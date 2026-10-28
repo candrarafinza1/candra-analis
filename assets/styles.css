@@ -220,6 +220,18 @@ tbody tr:hover { background: #f0f2ea; }
 .tab:hover { border-color: var(--malam-2); }
 .tab[aria-selected="true"] { background: var(--malam); border-color: var(--malam); color: #fff; }
 
+/* HP: tombol pilihan jadi kisi 2×2 dan menu atas muat satu baris (Dewi, usulan Kirana #2) */
+@media (max-width: 600px) {
+  .tab-baris { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 16px 0 12px; }
+  .tab { font-size: .88rem; line-height: 1.25; padding: 8px 10px; min-height: 48px; text-align: center; }
+  .kepala .wadah { gap: 4px 16px; padding-top: 8px; padding-bottom: 8px; }
+  .nav { gap: 2px; flex-wrap: nowrap; margin: 0 -8px; }
+  .nav a { font-size: .86rem; padding: 8px 9px; white-space: nowrap; }
+  .judul-halaman { padding: 28px 0 24px; }
+  .bagian { padding: 32px 0; }
+}
+@media (max-width: 359px) { .nav { flex-wrap: wrap; } }
+
 .catatan-metode { font-size: .92rem; color: var(--tinta-2); max-width: var(--lebar-teks); }
 
 /* Radar risiko */

@@ -51,7 +51,7 @@ Acuan tren 2026 yang dipakai:
 - Ide: tombol pilihan jadi satu baris yang bisa digeser (`overflow-x:auto` di dalam wadahnya sendiri, dengan `scroll-snap`) atau kisi 2×2; menu atas memakai jarak dan ukuran huruf yang lebih rapat agar muat satu baris.
 - Acuan tren: "chip" filter satu baris yang umum di aplikasi keuangan dan e-commerce.
 - Dampak bagi pemula: isi utama (tabel) terlihat di layar pertama.
-- Status: **dipilih** (28 Okt 18.40, Bima) — tinjauan kartu membuktikan kartu pertama baru muncul setelah layar pertama karena tombol menumpuk. Dikerjakan Dewi.
+- Status: **selesai** (28 Okt 19.05, Dewi) — kisi 2×2 + menu satu baris; kartu pertama naik ±190px. Sisa: kotak keterangan data masih panjang (tugas lanjutan Dewi).
 
 ### 3. Kamus istilah di tempat (ketuk istilah → penjelasan singkat) ★ paling berdampak
 - **Kategori:** fitur — usaha **sedang**

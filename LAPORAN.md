@@ -70,3 +70,8 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Nina: 7 halaman dicek di 1280px & 390px, tanpa scroll horizontal dan tanpa galat. `node tests/cek.mjs` lolos.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).
 
+## 28 Okt 2026, 19.05 WIB — Dewi, Nina (via Bima)
+- Dewi: usulan Kirana #2 tayang. Di HP, empat tombol pilihan Peringkat jadi kisi 2×2 dan menu atas muat satu baris; jarak judul dirapatkan. Kartu pertama naik dari 1029px ke 840px dari atas layar (390px). Belum masuk layar pertama karena kotak keterangan data panjang → tugas lanjutan Dewi.
+- Nina: dicek 320, 360, 390, 1280px: tanpa scroll horizontal (di 320px menu kembali dua baris), 7 halaman tanpa galat. `node tests/cek.mjs` lolos.
+- Masalah berat: tidak ada baru.
+
