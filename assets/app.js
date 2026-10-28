@@ -164,16 +164,16 @@
         tbody.appendChild(el("tr", null, [
           el("td", { class: "peringkat-no", text: String(i + 1) }),
           selKode(e),
-          el("td", { text: e.sektor }),
-          el("td", { class: "angka", text: k.tampil(k.nilai(e)) }),
-          kunci === "laba" ? null : el("td", { class: "angka", text: strip(laba25(e), rupiahMiliar) }),
-          kunci === "tumbuh" ? null : el("td", { class: "angka " + (ada(g) ? (g >= 0 ? "naik" : "turun") : ""), text: strip(g, persen) }),
-          el("td", { class: "angka", text: strip(der(e), function (v) { return angka.format(v) + "x"; }) }),
-          el("td", null, [tautanSumber(e)])
+          el("td", { class: "sel-sektor", "data-label": "Sektor", text: e.sektor }),
+          el("td", { class: "angka sel-utama", "data-label": k.kolom, text: k.tampil(k.nilai(e)) }),
+          kunci === "laba" ? null : el("td", { class: "angka", "data-label": "Laba 2025", text: strip(laba25(e), rupiahMiliar) }),
+          kunci === "tumbuh" ? null : el("td", { class: "angka " + (ada(g) ? (g >= 0 ? "naik" : "turun") : ""), "data-label": "Pendapatan YoY", text: strip(g, persen) }),
+          el("td", { class: "angka", "data-label": "DER", text: strip(der(e), function (v) { return angka.format(v) + "x"; }) }),
+          el("td", { class: "sel-sumber", "data-label": "Data" }, [tautanSumber(e)])
         ]));
       });
       panel.appendChild(el("div", { class: "tabel-wadah" }, [
-        el("table", null, [
+        el("table", { class: "tabel-kartu" }, [
           el("caption", { class: "keterangan-tabel", text: (daftar.length < 10 ? daftar.length : "Sepuluh") + " saham syariah teratas: " + k.label.toLowerCase() }),
           el("thead", null, [el("tr", null, [
             el("th", { scope: "col", text: "#" }),
