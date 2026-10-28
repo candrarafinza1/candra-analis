@@ -43,7 +43,7 @@ Acuan tren 2026 yang dipakai:
 - Ide: di bawah lebar ±600px, tiap baris tabel tampil sebagai kartu: nomor urut + kode besar, nama perusahaan, lalu 2–3 angka utama berlabel (misalnya "Laba 2025", "Pertumbuhan laba", "Sektor") dan tautan sumber. Di desktop tabel tetap seperti sekarang. Cukup CSS (`display:grid` per baris + label dari atribut `data-label`), tanpa pustaka.
 - Acuan tren: aplikasi investasi 2026 menampilkan daftar saham sebagai kartu ringkas di HP, bukan tabel lebar.
 - Dampak bagi pemula: sebagian besar pemula membuka dari HP; semua angka langsung terbaca tanpa harus tahu bahwa tabel bisa digeser.
-- Status: **dipilih** (28 Okt) → BACKLOG, Dewi.
+- Status: **dikerjakan** (28 Okt 16.15, Dewi). Menunggu tinjauan Kirana.
 
 ### 2. Tombol pilihan & menu ringkas di HP
 - **Kategori:** tampilan — usaha **kecil**

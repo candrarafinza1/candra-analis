@@ -50,3 +50,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Bima memilih 2 usulan paling berdampak: tabel Peringkat jadi kartu di HP (Dewi) dan kamus istilah di tempat (Arif). Masuk BACKLOG.
 - Asisten AI: sudah terbukti masih "belum aktif" (dilihat Rafinza 15.07) dan perbaikannya butuh akun Vercel → dicatat di "Menunggu keputusan Rafinza" dan diemailkan sekali (langkah cek & Redeploy).
 - `node tests/cek.mjs` lolos. Tampilan website tidak berubah.
+
+## 28 Okt 2026, 16.15 WIB — Dewi, Nina (via Bima)
+- Dewi: tabel Peringkat kini tampil sebagai kartu di HP (di bawah 600px): nomor + kode besar, nama, sektor, angka utama besar, angka lain berlabel, tautan sumber. Desktop tetap tabel. Hanya CSS + label `data-label` di `assets/app.js`.
+- Nina: dicek di 1280px & 390px, tanpa scroll horizontal dan tanpa galat. `node tests/cek.mjs` lolos.
+- Kirana diberi tugas meninjau hasilnya. Berikutnya: Arif, kamus istilah di tempat.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).
