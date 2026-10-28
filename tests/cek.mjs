@@ -22,8 +22,8 @@ for (const h of halaman) {
 // 2. Data dapat dibaca dan lengkap
 const ctx = { window: {} };
 vm.createContext(ctx);
-for (const f of ["data/modul.js", "data/emiten.js", "data/rujukan.js"]) vm.runInContext(readFileSync(f, "utf8"), ctx);
-const { MODUL, EMITEN, RUJUKAN } = ctx.window;
+for (const f of ["data/modul.js", "data/rujukan.js"]) vm.runInContext(readFileSync(f, "utf8"), ctx);
+const { MODUL, RUJUKAN } = ctx.window;
 
 // Rujukan: hanya tautan https ke sumber yang sudah disetujui tim Laras & Hana
 const domainResmi = /^https:\/\/(www\.)?(idx\.co\.id|idx\.id|ojk\.go\.id|sikapiuangmu\.ojk\.go\.id|akses\.ksei\.co\.id|youtube\.com|cnbcindonesia\.com)(\/|$)/;
@@ -41,21 +41,10 @@ for (const m of MODUL) {
   ok(!idModul.has(m.id), `id pelajaran ganda: ${m.id}`); idModul.add(m.id);
 }
 
-ok(Array.isArray(EMITEN) && EMITEN.length >= 10, "data emiten kurang dari 10");
-const kode = new Set();
-for (const e of EMITEN) {
-  ok(/^[A-Z0-9]{4}$/.test(e.kode), `kode tidak valid: ${e.kode}`);
-  ok(!kode.has(e.kode), `kode ganda: ${e.kode}`); kode.add(e.kode);
-  ok(Array.isArray(e.labaKuartal) && e.labaKuartal.length === 4, `${e.kode}: labaKuartal harus 4 angka`);
-  ok(Array.isArray(e.pendapatan) && e.pendapatan.length === 2 && e.pendapatan[0] > 0, `${e.kode}: pendapatan tidak valid`);
-  for (const k of ["roe", "der", "divYield"]) ok(Number.isFinite(e[k]), `${e.kode}: ${k} bukan angka`);
-  ok(!(e.syariah && e.keluarDES), `${e.kode}: tidak boleh syariah sekaligus keluar DES`);
-}
-
 // Data asli (tim Fajar): setiap emiten wajib punya bukti baris DES dan sumber https
 vm.runInContext(readFileSync("data/emiten-asli.js", "utf8"), ctx);
 const ASLI = ctx.window.EMITEN_ASLI;
-ok(Array.isArray(ASLI), "data/emiten-asli.js tidak terbaca");
+ok(Array.isArray(ASLI) && ASLI.length >= 15, "data asli kurang dari 15 emiten");
 const kodeAsli = new Set();
 for (const e of ASLI || []) {
   ok(/^[A-Z0-9]{4}$/.test(e.kode) && !kodeAsli.has(e.kode), `data asli: kode tidak valid/ganda: ${e.kode}`); kodeAsli.add(e.kode);
@@ -74,4 +63,4 @@ for (const f of [...halaman, "data/modul.js", "assets/app.js"]) {
 }
 
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
-console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${EMITEN.length} emiten.`);
+console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);

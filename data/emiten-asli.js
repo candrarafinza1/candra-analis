@@ -1,5 +1,6 @@
 /* DATA ASLI — dikumpulkan tim Fajar (Data Engineer), diperiksa Hana (Syariah).
-   Belum ditampilkan di website sampai minimal 15 emiten lengkap (lihat BACKLOG.md).
+   Tayang di website sejak 28 Okt 2026. periksaUlang: true = angka laba perlu dicek ke laporan
+   resmi; emiten itu tampil di Radar tetapi tidak ikut Peringkat sampai dipastikan.
 
    Aturan:
    - desBaris: nomor baris di Daftar Efek Syariah periode I 2026 (KEP-21/D.04/2026,
@@ -46,7 +47,7 @@ window.EMITEN_ASLI = [
   },
   {
     kode: "ANTM", nama: "PT Aneka Tambang Tbk", sektor: "Bahan baku",
-    desBaris: 76,
+    desBaris: 76, periksaUlang: true,
     labaTahun: { 2024: 3850, 2025: 7920 },
     pendapatan: { 2024: 69190, 2025: 84640 },
     liabilitas2025: 15930, ekuitas2025: 36600,
@@ -90,7 +91,7 @@ window.EMITEN_ASLI = [
   },
   {
     kode: "UNVR", nama: "PT Unilever Indonesia Tbk", sektor: "Barang konsumen primer",
-    desBaris: 290,
+    desBaris: 290, periksaUlang: true,
     labaTahun: { 2024: 3360, 2025: 7640 },
     pendapatan: { 2024: 30620, 2025: 31940 },
     liabilitas2025: 15540, ekuitas2025: 4470,
@@ -166,7 +167,7 @@ window.EMITEN_ASLI = [
   },
   {
     kode: "INTP", nama: "PT Indocement Tunggal Prakarsa Tbk", sektor: "Bahan baku",
-    desBaris: 108,
+    desBaris: 108, periksaUlang: true,
     labaTahun: { 2024: 2010, 2025: 2250 },
     pendapatan: { 2024: 18550, 2025: 17730 },
     liabilitas2025: 8522.2, ekuitas2025: 23203.1,

@@ -334,3 +334,14 @@ tbody tr:hover { background: #f0f2ea; }
 .form-tanya textarea:disabled, .form-tanya button:disabled { opacity: .6; cursor: not-allowed; }
 .form-bawah { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 10px; }
 .hitung-karakter { font-size: .85rem; color: var(--tinta-2); }
+
+/* Data asli (tim Galih & Dewi) */
+.pita-sumber {
+  background: var(--naik-muda); border: 1px solid #bfe0cd; color: #174d35;
+  border-radius: var(--radius-kecil); padding: 12px 16px; font-size: .95rem; margin: 20px 0;
+}
+.pita-sumber strong { color: #0f3a27; }
+.sinyal-info { border-left-color: var(--malam-2); }
+.sinyal-info h4 { color: var(--malam-2); }
+.daftar-sumber { padding-left: 1.2em; margin: 0; font-size: .95rem; }
+.daftar-sumber li { margin-bottom: 6px; }

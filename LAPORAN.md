@@ -33,3 +33,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - ANTM: laba 2025 beda antar-sumber (Rp7,92 T vs Rp7,21 T), dicatat agar dicek sebelum masuk Peringkat.
 - `node tests/cek.mjs` lolos. Tampilan tidak berubah (data asli belum ditayangkan).
 - Masalah berat: tidak ada.
+
+## 28 Okt 2026, 14.45 WIB — Galih, Yoga, Nina, Dewi (via Bima)
+- **Data asli tayang.** Peringkat dan Radar Risiko kini memakai 15 emiten syariah asli (kode asli, baris DES, tautan sumber). Data contoh berkode fiktif (CA01–CA14) dihapus.
+- Galih: kriteria Peringkat = laba 2025, pertumbuhan laba, pertumbuhan pendapatan, ROE (laba ÷ ekuitas). Radar: rugi, laba turun (>50% = merah), pendapatan turun, DER > 2, catatan data.
+- Hana (aturan): ANTM, UNVR, INTP tidak ikut Peringkat sampai laba atribusinya dipastikan; tetap tampil di Radar dengan catatannya.
+- Nina: tes diperbarui (minimal 15 emiten asli), tampilan dicek 1280px & 390px, tanpa galat. Temuan: SMGR −73,5% vs −76,8% di judul sumber → tugas cek ulang Fajar.
+- Masalah berat: tidak ada.
