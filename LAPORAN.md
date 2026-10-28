@@ -63,20 +63,12 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Berikutnya: Sari & Laras (dan Hana untuk istilah syariah) meninjau teks kamus; Kirana meninjau tampilannya.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).
 
-## 28 Okt 2026, 18.40 WIB — Kirana, Sari, Laras, Hana, Dewi, Nina (via Bima)
+## 28 Okt 2026, 18.35 WIB — Kirana, Sari, Laras, Hana, Dewi, Nina (via Bima)
 - Kirana: tinjauan kartu Peringkat & kotak istilah selesai (IDE.md). Kartu sudah baik; masalah yang tersisa: tombol pilihan menumpuk sehingga kartu pertama di bawah layar pertama → Bima memilih usulan #2 untuk Dewi.
 - Dewi: tautan "Sumber" di Peringkat kini berlabel "Sumber data KODE (tab baru)" untuk pembaca layar.
 - Sari & Laras & Hana: teks kamus istilah ditinjau; 4 penjelasan diperbaiki, JII70 ditambah (16 istilah). DES kini menegaskan bahwa masuk daftar bukan saran membeli.
-- Nina: 7 halaman dicek di 1280px & 390px, tanpa scroll horizontal dan tanpa galat. `node tests/cek.mjs` lolos.
-- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).
-
-## 28 Okt 2026, 19.05 WIB — Dewi, Nina (via Bima)
-- Dewi: usulan Kirana #2 tayang. Di HP, empat tombol pilihan Peringkat jadi kisi 2×2 dan menu atas muat satu baris; jarak judul dirapatkan. Kartu pertama naik dari 1029px ke 840px dari atas layar (390px). Belum masuk layar pertama karena kotak keterangan data panjang → tugas lanjutan Dewi.
-- Nina: dicek 320, 360, 390, 1280px: tanpa scroll horizontal (di 320px menu kembali dua baris), 7 halaman tanpa galat. `node tests/cek.mjs` lolos.
-- Masalah berat: tidak ada baru.
-
-## 28 Okt 2026, 19.35 WIB — Dewi, Hana, Nina (via Bima)
+- Dewi: usulan Kirana #2 tayang. Di HP, empat tombol pilihan Peringkat jadi kisi 2×2 dan menu atas muat satu baris; jarak judul dirapatkan.
 - Dewi: kotak keterangan data di Peringkat & Radar diringkas; rincian sumber dan nomor KEP DES pindah ke "Tentang data ini" (tetap bisa dibuka, termasuk dengan keyboard). Hana: nama Daftar Efek Syariah OJK tetap tampil di kalimat inti. Kartu Peringkat pertama kini masuk layar pertama HP (mulai 725px dari 1029px sebelum sesi ini).
-- Nina: dicek 320/360/390/1280px, tanpa scroll horizontal dan tanpa galat. `node tests/cek.mjs` lolos.
-- Masalah berat: tidak ada baru.
+- Nina: 7 halaman dicek di 320/360/390/1280px, tanpa scroll horizontal dan tanpa galat. `node tests/cek.mjs` lolos.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).
 

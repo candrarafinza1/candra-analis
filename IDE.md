@@ -43,7 +43,7 @@ Acuan tren 2026 yang dipakai:
 - Ide: di bawah lebar ±600px, tiap baris tabel tampil sebagai kartu: nomor urut + kode besar, nama perusahaan, lalu 2–3 angka utama berlabel (misalnya "Laba 2025", "Pertumbuhan laba", "Sektor") dan tautan sumber. Di desktop tabel tetap seperti sekarang. Cukup CSS (`display:grid` per baris + label dari atribut `data-label`), tanpa pustaka.
 - Acuan tren: aplikasi investasi 2026 menampilkan daftar saham sebagai kartu ringkas di HP, bukan tabel lebar.
 - Dampak bagi pemula: sebagian besar pemula membuka dari HP; semua angka langsung terbaca tanpa harus tahu bahwa tabel bisa digeser.
-- Status: **selesai** (28 Okt 16.15, Dewi). Ditinjau Kirana 28 Okt 18.40 (lihat "Tinjauan Kirana" di bawah).
+- Status: **selesai** (28 Okt 16.15, Dewi). Ditinjau Kirana 28 Okt 18.35 (lihat "Tinjauan Kirana" di bawah).
 
 ### 2. Tombol pilihan & menu ringkas di HP
 - **Kategori:** tampilan — usaha **kecil**
@@ -51,7 +51,7 @@ Acuan tren 2026 yang dipakai:
 - Ide: tombol pilihan jadi satu baris yang bisa digeser (`overflow-x:auto` di dalam wadahnya sendiri, dengan `scroll-snap`) atau kisi 2×2; menu atas memakai jarak dan ukuran huruf yang lebih rapat agar muat satu baris.
 - Acuan tren: "chip" filter satu baris yang umum di aplikasi keuangan dan e-commerce.
 - Dampak bagi pemula: isi utama (tabel) terlihat di layar pertama.
-- Status: **selesai** (28 Okt 19.05, Dewi) — kisi 2×2 + menu satu baris; kartu pertama naik ±190px. Sisa: kotak keterangan data masih panjang (tugas lanjutan Dewi).
+- Status: **selesai** (28 Okt 18.35, Dewi) — kisi 2×2 + menu satu baris; kartu pertama naik ±190px. Sisa: kotak keterangan data masih panjang (tugas lanjutan Dewi).
 
 ### 3. Kamus istilah di tempat (ketuk istilah → penjelasan singkat) ★ paling berdampak
 - **Kategori:** fitur — usaha **sedang**
@@ -85,7 +85,7 @@ Acuan tren 2026 yang dipakai:
 - Dampak bagi pemula: perubahan naik/turun langsung terlihat, tetap berbasis data bersumber.
 - Status: usulan.
 
-## Tinjauan Kirana — 28 Okt 2026, 18.40 WIB
+## Tinjauan Kirana — 28 Okt 2026, 18.35 WIB
 
 Kartu Peringkat di HP (hasil Dewi, usulan #1), dicek di 390px dan 1280px:
 - Bagus: kode besar, nama, sektor, "Laba 2025" paling menonjol, angka lain berlabel. Angka turun ditandai warna
