@@ -1,0 +1,19 @@
+# Dijalankan setiap ada kode baru. Rilis ke Vercel hanya aman bila pemeriksaan ini hijau.
+name: Periksa sebelum rilis
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  periksa:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Cek sintaks JavaScript
+        run: for f in assets/*.js data/*.js; do node --check "$f"; done
+      - name: Pemeriksaan QA (tautan, data, bahasa ajakan)
+        run: node tests/cek.mjs
