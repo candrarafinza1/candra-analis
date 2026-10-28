@@ -56,3 +56,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Nina: dicek di 1280px & 390px, tanpa scroll horizontal dan tanpa galat. `node tests/cek.mjs` lolos.
 - Kirana diberi tugas meninjau hasilnya. Berikutnya: Arif, kamus istilah di tempat.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).
+
+## 28 Okt 2026, 17.30 WIB — Arif, Nina (via Bima)
+- Arif: **kamus istilah di tempat** tayang (usulan Kirana #3). 15 istilah di `data/istilah.js`; istilah bergaris putus-putus di Peringkat, Radar Risiko, dan halaman pelajaran. Ketuk/Enter membuka penjelasan singkat + tautan ke pelajaran terkait; Esc atau ketuk di luar menutup. Di Peringkat ada baris "Bingung istilahnya?" agar tetap terjangkau di HP.
+- Nina: tes kini memeriksa kelengkapan kamus dan tautan pelajarannya. Dicek di 1280px & 390px: tanpa scroll horizontal, kotak tidak keluar layar, urutan Tab wajar. `node tests/cek.mjs` lolos.
+- Berikutnya: Sari & Laras (dan Hana untuk istilah syariah) meninjau teks kamus; Kirana meninjau tampilannya.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).
