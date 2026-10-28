@@ -54,9 +54,18 @@ for (const e of ASLI || []) {
     ok(v === null || Number.isFinite(v), `data asli ${e.kode}: ${g} harus angka atau null`);
 }
 
+// Kamus istilah (tim Arif): setiap istilah punya penjelasan, pola, dan pelajaran yang benar-benar ada
+vm.runInContext(readFileSync("data/istilah.js", "utf8"), ctx);
+const ISTILAH = ctx.window.ISTILAH;
+ok(Array.isArray(ISTILAH) && ISTILAH.length > 0, "kamus istilah kosong");
+for (const t of ISTILAH || []) {
+  ok(t.istilah && t.arti && Array.isArray(t.pola) && t.pola.length > 0, `istilah tidak lengkap: ${t.istilah}`);
+  ok(!t.pelajaran || idModul.has(t.pelajaran), `istilah ${t.istilah}: pelajaran "${t.pelajaran}" tidak ada`);
+}
+
 // 3. Aturan Hana (syariah): halaman tidak boleh memakai bahasa ajakan
 const terlarang = /\b(wajib beli|pasti naik|buruan (beli|jual)|dijamin untung|rekomendasi beli)\b/i;
-for (const f of [...halaman, "data/modul.js", "assets/app.js"]) {
+for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"]) {
   // Frasa di dalam tanda kutip dianggap contoh yang dibahas, bukan ajakan
   const isi = readFileSync(f, "utf8").replace(/[“"][^“”"\n]{1,40}[”"]/g, "");
   ok(!terlarang.test(isi), `${f} memuat bahasa ajakan yang dilarang`);

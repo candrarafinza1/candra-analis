@@ -59,7 +59,7 @@ Acuan tren 2026 yang dipakai:
 - Ide: satu berkas `data/istilah.js` (istilah → penjelasan 1–2 kalimat + tautan ke pelajaran terkait). Istilah yang dikenali di halaman diberi garis bawah putus-putus; diketuk/di-fokus dengan keyboard → muncul kotak kecil penjelasan (elemen `<button>` + kotak `role="tooltip"`, tutup dengan Esc). Isi penjelasan ditinjau Sari & Laras, istilah syariah oleh Hana.
 - Acuan tren: "progressive disclosure" dan penjelas jargon di aplikasi fintech 2026.
 - Dampak bagi pemula: memahami angka tanpa meninggalkan halaman; menurunkan rasa takut terhadap istilah.
-- Status: **dipilih** (28 Okt) → BACKLOG, Arif.
+- Status: **selesai** (28 Okt 17.30, Arif) — 15 istilah di `data/istilah.js`, tayang di Peringkat, Radar, dan pelajaran. Kirana meninjau.
 
 ### 4. Penanda kemajuan belajar
 - **Kategori:** fitur — usaha **kecil–sedang**

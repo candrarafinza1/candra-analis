@@ -86,6 +86,7 @@
       "Pelajaran " + (idx + 1) + " dari " + MODUL.length + " · " + m.durasi;
 
     wadah.innerHTML = m.isi; // isi berasal dari file kurikulum kita sendiri
+    pasangIstilah(wadah);
 
     var nav = el("nav", { class: "navigasi-pelajaran", "aria-label": "Pelajaran lain" });
     nav.appendChild(idx > 0
@@ -143,6 +144,7 @@
     var akar = document.getElementById("peringkat");
     if (!akar) return;
     pitaSumber(document.getElementById("pita"));
+    pasangIstilah(document.getElementById("pita"));
 
     var tabBaris = el("div", { class: "tab-baris", role: "tablist", "aria-label": "Pilih dasar peringkat" });
     var panel = el("div", { role: "tabpanel", id: "panel-peringkat" });
@@ -156,6 +158,7 @@
       });
       var k = KRITERIA[kunci];
       panel.setAttribute("aria-labelledby", "tab-" + kunci);
+      tutupIstilah(false);
       panel.innerHTML = "";
       var daftar = urutkan(kunci);
       var tbody = el("tbody");
@@ -172,6 +175,8 @@
           el("td", { class: "sel-sumber", "data-label": "Data" }, [tautanSumber(e)])
         ]));
       });
+      if (ISTILAH.length) panel.appendChild(el("p", { class: "baris-istilah" },
+        ["Bingung istilahnya? Ketuk: ROE, DER, YoY, laba bersih, pendapatan, ekuitas."]));
       panel.appendChild(el("div", { class: "tabel-wadah" }, [
         el("table", { class: "tabel-kartu" }, [
           el("caption", { class: "keterangan-tabel", text: (daftar.length < 10 ? daftar.length : "Sepuluh") + " saham syariah teratas: " + k.label.toLowerCase() }),
@@ -193,6 +198,7 @@
       panel.appendChild(el("p", { class: "catatan-metode", style: "margin-top:12px" },
         ["Cara menghitung: " + k.metode + " Hanya emiten yang tercatat di Daftar Efek Syariah. Urutan ini menggambarkan data, bukan saran membeli." +
           (keluar.length ? " Belum ikut diperingkat karena angkanya kosong atau sedang dicek ulang: " + keluar.join(", ") + "." : "")]));
+      pasangIstilah(panel);
     }
 
     Object.keys(KRITERIA).forEach(function (kunci) {
@@ -274,6 +280,7 @@
     akar.appendChild(hasil);
 
     function tampil() {
+      tutupIstilah(false);
       hasil.innerHTML = "";
       var e = EMITEN.find(function (x) { return x.kode === pilih.value; });
       if (!e) {
@@ -297,6 +304,7 @@
       });
       hasil.appendChild(el("h3", { style: "margin-top:20px;font-size:1.05rem", text: "Sumber data" }));
       hasil.appendChild(sumber);
+      pasangIstilah(hasil);
       hasil.appendChild(el("p", { class: "catatan-metode", style: "margin-top:16px", text: "Radar menyajikan fakta dari data. Ini bukan perintah menjual atau mempertahankan saham. Keputusan ada di tangan Anda." }));
     }
     pilih.addEventListener("change", tampil);
@@ -441,6 +449,103 @@
         .then(function () { tombol.disabled = false; tombol.textContent = "Kirim pertanyaan"; area.focus(); });
     });
   }
+
+  /* ---------- Kamus istilah di tempat (tim Arif, usulan Kirana #3) ---------- */
+  var ISTILAH = window.ISTILAH || [];
+  var JUDUL_MODUL = {};
+  MODUL.forEach(function (m) { JUDUL_MODUL[m.id] = m.judul; });
+  var LEWATI = /^(A|BUTTON|H1|H2|H3|SCRIPT|STYLE|CODE|SELECT|OPTION|TEXTAREA|LABEL)$/;
+  var POLA = [];
+  ISTILAH.forEach(function (t, i) {
+    t.pola.forEach(function (p) {
+      var aman = p.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      POLA.push({ i: i, re: new RegExp("(^|[^A-Za-z0-9À-ÿ])(" + aman + ")(?![A-Za-z0-9À-ÿ])", t.besarKecil ? "" : "i") });
+    });
+  });
+
+  var kotak = null, aktif = null;
+  function tutupIstilah(kembalikanFokus) {
+    if (!aktif) return;
+    var b = aktif; aktif = null;
+    b.setAttribute("aria-expanded", "false");
+    kotak.hidden = true;
+    if (kembalikanFokus) b.focus();
+  }
+  function letakkan() {
+    if (aktif && !document.body.contains(aktif)) { aktif = null; if (kotak) kotak.hidden = true; }
+    if (!aktif) return;
+    var r = aktif.getBoundingClientRect(), lebar = Math.min(320, window.innerWidth - 32);
+    kotak.style.width = lebar + "px";
+    kotak.style.left = Math.max(16, Math.min(r.left, window.innerWidth - lebar - 16)) + "px";
+    var tinggi = kotak.offsetHeight;
+    var bawah = r.bottom + 8 + tinggi <= window.innerHeight || r.top - 8 - tinggi < 0;
+    kotak.style.top = (bawah ? r.bottom + 8 : r.top - 8 - tinggi) + "px";
+  }
+  function bukaIstilah(b) {
+    if (aktif === b) { tutupIstilah(false); return; }
+    tutupIstilah(false);
+    var t = ISTILAH[+b.dataset.istilah];
+    if (!kotak) {
+      kotak = el("div", { class: "kotak-istilah", id: "kotak-istilah", role: "region", "aria-label": "Penjelasan istilah" });
+      kotak.addEventListener("keydown", function (ev) { if (ev.key === "Escape") tutupIstilah(true); });
+    }
+    kotak.innerHTML = "";
+    kotak.appendChild(el("strong", { text: t.istilah }));
+    kotak.appendChild(el("p", { text: t.arti }));
+    if (t.pelajaran && JUDUL_MODUL[t.pelajaran]) kotak.appendChild(el("a", {
+      href: "pelajaran.html?m=" + t.pelajaran, text: "Pelajari lebih lanjut: " + JUDUL_MODUL[t.pelajaran]
+    }));
+    // Kotak diletakkan tepat setelah tombol agar urutan Tab tetap wajar (tombol → tautan di kotak)
+    b.parentNode.insertBefore(kotak, b.nextSibling);
+    kotak.hidden = false;
+    aktif = b;
+    b.setAttribute("aria-expanded", "true");
+    letakkan();
+  }
+
+  // Beri tanda istilah di dalam wadah: setiap istilah hanya ditandai sekali per wadah.
+  function pasangIstilah(wadah) {
+    if (!wadah || !POLA.length) return;
+    var dipakai = {}, simpul = [];
+    var jalan = document.createTreeWalker(wadah, NodeFilter.SHOW_TEXT, {
+      acceptNode: function (n) {
+        for (var p = n.parentNode; p && p !== wadah; p = p.parentNode)
+          if (LEWATI.test(p.nodeName) || (p.classList && p.classList.contains("kotak-istilah"))) return NodeFilter.FILTER_REJECT;
+        return /\S/.test(n.nodeValue) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP;
+      }
+    });
+    while (jalan.nextNode()) simpul.push(jalan.currentNode);
+    simpul.forEach(function (n) {
+      while (n) {
+        var terbaik = null;
+        POLA.forEach(function (p) {
+          if (dipakai[p.i]) return;
+          var m = p.re.exec(n.nodeValue);
+          if (m && (!terbaik || m.index + m[1].length < terbaik.mulai))
+            terbaik = { i: p.i, mulai: m.index + m[1].length, teks: m[2] };
+        });
+        if (!terbaik) break;
+        dipakai[terbaik.i] = true;
+        var sisa = n.splitText(terbaik.mulai);
+        var lanjut = sisa.splitText(terbaik.teks.length);
+        var b = el("button", { type: "button", class: "istilah", "aria-expanded": "false", "aria-controls": "kotak-istilah",
+          title: "Apa itu " + ISTILAH[terbaik.i].istilah + "?", text: terbaik.teks });
+        b.dataset.istilah = String(terbaik.i);
+        sisa.parentNode.replaceChild(b, sisa);
+        n = lanjut;
+      }
+    });
+  }
+
+  document.addEventListener("click", function (ev) {
+    var b = ev.target.closest && ev.target.closest("button.istilah");
+    if (b) { bukaIstilah(b); return; }
+    if (aktif && kotak && !kotak.contains(ev.target)) tutupIstilah(false);
+  });
+  document.addEventListener("keydown", function (ev) { if (ev.key === "Escape" && aktif) tutupIstilah(true); });
+  window.addEventListener("resize", letakkan);
+  window.addEventListener("scroll", letakkan, { passive: true });
+  document.addEventListener("scroll", letakkan, { passive: true, capture: true });
 
   /* ---------- Tandai menu aktif ---------- */
   function tandaiMenu() {
