@@ -15,3 +15,8 @@ Satu entri per sesi kerja. Terbaru di bawah.
 ## 28 Okt 2026, 10.40 WIB — Arif, Dewi, Nina (via Bima)
 - Asisten AI selesai: halaman `asisten.html` + fungsi `api/tanya.mjs`. Diuji 9 skenario (tanpa key, key ada, pertanyaan kosong/terlalu panjang, batas 6 pertanyaan per menit, kuota habis). Semua lolos.
 - Menunggu Pak Rudi memasang `GEMINI_API_KEY` di Vercel.
+
+## 28 Okt 2026, 11.05 WIB — Bima
+- Rafinza memasang `GEMINI_API_KEY` di Vercel. Nina mengecek di sesi 13.05.
+- Rafinza ke luar kota dan memberi mandat sementara ke Bima. Laporan malam 22.00 wajib membandingkan website versi pertama (commit 7836fd4, 28 Okt 09.25) dengan versi saat itu.
+- Istirahat 11.00–13.00.

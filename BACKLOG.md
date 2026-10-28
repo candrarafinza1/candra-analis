@@ -4,9 +4,10 @@ Urutan = prioritas. Ambil tugas teratas yang belum `[x]` dan tidak `[macet]`.
 Format: `- [ ] Karyawan: tugas` · selesai: `[x]` · macet: `[macet: alasan]`
 
 ## Menunggu keputusan Rafinza
-- **API key Asisten AI.** Fitur dibangun dengan layanan AI versi gratis (Google Gemini, ada batas harian). Rafinza perlu membuat API key sendiri dan memasangnya di Vercel sebagai `GEMINI_API_KEY`. Sambil menunggu, halaman asisten menampilkan "belum aktif".
+- (kosong) Rafinza sedang ke luar kota mulai 28 Okt dan hanya memantau. Bima memegang perusahaan. Hanya masalah berat yang diemailkan.
 
 ## Sedang dikerjakan / berikutnya
+- [ ] Nina: **Cek Asisten AI live.** Rafinza memasang `GEMINI_API_KEY` di Vercel pukul 11.05 tanggal 28 Okt. Pastikan halaman Asisten AI tidak lagi menampilkan "belum aktif" dan bisa menjawab. Bila masih belum aktif, kemungkinan belum di-Redeploy, atau key terpasang di project Vercel yang salah (ada dua project: `candra-analis-id` dan `candra-analis-595u`). Ini butuh tindakan Rafinza di Vercel: kirim satu email singkat berisi langkah Redeploy.
 - [ ] Fajar: **Data asli batch 1.** Kumpulkan data emiten besar yang terbukti tercatat di DES periode I 2026 (KEP-21/D.04/2026, berlaku 1 Juni 2026). Verifikasi tiap kode dengan mengutip barisnya dari https://idx.id/media/nbkfn2sd/des-mei-2026.pdf. Sudah terverifikasi verbatim: TLKM (580), ANTM (76), ICBP (241), UNTR (199), KLBF (413), ADRO (11). Kandidat berikutnya: INDF, UNVR, AADI, PTBA, ITMG, CPIN, JPFA, SMGR, INTP, EXCL, ISAT, AKRA, PGAS, MDKA, BRIS, MYOR, TPIA, MAPI, ACES, HRUM, MBMA, CTRA, BSDE, SIDO, MIKA, HEAL. Tulis ke `data/emiten-asli.js` (skema di file itu). **Progres 28 Okt 10.20:** TLKM, KLBF, ICBP lengkap laba & pendapatan; ANTM perlu cek laba atribusi; UNTR (laba 2025 Rp14,8 T, pendapatan Rp131,3 T, angka 2024 belum ada) dan ADRO (laba 2025 US$447 juta, perlu dikonversi/diberi catatan mata uang) belum dimasukkan. Situs kontan.co.id, bisnis.com, dan idnfinancials sering menolak diakses: pakai investortrust.id, wartaekonomi.co.id, jawapos.com, katadata.co.id, atau laporan resmi emiten. Angka: laba bersih & pendapatan tahun buku 2024 dan 2025, laba 9 bulan 2025 vs 9 bulan 2026 bila sudah rilis, ROE, DER, dividen per saham tahun buku 2025, harga acuan + tanggalnya. Setiap angka wajib punya sumber.
 - [ ] Galih: Sesuaikan rumus Peringkat dan aturan Radar Risiko ke skema data asli (laba tahunan & 9 bulan, bukan 4 kuartal). Tampilkan tautan sumber per emiten.
 - [ ] Yoga + Nina: Ganti `data/emiten.js` (contoh) dengan data asli setelah minimal 15 emiten lengkap. Hapus pita "Data contoh". Tambah pemeriksaan: setiap emiten wajib punya `desBaris` dan `sumber`.
@@ -18,6 +19,7 @@ Format: `- [ ] Karyawan: tugas` · selesai: `[x]` · macet: `[macet: alasan]`
 - [ ] Fajar: **Akhir November 2026**: OJK menerbitkan DES periode II 2026 (berlaku 1 Desember). Perbarui status syariah semua emiten; yang keluar dari DES dimunculkan di Radar Risiko.
 
 ## Selesai
+- [x] Rafinza: memasang `GEMINI_API_KEY` di Vercel — 28 Okt 11.05
 - [x] Dewi, Arif, Nina, Tegar, Yoga: Fase 1 (beranda, kurikulum, peringkat, Radar Risiko, QA, header keamanan) — 28 Okt 2026
 - [x] Laras: dua pelajaran praktik, modul PDF, rujukan resmi — 28 Okt 2026
 
@@ -35,3 +37,6 @@ window.EMITEN_ASLI = [{
   sumber: [{ judul: "", url: "" }]
 }];
 ```
+
+## Catatan untuk Rafinza (tidak mendesak)
+- Ada dua project Vercel dari repo yang sama (`candra-analis-id` dan `candra-analis-595u`). Setelah asisten terbukti aktif, salah satunya sebaiknya dihapus Rafinza agar build tidak dobel.
