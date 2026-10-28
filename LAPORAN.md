@@ -20,3 +20,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Rafinza memasang `GEMINI_API_KEY` di Vercel. Nina mengecek di sesi 13.05.
 - Rafinza ke luar kota dan memberi mandat sementara ke Bima. Laporan malam 22.00 wajib membandingkan website versi pertama (commit 7836fd4, 28 Okt 09.25) dengan versi saat itu.
 - Istirahat 11.00–13.00.
+
+## 28 Okt 2026, 13.30 WIB — Fajar, Nina (via Bima)
+- Nina: cek Asisten AI live **macet**, karena lingkungan kerja tim tidak bisa membuka vercel.app. Push pukul 11.06 (setelah key dipasang 11.05) seharusnya sudah memicu deploy ulang dengan key. Tidak diemailkan karena belum terbukti rusak.
+- Fajar: `data/emiten-asli.js` bertambah 11 emiten menjadi 15 (UNTR, INDF, UNVR, PTBA, MYOR, SIDO, CPIN, JPFA, INTP, SMGR, AKRA). Tiap baris DES dikutip dari PDF DES Mei 2026 dan dicek silang. Angka yang tidak pasti dibiarkan kosong (null) dan diberi catatan (laba UNVR & INTP 2025 kemungkinan memuat keuntungan sekali-waktu, laba AKRA 2024 tidak konsisten antar-sumber).
+- Nina: `tests/cek.mjs` kini memeriksa `desBaris` dan `sumber` di data asli. Semua pemeriksaan lolos. Data asli belum tampil di website.
+- Masalah berat: tidak ada.

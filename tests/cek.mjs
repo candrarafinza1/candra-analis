@@ -52,6 +52,19 @@ for (const e of EMITEN) {
   ok(!(e.syariah && e.keluarDES), `${e.kode}: tidak boleh syariah sekaligus keluar DES`);
 }
 
+// Data asli (tim Fajar): setiap emiten wajib punya bukti baris DES dan sumber https
+vm.runInContext(readFileSync("data/emiten-asli.js", "utf8"), ctx);
+const ASLI = ctx.window.EMITEN_ASLI;
+ok(Array.isArray(ASLI), "data/emiten-asli.js tidak terbaca");
+const kodeAsli = new Set();
+for (const e of ASLI || []) {
+  ok(/^[A-Z0-9]{4}$/.test(e.kode) && !kodeAsli.has(e.kode), `data asli: kode tidak valid/ganda: ${e.kode}`); kodeAsli.add(e.kode);
+  ok(Number.isInteger(e.desBaris) && e.desBaris > 0, `data asli ${e.kode}: desBaris wajib diisi`);
+  ok(Array.isArray(e.sumber) && e.sumber.length > 0 && e.sumber.every(s => s.judul && /^https:\/\//.test(s.url)), `data asli ${e.kode}: sumber wajib berisi judul dan tautan https`);
+  for (const g of ["labaTahun", "pendapatan"]) for (const v of Object.values(e[g] || {}))
+    ok(v === null || Number.isFinite(v), `data asli ${e.kode}: ${g} harus angka atau null`);
+}
+
 // 3. Aturan Hana (syariah): halaman tidak boleh memakai bahasa ajakan
 const terlarang = /\b(wajib beli|pasti naik|buruan (beli|jual)|dijamin untung|rekomendasi beli)\b/i;
 for (const f of [...halaman, "data/modul.js", "assets/app.js"]) {
