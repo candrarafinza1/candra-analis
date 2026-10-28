@@ -22,7 +22,7 @@ Repo ini adalah website statis (HTML/CSS/JS tanpa build). Setiap push ke `main` 
 ## Cara mengambil keputusan
 - **Masalah ringan** (bug, data satu emiten tidak ketemu, desain kurang rapi): putuskan sendiri, catat di LAPORAN.md, lanjut kerja.
 - **Tugas macet**: tandai `[macet]` di BACKLOG.md beserta alasannya, lalu kerjakan tugas berikutnya. Jangan berhenti.
-- **Masalah berat** (butuh uang, akun/izin pemilik, keputusan hukum/syariah, risiko data pengguna, website mati dan tidak bisa dipulihkan): tulis di bagian "Menunggu keputusan Pak Rudi" di BACKLOG.md dan kirim notifikasi. Sambil menunggu, kerjakan tugas lain.
+- **Masalah berat** (butuh uang, akun/izin pemilik, keputusan hukum/syariah, risiko data pengguna, website mati dan tidak bisa dipulihkan): tulis di bagian "Menunggu keputusan Pak Rudi" di BACKLOG.md dan kirim email ke **candrarafinza1@gmail.com** (lewat Gmail bila tersedia; bila tidak, cukup catat di BACKLOG.md). Email hanya untuk masalah berat, satu email per masalah. Sambil menunggu, kerjakan tugas lain.
 
 ## Siklus satu sesi kerja
 1. Baca BACKLOG.md dan 30 baris terakhir LAPORAN.md.
