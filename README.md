@@ -54,6 +54,7 @@ Perusahaan ini dijalankan tim AI dengan CEO **Bima**. Karyawan melapor ke Bima; 
 | Arif | Engineer Web & AI | Halaman, logika, dan Asisten AI (Fase 2) |
 | Nina | QA & Pemantau Error | `tests/cek.mjs`, pemeriksaan tampilan desktop & HP |
 | Tegar | Keamanan | Header keamanan di `vercel.json`, perlindungan data |
+| Kirana | Tim Kreatif | Usulan tampilan, fitur, dan animasi di `IDE.md`, mengikuti tren |
 | Yoga | Deploy & Rilis | Alur `.github/workflows/periksa.yml`, rilis ke Vercel, rollback |
 
 ## Aturan rilis

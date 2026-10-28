@@ -40,3 +40,7 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Hana (aturan): ANTM, UNVR, INTP tidak ikut Peringkat sampai laba atribusinya dipastikan; tetap tampil di Radar dengan catatannya.
 - Nina: tes diperbarui (minimal 15 emiten asli), tampilan dicek 1280px & 390px, tanpa galat. Temuan: SMGR −73,5% vs −76,8% di judul sumber → tugas cek ulang Fajar.
 - Masalah berat: tidak ada.
+
+## 28 Okt 2026, 15.10 WIB — Bima
+- Karyawan ke-12 bergabung: **Kirana, tim kreatif** (permintaan Rafinza). Tugas: ide tampilan, fitur, dan animasi mengikuti tren, ditulis di `IDE.md`; Bima memilih, Dewi/Arif mengerjakan.
+- Rafinza: Asisten AI masih "belum aktif" pukul 15.07, padahal sudah ada dua deploy setelah key dipasang. Dugaan: key tersimpan sebagai variabel umum akun Vercel, belum terhubung ke project. Menunggu Rafinza membuka /api/tanya untuk memastikan.

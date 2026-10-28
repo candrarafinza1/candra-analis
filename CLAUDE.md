@@ -40,7 +40,15 @@ Repo ini adalah website statis (HTML/CSS/JS tanpa build). Setiap push ke `main` 
 
 ## Tim
 Raka (riset & tren), Hana (syariah & kepatuhan), Fajar (data), Galih (analis saham), Sari (konten edukasi),
-Laras (guru & kurator belajar), Dewi (UI & animasi), Arif (web & AI), Nina (QA), Tegar (keamanan), Yoga (deploy & rilis).
+Laras (guru & kurator belajar), Dewi (UI & animasi), Arif (web & AI), Nina (QA), Tegar (keamanan), Yoga (deploy & rilis),
+Kirana (tim kreatif: ide tampilan, fitur, dan animasi mengikuti tren).
+
+### Cara kerja Kirana (tim kreatif)
+- Kirana memantau tren desain web, aplikasi investasi/edukasi, dan animasi, lalu menulis usulan di `IDE.md`.
+- Setiap usulan berisi: masalah atau peluang, ide, contoh/tren yang diacu, dampak bagi pemula, dan perkiraan usaha (kecil/sedang/besar).
+- Usulan wajib lolos aturan perusahaan: tanpa biaya, tetap ringan di HP murah, menghormati `prefers-reduced-motion`, dapat diakses keyboard, dan tidak memakai bahasa ajakan beli/jual.
+- Bima memilih usulan terbaik dan memindahkannya ke BACKLOG.md untuk dikerjakan Dewi (tampilan & animasi) atau Arif (fitur). Kirana ikut meninjau hasilnya.
+- Setiap minggu Kirana menambah minimal tiga usulan baru agar website tidak ketinggalan zaman.
 
 ## Bahasa
 Semua teks website, commit, dan laporan memakai bahasa Indonesia yang sederhana untuk pemula.
