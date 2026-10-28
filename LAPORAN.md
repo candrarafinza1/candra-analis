@@ -44,3 +44,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 ## 28 Okt 2026, 15.10 WIB — Bima
 - Karyawan ke-12 bergabung: **Kirana, tim kreatif** (permintaan Rafinza). Tugas: ide tampilan, fitur, dan animasi mengikuti tren, ditulis di `IDE.md`; Bima memilih, Dewi/Arif mengerjakan.
 - Rafinza: Asisten AI masih "belum aktif" pukul 15.07, padahal sudah ada dua deploy setelah key dipasang. Dugaan: key tersimpan sebagai variabel umum akun Vercel, belum terhubung ke project. Menunggu Rafinza membuka /api/tanya untuk memastikan.
+
+## 28 Okt 2026, 15.25 WIB — Kirana, Bima
+- Kirana: audit kreatif pertama selesai. Enam halaman dicek di 1280px & 390px (tanpa scroll horizontal). 6 usulan ditulis di `IDE.md` (2 tampilan, 2 fitur, 2 animasi) dengan acuan tren 2026. Temuan utama: tabel Peringkat terpotong di HP, tombol pilihan menumpuk, istilah tanpa penjelasan di tempat.
+- Bima memilih 2 usulan paling berdampak: tabel Peringkat jadi kartu di HP (Dewi) dan kamus istilah di tempat (Arif). Masuk BACKLOG.
+- Asisten AI: sudah terbukti masih "belum aktif" (dilihat Rafinza 15.07) dan perbaikannya butuh akun Vercel → dicatat di "Menunggu keputusan Rafinza" dan diemailkan sekali (langkah cek & Redeploy).
+- `node tests/cek.mjs` lolos. Tampilan website tidak berubah.
