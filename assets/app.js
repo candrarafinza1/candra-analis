@@ -54,7 +54,7 @@
   }
   function tautanSumber(e) {
     var s = (e.sumber || [])[0];
-    return s ? el("a", { href: s.url, target: "_blank", rel: "noopener", text: "Sumber" }) : document.createTextNode("–");
+    return s ? el("a", { href: s.url, target: "_blank", rel: "noopener", text: "Sumber", "aria-label": "Sumber data " + e.kode + " (tab baru)" }) : document.createTextNode("–");
   }
 
   /* ---------- Jalur belajar ---------- */

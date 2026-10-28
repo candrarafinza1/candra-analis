@@ -43,7 +43,7 @@ Acuan tren 2026 yang dipakai:
 - Ide: di bawah lebar ±600px, tiap baris tabel tampil sebagai kartu: nomor urut + kode besar, nama perusahaan, lalu 2–3 angka utama berlabel (misalnya "Laba 2025", "Pertumbuhan laba", "Sektor") dan tautan sumber. Di desktop tabel tetap seperti sekarang. Cukup CSS (`display:grid` per baris + label dari atribut `data-label`), tanpa pustaka.
 - Acuan tren: aplikasi investasi 2026 menampilkan daftar saham sebagai kartu ringkas di HP, bukan tabel lebar.
 - Dampak bagi pemula: sebagian besar pemula membuka dari HP; semua angka langsung terbaca tanpa harus tahu bahwa tabel bisa digeser.
-- Status: **dikerjakan** (28 Okt 16.15, Dewi). Menunggu tinjauan Kirana.
+- Status: **selesai** (28 Okt 16.15, Dewi). Ditinjau Kirana 28 Okt 18.40 (lihat "Tinjauan Kirana" di bawah).
 
 ### 2. Tombol pilihan & menu ringkas di HP
 - **Kategori:** tampilan — usaha **kecil**
@@ -51,7 +51,7 @@ Acuan tren 2026 yang dipakai:
 - Ide: tombol pilihan jadi satu baris yang bisa digeser (`overflow-x:auto` di dalam wadahnya sendiri, dengan `scroll-snap`) atau kisi 2×2; menu atas memakai jarak dan ukuran huruf yang lebih rapat agar muat satu baris.
 - Acuan tren: "chip" filter satu baris yang umum di aplikasi keuangan dan e-commerce.
 - Dampak bagi pemula: isi utama (tabel) terlihat di layar pertama.
-- Status: usulan.
+- Status: **dipilih** (28 Okt 18.40, Bima) — tinjauan kartu membuktikan kartu pertama baru muncul setelah layar pertama karena tombol menumpuk. Dikerjakan Dewi.
 
 ### 3. Kamus istilah di tempat (ketuk istilah → penjelasan singkat) ★ paling berdampak
 - **Kategori:** fitur — usaha **sedang**
@@ -84,3 +84,19 @@ Acuan tren 2026 yang dipakai:
 - Acuan tren: visualisasi data mikro di aplikasi keuangan 2026.
 - Dampak bagi pemula: perubahan naik/turun langsung terlihat, tetap berbasis data bersumber.
 - Status: usulan.
+
+## Tinjauan Kirana — 28 Okt 2026, 18.40 WIB
+
+Kartu Peringkat di HP (hasil Dewi, usulan #1), dicek di 390px dan 1280px:
+- Bagus: kode besar, nama, sektor, "Laba 2025" paling menonjol, angka lain berlabel. Angka turun ditandai warna
+  merah **dan** tanda minus, jadi tetap terbaca tanpa warna. Tidak ada scroll horizontal; desktop tetap tabel.
+- Perbaikan langsung (Dewi, kecil): semua tautan kartu bertuliskan "Sumber" sehingga pembaca layar mendengar
+  "Sumber" berulang-ulang. Kini tiap tautan punya label "Sumber data KODE (tab baru)".
+- Masih kurang: empat tombol pilihan menumpuk satu per baris, sehingga kartu pertama baru terlihat setelah
+  menggulir. Diselesaikan lewat usulan #2 (dipilih Bima).
+- Catatan: tiap kartu ±275px, 10 kartu cukup panjang. Belum perlu diubah; dinilai lagi setelah usulan #2.
+
+Kotak istilah (hasil Arif, usulan #3), dicek di Peringkat dan pelajaran:
+- Kotak tetap di dalam layar 390px, bisa ditutup Esc atau ketuk di luar, tautan "Pelajari lebih lanjut" jelas.
+- Istilah bergaris di dalam kalimat tingginya ±22px (kecil untuk jari), tetapi wajar untuk teks dalam kalimat dan
+  ada baris "Bingung istilahnya?" sebagai jalan lain. Tidak diubah.

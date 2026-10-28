@@ -62,3 +62,11 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Nina: tes kini memeriksa kelengkapan kamus dan tautan pelajarannya. Dicek di 1280px & 390px: tanpa scroll horizontal, kotak tidak keluar layar, urutan Tab wajar. `node tests/cek.mjs` lolos.
 - Berikutnya: Sari & Laras (dan Hana untuk istilah syariah) meninjau teks kamus; Kirana meninjau tampilannya.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).
+
+## 28 Okt 2026, 18.40 WIB — Kirana, Sari, Laras, Hana, Dewi, Nina (via Bima)
+- Kirana: tinjauan kartu Peringkat & kotak istilah selesai (IDE.md). Kartu sudah baik; masalah yang tersisa: tombol pilihan menumpuk sehingga kartu pertama di bawah layar pertama → Bima memilih usulan #2 untuk Dewi.
+- Dewi: tautan "Sumber" di Peringkat kini berlabel "Sumber data KODE (tab baru)" untuk pembaca layar.
+- Sari & Laras & Hana: teks kamus istilah ditinjau; 4 penjelasan diperbaiki, JII70 ditambah (16 istilah). DES kini menegaskan bahwa masuk daftar bukan saran membeli.
+- Nina: 7 halaman dicek di 1280px & 390px, tanpa scroll horizontal dan tanpa galat. `node tests/cek.mjs` lolos.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).
+
