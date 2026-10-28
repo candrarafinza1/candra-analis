@@ -300,3 +300,37 @@ tbody tr:hover { background: #f0f2ea; }
 }
 .rujukan-daftar a { font-weight: 700; }
 .rujukan-daftar p { margin: 0; color: var(--tinta-2); font-size: .97rem; }
+
+/* Asisten AI (tim Arif & Dewi) */
+#asisten { max-width: 46rem; }
+.obrolan { display: grid; gap: 14px; margin-bottom: 20px; }
+.obrolan:empty { display: none; }
+.pesan { padding: 14px 16px; border-radius: var(--radius); border: 1px solid var(--garis); background: var(--putih); }
+.pesan p { margin: 0 0 .6em; }
+.pesan p:last-child { margin-bottom: 0; }
+.pesan ul { margin: 0 0 .6em; padding-left: 1.2em; }
+.pesan-pengguna { background: var(--malam); border-color: var(--malam); color: #fff; margin-left: 12%; }
+.pesan-asisten { margin-right: 6%; }
+.pesan-label { display: block; font-size: .8rem; font-weight: 700; margin-bottom: 4px; color: var(--tinta-2); }
+.pesan-pengguna .pesan-label { color: #cfd3f2; }
+.pesan-galat { color: var(--turun); }
+.mengetik { color: var(--tinta-2); }
+@media (prefers-reduced-motion: no-preference) {
+  .mengetik::after { content: "…"; animation: kedip 1s ease-in-out infinite alternate; }
+  .pesan { animation: muncul .3s ease both; }
+}
+.label-tanya { display: block; font-weight: 700; margin: 0 0 8px; }
+.contoh-tanya { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+.chip {
+  font: inherit; font-size: .92rem; text-align: left; cursor: pointer;
+  padding: 8px 14px; border-radius: 999px; border: 1px solid var(--garis); background: var(--putih); color: var(--tinta);
+}
+.chip:hover { border-color: var(--malam-2); }
+.form-tanya textarea {
+  width: 100%; font: inherit; padding: 12px 14px; border-radius: var(--radius-kecil);
+  border: 2px solid var(--garis); background: var(--putih); color: var(--tinta); resize: vertical; min-height: 96px;
+}
+.form-tanya textarea:focus { border-color: var(--malam-2); outline: none; }
+.form-tanya textarea:disabled, .form-tanya button:disabled { opacity: .6; cursor: not-allowed; }
+.form-bawah { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 10px; }
+.hitung-karakter { font-size: .85rem; color: var(--tinta-2); }

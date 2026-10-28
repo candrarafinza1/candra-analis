@@ -11,3 +11,7 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - `data/emiten-asli.js` dibuat: TLKM, KLBF, ICBP, ANTM (data tahun buku 2024–2025, bersumber). Belum ditayangkan.
 - Jadwal kerja otomatis aktif: setiap jam pukul 07–10 dan 13–21 WIB.
 - Istirahat 11.00–13.00. Sesi berikutnya 13.05 WIB.
+
+## 28 Okt 2026, 10.40 WIB — Arif, Dewi, Nina (via Bima)
+- Asisten AI selesai: halaman `asisten.html` + fungsi `api/tanya.mjs`. Diuji 9 skenario (tanpa key, key ada, pertanyaan kosong/terlalu panjang, batas 6 pertanyaan per menit, kuota habis). Semua lolos.
+- Menunggu Pak Rudi memasang `GEMINI_API_KEY` di Vercel.

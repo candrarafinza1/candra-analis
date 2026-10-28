@@ -299,6 +299,127 @@
     });
   }
 
+  /* ---------- Asisten AI (tim Arif) ---------- */
+  // Ubah teks jawaban (markdown sederhana) menjadi elemen yang aman: tanpa innerHTML dari server.
+  function teksKeElemen(teks) {
+    var wadah = el("div", { class: "jawaban-isi" });
+    var daftar = null;
+    function sebaris(str, tujuan) {
+      str.split(/(\*\*[^*]+\*\*)/g).forEach(function (bag) {
+        if (/^\*\*[^*]+\*\*$/.test(bag)) tujuan.appendChild(el("strong", { text: bag.slice(2, -2) }));
+        else if (bag) tujuan.appendChild(document.createTextNode(bag));
+      });
+    }
+    teks.split(/\n+/).forEach(function (baris) {
+      baris = baris.trim();
+      if (!baris) return;
+      var poin = baris.match(/^(?:[-*•]|\d+[.)])\s+(.*)$/);
+      if (poin) {
+        if (!daftar) { daftar = el("ul"); wadah.appendChild(daftar); }
+        var li = el("li"); sebaris(poin[1], li); daftar.appendChild(li);
+      } else {
+        daftar = null;
+        var p = el("p"); sebaris(baris.replace(/^#+\s*/, ""), p); wadah.appendChild(p);
+      }
+    });
+    return wadah;
+  }
+
+  function renderAsisten() {
+    var akar = document.getElementById("asisten");
+    if (!akar) return;
+    var riwayat = [];
+    var contoh = [
+      "Apa bedanya saham syariah dan saham biasa?",
+      "Bagaimana cara menghitung ROE? Beri contoh angka.",
+      "Laba naik tapi harga saham turun, kenapa bisa begitu?",
+      "Apa yang perlu saya periksa sebelum membeli saham pertama?"
+    ];
+
+    var status = el("div", { class: "pita-demo", role: "status", hidden: "hidden" });
+    var log = el("div", { class: "obrolan", "aria-live": "polite", "aria-label": "Percakapan dengan asisten" });
+    var chips = el("div", { class: "contoh-tanya" });
+    var area = el("textarea", { id: "kotak-tanya", rows: "3", maxlength: "600", placeholder: "Tulis pertanyaan Anda" });
+    var tombol = el("button", { class: "tombol tombol-gelap", type: "submit", text: "Kirim pertanyaan" });
+    var hitung = el("span", { class: "hitung-karakter", text: "0/600" });
+    var form = el("form", { class: "form-tanya" }, [
+      el("label", { for: "kotak-tanya", class: "label-tanya", text: "Pertanyaan Anda" }),
+      area, el("div", { class: "form-bawah" }, [hitung, tombol])
+    ]);
+
+    contoh.forEach(function (c) {
+      var b = el("button", { type: "button", class: "chip", text: c });
+      b.addEventListener("click", function () { area.value = c; area.focus(); perbaruiHitung(); });
+      chips.appendChild(b);
+    });
+
+    akar.appendChild(status);
+    akar.appendChild(log);
+    akar.appendChild(el("p", { class: "label-tanya", text: "Coba tanyakan:" }));
+    akar.appendChild(chips);
+    akar.appendChild(form);
+    akar.appendChild(el("p", { class: "catatan-metode", style: "margin-top:16px",
+      text: "Asisten AI bisa keliru. Selalu cek angka di laporan keuangan resmi. Jawaban asisten bukan rekomendasi membeli atau menjual efek. Jangan menuliskan data pribadi seperti nomor KTP atau rekening." }));
+
+    function perbaruiHitung() { hitung.textContent = area.value.length + "/600"; }
+    area.addEventListener("input", perbaruiHitung);
+    area.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); form.requestSubmit(); }
+    });
+
+    function tambahPesan(peran, isiEl) {
+      var kelas = "pesan pesan-" + peran;
+      var label = peran === "pengguna" ? "Anda" : "Asisten";
+      var p = el("div", { class: kelas }, [el("span", { class: "pesan-label", text: label }), isiEl]);
+      log.appendChild(p);
+      p.scrollIntoView({ block: "nearest", behavior: "smooth" });
+      return p;
+    }
+
+    function setAktif(aktif, pesan) {
+      area.disabled = !aktif; tombol.disabled = !aktif;
+      if (pesan) { status.hidden = false; status.textContent = ""; status.appendChild(el("strong", { text: "Asisten belum aktif. " })); status.appendChild(document.createTextNode(pesan)); }
+      else status.hidden = true;
+    }
+
+    fetch("api/tanya", { method: "GET" })
+      .then(function (r) { return r.ok ? r.json() : { aktif: false }; })
+      .then(function (d) { if (!d.aktif) setAktif(false, "Kami sedang menyiapkan layanan ini. Sementara itu, silakan pelajari materi di halaman Belajar."); })
+      .catch(function () { setAktif(false, "Layanan asisten tidak bisa dihubungi dari halaman ini."); });
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var q = area.value.trim();
+      if (!q || tombol.disabled) return;
+      tambahPesan("pengguna", el("p", { text: q }));
+      area.value = ""; perbaruiHitung();
+      tombol.disabled = true; tombol.textContent = "Menunggu jawaban";
+      var tunggu = tambahPesan("asisten", el("p", { class: "mengetik", text: "Sedang menyusun jawaban" }));
+
+      fetch("api/tanya", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pertanyaan: q, riwayat: riwayat })
+      })
+        .then(function (r) { return r.json().catch(function () { return {}; }).then(function (d) { return { ok: r.ok, d: d }; }); })
+        .then(function (h) {
+          tunggu.remove();
+          if (h.ok && h.d.jawaban) {
+            tambahPesan("asisten", teksKeElemen(h.d.jawaban));
+            riwayat.push({ peran: "pengguna", teks: q }, { peran: "asisten", teks: h.d.jawaban });
+            riwayat = riwayat.slice(-6);
+          } else {
+            tambahPesan("asisten", el("p", { class: "pesan-galat", text: h.d.galat || "Asisten tidak bisa menjawab saat ini. Coba lagi sebentar lagi." }));
+          }
+        })
+        .catch(function () {
+          tunggu.remove();
+          tambahPesan("asisten", el("p", { class: "pesan-galat", text: "Koneksi terputus. Periksa internet Anda lalu kirim ulang pertanyaan." }));
+        })
+        .then(function () { tombol.disabled = false; tombol.textContent = "Kirim pertanyaan"; area.focus(); });
+    });
+  }
+
   /* ---------- Tandai menu aktif ---------- */
   function tandaiMenu() {
     var hal = location.pathname.split("/").pop() || "index.html";
@@ -316,4 +437,5 @@
   renderPeringkat();
   renderRadar();
   renderRujukan();
+  renderAsisten();
 })();

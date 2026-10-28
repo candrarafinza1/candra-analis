@@ -12,6 +12,7 @@ Candra Analis adalah platform belajar dan penyaji data. Kami tidak memberi ajaka
 | `belajar.html`, `pelajaran.html` | Delapan pelajaran (enam dasar, dua praktik), modul PDF, dan rujukan resmi |
 | `peringkat.html` | Sepuluh saham syariah teratas menurut laba, dividend yield, pertumbuhan pendapatan, atau ROE |
 | `radar.html` | Radar Risiko: tanda masalah pada saham yang dipegang, lengkap dengan bukti |
+| `asisten.html`, `api/tanya.mjs` | Asisten AI (Google Gemini versi gratis). Aktif setelah `GEMINI_API_KEY` dipasang di Vercel |
 
 **Catatan penting:** `data/emiten.js` masih berisi **data contoh dengan kode fiktif** (CA01–CA14). Setiap halaman yang memakainya menampilkan pita "Data contoh". Pita ini harus tetap ada sampai data sungguhan dipasang.
 

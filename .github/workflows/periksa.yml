@@ -14,6 +14,6 @@ jobs:
         with:
           node-version: 22
       - name: Cek sintaks JavaScript
-        run: for f in assets/*.js data/*.js; do node --check "$f"; done
+        run: for f in assets/*.js data/*.js api/*.mjs; do node --check "$f"; done
       - name: Pemeriksaan QA (tautan, data, bahasa ajakan)
         run: node tests/cek.mjs
