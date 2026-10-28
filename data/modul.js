@@ -169,5 +169,81 @@ window.MODUL = [
       </ul>
       <div class="kotak-penting">Kalau ada tawaran investasi yang mencurigakan, Anda bisa memeriksanya atau melapor ke Kontak OJK 157.</div>
     `
+  },
+  {
+    id: "praktik-beli-pertama",
+    judul: "Praktik: membeli saham pertama Anda",
+    ringkas: "Latihan dengan uang virtual dulu, lalu langkah demi langkah membeli satu lot sungguhan.",
+    durasi: "15 menit",
+    isi: `
+      <p>Pelajaran ini mengajak Anda praktik. Kerjakan berurutan dan jangan lompat ke uang sungguhan sebelum tahap latihan selesai.</p>
+
+      <h2>Tahap 1: latihan tanpa uang sungguhan</h2>
+      <ol>
+        <li>Unduh aplikasi resmi <strong>IDX Mobile</strong> dari Bursa Efek Indonesia, lalu aktifkan <strong>Mode Syariah</strong>.</li>
+        <li>Buka fitur <strong>Sharia Virtual Trading</strong>. Anda mendapat modal virtual dan harga yang bergerak sungguhan.</li>
+        <li>Beli dua atau tiga saham syariah pilihan Anda dengan modal virtual itu. Tulis alasan Anda membeli masing-masing saham.</li>
+        <li>Pantau selama dua sampai empat minggu. Perhatikan perasaan Anda saat harga turun. Ini latihan terpenting.</li>
+      </ol>
+
+      <h2>Tahap 2: siapkan rekening</h2>
+      <ol>
+        <li>Buka rekening di sekuritas berizin OJK yang menyediakan transaksi syariah (lihat pelajaran "Membuka rekening saham").</li>
+        <li>Tunggu sampai rekening efek dan RDN aktif. Biasanya Anda menerima email atau notifikasi di aplikasi.</li>
+        <li>Setor dana ke RDN sesuai rencana. Untuk permulaan, cukup jumlah kecil yang siap Anda tahan bertahun-tahun.</li>
+      </ol>
+
+      <h2>Tahap 3: memasang order beli</h2>
+      <ol>
+        <li>Cari kode saham di aplikasi sekuritas. Pastikan saham itu tercatat di Daftar Efek Syariah.</li>
+        <li>Pilih <strong>Beli</strong>, isi <strong>harga</strong> dan <strong>jumlah lot</strong>. Periksa total yang akan terpotong dari RDN, termasuk biaya.</li>
+        <li>Kirim order. Order bisa langsung terjadi (<em>matched</em>) atau menunggu sampai ada penjual di harga itu.</li>
+        <li>Setelah dua hari bursa (T+2), saham tercatat atas nama Anda. Cek juga lewat AKSes KSEI.</li>
+      </ol>
+
+      <h2>Tahap 4: catat dan tinjau</h2>
+      <ul>
+        <li>Catat tanggal, harga, jumlah lot, biaya, dan alasan membeli.</li>
+        <li>Pasang saham Anda di Radar Risiko Candra Analis agar Anda tahu bila muncul tanda masalah.</li>
+        <li>Tinjau ulang setiap kali laporan kuartal terbit, bukan setiap kali harga naik-turun.</li>
+      </ul>
+      <div class="kotak-penting">Tujuan pembelian pertama adalah belajar prosesnya, bukan mencari untung besar. Mulai kecil, catat semuanya.</div>
+    `
+  },
+  {
+    id: "praktik-analisis-sendiri",
+    judul: "Praktik: menganalisis perusahaan sendiri",
+    ringkas: "Lembar kerja sepuluh langkah untuk menilai satu perusahaan dari laporan keuangannya.",
+    durasi: "20 menit",
+    isi: `
+      <p>Pilih satu perusahaan syariah yang produknya Anda kenal sehari-hari. Unduh laporan keuangan tahunan terbarunya dari situs BEI, lalu isi langkah-langkah di bawah. Tuliskan jawabannya di buku atau lembar kerja.</p>
+
+      <h2>Bagian A: kenali usahanya</h2>
+      <ol>
+        <li><strong>Dari mana uangnya datang?</strong> Tulis produk atau jasa utamanya dalam satu kalimat.</li>
+        <li><strong>Apakah masih tercatat syariah?</strong> Cek di Daftar Efek Syariah periode berjalan.</li>
+        <li><strong>Siapa pesaingnya?</strong> Sebutkan dua perusahaan sejenis untuk pembanding.</li>
+      </ol>
+
+      <h2>Bagian B: periksa angkanya</h2>
+      <ol start="4">
+        <li><strong>Pendapatan</strong> tiga tahun terakhir: naik, datar, atau turun?</li>
+        <li><strong>Laba bersih</strong> tiga tahun terakhir: apakah ikut naik bersama pendapatan?</li>
+        <li><strong>ROE</strong>: hitung laba bersih ÷ ekuitas. Bandingkan dengan dua pesaing tadi.</li>
+        <li><strong>DER</strong>: hitung total liabilitas ÷ ekuitas. Di atas 2 berarti utangnya berat.</li>
+      </ol>
+
+      <h2>Bagian C: nilai harganya</h2>
+      <ol start="8">
+        <li><strong>PER</strong>: harga saham ÷ laba per saham. Bandingkan dengan pesaing dan dengan PER tahun-tahun sebelumnya.</li>
+        <li><strong>Dividen</strong>: apakah rutin dibagikan? Berapa dividend yield-nya?</li>
+      </ol>
+
+      <h2>Bagian D: simpulkan sendiri</h2>
+      <ol start="10">
+        <li>Tulis tiga hal yang membuat Anda yakin dan tiga hal yang membuat Anda ragu tentang perusahaan ini. Keputusan Anda harus bisa dijelaskan dari daftar itu.</li>
+      </ol>
+      <div class="kotak-penting">Kalau Anda tidak bisa menjelaskan cara perusahaan itu menghasilkan uang, tunda dulu. Memahami usaha lebih penting daripada menghafal rasio.</div>
+    `
   }
 ];

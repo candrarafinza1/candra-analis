@@ -22,8 +22,17 @@ for (const h of halaman) {
 // 2. Data dapat dibaca dan lengkap
 const ctx = { window: {} };
 vm.createContext(ctx);
-for (const f of ["data/modul.js", "data/emiten.js"]) vm.runInContext(readFileSync(f, "utf8"), ctx);
-const { MODUL, EMITEN } = ctx.window;
+for (const f of ["data/modul.js", "data/emiten.js", "data/rujukan.js"]) vm.runInContext(readFileSync(f, "utf8"), ctx);
+const { MODUL, EMITEN, RUJUKAN } = ctx.window;
+
+// Rujukan: hanya tautan https ke sumber yang sudah disetujui tim Laras & Hana
+const domainResmi = /^https:\/\/(www\.)?(idx\.co\.id|idx\.id|ojk\.go\.id|sikapiuangmu\.ojk\.go\.id|akses\.ksei\.co\.id|youtube\.com|cnbcindonesia\.com)(\/|$)/;
+ok(Array.isArray(RUJUKAN) && RUJUKAN.length > 0, "rujukan kosong");
+for (const k of RUJUKAN || []) for (const r of k.item) {
+  ok(r.judul && r.ket, `rujukan tidak lengkap: ${r.url}`);
+  ok(domainResmi.test(r.url), `rujukan dari sumber yang belum disetujui: ${r.url}`);
+}
+ok(existsSync("assets/modul/modul-candra-analis.pdf"), "modul PDF belum dibuat (jalankan tools/buat-modul-pdf.py)");
 
 ok(Array.isArray(MODUL) && MODUL.length > 0, "kurikulum kosong");
 const idModul = new Set();

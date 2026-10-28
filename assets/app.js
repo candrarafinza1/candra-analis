@@ -283,6 +283,22 @@
     tampil();
   }
 
+  /* ---------- Rujukan belajar ---------- */
+  function renderRujukan() {
+    var akar = document.getElementById("rujukan");
+    if (!akar || !window.RUJUKAN) return;
+    window.RUJUKAN.forEach(function (k) {
+      var ul = el("ul", { class: "rujukan-daftar" });
+      k.item.forEach(function (r) {
+        ul.appendChild(el("li", null, [
+          el("a", { href: r.url, target: "_blank", rel: "noopener", text: r.judul }),
+          el("p", { text: r.ket })
+        ]));
+      });
+      akar.appendChild(el("div", { class: "rujukan-kelompok" }, [el("h3", { text: k.kelompok }), ul]));
+    });
+  }
+
   /* ---------- Tandai menu aktif ---------- */
   function tandaiMenu() {
     var hal = location.pathname.split("/").pop() || "index.html";
@@ -299,4 +315,5 @@
   renderMini();
   renderPeringkat();
   renderRadar();
+  renderRujukan();
 })();

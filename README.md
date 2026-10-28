@@ -9,7 +9,7 @@ Candra Analis adalah platform belajar dan penyaji data. Kami tidak memberi ajaka
 | Halaman | Isi |
 |---|---|
 | `index.html` | Beranda, jalur belajar, ringkasan alat |
-| `belajar.html`, `pelajaran.html` | Enam pelajaran dasar saham syariah |
+| `belajar.html`, `pelajaran.html` | Delapan pelajaran (enam dasar, dua praktik), modul PDF, dan rujukan resmi |
 | `peringkat.html` | Sepuluh saham syariah teratas menurut laba, dividend yield, pertumbuhan pendapatan, atau ROE |
 | `radar.html` | Radar Risiko: tanda masalah pada saham yang dipegang, lengkap dengan bukti |
 
@@ -20,7 +20,9 @@ Candra Analis adalah platform belajar dan penyaji data. Kami tidak memberi ajaka
 ```
 index.html, belajar.html, pelajaran.html, peringkat.html, radar.html
 assets/   styles.css, app.js, logo.svg
-data/     modul.js (kurikulum), emiten.js (data emiten)
+data/     modul.js (kurikulum), emiten.js (data emiten), rujukan.js (sumber belajar)
+assets/modul/  modul-candra-analis.pdf (dibuat dari data/modul.js)
+tools/    buat-modul-pdf.py
 tests/    cek.mjs (pemeriksaan QA tanpa dependensi)
 vercel.json   header keamanan & URL bersih
 ```
@@ -31,6 +33,7 @@ Website statis murni: tanpa proses build, tanpa biaya server. Cukup dibuka lewat
 
 ```
 python3 -m http.server 8000
+python3 tools/buat-modul-pdf.py   # setiap kali kurikulum berubah
 node tests/cek.mjs
 ```
 
@@ -45,6 +48,7 @@ Perusahaan ini dijalankan tim AI dengan CEO **Bima**. Karyawan melapor ke Bima; 
 | Fajar | Data Engineer | Mengisi `data/emiten.js` dari laporan keuangan BEI & DES OJK |
 | Galih | Analis Saham | Rumus peringkat dan aturan Radar Risiko di `assets/app.js` |
 | Sari | Konten Edukasi | Kurikulum di `data/modul.js` |
+| Laras | Guru & Kurator Belajar | Modul PDF (`tools/buat-modul-pdf.py`), pelajaran praktik, rujukan resmi di `data/rujukan.js` |
 | Dewi | Desainer UI & Animasi | `assets/styles.css`, animasi beranda |
 | Arif | Engineer Web & AI | Halaman, logika, dan Asisten AI (Fase 2) |
 | Nina | QA & Pemantau Error | `tests/cek.mjs`, pemeriksaan tampilan desktop & HP |
