@@ -25,11 +25,13 @@ window.EMITEN_ASLI = [
     desBaris: 413,
     labaTahun: { 2024: 3240, 2025: 3660 },
     pendapatan: { 2024: 32630, 2025: 35320 },
-    liabilitas2025: 5970, ekuitas2025: null,
+    liabilitas2025: 5970.85, ekuitas2025: 24728.50,
     laba9b: { 2025: null, 2026: null },
     dps: null, harga: null,
     sumber: [{ judul: "Investortrust, 31 Mar 2026: Laba Kalbe Farma naik di 2025, penjualan Rp35,32 triliun",
-      url: "https://investortrust.id/market/98460/laba-kalbe-farma-klbf-naik-15-3-di-2025-penjualan-tembus-rp35-32-triliun" }]
+      url: "https://investortrust.id/market/98460/laba-kalbe-farma-klbf-naik-15-3-di-2025-penjualan-tembus-rp35-32-triliun" },
+      { judul: "PintarSaham, 8 Apr 2026: Laba bersih Kalbe Farma tumbuh 13% di 2025 (neraca 31 Des 2025, juta Rp)",
+        url: "https://pintarsaham.id/laba-bersih-kalbe-farma-klbf-tumbuh-13-di-2025-simak-analisis-saham-klbf-berikut/" }]
   },
   {
     kode: "ICBP", nama: "PT Indofood CBP Sukses Makmur Tbk", sektor: "Barang konsumen primer",
@@ -47,19 +49,21 @@ window.EMITEN_ASLI = [
     desBaris: 76,
     labaTahun: { 2024: 3850, 2025: 7920 },
     pendapatan: { 2024: 69190, 2025: 84640 },
-    liabilitas2025: null, ekuitas2025: null,
+    liabilitas2025: 15930, ekuitas2025: 36600,
     laba9b: { 2025: null, 2026: null },
     dps: 210, harga: null,
-    catatan: "Laba yang dikutip adalah laba tahun berjalan (termasuk kepentingan nonpengendali). Perlu dicek ulang ke laba yang diatribusikan ke pemilik entitas induk.",
+    catatan: "Dua sumber berbeda angka laba: JawaPos Rp7,92 T (2024: Rp3,85 T), Katadata Rp7,21 T (2024: Rp3,65 T). Belum pasti mana yang laba diatribusikan ke pemilik entitas induk; cek ke laporan keuangan resmi sebelum dipakai di Peringkat. Liabilitas & ekuitas dari Katadata (cocok: 15,93 + 36,60 = aset 52,53 T).",
     sumber: [{ judul: "JawaPos, 10 Jun 2026: Laba bersih 2025 melonjak, ANTM tebar dividen Rp5,05 triliun",
-      url: "https://www.jawapos.com/bisnis/2606100278/laba-bersih-2025-melonjak-106-persen-antm-tebar-dividen-rp-505-triliun" }]
+      url: "https://www.jawapos.com/bisnis/2606100278/laba-bersih-2025-melonjak-106-persen-antm-tebar-dividen-rp-505-triliun" },
+      { judul: "Katadata, 31 Mar 2026: Laba Antam nyaris dua kali lipat jadi Rp7,21 triliun pada 2025",
+        url: "https://katadata.co.id/finansial/bursa/69cbbc3f148fa/laba-antam-antm-nyaris-dua-kali-lipat-jadi-rp-7-21-triliun-pada-2025" }]
     },
   {
     kode: "UNTR", nama: "PT United Tractors Tbk", sektor: "Industri",
     desBaris: 199,
     labaTahun: { 2024: 19530, 2025: 14810 },
     pendapatan: { 2024: 134400, 2025: 131300 },
-    liabilitas2025: null, ekuitas2025: null,
+    liabilitas2025: 74500, ekuitas2025: 103100,
     laba9b: { 2025: null, 2026: null },
     dps: null, harga: null,
     sumber: [
@@ -68,7 +72,9 @@ window.EMITEN_ASLI = [
       { judul: "Bisnis, 27 Feb 2025: United Tractors cetak laba bersih Rp19,53 triliun 2024",
         url: "https://market.bisnis.com/read/20250227/192/1843194/united-tractors-untr-cetak-laba-bersih-rp1953-triliun-2024" },
       { judul: "Warta Ekonomi, 2025: United Tractors raup pendapatan Rp134,4 triliun (tahun buku 2024)",
-        url: "https://wartaekonomi.co.id/read559366/united-tractors-untr-raup-pendapatan-rp1344-triliun-tapi-laba-bersihnya-tertekan" }]
+        url: "https://wartaekonomi.co.id/read559366/united-tractors-untr-raup-pendapatan-rp1344-triliun-tapi-laba-bersihnya-tertekan" },
+      { judul: "PintarSaham, 27 Feb 2026: Kinerja keuangan United Tractors tahun 2025 (aset Rp177,6 T, liabilitas Rp74,5 T, ekuitas Rp103,1 T)",
+        url: "https://pintarsaham.id/kinerja-keuangan-pt-united-tractors-tbk-untr-tahun-2025/" }]
   },
   {
     kode: "INDF", nama: "PT Indofood Sukses Makmur Tbk", sektor: "Barang konsumen primer",
@@ -138,11 +144,13 @@ window.EMITEN_ASLI = [
     desBaris: 220,
     labaTahun: { 2024: 3710, 2025: 5640 },
     pendapatan: { 2024: 67470, 2025: 70700 },
-    liabilitas2025: null, ekuitas2025: null,
+    liabilitas2025: 11710, ekuitas2025: 34150,
     laba9b: { 2025: null, 2026: null },
     dps: null, harga: null,
     sumber: [{ judul: "Kontan Insight, 9 Apr 2026: Pakan ternak menopang laba Charoen Pokphand pada 2025",
-      url: "https://insight.kontan.co.id/news/pakan-ternak-menopang-laba-charoen-pokphand-cpin-pada-2025" }]
+      url: "https://insight.kontan.co.id/news/pakan-ternak-menopang-laba-charoen-pokphand-cpin-pada-2025" },
+      { judul: "Bisnis, 31 Mar 2026: Adu nyaring kokok duo emiten unggas JPFA-CPIN di 2025 (neraca akhir 2025)",
+        url: "https://market.bisnis.com/read/20260331/192/1963318/adu-nyaring-kokok-duo-emiten-unggas-jpfa-cpin-di-2025" }]
   },
   {
     kode: "JPFA", nama: "PT Japfa Comfeed Indonesia Tbk", sektor: "Barang konsumen primer",
@@ -153,19 +161,22 @@ window.EMITEN_ASLI = [
     laba9b: { 2025: null, 2026: null },
     dps: null, harga: null,
     sumber: [{ judul: "Investortrust, 1 Mar 2026: Laba bersih Japfa melonjak 33,33% di 2025",
-      url: "https://investortrust.id/market/95824/laba-bersih-japfa-jpfa-melonjak-33-33-di-2025-ini-jadi-penopangnya" }]
+      url: "https://investortrust.id/market/95824/laba-bersih-japfa-jpfa-melonjak-33-33-di-2025-ini-jadi-penopangnya" }],
+    catatan: "Bisnis (31 Mar 2026) menulis liabilitas Rp20,04 T dan ekuitas Rp20,12 T, tetapi jumlahnya (Rp40,16 T) tidak cocok dengan total aset Rp40,06 T di artikel yang sama. Dibiarkan kosong sampai dicek ke laporan resmi."
   },
   {
     kode: "INTP", nama: "PT Indocement Tunggal Prakarsa Tbk", sektor: "Bahan baku",
     desBaris: 108,
     labaTahun: { 2024: 2010, 2025: 2250 },
     pendapatan: { 2024: 18550, 2025: 17730 },
-    liabilitas2025: null, ekuitas2025: null,
+    liabilitas2025: 8522.2, ekuitas2025: 23203.1,
     laba9b: { 2025: null, 2026: null },
     dps: null, harga: null,
-    catatan: "Laba 2025 ikut ditopang keuntungan sekali-waktu dari penjualan 60% bisnis mortar (Des 2025).",
+    catatan: "Laba 2025 ikut ditopang keuntungan sekali-waktu dari penjualan 60% bisnis mortar (Des 2025). Laba yang dipakai = laba tahun berjalan (siaran pers resmi tidak memisahkan bagian entitas induk). Liabilitas = jangka pendek 6.104,2 + jangka panjang 2.418,0 (miliar Rp) dari siaran pers resmi.",
     sumber: [{ judul: "Investortrust, 2 Apr 2026: Indocement cetak kenaikan laba 12% di 2025, ditopang divestasi aset",
-      url: "https://investortrust.id/market/98742/indocement-intp-cetak-kenaikan-laba-12-di-2025-ditopang-divestasi-aset" }]
+      url: "https://investortrust.id/market/98742/indocement-intp-cetak-kenaikan-laba-12-di-2025-ditopang-divestasi-aset" },
+      { judul: "Indocement, 1 Apr 2026: Siaran pers kinerja 2025 (neraca 31 Des 2025)",
+        url: "https://www.indocement.co.id/media/post/siaran-pers-indocement-kinerja-2025q4-indonesia-cc-ck-final-clean-8de93be8fc5a0372118.pdf" }]
   },
   {
     kode: "SMGR", nama: "PT Semen Indonesia (Persero) Tbk", sektor: "Bahan baku",
@@ -176,18 +187,21 @@ window.EMITEN_ASLI = [
     laba9b: { 2025: null, 2026: null },
     dps: null, harga: null,
     sumber: [{ judul: "Investortrust, 2026: Laba bersih Semen Indonesia anjlok 76,8% di 2025",
-      url: "https://www.investortrust.id/market/98479/laba-bersih-semen-indonesia-smgr-anjlok-76-8-di-2025-ini-pemicunya" }]
+      url: "https://www.investortrust.id/market/98479/laba-bersih-semen-indonesia-smgr-anjlok-76-8-di-2025-ini-pemicunya" }],
+    catatan: "Liputan6 & PintarSaham menulis liabilitas Rp27,15 T dan ekuitas Rp47,72 T, tetapi jumlahnya Rp1,7 T lebih kecil dari total aset Rp76,57 T. Dibiarkan kosong sampai dicek ke laporan resmi."
   },
   {
     kode: "AKRA", nama: "PT AKR Corporindo Tbk", sektor: "Energi",
     desBaris: 12,
     labaTahun: { 2024: null, 2025: 2470 },
-    pendapatan: { 2024: null, 2025: 46020 },
-    liabilitas2025: null, ekuitas2025: null,
+    pendapatan: { 2024: 38730, 2025: 46020 },
+    liabilitas2025: 20950, ekuitas2025: 15610,
     laba9b: { 2025: null, 2026: null },
     dps: 100, harga: null,
-    catatan: "Dividen tahun buku 2025 = interim Rp50 + final Rp50. Angka 2024 belum dimasukkan: sumber lain menyebut laba 2024 Rp2,39 triliun, tidak cocok dengan kenaikan 11% yang dilaporkan, jadi perlu dicek ke laporan resmi.",
+    catatan: "Dividen tahun buku 2025 = interim Rp50 + final Rp50. Angka 2024 belum dimasukkan: sumber lain menyebut laba 2024 Rp2,39 triliun, tidak cocok dengan kenaikan 11% yang dilaporkan, jadi perlu dicek ke laporan resmi. Ekuitas 2025 dihitung dari total aset Rp36,56 T dikurangi liabilitas Rp20,95 T (Bisnis).",
     sumber: [{ judul: "Katadata, 27 Apr 2026: AKRA sepakat bagi dividen Rp1,98 triliun",
-      url: "https://katadata.co.id/finansial/bursa/69ef175cc3f38/akra-sepakat-bagi-dividen-rp-1-98-triliun-umumkan-perubahan-direksi" }]
+      url: "https://katadata.co.id/finansial/bursa/69ef175cc3f38/akra-sepakat-bagi-dividen-rp-1-98-triliun-umumkan-perubahan-direksi" },
+      { judul: "Bisnis, 18 Mar 2026: Kinerja 2025, pendapatan AKRA tumbuh 18,82%, laba bersih naik 11,12%",
+        url: "https://market.bisnis.com/read/20260318/192/1961272/kinerja-2025-pendapatan-akra-tumbuh-1882-laba-bersih-naik-1112" }]
   }
 ];

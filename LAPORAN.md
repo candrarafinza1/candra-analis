@@ -26,3 +26,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: `data/emiten-asli.js` bertambah 11 emiten menjadi 15 (UNTR, INDF, UNVR, PTBA, MYOR, SIDO, CPIN, JPFA, INTP, SMGR, AKRA). Tiap baris DES dikutip dari PDF DES Mei 2026 dan dicek silang. Angka yang tidak pasti dibiarkan kosong (null) dan diberi catatan (laba UNVR & INTP 2025 kemungkinan memuat keuntungan sekali-waktu, laba AKRA 2024 tidak konsisten antar-sumber).
 - Nina: `tests/cek.mjs` kini memeriksa `desBaris` dan `sumber` di data asli. Semua pemeriksaan lolos. Data asli belum tampil di website.
 - Masalah berat: tidak ada.
+
+## 28 Okt 2026, 14.15 WIB — Fajar (via Bima)
+- Neraca 31 Des 2025 (liabilitas & ekuitas) terisi untuk 6 emiten: KLBF, ANTM, UNTR, CPIN, INTP (siaran pers resmi Indocement), AKRA. Pendapatan 2024 AKRA terisi. Semua bersumber dan dicek liabilitas + ekuitas = total aset.
+- JPFA & SMGR dibiarkan kosong: angka di berita tidak cocok dengan total asetnya. PDF laporan resmi emiten (unitedtractors.com, sig.id) diblokir proxy lingkungan kerja, jadi dicari lewat berita.
+- ANTM: laba 2025 beda antar-sumber (Rp7,92 T vs Rp7,21 T), dicatat agar dicek sebelum masuk Peringkat.
+- `node tests/cek.mjs` lolos. Tampilan tidak berubah (data asli belum ditayangkan).
+- Masalah berat: tidak ada.
