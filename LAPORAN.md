@@ -86,3 +86,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Hana: kelima kode sudah dikutip barisnya dari DES periode I 2026 sebelumnya.
 - Nina: `node tests/cek.mjs` lolos (23 emiten). Peringkat & Radar dicek di 390px & 1280px tanpa scroll horizontal dan tanpa galat.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).
+
+## 28 Okt 2026, 21.30 WIB — Fajar, Hana, Nina (via Bima)
+- Fajar: BRIS (Bank Syariah Indonesia, DES baris 3) masuk data asli. Laba bersih 2025 Rp7,56 T (2024 Rp7,00 T), ekuitas Rp51,95 T; dua sumber (Emitennews, BCA Sekuritas) sama. Total 24 emiten.
+- Hana & Fajar: karena bank syariah punya dana syirkah temporer Rp299,31 T di luar liabilitas, DER BRIS sengaja tidak dihitung agar Radar tidak salah menandai "utang tinggi". Pendapatan bank dikosongkan (sumber tidak memberi satu angka total). Cek: liabilitas + syirkah temporer + ekuitas = aset Rp456,19 T.
+- Bima: sisa kandidat (AADI, ITMG, PGAS, MDKA, TPIA, HRUM, MBMA) melapor dalam dolar AS → tugas baru untuk Galih menentukan cara tampilnya dulu. Masalah ringan.
+- Nina: `node tests/cek.mjs` lolos (24 emiten). Peringkat & Radar dicek di 390px & 1280px tanpa scroll horizontal dan tanpa galat.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).

@@ -308,5 +308,19 @@ window.EMITEN_ASLI = [
     catatan: "Rugi diatribusikan kepada pemilik entitas induk 2025 Rp4,42 T (2024 laba Rp1,81 T). Angka 2025 sudah termasuk penggabungan XL Axiata dengan Smartfren; angka 2024 sebelum penggabungan, jadi perbandingan tidak setara. Cek: liabilitas + ekuitas = aset Rp115,3 T.",
     sumber: [{ judul: "Warta Ekonomi, 13 Feb 2026: Pendapatan naik tapi EXCL justru rugi Rp4,42 triliun pada 2025",
       url: "https://wartaekonomi.co.id/read600982/pendapatan-naik-tapi-excl-justru-rugi-rp442-triliun-pada-2025" }]
+  },
+  {
+    kode: "BRIS", nama: "PT Bank Syariah Indonesia Tbk", sektor: "Keuangan",
+    desBaris: 3,
+    labaTahun: { 2024: 7000, 2025: 7560 },
+    pendapatan: { 2024: null, 2025: null },
+    liabilitas2025: null, ekuitas2025: 51950,
+    laba9b: { 2025: null, 2026: null },
+    dps: null, harga: null,
+    catatan: "Bank syariah: sumber menyebut laba bersih Rp7,56 T (2024 Rp7,00 T); belum dipastikan apakah sama dengan laba diatribusikan. Pendapatan bank tidak dijumlah dalam satu angka di sumber (pendapatan jual beli Rp14,51 T, bagi hasil Rp10,12 T), jadi dikosongkan. DER sengaja tidak dihitung: di bank syariah, selain liabilitas Rp104,92 T ada dana syirkah temporer Rp299,31 T (dana nasabah bagi hasil), sehingga DER tidak sebanding dengan perusahaan non-bank. Cek: liabilitas + dana syirkah temporer + ekuitas = aset Rp456,19 T.",
+    sumber: [{ judul: "Emitennews, 7 Feb 2026: Tumbuh minimalis, BRIS 2025 tabulasi laba Rp7,56 triliun",
+      url: "https://emitennews.com/news/tumbuh-minimalis-bris-2025-tabulasi-laba-rp756-triliun" },
+      { judul: "BCA Sekuritas, 6 Feb 2026: Bank Syariah Indonesia raih laba Rp7,56 triliun hingga Desember 2025",
+        url: "https://bcasekuritas.co.id/latest-news/news/bank-syariah-indonesia-raih-laba-rp756-triliun-hingga-desember-2025" }]
   }
 ];
