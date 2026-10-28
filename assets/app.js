@@ -47,9 +47,16 @@
 
   function pitaSumber(wadah) {
     if (!wadah) return;
+    // Kalimat inti selalu tampil; rinciannya di <details> agar tidak memanjang di HP (Dewi, tinjauan Kirana).
     wadah.appendChild(el("div", { class: "pita-sumber", role: "note" }, [
-      el("strong", { text: EMITEN.length + " emiten syariah. " }),
-      "Angka tahun buku 2024–2025 dari laporan keuangan emiten sebagaimana diberitakan media; tiap emiten punya tautan sumber. Status syariah: " + DES_LABEL + ". Angka yang belum bisa dipastikan sengaja dikosongkan (–)."
+      el("p", null, [
+        el("strong", { text: EMITEN.length + " emiten syariah" }),
+        " dari Daftar Efek Syariah OJK. Angka yang belum bisa dipastikan sengaja dikosongkan (–)."
+      ]),
+      el("details", null, [
+        el("summary", { text: "Tentang data ini" }),
+        el("p", { text: "Angka tahun buku 2024–2025 dari laporan keuangan emiten sebagaimana diberitakan media; tiap emiten punya tautan sumber. Status syariah: " + DES_LABEL + "." })
+      ])
     ]));
   }
   function tautanSumber(e) {

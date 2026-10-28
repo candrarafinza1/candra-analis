@@ -75,3 +75,8 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Nina: dicek 320, 360, 390, 1280px: tanpa scroll horizontal (di 320px menu kembali dua baris), 7 halaman tanpa galat. `node tests/cek.mjs` lolos.
 - Masalah berat: tidak ada baru.
 
+## 28 Okt 2026, 19.35 WIB — Dewi, Hana, Nina (via Bima)
+- Dewi: kotak keterangan data di Peringkat & Radar diringkas; rincian sumber dan nomor KEP DES pindah ke "Tentang data ini" (tetap bisa dibuka, termasuk dengan keyboard). Hana: nama Daftar Efek Syariah OJK tetap tampil di kalimat inti. Kartu Peringkat pertama kini masuk layar pertama HP (mulai 725px dari 1029px sebelum sesi ini).
+- Nina: dicek 320/360/390/1280px, tanpa scroll horizontal dan tanpa galat. `node tests/cek.mjs` lolos.
+- Masalah berat: tidak ada baru.
+

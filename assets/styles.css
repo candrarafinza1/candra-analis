@@ -227,7 +227,6 @@ tbody tr:hover { background: #f0f2ea; }
   .kepala .wadah { gap: 4px 16px; padding-top: 8px; padding-bottom: 8px; }
   .nav { gap: 2px; flex-wrap: nowrap; margin: 0 -8px; }
   .nav a { font-size: .86rem; padding: 8px 9px; white-space: nowrap; }
-  .judul-halaman { padding: 28px 0 24px; }
   .bagian { padding: 32px 0; }
 }
 @media (max-width: 359px) { .nav { flex-wrap: wrap; } }
@@ -353,6 +352,11 @@ tbody tr:hover { background: #f0f2ea; }
   border-radius: var(--radius-kecil); padding: 12px 16px; font-size: .95rem; margin: 20px 0;
 }
 .pita-sumber strong { color: #0f3a27; }
+.pita-sumber p { margin: 0; }
+.pita-sumber details { margin-top: 6px; }
+.pita-sumber details p { margin-top: 6px; }
+.pita-sumber summary { cursor: pointer; font-weight: 700; color: #0f3a27; padding: 6px 0; }
+.pita-sumber summary:focus-visible { outline: 3px solid var(--malam-2); outline-offset: 2px; border-radius: 4px; }
 .sinyal-info { border-left-color: var(--malam-2); }
 .sinyal-info h4 { color: var(--malam-2); }
 .daftar-sumber { padding-left: 1.2em; margin: 0; font-size: .95rem; }
@@ -410,3 +414,6 @@ button.istilah:hover, button.istilah[aria-expanded="true"] { color: var(--malam-
   .kotak-istilah:not([hidden]) { animation: muncul-istilah .14s ease-out; }
   @keyframes muncul-istilah { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
 }
+
+/* HP: judul halaman lebih rapat (Dewi). Ditaruh di akhir agar menimpa aturan .judul-halaman di atas. */
+@media (max-width: 600px) { .judul-halaman { padding: 28px 0 24px; } }
