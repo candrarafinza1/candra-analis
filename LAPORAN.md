@@ -72,3 +72,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Nina: 7 halaman dicek di 320/360/390/1280px, tanpa scroll horizontal dan tanpa galat. `node tests/cek.mjs` lolos.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).
 
+
+## 28 Okt 2026, 19.50 WIB — Kirana, Fajar, Nina (via Bima)
+- Kirana: Peringkat di HP ditinjau ulang setelah perubahan 18.35. Kartu pertama masuk layar pertama (725px di 390×844), tombol 2×2 cukup besar, "Tentang data ini" berfungsi. Tidak ada perbaikan baru.
+- Fajar: 3 emiten syariah baru masuk data asli: MIKA (DES baris 418, dari laporan keuangan resmi 2025), CTRA (457), BSDE (454). Total 18 emiten. Neraca tiap emiten dicek: liabilitas + ekuitas = total aset.
+- Fajar: SMGR ditandai periksaUlang (tidak ikut Peringkat) karena tiga sumber memberi angka laba diatribusikan berbeda; laporan resmi PDF tidak terbaca alat tim. Masalah ringan, lanjut.
+- Nina: `node tests/cek.mjs` lolos (18 emiten). Peringkat dicek di 390px & 1280px tanpa scroll horizontal dan tanpa galat.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).

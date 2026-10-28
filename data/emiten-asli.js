@@ -163,7 +163,7 @@ window.EMITEN_ASLI = [
     dps: null, harga: null,
     sumber: [{ judul: "Investortrust, 1 Mar 2026: Laba bersih Japfa melonjak 33,33% di 2025",
       url: "https://investortrust.id/market/95824/laba-bersih-japfa-jpfa-melonjak-33-33-di-2025-ini-jadi-penopangnya" }],
-    catatan: "Bisnis (31 Mar 2026) menulis liabilitas Rp20,04 T dan ekuitas Rp20,12 T, tetapi jumlahnya (Rp40,16 T) tidak cocok dengan total aset Rp40,06 T di artikel yang sama. Dibiarkan kosong sampai dicek ke laporan resmi."
+    catatan: "Bisnis (31 Mar 2026) menulis liabilitas Rp20,04 T dan ekuitas Rp20,12 T, tetapi jumlahnya (Rp40,16 T) tidak cocok dengan total aset Rp40,06 T di artikel yang sama. Dibiarkan kosong sampai dicek ke laporan resmi. Kabar Bursa (14 Agu 2026) menulis laba diatribusikan Rp179,44 M (2025) dan Rp771,67 M (2024), berbeda dari angka di atas, jadi SMGR ditandai periksaUlang (28 Okt 19.50)."
   },
   {
     kode: "INTP", nama: "PT Indocement Tunggal Prakarsa Tbk", sektor: "Bahan baku",
@@ -181,7 +181,7 @@ window.EMITEN_ASLI = [
   },
   {
     kode: "SMGR", nama: "PT Semen Indonesia (Persero) Tbk", sektor: "Bahan baku",
-    desBaris: 136,
+    desBaris: 136, periksaUlang: true,
     labaTahun: { 2024: 719.76, 2025: 190.84 },
     pendapatan: { 2024: 36180, 2025: 35240 },
     liabilitas2025: null, ekuitas2025: null,
@@ -189,7 +189,7 @@ window.EMITEN_ASLI = [
     dps: null, harga: null,
     sumber: [{ judul: "Investortrust, 2026: Laba bersih Semen Indonesia anjlok 76,8% di 2025",
       url: "https://www.investortrust.id/market/98479/laba-bersih-semen-indonesia-smgr-anjlok-76-8-di-2025-ini-pemicunya" }],
-    catatan: "Liputan6 & PintarSaham menulis liabilitas Rp27,15 T dan ekuitas Rp47,72 T, tetapi jumlahnya Rp1,7 T lebih kecil dari total aset Rp76,57 T. Dibiarkan kosong sampai dicek ke laporan resmi."
+    catatan: "Liputan6 & PintarSaham menulis liabilitas Rp27,15 T dan ekuitas Rp47,72 T, tetapi jumlahnya Rp1,7 T lebih kecil dari total aset Rp76,57 T. Dibiarkan kosong sampai dicek ke laporan resmi. Kabar Bursa (14 Agu 2026) menulis laba diatribusikan Rp179,44 M (2025) dan Rp771,67 M (2024), berbeda dari angka di atas, jadi SMGR ditandai periksaUlang (28 Okt 19.50)."
   },
   {
     kode: "AKRA", nama: "PT AKR Corporindo Tbk", sektor: "Energi",
@@ -204,5 +204,41 @@ window.EMITEN_ASLI = [
       url: "https://katadata.co.id/finansial/bursa/69ef175cc3f38/akra-sepakat-bagi-dividen-rp-1-98-triliun-umumkan-perubahan-direksi" },
       { judul: "Bisnis, 18 Mar 2026: Kinerja 2025, pendapatan AKRA tumbuh 18,82%, laba bersih naik 11,12%",
         url: "https://market.bisnis.com/read/20260318/192/1961272/kinerja-2025-pendapatan-akra-tumbuh-1882-laba-bersih-naik-1112" }]
+  },
+  {
+    kode: "MIKA", nama: "PT Mitra Keluarga Karyasehat Tbk", sektor: "Kesehatan",
+    desBaris: 418,
+    labaTahun: { 2024: 1146.35, 2025: 1364.81 },
+    pendapatan: { 2024: 4874.37, 2025: 5368.32 },
+    liabilitas2025: 1092.28, ekuitas2025: 8174.06,
+    laba9b: { 2025: null, 2026: null },
+    dps: null, harga: null,
+    catatan: "Dari laporan keuangan konsolidasian 31 Des 2025 (laba diatribusikan kepada pemilik entitas induk). Cek: liabilitas + ekuitas = aset Rp9.266,34 M.",
+    sumber: [{ judul: "Laporan keuangan konsolidasian MIKA 31 Des 2025 (salinan di Indo Premier)",
+      url: "https://www.indopremier.com/xdir/news/LAPORAN%20KEUANGAN/2025/q4//MIKA_Q4_2025.pdf" }]
+  },
+  {
+    kode: "CTRA", nama: "PT Ciputra Development Tbk", sektor: "Properti & real estat",
+    desBaris: 457,
+    labaTahun: { 2024: 2120, 2025: 2660 },
+    pendapatan: { 2024: 11180, 2025: 12610 },
+    liabilitas2025: 21060, ekuitas2025: 26910,
+    laba9b: { 2025: null, 2026: null },
+    dps: null, harga: null,
+    catatan: "Laba diatribusikan kepada pemilik entitas induk. Cek: liabilitas + ekuitas = Rp47,97 T, aset Rp47,98 T (selisih pembulatan).",
+    sumber: [{ judul: "Kontan, 2 Apr 2026: Kinerja Ciputra Development (CTRA) positif di sepanjang 2025",
+      url: "https://industri.kontan.co.id/news/kinerja-ciputra-development-ctra-positif-di-sepanjang-2025-cek-rinciannya" }]
+  },
+  {
+    kode: "BSDE", nama: "PT Bumi Serpong Damai Tbk", sektor: "Properti & real estat",
+    desBaris: 454,
+    labaTahun: { 2024: 4350, 2025: 2540 },
+    pendapatan: { 2024: 13790, 2025: 12780 },
+    liabilitas2025: 26590, ekuitas2025: 52660,
+    laba9b: { 2025: null, 2026: null },
+    dps: null, harga: null,
+    catatan: "Laba diatribusikan kepada pemilik entitas induk. Cek: liabilitas + ekuitas = Rp79,25 T, aset Rp79,26 T (selisih pembulatan).",
+    sumber: [{ judul: "Kontan, 8 Mar 2026: Laba Bumi Serpong Damai (BSDE) di 2025 melorot 41,6% dan penjualan turun 7,3%",
+      url: "https://investasi.kontan.co.id/news/laba-bumi-serpong-damai-bsde-di-2025-melorot-416-dan-penjualan-turun-73" }]
   }
 ];
