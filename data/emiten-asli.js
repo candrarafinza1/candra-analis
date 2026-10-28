@@ -240,5 +240,73 @@ window.EMITEN_ASLI = [
     catatan: "Laba diatribusikan kepada pemilik entitas induk. Cek: liabilitas + ekuitas = Rp79,25 T, aset Rp79,26 T (selisih pembulatan).",
     sumber: [{ judul: "Kontan, 8 Mar 2026: Laba Bumi Serpong Damai (BSDE) di 2025 melorot 41,6% dan penjualan turun 7,3%",
       url: "https://investasi.kontan.co.id/news/laba-bumi-serpong-damai-bsde-di-2025-melorot-416-dan-penjualan-turun-73" }]
+  },
+  {
+    kode: "MAPI", nama: "PT Mitra Adiperkasa Tbk", sektor: "Barang konsumen non-primer",
+    desBaris: 356, periksaUlang: true,
+    labaTahun: { 2024: 1767.62, 2025: 2231.16 },
+    pendapatan: { 2024: 37835.89, 2025: 43083.21 },
+    liabilitas2025: 15612.72, ekuitas2025: 17211.48,
+    laba9b: { 2025: null, 2026: null },
+    dps: null, harga: null,
+    catatan: "PintarSaham menulis laba diatribusikan Rp2.231,16 M (2025) dan Rp1.767,62 M (2024); Kontan menulis laba bersih 2025 Rp2,33 T. Perlu cek ke laporan keuangan resmi sebelum ikut Peringkat. Neraca cocok: liabilitas + ekuitas = aset Rp32.824,21 M.",
+    sumber: [{ judul: "PintarSaham, 14 Apr 2026: Kinerja keuangan saham MAPI meningkat di tengah ekspansi ritel 2025 (juta Rp)",
+      url: "https://pintarsaham.id/kinerja-keuangan-saham-mapi-meningkat-di-tengah-ekspansi-ritel-2025/" },
+      { judul: "Kontan, 6 Apr 2026: Mitra Adiperkasa (MAPI) raih kenaikan pendapatan dan laba pada 2025",
+        url: "https://investasi.kontan.co.id/news/mitra-adiperkasa-mapi-raih-kenaikan-pendapatan-dan-laba-pada-2025" }]
+  },
+  {
+    kode: "HEAL", nama: "PT Medikaloka Hermina Tbk", sektor: "Kesehatan",
+    desBaris: 410,
+    labaTahun: { 2024: 535.94, 2025: 429.55 },
+    pendapatan: { 2024: 6720, 2025: 7130 },
+    liabilitas2025: 4680, ekuitas2025: 7210,
+    laba9b: { 2025: null, 2026: null },
+    dps: null, harga: null,
+    catatan: "Laba diatribusikan kepada pemilik entitas induk (laba tahun berjalan termasuk kepentingan nonpengendali Rp548,96 M). Cek: liabilitas + ekuitas = aset Rp11,89 T. BCA Sekuritas menulis angka yang sama (pendapatan 2024 Rp6,71 T, selisih pembulatan).",
+    sumber: [{ judul: "Kabar Bursa, 26 Mar 2026: HEAL bukukan laba Rp429,55 miliar sepanjang 2025",
+      url: "https://www.kabarbursa.com/market-hari-ini/heal-bukukan-laba-rp42955-miliar-anjlok-199-persen-sepanjang-2025" },
+      { judul: "BCA Sekuritas, 26 Mar 2026: Medikaloka Hermina raih pendapatan Rp7,13 triliun hingga Desember 2025",
+        url: "https://bcasekuritas.co.id/latest-news/news/medikaloka-hermina-raih-pendapatan-rp713-triliun-hingga-desember-2025" }]
+  },
+  {
+    kode: "ACES", nama: "PT Aspirasi Hidup Indonesia Tbk", sektor: "Barang konsumen non-primer",
+    desBaris: 294,
+    labaTahun: { 2024: 892.04, 2025: 668.73 },
+    pendapatan: { 2024: 8580, 2025: 8640 },
+    liabilitas2025: 1920, ekuitas2025: 6600,
+    laba9b: { 2025: null, 2026: null },
+    dps: null, harga: null,
+    catatan: "Laba diatribusikan kepada pemilik entitas induk (BCA Sekuritas: Rp668,72 M vs Rp892,04 M). Cek: liabilitas + ekuitas = aset Rp8,52 T.",
+    sumber: [{ judul: "Kabar Bursa, 1 Apr 2026: Kinerja tertekan, laba bersih ACES susut ke Rp668 miliar",
+      url: "https://www.kabarbursa.com/market-hari-ini/kinerja-tertekan-laba-bersih-aces-susut-ke-rp668-miliar" },
+      { judul: "BCA Sekuritas, 1 Apr 2026: ACES catat penjualan bersih Rp8,63 triliun di 2025",
+        url: "https://bcasekuritas.co.id/latest-news/news/aces-catat-penjualan-bersih-rp863-triliun-di-2025" }]
+  },
+  {
+    kode: "ISAT", nama: "PT Indosat Tbk", sektor: "Infrastruktur",
+    desBaris: 556,
+    labaTahun: { 2024: 4910.1, 2025: 5509 },
+    pendapatan: { 2024: 55890, 2025: 56518 },
+    liabilitas2025: 79120, ekuitas2025: 39510,
+    laba9b: { 2025: null, 2026: null },
+    dps: null, harga: null,
+    catatan: "Laba diatribusikan kepada pemilik entitas induk. Laba 2024 = Rp5.509 M dikurangi kenaikan Rp598,9 M yang disebut BCA Sekuritas. Cek: liabilitas + ekuitas = aset Rp118,63 T.",
+    sumber: [{ judul: "PintarSaham, 9 Feb 2026: Kinerja keuangan PT Indosat Tbk (ISAT) tahun 2025",
+      url: "https://pintarsaham.id/kinerja-keuangan-pt-indosat-tbk-isat-tahun-2025/" },
+      { judul: "BCA Sekuritas, 9 Feb 2026: Indosat catat pendapatan Rp56,518 triliun di 2025",
+        url: "https://bcasekuritas.co.id/latest-news/news/indosat-catat-pendapatan-rp56518-triliun-di-2025" }]
+  },
+  {
+    kode: "EXCL", nama: "PT XLSmart Telecom Sejahtera Tbk", sektor: "Infrastruktur",
+    desBaris: 547,
+    labaTahun: { 2024: 1810, 2025: -4420 },
+    pendapatan: { 2024: 34390, 2025: 42440 },
+    liabilitas2025: 85300, ekuitas2025: 30000,
+    laba9b: { 2025: null, 2026: null },
+    dps: null, harga: null,
+    catatan: "Rugi diatribusikan kepada pemilik entitas induk 2025 Rp4,42 T (2024 laba Rp1,81 T). Angka 2025 sudah termasuk penggabungan XL Axiata dengan Smartfren; angka 2024 sebelum penggabungan, jadi perbandingan tidak setara. Cek: liabilitas + ekuitas = aset Rp115,3 T.",
+    sumber: [{ judul: "Warta Ekonomi, 13 Feb 2026: Pendapatan naik tapi EXCL justru rugi Rp4,42 triliun pada 2025",
+      url: "https://wartaekonomi.co.id/read600982/pendapatan-naik-tapi-excl-justru-rugi-rp442-triliun-pada-2025" }]
   }
 ];

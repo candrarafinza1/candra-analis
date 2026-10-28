@@ -79,3 +79,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: SMGR ditandai periksaUlang (tidak ikut Peringkat) karena tiga sumber memberi angka laba diatribusikan berbeda; laporan resmi PDF tidak terbaca alat tim. Masalah ringan, lanjut.
 - Nina: `node tests/cek.mjs` lolos (18 emiten). Peringkat dicek di 390px & 1280px tanpa scroll horizontal dan tanpa galat.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).
+
+## 28 Okt 2026, 20.55 WIB — Fajar, Hana, Nina (via Bima)
+- Fajar: 5 emiten syariah baru masuk data asli: MAPI (DES baris 356), HEAL (410), ACES (294), ISAT (556), EXCL (547). Total 23 emiten. Semua laba = laba diatribusikan kepada pemilik entitas induk; neraca tiap emiten dicek: liabilitas + ekuitas = total aset. HEAL, ACES, ISAT dicek silang ke dua sumber.
+- Fajar: MAPI ditandai periksaUlang (tidak ikut Peringkat) karena dua sumber beda angka laba 2025 (Rp2,23 T vs Rp2,33 T). EXCL mencatat rugi 2025; diberi catatan bahwa angka 2024 sebelum penggabungan XL–Smartfren. Masalah ringan, lanjut.
+- Hana: kelima kode sudah dikutip barisnya dari DES periode I 2026 sebelumnya.
+- Nina: `node tests/cek.mjs` lolos (23 emiten). Peringkat & Radar dicek di 390px & 1280px tanpa scroll horizontal dan tanpa galat.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).
