@@ -417,3 +417,26 @@ button.istilah:hover, button.istilah[aria-expanded="true"] { color: var(--malam-
 
 /* HP: judul halaman lebih rapat (Dewi). Ditaruh di akhir agar menimpa aturan .judul-halaman di atas. */
 @media (max-width: 600px) { .judul-halaman { padding: 28px 0 24px; } }
+
+/* ---------- Profil emiten (Dewi, 29 Okt 2026) ---------- */
+.tautan-kode { color: var(--tinta); text-decoration: underline; text-decoration-color: var(--garis); text-decoration-thickness: 2px; }
+.tautan-kode:hover { color: var(--naik); text-decoration-color: currentColor; }
+.judul-profil-bagian { font-size: 1.35rem; margin-top: 36px; }
+.status-syariah { border: 1px solid var(--garis); border-left: 6px solid var(--naik); background: var(--naik-muda); border-radius: var(--radius-kecil); padding: 14px 16px; max-width: var(--lebar-teks); }
+.status-syariah.status-tidak { border-left-color: var(--turun); background: var(--turun-muda); }
+.status-syariah p { margin: 4px 0 0; color: var(--tinta-2); font-size: .95rem; }
+.kisi-ubin { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 12px; margin-bottom: 20px; }
+.ubin { background: var(--putih); border: 1px solid var(--garis); border-radius: var(--radius); padding: 14px 16px; display: grid; gap: 2px; }
+.ubin-label { font-size: .85rem; color: var(--tinta-2); font-weight: 600; }
+.ubin-nilai { font-size: 1.35rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+.ubin-ket { font-size: .85rem; color: var(--tinta-2); }
+.tabel-profil { max-width: 40rem; background: var(--putih); }
+.tabel-profil th[scope="row"] { font-size: .95rem; color: var(--tinta); font-weight: 600; white-space: normal; }
+.sinyal .sinyal-judul { margin: 0 0 .3em; font-size: 1.05rem; }
+.sinyal-tinggi .sinyal-judul { color: var(--turun); }
+.sinyal-sedang .sinyal-judul { color: var(--waspada); }
+.sinyal-aman .sinyal-judul { color: var(--naik); }
+.daftar-emiten { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr)); gap: 8px; }
+.daftar-emiten a { display: block; padding: 12px 14px; min-height: 48px; background: var(--putih); border: 1px solid var(--garis); border-radius: var(--radius-kecil); text-decoration: none; color: var(--tinta); }
+.daftar-emiten a:hover { border-color: var(--malam-2); }
+@media (max-width: 600px) { .tabel-profil th, .tabel-profil td { padding: 8px 6px; } }

@@ -151,3 +151,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Masalah ringan: ekuitas TPIA tidak disebut sumber, neraca dikosongkan (tidak dihitung sendiri); tugas baru dicatat untuk Fajar.
 - Nina: `node tests/cek.mjs` lolos (31 emiten). Peringkat & Radar dicek di 1280px & 390px tanpa scroll horizontal dan tanpa galat JS.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).
+
+## 29 Okt 2026, 17.10 WIB — Dewi, Arif, Nina, Yoga, Fajar (via Bima)
+- Fajar: laba 9 bulan 2026 dicek ulang (TLKM dkk.), belum ada rilis kuartal III baru. Cek lagi 30–31 Okt.
+- Dewi & Arif: halaman profil emiten `emiten.html?kode=XXXX` tayang: status syariah dengan baris DES, angka utama, tabel 2024/2025, laba 9 bulan, Radar Risiko, sumber. Kode di Peringkat & Radar kini menaut ke profil. Kode salah/kosong → pesan ramah + daftar 31 emiten.
+- Masalah ringan: ringkasan usaha tiap emiten belum ada sumbernya, jadi tidak ditampilkan (tidak dikarang). Tugas baru untuk Raka & Sari. Untuk emiten yang 2024-nya rugi (TPIA), profil menulis "2024: rugi …" alih-alih persen pertumbuhan yang menyesatkan.
+- Yoga: tautan "Profil semua emiten" di kaki semua halaman. Nina: cek profil ditambahkan di `tests/cek.mjs`; lolos (8 halaman, 31 emiten). Dicek 1280px & 390px tanpa scroll horizontal dan tanpa galat JS.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).

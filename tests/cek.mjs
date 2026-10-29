@@ -64,6 +64,10 @@ for (const t of ISTILAH || []) {
   ok(!t.pelajaran || idModul.has(t.pelajaran), `istilah ${t.istilah}: pelajaran "${t.pelajaran}" tidak ada`);
 }
 
+// Profil emiten (Nina, 29 Okt): halaman ada, memuat wadah #profil, dan Peringkat menaut ke profil
+ok(existsSync("emiten.html") && /id="profil"/.test(readFileSync("emiten.html", "utf8")), "emiten.html tidak ada atau tanpa wadah #profil");
+ok(/emiten\.html\?kode=/.test(readFileSync("assets/app.js", "utf8")), "Peringkat/Radar belum menaut ke profil emiten");
+
 // 3. Aturan Hana (syariah): halaman tidak boleh memakai bahasa ajakan
 const terlarang = /\b(wajib beli|pasti naik|buruan (beli|jual)|dijamin untung|rekomendasi beli)\b/i;
 for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"]) {

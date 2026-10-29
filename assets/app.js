@@ -53,7 +53,8 @@
   function strip(v, f) { return ada(v) ? f(v) : "–"; }
 
   function selKode(e) {
-    return el("td", null, [el("span", { class: "kode", text: e.kode }), el("span", { class: "nama-emiten", text: e.nama })]);
+    // Kode menaut ke profil emiten (Dewi, 29 Okt)
+    return el("td", null, [el("a", { class: "kode tautan-kode", href: "emiten.html?kode=" + e.kode, text: e.kode, "aria-label": "Profil " + e.kode }), el("span", { class: "nama-emiten", text: e.nama })]);
   }
 
   function pitaSumber(wadah) {
@@ -337,6 +338,7 @@
       (e.sumber || []).forEach(function (x) {
         sumber.appendChild(el("li", null, [el("a", { href: x.url, target: "_blank", rel: "noopener", text: x.judul })]));
       });
+      hasil.appendChild(el("p", null, [el("a", { href: "emiten.html?kode=" + e.kode, text: "Lihat profil lengkap " + e.kode })]));
       hasil.appendChild(el("h3", { style: "margin-top:20px;font-size:1.05rem", text: "Sumber data" }));
       hasil.appendChild(sumber);
       pasangIstilah(hasil);
@@ -346,6 +348,111 @@
     var awal = new URLSearchParams(location.search).get("kode");
     if (awal) pilih.value = awal.toUpperCase();
     tampil();
+  }
+
+  /* ---------- Profil emiten (tim Dewi & Arif) ---------- */
+  // emiten.html?kode=XXXX. Hanya menampilkan angka yang ada di data; yang kosong tampil "–".
+  function renderProfil() {
+    var akar = document.getElementById("profil");
+    if (!akar) return;
+    var kode = (new URLSearchParams(location.search).get("kode") || "").trim().toUpperCase();
+    var e = EMITEN.find(function (x) { return x.kode === kode; });
+
+    function daftarSemua() {
+      var ul = el("ul", { class: "daftar-emiten" });
+      EMITEN.slice().sort(function (a, b) { return a.kode.localeCompare(b.kode); }).forEach(function (x) {
+        ul.appendChild(el("li", null, [el("a", { href: "emiten.html?kode=" + x.kode }, [
+          el("span", { class: "kode", text: x.kode }), el("span", { class: "nama-emiten", text: x.nama })
+        ])]));
+      });
+      return ul;
+    }
+
+    if (!e) {
+      // Arif: kode kosong atau tidak ada di data → pesan ramah + daftar emiten yang tersedia
+      akar.appendChild(el("div", { class: "pita-sumber", role: "status" }, [
+        el("p", null, kode
+          ? [el("strong", { text: "Kode " + kode.slice(0, 8) + " belum ada di data kami. " }),
+            "Bisa jadi kodenya salah ketik, atau emiten itu belum kami kumpulkan datanya. Kami hanya memuat emiten yang tercatat di Daftar Efek Syariah OJK."]
+          : ["Pilih satu emiten di bawah untuk melihat profilnya."])
+      ]));
+      akar.appendChild(el("h2", { class: "judul-profil-bagian", text: EMITEN.length + " emiten dalam data kami" }));
+      akar.appendChild(daftarSemua());
+      return;
+    }
+
+    var rp = uang(e), L = e.labaTahun || {}, P = e.pendapatan || {}, N = e.laba9b || {};
+    document.title = e.kode + " · " + e.nama + " · Candra Analis";
+    document.getElementById("judul-profil").textContent = e.kode;
+    document.getElementById("sub-profil").textContent = e.nama + " · Sektor " + e.sektor.toLowerCase();
+
+    // Status syariah
+    akar.appendChild(el("div", { class: "status-syariah " + (syariahAktif(e) ? "status-ya" : "status-tidak"), role: "note" }, [
+      el("strong", { text: syariahAktif(e) ? "Tercatat sebagai saham syariah" : "Tidak lagi tercatat sebagai saham syariah" }),
+      el("p", { text: syariahAktif(e)
+        ? "Bukti: " + DES_LABEL + ", baris " + e.desBaris + ". Masuk daftar bukan berarti disarankan untuk dibeli."
+        : "Emiten ini tidak ada di Daftar Efek Syariah periode terbaru." })
+    ]));
+    if (usd(e)) akar.appendChild(el("p", { class: "catatan-metode", text: "Emiten ini melapor dalam dolar AS. Angka ditampilkan dalam dolar AS sesuai laporannya, tanpa dikonversi ke rupiah." }));
+    if (e.periksaUlang) akar.appendChild(el("p", { class: "catatan-metode", text: "Angka laba emiten ini sedang dicek ulang atau tidak bisa dibandingkan secara adil, jadi sementara tidak ikut Peringkat. Penjelasannya ada di catatan di bawah." }));
+
+    // Angka utama
+    function ubin(label, nilai, ket) {
+      return el("div", { class: "ubin" }, [el("span", { class: "ubin-label", text: label }), el("strong", { class: "ubin-nilai", text: nilai }), ket ? el("span", { class: "ubin-ket", text: ket }) : null]);
+    }
+    var gl = tumbuhLaba(e), gp = tumbuhPendapatan(e), g9 = tumbuh(N[2025], N[2026]);
+    akar.appendChild(el("h2", { class: "judul-profil-bagian", text: "Angka utama" }));
+    akar.appendChild(el("div", { class: "kisi-ubin" }, [
+      ubin("Laba bersih 2025", strip(L[2025], rp), ada(L[2024]) && L[2024] < 0 ? "2024: rugi " + rp(-L[2024]) : (ada(gl) ? persen(gl) + " dibanding 2024" : null)),
+      ubin("Pendapatan 2025", strip(P[2025], rp), ada(gp) ? persen(gp) + " dibanding 2024" : null),
+      ubin("ROE 2025", strip(roe(e), persen), "Laba bersih ÷ ekuitas"),
+      ubin("DER akhir 2025", strip(der(e), function (v) { return angka.format(v) + "x"; }), "Liabilitas ÷ ekuitas")
+    ]));
+
+    var baris = [
+      ["Laba bersih", L[2024], L[2025]],
+      ["Pendapatan", P[2024], P[2025]],
+      ["Liabilitas (akhir tahun)", null, e.liabilitas2025],
+      ["Ekuitas (akhir tahun)", null, e.ekuitas2025]
+    ];
+    var tbody = el("tbody");
+    baris.forEach(function (b) {
+      tbody.appendChild(el("tr", null, [el("th", { scope: "row", text: b[0] }),
+        el("td", { class: "angka", text: strip(b[1], rp) }), el("td", { class: "angka", text: strip(b[2], rp) })]));
+    });
+    akar.appendChild(el("div", { class: "tabel-wadah" }, [el("table", { class: "tabel-profil" }, [
+      el("caption", { class: "keterangan-tabel", text: "Tahun buku 2024 dan 2025" + (usd(e) ? " (dolar AS)" : " (rupiah)") + ". Laba = laba yang diatribusikan kepada pemilik entitas induk." }),
+      el("thead", null, [el("tr", null, [el("th", { scope: "col", text: "Pos" }), el("th", { scope: "col", class: "angka", text: "2024" }), el("th", { scope: "col", class: "angka", text: "2025" })])]),
+      tbody
+    ])]));
+    akar.appendChild(el("p", { class: "catatan-metode", text: ada(g9)
+      ? "Laba Januari–September: " + rp(N[2025]) + " (2025) → " + rp(N[2026]) + " (2026), " + persen(g9) + ". Angka kuartalan belum diaudit."
+      : "Laba Januari–September 2026 belum kami masukkan: laporan kuartal III belum rilis atau angkanya belum bisa dipastikan." }));
+
+    // Radar Risiko (rumus yang sama dengan radar.html)
+    var s = periksa(e);
+    akar.appendChild(el("h2", { class: "judul-profil-bagian", text: "Radar Risiko" }));
+    var ul = el("ul", { class: "sinyal-daftar" });
+    s.forEach(function (x) {
+      ul.appendChild(el("li", { class: "sinyal sinyal-" + x.tingkat }, [
+        el("h3", { class: "sinyal-judul", text: x.judul }), el("p", { text: x.isi }), el("p", { class: "bukti", text: x.bukti })
+      ]));
+    });
+    akar.appendChild(ul);
+
+    // Sumber
+    akar.appendChild(el("h2", { class: "judul-profil-bagian", text: "Sumber data" }));
+    var sumber = el("ul", { class: "daftar-sumber" });
+    (e.sumber || []).forEach(function (x) {
+      sumber.appendChild(el("li", null, [el("a", { href: x.url, target: "_blank", rel: "noopener", text: x.judul })]));
+    });
+    akar.appendChild(sumber);
+    akar.appendChild(el("p", { class: "catatan-metode", style: "margin-top:16px" }, [
+      "Profil ini menyajikan data, bukan saran membeli atau menjual. Cara kami menghitung tiap angka ada di ",
+      el("a", { href: "metodologi.html", text: "halaman Metodologi" }), ". ",
+      el("a", { href: "peringkat.html", text: "Kembali ke Peringkat" }), "."
+    ]));
+    pasangIstilah(akar);
   }
 
   /* ---------- Rujukan belajar ---------- */
@@ -598,6 +705,7 @@
   renderMini();
   renderPeringkat();
   renderRadar();
+  renderProfil();
   renderRujukan();
   renderAsisten();
 })();
