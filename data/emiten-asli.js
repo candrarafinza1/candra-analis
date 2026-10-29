@@ -119,14 +119,18 @@ window.EMITEN_ASLI = [
   {
     kode: "MYOR", nama: "PT Mayora Indah Tbk", sektor: "Barang konsumen primer",
     desBaris: 259,
-    labaTahun: { 2024: null, 2025: 2860 },
+    labaTahun: { 2024: 3000, 2025: 2860 },
     pendapatan: { 2024: 36070, 2025: 38680 },
     liabilitas2025: 13010, ekuitas2025: 18360,
     laba9b: { 2025: null, 2026: null },
     dps: null, harga: null,
-    catatan: "Laba 2024 hanya ditulis dibulatkan (Rp3 triliun) di sumber, jadi dibiarkan kosong sampai ada angka persis.",
+    catatan: "Laba 2024 = Rp3,00 triliun (Fortune IDN, dua desimal seperti angka 2025). Cocok dengan Investortrust dan KabarBursa (Rp3 triliun) dan dengan penurunan 4,66% ke Rp2,86 triliun di 2025.",
     sumber: [{ judul: "Emiten News, 18 Mar 2026: Mayora raup laba Rp2,86 triliun, menciut 4,66 persen",
-      url: "https://emitennews.com/news/mayora-myor-raup-laba-286-triliun-menciut-466-persen" }]
+      url: "https://emitennews.com/news/mayora-myor-raup-laba-286-triliun-menciut-466-persen" },
+      { judul: "Fortune IDN, 3 Mar 2025: Laba Mayora 2024 turun 6% walau pendapatan naik (Rp3,19 T → Rp3,00 T)",
+        url: "https://www.fortuneidn.com/business/laba-mayora-2024-turun-6-walau-pendapatan-naik-mengapa-00-3dhnm-d63t4c" },
+      { judul: "Investortrust, 3 Mar 2025: Laba Mayora tergerus saat pendapatan naik di 2024",
+        url: "https://investortrust.id/market/58333/laba-mayora-myor-tergerus-saat-pendapatan-naik-di-2024-apa-pemicunya" }]
   },
   {
     kode: "SIDO", nama: "PT Industri Jamu Dan Farmasi Sido Muncul Tbk", sektor: "Kesehatan",
@@ -158,12 +162,16 @@ window.EMITEN_ASLI = [
     desBaris: 246,
     labaTahun: { 2024: 3010, 2025: 4000 },
     pendapatan: { 2024: 55800, 2025: 60710 },
-    liabilitas2025: null, ekuitas2025: null,
+    liabilitas2025: 20041.47, ekuitas2025: 20018.96,
     laba9b: { 2025: null, 2026: null },
     dps: null, harga: null,
     sumber: [{ judul: "Investortrust, 1 Mar 2026: Laba bersih Japfa melonjak 33,33% di 2025",
-      url: "https://investortrust.id/market/95824/laba-bersih-japfa-jpfa-melonjak-33-33-di-2025-ini-jadi-penopangnya" }],
-    catatan: "Bisnis (31 Mar 2026) menulis liabilitas Rp20,04 T dan ekuitas Rp20,12 T, tetapi jumlahnya (Rp40,16 T) tidak cocok dengan total aset Rp40,06 T di artikel yang sama. Dibiarkan kosong sampai dicek ke laporan resmi. Kabar Bursa (14 Agu 2026) menulis laba diatribusikan Rp179,44 M (2025) dan Rp771,67 M (2024), berbeda dari angka di atas, jadi SMGR ditandai periksaUlang (28 Okt 19.50)."
+      url: "https://investortrust.id/market/95824/laba-bersih-japfa-jpfa-melonjak-33-33-di-2025-ini-jadi-penopangnya" },
+      { judul: "PintarSaham, 10 Apr 2026: Kinerja keuangan JPFA 2025 melesat (neraca 31 Des 2025, juta Rp)",
+        url: "https://pintarsaham.id/kinerja-keuangan-jpfa-2025-melesat-laba-bersih-tumbuh-32-persen/" },
+      { judul: "BCA Sekuritas, 2 Mar 2026: Laba Japfa Comfeed Indonesia Rp4 triliun hingga Desember 2025",
+        url: "https://bcasekuritas.co.id/latest-news/news/laba-japfa-comfeed-indonesia-rp4-triliun-hingga-desember-2025" }],
+    catatan: "Neraca 31 Des 2025 dari tabel PintarSaham (juta Rp): liabilitas 20.041.473 + ekuitas 20.018.957 = aset 40.060.430 (cocok). BCA Sekuritas menulis aset Rp40,06 T dan liabilitas Rp20,04 T. Angka ekuitas Rp20,12 T di Bisnis (31 Mar 2026) tidak dipakai karena tidak cocok dengan total aset."
   },
   {
     kode: "INTP", nama: "PT Indocement Tunggal Prakarsa Tbk", sektor: "Bahan baku",
@@ -184,26 +192,32 @@ window.EMITEN_ASLI = [
     desBaris: 136, periksaUlang: true,
     labaTahun: { 2024: 719.76, 2025: 190.84 },
     pendapatan: { 2024: 36180, 2025: 35240 },
-    liabilitas2025: null, ekuitas2025: null,
+    liabilitas2025: 28849.01, ekuitas2025: 47719.72,
     laba9b: { 2025: null, 2026: null },
     dps: null, harga: null,
     sumber: [{ judul: "Investortrust, 2026: Laba bersih Semen Indonesia anjlok 76,8% di 2025",
-      url: "https://www.investortrust.id/market/98479/laba-bersih-semen-indonesia-smgr-anjlok-76-8-di-2025-ini-pemicunya" }],
-    catatan: "Liputan6 & PintarSaham menulis liabilitas Rp27,15 T dan ekuitas Rp47,72 T, tetapi jumlahnya Rp1,7 T lebih kecil dari total aset Rp76,57 T. Dibiarkan kosong sampai dicek ke laporan resmi. Kabar Bursa (14 Agu 2026) menulis laba diatribusikan Rp179,44 M (2025) dan Rp771,67 M (2024), berbeda dari angka di atas, jadi SMGR ditandai periksaUlang (28 Okt 19.50)."
+      url: "https://www.investortrust.id/market/98479/laba-bersih-semen-indonesia-smgr-anjlok-76-8-di-2025-ini-pemicunya" },
+      { judul: "StockAnalysis: neraca tahunan Semen Indonesia (juta Rp)",
+        url: "https://stockanalysis.com/quote/idx/SMGR/financials/balance-sheet/" },
+      { judul: "KabarBursa, 14 Agu 2026: Laba Semen Indonesia diklaim naik 408 persen, dari mana angkanya",
+        url: "https://www.kabarbursa.com/market-hari-ini/laba-semen-indonesia-smgr-diklaim-naik-408-persen-dari-mana-angkanya" }],
+    catatan: "Neraca 31 Des 2025 dari StockAnalysis (juta Rp): liabilitas 28.849.009 + ekuitas 47.719.715 = aset 76.568.724 (cocok). Ekuitas Rp47,72 T dan aset Rp76,57 T sama dengan Liputan6, PintarSaham, dan KabarBursa; angka liabilitas Rp27,15 T di berita tidak dipakai karena tidak cocok dengan total aset. Ekuitas termasuk kepentingan nonpengendali. Kabar Bursa (14 Agu 2026) menulis laba diatribusikan Rp179,44 M (2025) dan Rp771,67 M (2024), berbeda dari angka di atas, jadi SMGR ditandai periksaUlang (28 Okt 19.50)."
   },
   {
     kode: "AKRA", nama: "PT AKR Corporindo Tbk", sektor: "Energi",
     desBaris: 12,
-    labaTahun: { 2024: null, 2025: 2470 },
+    labaTahun: { 2024: 2220, 2025: 2470 },
     pendapatan: { 2024: 38730, 2025: 46020 },
     liabilitas2025: 20950, ekuitas2025: 15610,
     laba9b: { 2025: null, 2026: null },
     dps: 100, harga: null,
-    catatan: "Dividen tahun buku 2025 = interim Rp50 + final Rp50. Angka 2024 belum dimasukkan: sumber lain menyebut laba 2024 Rp2,39 triliun, tidak cocok dengan kenaikan 11% yang dilaporkan, jadi perlu dicek ke laporan resmi. Ekuitas 2025 dihitung dari total aset Rp36,56 T dikurangi liabilitas Rp20,95 T (Bisnis).",
+    catatan: "Dividen tahun buku 2025 = interim Rp50 + final Rp50. Laba 2024 diatribusikan = Rp2,22 T (Investortrust); Rp2,39 T yang sering dikutip adalah laba tahun berjalan termasuk kepentingan nonpengendali. Rp2,22 T → Rp2,47 T cocok dengan kenaikan 11,12% yang ditulis Bisnis. Ekuitas 2025 dihitung dari total aset Rp36,56 T dikurangi liabilitas Rp20,95 T (Bisnis).",
     sumber: [{ judul: "Katadata, 27 Apr 2026: AKRA sepakat bagi dividen Rp1,98 triliun",
       url: "https://katadata.co.id/finansial/bursa/69ef175cc3f38/akra-sepakat-bagi-dividen-rp-1-98-triliun-umumkan-perubahan-direksi" },
       { judul: "Bisnis, 18 Mar 2026: Kinerja 2025, pendapatan AKRA tumbuh 18,82%, laba bersih naik 11,12%",
-        url: "https://market.bisnis.com/read/20260318/192/1961272/kinerja-2025-pendapatan-akra-tumbuh-1882-laba-bersih-naik-1112" }]
+        url: "https://market.bisnis.com/read/20260318/192/1961272/kinerja-2025-pendapatan-akra-tumbuh-1882-laba-bersih-naik-1112" },
+      { judul: "Investortrust, 19 Mar 2025: AKR Corporindo cetak laba bersih Rp2,39 triliun di 2024 (laba atribusi Rp2,22 T)",
+        url: "https://investortrust.id/market/60164/akr-corporindo-akra-cetak-laba-bersih-rp-2-39-triliun-di-2024" }]
   },
   {
     kode: "MIKA", nama: "PT Mitra Keluarga Karyasehat Tbk", sektor: "Kesehatan",
