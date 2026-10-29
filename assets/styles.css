@@ -480,3 +480,20 @@ button.istilah:hover, button.istilah[aria-expanded="true"] { color: var(--malam-
   @view-transition { navigation: auto; }
   ::view-transition-old(root), ::view-transition-new(root) { animation-duration: .2s; }
 }
+
+/* Metodologi: daftar isi + jarak lebih rapat di HP (Dewi, 29 Okt 2026 20.20) */
+.isi-halaman { background: var(--putih); border: 1px solid var(--garis); border-radius: var(--radius-kecil); padding: 12px 16px; margin-bottom: 8px; }
+.isi-halaman-judul { margin: 0 0 4px; font-weight: 700; font-size: .95rem; }
+.isi-halaman ol { margin: 0; padding-left: 1.4em; }
+.isi-halaman li { margin: 0; }
+.isi-halaman a { display: inline-block; padding: 6px 0; min-height: 32px; }
+.artikel h2[id] { scroll-margin-top: 16px; }
+@media (max-width: 600px) {
+  .artikel h2 { font-size: 1.3rem; margin-top: 1.5em; }
+  .artikel h2 + p, .artikel h2 + ul { margin-top: .4em; }
+  /* Profil emiten: 4 ubin angka jadi kisi 2×2 agar tabel & Radar naik ke layar (tinjauan Kirana) */
+  .kisi-ubin { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .ubin { padding: 12px; min-width: 0; }
+  .ubin-nilai { font-size: 1.15rem; overflow-wrap: anywhere; }
+  .ubin-label, .ubin-ket { font-size: .8rem; }
+}

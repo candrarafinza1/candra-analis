@@ -100,3 +100,45 @@ Kotak istilah (hasil Arif, usulan #3), dicek di Peringkat dan pelajaran:
 - Kotak tetap di dalam layar 390px, bisa ditutup Esc atau ketuk di luar, tautan "Pelajari lebih lanjut" jelas.
 - Istilah bergaris di dalam kalimat tingginya ±22px (kecil untuk jari), tetapi wajar untuk teks dalam kalimat dan
   ada baris "Bingung istilahnya?" sebagai jalan lain. Tidak diubah.
+
+## Tinjauan Kirana — 29 Okt 2026, 20.20 WIB
+
+Profil emiten `emiten.html` di HP (dicek TLKM, AADI, dan daftar 31 emiten di 390px dan 1280px):
+- Bagus: status syariah dengan baris DES paling atas, kalimat "bukan berarti disarankan untuk dibeli" ikut tampil,
+  angka dolar AS diberi keterangan, Radar Risiko memakai warna **dan** judul teks. Tanpa scroll horizontal, tanpa galat JS.
+- Perbaikan langsung (Dewi, kecil): empat ubin angka menumpuk satu kolom (±440px) sehingga tabel dan Radar jauh
+  di bawah. Di bawah 600px kini kisi 2×2 (angka 1,15rem, tetap muat "US$4,91 miliar"); halaman profil TLKM
+  memendek dari 2420px ke 2145px di 390px. Desktop tidak berubah.
+- Catatan: label baris tabel "Liabilitas (akhir tahun)" pecah dua baris di 390px. Masih terbaca, tidak diubah.
+
+Penanda kemajuan & perpindahan halaman (hasil Arif & Dewi, usulan #4 dan #5):
+- Tombol "Tandai selesai" tinggi 48px, setelah diketuk berubah jadi "✓ Sudah selesai" dengan `aria-pressed="true"`.
+  Jelas untuk pembaca layar. Tidak ada perbaikan.
+- Perpindahan halaman 0,2 detik terasa halus dan tidak mengganggu; mati bila gerak dikurangi. Tidak ada perbaikan.
+
+Metodologi di HP:
+- Halaman panjang (±5.000px di 390px) tanpa daftar isi. Dewi menambah kotak "Isi halaman" (6 tautan ke tiap bagian)
+  dan merapatkan judul bagian di HP.
+
+### 7. Profil emiten: ringkasan "posisi di Peringkat"
+- **Kategori:** fitur — usaha **kecil**
+- Masalah atau peluang: dari profil, pemula tidak tahu emiten ini ada di urutan berapa di Peringkat.
+- Ide: satu baris di bawah ubin, misalnya "Urutan 5 dari 24 untuk pertumbuhan laba" (dihitung dengan rumus Peringkat
+  yang sama), dengan tautan ke Peringkat. Emiten yang tidak ikut Peringkat diberi alasannya (periksa ulang / dolar AS).
+- Acuan tren: konteks "relatif terhadap rekan" di aplikasi data saham.
+- Dampak bagi pemula: angka satu emiten jadi punya pembanding. Tetap data, bukan saran.
+- Status: usulan.
+
+### 8. Metodologi: penanda bagian yang sedang dibaca
+- **Kategori:** tampilan — usaha **kecil**
+- Ide: di desktop (≥900px), kotak "Isi halaman" menempel di samping (sticky) dan menebalkan bagian yang sedang dibaca.
+  Di HP tetap di atas. Tanpa pustaka.
+- Dampak bagi pemula: tidak tersesat di halaman panjang.
+- Status: usulan.
+
+### 9. Beranda: "Lanjutkan belajar"
+- **Kategori:** fitur — usaha **kecil**
+- Ide: bila penanda kemajuan menyimpan pelajaran selesai, beranda menampilkan tombol "Lanjutkan: pelajaran berikutnya".
+  Memakai data yang sama di peramban (try/catch), tanpa akun.
+- Dampak bagi pemula: kembali ke jalur belajar dalam satu ketukan.
+- Status: usulan.

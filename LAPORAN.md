@@ -174,3 +174,11 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Nina: cek baru di `tests/cek.mjs` (localStorage wajib dalam try, view transition wajib di dalam prefers-reduced-motion); lolos (8 halaman, 8 pelajaran, 31 emiten). Dicek 1280px & 390px tanpa scroll horizontal dan tanpa galat JS, termasuk peramban dengan penyimpanan diblokir.
 - Bima: tugas baru untuk Kirana (tinjau) dan Dewi (rapikan metodologi di HP) agar tidak menganggur.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).
+
+## 29 Okt 2026, 20.20 WIB — Kirana, Dewi, Nina, Fajar (via Bima)
+- Fajar: laba 9 bulan 2026 dicek lagi (TLKM, KLBF, BRIS), belum ada rilis kuartal III. Cek lagi 30 Okt pagi; batas rilis 31 Okt.
+- Kirana: tinjau profil emiten di HP serta penanda kemajuan & perpindahan halaman. Penanda kemajuan dan transisi sudah baik. Temuan: empat ubin angka profil menumpuk satu kolom di HP. Tiga usulan baru di IDE.md (#7 posisi di Peringkat, #8 daftar isi menempel di Metodologi, #9 "Lanjutkan belajar").
+- Dewi: ubin profil jadi kisi 2×2 di bawah 600px (profil TLKM memendek dari 2420px ke 2145px di 390px). Metodologi diberi kotak "Isi halaman" dengan 6 tautan bagian, judul bagian dirapatkan di HP.
+- Nina: `node tests/cek.mjs` lolos (8 halaman, 8 pelajaran, 31 emiten). Metodologi, profil (TLKM, AADI, daftar), Belajar, pelajaran dicek 1280px & 390px: tanpa scroll horizontal, tanpa galat JS.
+- Bima: usulan #7 (Arif) dan #8 (Dewi) masuk backlog agar tidak menganggur.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).
