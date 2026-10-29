@@ -47,17 +47,19 @@ window.EMITEN_ASLI = [
   },
   {
     kode: "ANTM", nama: "PT Aneka Tambang Tbk", sektor: "Bahan baku",
-    desBaris: 76, periksaUlang: true,
-    labaTahun: { 2024: 3850, 2025: 7920 },
+    desBaris: 76,
+    labaTahun: { 2024: 3650, 2025: 7210 },
     pendapatan: { 2024: 69190, 2025: 84640 },
     liabilitas2025: 15930, ekuitas2025: 36600,
     laba9b: { 2025: null, 2026: null },
     dps: 210, harga: null,
-    catatan: "Dua sumber berbeda angka laba: JawaPos Rp7,92 T (2024: Rp3,85 T), Katadata Rp7,21 T (2024: Rp3,65 T). Belum pasti mana yang laba diatribusikan ke pemilik entitas induk; cek ke laporan keuangan resmi sebelum dipakai di Peringkat. Liabilitas & ekuitas dari Katadata (cocok: 15,93 + 36,60 = aset 52,53 T).",
-    sumber: [{ judul: "JawaPos, 10 Jun 2026: Laba bersih 2025 melonjak, ANTM tebar dividen Rp5,05 triliun",
-      url: "https://www.jawapos.com/bisnis/2606100278/laba-bersih-2025-melonjak-106-persen-antm-tebar-dividen-rp-505-triliun" },
-      { judul: "Katadata, 31 Mar 2026: Laba Antam nyaris dua kali lipat jadi Rp7,21 triliun pada 2025",
-        url: "https://katadata.co.id/finansial/bursa/69cbbc3f148fa/laba-antam-antm-nyaris-dua-kali-lipat-jadi-rp-7-21-triliun-pada-2025" }]
+    catatan: "Laba = laba bersih yang diatribusikan kepada pemilik entitas induk (Katadata): Rp7,21 T (2025), Rp3,65 T (2024). Rp7,92 T di JawaPos adalah laba tahun berjalan (termasuk kepentingan nonpengendali). Cek silang Fortune IDN: dividen Rp5,04 T = 70% laba atribusi dan laba ditahan Rp2,16 T = 30%, jumlahnya Rp7,20 T (cocok). Dipastikan 29 Okt 08.30, periksaUlang dicabut. Liabilitas & ekuitas dari Katadata (15,93 + 36,60 = aset 52,53 T).",
+    sumber: [{ judul: "Katadata, 31 Mar 2026: Laba Antam nyaris dua kali lipat jadi Rp7,21 triliun pada 2025",
+        url: "https://katadata.co.id/finansial/bursa/69cbbc3f148fa/laba-antam-antm-nyaris-dua-kali-lipat-jadi-rp-7-21-triliun-pada-2025" },
+      { judul: "Fortune IDN, 11 Jun 2026: Antam tebar dividen Rp5,04 triliun, setara 70% dari laba",
+        url: "https://www.fortuneidn.com/market/antam-antm-tebar-dividen-rp5-04-triliun-setara-70-dari-laba-00-6cmtl-v1573t" },
+      { judul: "JawaPos, 10 Jun 2026: Laba bersih 2025 melonjak, ANTM tebar dividen Rp5,05 triliun",
+        url: "https://www.jawapos.com/bisnis/2606100278/laba-bersih-2025-melonjak-106-persen-antm-tebar-dividen-rp-505-triliun" }]
     },
   {
     kode: "UNTR", nama: "PT United Tractors Tbk", sektor: "Industri",
@@ -97,9 +99,11 @@ window.EMITEN_ASLI = [
     liabilitas2025: 15540, ekuitas2025: 4470,
     laba9b: { 2025: null, 2026: null },
     dps: null, harga: null,
-    catatan: "Laba 2025 naik 126%. Sumber tidak merinci apakah ada keuntungan sekali-waktu; perlu dicek ke laporan keuangan tahunan sebelum dipakai di Peringkat.",
+    catatan: "Laba 2025 naik 127% karena keuntungan sekali-waktu Rp3,79 T dari penjualan anak usaha es krim (PT The Magnum Ice Cream Indonesia, selesai Desember 2025), menurut Investortrust. Angka ini benar, tetapi lebih dari separuh laba 2025 bukan dari usaha rutin, sehingga UNVR sengaja tidak ikut Peringkat agar perbandingan adil (keputusan Galih & Hana, 29 Okt). Laba tanpa keuntungan itu tidak disebut sumber, jadi tidak dihitung sendiri.",
     sumber: [{ judul: "Bisnis, 12 Feb 2026: Laba Unilever melonjak 126% jadi Rp7,64 triliun sepanjang 2025",
-      url: "https://market.bisnis.com/read/20260212/192/1952314/laba-unilever-unvr-melonjak-126-jadi-rp764-triliun-sepanjang-2025" }]
+      url: "https://market.bisnis.com/read/20260212/192/1952314/laba-unilever-unvr-melonjak-126-jadi-rp764-triliun-sepanjang-2025" },
+      { judul: "Investortrust, 12 Feb 2026: Didukung divestasi bisnis es krim, laba Unilever melesat 127% di 2025",
+        url: "https://investortrust.id/market/94315/didukung-divestasi-bisnis-es-krim-laba-unilever-unvr-melesat-127-di-2025" }]
   },
   {
     kode: "PTBA", nama: "PT Bukit Asam (Persero) Tbk", sektor: "Energi",
@@ -175,17 +179,19 @@ window.EMITEN_ASLI = [
   },
   {
     kode: "INTP", nama: "PT Indocement Tunggal Prakarsa Tbk", sektor: "Bahan baku",
-    desBaris: 108, periksaUlang: true,
-    labaTahun: { 2024: 2010, 2025: 2250 },
-    pendapatan: { 2024: 18550, 2025: 17730 },
+    desBaris: 108,
+    labaTahun: { 2024: 2000, 2025: 2240 },
+    pendapatan: { 2024: 18540, 2025: 17730 },
     liabilitas2025: 8522.2, ekuitas2025: 23203.1,
     laba9b: { 2025: null, 2026: null },
     dps: null, harga: null,
-    catatan: "Laba 2025 ikut ditopang keuntungan sekali-waktu dari penjualan 60% bisnis mortar (Des 2025). Laba yang dipakai = laba tahun berjalan (siaran pers resmi tidak memisahkan bagian entitas induk). Liabilitas = jangka pendek 6.104,2 + jangka panjang 2.418,0 (miliar Rp) dari siaran pers resmi.",
+    catatan: "Laba 2025 ikut ditopang keuntungan sekali-waktu dari penjualan 60% bisnis mortar (Des 2025). Laba = laba tahun berjalan yang diatribusikan ke pemilik entitas induk menurut BCA Sekuritas: Rp2,24 T (2025), Rp2,00 T (2024); angka Rp2,25 T / Rp2,01 T sebelumnya adalah laba tahun berjalan. Dipastikan 29 Okt 08.30, periksaUlang dicabut; pertumbuhan laba 2025 tetap perlu dibaca bersama keuntungan sekali-waktu itu. Liabilitas = jangka pendek 6.104,2 + jangka panjang 2.418,0 (miliar Rp) dari siaran pers resmi.",
     sumber: [{ judul: "Investortrust, 2 Apr 2026: Indocement cetak kenaikan laba 12% di 2025, ditopang divestasi aset",
       url: "https://investortrust.id/market/98742/indocement-intp-cetak-kenaikan-laba-12-di-2025-ditopang-divestasi-aset" },
       { judul: "Indocement, 1 Apr 2026: Siaran pers kinerja 2025 (neraca 31 Des 2025)",
-        url: "https://www.indocement.co.id/media/post/siaran-pers-indocement-kinerja-2025q4-indonesia-cc-ck-final-clean-8de93be8fc5a0372118.pdf" }]
+        url: "https://www.indocement.co.id/media/post/siaran-pers-indocement-kinerja-2025q4-indonesia-cc-ck-final-clean-8de93be8fc5a0372118.pdf" },
+      { judul: "BCA Sekuritas, 1 Apr 2026: Indocement raih pendapatan Rp17,73 triliun hingga Desember 2025",
+        url: "https://bcasekuritas.co.id/en/latest-news/news/indocement-raih-pendapatan-rp1773-triliun-hingga-desember-2025" }]
   },
   {
     kode: "SMGR", nama: "PT Semen Indonesia (Persero) Tbk", sektor: "Bahan baku",
