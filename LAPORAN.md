@@ -137,3 +137,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: PGAS dan ITMG masuk (kini 26 emiten). Laba atribusi & pendapatan 2024/2025 bersumber 2–3 media; neraca PGAS dicek = total aset; neraca ITMG dikosongkan karena ekuitas di sumber hanya angka bulat.
 - Nina: pemeriksaan `mataUang` ditambahkan; `node tests/cek.mjs` lolos (26 emiten). Peringkat, Radar (PGAS, ITMG), Metodologi dicek di 1280px & 390px tanpa scroll horizontal dan tanpa galat JS.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).
+
+## 29 Okt 2026, 15.15 WIB — Fajar, Galih, Nina (via Bima)
+- Fajar: laba 9 bulan 2026 dicek ulang untuk 17 emiten sisa, belum ada rilis baru. Artikel proyeksi analis (Kontan 14 Okt) sengaja tidak dipakai karena bukan laporan. Cek lagi 30–31 Okt (batas rilis kuartal III).
+- Fajar: AADI dan HRUM masuk (kini 28 emiten, dalam juta US$). AADI: laba atribusi US$760,18 jt (2025) vs US$1,21 miliar (2024), 3 sumber. HRUM: US$37,42 jt vs US$54,07 jt; laba atribusi 2024 dipastikan lewat StockAnalysis. Neraca keduanya dicek = total aset (selisih pembulatan). Bisnis keliru menulis laba HRUM "naik", dicatat.
+- Galih: angka dolar AS otomatis ikut Radar dan Peringkat pertumbuhan/ROE sesuai aturan 14.10.
+- Nina: `node tests/cek.mjs` lolos (28 emiten). Peringkat & Radar dicek di 1280px & 390px tanpa scroll horizontal dan tanpa galat JS.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).

@@ -411,5 +411,37 @@ window.EMITEN_ASLI = [
         url: "https://market.bisnis.com/read/20260226/192/1955916/indo-tambangraya-itmg-raih-laba-us19094-juta-pada-2025-turun-4896" },
       { judul: "Investortrust, 26 Feb 2026: Laba Indo Tambangraya (ITMG) tergerus jadi US$190,94 juta di 2025",
         url: "https://investortrust.id/market/95529/laba-indo-tambangraya-itmg-tergerus-jadi-us-190-94-juta-di-2025" }]
+  },
+  {
+    kode: "AADI", nama: "PT Adaro Andalan Indonesia Tbk", sektor: "Energi",
+    desBaris: 8, mataUang: "USD",
+    labaTahun: { 2024: 1210, 2025: 760.18 },
+    pendapatan: { 2024: 5310, 2025: 4910 },
+    liabilitas2025: 2050, ekuitas2025: 3640,
+    laba9b: { 2025: null, 2026: null },
+    dps: null, harga: null,
+    catatan: "Melapor dalam dolar AS; angka dalam juta US$ sesuai laporan, tidak dikonversi ke rupiah. Laba = laba tahun berjalan yang diatribusikan kepada pemilik entitas induk (disebut tegas oleh Warta Ekonomi dan EmitenNews). Laba 2024 dan pendapatan hanya tersedia dibulatkan sumber ke 2 desimal miliar US$ (laba 2024 US$1,21 miliar; turun 37,17% menurut EmitenNews, cocok). Cek neraca: liabilitas US$2,05 miliar + ekuitas US$3,64 miliar = US$5,69 miliar, aset US$5,70 miliar (selisih pembulatan). Pecahan dari Adaro (ADRO), tercatat di bursa Desember 2024.",
+    sumber: [{ judul: "Warta Ekonomi, 9 Mar 2026: Adaro Andalan (AADI) raih laba USD760,18 juta pada 2025, turun 37%",
+      url: "https://wartaekonomi.co.id/read603598/adaro-andalan-aadi-raih-laba-usd76018-juta-pada-2025-turun-37" },
+      { judul: "EmitenNews, 8 Mar 2026: Laba bersih Adaro Andalan (AADI) terpangkas 37,17 persen pada 2025",
+        url: "https://www.emitennews.com/news/laba-bersih-adaro-andalan-aadi-terpangkas-3717-persen-pada-2025" },
+      { judul: "BCA Sekuritas (IQPlus), 6 Mar 2026: Adaro Andalan Indonesia catat pendapatan USD4,91 miliar hingga Desember 2025",
+        url: "https://bcasekuritas.co.id/latest-news/news/adaro-andalan-indonesia-catat-pendapatan-usd491-miliar-hingga-desember-2025" }]
+  },
+  {
+    kode: "HRUM", nama: "PT Harum Energy Tbk", sektor: "Energi",
+    desBaris: 33, mataUang: "USD",
+    labaTahun: { 2024: 54.07, 2025: 37.42 },
+    pendapatan: { 2024: 1295, 2025: 1330 },
+    liabilitas2025: 1610, ekuitas2025: 1810,
+    laba9b: { 2025: null, 2026: null },
+    dps: null, harga: null,
+    catatan: "Melapor dalam dolar AS; angka dalam juta US$ sesuai laporan, tidak dikonversi ke rupiah. Laba 2024 US$54,07 juta = laba diatribusikan kepada pemilik entitas induk (StockAnalysis: 'Net Income to Common' 54,07; laba total 77,66 sebelum kepentingan nonpengendali). Bisnis menulis 2024 dengan angka yang sama, jadi laba 2025 US$37,42 juta di sumber yang sama dipakai sebagai laba atribusi. Catatan: Bisnis menulis laba 'naik', padahal angkanya turun (US$54,07 juta → US$37,42 juta); yang dipakai angkanya. Pendapatan 2025 dibulatkan sumber (US$1,33 miliar). Cek neraca: liabilitas US$1,61 miliar + ekuitas US$1,81 miliar = US$3,42 miliar, aset US$3,43 miliar (selisih pembulatan).",
+    sumber: [{ judul: "Bisnis, 30 Mar 2026: Emiten Kiki Barki (HRUM) cetak pendapatan Rp22,38 triliun di 2025 (angka asli dalam US$)",
+      url: "https://market.bisnis.com/read/20260330/192/1963120/emiten-kiki-barki-hrum-cetak-pendapatan-rp2238-triliun-di-2025" },
+      { judul: "StockAnalysis: PT Harum Energy Tbk, laporan keuangan tahunan (juta US$)",
+        url: "https://stockanalysis.com/quote/fra/44H/financials" },
+      { judul: "Fortune IDN, 10 Apr 2025: Beban membengkak, laba Harum Energy (HRUM) tergerus 64% di 2024",
+        url: "https://www.fortuneidn.com/business/beban-membengkak-laba-harum-energy-hrum-tergerus-64-di-2024-00-3dhnm-j7r7rh" }]
   }
 ];
