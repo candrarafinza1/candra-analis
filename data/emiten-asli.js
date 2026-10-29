@@ -443,5 +443,49 @@ window.EMITEN_ASLI = [
         url: "https://stockanalysis.com/quote/fra/44H/financials" },
       { judul: "Fortune IDN, 10 Apr 2025: Beban membengkak, laba Harum Energy (HRUM) tergerus 64% di 2024",
         url: "https://www.fortuneidn.com/business/beban-membengkak-laba-harum-energy-hrum-tergerus-64-di-2024-00-3dhnm-j7r7rh" }]
+  },
+  {
+    kode: "MDKA", nama: "PT Merdeka Copper Gold Tbk", sektor: "Bahan baku",
+    desBaris: 116, mataUang: "USD",
+    labaTahun: { 2024: -55.76, 2025: -62.06 },
+    pendapatan: { 2024: 2240, 2025: 1890 },
+    liabilitas2025: 2780, ekuitas2025: 2920,
+    laba9b: { 2025: null, 2026: null },
+    dps: null, harga: null,
+    catatan: "Melapor dalam dolar AS; angka dalam juta US$ sesuai laporan, tidak dikonversi ke rupiah. Rugi diatribusikan kepada pemilik entitas induk US$62,06 juta (2025) vs US$55,76 juta (2024), menurut Bisnis; Kabar Bursa menulis angka yang sama dan mencatat laba untuk kepentingan nonpengendali US$78,21 juta (cocok: grup rugi, anak usaha seperti MBMA laba). Pendapatan dibulatkan sumber (US$1,89 miliar vs US$2,24 miliar). Cek neraca: liabilitas US$2,78 miliar + ekuitas US$2,92 miliar = US$5,70 miliar, aset US$5,71 miliar (selisih pembulatan).",
+    sumber: [{ judul: "Bisnis, 31 Mar 2026: Merdeka Copper Gold (MDKA) cetak pendapatan US$1,89 miliar pada 2025, rugi membengkak",
+      url: "https://market.bisnis.com/read/20260331/192/1963203/merdeka-copper-gold-mdka-cetak-pendapatan-us189-miliar-pada-2025-rugi-membengkak" },
+      { judul: "Kabar Bursa, 31 Mar 2026: Rugi MDKA membesar",
+        url: "https://www.kabarbursa.com/syariah/rugi-mdka-membesar-bos-ikut-jual-saham-ada-sinyal-apa" }]
+  },
+  {
+    kode: "MBMA", nama: "PT Merdeka Battery Materials Tbk", sektor: "Bahan baku",
+    desBaris: 115, mataUang: "USD",
+    labaTahun: { 2024: 22.78, 2025: 29.56 },
+    pendapatan: { 2024: 1840, 2025: 1430 },
+    liabilitas2025: 1380, ekuitas2025: 2340,
+    laba9b: { 2025: null, 2026: null },
+    dps: null, harga: null,
+    catatan: "Melapor dalam dolar AS; angka dalam juta US$ sesuai laporan, tidak dikonversi ke rupiah. Laba diatribusikan kepada pemilik entitas induk US$29,56 juta (2025) vs US$22,78 juta (2024); Warta Ekonomi dan BCA Sekuritas (IQPlus) menulis angka yang sama. Pendapatan dibulatkan sumber. Ekuitas ditulis Warta Ekonomi 'di kisaran' US$2,34 miliar. Cek neraca: liabilitas US$1,38 miliar + ekuitas US$2,34 miliar = US$3,72 miliar, aset US$3,73 miliar (selisih pembulatan).",
+    sumber: [{ judul: "Warta Ekonomi, 31 Mar 2026: Laba emiten Boy Thohir (MBMA) naik 29,77% meski pendapatan menyusut di 2025",
+      url: "https://wartaekonomi.co.id/read606161/laba-emiten-boy-thohir-mbma-naik-2977-meski-pendapatan-menyusut-di-2025" },
+      { judul: "BCA Sekuritas (IQPlus), 31 Mar 2026: Pendapatan MBMA capai US$1,43 miliar hingga Desember 2025",
+        url: "https://bcasekuritas.co.id/latest-news/news/pendapatan-mbma-capai-usd143-miliar-hingga-desember-2025" }]
+  },
+  {
+    kode: "TPIA", nama: "PT Chandra Asri Pacific Tbk", sektor: "Bahan baku",
+    desBaris: 147, mataUang: "USD", periksaUlang: true,
+    labaTahun: { 2024: -68.61, 2025: 1090 },
+    pendapatan: { 2024: 1780, 2025: 7020 },
+    liabilitas2025: null, ekuitas2025: null,
+    laba9b: { 2025: null, 2026: null },
+    dps: null, harga: null,
+    catatan: "Melapor dalam dolar AS; angka dalam juta US$ sesuai laporan, tidak dikonversi ke rupiah. Laba diatribusikan kepada pemilik entitas induk US$1,09 miliar (2025) vs rugi US$68,61 juta (2024), menurut Investortrust; laba tahun berjalan US$1,44–1,45 miliar (Investortrust, Warta Ekonomi) sengaja tidak dipakai. Laba 2025 ditopang keuntungan akuntansi sekali-waktu dari transaksi Aster (rilis resmi perusahaan kuartal III 2025 via MarketScreener; nilainya tidak disebut), dan pendapatan naik karena akuisisi. Karena itu TPIA sengaja tidak ikut Peringkat, sama seperti UNVR, sampai aturan laba sekali-waktu Galih selesai. Neraca dikosongkan: sumber menyebut aset US$12,32 miliar dan liabilitas US$7,66 miliar, tetapi tidak menyebut ekuitas.",
+    sumber: [{ judul: "Investortrust, 26 Mar 2026: Laba Chandra Asri (TPIA) melonjak ke US$1,44 miliar di 2025",
+      url: "https://investortrust.id/market/98088/laba-chandra-asri-tpia-melonjak-ke-us1-44-miliar-di-2025-pendapatan-tumbuh-293" },
+      { judul: "Warta Ekonomi, 26 Mar 2026: Balik rugi jadi cuan, emiten Prajogo (TPIA) cetak laba US$1,45 miliar di 2025",
+        url: "https://wartaekonomi.co.id/read605545/balik-rugi-jadi-cuan-emiten-prajogo-tpia-cetak-laba-us145-miliar-di-2025" },
+      { judul: "MarketScreener, 31 Okt 2025: Rilis Chandra Asri kuartal III 2025 (laba termasuk keuntungan akuntansi sekali-waktu dari transaksi Aster)",
+        url: "https://www.marketscreener.com/news/pt-chandra-asri-pacific-tbk-cap-results-for-the-quarter-3-ended-september-30-2025-ce7d5cdbd98df52d" }]
   }
 ];

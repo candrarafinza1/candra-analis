@@ -144,3 +144,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Galih: angka dolar AS otomatis ikut Radar dan Peringkat pertumbuhan/ROE sesuai aturan 14.10.
 - Nina: `node tests/cek.mjs` lolos (28 emiten). Peringkat & Radar dicek di 1280px & 390px tanpa scroll horizontal dan tanpa galat JS.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).
+
+## 29 Okt 2026, 16.10 WIB — Fajar, Galih, Nina (via Bima)
+- Fajar: target 30 emiten terlampaui, kini 31. MDKA (DES 116): rugi atribusi US$62,06 jt (2025) vs US$55,76 jt (2024), Bisnis & Kabar Bursa; neraca dicek = aset US$5,71 miliar. MBMA (DES 115): laba atribusi US$29,56 jt vs US$22,78 jt, Warta Ekonomi & BCA Sekuritas; neraca = aset US$3,73 miliar (selisih pembulatan). TPIA (DES 147): laba atribusi US$1,09 miliar vs rugi US$68,61 jt; laba tahun berjalan US$1,44 miliar sengaja tidak dipakai.
+- Galih: TPIA ditandai `periksaUlang` (tidak ikut Peringkat) karena laba 2025 ditopang keuntungan akuntansi sekali-waktu dari transaksi Aster, sama perlakuannya dengan UNVR. Masuk ke tugas aturan laba sekali-waktu.
+- Masalah ringan: ekuitas TPIA tidak disebut sumber, neraca dikosongkan (tidak dihitung sendiri); tugas baru dicatat untuk Fajar.
+- Nina: `node tests/cek.mjs` lolos (31 emiten). Peringkat & Radar dicek di 1280px & 390px tanpa scroll horizontal dan tanpa galat JS.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).
