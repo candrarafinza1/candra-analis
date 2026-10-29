@@ -253,6 +253,22 @@
       isi: "Penjualan 2025 lebih rendah daripada 2024.",
       bukti: "Pendapatan: " + rupiahMiliar(P[2024]) + " → " + rupiahMiliar(P[2025]) + " (" + persen(gp) + ")." });
 
+    // Laba 9 bulan (Januari–September) 2026 dibanding periode yang sama 2025.
+    var N = e.laba9b || {}, g9 = tumbuh(N[2025], N[2026]);
+    if (ada(g9)) {
+      var bukti9 = "Laba Januari–September: " + rupiahMiliar(N[2025]) + " (2025) → " + rupiahMiliar(N[2026]) + " (2026), " + persen(g9) + ".";
+      if (ada(N[2026]) && N[2026] < 0) s.push({ tingkat: "tinggi", judul: "Merugi dalam 9 bulan pertama 2026",
+        isi: "Perusahaan mencatat rugi bersih untuk periode Januari–September 2026.", bukti: bukti9 });
+      else if (g9 <= -50) s.push({ tingkat: "tinggi", judul: "Laba 9 bulan 2026 turun lebih dari separuh",
+        isi: "Laba Januari–September 2026 turun tajam dibanding periode yang sama tahun lalu.", bukti: bukti9 });
+      else if (g9 < 0) s.push({ tingkat: "sedang", judul: "Laba 9 bulan 2026 menurun",
+        isi: "Laba Januari–September 2026 lebih rendah daripada periode yang sama tahun lalu.", bukti: bukti9 });
+      else s.push({ tingkat: "info", judul: "Laba 9 bulan 2026 naik",
+        isi: "Laba Januari–September 2026 lebih tinggi daripada periode yang sama tahun lalu. Angka kuartalan belum diaudit.", bukti: bukti9 });
+      if (e.catatan9b) s.push({ tingkat: "info", judul: "Catatan laba 9 bulan", isi: e.catatan9b,
+        bukti: "Sumber tercantum di daftar sumber di bawah." });
+    }
+
     var d = der(e);
     if (ada(d) && d > 2) s.push({ tingkat: "sedang", judul: "Utang tinggi dibanding modal",
       isi: "Total liabilitas lebih dari dua kali ekuitas. Beban kewajiban bisa menekan laba saat kondisi sulit.",

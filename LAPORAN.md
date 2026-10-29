@@ -108,3 +108,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Bima: tugas Data asli batch 1 ditutup; harga & DPS dipindah ke tugas tersendiri karena belum ditampilkan.
 - Nina: `node tests/cek.mjs` lolos (24 emiten). Peringkat & Radar dicek di 1280px & 390px tanpa scroll horizontal dan tanpa galat JS.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).
+
+## 29 Okt 2026, 09.40 WIB — Fajar, Galih, Hana, Nina (via Bima)
+- Fajar: laba 9 bulan (Januari–September) 2026 dan pembanding 2025 masuk untuk 4 emiten yang sudah rilis: ANTM (Rp8,83 T vs Rp5,97 T, laba atribusi), UNTR (Rp4,47 T vs Rp11,48 T), ISAT (Rp4,92 T vs Rp3,56 T), UNVR (Rp4,20 T vs Rp3,33 T). Tiap angka bersumber; selisih antarsumber dicatat di `catatan9b`.
+- Fajar: ANTM sengaja memakai laba atribusi, bukan Rp9,66 T (laba periode berjalan) yang ramai dikutip media. UNTR turun 61%, antara lain karena pos sekali-waktu Rp3,5 T (Kontan).
+- Galih & Hana: Radar Risiko kini membandingkan laba 9 bulan 2026 vs 2025 (rugi/turun ≥50% = tinggi, turun = sedang, naik = info). Aturannya ditulis di halaman Metodologi. UNTR kini tampil dengan tanda tinggi.
+- Nina: `node tests/cek.mjs` lolos (24 emiten). Radar dicek di 1280px & 390px tanpa scroll horizontal dan tanpa galat JS.
+- Masalah ringan: 20 emiten lain belum rilis atau belum ditemukan sumbernya; dilanjutkan sesi berikutnya. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).

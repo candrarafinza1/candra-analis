@@ -51,7 +51,8 @@ window.EMITEN_ASLI = [
     labaTahun: { 2024: 3650, 2025: 7210 },
     pendapatan: { 2024: 69190, 2025: 84640 },
     liabilitas2025: 15930, ekuitas2025: 36600,
-    laba9b: { 2025: null, 2026: null },
+    laba9b: { 2025: 5970, 2026: 8830 },
+    catatan9b: "Laba 9 bulan = laba diatribusikan kepada pemilik entitas induk: Rp8,83 T (Jan–Sep 2026) vs Rp5,97 T (Jan–Sep 2025), Investor Daily. Angka Rp9,66 T vs Rp6,61 T yang banyak dikutip media adalah laba periode berjalan (termasuk kepentingan nonpengendali).",
     dps: 210, harga: null,
     catatan: "Laba = laba bersih yang diatribusikan kepada pemilik entitas induk (Katadata): Rp7,21 T (2025), Rp3,65 T (2024). Rp7,92 T di JawaPos adalah laba tahun berjalan (termasuk kepentingan nonpengendali). Cek silang Fortune IDN: dividen Rp5,04 T = 70% laba atribusi dan laba ditahan Rp2,16 T = 30%, jumlahnya Rp7,20 T (cocok). Dipastikan 29 Okt 08.20, periksaUlang dicabut. Liabilitas & ekuitas dari Katadata (15,93 + 36,60 = aset 52,53 T).",
     sumber: [{ judul: "Katadata, 31 Mar 2026: Laba Antam nyaris dua kali lipat jadi Rp7,21 triliun pada 2025",
@@ -59,7 +60,11 @@ window.EMITEN_ASLI = [
       { judul: "Fortune IDN, 11 Jun 2026: Antam tebar dividen Rp5,04 triliun, setara 70% dari laba",
         url: "https://www.fortuneidn.com/market/antam-antm-tebar-dividen-rp5-04-triliun-setara-70-dari-laba-00-6cmtl-v1573t" },
       { judul: "JawaPos, 10 Jun 2026: Laba bersih 2025 melonjak, ANTM tebar dividen Rp5,05 triliun",
-        url: "https://www.jawapos.com/bisnis/2606100278/laba-bersih-2025-melonjak-106-persen-antm-tebar-dividen-rp-505-triliun" }]
+        url: "https://www.jawapos.com/bisnis/2606100278/laba-bersih-2025-melonjak-106-persen-antm-tebar-dividen-rp-505-triliun" },
+      { judul: "Investor Daily, 28 Okt 2026: Laba Antam (ANTM) loncat (laba atribusi 9 bulan 2026 Rp8,83 T)",
+        url: "https://investor.id/market/459656/laba-antam-antm-loncat-saham-lagi-murahmurahnya" },
+      { judul: "EmitenNews, 28 Okt 2026: Laba bersih ANTAM naik 46% jadi Rp9,66 T di 9M26 (laba periode berjalan)",
+        url: "https://www.emitennews.com/news/laba-bersih-antam-naik-46-rp966-t-di-9m26-ini-penunjangnya" }]
     },
   {
     kode: "UNTR", nama: "PT United Tractors Tbk", sektor: "Industri",
@@ -67,7 +72,8 @@ window.EMITEN_ASLI = [
     labaTahun: { 2024: 19530, 2025: 14810 },
     pendapatan: { 2024: 134400, 2025: 131300 },
     liabilitas2025: 74500, ekuitas2025: 103100,
-    laba9b: { 2025: null, 2026: null },
+    laba9b: { 2025: 11480, 2026: 4470 },
+    catatan9b: "Laba 9 bulan = laba diatribusikan kepada pemilik entitas induk: Rp4,47 T (Jan–Sep 2026) vs Rp11,48 T (Jan–Sep 2025), Databoks Katadata; BCA Sekuritas (31 Okt 2025) menulis Rp11,47 T untuk 2025 (selisih pembulatan). Penurunan antara lain karena pos sekali-waktu Rp3,5 T (penurunan nilai Supreme Energy dan pembayaran izin kawasan hutan tambang nikel); tanpa pos itu laba Rp7,9 T (Kontan).",
     dps: null, harga: null,
     sumber: [
       { judul: "Kontan, 27 Feb 2026: United Tractors cetak pendapatan bersih Rp131,3 triliun pada 2025",
@@ -77,7 +83,13 @@ window.EMITEN_ASLI = [
       { judul: "Warta Ekonomi, 2025: United Tractors raup pendapatan Rp134,4 triliun (tahun buku 2024)",
         url: "https://wartaekonomi.co.id/read559366/united-tractors-untr-raup-pendapatan-rp1344-triliun-tapi-laba-bersihnya-tertekan" },
       { judul: "PintarSaham, 27 Feb 2026: Kinerja keuangan United Tractors tahun 2025 (aset Rp177,6 T, liabilitas Rp74,5 T, ekuitas Rp103,1 T)",
-        url: "https://pintarsaham.id/kinerja-keuangan-pt-united-tractors-tbk-untr-tahun-2025/" }]
+        url: "https://pintarsaham.id/kinerja-keuangan-pt-united-tractors-tbk-untr-tahun-2025/" },
+      { judul: "Databoks Katadata, 27 Okt 2026: Laba United Tractors anjlok 61% pada kuartal III 2026",
+        url: "https://databoks.katadata.co.id/en/market/statistics/6ae0018520bc5/profit-of-united-tractors-plummeted-by-61-in-the-q3-2026-lowest-level-in-the-past-5-years" },
+      { judul: "Kontan, 27 Okt 2026: Pendapatan United Tractors turun 10% jadi Rp90,3 triliun",
+        url: "https://investasi.kontan.co.id/news/pendapatan-united-tractors-untr-turun-10-jadi-rp-903-triliun-ini-sebabnya" },
+      { judul: "BCA Sekuritas, 31 Okt 2025: United Tractors raih pendapatan bersih Rp100,46 triliun hingga September 2025",
+        url: "https://bcasekuritas.co.id/latest-news/news/united-tractors-raih-pendapatan-bersih-rp10046-triliun-hingga-september-2025" }]
   },
   {
     kode: "INDF", nama: "PT Indofood Sukses Makmur Tbk", sektor: "Barang konsumen primer",
@@ -97,13 +109,18 @@ window.EMITEN_ASLI = [
     labaTahun: { 2024: 3360, 2025: 7640 },
     pendapatan: { 2024: 30620, 2025: 31940 },
     liabilitas2025: 15540, ekuitas2025: 4470,
-    laba9b: { 2025: null, 2026: null },
+    laba9b: { 2025: 3330, 2026: 4200 },
+    catatan9b: "Laba 9 bulan Rp4,20 T (Jan–Sep 2026) vs Rp3,33 T (Jan–Sep 2025), EmitenNews; Databoks menulis Rp3,34 T (pembulatan). Laba dari operasi yang dilanjutkan Rp3,31 T vs Rp2,99 T; sisanya dari operasi yang dihentikan (bisnis es krim).",
     dps: null, harga: null,
     catatan: "Laba 2025 naik 127% karena keuntungan sekali-waktu Rp3,79 T dari penjualan anak usaha es krim (PT The Magnum Ice Cream Indonesia, selesai Desember 2025), menurut Investortrust. Angka ini benar, tetapi lebih dari separuh laba 2025 bukan dari usaha rutin, sehingga UNVR sengaja tidak ikut Peringkat agar perbandingan adil (keputusan Galih & Hana, 29 Okt). Laba tanpa keuntungan itu tidak disebut sumber, jadi tidak dihitung sendiri.",
     sumber: [{ judul: "Bisnis, 12 Feb 2026: Laba Unilever melonjak 126% jadi Rp7,64 triliun sepanjang 2025",
       url: "https://market.bisnis.com/read/20260212/192/1952314/laba-unilever-unvr-melonjak-126-jadi-rp764-triliun-sepanjang-2025" },
       { judul: "Investortrust, 12 Feb 2026: Didukung divestasi bisnis es krim, laba Unilever melesat 127% di 2025",
-        url: "https://investortrust.id/market/94315/didukung-divestasi-bisnis-es-krim-laba-unilever-unvr-melesat-127-di-2025" }]
+        url: "https://investortrust.id/market/94315/didukung-divestasi-bisnis-es-krim-laba-unilever-unvr-melesat-127-di-2025" },
+      { judul: "EmitenNews, 23 Okt 2026: Aset drop, laba UNVR kuartal III tumbuh 26,12 persen",
+        url: "https://emitennews.com/news/aset-drop-laba-unvr-kuartal-iii-tumbuh-2612-persen" },
+      { judul: "Databoks Katadata, 23 Okt 2026: Penjualan dan laba Unilever Indonesia meningkat pada kuartal III 2026",
+        url: "https://databoks.katadata.co.id/pasar/statistik/6adaae8e7366d/penjualan-dan-laba-unilever-indonesia-unvr-meningkat-pada-kuartal-iii-2026" }]
   },
   {
     kode: "PTBA", nama: "PT Bukit Asam (Persero) Tbk", sektor: "Energi",
@@ -309,13 +326,16 @@ window.EMITEN_ASLI = [
     labaTahun: { 2024: 4910.1, 2025: 5509 },
     pendapatan: { 2024: 55890, 2025: 56518 },
     liabilitas2025: 79120, ekuitas2025: 39510,
-    laba9b: { 2025: null, 2026: null },
+    laba9b: { 2025: 3560, 2026: 4920 },
+    catatan9b: "Laba 9 bulan = laba diatribusikan kepada pemilik entitas induk: Rp4,92 T (Jan–Sep 2026) vs Rp3,56 T (Jan–Sep 2025), Investor Daily mengutip laporan keuangan 30 Sep 2026. Receh.in menulis Rp3,59 T untuk 2025; dipakai angka Investor Daily.",
     dps: null, harga: null,
     catatan: "Laba diatribusikan kepada pemilik entitas induk. Laba 2024 = Rp5.509 M dikurangi kenaikan Rp598,9 M yang disebut BCA Sekuritas. Cek: liabilitas + ekuitas = aset Rp118,63 T.",
     sumber: [{ judul: "PintarSaham, 9 Feb 2026: Kinerja keuangan PT Indosat Tbk (ISAT) tahun 2025",
       url: "https://pintarsaham.id/kinerja-keuangan-pt-indosat-tbk-isat-tahun-2025/" },
       { judul: "BCA Sekuritas, 9 Feb 2026: Indosat catat pendapatan Rp56,518 triliun di 2025",
-        url: "https://bcasekuritas.co.id/latest-news/news/indosat-catat-pendapatan-rp56518-triliun-di-2025" }]
+        url: "https://bcasekuritas.co.id/latest-news/news/indosat-catat-pendapatan-rp56518-triliun-di-2025" },
+      { judul: "Investor Daily, 28 Okt 2026: Laba Indosat (ISAT) menguat, investasi tembus Rp15 triliun",
+        url: "https://investor.id/market/459807/laba-indosat-isat-menguat-investasi-tembus-rp-15-triliun" }]
   },
   {
     kode: "EXCL", nama: "PT XLSmart Telecom Sejahtera Tbk", sektor: "Infrastruktur",
