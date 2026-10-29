@@ -50,6 +50,7 @@ for (const e of ASLI || []) {
   ok(/^[A-Z0-9]{4}$/.test(e.kode) && !kodeAsli.has(e.kode), `data asli: kode tidak valid/ganda: ${e.kode}`); kodeAsli.add(e.kode);
   ok(Number.isInteger(e.desBaris) && e.desBaris > 0, `data asli ${e.kode}: desBaris wajib diisi`);
   ok(Array.isArray(e.sumber) && e.sumber.length > 0 && e.sumber.every(s => s.judul && /^https:\/\//.test(s.url)), `data asli ${e.kode}: sumber wajib berisi judul dan tautan https`);
+  ok(e.mataUang === undefined || e.mataUang === "USD", `data asli ${e.kode}: mataUang hanya boleh kosong (rupiah) atau "USD"`);
   for (const g of ["labaTahun", "pendapatan"]) for (const v of Object.values(e[g] || {}))
     ok(v === null || Number.isFinite(v), `data asli ${e.kode}: ${g} harus angka atau null`);
 }

@@ -6,6 +6,8 @@
    - desBaris: nomor baris di Daftar Efek Syariah periode I 2026 (KEP-21/D.04/2026,
      berlaku 1 Juni 2026), dikutip verbatim dari https://idx.id/media/nbkfn2sd/des-mei-2026.pdf
    - Angka dalam miliar rupiah. null = belum ditemukan sumbernya. Jangan diisi tebakan.
+   - Emiten yang melapor dalam dolar AS: tulis mataUang: "USD" dan semua angka dalam JUTA US$,
+     persis seperti laporannya. Jangan dikonversi ke rupiah (keputusan Galih, 29 Okt 2026).
    - roe & der dihitung dari angka di sumber: roe = labaTahun[2025] ÷ ekuitas 2025,
      der = liabilitas 2025 ÷ ekuitas 2025.
    - catatan: keterangan bila definisi angka berbeda dari biasanya. */
@@ -379,5 +381,35 @@ window.EMITEN_ASLI = [
       url: "https://emitennews.com/news/tumbuh-minimalis-bris-2025-tabulasi-laba-rp756-triliun" },
       { judul: "BCA Sekuritas, 6 Feb 2026: Bank Syariah Indonesia raih laba Rp7,56 triliun hingga Desember 2025",
         url: "https://bcasekuritas.co.id/latest-news/news/bank-syariah-indonesia-raih-laba-rp756-triliun-hingga-desember-2025" }]
+    },
+  {
+    kode: "PGAS", nama: "PT Perusahaan Gas Negara Tbk", sektor: "Energi",
+    desBaris: 46, mataUang: "USD",
+    labaTahun: { 2024: 339.42, 2025: 215.36 },
+    pendapatan: { 2024: 3790, 2025: 3980 },
+    liabilitas2025: 2620, ekuitas2025: 3610,
+    laba9b: { 2025: null, 2026: null },
+    dps: null, harga: null,
+    catatan: "Melapor dalam dolar AS; angka dalam juta US$ sesuai laporan, tidak dikonversi ke rupiah. Laba = laba diatribusikan kepada pemilik entitas induk. Pendapatan dan neraca dibulatkan sumber ke 2 desimal miliar US$. Cek: liabilitas US$2,62 miliar + ekuitas US$3,61 miliar = aset US$6,23 miliar.",
+    sumber: [{ judul: "KabarBursa, 7 Mar 2026: PGAS catat pendapatan USD3,98 miliar di 2025, laba bersih turun",
+      url: "https://www.kabarbursa.com/market-hari-ini/pgas-catat-pendapatan-usd398-miliar-di-2025-laba-bersih-turun" },
+      { judul: "Stockwatch: Perusahaan Gas Negara (PGN) bukukan laba US$215,36 juta di 2025, turun 36,55%",
+        url: "https://stockwatch.id/perusahaan-gas-negara-pgn-bukukan-laba-us21536-juta-di-2025-turun-3655" }]
+  },
+  {
+    kode: "ITMG", nama: "PT Indo Tambangraya Megah Tbk", sektor: "Energi",
+    desBaris: 37, mataUang: "USD",
+    labaTahun: { 2024: 374.11, 2025: 190.94 },
+    pendapatan: { 2024: 2300, 2025: 1880 },
+    liabilitas2025: null, ekuitas2025: null,
+    laba9b: { 2025: null, 2026: null },
+    dps: null, harga: null,
+    catatan: "Melapor dalam dolar AS; angka dalam juta US$ sesuai laporan, tidak dikonversi ke rupiah. Laba = laba diatribusikan kepada pemilik entitas induk (Bisnis menulis 2024 US$374,12 juta, selisih pembulatan). Neraca belum diisi: sumber hanya memberi ekuitas yang dibulatkan (US$1,9 miliar), jadi ROE dan DER belum dihitung.",
+    sumber: [{ judul: "BCA Sekuritas (IQPlus), 26 Feb 2026: Pendapatan ITMG capai USD1,88 miliar hingga Desember 2025",
+      url: "https://bcasekuritas.co.id/latest-news/news/pendapatan-itmg-capai-usd188-miliar-hingga-desember-2025" },
+      { judul: "Bisnis, 26 Feb 2026: Indo Tambangraya (ITMG) raih laba US$190,94 juta pada 2025, turun 48,96%",
+        url: "https://market.bisnis.com/read/20260226/192/1955916/indo-tambangraya-itmg-raih-laba-us19094-juta-pada-2025-turun-4896" },
+      { judul: "Investortrust, 26 Feb 2026: Laba Indo Tambangraya (ITMG) tergerus jadi US$190,94 juta di 2025",
+        url: "https://investortrust.id/market/95529/laba-indo-tambangraya-itmg-tergerus-jadi-us-190-94-juta-di-2025" }]
   }
 ];

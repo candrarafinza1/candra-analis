@@ -29,6 +29,17 @@
     var t = a >= 1000 ? "Rp" + angka2.format(a / 1000) + " T" : "Rp" + angka.format(a) + " M";
     return neg ? "−" + t : t;
   }
+  // Emiten yang melapor dalam dolar AS (keputusan Galih, 29 Okt 2026): angka disimpan dan
+  // ditampilkan dalam mata uang laporannya (juta US$), TANPA dikonversi ke rupiah, agar tidak
+  // ada kurs karangan. Rasio (pertumbuhan, ROE, DER) tidak bergantung mata uang, jadi tetap ikut
+  // Peringkat; "Laba terbesar" hanya membandingkan emiten berlaporan rupiah.
+  function dolarJuta(m) {
+    var neg = m < 0, a = Math.abs(m);
+    var t = a >= 1000 ? "US$" + angka2.format(a / 1000) + " miliar" : "US$" + angka.format(a) + " juta";
+    return neg ? "−" + t : t;
+  }
+  function usd(e) { return e && e.mataUang === "USD"; }
+  function uang(e) { return usd(e) ? dolarJuta : rupiahMiliar; }
   function persen(p) { return (p < 0 ? "−" : "") + angka.format(Math.abs(p)) + "%"; }
   function ada(v) { return typeof v === "number" && isFinite(v); }
   function tumbuh(a, b) { return ada(a) && ada(b) && a !== 0 ? (b - a) / Math.abs(a) * 100 : null; }
@@ -108,8 +119,8 @@
   /* ---------- Peringkat (tim Galih) ---------- */
   var KRITERIA = {
     laba: {
-      label: "Laba bersih terbesar", nilai: laba25, tampil: rupiahMiliar, kolom: "Laba 2025",
-      metode: "Laba bersih tahun buku 2025."
+      label: "Laba bersih terbesar", nilai: laba25, tampil: rupiahMiliar, rupiahSaja: true, kolom: "Laba 2025",
+      metode: "Laba bersih tahun buku 2025. Emiten yang melapor dalam dolar AS tidak ikut urutan ini karena tidak kami konversi ke rupiah."
     },
     tumbuhLaba: {
       label: "Pertumbuhan laba", nilai: tumbuhLaba, tampil: persen, kolom: "Laba 2025 vs 2024",
@@ -128,7 +139,7 @@
   // Emiten bertanda periksaUlang tidak ikut diperingkat sampai angkanya dipastikan (aturan Hana).
   function peserta(kunci) {
     var k = KRITERIA[kunci];
-    return EMITEN.filter(function (e) { return syariahAktif(e) && !e.periksaUlang && ada(k.nilai(e)); });
+    return EMITEN.filter(function (e) { return syariahAktif(e) && !e.periksaUlang && !(k.rupiahSaja && usd(e)) && ada(k.nilai(e)); });
   }
   function urutkan(kunci) {
     var k = KRITERIA[kunci];
@@ -176,7 +187,7 @@
           selKode(e),
           el("td", { class: "sel-sektor", "data-label": "Sektor", text: e.sektor }),
           el("td", { class: "angka sel-utama", "data-label": k.kolom, text: k.tampil(k.nilai(e)) }),
-          kunci === "laba" ? null : el("td", { class: "angka", "data-label": "Laba 2025", text: strip(laba25(e), rupiahMiliar) }),
+          kunci === "laba" ? null : el("td", { class: "angka", "data-label": "Laba 2025", text: strip(laba25(e), uang(e)) }),
           kunci === "tumbuh" ? null : el("td", { class: "angka " + (ada(g) ? (g >= 0 ? "naik" : "turun") : ""), "data-label": "Pendapatan YoY", text: strip(g, persen) }),
           el("td", { class: "angka", "data-label": "DER", text: strip(der(e), function (v) { return angka.format(v) + "x"; }) }),
           el("td", { class: "sel-sumber", "data-label": "Data" }, [tautanSumber(e)])
@@ -200,7 +211,7 @@
           tbody
         ])
       ]));
-      var keluar = EMITEN.filter(function (e) { return syariahAktif(e) && (e.periksaUlang || !ada(k.nilai(e))); })
+      var keluar = EMITEN.filter(function (e) { return syariahAktif(e) && !(k.rupiahSaja && usd(e)) && (e.periksaUlang || !ada(k.nilai(e))); })
         .map(function (e) { return e.kode; });
       panel.appendChild(el("p", { class: "catatan-metode", style: "margin-top:12px" },
         ["Cara menghitung: " + k.metode + " Hanya emiten yang tercatat di Daftar Efek Syariah. Urutan ini menggambarkan data, bukan saran membeli." +
@@ -229,7 +240,7 @@
   // Mengembalikan daftar sinyal { tingkat: tinggi|sedang|info|aman, judul, isi, bukti }
   function periksa(e) {
     var s = [];
-    var L = e.labaTahun || {}, P = e.pendapatan || {};
+    var L = e.labaTahun || {}, P = e.pendapatan || {}, rp = uang(e);
 
     if (e.keluarDES) s.push({ tingkat: "tinggi", judul: "Tidak lagi tercatat sebagai saham syariah",
       isi: "Emiten ini tidak ada di Daftar Efek Syariah periode terbaru.", bukti: "Sumber: " + DES_LABEL + "." });
@@ -238,25 +249,25 @@
       isi: "Bursa menghentikan sementara perdagangan saham ini.", bukti: "Sumber: pengumuman Bursa Efek Indonesia." });
 
     if (ada(L[2025]) && L[2025] < 0) s.push({ tingkat: "tinggi", judul: "Merugi pada 2025",
-      isi: "Perusahaan mencatat rugi bersih pada tahun buku 2025.", bukti: "Laba 2025: " + rupiahMiliar(L[2025]) + "." });
+      isi: "Perusahaan mencatat rugi bersih pada tahun buku 2025.", bukti: "Laba 2025: " + rp(L[2025]) + "." });
 
     var gl = tumbuhLaba(e);
     if (ada(gl) && gl <= -50) s.push({ tingkat: "tinggi", judul: "Laba turun lebih dari separuh",
       isi: "Laba bersih 2025 turun tajam dibanding 2024.",
-      bukti: "Laba: " + rupiahMiliar(L[2024]) + " (2024) → " + rupiahMiliar(L[2025]) + " (2025), " + persen(gl) + "." });
+      bukti: "Laba: " + rp(L[2024]) + " (2024) → " + rp(L[2025]) + " (2025), " + persen(gl) + "." });
     else if (ada(gl) && gl < 0) s.push({ tingkat: "sedang", judul: "Laba menurun",
       isi: "Laba bersih 2025 lebih rendah daripada 2024.",
-      bukti: "Laba: " + rupiahMiliar(L[2024]) + " (2024) → " + rupiahMiliar(L[2025]) + " (2025), " + persen(gl) + "." });
+      bukti: "Laba: " + rp(L[2024]) + " (2024) → " + rp(L[2025]) + " (2025), " + persen(gl) + "." });
 
     var gp = tumbuhPendapatan(e);
     if (ada(gp) && gp < 0) s.push({ tingkat: "sedang", judul: "Pendapatan menurun",
       isi: "Penjualan 2025 lebih rendah daripada 2024.",
-      bukti: "Pendapatan: " + rupiahMiliar(P[2024]) + " → " + rupiahMiliar(P[2025]) + " (" + persen(gp) + ")." });
+      bukti: "Pendapatan: " + rp(P[2024]) + " → " + rp(P[2025]) + " (" + persen(gp) + ")." });
 
     // Laba 9 bulan (Januari–September) 2026 dibanding periode yang sama 2025.
     var N = e.laba9b || {}, g9 = tumbuh(N[2025], N[2026]);
     if (ada(g9)) {
-      var bukti9 = "Laba Januari–September: " + rupiahMiliar(N[2025]) + " (2025) → " + rupiahMiliar(N[2026]) + " (2026), " + persen(g9) + ".";
+      var bukti9 = "Laba Januari–September: " + rp(N[2025]) + " (2025) → " + rp(N[2026]) + " (2026), " + persen(g9) + ".";
       if (ada(N[2026]) && N[2026] < 0) s.push({ tingkat: "tinggi", judul: "Merugi dalam 9 bulan pertama 2026",
         isi: "Perusahaan mencatat rugi bersih untuk periode Januari–September 2026.", bukti: bukti9 });
       else if (g9 <= -50) s.push({ tingkat: "tinggi", judul: "Laba 9 bulan 2026 turun lebih dari separuh",
@@ -313,7 +324,8 @@
       var s = periksa(e);
       var jml = s.filter(function (x) { return x.tingkat === "tinggi" || x.tingkat === "sedang"; }).length;
       hasil.appendChild(el("h2", { style: "font-size:1.35rem", text: e.kode + ": " + (jml ? jml + " tanda yang perlu Anda perhatikan" : "tidak ada tanda risiko") }));
-      hasil.appendChild(el("p", { class: "catatan-metode", text: "Tercatat di " + DES_LABEL + ", baris " + e.desBaris + "." }));
+      hasil.appendChild(el("p", { class: "catatan-metode", text: "Tercatat di " + DES_LABEL + ", baris " + e.desBaris + "." +
+        (usd(e) ? " Emiten ini melapor dalam dolar AS; angka ditampilkan dalam dolar AS sesuai laporannya." : "") }));
       var ul = el("ul", { class: "sinyal-daftar" });
       s.forEach(function (x) {
         ul.appendChild(el("li", { class: "sinyal sinyal-" + x.tingkat }, [
