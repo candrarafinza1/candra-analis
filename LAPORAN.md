@@ -130,3 +130,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Galih: Radar otomatis membaca HEAL (tanda laba 9 bulan turun).
 - Nina: `node tests/cek.mjs` lolos (24 emiten). Radar dicek di 1280px & 390px tanpa scroll horizontal dan tanpa galat JS.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).
+
+## 29 Okt 2026, 14.10 WIB — Galih, Hana, Fajar, Nina (via Bima)
+- Fajar: laba 9 bulan 2026 TLKM, ICBP, INDF, KLBF, PTBA dicek, belum rilis. Tugas tetap jalan di sesi berikutnya.
+- Galih: keputusan emiten berlaporan dolar AS. Angka tampil dalam US$ sesuai laporan, tidak dikonversi ke rupiah (tanpa kurs karangan). Ikut Peringkat pertumbuhan laba/pendapatan dan ROE; tidak ikut "Laba terbesar". Hana menjelaskannya di halaman Metodologi.
+- Fajar: PGAS dan ITMG masuk (kini 26 emiten). Laba atribusi & pendapatan 2024/2025 bersumber 2–3 media; neraca PGAS dicek = total aset; neraca ITMG dikosongkan karena ekuitas di sumber hanya angka bulat.
+- Nina: pemeriksaan `mataUang` ditambahkan; `node tests/cek.mjs` lolos (26 emiten). Peringkat, Radar (PGAS, ITMG), Metodologi dicek di 1280px & 390px tanpa scroll horizontal dan tanpa galat JS.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).
