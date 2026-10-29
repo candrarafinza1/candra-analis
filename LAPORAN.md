@@ -122,3 +122,11 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Galih: Radar Risiko otomatis membaca angka baru (SIDO tampil dengan tanda laba 9 bulan turun).
 - Nina: `node tests/cek.mjs` lolos (24 emiten). Radar & Peringkat dicek di 1280px & 390px tanpa scroll horizontal dan tanpa galat JS.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).
+
+## 29 Okt 2026, 13.10 WIB — Fajar, Galih, Nina, Sari (via Bima)
+- Bima: email masuk kerja siang terkirim ke Rafinza. Sari diberi tugas pendukung (tinjau bahasa kuis Laras), dicatat di BACKLOG.md.
+- Fajar: laba 9 bulan HEAL masuk (kini 7 dari 24): Rp303,31 M vs Rp356,01 M, turun 14,8%, laba atribusi (Receh.in & Bisnis; pembanding 2025 dicek Warta Ekonomi: laba periode berjalan Rp451,06 M sengaja tidak dipakai).
+- Fajar: MAPI tetap ditahan. Dua angka per tahun beredar (2026 Rp1,72 T / Rp2,1 T; 2025 Rp1,37 T / Rp1,7 T), belum ada sumber yang menyebut mana laba atribusi. ACES, TLKM, KLBF, ICBP, INDF, PTBA, INTP, SMGR, CPIN, JPFA, CTRA, BSDE, MIKA, EXCL belum rilis saat dicek. Masalah ringan, lanjut sesi berikutnya.
+- Galih: Radar otomatis membaca HEAL (tanda laba 9 bulan turun).
+- Nina: `node tests/cek.mjs` lolos (24 emiten). Radar dicek di 1280px & 390px tanpa scroll horizontal dan tanpa galat JS.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).

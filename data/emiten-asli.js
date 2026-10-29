@@ -308,13 +308,20 @@ window.EMITEN_ASLI = [
     labaTahun: { 2024: 535.94, 2025: 429.55 },
     pendapatan: { 2024: 6720, 2025: 7130 },
     liabilitas2025: 4680, ekuitas2025: 7210,
-    laba9b: { 2025: null, 2026: null },
+    laba9b: { 2025: 356.01, 2026: 303.31 },
+    catatan9b: "Laba 9 bulan = laba diatribusikan kepada pemilik entitas induk: Rp303,31 M (Jan–Sep 2026) vs Rp356,01 M (Jan–Sep 2025), turun 14,8% (Receh.in; Bisnis menulis Rp303,31 M). Warta Ekonomi (24 Okt 2025) memastikan Rp356,01 M adalah laba bersih, sedangkan laba periode berjalan termasuk kepentingan nonpengendali Rp451,06 M.",
     dps: null, harga: null,
     catatan: "Laba diatribusikan kepada pemilik entitas induk (laba tahun berjalan termasuk kepentingan nonpengendali Rp548,96 M). Cek: liabilitas + ekuitas = aset Rp11,89 T. BCA Sekuritas menulis angka yang sama (pendapatan 2024 Rp6,71 T, selisih pembulatan).",
     sumber: [{ judul: "Kabar Bursa, 26 Mar 2026: HEAL bukukan laba Rp429,55 miliar sepanjang 2025",
       url: "https://www.kabarbursa.com/market-hari-ini/heal-bukukan-laba-rp42955-miliar-anjlok-199-persen-sepanjang-2025" },
       { judul: "BCA Sekuritas, 26 Mar 2026: Medikaloka Hermina raih pendapatan Rp7,13 triliun hingga Desember 2025",
-        url: "https://bcasekuritas.co.id/latest-news/news/medikaloka-hermina-raih-pendapatan-rp713-triliun-hingga-desember-2025" }]
+        url: "https://bcasekuritas.co.id/latest-news/news/medikaloka-hermina-raih-pendapatan-rp713-triliun-hingga-desember-2025" },
+      { judul: "Receh.in, 28 Okt 2026: Kinerja HEAL 9M 2026, pendapatan naik 4,4%, laba bersih turun 14,8%",
+        url: "https://www.receh.in/2026/10/kinerja-heal-9m-2026-pendapatan-naik-44.html" },
+      { judul: "Bisnis, 28 Okt 2026: Hermina (HEAL) cetak laba bersih Rp303,31 miliar pada kuartal III/2026",
+        url: "https://market.bisnis.com/read/20261028/192/2016384/hermina-heal-cetak-laba-bersih-rp30331-miliar-pada-kuartal-iii2026" },
+      { judul: "Warta Ekonomi, 24 Okt 2025: Beban membengkak, laba HEAL tergerus kuartal III (pembanding 2025)",
+        url: "https://wartaekonomi.co.id/read587537/beban-membengkak-laba-heal-tergerus-kuartal-iii" }]
   },
   {
     kode: "ACES", nama: "PT Aspirasi Hidup Indonesia Tbk", sektor: "Barang konsumen non-primer",
