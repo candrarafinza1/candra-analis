@@ -93,3 +93,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Bima: sisa kandidat (AADI, ITMG, PGAS, MDKA, TPIA, HRUM, MBMA) melapor dalam dolar AS → tugas baru untuk Galih menentukan cara tampilnya dulu. Masalah ringan.
 - Nina: `node tests/cek.mjs` lolos (24 emiten). Peringkat & Radar dicek di 390px & 1280px tanpa scroll horizontal dan tanpa galat.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).
+
+## 29 Okt 2026, 07.10 WIB — Fajar, Hana, Sari, Yoga, Nina (via Bima)
+- Bima: email masuk kerja pagi terkirim ke Rafinza; 6 karyawan tanpa tugas (Sari, Arif, Nina, Tegar, Yoga, Kirana) diberi tugas pendukung di BACKLOG.md.
+- Fajar: kolom kosong batch 1 dilengkapi. Laba 2024 MYOR Rp3,00 T (Fortune IDN, cocok dengan Investortrust & KabarBursa) dan AKRA Rp2,22 T (laba atribusi, Investortrust; cocok dengan kenaikan 11,12% di 2025). Neraca 2025 JPFA dan SMGR terisi; jumlah liabilitas + ekuitas sama dengan total aset. SMGR tetap periksaUlang karena angka labanya. Catatan JPFA yang tertukar teks SMGR dibersihkan.
+- Hana & Sari: halaman Metodologi tayang (sumber data, rumus, aturan bank syariah, Radar Risiko, jadwal DES, batasan), bahasa ditinjau Sari. Yoga menautkannya dari kaki semua halaman.
+- Nina: `node tests/cek.mjs` lolos (7 halaman, 24 emiten). Dicek di 1280/390/320px tanpa scroll horizontal dan tanpa galat JS.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).
