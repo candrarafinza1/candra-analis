@@ -101,7 +101,7 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Nina: `node tests/cek.mjs` lolos (7 halaman, 24 emiten). Dicek di 1280/390/320px tanpa scroll horizontal dan tanpa galat JS.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).
 
-## 29 Okt 2026, 08.30 WIB — Fajar, Galih, Hana, Nina (via Bima)
+## 29 Okt 2026, 08.20 WIB — Fajar, Galih, Hana, Nina (via Bima)
 - Fajar: cek ulang angka bertanda. ANTM laba atribusi 2025 Rp7,21 T (2024 Rp3,65 T) dari Katadata, dicek silang dengan dividen Rp5,04 T = 70% laba (Fortune IDN); Rp7,92 T di JawaPos ternyata laba total. INTP laba atribusi Rp2,24 T (2024 Rp2,00 T) dari BCA Sekuritas. Keduanya kini ikut Peringkat.
 - Galih & Hana: UNVR tetap di luar Peringkat karena Rp3,79 T dari laba Rp7,64 T adalah keuntungan sekali-waktu penjualan bisnis es krim (Investortrust). Alasannya tampil di Radar. Tugas baru Galih: aturan tertulis untuk keuntungan sekali-waktu.
 - Fajar: MAPI dan SMGR masih bertanda (sumber berbeda, laporan resmi belum terbaca). Laba 9 bulan 2026 emiten kita belum terbit saat dicek. Masalah ringan, lanjut.
