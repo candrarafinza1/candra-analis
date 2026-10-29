@@ -166,3 +166,11 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Nina: cek kuis ditambahkan di `tests/cek.mjs`; lolos (8 halaman, 8 pelajaran, 31 emiten). Kuis dicoba di 1280px & 390px: tanpa scroll horizontal, tanpa galat JS, "Ulangi kuis" mengembalikan fokus ke soal pertama.
 - Bima: usulan Kirana #4 (penanda kemajuan, Arif) dan #5 (perpindahan halaman halus, Dewi) masuk backlog agar Arif dan Dewi tidak menganggur.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).
+
+## 29 Okt 2026, 19.10 WIB — Arif, Dewi, Nina, Fajar (via Bima)
+- Fajar: laba 9 bulan 2026 dicek lagi (TLKM, KLBF, ICBP), yang terbit masih kuartal I/semester I. Cek lagi 30–31 Okt.
+- Arif: penanda kemajuan belajar tayang. Tombol "Tandai selesai" di akhir tiap pelajaran (setelah kuis), halaman Belajar menampilkan "x dari 8 pelajaran selesai" dan centang + label "Selesai". Disimpan hanya di peramban (localStorage dalam try/catch), tanpa akun dan server; bila penyimpanan diblokir muncul pesan ramah.
+- Dewi: perpindahan antarhalaman halus (`@view-transition`, 0,2 detik) hanya bila pengguna tidak meminta gerak dikurangi. Tampilan tombol & label selesai.
+- Nina: cek baru di `tests/cek.mjs` (localStorage wajib dalam try, view transition wajib di dalam prefers-reduced-motion); lolos (8 halaman, 8 pelajaran, 31 emiten). Dicek 1280px & 390px tanpa scroll horizontal dan tanpa galat JS, termasuk peramban dengan penyimpanan diblokir.
+- Bima: tugas baru untuk Kirana (tinjau) dan Dewi (rapikan metodologi di HP) agar tidak menganggur.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).

@@ -76,18 +76,67 @@
     return s ? el("a", { href: s.url, target: "_blank", rel: "noopener", text: "Sumber", "aria-label": "Sumber data " + e.kode + " (tab baru)" }) : document.createTextNode("–");
   }
 
+  /* ---------- Penanda kemajuan belajar (Arif, IDE.md #4) ----------
+     Hanya disimpan di peramban pengguna ini (localStorage): tanpa akun, tanpa server.
+     Bila penyimpanan diblokir (mode privat), halaman tetap jalan tanpa penanda tersimpan. */
+  var KUNCI_KEMAJUAN = "candra-analis:pelajaran-selesai";
+  function bacaSelesai() {
+    var v;
+    try { v = JSON.parse(localStorage.getItem(KUNCI_KEMAJUAN) || "[]"); } catch (e) { return []; }
+    return Array.isArray(v) ? v.filter(function (id) { return MODUL.some(function (m) { return m.id === id; }); }) : [];
+  }
+  function simpanSelesai(daftar) {
+    try { localStorage.setItem(KUNCI_KEMAJUAN, JSON.stringify(daftar)); return true; } catch (e) { return false; }
+  }
+
+  function buatTandaiSelesai(m) {
+    var kotak = el("div", { class: "tandai-selesai" });
+    var tombol = el("button", { type: "button", class: "tombol tombol-tandai" });
+    var info = el("p", { class: "tandai-info", role: "status", "aria-live": "polite" });
+    function segarkan(umumkan) {
+      var sudah = bacaSelesai().indexOf(m.id) >= 0;
+      tombol.setAttribute("aria-pressed", sudah ? "true" : "false");
+      tombol.textContent = sudah ? "✓ Sudah selesai" : "Tandai selesai";
+      if (umumkan) info.textContent = sudah
+        ? bacaSelesai().length + " dari " + MODUL.length + " pelajaran selesai. Tanda hanya tersimpan di perangkat ini."
+        : "Tanda selesai dihapus.";
+    }
+    tombol.addEventListener("click", function () {
+      var daftar = bacaSelesai(), i = daftar.indexOf(m.id);
+      if (i >= 0) daftar.splice(i, 1); else daftar.push(m.id);
+      if (!simpanSelesai(daftar)) { info.textContent = "Peramban ini tidak mengizinkan penyimpanan, jadi tanda tidak bisa disimpan."; return; }
+      segarkan(true);
+    });
+    segarkan(false);
+    kotak.appendChild(el("p", { class: "tandai-ajak", text: "Sudah paham isi pelajaran ini?" }));
+    kotak.appendChild(tombol);
+    kotak.appendChild(info);
+    return kotak;
+  }
+
   /* ---------- Jalur belajar ---------- */
   function renderJalur(id, lengkap) {
     var ol = document.getElementById(id);
     if (!ol) return;
+    var selesai = lengkap ? bacaSelesai() : [];
     MODUL.forEach(function (m, i) {
-      var li = el("li", { "data-no": String(i + 1) }, [
-        el("h3", null, [el("a", { href: "pelajaran.html?m=" + m.id, text: m.judul })]),
+      var sudah = selesai.indexOf(m.id) >= 0;
+      var li = el("li", { "data-no": sudah ? "✓" : String(i + 1), class: sudah ? "selesai" : null }, [
+        el("h3", null, [el("a", { href: "pelajaran.html?m=" + m.id, text: m.judul }), sudah ? el("span", { class: "label-selesai", text: "Selesai" }) : null]),
         el("p", { text: m.ringkas }),
         lengkap ? el("span", { class: "durasi", text: m.durasi }) : null
       ]);
+      if (!sudah) li.removeAttribute("class");
       ol.appendChild(li);
     });
+    if (lengkap) {
+      var n = selesai.length;
+      ol.parentNode.insertBefore(el("p", { class: "kemajuan" }, [
+        el("strong", { text: n + " dari " + MODUL.length + " pelajaran selesai" }),
+        n ? (n === MODUL.length ? ". Semua pelajaran sudah Anda tandai selesai." : ". Lanjutkan kapan saja.") : ". Tandai pelajaran di bagian akhirnya setelah Anda membacanya.",
+        el("span", { class: "kemajuan-catatan", text: " Tanda hanya tersimpan di peramban perangkat ini." })
+      ]), ol);
+    }
   }
 
   /* ---------- Kuis akhir pelajaran (tim Laras, Sari, Hana; tampilan Dewi) ----------
@@ -162,6 +211,7 @@
     wadah.innerHTML = m.isi; // isi berasal dari file kurikulum kita sendiri
     pasangIstilah(wadah);
     if (m.kuis && m.kuis.length) wadah.appendChild(buatKuis(m));
+    wadah.appendChild(buatTandaiSelesai(m));
 
     var nav = el("nav", { class: "navigasi-pelajaran", "aria-label": "Pelajaran lain" });
     nav.appendChild(idx > 0

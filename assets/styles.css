@@ -167,6 +167,17 @@ p { margin: 0 0 1em; }
 .jalur h3 a:hover { color: var(--naik); text-decoration: underline; }
 .jalur p { color: var(--tinta-2); margin: 0; max-width: var(--lebar-teks); }
 .jalur .durasi { font-size: .88rem; color: var(--tinta-2); }
+/* Penanda kemajuan belajar (Arif & Dewi) */
+.jalur li.selesai::before { background: var(--naik); color: var(--putih); }
+.label-selesai { display: inline-block; margin-left: 8px; padding: 2px 8px; border-radius: 999px; background: var(--naik-muda); color: var(--naik); font-size: .78rem; font-weight: 700; vertical-align: middle; }
+.kemajuan { margin: 24px 0 0; padding: 12px 14px; background: var(--putih); border: 1px solid var(--garis); border-radius: var(--radius-kecil); }
+.kemajuan-catatan { display: block; color: var(--tinta-2); font-size: .9rem; }
+.tandai-selesai { margin: 28px 0 0; padding: 18px 20px; border: 1px solid var(--garis); border-radius: var(--radius); background: var(--putih); }
+.tandai-ajak { margin: 0 0 10px; font-weight: 700; }
+.tombol-tandai { background: var(--malam); color: var(--putih); }
+.tombol-tandai[aria-pressed="true"] { background: var(--naik); border-color: var(--naik); color: var(--putih); }
+.tandai-info { margin: 10px 0 0; color: var(--tinta-2); font-size: .95rem; }
+.tandai-info:empty { display: none; }
 
 /* Tiga alat utama di beranda — sengaja tidak seragam */
 .alat {
@@ -462,3 +473,10 @@ button.istilah:hover, button.istilah[aria-expanded="true"] { color: var(--malam-
 .daftar-emiten a { display: block; padding: 12px 14px; min-height: 48px; background: var(--putih); border: 1px solid var(--garis); border-radius: var(--radius-kecil); text-decoration: none; color: var(--tinta); }
 .daftar-emiten a:hover { border-color: var(--malam-2); }
 @media (max-width: 600px) { .tabel-profil th, .tabel-profil td { padding: 8px 6px; } }
+
+/* Perpindahan halaman halus antarhalaman (Dewi, IDE.md #5).
+   Hanya bila pengguna tidak meminta gerak dikurangi; peramban lama mengabaikannya. */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition { navigation: auto; }
+  ::view-transition-old(root), ::view-transition-new(root) { animation-duration: .2s; }
+}

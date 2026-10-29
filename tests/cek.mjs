@@ -74,6 +74,15 @@ for (const t of ISTILAH || []) {
 // Profil emiten (Nina, 29 Okt): halaman ada, memuat wadah #profil, dan Peringkat menaut ke profil
 ok(existsSync("emiten.html") && /id="profil"/.test(readFileSync("emiten.html", "utf8")), "emiten.html tidak ada atau tanpa wadah #profil");
 ok(/emiten\.html\?kode=/.test(readFileSync("assets/app.js", "utf8")), "Peringkat/Radar belum menaut ke profil emiten");
+// Penanda kemajuan (Nina, 29 Okt): setiap akses localStorage wajib di dalam try { ... }
+{
+  const js = readFileSync("assets/app.js", "utf8");
+  for (const baris of js.split("\n").filter((b) => /localStorage\./.test(b)))
+    ok(/try\s*\{/.test(baris), "akses localStorage di luar try/catch: " + baris.trim());
+  const css = readFileSync("assets/styles.css", "utf8");
+  ok(!/@view-transition/.test(css) || /prefers-reduced-motion: no-preference\)\s*\{\s*@view-transition/.test(css),
+    "@view-transition harus di dalam prefers-reduced-motion: no-preference");
+}
 
 // 3. Aturan Hana (syariah): halaman tidak boleh memakai bahasa ajakan
 const terlarang = /\b(wajib beli|pasti naik|buruan (beli|jual)|dijamin untung|rekomendasi beli)\b/i;
