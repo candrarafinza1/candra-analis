@@ -159,11 +159,16 @@ window.EMITEN_ASLI = [
     labaTahun: { 2024: 1170, 2025: 1220 },
     pendapatan: { 2024: 3910, 2025: 4070 },
     liabilitas2025: 561.44, ekuitas2025: 3120,
-    laba9b: { 2025: null, 2026: null },
+    laba9b: { 2025: 818.54, 2026: 619.1 },
+    catatan9b: "Laba 9 bulan = laba periode berjalan yang diatribusikan kepada pemilik entitas induk: Rp619,1 M (Jan–Sep 2026) vs Rp818,54 M (Jan–Sep 2025), turun 24,36% (Databoks Katadata). IDX Channel menulis Rp619 M vs Rp818 M (pembulatan).",
     dps: null, harga: null,
     catatan: "Sumber menulis liabilitas \"Rp561,44 triliun\"; dibaca sebagai Rp561,44 miliar karena total aset hanya Rp3,68 triliun dan ekuitas Rp3,12 triliun.",
     sumber: [{ judul: "Bisnis, 28 Feb 2026: Sido Muncul cetak laba bersih Rp1,22 triliun pada 2025",
-      url: "https://market.bisnis.com/read/20260228/192/1956569/sido-muncul-sido-cetak-laba-bersih-rp122-triliun-pada-2025-naik-dari-2024" }]
+      url: "https://market.bisnis.com/read/20260228/192/1956569/sido-muncul-sido-cetak-laba-bersih-rp122-triliun-pada-2025-naik-dari-2024" },
+      { judul: "Databoks Katadata, 28 Okt 2026: Laba SIDO susut 24,36% pada kuartal III 2026 (laba atribusi 9 bulan Rp619,1 M)",
+        url: "https://databoks.katadata.co.id/pasar/statistik/6ae14a2949493/laba-sido-susut-2436-seiring-lesunya-penjualan-pada-kuartal-iii-2026" },
+      { judul: "IDX Channel, 27 Okt 2026: Sido Muncul catat laba bersih Rp619 miliar hingga kuartal III-2026",
+        url: "https://www.idxchannel.com/market-news/sido-muncul-sido-catat-laba-bersih-rp619-miliar-hingga-kuartal-iii-2026" }]
   },
   {
     kode: "CPIN", nama: "PT Charoen Pokphand Indonesia Tbk", sektor: "Barang konsumen primer",
@@ -232,7 +237,8 @@ window.EMITEN_ASLI = [
     labaTahun: { 2024: 2220, 2025: 2470 },
     pendapatan: { 2024: 38730, 2025: 46020 },
     liabilitas2025: 20950, ekuitas2025: 15610,
-    laba9b: { 2025: null, 2026: null },
+    laba9b: { 2025: 1650, 2026: 2210 },
+    catatan9b: "Laba 9 bulan = laba diatribusikan kepada pemilik entitas induk: Rp2,21 T (Jan–Sep 2026) vs Rp1,65 T (Jan–Sep 2025), StockWatch dan Kontan (sama). Rp2,44 T vs Rp1,85 T yang juga dikutip media adalah laba periode berjalan (termasuk kepentingan nonpengendali).",
     dps: 100, harga: null,
     catatan: "Dividen tahun buku 2025 = interim Rp50 + final Rp50. Laba 2024 diatribusikan = Rp2,22 T (Investortrust); Rp2,39 T yang sering dikutip adalah laba tahun berjalan termasuk kepentingan nonpengendali. Rp2,22 T → Rp2,47 T cocok dengan kenaikan 11,12% yang ditulis Bisnis. Ekuitas 2025 dihitung dari total aset Rp36,56 T dikurangi liabilitas Rp20,95 T (Bisnis).",
     sumber: [{ judul: "Katadata, 27 Apr 2026: AKRA sepakat bagi dividen Rp1,98 triliun",
@@ -240,7 +246,11 @@ window.EMITEN_ASLI = [
       { judul: "Bisnis, 18 Mar 2026: Kinerja 2025, pendapatan AKRA tumbuh 18,82%, laba bersih naik 11,12%",
         url: "https://market.bisnis.com/read/20260318/192/1961272/kinerja-2025-pendapatan-akra-tumbuh-1882-laba-bersih-naik-1112" },
       { judul: "Investortrust, 19 Mar 2025: AKR Corporindo cetak laba bersih Rp2,39 triliun di 2024 (laba atribusi Rp2,22 T)",
-        url: "https://investortrust.id/market/60164/akr-corporindo-akra-cetak-laba-bersih-rp-2-39-triliun-di-2024" }]
+        url: "https://investortrust.id/market/60164/akr-corporindo-akra-cetak-laba-bersih-rp-2-39-triliun-di-2024" },
+      { judul: "StockWatch, 23 Okt 2026: Laba bersih AKRA Rp2,44 T per September 2026 (laba atribusi Rp2,21 T vs Rp1,65 T)",
+        url: "https://stockwatch.id/laba-bersih-akra-tumbuh-3227-jadi-rp244-triliun-per-september-2026-ini-pemicunya/" },
+      { judul: "Kontan, 23 Okt 2026: Laba AKR (AKRA) melonjak 34% menjadi Rp2,21 triliun per kuartal III-2026",
+        url: "https://investasi.kontan.co.id/news/laba-akr-akra-melonjak-34-menjadi-rp-221-triliun-per-kuartal-iii-2026" }]
   },
   {
     kode: "MIKA", nama: "PT Mitra Keluarga Karyasehat Tbk", sektor: "Kesehatan",

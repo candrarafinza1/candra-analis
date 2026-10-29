@@ -115,3 +115,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Galih & Hana: Radar Risiko kini membandingkan laba 9 bulan 2026 vs 2025 (rugi/turun ≥50% = tinggi, turun = sedang, naik = info). Aturannya ditulis di halaman Metodologi. UNTR kini tampil dengan tanda tinggi.
 - Nina: `node tests/cek.mjs` lolos (24 emiten). Radar dicek di 1280px & 390px tanpa scroll horizontal dan tanpa galat JS.
 - Masalah ringan: 20 emiten lain belum rilis atau belum ditemukan sumbernya; dilanjutkan sesi berikutnya. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).
+
+## 29 Okt 2026, 10.30 WIB — Fajar, Galih, Nina (via Bima)
+- Fajar: laba 9 bulan 2026 vs 2025 masuk untuk 2 emiten lagi (kini 6 dari 24): SIDO Rp619,1 M vs Rp818,54 M (turun 24%, laba atribusi, Databoks; IDX Channel sama) dan AKRA Rp2,21 T vs Rp1,65 T (naik 34%, laba atribusi, StockWatch & Kontan). Rp2,44 T AKRA di media adalah laba periode berjalan, sengaja tidak dipakai.
+- Fajar: MAPI sudah rilis, tetapi tiga sumber memberi angka berbeda (Rp1,72 T / Rp2,0 T / Rp2,1 T) tanpa menyebut laba atribusi → belum dimasukkan. Emiten lain belum rilis saat dicek. Masalah ringan, lanjut sesi berikutnya.
+- Galih: Radar Risiko otomatis membaca angka baru (SIDO tampil dengan tanda laba 9 bulan turun).
+- Nina: `node tests/cek.mjs` lolos (24 emiten). Radar & Peringkat dicek di 1280px & 390px tanpa scroll horizontal dan tanpa galat JS.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).
