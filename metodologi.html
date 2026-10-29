@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Metodologi Data · Candra Analis</title>
+  <meta name="description" content="Dari mana data Candra Analis berasal, bagaimana setiap angka dihitung, kapan status syariah diperbarui, dan batasan data kami.">
+  <meta name="theme-color" content="#1b1f4b">
+  <link rel="icon" href="assets/logo.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <a class="lompat" href="#isi">Langsung ke isi</a>
+
+  <header class="kepala">
+    <div class="wadah">
+      <a class="merek" href="index.html" aria-label="Candra Analis, beranda">
+        <svg viewBox="0 0 32 32" aria-hidden="true"><path fill="#e9c46a" d="M20.5 3.5A13 13 0 1 0 28.4 25 11 11 0 1 1 20.5 3.5z"/></svg>
+        Candra Analis
+      </a>
+      <nav class="nav" aria-label="Menu utama">
+        <a href="belajar.html">Belajar</a>
+        <a href="peringkat.html">Peringkat</a>
+        <a href="radar.html">Radar Risiko</a>
+        <a href="asisten.html">Asisten AI</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="isi">
+    <section class="judul-halaman">
+      <div class="wadah">
+        <h1>Cara kami mengolah data</h1>
+        <p>Halaman ini menjelaskan dari mana angka di Candra Analis berasal, bagaimana angka itu dihitung, dan apa batasannya. Tujuannya agar Anda bisa memeriksa sendiri.</p>
+      </div>
+    </section>
+    <section class="bagian">
+      <div class="wadah">
+        <article class="artikel">
+          <h2 id="syariah">1. Siapa yang masuk data</h2>
+          <p>Kami hanya memuat saham yang tercatat di <strong>Daftar Efek Syariah (DES)</strong> yang ditetapkan OJK. Saat ini kami memakai DES periode I 2026 (KEP-21/D.04/2026, berlaku 1 Juni 2026).</p>
+          <ul>
+            <li>Setiap saham baru dicocokkan dulu dengan barisnya di dokumen DES. Nomor baris itu kami simpan sebagai bukti.</li>
+            <li>Kami mulai dari perusahaan besar yang laporan keuangannya mudah diperiksa. Jadi daftar kami belum memuat semua saham syariah.</li>
+            <li>Masuk DES berarti saham itu memenuhi kriteria syariah OJK. Itu <strong>bukan</strong> tanda bahwa saham itu bagus atau disarankan untuk dibeli.</li>
+          </ul>
+
+          <h2 id="sumber">2. Dari mana angkanya</h2>
+          <p>Angka diambil dari laporan keuangan tahunan emiten, siaran pers resmi emiten, atau berita media keuangan yang mengutip laporan tersebut. Setiap emiten punya tautan sumber yang bisa Anda buka.</p>
+          <ul>
+            <li>Satuan angka adalah miliar rupiah, kecuali disebut lain.</li>
+            <li>Tahun yang dipakai adalah tahun buku 2024 dan 2025 (periode 1 Januari–31 Desember).</li>
+            <li>Bila sebuah angka belum ditemukan sumbernya, kolomnya kami biarkan kosong (tanda "–"). Kami tidak mengisi angka perkiraan.</li>
+            <li>Bila dua sumber memberi angka berbeda, emiten itu kami beri tanda <strong>periksa ulang</strong>. Datanya tetap tampil di Radar Risiko, tetapi tidak ikut Peringkat sampai angkanya pasti.</li>
+          </ul>
+
+          <h2 id="hitung">3. Cara menghitung tiap angka</h2>
+          <ul>
+            <li><strong>Laba bersih</strong>: laba yang menjadi hak pemilik perusahaan induk (di laporan disebut "laba yang diatribusikan kepada pemilik entitas induk"). Bila sumber tidak memisahkannya, kami tulis keterangannya di catatan emiten.</li>
+            <li><strong>Pertumbuhan laba</strong> dan <strong>pertumbuhan pendapatan</strong>: (angka 2025 − angka 2024) ÷ angka 2024 × 100%.</li>
+            <li><strong>ROE</strong>: laba bersih 2025 ÷ total ekuitas akhir 2025 × 100%.</li>
+            <li><strong>DER</strong>: total liabilitas akhir 2025 ÷ total ekuitas akhir 2025.</li>
+          </ul>
+          <div class="kotak-rumus">Sebelum neraca dimasukkan, kami cek bahwa liabilitas + ekuitas = total aset. Bila tidak cocok, angkanya tidak kami pakai.</div>
+          <p><strong>Bank syariah.</strong> Bank syariah punya "dana syirkah temporer", yaitu dana nasabah dengan akad bagi hasil yang dicatat di luar liabilitas dan ekuitas. Karena itu DER bank syariah tidak kami hitung, agar tidak keliru terbaca sebagai utang tinggi.</p>
+
+          <h2 id="peringkat">4. Peringkat dan Radar Risiko</h2>
+          <p><strong>Peringkat</strong> hanya mengurutkan data: laba terbesar, pertumbuhan laba, pertumbuhan pendapatan, dan ROE. Hanya saham yang masih tercatat di DES dan angkanya lengkap yang ikut diurutkan.</p>
+          <p><strong>Radar Risiko</strong> memeriksa fakta berikut, masing-masing dengan buktinya:</p>
+          <ul>
+            <li>Tidak lagi tercatat di DES terbaru, atau perdagangan sedang dihentikan bursa: tanda <strong>tinggi</strong>.</li>
+            <li>Rugi bersih pada 2025, atau laba turun 50% atau lebih: tanda <strong>tinggi</strong>.</li>
+            <li>Laba turun kurang dari 50%, atau pendapatan turun: tanda <strong>sedang</strong>.</li>
+            <li>DER lebih dari 2 kali: tanda <strong>sedang</strong>.</li>
+          </ul>
+          <div class="kotak-penting">Peringkat dan Radar Risiko adalah ringkasan data, bukan saran membeli atau menjual. Angka masa lalu tidak menjamin hasil di masa depan.</div>
+
+          <h2 id="jadwal">5. Kapan data diperbarui</h2>
+          <ul>
+            <li><strong>Status syariah</strong>: OJK menerbitkan DES pada akhir Mei dan akhir November (berlaku 1 Juni dan 1 Desember). Setelah DES periode II 2026 terbit, status semua emiten kami cek ulang. Saham yang keluar dari daftar akan ditandai di Radar Risiko.</li>
+            <li><strong>Angka keuangan</strong>: diperbarui setelah emiten merilis laporan keuangan tahunan. Laporan kuartalan akan ditambahkan bertahap.</li>
+          </ul>
+
+          <h2 id="batasan">6. Batasan yang perlu Anda tahu</h2>
+          <ul>
+            <li>Sebagian angka berasal dari berita yang mengutip laporan keuangan, bukan langsung dari laporan itu. Bila Anda ingin memastikan, buka laporan resmi di situs emiten atau Bursa Efek Indonesia.</li>
+            <li>Emiten yang melaporkan keuangan dalam dolar AS belum kami masukkan, karena cara menampilkannya masih disusun.</li>
+            <li>Data bisa terlambat. Selalu lihat tahun buku dan tanggal sumber yang tercantum.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="kaki">
+    <div class="wadah">
+      <p><strong>Candra Analis</strong> adalah platform belajar dan penyaji data saham syariah. Kami bukan penasihat investasi dan tidak memberi ajakan membeli atau menjual efek apa pun. Setiap keputusan investasi dan risikonya sepenuhnya menjadi tanggung jawab Anda.</p>
+      <p>Status syariah mengacu pada Daftar Efek Syariah yang ditetapkan OJK. Sumber data dicantumkan di setiap halaman. <a href="metodologi.html">Cara kami mengolah data</a>.</p>
+    </div>
+  </footer>
+</body>
+</html>
