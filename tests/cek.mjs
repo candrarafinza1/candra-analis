@@ -74,6 +74,8 @@ for (const t of ISTILAH || []) {
 // Profil emiten (Nina, 29 Okt): halaman ada, memuat wadah #profil, dan Peringkat menaut ke profil
 ok(existsSync("emiten.html") && /id="profil"/.test(readFileSync("emiten.html", "utf8")), "emiten.html tidak ada atau tanpa wadah #profil");
 ok(/emiten\.html\?kode=/.test(readFileSync("assets/app.js", "utf8")), "Peringkat/Radar belum menaut ke profil emiten");
+// Posisi di Peringkat pada profil (Nina, 29 Okt 21.30): wajib memakai peserta() yang sama dengan Peringkat
+ok(/function posisi\(kunci[\s\S]{0,900}peserta\(kunci\)/.test(readFileSync("assets/app.js", "utf8")), "Posisi di Peringkat pada profil tidak memakai peserta() yang sama");
 // Penanda kemajuan (Nina, 29 Okt): setiap akses localStorage wajib di dalam try { ... }
 {
   const js = readFileSync("assets/app.js", "utf8");

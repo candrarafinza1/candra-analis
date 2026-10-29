@@ -458,6 +458,10 @@ button.istilah:hover, button.istilah[aria-expanded="true"] { color: var(--malam-
 .status-syariah { border: 1px solid var(--garis); border-left: 6px solid var(--naik); background: var(--naik-muda); border-radius: var(--radius-kecil); padding: 14px 16px; max-width: var(--lebar-teks); }
 .status-syariah.status-tidak { border-left-color: var(--turun); background: var(--turun-muda); }
 .status-syariah p { margin: 4px 0 0; color: var(--tinta-2); font-size: .95rem; }
+.posisi-peringkat { border: 1px solid var(--garis, #dde3ea); border-radius: 12px; padding: 12px 16px; margin: 0 0 20px; }
+.posisi-peringkat ul { margin: 6px 0 8px; padding-left: 20px; }
+.posisi-peringkat li { margin: 4px 0; }
+.posisi-peringkat .catatan-metode { margin: 0; }
 .kisi-ubin { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 12px; margin-bottom: 20px; }
 .ubin { background: var(--putih); border: 1px solid var(--garis); border-radius: var(--radius); padding: 14px 16px; display: grid; gap: 2px; }
 .ubin-label { font-size: .85rem; color: var(--tinta-2); font-weight: 600; }

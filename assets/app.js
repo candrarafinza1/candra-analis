@@ -515,6 +515,24 @@
       ubin("DER akhir 2025", strip(der(e), function (v) { return angka.format(v) + "x"; }), "Liabilitas ÷ ekuitas")
     ]));
 
+    // Arif (IDE.md #7): posisi emiten di Peringkat, memakai peserta() dan rumus yang sama dengan halaman Peringkat
+    function posisi(kunci, nama) {
+      var k = KRITERIA[kunci];
+      if (!syariahAktif(e)) return nama + ": tidak ikut Peringkat karena tidak tercatat di Daftar Efek Syariah terbaru.";
+      if (e.periksaUlang) return nama + ": belum ikut Peringkat karena angkanya sedang dicek ulang atau tidak bisa dibandingkan secara adil (lihat catatan di bawah).";
+      if (k.rupiahSaja && usd(e)) return nama + ": tidak ikut karena emiten ini melapor dalam dolar AS.";
+      if (!ada(k.nilai(e))) return nama + ": belum ikut Peringkat karena datanya belum lengkap.";
+      var urut = peserta(kunci).sort(function (a, b) { return k.nilai(b) - k.nilai(a); });
+      var i = urut.findIndex(function (x) { return x.kode === e.kode; });
+      return nama + ": urutan " + (i + 1) + " dari " + urut.length + " emiten (" + k.tampil(k.nilai(e)) + ").";
+    }
+    akar.appendChild(el("div", { class: "posisi-peringkat", role: "note" }, [
+      el("strong", { text: "Posisi di Peringkat" }),
+      el("ul", null, [el("li", { text: posisi("tumbuhLaba", "Pertumbuhan laba 2025 vs 2024") }), el("li", { text: posisi("roe", "ROE 2025") })]),
+      el("p", { class: "catatan-metode" }, ["Urutan 1 = angka tertinggi di antara emiten dalam data kami. Ini gambaran data, bukan saran membeli atau menjual. ",
+        el("a", { href: "peringkat.html", text: "Lihat Peringkat (10 teratas)" })])
+    ]));
+
     var baris = [
       ["Laba bersih", L[2024], L[2025]],
       ["Pendapatan", P[2024], P[2025]],

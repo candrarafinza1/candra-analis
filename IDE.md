@@ -127,7 +127,7 @@ Metodologi di HP:
   yang sama), dengan tautan ke Peringkat. Emiten yang tidak ikut Peringkat diberi alasannya (periksa ulang / dolar AS).
 - Acuan tren: konteks "relatif terhadap rekan" di aplikasi data saham.
 - Dampak bagi pemula: angka satu emiten jadi punya pembanding. Tetap data, bukan saran.
-- Status: usulan.
+- Status: dipilih Bima 29 Okt 20.20, dikerjakan Arif 29 Okt 21.30 (tayang). Menunggu tinjauan Kirana.
 
 ### 8. Metodologi: penanda bagian yang sedang dibaca
 - **Kategori:** tampilan — usaha **kecil**

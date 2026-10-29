@@ -182,3 +182,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Nina: `node tests/cek.mjs` lolos (8 halaman, 8 pelajaran, 31 emiten). Metodologi, profil (TLKM, AADI, daftar), Belajar, pelajaran dicek 1280px & 390px: tanpa scroll horizontal, tanpa galat JS.
 - Bima: usulan #7 (Arif) dan #8 (Dewi) masuk backlog agar tidak menganggur.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).
+
+## 29 Okt 2026, 21.30 WIB — Arif, Nina (via Bima)
+- Arif: profil emiten kini punya kotak "Posisi di Peringkat" (IDE.md #7): urutan untuk pertumbuhan laba dan ROE dari seluruh peserta, memakai rumus dan aturan yang sama dengan halaman Peringkat (contoh TLKM: urutan 18 dari 27 dan 15 dari 26). Emiten yang tidak ikut diberi alasannya (dicek ulang/tidak sebanding, data belum lengkap, tidak di DES). Kalimat "gambaran data, bukan saran membeli atau menjual" ikut tampil, plus tautan ke Peringkat.
+- Nina: cek baru di `tests/cek.mjs` (posisi wajib memakai `peserta()` yang sama); lolos (8 halaman, 8 pelajaran, 31 emiten). Dicek di 1280px & 390px (TLKM, AADI, TPIA, UNVR, EXCL): tanpa scroll horizontal, tanpa galat JS.
+- Fajar: laba 9 bulan tidak dicek sesi ini (terakhir 20.20, cek lagi 30 Okt pagi; batas rilis 31 Okt).
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).
