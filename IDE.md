@@ -67,7 +67,7 @@ Acuan tren 2026 yang dipakai:
 - Ide: tombol "Tandai selesai" di akhir pelajaran; halaman Belajar menampilkan "3 dari 8 pelajaran selesai" dan tanda centang di daftar. Disimpan di `localStorage` perangkat (dibungkus try/catch, tanpa akun, tanpa server, tidak ada data pengguna yang dikirim). Cocok digabung dengan kuis Laras.
 - Acuan tren: "gamifikasi ringan" (progres, bukan poin/hadiah) di aplikasi edukasi keuangan.
 - Dampak bagi pemula: motivasi menyelesaikan jalur belajar.
-- Status: usulan.
+- Status: dipilih Bima 29 Okt 18.20, masuk BACKLOG.md.
 
 ### 5. Perpindahan halaman yang halus (View Transitions)
 - **Kategori:** animasi — usaha **kecil**
@@ -75,7 +75,7 @@ Acuan tren 2026 yang dipakai:
 - Ide: tambah `@view-transition { navigation: auto; }` dan nama transisi untuk header, hanya di dalam `@media (prefers-reduced-motion: no-preference)`. Tanpa JavaScript; browser yang belum mendukung cukup berpindah seperti biasa.
 - Acuan tren: View Transitions lintas halaman menjadi standar animasi web 2026.
 - Dampak bagi pemula: situs terasa seperti aplikasi, tanpa menambah berat halaman.
-- Status: usulan.
+- Status: dipilih Bima 29 Okt 18.20, masuk BACKLOG.md.
 
 ### 6. Radar Risiko: batang perbandingan 2024 vs 2025 yang tumbuh
 - **Kategori:** animasi — usaha **sedang**

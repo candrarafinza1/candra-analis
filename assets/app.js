@@ -90,6 +90,61 @@
     });
   }
 
+  /* ---------- Kuis akhir pelajaran (tim Laras, Sari, Hana; tampilan Dewi) ----------
+     Tanpa server dan tanpa menyimpan apa pun: jawaban hanya diperiksa di perangkat. */
+  function buatKuis(m) {
+    var form = el("form", { class: "kuis", "aria-labelledby": "judul-kuis", novalidate: "" });
+    form.appendChild(el("h2", { id: "judul-kuis", text: "Cek pemahaman" }));
+    form.appendChild(el("p", { class: "kuis-pengantar", text: "Tiga soal singkat dari pelajaran ini. Pilih satu jawaban di tiap soal, lalu periksa. Tidak dinilai dan tidak disimpan." }));
+    var umpan = [];
+    m.kuis.forEach(function (q, i) {
+      var fs = el("fieldset", { class: "kuis-soal" });
+      fs.appendChild(el("legend", { text: (i + 1) + ". " + q.soal }));
+      q.pilihan.forEach(function (p, j) {
+        var idIn = "kuis-" + i + "-" + j;
+        fs.appendChild(el("div", { class: "kuis-pilihan" }, [
+          el("input", { type: "radio", name: "soal-" + i, id: idIn, value: String(j) }),
+          el("label", { for: idIn, text: p })
+        ]));
+      });
+      var u = el("p", { class: "kuis-umpan", hidden: "" });
+      umpan.push(u); fs.appendChild(u);
+      form.appendChild(fs);
+    });
+    var hasil = el("p", { class: "kuis-hasil", role: "status", "aria-live": "polite" });
+    var ulang = el("button", { type: "button", class: "tombol kuis-ulang", text: "Ulangi kuis", hidden: "" });
+    form.appendChild(el("div", { class: "kuis-aksi" }, [
+      el("button", { type: "submit", class: "tombol tombol-gelap", text: "Periksa jawaban" }), ulang
+    ]));
+    form.appendChild(hasil);
+
+    form.addEventListener("submit", function (ev) {
+      ev.preventDefault();
+      var benar = 0, kosong = 0;
+      m.kuis.forEach(function (q, i) {
+        var pilih = form.querySelector('input[name="soal-' + i + '"]:checked');
+        var u = umpan[i];
+        u.hidden = false;
+        if (!pilih) { kosong++; u.className = "kuis-umpan kuis-kosong"; u.textContent = "Belum dijawab."; return; }
+        var tepat = Number(pilih.value) === q.benar;
+        if (tepat) benar++;
+        u.className = "kuis-umpan " + (tepat ? "kuis-tepat" : "kuis-salah");
+        u.textContent = (tepat ? "✓ Benar. " : "✗ Belum tepat. Jawaban: " + q.pilihan[q.benar] + ". ") + q.jelas;
+      });
+      hasil.textContent = benar + " dari " + m.kuis.length + " benar" +
+        (kosong ? " (" + kosong + " soal belum dijawab)." : benar === m.kuis.length ? ". Bagus, Anda siap ke pelajaran berikutnya." : ". Baca lagi bagian yang belum tepat, lalu coba ulangi.");
+      ulang.hidden = false;
+    });
+    ulang.addEventListener("click", function () {
+      form.reset();
+      umpan.forEach(function (u) { u.hidden = true; u.textContent = ""; });
+      hasil.textContent = ""; ulang.hidden = true;
+      var pertama = form.querySelector("input");
+      if (pertama) pertama.focus();
+    });
+    return form;
+  }
+
   /* ---------- Halaman pelajaran ---------- */
   function renderPelajaran() {
     var wadah = document.getElementById("isi-pelajaran");
@@ -106,6 +161,7 @@
 
     wadah.innerHTML = m.isi; // isi berasal dari file kurikulum kita sendiri
     pasangIstilah(wadah);
+    if (m.kuis && m.kuis.length) wadah.appendChild(buatKuis(m));
 
     var nav = el("nav", { class: "navigasi-pelajaran", "aria-label": "Pelajaran lain" });
     nav.appendChild(idx > 0

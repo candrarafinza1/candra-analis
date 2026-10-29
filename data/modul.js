@@ -1,12 +1,46 @@
 /* Kurikulum belajar Candra Analis — disusun tim Sari (Konten Edukasi),
    diperiksa tim Hana (Syariah & Kepatuhan).
-   Setiap pelajaran: id, judul, ringkas, durasi, isi (HTML). */
+   Setiap pelajaran: id, judul, ringkas, durasi, kuis, isi (HTML).
+   kuis (tim Laras, bahasa ditinjau Sari, soal syariah ditinjau Hana): 3 soal,
+   tiap soal { soal, pilihan[3], benar = indeks pilihan yang benar, jelas = penjelasan singkat }. */
 window.MODUL = [
   {
     id: "apa-itu-saham",
     judul: "Apa itu saham?",
     ringkas: "Saham sebagai bukti kepemilikan perusahaan, dan dua cara saham memberi hasil.",
     durasi: "8 menit",
+    kuis: [
+      {
+        "soal": "Apa arti memegang saham sebuah perusahaan?",
+        "pilihan": [
+          "Meminjamkan uang ke perusahaan dengan bunga tetap",
+          "Ikut memiliki sebagian kecil perusahaan",
+          "Menjadi karyawan perusahaan itu"
+        ],
+        "benar": 1,
+        "jelas": "Saham adalah bukti bahwa Anda ikut memiliki sebagian kecil perusahaan."
+      },
+      {
+        "soal": "Dua cara saham bisa memberi hasil adalah…",
+        "pilihan": [
+          "Kenaikan harga (capital gain) dan dividen",
+          "Bunga bulanan dan bonus tahunan",
+          "Gaji dan tunjangan"
+        ],
+        "benar": 0,
+        "jelas": "Hasil saham datang dari selisih harga jual dengan harga beli, dan dari dividen bila dibagikan. Keduanya tidak dijamin."
+      },
+      {
+        "soal": "Uang seperti apa yang sebaiknya dipakai untuk membeli saham?",
+        "pilihan": [
+          "Uang belanja bulan depan",
+          "Uang pinjaman",
+          "Uang yang tidak Anda butuhkan dalam waktu dekat"
+        ],
+        "benar": 2,
+        "jelas": "Harga saham bisa turun. Pakai uang yang bisa Anda tahan untuk jangka panjang."
+      }
+    ],
     isi: `
       <p>Saham adalah bukti bahwa Anda ikut memiliki sebagian kecil perusahaan. Kalau sebuah perusahaan punya satu miliar lembar saham dan Anda memegang seribu lembar, Anda pemilik satu per sejuta perusahaan itu.</p>
       <p>Perusahaan yang sahamnya bisa dibeli masyarakat disebut <strong>emiten</strong> atau perusahaan terbuka. Di Indonesia, saham diperdagangkan di Bursa Efek Indonesia (BEI) dan diawasi Otoritas Jasa Keuangan (OJK).</p>
@@ -31,6 +65,38 @@ window.MODUL = [
     judul: "Saham syariah dan Daftar Efek Syariah",
     ringkas: "Bagaimana sebuah saham dinyatakan syariah, siapa yang menetapkan, dan seberapa sering daftarnya diperbarui.",
     durasi: "10 menit",
+    kuis: [
+      {
+        "soal": "Siapa yang menetapkan Daftar Efek Syariah (DES)?",
+        "pilihan": [
+          "OJK (Otoritas Jasa Keuangan)",
+          "Perusahaan sekuritas",
+          "Emitennya sendiri"
+        ],
+        "benar": 0,
+        "jelas": "DES ditetapkan oleh OJK."
+      },
+      {
+        "soal": "Berapa batas utang berbasis bunga dibanding total aset agar saham bisa masuk DES?",
+        "pilihan": [
+          "Tidak lebih dari 10%",
+          "Tidak lebih dari 45%",
+          "Tidak ada batas"
+        ],
+        "benar": 1,
+        "jelas": "Utang berbasis bunga tidak boleh lebih dari 45% total aset. Angka 10% adalah batas pendapatan tidak halal."
+      },
+      {
+        "soal": "Seberapa sering DES diperbarui secara berkala?",
+        "pilihan": [
+          "Setiap hari bursa",
+          "Sekali dalam lima tahun",
+          "Dua kali setahun, berlaku 1 Juni dan 1 Desember"
+        ],
+        "benar": 2,
+        "jelas": "DES terbit akhir Mei dan akhir November. Karena itu status syariah sebuah saham bisa berubah."
+      }
+    ],
     isi: `
       <p>Saham syariah adalah saham emiten yang kegiatan usaha dan keuangannya memenuhi prinsip syariah di pasar modal. Di Indonesia, daftarnya ditetapkan oleh OJK dalam <strong>Daftar Efek Syariah (DES)</strong>.</p>
 
@@ -62,6 +128,38 @@ window.MODUL = [
     judul: "Membuka rekening saham",
     ringkas: "Rekening efek, RDN, dan cara memastikan sekuritas Anda resmi.",
     durasi: "7 menit",
+    kuis: [
+      {
+        "soal": "Di mana uang transaksi saham Anda disimpan?",
+        "pilihan": [
+          "Di Rekening Dana Nasabah (RDN) atas nama Anda",
+          "Di rekening pribadi pegawai sekuritas",
+          "Di rekening perusahaan yang sahamnya Anda beli"
+        ],
+        "benar": 0,
+        "jelas": "RDN adalah rekening bank atas nama Anda sendiri. Uang tidak masuk ke rekening sekuritas."
+      },
+      {
+        "soal": "Layanan apa yang dipakai untuk memastikan saham benar-benar tercatat atas nama Anda?",
+        "pilihan": [
+          "Grup percakapan investor",
+          "AKSes KSEI",
+          "Kolom komentar media sosial"
+        ],
+        "benar": 1,
+        "jelas": "Lewat AKSes KSEI Anda bisa memantau sendiri kepemilikan saham Anda."
+      },
+      {
+        "soal": "Seseorang menawarkan untuk “mengelolakan” uang Anda lewat rekening pribadinya. Sikap yang tepat?",
+        "pilihan": [
+          "Setuju bila dijanjikan untung tetap",
+          "Setor sedikit dulu untuk mencoba",
+          "Tolak, karena itu bukan cara kerja pasar modal yang resmi"
+        ],
+        "benar": 2,
+        "jelas": "Jangan menitipkan uang ke rekening pribadi seseorang. Transaksi resmi selalu lewat RDN atas nama Anda."
+      }
+    ],
     isi: `
       <p>Untuk membeli saham, Anda membuka rekening di <strong>perusahaan sekuritas</strong> (perantara pedagang efek) yang berizin OJK dan menjadi anggota BEI. Sekarang prosesnya bisa sepenuhnya daring lewat aplikasi.</p>
 
@@ -93,6 +191,38 @@ window.MODUL = [
     judul: "Lot, harga, dan biaya transaksi",
     ringkas: "Berapa uang yang dibutuhkan untuk membeli saham pertama Anda, beserta biayanya.",
     durasi: "9 menit",
+    kuis: [
+      {
+        "soal": "Satu lot saham di BEI sama dengan berapa lembar?",
+        "pilihan": [
+          "10 lembar",
+          "100 lembar",
+          "1.000 lembar"
+        ],
+        "benar": 1,
+        "jelas": "Satu lot = 100 lembar saham."
+      },
+      {
+        "soal": "Harga saham Rp500 per lembar. Berapa modal untuk membeli 3 lot, belum termasuk biaya?",
+        "pilihan": [
+          "Rp150.000",
+          "Rp1.500",
+          "Rp15.000"
+        ],
+        "benar": 0,
+        "jelas": "Rp500 × 100 lembar × 3 lot = Rp150.000."
+      },
+      {
+        "soal": "Apa arti T+2?",
+        "pilihan": [
+          "Harga boleh naik dua kali sehari",
+          "Biaya transaksi dua persen",
+          "Transaksi diselesaikan dua hari bursa setelah transaksi"
+        ],
+        "benar": 2,
+        "jelas": "Pada T+2 uang benar-benar berpindah dan saham tercatat di rekening efek Anda."
+      }
+    ],
     isi: `
       <p>Saham di BEI dibeli dalam satuan <strong>lot</strong>. Satu lot sama dengan <strong>100 lembar</strong> saham.</p>
 
@@ -117,6 +247,38 @@ window.MODUL = [
     judul: "Membaca laporan keuangan",
     ringkas: "Tujuh angka yang paling sering dipakai untuk menilai kesehatan dan harga sebuah saham.",
     durasi: "12 menit",
+    kuis: [
+      {
+        "soal": "Rumus ROE adalah…",
+        "pilihan": [
+          "Total liabilitas ÷ total ekuitas",
+          "Laba bersih ÷ total ekuitas × 100%",
+          "Harga saham ÷ EPS"
+        ],
+        "benar": 1,
+        "jelas": "ROE mengukur seberapa efisien perusahaan menghasilkan laba dari modal pemiliknya. Rumus lain di pilihan adalah DER dan PER."
+      },
+      {
+        "soal": "DER yang tinggi berarti…",
+        "pilihan": [
+          "Utang perusahaan besar dibanding modal sendiri",
+          "Laba perusahaan pasti besar",
+          "Dividen pasti dibagikan"
+        ],
+        "benar": 0,
+        "jelas": "Makin tinggi DER, makin berat beban perusahaan saat kondisi sulit."
+      },
+      {
+        "soal": "Apakah PER yang rendah selalu berarti sahamnya murah?",
+        "pilihan": [
+          "Ya, selalu",
+          "Ya, asalkan pendapatannya naik",
+          "Belum tentu, bisa juga pasar khawatir labanya akan turun"
+        ],
+        "benar": 2,
+        "jelas": "Satu angka tidak pernah cukup. Bandingkan dengan tahun-tahun sebelumnya dan dengan perusahaan sejenis."
+      }
+    ],
     isi: `
       <p>Laporan keuangan emiten terbit setiap kuartal dan bisa diunduh gratis dari situs BEI. Anda tidak perlu membaca semuanya. Mulailah dari angka-angka ini.</p>
 
@@ -151,6 +313,38 @@ window.MODUL = [
     judul: "Mengelola risiko",
     ringkas: "Kebiasaan sederhana yang melindungi modal Anda, dan jebakan yang paling sering menjerat pemula.",
     durasi: "9 menit",
+    kuis: [
+      {
+        "soal": "Apa yang sebaiknya disiapkan sebelum berinvestasi saham?",
+        "pilihan": [
+          "Dana darurat",
+          "Uang pinjaman",
+          "Daftar saham dari media sosial"
+        ],
+        "benar": 0,
+        "jelas": "Dana darurat menjaga Anda tidak terpaksa menjual saham saat butuh uang mendadak."
+      },
+      {
+        "soal": "Apa yang dimaksud diversifikasi?",
+        "pilihan": [
+          "Menaruh semua modal di satu saham",
+          "Menyebar modal ke beberapa saham dan sektor",
+          "Sering keluar-masuk saham setiap hari"
+        ],
+        "benar": 1,
+        "jelas": "Dengan menyebar modal, satu masalah tidak menghabiskan semua modal Anda."
+      },
+      {
+        "soal": "Ke mana Anda bisa memeriksa atau melaporkan tawaran investasi yang mencurigakan?",
+        "pilihan": [
+          "Ke orang yang menawarkannya",
+          "Tidak perlu ke mana-mana",
+          "Kontak OJK 157"
+        ],
+        "benar": 2,
+        "jelas": "OJK menyediakan Kontak OJK 157 untuk bertanya atau melapor."
+      }
+    ],
     isi: `
       <h2>Kebiasaan yang melindungi</h2>
       <ul>
@@ -175,6 +369,38 @@ window.MODUL = [
     judul: "Praktik: membeli saham pertama Anda",
     ringkas: "Latihan dengan uang virtual dulu, lalu langkah demi langkah membeli satu lot sungguhan.",
     durasi: "15 menit",
+    kuis: [
+      {
+        "soal": "Apa langkah pertama yang disarankan pelajaran ini?",
+        "pilihan": [
+          "Langsung setor dana besar ke RDN",
+          "Latihan dengan Sharia Virtual Trading di aplikasi IDX Mobile",
+          "Bergabung dengan grup yang membagikan kode saham"
+        ],
+        "benar": 1,
+        "jelas": "Latihan dengan uang virtual dulu, terutama untuk merasakan saat harga turun."
+      },
+      {
+        "soal": "Sebelum memasang order beli, apa yang perlu dipastikan tentang sahamnya?",
+        "pilihan": [
+          "Saham itu tercatat di Daftar Efek Syariah",
+          "Saham itu sedang ramai dibicarakan",
+          "Harganya yang paling murah di bursa"
+        ],
+        "benar": 0,
+        "jelas": "Cek status syariahnya di DES periode berjalan."
+      },
+      {
+        "soal": "Kapan sebaiknya Anda meninjau ulang saham yang Anda pegang?",
+        "pilihan": [
+          "Setiap kali harga naik atau turun",
+          "Tidak perlu ditinjau",
+          "Setiap kali laporan kuartal terbit"
+        ],
+        "benar": 2,
+        "jelas": "Tinjau berdasarkan laporan keuangan, bukan pergerakan harga harian."
+      }
+    ],
     isi: `
       <p>Pelajaran ini mengajak Anda praktik. Kerjakan berurutan dan jangan lompat ke uang sungguhan sebelum tahap latihan selesai.</p>
 
@@ -215,6 +441,38 @@ window.MODUL = [
     judul: "Praktik: menganalisis perusahaan sendiri",
     ringkas: "Lembar kerja sepuluh langkah untuk menilai satu perusahaan dari laporan keuangannya.",
     durasi: "20 menit",
+    kuis: [
+      {
+        "soal": "Apa yang pertama kali dicari di Bagian A lembar kerja?",
+        "pilihan": [
+          "Dari mana uang perusahaan itu datang",
+          "Harga sahamnya hari ini",
+          "Berapa orang yang membicarakannya"
+        ],
+        "benar": 0,
+        "jelas": "Memahami usaha lebih penting daripada menghafal rasio."
+      },
+      {
+        "soal": "Menurut lembar kerja ini, DER di atas 2 berarti…",
+        "pilihan": [
+          "Labanya sangat besar",
+          "Utangnya berat",
+          "Sahamnya otomatis syariah"
+        ],
+        "benar": 1,
+        "jelas": "DER di atas 2 berarti total liabilitas lebih dari dua kali ekuitas."
+      },
+      {
+        "soal": "Anda belum bisa menjelaskan cara perusahaan itu menghasilkan uang. Apa yang disarankan?",
+        "pilihan": [
+          "Tetap lanjut asal PER-nya rendah",
+          "Ikuti pendapat orang lain",
+          "Tunda dulu sampai Anda memahaminya"
+        ],
+        "benar": 2,
+        "jelas": "Keputusan Anda harus bisa dijelaskan dengan alasan Anda sendiri."
+      }
+    ],
     isi: `
       <p>Pilih satu perusahaan syariah yang produknya Anda kenal sehari-hari. Unduh laporan keuangan tahunan terbarunya dari situs BEI, lalu isi langkah-langkah di bawah. Tuliskan jawabannya di buku atau lembar kerja.</p>
 

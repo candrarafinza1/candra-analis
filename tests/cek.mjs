@@ -39,6 +39,13 @@ const idModul = new Set();
 for (const m of MODUL) {
   ok(m.id && m.judul && m.ringkas && m.isi, `pelajaran ${m.id} tidak lengkap`);
   ok(!idModul.has(m.id), `id pelajaran ganda: ${m.id}`); idModul.add(m.id);
+  // Kuis (Laras, 29 Okt): 3 soal, 3 pilihan, satu jawaban benar yang valid, ada penjelasan
+  ok(Array.isArray(m.kuis) && m.kuis.length === 3, `pelajaran ${m.id}: kuis harus 3 soal`);
+  for (const q of m.kuis || []) {
+    ok(q.soal && q.jelas && Array.isArray(q.pilihan) && q.pilihan.length === 3 && new Set(q.pilihan).size === 3,
+      `pelajaran ${m.id}: soal kuis tidak lengkap: ${q.soal}`);
+    ok(Number.isInteger(q.benar) && q.benar >= 0 && q.benar < (q.pilihan || []).length, `pelajaran ${m.id}: kunci kuis tidak valid: ${q.soal}`);
+  }
 }
 
 // Data asli (tim Fajar): setiap emiten wajib punya bukti baris DES dan sumber https

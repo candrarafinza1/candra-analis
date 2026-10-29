@@ -158,3 +158,11 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Masalah ringan: ringkasan usaha tiap emiten belum ada sumbernya, jadi tidak ditampilkan (tidak dikarang). Tugas baru untuk Raka & Sari. Untuk emiten yang 2024-nya rugi (TPIA), profil menulis "2024: rugi …" alih-alih persen pertumbuhan yang menyesatkan.
 - Yoga: tautan "Profil semua emiten" di kaki semua halaman. Nina: cek profil ditambahkan di `tests/cek.mjs`; lolos (8 halaman, 31 emiten). Dicek 1280px & 390px tanpa scroll horizontal dan tanpa galat JS.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).
+
+## 29 Okt 2026, 18.20 WIB — Laras, Sari, Hana, Dewi, Nina, Fajar (via Bima)
+- Fajar: laba 9 bulan 2026 dicek lagi (TLKM, ICBP, KLBF), belum ada rilis kuartal III. Cek lagi 30–31 Okt.
+- Laras: kuis "Cek pemahaman" 3 soal tayang di akhir semua 8 pelajaran. Soal diambil dari isi pelajaran masing-masing, tiap jawaban punya penjelasan singkat. Sari merapikan bahasanya; Hana memeriksa soal DES (OJK, batas utang berbunga 45%, jadwal 1 Juni & 1 Desember). Tidak ada kalimat ajakan beli/jual dan tidak ada data yang disimpan.
+- Dewi: tampilan kuis (kartu putih, umpan balik teks + warna, tombol min. 48px). Modul PDF dibuat ulang dengan soal dan kunci jawaban.
+- Nina: cek kuis ditambahkan di `tests/cek.mjs`; lolos (8 halaman, 8 pelajaran, 31 emiten). Kuis dicoba di 1280px & 390px: tanpa scroll horizontal, tanpa galat JS, "Ulangi kuis" mengembalikan fokus ke soal pertama.
+- Bima: usulan Kirana #4 (penanda kemajuan, Arif) dan #5 (perpindahan halaman halus, Dewi) masuk backlog agar Arif dan Dewi tidak menganggur.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).

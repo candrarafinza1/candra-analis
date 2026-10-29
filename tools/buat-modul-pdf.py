@@ -241,6 +241,27 @@ def main():
         p = KeFlowable()
         p.feed(m["isi"])
         isi += p.selesai()
+        # Kuis akhir pelajaran (tim Laras): soal di sini, kunci jawaban di bagian akhir modul
+        if m.get("kuis"):
+            isi.append(Paragraph("Cek pemahaman", GAYA["h2"]))
+            for n, q in enumerate(m["kuis"], 1):
+                baris = [Paragraph(f"<b>{n}. {q['soal']}</b>", GAYA["isi"])]
+                for h, pil in zip("abc", q["pilihan"]):
+                    baris.append(Paragraph(f"{h}. {pil}", GAYA["kecil"]))
+                baris.append(Spacer(1, 6))
+                isi.append(KeepTogether(baris))
+
+    # Kunci jawaban kuis
+    if any(m.get("kuis") for m in modul):
+        isi.append(PageBreak())
+        isi.append(Paragraph("Kunci jawaban Cek pemahaman", GAYA["h1"]))
+        isi.append(Spacer(1, 6))
+        for i, m in enumerate(modul, 1):
+            if not m.get("kuis"):
+                continue
+            isi.append(Paragraph(f"Pelajaran {i}: {m['judul']}", GAYA["h2"]))
+            for n, q in enumerate(m["kuis"], 1):
+                isi.append(Paragraph(f"<b>{n}. {'abc'[q['benar']]}.</b> {q['jelas']}", GAYA["kecil"]))
 
     # Rujukan
     isi.append(PageBreak())
