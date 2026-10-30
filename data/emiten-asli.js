@@ -152,7 +152,8 @@ window.EMITEN_ASLI = [
     labaTahun: { 2024: 3000, 2025: 2860 },
     pendapatan: { 2024: 36070, 2025: 38680 },
     liabilitas2025: 13010, ekuitas2025: 18360,
-    laba9b: { 2025: null, 2026: null },
+    laba9b: { 2025: 1850, 2026: 2430 },
+    catatan9b: "Laba 9 bulan = laba diatribusikan kepada pemilik entitas induk: Rp2,43 T (Jan–Sep 2026, Kontan 29 Okt 2026, naik 31,23%) vs Rp1,85 T (Jan–Sep 2025, BCA Sekuritas). Cek runtut: Rp2,43 T ÷ 1,3123 = Rp1,85 T. Liputan6 menulis Rp1,84 T untuk 2025 (pembulatan). Rp2,47 T vs Rp1,88 T di media = laba periode berjalan (termasuk kepentingan nonpengendali), tidak dipakai.",
     dps: null, harga: null,
     catatan: "Laba 2024 = Rp3,00 triliun (Fortune IDN, dua desimal seperti angka 2025). Cocok dengan Investortrust dan KabarBursa (Rp3 triliun) dan dengan penurunan 4,66% ke Rp2,86 triliun di 2025.",
     sumber: [{ judul: "Emiten News, 18 Mar 2026: Mayora raup laba Rp2,86 triliun, menciut 4,66 persen",
@@ -160,7 +161,11 @@ window.EMITEN_ASLI = [
       { judul: "Fortune IDN, 3 Mar 2025: Laba Mayora 2024 turun 6% walau pendapatan naik (Rp3,19 T → Rp3,00 T)",
         url: "https://www.fortuneidn.com/business/laba-mayora-2024-turun-6-walau-pendapatan-naik-mengapa-00-3dhnm-d63t4c" },
       { judul: "Investortrust, 3 Mar 2025: Laba Mayora tergerus saat pendapatan naik di 2024",
-        url: "https://investortrust.id/market/58333/laba-mayora-myor-tergerus-saat-pendapatan-naik-di-2024-apa-pemicunya" }]
+        url: "https://investortrust.id/market/58333/laba-mayora-myor-tergerus-saat-pendapatan-naik-di-2024-apa-pemicunya" },
+      { judul: "Kontan, 29 Okt 2026: Laba Mayora melesat 31,23% menjadi Rp2,43 triliun per kuartal III-2026 (laba atribusi)",
+        url: "https://investasi.kontan.co.id/news/laba-mayora-myor-melesat-3123-menjadi-rp-243-triliun-per-kuartal-iii-2026" },
+      { judul: "BCA Sekuritas: Mayora catat penjualan bersih Rp27,15 triliun hingga September 2025 (laba atribusi Rp1,85 T)",
+        url: "https://bcasekuritas.co.id/latest-news/news/mayora-indah-catat-penjualan-bersih-rp2715-triliun-hingga-september-2025" }]
   },
   {
     kode: "SIDO", nama: "PT Industri Jamu Dan Farmasi Sido Muncul Tbk", sektor: "Kesehatan",

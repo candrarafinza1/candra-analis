@@ -127,18 +127,53 @@ Metodologi di HP:
   yang sama), dengan tautan ke Peringkat. Emiten yang tidak ikut Peringkat diberi alasannya (periksa ulang / dolar AS).
 - Acuan tren: konteks "relatif terhadap rekan" di aplikasi data saham.
 - Dampak bagi pemula: angka satu emiten jadi punya pembanding. Tetap data, bukan saran.
-- Status: dipilih Bima 29 Okt 20.20, dikerjakan Arif 29 Okt 21.30 (tayang). Menunggu tinjauan Kirana.
+- Status: dipilih Bima 29 Okt 20.20, dikerjakan Arif 29 Okt 21.30 (tayang). Ditinjau Kirana 30 Okt 09.30: baik.
 
 ### 8. Metodologi: penanda bagian yang sedang dibaca
 - **Kategori:** tampilan — usaha **kecil**
 - Ide: di desktop (≥900px), kotak "Isi halaman" menempel di samping (sticky) dan menebalkan bagian yang sedang dibaca.
   Di HP tetap di atas. Tanpa pustaka.
 - Dampak bagi pemula: tidak tersesat di halaman panjang.
-- Status: dipilih Bima 29 Okt 20.20, dikerjakan Dewi 30 Okt 07.45 (tayang). Menunggu tinjauan Kirana.
+- Status: dipilih Bima 29 Okt 20.20, dikerjakan Dewi 30 Okt 07.45 (tayang). Ditinjau Kirana 30 Okt 09.30: baik.
 
 ### 9. Beranda: "Lanjutkan belajar"
 - **Kategori:** fitur — usaha **kecil**
 - Ide: bila penanda kemajuan menyimpan pelajaran selesai, beranda menampilkan tombol "Lanjutkan: pelajaran berikutnya".
   Memakai data yang sama di peramban (try/catch), tanpa akun.
 - Dampak bagi pemula: kembali ke jalur belajar dalam satu ketukan.
-- Status: dipilih Bima 30 Okt 07.10, dikerjakan Arif 30 Okt 08.30 (tayang). Menunggu tinjauan Kirana.
+- Status: dipilih Bima 30 Okt 07.10, dikerjakan Arif 30 Okt 08.30 (tayang). Ditinjau Kirana 30 Okt 09.30: baik.
+
+## Tinjauan Kirana — 30 Okt 2026, 09.30 WIB
+
+Hasil #7, #8, #9 dicek di 390px dan 1280px (tanpa scroll horizontal, tanpa galat JS):
+- #7 Posisi di Peringkat (profil MYOR & TLKM): dua baris urutan jelas, ada kalimat "gambaran data, bukan saran
+  membeli atau menjual" dan tautan ke Peringkat. Tidak ada perbaikan.
+- #8 Daftar isi Metodologi (1280px): setelah menggulir, bagian yang dibaca ditandai (`aria-current`). Di HP tetap di atas.
+  Tidak ada perbaikan.
+- #9 Lanjutkan belajar (beranda 390px, 2 pelajaran selesai): kotak tampil di 572px dari atas (masuk layar pertama),
+  teks "2 dari 8 pelajaran selesai" + tombol "Lanjutkan belajar: Pelajaran 3" (tinggi 69px), bisa dicapai dengan Tab.
+  Tidak ada perbaikan.
+
+### 10. Profil emiten: batang pembanding laba 9 bulan
+- **Kategori:** tampilan — usaha **kecil**
+- Masalah atau peluang: laba Januari–September kini terisi untuk 9 emiten, tetapi hanya tampil sebagai satu kalimat angka.
+- Ide: dua batang horizontal sederhana (2025 vs 2026) dari CSS saja, panjang sebanding angka, label angka tetap
+  tertulis (tidak bergantung warna). Hanya muncul bila kedua angka ada dan positif; rugi tetap kalimat.
+- Acuan tren: grafik mini "year-on-year" di aplikasi data saham, versi tanpa pustaka.
+- Dampak bagi pemula: naik/turun langsung terlihat. Tetap data, bukan saran. Ringan di HP murah (tanpa JS tambahan).
+- Status: dipilih Bima 30 Okt 09.30 untuk Dewi.
+
+### 11. Peringkat: saring per sektor
+- **Kategori:** fitur — usaha **kecil**
+- Masalah atau peluang: 31 emiten dari banyak sektor; pemula ingin membandingkan emiten yang sejenis.
+- Ide: satu `<select>` "Semua sektor / Barang konsumen primer / ..." di atas tabel/kartu; urutan dihitung ulang di
+  dalam sektor itu dengan rumus yang sama. Tanpa simpanan, dapat diakses keyboard.
+- Dampak bagi pemula: pembanding yang adil (bank dengan bank, tambang dengan tambang).
+- Status: dipilih Bima 30 Okt 09.30 untuk Arif.
+
+### 12. Belajar: perkiraan waktu baca tiap pelajaran
+- **Kategori:** konten/tampilan — usaha **kecil**
+- Ide: "± 6 menit baca" di kartu pelajaran, dihitung dari jumlah kata di `data/modul.js` (±200 kata/menit).
+- Dampak bagi pemula: tahu berapa lama waktu yang dibutuhkan sebelum mulai.
+- Status: belum dipilih.
+
