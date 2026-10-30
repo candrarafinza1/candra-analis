@@ -134,11 +134,11 @@ Metodologi di HP:
 - Ide: di desktop (≥900px), kotak "Isi halaman" menempel di samping (sticky) dan menebalkan bagian yang sedang dibaca.
   Di HP tetap di atas. Tanpa pustaka.
 - Dampak bagi pemula: tidak tersesat di halaman panjang.
-- Status: usulan.
+- Status: dipilih Bima 29 Okt 20.20, masuk BACKLOG.md (Dewi).
 
 ### 9. Beranda: "Lanjutkan belajar"
 - **Kategori:** fitur — usaha **kecil**
 - Ide: bila penanda kemajuan menyimpan pelajaran selesai, beranda menampilkan tombol "Lanjutkan: pelajaran berikutnya".
   Memakai data yang sama di peramban (try/catch), tanpa akun.
 - Dampak bagi pemula: kembali ke jalur belajar dalam satu ketukan.
-- Status: usulan.
+- Status: dipilih Bima 30 Okt 07.10, masuk BACKLOG.md (Arif).

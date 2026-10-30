@@ -130,14 +130,21 @@ window.EMITEN_ASLI = [
     labaTahun: { 2024: 5100, 2025: 2930 },
     pendapatan: { 2024: 42760, 2025: 42650 },
     liabilitas2025: 21300, ekuitas2025: 22610,
-    laba9b: { 2025: null, 2026: null },
+    laba9b: { 2025: 1390, 2026: 4410 },
+    catatan9b: "Laba 9 bulan = laba diatribusikan kepada pemilik entitas induk: Rp4,41 T (Jan–Sep 2026) vs Rp1,39 T (Jan–Sep 2025), CNBC Indonesia 29 Okt 2026; angka 2025 sama dengan Bisnis 30 Okt 2025. Cek runtut: semester I 2026 Rp2,65 T dan semester I 2025 Rp833 M (BCA Sekuritas), jadi kuartal III tiap tahun bernilai positif.",
     dps: 114, harga: null,
     catatan: "Ekuitas 2025 disebut sumber sebagai angka kisaran. Dividen Rp114 per saham disebut \"kisaran\" (total Rp1,32 triliun, 45% laba 2025).",
     sumber: [
       { judul: "Kabar Bursa, 2 Apr 2026: Laba bersih 2025 tergerus, bos PTBA langsung pasang target",
         url: "https://www.kabarbursa.com/market-hari-ini/laba-bersih-2025-tergerus-bos-ptba-langsung-pasang-target" },
       { judul: "JawaPos, 12 Jun 2026: Cetak laba Rp2,93 T, Bukit Asam tebar dividen Rp114 per saham",
-        url: "https://jawapos.com/bisnis/2606110334/cetak-laba-rp-293-t-bukit-asam-tebar-dividen-rp-114-per-saham" }]
+        url: "https://jawapos.com/bisnis/2606110334/cetak-laba-rp-293-t-bukit-asam-tebar-dividen-rp-114-per-saham" },
+      { judul: "CNBC Indonesia, 29 Okt 2026: Kuartal III-2026, laba Bukit Asam (PTBA) melesat 216% jadi Rp4,41 T",
+        url: "https://www.cnbcindonesia.com/market/20261029132034-17-780560/kuartal-iii-2026-laba-bukit-asam--ptba--melesat-216-jadi-rp441-t" },
+      { judul: "Bisnis, 30 Okt 2025: Bukit Asam (PTBA) cetak laba bersih Rp1,39 triliun sampai September 2025",
+        url: "https://market.bisnis.com/read/20251030/192/1924749/bukit-asam-ptba-cetak-laba-bersih-rp139-triliun-sampai-september-2025" },
+      { judul: "BCA Sekuritas, 1 Sep 2026: Laba PTBA tembus Rp2,65 triliun di semester I 2026",
+        url: "https://bcasekuritas.co.id/latest-news/news/harga-batu-bara-menguat-laba-ptba-tembus-rp265-triliun-di-semester-i-2026" }]
   },
   {
     kode: "MYOR", nama: "PT Mayora Indah Tbk", sektor: "Barang konsumen primer",
