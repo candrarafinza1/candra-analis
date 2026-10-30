@@ -235,3 +235,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Nina: 4 cek baru di `tests/cek.mjs` (syarat angka positif, angka tertulis + batang aria-hidden, panduan sebelum memilih, animasi dalam reduced-motion). Lolos (8 halaman, 8 pelajaran, 31 emiten). Radar dicek 1280px & 390px untuk kosong, TLKM, TPIA, EXCL, UNTR, MDKA: tanpa scroll horizontal, tanpa galat JS, label tidak meluap.
 - Fajar: laba 9 bulan dicek lagi (TLKM masih semester I; KLBF, ICBP belum ada kuartal III 2026). Tetap 10 dari 31; batas rilis 31 Okt.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).
+
+## 30 Okt 2026, 16.10–16.25 WIB — Kirana, Dewi, Nina, Fajar (via Bima)
+- Kirana: tinjau #10 (batang laba 9 bulan), #11 (saring sektor), #12 (waktu baca), #6 (Radar baru) di 390px & 1280px. Semua baik; satu temuan: angka kenaikan tertulis tanpa tanda (mis. "31,4%") sementara penurunan "−14,8%".
+- Dewi: perbaikan langsung. Fungsi baru `ubah()` memberi "+" pada angka naik untuk pertumbuhan laba/pendapatan, laba 9 bulan, ubin profil, dan kolom Pendapatan YoY. ROE tetap tanpa tanda.
+- Nina: 3 cek baru di `tests/cek.mjs` (ubah() ada, angka perubahan tidak lagi memakai persen() polos, ROE tanpa "+"). Lolos (8 halaman, 8 pelajaran, 31 emiten). Peringkat, Radar, profil dicek 390px & 1280px: tanpa scroll horizontal, tanpa galat JS.
+- Fajar: laba 9 bulan dicek lagi (TLKM masih kuartal I; KLBF, ICBP belum ada kuartal III 2026). Tetap 10 dari 31; batas rilis 31 Okt.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).

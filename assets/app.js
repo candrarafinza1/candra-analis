@@ -41,6 +41,8 @@
   function usd(e) { return e && e.mataUang === "USD"; }
   function uang(e) { return usd(e) ? dolarJuta : rupiahMiliar; }
   function persen(p) { return (p < 0 ? "−" : "") + angka.format(Math.abs(p)) + "%"; }
+  // Perubahan (naik/turun): tanda "+" bila naik, "−" bila turun. ROE tetap memakai persen() (temuan Kirana 30 Okt 16.10).
+  function ubah(p) { return (p > 0 ? "+" : "") + persen(p); }
   function ada(v) { return typeof v === "number" && isFinite(v); }
   function tumbuh(a, b) { return ada(a) && ada(b) && a !== 0 ? (b - a) / Math.abs(a) * 100 : null; }
   // Rumus tim Galih: semua dari angka tahun buku 2025 di sumber
@@ -271,11 +273,11 @@
       metode: "Laba bersih tahun buku 2025. Emiten yang melapor dalam dolar AS tidak ikut urutan ini karena tidak kami konversi ke rupiah."
     },
     tumbuhLaba: {
-      label: "Pertumbuhan laba", nilai: tumbuhLaba, tampil: persen, kolom: "Laba 2025 vs 2024",
+      label: "Pertumbuhan laba", nilai: tumbuhLaba, tampil: ubah, kolom: "Laba 2025 vs 2024",
       metode: "Perubahan laba bersih 2025 dibanding 2024."
     },
     tumbuh: {
-      label: "Pertumbuhan pendapatan", nilai: tumbuhPendapatan, tampil: persen, kolom: "Pendapatan 2025 vs 2024",
+      label: "Pertumbuhan pendapatan", nilai: tumbuhPendapatan, tampil: ubah, kolom: "Pendapatan 2025 vs 2024",
       metode: "Perubahan pendapatan 2025 dibanding 2024."
     },
     roe: {
@@ -353,7 +355,7 @@
           el("td", { class: "sel-sektor", "data-label": "Sektor", text: e.sektor }),
           el("td", { class: "angka sel-utama", "data-label": k.kolom, text: k.tampil(k.nilai(e)) }),
           kunci === "laba" ? null : el("td", { class: "angka", "data-label": "Laba 2025", text: strip(laba25(e), uang(e)) }),
-          kunci === "tumbuh" ? null : el("td", { class: "angka " + (ada(g) ? (g >= 0 ? "naik" : "turun") : ""), "data-label": "Pendapatan YoY", text: strip(g, persen) }),
+          kunci === "tumbuh" ? null : el("td", { class: "angka " + (ada(g) ? (g >= 0 ? "naik" : "turun") : ""), "data-label": "Pendapatan YoY", text: strip(g, ubah) }),
           el("td", { class: "angka", "data-label": "DER", text: strip(der(e), function (v) { return angka.format(v) + "x"; }) }),
           el("td", { class: "sel-sumber", "data-label": "Data" }, [tautanSumber(e)])
         ]));
@@ -420,20 +422,20 @@
     var gl = tumbuhLaba(e);
     if (ada(gl) && gl <= -50) s.push({ tingkat: "tinggi", judul: "Laba turun lebih dari separuh",
       isi: "Laba bersih 2025 turun tajam dibanding 2024.",
-      bukti: "Laba: " + rp(L[2024]) + " (2024) → " + rp(L[2025]) + " (2025), " + persen(gl) + "." });
+      bukti: "Laba: " + rp(L[2024]) + " (2024) → " + rp(L[2025]) + " (2025), " + ubah(gl) + "." });
     else if (ada(gl) && gl < 0) s.push({ tingkat: "sedang", judul: "Laba menurun",
       isi: "Laba bersih 2025 lebih rendah daripada 2024.",
-      bukti: "Laba: " + rp(L[2024]) + " (2024) → " + rp(L[2025]) + " (2025), " + persen(gl) + "." });
+      bukti: "Laba: " + rp(L[2024]) + " (2024) → " + rp(L[2025]) + " (2025), " + ubah(gl) + "." });
 
     var gp = tumbuhPendapatan(e);
     if (ada(gp) && gp < 0) s.push({ tingkat: "sedang", judul: "Pendapatan menurun",
       isi: "Penjualan 2025 lebih rendah daripada 2024.",
-      bukti: "Pendapatan: " + rp(P[2024]) + " → " + rp(P[2025]) + " (" + persen(gp) + ")." });
+      bukti: "Pendapatan: " + rp(P[2024]) + " → " + rp(P[2025]) + " (" + ubah(gp) + ")." });
 
     // Laba 9 bulan (Januari–September) 2026 dibanding periode yang sama 2025.
     var N = e.laba9b || {}, g9 = tumbuh(N[2025], N[2026]);
     if (ada(g9)) {
-      var bukti9 = "Laba Januari–September: " + rp(N[2025]) + " (2025) → " + rp(N[2026]) + " (2026), " + persen(g9) + ".";
+      var bukti9 = "Laba Januari–September: " + rp(N[2025]) + " (2025) → " + rp(N[2026]) + " (2026), " + ubah(g9) + ".";
       if (ada(N[2026]) && N[2026] < 0) s.push({ tingkat: "tinggi", judul: "Merugi dalam 9 bulan pertama 2026",
         isi: "Perusahaan mencatat rugi bersih untuk periode Januari–September 2026.", bukti: bukti9 });
       else if (g9 <= -50) s.push({ tingkat: "tinggi", judul: "Laba 9 bulan 2026 turun lebih dari separuh",
@@ -616,8 +618,8 @@
     var gl = tumbuhLaba(e), gp = tumbuhPendapatan(e), g9 = tumbuh(N[2025], N[2026]);
     akar.appendChild(el("h2", { class: "judul-profil-bagian", text: "Angka utama" }));
     akar.appendChild(el("div", { class: "kisi-ubin" }, [
-      ubin("Laba bersih 2025", strip(L[2025], rp), ada(L[2024]) && L[2024] < 0 ? "2024: rugi " + rp(-L[2024]) : (ada(gl) ? persen(gl) + " dibanding 2024" : null)),
-      ubin("Pendapatan 2025", strip(P[2025], rp), ada(gp) ? persen(gp) + " dibanding 2024" : null),
+      ubin("Laba bersih 2025", strip(L[2025], rp), ada(L[2024]) && L[2024] < 0 ? "2024: rugi " + rp(-L[2024]) : (ada(gl) ? ubah(gl) + " dibanding 2024" : null)),
+      ubin("Pendapatan 2025", strip(P[2025], rp), ada(gp) ? ubah(gp) + " dibanding 2024" : null),
       ubin("ROE 2025", strip(roe(e), persen), "Laba bersih ÷ ekuitas"),
       ubin("DER akhir 2025", strip(der(e), function (v) { return angka.format(v) + "x"; }), "Liabilitas ÷ ekuitas")
     ]));
@@ -657,7 +659,7 @@
       tbody
     ])]));
     akar.appendChild(el("p", { class: "catatan-metode", text: ada(g9)
-      ? "Laba Januari–September: " + rp(N[2025]) + " (2025) → " + rp(N[2026]) + " (2026), " + persen(g9) + ". Angka kuartalan belum diaudit."
+      ? "Laba Januari–September: " + rp(N[2025]) + " (2025) → " + rp(N[2026]) + " (2026), " + ubah(g9) + ". Angka kuartalan belum diaudit."
       : "Laba Januari–September 2026 belum kami masukkan: laporan kuartal III belum rilis atau angkanya belum bisa dipastikan." }));
     // Batang pembanding laba 9 bulan (IDE.md #10): CSS saja, angka tetap tertulis; hanya bila kedua angka positif.
     if (ada(g9) && N[2025] > 0 && N[2026] > 0) {

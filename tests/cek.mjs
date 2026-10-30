@@ -115,6 +115,14 @@ ok(/function posisi\(kunci[\s\S]{0,900}peserta\(kunci\)/.test(readFileSync("asse
   ok(!MODUL.some(m => "durasi" in m), "data/modul.js: durasi tidak boleh ditulis tangan lagi (dihitung otomatis)");
 }
 
+// Nina (30 Okt 16.10): angka perubahan diberi tanda "+" bila naik; ROE tidak.
+{
+  const js = readFileSync("assets/app.js", "utf8");
+  ok(/function ubah\(p\)\s*\{\s*return \(p > 0 \? "\+" : ""\) \+ persen\(p\)/.test(js), "Fungsi ubah() untuk tanda +/− perubahan tidak ditemukan");
+  ok(!/persen\((gl|gp|g9)\)/.test(js) && !/strip\(g, persen\)/.test(js), "Angka perubahan masih memakai persen() tanpa tanda +");
+  ok(/nilai: roe, tampil: persen/.test(js), "ROE tidak boleh diberi tanda +");
+}
+
 // 3. Aturan Hana (syariah): halaman tidak boleh memakai bahasa ajakan
 const terlarang = /\b(wajib beli|pasti naik|buruan (beli|jual)|dijamin untung|rekomendasi beli)\b/i;
 for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"]) {
