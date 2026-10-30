@@ -490,7 +490,8 @@ window.EMITEN_ASLI = [
     labaTahun: { 2024: -68.61, 2025: 1090 },
     pendapatan: { 2024: 1780, 2025: 7020 },
     liabilitas2025: null, ekuitas2025: null,
-    laba9b: { 2025: null, 2026: null },
+    laba9b: { 2025: 1300, 2026: 279.81 },
+    catatan9b: "Laba 9 bulan = laba diatribusikan kepada pemilik entitas induk, juta US$: US$279,81 juta (Jan–Sep 2026) vs US$1,30 miliar (Jan–Sep 2025), turun ±78%; CNBC Indonesia 30 Okt 2026 dan PintarSaham sama. Angka 2025 dibulatkan sumber. Penurunan terutama karena keuntungan pembelian dengan diskon ±US$1,81 miliar (transaksi Aster) tercatat di 9 bulan 2025 dan tidak berulang (PintarSaham). Laba periode berjalan US$394,93 juta vs US$1,65 miliar sengaja tidak dipakai.",
     dps: null, harga: null,
     catatan: "Melapor dalam dolar AS; angka dalam juta US$ sesuai laporan, tidak dikonversi ke rupiah. Laba diatribusikan kepada pemilik entitas induk US$1,09 miliar (2025) vs rugi US$68,61 juta (2024), menurut Investortrust; laba tahun berjalan US$1,44–1,45 miliar (Investortrust, Warta Ekonomi) sengaja tidak dipakai. Laba 2025 ditopang keuntungan akuntansi sekali-waktu dari transaksi Aster (rilis resmi perusahaan kuartal III 2025 via MarketScreener; nilainya tidak disebut), dan pendapatan naik karena akuisisi. Karena itu TPIA sengaja tidak ikut Peringkat, sama seperti UNVR, sampai aturan laba sekali-waktu Galih selesai. Neraca dikosongkan: sumber menyebut aset US$12,32 miliar dan liabilitas US$7,66 miliar, tetapi tidak menyebut ekuitas.",
     sumber: [{ judul: "Investortrust, 26 Mar 2026: Laba Chandra Asri (TPIA) melonjak ke US$1,44 miliar di 2025",
@@ -498,6 +499,10 @@ window.EMITEN_ASLI = [
       { judul: "Warta Ekonomi, 26 Mar 2026: Balik rugi jadi cuan, emiten Prajogo (TPIA) cetak laba US$1,45 miliar di 2025",
         url: "https://wartaekonomi.co.id/read605545/balik-rugi-jadi-cuan-emiten-prajogo-tpia-cetak-laba-us145-miliar-di-2025" },
       { judul: "MarketScreener, 31 Okt 2025: Rilis Chandra Asri kuartal III 2025 (laba termasuk keuntungan akuntansi sekali-waktu dari transaksi Aster)",
-        url: "https://www.marketscreener.com/news/pt-chandra-asri-pacific-tbk-cap-results-for-the-quarter-3-ended-september-30-2025-ce7d5cdbd98df52d" }]
+        url: "https://www.marketscreener.com/news/pt-chandra-asri-pacific-tbk-cap-results-for-the-quarter-3-ended-september-30-2025-ce7d5cdbd98df52d" },
+      { judul: "CNBC Indonesia, 30 Okt 2026: Laba Chandra Asri (TPIA) anjlok 78% di kuartal III-2026",
+        url: "https://www.cnbcindonesia.com/market/20261030112319-17-780872/laba-chandra-asri--tpia--anjlok-78-di-kuartal-iii-2026-ini-sebabnya" },
+      { judul: "PintarSaham: Analisis saham TPIA, pendapatan naik 60,50% hingga September 2026, laba bersih turun",
+        url: "https://pintarsaham.id/analisis-saham-tpia-pendapatan-naik-6050-hingga-september-2026-tetapi-laba-bersih-turun/" }]
   }
 ];

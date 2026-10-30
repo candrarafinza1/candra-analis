@@ -216,3 +216,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Nina: cek baru di `tests/cek.mjs` (saringan memakai `peserta()` yang sama, select berlabel); komentar ganda di cek batang9 dirapikan. Lolos (8 halaman, 8 pelajaran, 31 emiten). Dicek 1280px & 390px untuk Semua/Energi/Keuangan/Kesehatan × 2 dasar peringkat: tanpa scroll horizontal, tanpa galat JS.
 - Fajar: laba 9 bulan dicek lagi (TLKM, KLBF, ICBP belum ada kuartal III 2026). Tetap 9 dari 24; batas rilis 31 Okt.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).
+
+## 30 Okt 2026, 13.10–13.30 WIB — Fajar, Nina (via Bima)
+- Bima: laporan masuk kerja siang dikirim ke Rafinza (13.13). Usulan Kirana #12 (perkiraan waktu baca) dipilih untuk Arif dengan Laras sebagai pendamping, #6 (Radar: contoh cara membaca + batang 2024 vs 2025) untuk Dewi; masuk backlog agar tidak ada yang menganggur.
+- Fajar: laba 9 bulan 2026 TPIA masuk: laba atribusi US$279,81 jt vs US$1,30 miliar (CNBC Indonesia 30 Okt 2026, PintarSaham; turun ±78% karena keuntungan sekali-waktu transaksi Aster di 2025 tidak berulang, dicatat di `catatan9b`). Kini 10 dari 31 emiten. Rp2,41 T JPFA di hasil pencarian ternyata angka 2025, tidak dipakai. 21 emiten lain belum ada berita kuartal III 2026.
+- Nina: `node tests/cek.mjs` lolos (8 halaman, 8 pelajaran, 31 emiten). Profil TPIA dicek 390px & 1280px: batang laba 9 bulan tampil, tanpa scroll horizontal, tanpa galat JS; Radar tanpa galat.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).
