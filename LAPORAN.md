@@ -242,3 +242,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Nina: 3 cek baru di `tests/cek.mjs` (ubah() ada, angka perubahan tidak lagi memakai persen() polos, ROE tanpa "+"). Lolos (8 halaman, 8 pelajaran, 31 emiten). Peringkat, Radar, profil dicek 390px & 1280px: tanpa scroll horizontal, tanpa galat JS.
 - Fajar: laba 9 bulan dicek lagi (TLKM masih kuartal I; KLBF, ICBP belum ada kuartal III 2026). Tetap 10 dari 31; batas rilis 31 Okt.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).
+
+## 30 Okt 2026, 17.10–17.25 WIB — Tegar, Nina, Fajar (via Bima)
+- Tegar: audit keamanan selesai. Tidak ada rahasia di repo (`.env*` diabaikan git, key hanya dari Environment Variable). Perbaikan: `api/tanya.mjs` kini menolak POST dari situs lain (Origin beda host → 403) dan memangkas riwayat bila total di atas 6.000 karakter (hemat kuota gratis); `vercel.json` ditambah header Cross-Origin-Opener-Policy. Batas 600 karakter dan 6 pertanyaan/menit per IP sudah ada.
+- Nina: cek keamanan baru di `tests/cek.mjs` (key dari env, tiga batas ada, tolak situs lain, 7 header keamanan, pindai pola API key di halaman/JS). Lolos (8 halaman, 8 pelajaran, 31 emiten). Uji tiruan handler: asal sama 200, situs lain 403, riwayat 6×2.000 karakter dipangkas jadi 3. Tampilan tidak berubah.
+- Fajar: laba 9 bulan dicek lagi (TLKM, CPIN, SMGR masih semester I 2026; KLBF belum ada kuartal III 2026). Tetap 10 dari 31; batas rilis 31 Okt.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).

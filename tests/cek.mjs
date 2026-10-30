@@ -123,6 +123,21 @@ ok(/function posisi\(kunci[\s\S]{0,900}peserta\(kunci\)/.test(readFileSync("asse
   ok(/nilai: roe, tampil: persen/.test(js), "ROE tidak boleh diberi tanda +");
 }
 
+// Tegar & Nina (30 Okt 17.10): audit keamanan
+{
+  const api = readFileSync("api/tanya.mjs", "utf8");
+  ok(/process\.env\.GEMINI_API_KEY/.test(api) && !/AIza[0-9A-Za-z_-]{20,}/.test(api), "api/tanya.mjs harus membaca key dari Environment Variable, bukan menulisnya");
+  ok(/MAKS_PERTANYAAN = \d+/.test(api) && /BATAS_PER_MENIT = \d+/.test(api) && /MAKS_TOTAL_RIWAYAT = \d+/.test(api), "api/tanya.mjs harus punya batas panjang, jumlah per menit, dan total riwayat");
+  ok(/if \(asalLain\(req\)\) return kirim\(res, 403/.test(api), "api/tanya.mjs harus menolak POST dari situs lain");
+  const vj = JSON.parse(readFileSync("vercel.json", "utf8"));
+  const kunciHeader = vj.headers[0].headers.map(h => h.key);
+  for (const k of ["Content-Security-Policy", "X-Content-Type-Options", "X-Frame-Options", "Referrer-Policy", "Permissions-Policy", "Strict-Transport-Security", "Cross-Origin-Opener-Policy"])
+    ok(kunciHeader.includes(k), `vercel.json: header keamanan ${k} hilang`);
+  const rahasia = /AIza[0-9A-Za-z_-]{30,}|ghp_[0-9A-Za-z]{30,}|sk-[0-9A-Za-z]{30,}/;
+  for (const f of [...halaman, "assets/app.js", "api/tanya.mjs", "vercel.json"])
+    ok(!rahasia.test(readFileSync(f, "utf8")), `${f} tampak memuat API key/rahasia`);
+}
+
 // 3. Aturan Hana (syariah): halaman tidak boleh memakai bahasa ajakan
 const terlarang = /\b(wajib beli|pasti naik|buruan (beli|jual)|dijamin untung|rekomendasi beli)\b/i;
 for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"]) {

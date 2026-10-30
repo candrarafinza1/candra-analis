@@ -29,6 +29,16 @@ Bila pengguna meminta rekomendasi, jelaskan bahwa Anda tidak bisa memberi rekome
 Bila pengguna menyebut ingin memakai uang pinjaman, dana darurat, atau tampak dalam tekanan keuangan, ingatkan risikonya dengan lembut.
 Jawab ringkas: paling banyak sekitar 200 kata, gunakan poin bila membantu. Akhiri jawaban yang menyangkut keputusan investasi dengan pengingat singkat bahwa keputusan ada di tangan pengguna.`;
 
+const MAKS_TOTAL_RIWAYAT = 6000; // karakter riwayat seluruhnya (Tegar, 30 Okt)
+
+// Tegar (30 Okt): hanya halaman Candra Analis sendiri yang boleh mengirim pertanyaan.
+// Peramban selalu mengirim Origin pada POST; bila ada dan host-nya beda, tolak.
+function asalLain(req) {
+  const asal = req.headers.origin;
+  if (!asal) return false;
+  try { return new URL(asal).host !== String(req.headers.host || ""); } catch { return true; }
+}
+
 const jejak = new Map(); // ip → [waktu permintaan]
 
 function terlaluSering(ip) {
@@ -65,6 +75,8 @@ export default async function handler(req, res) {
   if (req.method !== "POST") return kirim(res, 405, { galat: "Metode tidak didukung." });
   if (!kunci) return kirim(res, 503, { galat: "Asisten belum aktif." });
 
+  if (asalLain(req)) return kirim(res, 403, { galat: "Permintaan dari situs lain tidak dilayani." });
+
   const ip = String(req.headers["x-forwarded-for"] || "").split(",")[0].trim() || "anon";
   if (terlaluSering(ip)) {
     return kirim(res, 429, { galat: "Terlalu banyak pertanyaan dalam satu menit. Coba lagi sebentar lagi." });
@@ -86,6 +98,8 @@ export default async function handler(req, res) {
       role: p.peran === "asisten" ? "model" : "user",
       parts: [{ text: p.teks.slice(0, 2000) }],
     }));
+  // Buang pesan paling lama bila total riwayat terlalu panjang (hemat kuota gratis)
+  while (riwayat.reduce((n, p) => n + p.parts[0].text.length, 0) > MAKS_TOTAL_RIWAYAT) riwayat.shift();
 
   const payload = {
     systemInstruction: { parts: [{ text: PETUNJUK }] },
