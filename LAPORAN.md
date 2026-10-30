@@ -248,3 +248,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Nina: cek keamanan baru di `tests/cek.mjs` (key dari env, tiga batas ada, tolak situs lain, 7 header keamanan, pindai pola API key di halaman/JS). Lolos (8 halaman, 8 pelajaran, 31 emiten). Uji tiruan handler: asal sama 200, situs lain 403, riwayat 6×2.000 karakter dipangkas jadi 3. Tampilan tidak berubah.
 - Fajar: laba 9 bulan dicek lagi (TLKM, CPIN, SMGR masih semester I 2026; KLBF belum ada kuartal III 2026). Tetap 10 dari 31; batas rilis 31 Okt.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).
+
+## 30 Okt 2026, 18.15–18.35 WIB — Galih, Hana, Nina, Fajar (via Bima)
+- Galih & Hana: aturan tertulis laba sekali-waktu selesai (metodologi.html#sekali-waktu). Nilai keuntungan sekali-waktu yang disebut sumber ≥25% laba tahun itu → tidak ikut Peringkat; nilai tidak disebut → keluar hanya bila laba berbalik dari rugi. Tidak menghitung sendiri laba tanpa keuntungan itu. Field baru `sekaliWaktu` (UNVR, TPIA; periksaUlang keduanya dicabut karena alasannya bukan angka salah).
+- Dampak: **INTP kini tidak ikut Peringkat.** Siaran pers resmi Indocement menyebut "Laba dari Divestasi" Rp670,0 miliar (bisnis mortar) ≈30% laba 2025 Rp2,24 T; tanpa itu laba 2025 kemungkinan tidak naik. Profil emiten menampilkan alasan + tautan ke aturan.
+- Nina: cek baru di `tests/cek.mjs` (bagian #sekali-waktu ada, peserta Peringkat memakai diluarPeringkat, tiap emiten sekaliWaktu disebut di metodologi). Lolos (8 halaman, 8 pelajaran, 31 emiten). Dicek 1280px & 390px: tanpa scroll horizontal, tanpa galat JS.
+- Fajar: laba 9 bulan dicek lagi (TLKM masih semester I 2026; KLBF, ICBP belum ada kuartal III 2026). Tetap 10 dari 31.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).

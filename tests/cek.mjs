@@ -138,6 +138,21 @@ ok(/function posisi\(kunci[\s\S]{0,900}peserta\(kunci\)/.test(readFileSync("asse
     ok(!rahasia.test(readFileSync(f, "utf8")), `${f} tampak memuat API key/rahasia`);
 }
 
+// Nina (30 Okt): aturan laba sekali-waktu Galih & Hana
+{
+  const app = readFileSync("assets/app.js", "utf8");
+  const metod = readFileSync("metodologi.html", "utf8");
+  ok(/id="sekali-waktu"/.test(metod), "metodologi.html: bagian #sekali-waktu (aturan laba sekali-waktu) tidak ada");
+  ok(/function diluarPeringkat\(e\) \{ return !!\(e\.periksaUlang \|\| e\.sekaliWaktu\)/.test(app), "app.js: diluarPeringkat harus mencakup periksaUlang dan sekaliWaktu");
+  ok(/syariahAktif\(e\) && !diluarPeringkat\(e\)/.test(app), "app.js: peserta() Peringkat harus memakai diluarPeringkat");
+  for (const e of ASLI) {
+    if (!("sekaliWaktu" in e)) continue;
+    ok(typeof e.sekaliWaktu === "string" && e.sekaliWaktu.length >= 20, `${e.kode}: sekaliWaktu harus berupa penjelasan singkat`);
+    ok(new RegExp(`<strong>${e.kode}</strong>`).test(metod), `${e.kode}: bertanda sekaliWaktu tetapi tidak disebut di metodologi #sekali-waktu`);
+  }
+  for (const kode of ["UNVR", "INTP", "TPIA"]) ok(ASLI.some(e => e.kode === kode && e.sekaliWaktu), `${kode} seharusnya bertanda sekaliWaktu`);
+}
+
 // 3. Aturan Hana (syariah): halaman tidak boleh memakai bahasa ajakan
 const terlarang = /\b(wajib beli|pasti naik|buruan (beli|jual)|dijamin untung|rekomendasi beli)\b/i;
 for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"]) {

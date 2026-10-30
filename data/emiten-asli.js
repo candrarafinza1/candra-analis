@@ -1,6 +1,8 @@
 /* DATA ASLI — dikumpulkan tim Fajar (Data Engineer), diperiksa Hana (Syariah).
    Tayang di website sejak 28 Okt 2026. periksaUlang: true = angka laba perlu dicek ke laporan
    resmi; emiten itu tampil di Radar tetapi tidak ikut Peringkat sampai dipastikan.
+   sekaliWaktu: "..." = laba tahun itu banyak ditopang keuntungan sekali-waktu (aturan Galih & Hana,
+   30 Okt 2026, lihat metodologi.html#sekali-waktu); emiten tampil di profil & Radar, tidak ikut Peringkat.
 
    Aturan:
    - desBaris: nomor baris di Daftar Efek Syariah periode I 2026 (KEP-21/D.04/2026,
@@ -107,14 +109,15 @@ window.EMITEN_ASLI = [
   },
   {
     kode: "UNVR", nama: "PT Unilever Indonesia Tbk", sektor: "Barang konsumen primer",
-    desBaris: 290, periksaUlang: true,
+    desBaris: 290,
+    sekaliWaktu: "Keuntungan sekali-waktu Rp3,79 T dari penjualan bisnis es krim = sekitar 50% laba 2025 (Rp7,64 T).",
     labaTahun: { 2024: 3360, 2025: 7640 },
     pendapatan: { 2024: 30620, 2025: 31940 },
     liabilitas2025: 15540, ekuitas2025: 4470,
     laba9b: { 2025: 3330, 2026: 4200 },
     catatan9b: "Laba 9 bulan Rp4,20 T (Jan–Sep 2026) vs Rp3,33 T (Jan–Sep 2025), EmitenNews; Databoks menulis Rp3,34 T (pembulatan). Laba dari operasi yang dilanjutkan Rp3,31 T vs Rp2,99 T; sisanya dari operasi yang dihentikan (bisnis es krim).",
     dps: null, harga: null,
-    catatan: "Laba 2025 naik 127% karena keuntungan sekali-waktu Rp3,79 T dari penjualan anak usaha es krim (PT The Magnum Ice Cream Indonesia, selesai Desember 2025), menurut Investortrust. Angka ini benar, tetapi lebih dari separuh laba 2025 bukan dari usaha rutin, sehingga UNVR sengaja tidak ikut Peringkat agar perbandingan adil (keputusan Galih & Hana, 29 Okt). Laba tanpa keuntungan itu tidak disebut sumber, jadi tidak dihitung sendiri.",
+    catatan: "Laba 2025 naik 127% karena keuntungan sekali-waktu Rp3,79 T dari penjualan anak usaha es krim (PT The Magnum Ice Cream Indonesia, selesai Desember 2025), menurut Investortrust. Angka ini benar, tetapi lebih dari separuh laba 2025 bukan dari usaha rutin, sehingga UNVR tidak ikut Peringkat agar perbandingan adil (aturan laba sekali-waktu Galih & Hana, 30 Okt). Laba tanpa keuntungan itu tidak disebut sumber, jadi tidak dihitung sendiri.",
     sumber: [{ judul: "Bisnis, 12 Feb 2026: Laba Unilever melonjak 126% jadi Rp7,64 triliun sepanjang 2025",
       url: "https://market.bisnis.com/read/20260212/192/1952314/laba-unilever-unvr-melonjak-126-jadi-rp764-triliun-sepanjang-2025" },
       { judul: "Investortrust, 12 Feb 2026: Didukung divestasi bisnis es krim, laba Unilever melesat 127% di 2025",
@@ -216,12 +219,13 @@ window.EMITEN_ASLI = [
   {
     kode: "INTP", nama: "PT Indocement Tunggal Prakarsa Tbk", sektor: "Bahan baku",
     desBaris: 108,
+    sekaliWaktu: "Laba dari divestasi bisnis mortar Rp670,0 miliar = sekitar 30% laba 2025 (Rp2,24 T), menurut siaran pers resmi Indocement.",
     labaTahun: { 2024: 2000, 2025: 2240 },
     pendapatan: { 2024: 18540, 2025: 17730 },
     liabilitas2025: 8522.2, ekuitas2025: 23203.1,
     laba9b: { 2025: null, 2026: null },
     dps: null, harga: null,
-    catatan: "Laba 2025 ikut ditopang keuntungan sekali-waktu dari penjualan 60% bisnis mortar (Des 2025). Laba = laba tahun berjalan yang diatribusikan ke pemilik entitas induk menurut BCA Sekuritas: Rp2,24 T (2025), Rp2,00 T (2024); angka Rp2,25 T / Rp2,01 T sebelumnya adalah laba tahun berjalan. Dipastikan 29 Okt 08.20, periksaUlang dicabut; pertumbuhan laba 2025 tetap perlu dibaca bersama keuntungan sekali-waktu itu. Liabilitas = jangka pendek 6.104,2 + jangka panjang 2.418,0 (miliar Rp) dari siaran pers resmi.",
+    catatan: "Laba 2025 ikut ditopang keuntungan sekali-waktu dari penjualan 60% bisnis mortar (Des 2025). Laba = laba tahun berjalan yang diatribusikan ke pemilik entitas induk menurut BCA Sekuritas: Rp2,24 T (2025), Rp2,00 T (2024); angka Rp2,25 T / Rp2,01 T sebelumnya adalah laba tahun berjalan. Dipastikan 29 Okt 08.20, periksaUlang dicabut; Siaran pers resmi menyebut \"Laba dari Divestasi\" Rp670,0 miliar (sebelum pajak), sekitar 30% laba 2025; tanpa itu laba 2025 kemungkinan tidak naik. Karena itu, sejak 30 Okt INTP tidak ikut Peringkat (aturan laba sekali-waktu Galih & Hana). Liabilitas = jangka pendek 6.104,2 + jangka panjang 2.418,0 (miliar Rp) dari siaran pers resmi.",
     sumber: [{ judul: "Investortrust, 2 Apr 2026: Indocement cetak kenaikan laba 12% di 2025, ditopang divestasi aset",
       url: "https://investortrust.id/market/98742/indocement-intp-cetak-kenaikan-laba-12-di-2025-ditopang-divestasi-aset" },
       { judul: "Indocement, 1 Apr 2026: Siaran pers kinerja 2025 (neraca 31 Des 2025)",
@@ -486,14 +490,15 @@ window.EMITEN_ASLI = [
   },
   {
     kode: "TPIA", nama: "PT Chandra Asri Pacific Tbk", sektor: "Bahan baku",
-    desBaris: 147, mataUang: "USD", periksaUlang: true,
+    desBaris: 147, mataUang: "USD",
+    sekaliWaktu: "Laba 2025 berbalik dari rugi berkat keuntungan akuntansi sekali-waktu dari transaksi Aster; nilainya tidak disebut sumber.",
     labaTahun: { 2024: -68.61, 2025: 1090 },
     pendapatan: { 2024: 1780, 2025: 7020 },
     liabilitas2025: null, ekuitas2025: null,
     laba9b: { 2025: 1300, 2026: 279.81 },
     catatan9b: "Laba 9 bulan = laba diatribusikan kepada pemilik entitas induk, juta US$: US$279,81 juta (Jan–Sep 2026) vs US$1,30 miliar (Jan–Sep 2025), turun ±78%; CNBC Indonesia 30 Okt 2026 dan PintarSaham sama. Angka 2025 dibulatkan sumber. Penurunan terutama karena keuntungan pembelian dengan diskon ±US$1,81 miliar (transaksi Aster) tercatat di 9 bulan 2025 dan tidak berulang (PintarSaham). Laba periode berjalan US$394,93 juta vs US$1,65 miliar sengaja tidak dipakai.",
     dps: null, harga: null,
-    catatan: "Melapor dalam dolar AS; angka dalam juta US$ sesuai laporan, tidak dikonversi ke rupiah. Laba diatribusikan kepada pemilik entitas induk US$1,09 miliar (2025) vs rugi US$68,61 juta (2024), menurut Investortrust; laba tahun berjalan US$1,44–1,45 miliar (Investortrust, Warta Ekonomi) sengaja tidak dipakai. Laba 2025 ditopang keuntungan akuntansi sekali-waktu dari transaksi Aster (rilis resmi perusahaan kuartal III 2025 via MarketScreener; nilainya tidak disebut), dan pendapatan naik karena akuisisi. Karena itu TPIA sengaja tidak ikut Peringkat, sama seperti UNVR, sampai aturan laba sekali-waktu Galih selesai. Neraca dikosongkan: sumber menyebut aset US$12,32 miliar dan liabilitas US$7,66 miliar, tetapi tidak menyebut ekuitas.",
+    catatan: "Melapor dalam dolar AS; angka dalam juta US$ sesuai laporan, tidak dikonversi ke rupiah. Laba diatribusikan kepada pemilik entitas induk US$1,09 miliar (2025) vs rugi US$68,61 juta (2024), menurut Investortrust; laba tahun berjalan US$1,44–1,45 miliar (Investortrust, Warta Ekonomi) sengaja tidak dipakai. Laba 2025 ditopang keuntungan akuntansi sekali-waktu dari transaksi Aster (rilis resmi perusahaan kuartal III 2025 via MarketScreener; nilainya tidak disebut), dan pendapatan naik karena akuisisi. Karena itu TPIA tidak ikut Peringkat, sama seperti UNVR (aturan laba sekali-waktu Galih & Hana, 30 Okt). Neraca dikosongkan: sumber menyebut aset US$12,32 miliar dan liabilitas US$7,66 miliar, tetapi tidak menyebut ekuitas.",
     sumber: [{ judul: "Investortrust, 26 Mar 2026: Laba Chandra Asri (TPIA) melonjak ke US$1,44 miliar di 2025",
       url: "https://investortrust.id/market/98088/laba-chandra-asri-tpia-melonjak-ke-us1-44-miliar-di-2025-pendapatan-tumbuh-293" },
       { judul: "Warta Ekonomi, 26 Mar 2026: Balik rugi jadi cuan, emiten Prajogo (TPIA) cetak laba US$1,45 miliar di 2025",

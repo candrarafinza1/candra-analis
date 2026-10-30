@@ -287,9 +287,11 @@
   };
 
   // Emiten bertanda periksaUlang tidak ikut diperingkat sampai angkanya dipastikan (aturan Hana).
+  // Emiten bertanda sekaliWaktu tidak ikut karena labanya banyak ditopang keuntungan sekali-waktu (aturan Galih & Hana, 30 Okt).
+  function diluarPeringkat(e) { return !!(e.periksaUlang || e.sekaliWaktu); }
   function peserta(kunci) {
     var k = KRITERIA[kunci];
-    return EMITEN.filter(function (e) { return syariahAktif(e) && !e.periksaUlang && !(k.rupiahSaja && usd(e)) && ada(k.nilai(e)); });
+    return EMITEN.filter(function (e) { return syariahAktif(e) && !diluarPeringkat(e) && !(k.rupiahSaja && usd(e)) && ada(k.nilai(e)); });
   }
   // sektor kosong = semua sektor. Saring sektor (Arif, 30 Okt, IDE.md #11): rumus sama, urutan dihitung ulang di dalam sektor.
   function urutkan(kunci, sektor) {
@@ -379,11 +381,11 @@
         ])
       ]));
       if (!daftar.length) panel.insertBefore(el("p", { class: "catatan-metode", text: "Belum ada emiten di sektor ini yang angkanya lengkap untuk urutan ini. Pilih dasar peringkat lain atau Semua sektor." }), panel.lastChild);
-      var keluar = EMITEN.filter(function (e) { return syariahAktif(e) && (!sektor || e.sektor === sektor) && !(k.rupiahSaja && usd(e)) && (e.periksaUlang || !ada(k.nilai(e))); })
+      var keluar = EMITEN.filter(function (e) { return syariahAktif(e) && (!sektor || e.sektor === sektor) && !(k.rupiahSaja && usd(e)) && (diluarPeringkat(e) || !ada(k.nilai(e))); })
         .map(function (e) { return e.kode; });
       panel.appendChild(el("p", { class: "catatan-metode", style: "margin-top:12px" },
         ["Cara menghitung: " + k.metode + " Hanya emiten yang tercatat di Daftar Efek Syariah. Urutan ini menggambarkan data, bukan saran membeli." +
-          (keluar.length ? " Belum ikut diperingkat karena angkanya kosong atau sedang dicek ulang: " + keluar.join(", ") + "." : "")]));
+          (keluar.length ? " Belum ikut diperingkat karena angkanya kosong, sedang dicek ulang, atau labanya banyak ditopang keuntungan sekali-waktu: " + keluar.join(", ") + "." : "")]));
       pasangIstilah(panel);
     }
 
@@ -610,6 +612,9 @@
     ]));
     if (usd(e)) akar.appendChild(el("p", { class: "catatan-metode", text: "Emiten ini melapor dalam dolar AS. Angka ditampilkan dalam dolar AS sesuai laporannya, tanpa dikonversi ke rupiah." }));
     if (e.periksaUlang) akar.appendChild(el("p", { class: "catatan-metode", text: "Angka laba emiten ini sedang dicek ulang atau tidak bisa dibandingkan secara adil, jadi sementara tidak ikut Peringkat. Penjelasannya ada di catatan di bawah." }));
+    if (e.sekaliWaktu) akar.appendChild(el("p", { class: "catatan-metode" }, [
+      "Tidak ikut Peringkat: " + e.sekaliWaktu + " Laba yang seperempatnya atau lebih berasal dari keuntungan sekali-waktu tidak adil dibandingkan dengan laba usaha rutin. ",
+      el("a", { href: "metodologi.html#sekali-waktu", text: "Baca aturannya" }), "."]));
 
     // Angka utama
     function ubin(label, nilai, ket) {
@@ -629,6 +634,7 @@
       var k = KRITERIA[kunci];
       if (!syariahAktif(e)) return nama + ": tidak ikut Peringkat karena tidak tercatat di Daftar Efek Syariah terbaru.";
       if (e.periksaUlang) return nama + ": belum ikut Peringkat karena angkanya sedang dicek ulang atau tidak bisa dibandingkan secara adil (lihat catatan di bawah).";
+      if (e.sekaliWaktu) return nama + ": tidak ikut Peringkat karena laba 2025 banyak ditopang keuntungan sekali-waktu (lihat aturan di Metodologi).";
       if (k.rupiahSaja && usd(e)) return nama + ": tidak ikut karena emiten ini melapor dalam dolar AS.";
       if (!ada(k.nilai(e))) return nama + ": belum ikut Peringkat karena datanya belum lengkap.";
       var urut = peserta(kunci).sort(function (a, b) { return k.nilai(b) - k.nilai(a); });
