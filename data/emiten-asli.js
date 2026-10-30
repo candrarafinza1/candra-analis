@@ -1,6 +1,9 @@
 /* DATA ASLI — dikumpulkan tim Fajar (Data Engineer), diperiksa Hana (Syariah).
    Tayang di website sejak 28 Okt 2026. periksaUlang: true = angka laba perlu dicek ke laporan
    resmi; emiten itu tampil di Radar tetapi tidak ikut Peringkat sampai dipastikan.
+   sekaliWaktu9b: { tahun, nilai, jenis: "keuntungan"|"beban", ket } = laba 9 bulan tahun itu dipengaruhi pos
+   sekali-waktu yang nilainya disebut sumber (satuan sama dengan laba9b). Bila nilai ≥25% laba 9 bulan tahun itu,
+   Radar & profil memberi catatan bahwa perbandingan 9 bulan tidak sebanding (aturan Galih & Hana, 30 Okt).
    sekaliWaktu: "..." = laba tahun itu banyak ditopang keuntungan sekali-waktu (aturan Galih & Hana,
    30 Okt 2026, lihat metodologi.html#sekali-waktu); emiten tampil di profil & Radar, tidak ikut Peringkat.
 
@@ -77,6 +80,7 @@ window.EMITEN_ASLI = [
     pendapatan: { 2024: 134400, 2025: 131300 },
     liabilitas2025: 74500, ekuitas2025: 103100,
     laba9b: { 2025: 11480, 2026: 4470 },
+    sekaliWaktu9b: { tahun: 2026, nilai: 3500, jenis: "beban", ket: "pos sekali-waktu Rp3,5 T (penurunan nilai Supreme Energy dan pembayaran izin kawasan hutan tambang nikel) menurut Kontan" },
     catatan9b: "Laba 9 bulan = laba diatribusikan kepada pemilik entitas induk: Rp4,47 T (Jan–Sep 2026) vs Rp11,48 T (Jan–Sep 2025), Databoks Katadata; BCA Sekuritas (31 Okt 2025) menulis Rp11,47 T untuk 2025 (selisih pembulatan). Penurunan antara lain karena pos sekali-waktu Rp3,5 T (penurunan nilai Supreme Energy dan pembayaran izin kawasan hutan tambang nikel); tanpa pos itu laba Rp7,9 T (Kontan).",
     dps: null, harga: null,
     sumber: [
@@ -496,6 +500,7 @@ window.EMITEN_ASLI = [
     pendapatan: { 2024: 1780, 2025: 7020 },
     liabilitas2025: null, ekuitas2025: null,
     laba9b: { 2025: 1300, 2026: 279.81 },
+    sekaliWaktu9b: { tahun: 2025, nilai: 1810, jenis: "keuntungan", ket: "keuntungan pembelian dengan diskon ±US$1,81 miliar dari transaksi Aster menurut PintarSaham" },
     catatan9b: "Laba 9 bulan = laba diatribusikan kepada pemilik entitas induk, juta US$: US$279,81 juta (Jan–Sep 2026) vs US$1,30 miliar (Jan–Sep 2025), turun ±78%; CNBC Indonesia 30 Okt 2026 dan PintarSaham sama. Angka 2025 dibulatkan sumber. Penurunan terutama karena keuntungan pembelian dengan diskon ±US$1,81 miliar (transaksi Aster) tercatat di 9 bulan 2025 dan tidak berulang (PintarSaham). Laba periode berjalan US$394,93 juta vs US$1,65 miliar sengaja tidak dipakai.",
     dps: null, harga: null,
     catatan: "Melapor dalam dolar AS; angka dalam juta US$ sesuai laporan, tidak dikonversi ke rupiah. Laba diatribusikan kepada pemilik entitas induk US$1,09 miliar (2025) vs rugi US$68,61 juta (2024), menurut Investortrust; laba tahun berjalan US$1,44–1,45 miliar (Investortrust, Warta Ekonomi) sengaja tidak dipakai. Laba 2025 ditopang keuntungan akuntansi sekali-waktu dari transaksi Aster (rilis resmi perusahaan kuartal III 2025 via MarketScreener; nilainya tidak disebut), dan pendapatan naik karena akuisisi. Karena itu TPIA tidak ikut Peringkat, sama seperti UNVR (aturan laba sekali-waktu Galih & Hana, 30 Okt). Neraca dikosongkan: sumber menyebut aset US$12,32 miliar dan liabilitas US$7,66 miliar, tetapi tidak menyebut ekuitas.",

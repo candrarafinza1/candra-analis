@@ -406,6 +406,18 @@
     tampilkan("laba");
   }
 
+  // Fajar & Galih (30 Okt): aturan laba sekali-waktu untuk laba 9 bulan. Pos sekali-waktu yang nilainya disebut sumber
+  // dibandingkan dengan laba 9 bulan tahun yang sama; ≥25% → beri catatan. Laba tidak dihitung ulang.
+  function sekaliWaktu9b(e) {
+    var w = e.sekaliWaktu9b, N = e.laba9b || {};
+    if (!w || !ada(w.nilai) || !ada(N[w.tahun]) || N[w.tahun] === 0) return null;
+    var porsi = Math.abs(w.nilai) / Math.abs(N[w.tahun]) * 100;
+    if (porsi < 25) return null;
+    var besar = porsi > 100 ? "lebih besar daripada laba" : "setara sekitar " + Math.round(porsi) + "% laba";
+    return "Laba Januari–September " + w.tahun + " " + (w.jenis === "beban" ? "ditekan" : "ditopang") + " " + w.ket +
+      ", " + besar + " periode itu. Karena itu naik-turun laba 9 bulan 2026 dibanding 2025 tidak sepenuhnya mencerminkan usaha rutin.";
+  }
+
   /* ---------- Radar Risiko (tim Galih) ---------- */
   // Mengembalikan daftar sinyal { tingkat: tinggi|sedang|info|aman, judul, isi, bukti }
   function periksa(e) {
@@ -446,6 +458,9 @@
         isi: "Laba Januari–September 2026 lebih rendah daripada periode yang sama tahun lalu.", bukti: bukti9 });
       else s.push({ tingkat: "info", judul: "Laba 9 bulan 2026 naik",
         isi: "Laba Januari–September 2026 lebih tinggi daripada periode yang sama tahun lalu. Angka kuartalan belum diaudit.", bukti: bukti9 });
+      var sw9 = sekaliWaktu9b(e);
+      if (sw9) s.push({ tingkat: "info", judul: "Perbandingan laba 9 bulan tidak sebanding", isi: sw9,
+        bukti: "Aturan laba sekali-waktu: lihat Metodologi. Angka laba tetap ditampilkan apa adanya." });
       if (e.catatan9b) s.push({ tingkat: "info", judul: "Catatan laba 9 bulan", isi: e.catatan9b,
         bukti: "Sumber tercantum di daftar sumber di bawah." });
     }
@@ -667,6 +682,8 @@
     akar.appendChild(el("p", { class: "catatan-metode", text: ada(g9)
       ? "Laba Januari–September: " + rp(N[2025]) + " (2025) → " + rp(N[2026]) + " (2026), " + ubah(g9) + ". Angka kuartalan belum diaudit."
       : "Laba Januari–September 2026 belum kami masukkan: laporan kuartal III belum rilis atau angkanya belum bisa dipastikan." }));
+    var sw9p = sekaliWaktu9b(e);
+    if (sw9p) akar.appendChild(el("p", { class: "catatan-metode" }, [sw9p + " ", el("a", { href: "metodologi.html#sekali-waktu", text: "Baca aturannya" }), "."]));
     // Batang pembanding laba 9 bulan (IDE.md #10): CSS saja, angka tetap tertulis; hanya bila kedua angka positif.
     if (ada(g9) && N[2025] > 0 && N[2026] > 0) {
       var maks9 = Math.max(N[2025], N[2026]);

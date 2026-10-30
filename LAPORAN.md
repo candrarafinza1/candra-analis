@@ -255,3 +255,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Nina: cek baru di `tests/cek.mjs` (bagian #sekali-waktu ada, peserta Peringkat memakai diluarPeringkat, tiap emiten sekaliWaktu disebut di metodologi). Lolos (8 halaman, 8 pelajaran, 31 emiten). Dicek 1280px & 390px: tanpa scroll horizontal, tanpa galat JS.
 - Fajar: laba 9 bulan dicek lagi (TLKM masih semester I 2026; KLBF, ICBP belum ada kuartal III 2026). Tetap 10 dari 31.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).
+
+## 30 Okt 2026, 19.15–19.30 WIB — Fajar, Galih, Hana, Nina (via Bima)
+- Fajar & Galih: aturan laba sekali-waktu kini juga untuk laba 9 bulan. Field baru `sekaliWaktu9b` (tahun, nilai, jenis keuntungan/beban, keterangan bersumber). Bila nilainya ≥25% laba 9 bulan tahun itu, Radar & profil memberi catatan "Perbandingan laba 9 bulan tidak sebanding"; tanda risiko tetap sesuai angka, laba tidak dihitung ulang. UNTR: beban sekali-waktu Rp3,5 T (Kontan) ≈78% laba 9 bulan 2026. TPIA: keuntungan transaksi Aster ±US$1,81 miliar (PintarSaham) lebih besar daripada laba 9 bulan 2025. Catatan: di backlog tertulis pos UNTR ada di 9 bulan 2025; menurut catatan data pos itu ada di 9 bulan 2026 (penyebab laba turun) — yang dipakai catatan data.
+- Hana: metodologi #sekali-waktu ditambah satu poin untuk laba 9 bulan (UNTR, TPIA).
+- Nina: cek baru di `tests/cek.mjs` (fungsi + batas 25%, dipakai Radar & profil, bentuk field, disebut di metodologi). Lolos (8 halaman, 8 pelajaran, 31 emiten). Profil UNTR/TPIA/ANTM, metodologi, Radar dicek 1280px & 390px: tanpa scroll horizontal, tanpa galat JS.
+- Fajar: laba 9 bulan dicek lagi (TLKM masih semester I; KLBF, ICBP belum ada kuartal III 2026). Tetap 10 dari 31; batas rilis 31 Okt.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).

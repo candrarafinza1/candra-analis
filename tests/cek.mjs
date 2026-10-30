@@ -153,6 +153,25 @@ ok(/function posisi\(kunci[\s\S]{0,900}peserta\(kunci\)/.test(readFileSync("asse
   for (const kode of ["UNVR", "INTP", "TPIA"]) ok(ASLI.some(e => e.kode === kode && e.sekaliWaktu), `${kode} seharusnya bertanda sekaliWaktu`);
 }
 
+// Nina (30 Okt 19.15): aturan sekali-waktu untuk laba 9 bulan (Fajar & Galih)
+{
+  const app = readFileSync("assets/app.js", "utf8");
+  const metod = readFileSync("metodologi.html", "utf8");
+  ok(/function sekaliWaktu9b\(e\)/.test(app) && /porsi < 25/.test(app), "app.js: sekaliWaktu9b() dengan batas 25% tidak ada");
+  ok(/var sw9 = sekaliWaktu9b\(e\)/.test(app), "app.js: Radar harus memakai sekaliWaktu9b()");
+  ok(/var sw9p = sekaliWaktu9b\(e\)/.test(app), "app.js: profil emiten harus memakai sekaliWaktu9b()");
+  for (const e of ASLI) {
+    if (!("sekaliWaktu9b" in e)) continue;
+    const w = e.sekaliWaktu9b;
+    ok(w && (w.tahun === 2025 || w.tahun === 2026) && typeof w.nilai === "number" && ["keuntungan", "beban"].includes(w.jenis) && typeof w.ket === "string" && w.ket.length >= 20,
+      `${e.kode}: sekaliWaktu9b harus { tahun 2025/2026, nilai angka, jenis keuntungan/beban, ket }`);
+    ok(e.laba9b && typeof e.laba9b[w.tahun] === "number", `${e.kode}: sekaliWaktu9b butuh laba9b tahun ${w.tahun}`);
+    ok(e.catatan9b && e.sumber && e.sumber.length > 0, `${e.kode}: sekaliWaktu9b butuh catatan9b dan sumber`);
+    ok(new RegExp(`<strong>${e.kode}</strong>`).test(metod), `${e.kode}: sekaliWaktu9b tetapi tidak disebut di metodologi`);
+  }
+  for (const kode of ["UNTR", "TPIA"]) ok(ASLI.some(e => e.kode === kode && e.sekaliWaktu9b), `${kode} seharusnya bertanda sekaliWaktu9b`);
+}
+
 // 3. Aturan Hana (syariah): halaman tidak boleh memakai bahasa ajakan
 const terlarang = /\b(wajib beli|pasti naik|buruan (beli|jual)|dijamin untung|rekomendasi beli)\b/i;
 for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"]) {
