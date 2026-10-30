@@ -202,3 +202,11 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Nina: cek baru di `tests/cek.mjs` (wadah tersembunyi bawaan, memakai `bacaSelesai()`); lolos (8 halaman, 8 pelajaran, 31 emiten). Beranda dicek 1280px & 390px untuk 5 keadaan (kosong, sebagian, semua, data rusak, penyimpanan diblokir): tanpa scroll horizontal, tanpa galat JS.
 - Fajar: laba 9 bulan dicek lagi (TLKM masih semester I; KLBF, ICBP belum ada kuartal III 2026). Tetap 8 dari 24; batas rilis 31 Okt.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).
+
+## 30 Okt 2026, 09.10–09.50 WIB — Fajar, Kirana, Dewi, Nina (via Bima)
+- Fajar: laba 9 bulan 2026 MYOR masuk: Rp2,43 T vs Rp1,85 T (laba atribusi; Kontan 29 Okt 2026 naik 31,23%, pembanding BCA Sekuritas; Rp2,47 T vs Rp1,88 T di media = laba periode berjalan, tidak dipakai). Kini 9 dari 24. CTRA, TLKM, KLBF, ICBP, INDF, CPIN, JPFA, SMGR, INTP, BSDE, MIKA, EXCL, ACES belum ada berita kuartal III 2026; batas rilis 31 Okt.
+- Kirana: tinjau #7 (posisi di Peringkat), #8 (daftar isi Metodologi), #9 (Lanjutkan belajar) di 390px & 1280px: semuanya baik, tanpa perbaikan. Tiga usulan baru di IDE.md (#10 batang laba 9 bulan, #11 saring sektor di Peringkat, #12 perkiraan waktu baca).
+- Bima: #10 dipilih untuk Dewi, #11 untuk Arif (masuk backlog agar tidak menganggur).
+- Dewi: profil emiten kini punya dua batang pembanding laba Januari–September 2025 vs 2026 (CSS saja, angka tetap tertulis, batang 2026 hijau bila naik/merah bila turun, tanpa animasi). Hanya muncul bila kedua angka positif (kini 9 emiten).
+- Nina: cek baru di `tests/cek.mjs` (batang hanya bila kedua angka positif, angka wajib tertulis; dicoba gagal dengan syarat dihapus); lolos (8 halaman, 8 pelajaran, 31 emiten). Profil MYOR, SIDO, UNTR, PTBA, TLKM, AADI dicek 390px & 1280px: tanpa scroll horizontal, tanpa galat JS.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).

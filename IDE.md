@@ -161,7 +161,7 @@ Hasil #7, #8, #9 dicek di 390px dan 1280px (tanpa scroll horizontal, tanpa galat
   tertulis (tidak bergantung warna). Hanya muncul bila kedua angka ada dan positif; rugi tetap kalimat.
 - Acuan tren: grafik mini "year-on-year" di aplikasi data saham, versi tanpa pustaka.
 - Dampak bagi pemula: naik/turun langsung terlihat. Tetap data, bukan saran. Ringan di HP murah (tanpa JS tambahan).
-- Status: dipilih Bima 30 Okt 09.30 untuk Dewi.
+- Status: dipilih Bima 30 Okt 09.30 untuk Dewi, dikerjakan Dewi 30 Okt 09.45 (tayang; batang abu-abu 2025, hijau/merah 2026, kolom angka sejajar). Menunggu tinjauan Kirana.
 
 ### 11. Peringkat: saring per sektor
 - **Kategori:** fitur — usaha **kecil**

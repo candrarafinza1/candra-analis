@@ -524,3 +524,13 @@ button.istilah:hover, button.istilah[aria-expanded="true"] { color: var(--malam-
   .tata-isi .isi-halaman a[aria-current="true"] { border-left-color: var(--bulan); }
   .tata-isi .artikel > h2:first-child { margin-top: 0; }
 }
+
+/* Batang pembanding laba 9 bulan di profil emiten (IDE.md #10). Tanpa animasi, angka selalu tertulis. */
+.batang9 { list-style: none; margin: .25rem 0 1.25rem; padding: 0; max-width: var(--lebar-teks); display: grid; gap: .4rem; }
+.batang9-baris { display: grid; grid-template-columns: 6.3rem minmax(0, 1fr) 6rem; align-items: center; gap: .6rem; font-size: .92rem; }
+.batang9-label { color: var(--tinta-2); white-space: nowrap; }
+.batang9-jalur { background: var(--garis); border-radius: var(--radius-kecil); height: .9rem; overflow: hidden; min-width: 0; }
+.batang9-isi { display: block; height: 100%; background: var(--tinta-2); border-radius: var(--radius-kecil); }
+.batang9-naik { background: var(--naik); }
+.batang9-turun { background: var(--turun); }
+.batang9-angka { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; white-space: nowrap; }

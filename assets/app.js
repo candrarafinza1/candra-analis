@@ -582,6 +582,21 @@
     akar.appendChild(el("p", { class: "catatan-metode", text: ada(g9)
       ? "Laba Januari–September: " + rp(N[2025]) + " (2025) → " + rp(N[2026]) + " (2026), " + persen(g9) + ". Angka kuartalan belum diaudit."
       : "Laba Januari–September 2026 belum kami masukkan: laporan kuartal III belum rilis atau angkanya belum bisa dipastikan." }));
+    // Batang pembanding laba 9 bulan (IDE.md #10): CSS saja, angka tetap tertulis; hanya bila kedua angka positif.
+    if (ada(g9) && N[2025] > 0 && N[2026] > 0) {
+      var maks9 = Math.max(N[2025], N[2026]);
+      var daftar9 = el("ul", { class: "batang9", "aria-label": "Perbandingan laba Januari–September 2025 dan 2026" });
+      [2025, 2026].forEach(function (th) {
+        var batang = el("span", { class: "batang9-isi" + (th === 2026 ? (N[2026] >= N[2025] ? " batang9-naik" : " batang9-turun") : ""), "aria-hidden": "true" });
+        batang.style.width = Math.max(4, Math.round(N[th] / maks9 * 100)) + "%";
+        daftar9.appendChild(el("li", { class: "batang9-baris" }, [
+          el("span", { class: "batang9-label", text: "Jan–Sep " + th }),
+          el("span", { class: "batang9-jalur" }, [batang]),
+          el("span", { class: "batang9-angka", text: rp(N[th]) })
+        ]));
+      });
+      akar.appendChild(daftar9);
+    }
 
     // Radar Risiko (rumus yang sama dengan radar.html)
     var s = periksa(e);

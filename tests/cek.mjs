@@ -97,6 +97,9 @@ ok(/function posisi\(kunci[\s\S]{0,900}peserta\(kunci\)/.test(readFileSync("asse
   const beranda = readFileSync("index.html", "utf8");
   ok(/id="lanjutkan-belajar"[^>]*\bhidden\b/.test(beranda), "index.html: wadah #lanjutkan-belajar harus ada dan tersembunyi secara bawaan");
   ok(/function renderLanjutkan\(\)[\s\S]{0,400}bacaSelesai\(\)/.test(js), "renderLanjutkan harus memakai bacaSelesai() yang sama dengan penanda kemajuan");
+  // Nina (30 Okt): batang laba 9 bulan (IDE.md #10) — hanya bila kedua angka positif, angka tetap tertulis, batang aria-hidden
+  ok(/N\[2025\] > 0 && N\[2026\] > 0[\s\S]{0,200}class: "batang9"/.test(js), "batang9 hanya boleh dibuat bila laba 9 bulan 2025 dan 2026 positif");
+  ok(/batang9-isi[^\n]*"aria-hidden": "true"/.test(js) && /class: "batang9-angka", text: rp\(/.test(js), "batang9: batang aria-hidden dan angka wajib tertulis");
 }
 
 // 3. Aturan Hana (syariah): halaman tidak boleh memakai bahasa ajakan
