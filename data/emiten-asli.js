@@ -212,6 +212,8 @@ window.EMITEN_ASLI = [
   {
     kode: "CPIN", nama: "PT Charoen Pokphand Indonesia Tbk", sektor: "Barang konsumen primer",
     desBaris: 220,
+    usaha: { teks: "Membuat pakan ternak, menghasilkan anak ayam umur sehari (DOC), dan mengolah makanan, terutama dari daging ayam. Pabriknya tersebar di beberapa wilayah Indonesia.",
+      sumber: { judul: "Lembar Saham: Profil Perusahaan CPIN (dibaca 30 Okt 2026)", url: "https://lembarsaham.com/fundamental-saham/emiten/CPIN" } },
     labaTahun: { 2024: 3710, 2025: 5640 },
     pendapatan: { 2024: 67470, 2025: 70700 },
     liabilitas2025: 11710, ekuitas2025: 34150,
