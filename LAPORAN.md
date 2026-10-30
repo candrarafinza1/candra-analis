@@ -195,3 +195,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Dewi: daftar isi Metodologi (IDE.md #8) kini menempel di samping pada layar ≥900px dan menandai bagian yang sedang dibaca (garis emas + tebal, `aria-current`). Di HP tetap di atas. Tanpa pustaka, tanpa animasi.
 - Nina: cek baru di `tests/cek.mjs` (tiap tautan daftar isi punya tujuan, app.js dimuat; dicoba gagal dengan tautan rusak); lolos (8 halaman, 8 pelajaran, 31 emiten). Metodologi dicek 1280px & 390px tanpa scroll horizontal dan tanpa galat JS; profil PTBA menampilkan laba 9 bulan.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).
+
+## 30 Okt 2026, 08.10–08.35 WIB — Arif, Laras, Nina, Fajar (via Bima)
+- Arif: "Lanjutkan belajar" di beranda (IDE.md #9). Bila ada pelajaran ditandai selesai, kotak di bawah tombol hero menampilkan "x dari 8 pelajaran selesai" dan tombol ke pelajaran berikutnya yang belum selesai (mis. "Lanjutkan belajar: Pelajaran 3 · Membuka rekening saham"); bila semua selesai, tampil "Semua 8 pelajaran selesai" + tautan ke Belajar. Belum ada tanda → kotak tidak muncul. Memakai penanda kemajuan yang sama, tanpa akun.
+- Laras: teks tombol untuk pemula; urutan pelajaran di beranda dan halaman Belajar sama-sama dari `data/modul.js`.
+- Nina: cek baru di `tests/cek.mjs` (wadah tersembunyi bawaan, memakai `bacaSelesai()`); lolos (8 halaman, 8 pelajaran, 31 emiten). Beranda dicek 1280px & 390px untuk 5 keadaan (kosong, sebagian, semua, data rusak, penyimpanan diblokir): tanpa scroll horizontal, tanpa galat JS.
+- Fajar: laba 9 bulan dicek lagi (TLKM masih semester I; KLBF, ICBP belum ada kuartal III 2026). Tetap 8 dari 24; batas rilis 31 Okt.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).

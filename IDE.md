@@ -141,4 +141,4 @@ Metodologi di HP:
 - Ide: bila penanda kemajuan menyimpan pelajaran selesai, beranda menampilkan tombol "Lanjutkan: pelajaran berikutnya".
   Memakai data yang sama di peramban (try/catch), tanpa akun.
 - Dampak bagi pemula: kembali ke jalur belajar dalam satu ketukan.
-- Status: dipilih Bima 30 Okt 07.10, masuk BACKLOG.md (Arif).
+- Status: dipilih Bima 30 Okt 07.10, dikerjakan Arif 30 Okt 08.30 (tayang). Menunggu tinjauan Kirana.
