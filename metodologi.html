@@ -39,10 +39,10 @@
     </section>
     <section class="bagian">
       <div class="wadah">
-        <article class="artikel">
-          <nav class="isi-halaman" aria-label="Isi halaman ini">
+        <div class="tata-isi">
+          <nav class="isi-halaman" id="isi-halaman" aria-label="Isi halaman ini">
             <p class="isi-halaman-judul">Isi halaman</p>
-            <ol>
+            <ol role="list">
               <li><a href="#syariah">Siapa yang masuk data</a></li>
               <li><a href="#sumber">Dari mana angkanya</a></li>
               <li><a href="#hitung">Cara menghitung tiap angka</a></li>
@@ -51,59 +51,61 @@
               <li><a href="#batasan">Batasan yang perlu Anda tahu</a></li>
             </ol>
           </nav>
-          <h2 id="syariah">1. Siapa yang masuk data</h2>
-          <p>Kami hanya memuat saham yang tercatat di <strong>Daftar Efek Syariah (DES)</strong> yang ditetapkan OJK. Saat ini kami memakai DES periode I 2026 (KEP-21/D.04/2026, berlaku 1 Juni 2026).</p>
-          <ul>
-            <li>Setiap saham baru dicocokkan dulu dengan barisnya di dokumen DES. Nomor baris itu kami simpan sebagai bukti.</li>
-            <li>Kami mulai dari perusahaan besar yang laporan keuangannya mudah diperiksa. Jadi daftar kami belum memuat semua saham syariah.</li>
-            <li>Masuk DES berarti saham itu memenuhi kriteria syariah OJK. Itu <strong>bukan</strong> tanda bahwa saham itu bagus atau disarankan untuk dibeli.</li>
-          </ul>
+          <article class="artikel">
+            <h2 id="syariah">1. Siapa yang masuk data</h2>
+            <p>Kami hanya memuat saham yang tercatat di <strong>Daftar Efek Syariah (DES)</strong> yang ditetapkan OJK. Saat ini kami memakai DES periode I 2026 (KEP-21/D.04/2026, berlaku 1 Juni 2026).</p>
+            <ul>
+              <li>Setiap saham baru dicocokkan dulu dengan barisnya di dokumen DES. Nomor baris itu kami simpan sebagai bukti.</li>
+              <li>Kami mulai dari perusahaan besar yang laporan keuangannya mudah diperiksa. Jadi daftar kami belum memuat semua saham syariah.</li>
+              <li>Masuk DES berarti saham itu memenuhi kriteria syariah OJK. Itu <strong>bukan</strong> tanda bahwa saham itu bagus atau disarankan untuk dibeli.</li>
+            </ul>
 
-          <h2 id="sumber">2. Dari mana angkanya</h2>
-          <p>Angka diambil dari laporan keuangan tahunan emiten, siaran pers resmi emiten, atau berita media keuangan yang mengutip laporan tersebut. Setiap emiten punya tautan sumber yang bisa Anda buka.</p>
-          <ul>
-            <li>Satuan angka adalah miliar rupiah, kecuali disebut lain.</li>
-            <li>Tahun yang dipakai adalah tahun buku 2024 dan 2025 (periode 1 Januari–31 Desember).</li>
-            <li>Bila sebuah angka belum ditemukan sumbernya, kolomnya kami biarkan kosong (tanda "–"). Kami tidak mengisi angka perkiraan.</li>
-            <li>Bila dua sumber memberi angka berbeda, emiten itu kami beri tanda <strong>periksa ulang</strong>. Datanya tetap tampil di Radar Risiko, tetapi tidak ikut Peringkat sampai angkanya pasti.</li>
-          </ul>
+            <h2 id="sumber">2. Dari mana angkanya</h2>
+            <p>Angka diambil dari laporan keuangan tahunan emiten, siaran pers resmi emiten, atau berita media keuangan yang mengutip laporan tersebut. Setiap emiten punya tautan sumber yang bisa Anda buka.</p>
+            <ul>
+              <li>Satuan angka adalah miliar rupiah, kecuali disebut lain.</li>
+              <li>Tahun yang dipakai adalah tahun buku 2024 dan 2025 (periode 1 Januari–31 Desember).</li>
+              <li>Bila sebuah angka belum ditemukan sumbernya, kolomnya kami biarkan kosong (tanda "–"). Kami tidak mengisi angka perkiraan.</li>
+              <li>Bila dua sumber memberi angka berbeda, emiten itu kami beri tanda <strong>periksa ulang</strong>. Datanya tetap tampil di Radar Risiko, tetapi tidak ikut Peringkat sampai angkanya pasti.</li>
+            </ul>
 
-          <h2 id="hitung">3. Cara menghitung tiap angka</h2>
-          <ul>
-            <li><strong>Laba bersih</strong>: laba yang menjadi hak pemilik perusahaan induk (di laporan disebut "laba yang diatribusikan kepada pemilik entitas induk"). Bila sumber tidak memisahkannya, kami tulis keterangannya di catatan emiten.</li>
-            <li><strong>Pertumbuhan laba</strong> dan <strong>pertumbuhan pendapatan</strong>: (angka 2025 − angka 2024) ÷ angka 2024 × 100%.</li>
-            <li><strong>ROE</strong>: laba bersih 2025 ÷ total ekuitas akhir 2025 × 100%.</li>
-            <li><strong>DER</strong>: total liabilitas akhir 2025 ÷ total ekuitas akhir 2025.</li>
-          </ul>
-          <div class="kotak-rumus">Sebelum neraca dimasukkan, kami cek bahwa liabilitas + ekuitas = total aset. Bila tidak cocok, angkanya tidak kami pakai.</div>
-          <p><strong>Emiten yang melapor dalam dolar AS.</strong> Beberapa perusahaan, misalnya perusahaan tambang batu bara, mineral, dan gas, menyusun laporan keuangannya dalam dolar AS. Angka mereka kami tampilkan dalam dolar AS sesuai laporannya (misalnya "US$450 juta") dan tidak kami ubah ke rupiah, karena hasil konversi bergantung pada kurs dan tanggal yang dipilih. Pertumbuhan laba, pertumbuhan pendapatan, ROE, dan DER tidak terpengaruh mata uang, jadi emiten ini tetap ikut Peringkat untuk ukuran tersebut. Untuk "Laba bersih terbesar", hanya emiten yang melapor dalam rupiah yang dibandingkan.</p>
-          <p><strong>Bank syariah.</strong> Bank syariah punya "dana syirkah temporer", yaitu dana nasabah dengan akad bagi hasil yang dicatat di luar liabilitas dan ekuitas. Karena itu DER bank syariah tidak kami hitung, agar tidak keliru terbaca sebagai utang tinggi.</p>
+            <h2 id="hitung">3. Cara menghitung tiap angka</h2>
+            <ul>
+              <li><strong>Laba bersih</strong>: laba yang menjadi hak pemilik perusahaan induk (di laporan disebut "laba yang diatribusikan kepada pemilik entitas induk"). Bila sumber tidak memisahkannya, kami tulis keterangannya di catatan emiten.</li>
+              <li><strong>Pertumbuhan laba</strong> dan <strong>pertumbuhan pendapatan</strong>: (angka 2025 − angka 2024) ÷ angka 2024 × 100%.</li>
+              <li><strong>ROE</strong>: laba bersih 2025 ÷ total ekuitas akhir 2025 × 100%.</li>
+              <li><strong>DER</strong>: total liabilitas akhir 2025 ÷ total ekuitas akhir 2025.</li>
+            </ul>
+            <div class="kotak-rumus">Sebelum neraca dimasukkan, kami cek bahwa liabilitas + ekuitas = total aset. Bila tidak cocok, angkanya tidak kami pakai.</div>
+            <p><strong>Emiten yang melapor dalam dolar AS.</strong> Beberapa perusahaan, misalnya perusahaan tambang batu bara, mineral, dan gas, menyusun laporan keuangannya dalam dolar AS. Angka mereka kami tampilkan dalam dolar AS sesuai laporannya (misalnya "US$450 juta") dan tidak kami ubah ke rupiah, karena hasil konversi bergantung pada kurs dan tanggal yang dipilih. Pertumbuhan laba, pertumbuhan pendapatan, ROE, dan DER tidak terpengaruh mata uang, jadi emiten ini tetap ikut Peringkat untuk ukuran tersebut. Untuk "Laba bersih terbesar", hanya emiten yang melapor dalam rupiah yang dibandingkan.</p>
+            <p><strong>Bank syariah.</strong> Bank syariah punya "dana syirkah temporer", yaitu dana nasabah dengan akad bagi hasil yang dicatat di luar liabilitas dan ekuitas. Karena itu DER bank syariah tidak kami hitung, agar tidak keliru terbaca sebagai utang tinggi.</p>
 
-          <h2 id="peringkat">4. Peringkat dan Radar Risiko</h2>
-          <p><strong>Peringkat</strong> hanya mengurutkan data: laba terbesar, pertumbuhan laba, pertumbuhan pendapatan, dan ROE. Hanya saham yang masih tercatat di DES dan angkanya lengkap yang ikut diurutkan.</p>
-          <p><strong>Radar Risiko</strong> memeriksa fakta berikut, masing-masing dengan buktinya:</p>
-          <ul>
-            <li>Tidak lagi tercatat di DES terbaru, atau perdagangan sedang dihentikan bursa: tanda <strong>tinggi</strong>.</li>
-            <li>Rugi bersih pada 2025, atau laba turun 50% atau lebih: tanda <strong>tinggi</strong>.</li>
-            <li>Laba turun kurang dari 50%, atau pendapatan turun: tanda <strong>sedang</strong>.</li>
-            <li>DER lebih dari 2 kali: tanda <strong>sedang</strong>.</li>
-            <li>Laba 9 bulan 2026 dibanding 9 bulan 2025 (bila sudah rilis): rugi atau turun 50% atau lebih = <strong>tinggi</strong>, turun kurang dari 50% = <strong>sedang</strong>, naik = catatan informasi.</li>
-          </ul>
-          <div class="kotak-penting">Peringkat dan Radar Risiko adalah ringkasan data, bukan saran membeli atau menjual. Angka masa lalu tidak menjamin hasil di masa depan.</div>
+            <h2 id="peringkat">4. Peringkat dan Radar Risiko</h2>
+            <p><strong>Peringkat</strong> hanya mengurutkan data: laba terbesar, pertumbuhan laba, pertumbuhan pendapatan, dan ROE. Hanya saham yang masih tercatat di DES dan angkanya lengkap yang ikut diurutkan.</p>
+            <p><strong>Radar Risiko</strong> memeriksa fakta berikut, masing-masing dengan buktinya:</p>
+            <ul>
+              <li>Tidak lagi tercatat di DES terbaru, atau perdagangan sedang dihentikan bursa: tanda <strong>tinggi</strong>.</li>
+              <li>Rugi bersih pada 2025, atau laba turun 50% atau lebih: tanda <strong>tinggi</strong>.</li>
+              <li>Laba turun kurang dari 50%, atau pendapatan turun: tanda <strong>sedang</strong>.</li>
+              <li>DER lebih dari 2 kali: tanda <strong>sedang</strong>.</li>
+              <li>Laba 9 bulan 2026 dibanding 9 bulan 2025 (bila sudah rilis): rugi atau turun 50% atau lebih = <strong>tinggi</strong>, turun kurang dari 50% = <strong>sedang</strong>, naik = catatan informasi.</li>
+            </ul>
+            <div class="kotak-penting">Peringkat dan Radar Risiko adalah ringkasan data, bukan saran membeli atau menjual. Angka masa lalu tidak menjamin hasil di masa depan.</div>
 
-          <h2 id="jadwal">5. Kapan data diperbarui</h2>
-          <ul>
-            <li><strong>Status syariah</strong>: OJK menerbitkan DES pada akhir Mei dan akhir November (berlaku 1 Juni dan 1 Desember). Setelah DES periode II 2026 terbit, status semua emiten kami cek ulang. Saham yang keluar dari daftar akan ditandai di Radar Risiko.</li>
-            <li><strong>Angka keuangan</strong>: diperbarui setelah emiten merilis laporan keuangan tahunan. Laba 9 bulan (Januari–September) mulai ditambahkan bertahap sejak akhir Oktober 2026, begitu emiten merilis laporan kuartal III. Radar Risiko membandingkannya dengan periode yang sama tahun lalu. Laporan kuartalan biasanya belum diaudit.</li>
-          </ul>
+            <h2 id="jadwal">5. Kapan data diperbarui</h2>
+            <ul>
+              <li><strong>Status syariah</strong>: OJK menerbitkan DES pada akhir Mei dan akhir November (berlaku 1 Juni dan 1 Desember). Setelah DES periode II 2026 terbit, status semua emiten kami cek ulang. Saham yang keluar dari daftar akan ditandai di Radar Risiko.</li>
+              <li><strong>Angka keuangan</strong>: diperbarui setelah emiten merilis laporan keuangan tahunan. Laba 9 bulan (Januari–September) mulai ditambahkan bertahap sejak akhir Oktober 2026, begitu emiten merilis laporan kuartal III. Radar Risiko membandingkannya dengan periode yang sama tahun lalu. Laporan kuartalan biasanya belum diaudit.</li>
+            </ul>
 
-          <h2 id="batasan">6. Batasan yang perlu Anda tahu</h2>
-          <ul>
-            <li>Sebagian angka berasal dari berita yang mengutip laporan keuangan, bukan langsung dari laporan itu. Bila Anda ingin memastikan, buka laporan resmi di situs emiten atau Bursa Efek Indonesia.</li>
-            <li>Angka emiten yang melapor dalam dolar AS tidak bisa dibandingkan langsung dengan angka rupiah. Bandingkan memakai persentase (pertumbuhan, ROE) atau DER.</li>
-            <li>Data bisa terlambat. Selalu lihat tahun buku dan tanggal sumber yang tercantum.</li>
-          </ul>
-        </article>
+            <h2 id="batasan">6. Batasan yang perlu Anda tahu</h2>
+            <ul>
+              <li>Sebagian angka berasal dari berita yang mengutip laporan keuangan, bukan langsung dari laporan itu. Bila Anda ingin memastikan, buka laporan resmi di situs emiten atau Bursa Efek Indonesia.</li>
+              <li>Angka emiten yang melapor dalam dolar AS tidak bisa dibandingkan langsung dengan angka rupiah. Bandingkan memakai persentase (pertumbuhan, ROE) atau DER.</li>
+              <li>Data bisa terlambat. Selalu lihat tahun buku dan tanggal sumber yang tercantum.</li>
+            </ul>
+          </article>
+        </div>
       </div>
     </section>
   </main>
@@ -114,5 +116,6 @@
       <p>Status syariah mengacu pada Daftar Efek Syariah yang ditetapkan OJK. Sumber data dicantumkan di setiap halaman. <a href="metodologi.html">Cara kami mengolah data</a> · <a href="emiten.html">Profil semua emiten</a>.</p>
     </div>
   </footer>
+  <script src="assets/app.js"></script>
 </body>
 </html>

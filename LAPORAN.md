@@ -188,3 +188,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Nina: cek baru di `tests/cek.mjs` (posisi wajib memakai `peserta()` yang sama); lolos (8 halaman, 8 pelajaran, 31 emiten). Dicek di 1280px & 390px (TLKM, AADI, TPIA, UNVR, EXCL): tanpa scroll horizontal, tanpa galat JS.
 - Fajar: laba 9 bulan tidak dicek sesi ini (terakhir 20.20, cek lagi 30 Okt pagi; batas rilis 31 Okt).
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).
+
+## 30 Okt 2026, 07.10–07.50 WIB — Fajar, Dewi, Nina (via Bima)
+- Bima: laporan masuk kerja pagi dikirim ke Rafinza (07.10). Usulan Kirana #9 "Lanjutkan belajar" dipilih untuk Arif; Laras diberi tugas pendukung (teks tombol + cek urutan pelajaran).
+- Fajar: laba 9 bulan 2026 PTBA masuk: Rp4,41 T vs Rp1,39 T (laba atribusi; CNBC Indonesia 29 Okt 2026, pembanding Bisnis 30 Okt 2025; runtut dengan angka semester I BCA Sekuritas). Kini 8 dari 24. BRIS baru ada laba hingga Agustus; TLKM, SMGR, INTP, KLBF, ICBP, INDF, CPIN belum rilis kuartal III.
+- Dewi: daftar isi Metodologi (IDE.md #8) kini menempel di samping pada layar ≥900px dan menandai bagian yang sedang dibaca (garis emas + tebal, `aria-current`). Di HP tetap di atas. Tanpa pustaka, tanpa animasi.
+- Nina: cek baru di `tests/cek.mjs` (tiap tautan daftar isi punya tujuan, app.js dimuat; dicoba gagal dengan tautan rusak); lolos (8 halaman, 8 pelajaran, 31 emiten). Metodologi dicek 1280px & 390px tanpa scroll horizontal dan tanpa galat JS; profil PTBA menampilkan laba 9 bulan.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).

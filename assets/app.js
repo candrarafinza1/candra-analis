@@ -813,6 +813,31 @@
   window.addEventListener("scroll", letakkan, { passive: true });
   document.addEventListener("scroll", letakkan, { passive: true, capture: true });
 
+  /* ---------- Metodologi: tandai bagian yang sedang dibaca (Dewi, IDE.md #8) ---------- */
+  function renderIsiHalaman() {
+    var nav = document.getElementById("isi-halaman");
+    if (!nav || !("IntersectionObserver" in window)) return;
+    var tautan = Array.prototype.slice.call(nav.querySelectorAll('a[href^="#"]'));
+    var judul = tautan.map(function (a) { return document.getElementById(a.getAttribute("href").slice(1)); })
+      .filter(Boolean);
+    function tandai(id) {
+      tautan.forEach(function (a) {
+        if (a.getAttribute("href") === "#" + id) a.setAttribute("aria-current", "true");
+        else a.removeAttribute("aria-current");
+      });
+    }
+    function perbarui() {
+      // Bagian aktif = judul terakhir yang sudah melewati sepertiga atas layar
+      var batas = window.innerHeight / 3, aktif = null;
+      judul.forEach(function (h) { if (h.getBoundingClientRect().top <= batas) aktif = h.id; });
+      if (aktif) tandai(aktif); else tautan.forEach(function (a) { a.removeAttribute("aria-current"); });
+    }
+    var io = new IntersectionObserver(perbarui, { rootMargin: "0px 0px -66% 0px" });
+    judul.forEach(function (h) { io.observe(h); });
+    window.addEventListener("hashchange", perbarui);
+    perbarui();
+  }
+
   /* ---------- Tandai menu aktif ---------- */
   function tandaiMenu() {
     var hal = location.pathname.split("/").pop() || "index.html";
@@ -832,4 +857,5 @@
   renderProfil();
   renderRujukan();
   renderAsisten();
+  renderIsiHalaman();
 })();

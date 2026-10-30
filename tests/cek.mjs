@@ -84,6 +84,15 @@ ok(/function posisi\(kunci[\s\S]{0,900}peserta\(kunci\)/.test(readFileSync("asse
   const css = readFileSync("assets/styles.css", "utf8");
   ok(!/@view-transition/.test(css) || /prefers-reduced-motion: no-preference\)\s*\{\s*@view-transition/.test(css),
     "@view-transition harus di dalam prefers-reduced-motion: no-preference");
+  // Nina (30 Okt): daftar isi Metodologi (IDE.md #8) — tiap tautan menuju judul yang ada, app.js dimuat
+  const metod = readFileSync("metodologi.html", "utf8");
+  const navIsi = (metod.match(/<nav class="isi-halaman" id="isi-halaman"[\s\S]*?<\/nav>/) || [""])[0];
+  ok(navIsi, "metodologi.html: nav#isi-halaman tidak ditemukan");
+  for (const [, id] of navIsi.matchAll(/href="#([^"]+)"/g))
+    ok(new RegExp(`id="${id}"`).test(metod), `metodologi.html: tautan #${id} tidak punya tujuan`);
+  ok(/src="assets\/app\.js"/.test(metod), "metodologi.html harus memuat assets/app.js untuk penanda bagian");
+  ok(!/scroll-behavior:\s*smooth/.test(css) || /prefers-reduced-motion: no-preference\)[^}]*scroll-behavior/.test(css),
+    "scroll halus hanya boleh bila pengguna tidak meminta gerak dikurangi");
 }
 
 // 3. Aturan Hana (syariah): halaman tidak boleh memakai bahasa ajakan

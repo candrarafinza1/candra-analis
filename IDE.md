@@ -134,7 +134,7 @@ Metodologi di HP:
 - Ide: di desktop (≥900px), kotak "Isi halaman" menempel di samping (sticky) dan menebalkan bagian yang sedang dibaca.
   Di HP tetap di atas. Tanpa pustaka.
 - Dampak bagi pemula: tidak tersesat di halaman panjang.
-- Status: dipilih Bima 29 Okt 20.20, masuk BACKLOG.md (Dewi).
+- Status: dipilih Bima 29 Okt 20.20, dikerjakan Dewi 30 Okt 07.45 (tayang). Menunggu tinjauan Kirana.
 
 ### 9. Beranda: "Lanjutkan belajar"
 - **Kategori:** fitur — usaha **kecil**

@@ -501,3 +501,17 @@ button.istilah:hover, button.istilah[aria-expanded="true"] { color: var(--malam-
   .ubin-nilai { font-size: 1.15rem; overflow-wrap: anywhere; }
   .ubin-label, .ubin-ket { font-size: .8rem; }
 }
+
+/* Metodologi: daftar isi menempel di samping (desktop) + penanda bagian yang sedang dibaca (Dewi, IDE.md #8) */
+.tata-isi h2[id] { scroll-margin-top: 16px; }
+.isi-halaman a[aria-current="true"] { font-weight: 700; color: var(--malam); }
+@media (min-width: 900px) {
+  .tata-isi { display: grid; grid-template-columns: 16rem minmax(0, var(--lebar-teks)); column-gap: 48px; align-items: start; }
+  .tata-isi .isi-halaman { position: sticky; top: 16px; margin-bottom: 0; }
+  .tata-isi .isi-halaman ol { list-style: none; padding-left: 0; counter-reset: isi; }
+  .tata-isi .isi-halaman li { counter-increment: isi; }
+  .tata-isi .isi-halaman a { display: block; border-left: 3px solid transparent; padding: 6px 0 6px 10px; line-height: 1.4; }
+  .tata-isi .isi-halaman a::before { content: counter(isi) ". "; }
+  .tata-isi .isi-halaman a[aria-current="true"] { border-left-color: var(--bulan); }
+  .tata-isi .artikel > h2:first-child { margin-top: 0; }
+}
