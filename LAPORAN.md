@@ -229,3 +229,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Nina: cek baru di `tests/cek.mjs` (menitBaca dari `m.isi` saja, kartu memakai teksWaktuBaca, `durasi` tidak boleh ditulis tangan; dicoba gagal dengan `durasi` dikembalikan). Lolos (8 halaman, 8 pelajaran, 31 emiten). Belajar & pelajaran dicek 1280px & 390px: tanpa scroll horizontal, tanpa galat JS.
 - Fajar: laba 9 bulan dicek lagi (TLKM masih semester I; KLBF, ICBP belum ada kuartal III 2026). Tetap 10 dari 31; batas rilis 31 Okt.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).
+
+## 30 Okt 2026, 15.20–15.35 WIB — Dewi, Nina, Fajar (via Bima)
+- Dewi: Radar Risiko (IDE.md #6) selesai. (a) Sebelum memilih saham tampil kotak "Cara membaca hasil Radar": lampu merah/kuning/biru/hijau beserta artinya, ditegaskan warna bukan saran membeli atau menjual. (b) Setelah memilih, laba dan pendapatan 2024 vs 2025 tampil sebagai batang (CSS saja, angka tetap tertulis, batang 2025 hijau bila naik/merah bila turun), hanya bila kedua angka positif; animasi tumbuh 0,6 detik hanya di `prefers-reduced-motion: no-preference`. Keputusan ringan: label batang cukup tahun ("2024"/"2025") dengan judul kecil "Laba"/"Pendapatan", karena "Pendapatan 2024" meluap di 390px.
+- Nina: 4 cek baru di `tests/cek.mjs` (syarat angka positif, angka tertulis + batang aria-hidden, panduan sebelum memilih, animasi dalam reduced-motion). Lolos (8 halaman, 8 pelajaran, 31 emiten). Radar dicek 1280px & 390px untuk kosong, TLKM, TPIA, EXCL, UNTR, MDKA: tanpa scroll horizontal, tanpa galat JS, label tidak meluap.
+- Fajar: laba 9 bulan dicek lagi (TLKM masih semester I; KLBF, ICBP belum ada kuartal III 2026). Tetap 10 dari 31; batas rilis 31 Okt.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).

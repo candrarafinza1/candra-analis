@@ -462,6 +462,46 @@
     return s.sort(function (a, b) { return urut[a.tingkat] - urut[b.tingkat]; });
   }
 
+  // Radar (IDE.md #6, Dewi): batang pembanding 2024 vs 2025. CSS saja, angka tetap tertulis;
+  // hanya bila kedua angka positif. Animasi tumbuh hanya di prefers-reduced-motion: no-preference (styles.css).
+  function batangTahun(judul, D, rp) {
+    if (!(ada(D[2024]) && ada(D[2025]) && D[2024] > 0 && D[2025] > 0)) return null;
+    var maks = Math.max(D[2024], D[2025]);
+    var daftar = el("ul", { class: "batang9 batang-tahun", "aria-label": judul + " 2024 dan 2025" });
+    [2024, 2025].forEach(function (th) {
+      var batang = el("span", { class: "batang9-isi batang-tumbuh" + (th === 2025 ? (D[2025] >= D[2024] ? " batang9-naik" : " batang9-turun") : ""), "aria-hidden": "true" });
+      batang.style.width = Math.max(4, Math.round(D[th] / maks * 100)) + "%";
+      daftar.appendChild(el("li", { class: "batang9-baris" }, [
+        el("span", { class: "batang9-label", text: String(th) }),
+        el("span", { class: "batang9-jalur" }, [batang]),
+        el("span", { class: "batang9-angka", text: rp(D[th]) })
+      ]));
+    });
+    return el("div", { class: "batang-kelompok" }, [el("p", { class: "batang-judul", "aria-hidden": "true", text: judul }), daftar]);
+  }
+
+  // Radar (IDE.md #6, Dewi): contoh cara membaca hasil, tampil sebelum emiten dipilih.
+  var PANDUAN_RADAR = [
+    { tingkat: "tinggi", warna: "Merah", arti: "Tanda berat, misalnya rugi, laba turun lebih dari separuh, atau tidak lagi tercatat sebagai saham syariah." },
+    { tingkat: "sedang", warna: "Kuning", arti: "Tanda yang perlu dicermati, misalnya laba atau pendapatan menurun, atau utang lebih dari dua kali modal." },
+    { tingkat: "info", warna: "Biru", arti: "Keterangan tambahan, misalnya catatan data dari tim kami atau laba 9 bulan yang naik." },
+    { tingkat: "aman", warna: "Hijau", arti: "Tidak ada tanda risiko dari pemeriksaan ini. Tetap pantau laporan berikutnya." }
+  ];
+  function panduanRadar() {
+    var ul = el("ul", { class: "panduan-radar" });
+    PANDUAN_RADAR.forEach(function (x) {
+      ul.appendChild(el("li", { class: "panduan-baris" }, [
+        el("span", { class: "lampu lampu-" + x.tingkat, "aria-hidden": "true" }),
+        el("p", null, [el("strong", { text: x.warna + ": " }), document.createTextNode(x.arti)])
+      ]));
+    });
+    return el("div", { class: "kotak-panduan" }, [
+      el("h2", { class: "panduan-judul", text: "Cara membaca hasil Radar" }),
+      el("p", { class: "catatan-metode", text: "Setiap temuan diberi warna. Warna menunjukkan jenis temuan, bukan saran membeli atau menjual." }),
+      ul
+    ]);
+  }
+
   function renderRadar() {
     var akar = document.getElementById("radar");
     if (!akar) return;
@@ -485,6 +525,7 @@
       var e = EMITEN.find(function (x) { return x.kode === pilih.value; });
       if (!e) {
         hasil.appendChild(el("p", { class: "catatan-metode", text: "Pilih satu kode saham untuk melihat hasil pemeriksaan. Saham yang belum ada di daftar sedang dikumpulkan datanya." }));
+        hasil.appendChild(panduanRadar());
         return;
       }
       var s = periksa(e);
@@ -499,6 +540,13 @@
         ]));
       });
       hasil.appendChild(ul);
+      var bL = batangTahun("Laba", e.labaTahun || {}, uang(e)), bP = batangTahun("Pendapatan", e.pendapatan || {}, uang(e));
+      if (bL || bP) {
+        hasil.appendChild(el("h3", { style: "margin-top:20px;font-size:1.05rem", text: "Laba dan pendapatan 2024 vs 2025" }));
+        if (bL) hasil.appendChild(bL);
+        if (bP) hasil.appendChild(bP);
+        hasil.appendChild(el("p", { class: "catatan-metode", text: "Batang 2025 hijau bila naik, merah bila turun dibanding 2024. Batang hanya tampil bila kedua angka positif." }));
+      }
       var sumber = el("ul", { class: "daftar-sumber" });
       (e.sumber || []).forEach(function (x) {
         sumber.appendChild(el("li", null, [el("a", { href: x.url, target: "_blank", rel: "noopener", text: x.judul })]));

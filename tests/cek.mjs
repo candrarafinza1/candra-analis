@@ -104,6 +104,11 @@ ok(/function posisi\(kunci[\s\S]{0,900}peserta\(kunci\)/.test(readFileSync("asse
   ok(/el\("label", \{ for: "pilih-sektor"/.test(js), "select #pilih-sektor wajib punya label");
   ok(/urutkan\(kunci, sektor\)/.test(js), "Peringkat harus memakai sektor terpilih saat mengurutkan");
   ok(/batang9-isi[^\n]*"aria-hidden": "true"/.test(js) && /class: "batang9-angka", text: rp\(/.test(js), "batang9: batang aria-hidden dan angka wajib tertulis");
+  // Nina (30 Okt 15.20): Radar (IDE.md #6) — panduan warna sebelum memilih; batang 2024 vs 2025 hanya bila kedua angka positif, angka tertulis
+  ok(/function batangTahun\(judul, D, rp\)[\s\S]{0,120}D\[2024\] > 0 && D\[2025\] > 0\)\) return null/.test(js), "batangTahun hanya boleh dibuat bila angka 2024 dan 2025 positif");
+  ok(/batang-tumbuh[^\n]*"aria-hidden": "true"/.test(js) && /function batangTahun[\s\S]{0,900}class: "batang9-angka", text: rp\(D\[th\]\)/.test(js), "batangTahun: batang aria-hidden dan angka wajib tertulis");
+  ok(/hasil\.appendChild\(panduanRadar\(\)\)/.test(js), "Radar harus menampilkan panduan cara membaca sebelum emiten dipilih");
+  ok(/@media \(prefers-reduced-motion: no-preference\) \{\s*\.batang-tumbuh/.test(css), "animasi batang Radar hanya di prefers-reduced-motion: no-preference");
   // Nina (30 Okt 14.15): waktu baca (IDE.md #12) — dihitung dari isi saja, bukan ditulis tangan
   ok(/function menitBaca\(m\)[\s\S]{0,200}m\.isi[\s\S]{0,300}Math\.max\(1, Math\.ceil\(kata \/ KATA_PER_MENIT\)\)/.test(js) && !/menitBaca[^\n]*kuis/.test(js), "menitBaca harus menghitung dari m.isi saja (tanpa kuis), dibulatkan ke atas, minimal 1");
   ok(/class: "durasi", text: teksWaktuBaca\(m\)/.test(js), "kartu pelajaran harus memakai teksWaktuBaca()");

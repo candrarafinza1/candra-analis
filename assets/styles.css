@@ -544,3 +544,24 @@ button.istilah:hover, button.istilah[aria-expanded="true"] { color: var(--malam-
 .batang9-naik { background: var(--naik); }
 .batang9-turun { background: var(--turun); }
 .batang9-angka { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; white-space: nowrap; }
+
+/* Radar Risiko (IDE.md #6, Dewi): panduan warna + batang 2024 vs 2025 */
+.kotak-panduan { background: var(--putih); border: 1px solid var(--garis); border-radius: var(--radius); padding: 18px 20px; margin-top: 16px; max-width: var(--lebar-teks); }
+.panduan-judul { font-size: 1.15rem; margin: 0 0 .3em; }
+.panduan-radar { list-style: none; padding: 0; margin: 12px 0 0; display: grid; gap: 10px; }
+.panduan-baris { display: grid; grid-template-columns: 1.1rem minmax(0, 1fr); gap: .7rem; align-items: start; }
+.panduan-baris p { margin: 0; color: var(--tinta-2); font-size: .95rem; }
+.panduan-baris strong { color: var(--tinta); }
+.lampu { width: 1.1rem; height: 1.1rem; border-radius: 50%; margin-top: .2em; display: block; }
+.lampu-tinggi { background: var(--turun); }
+.lampu-sedang { background: var(--waspada); }
+.lampu-info { background: var(--malam-2); }
+.lampu-aman { background: var(--naik); }
+.batang-kelompok { margin: .5rem 0 .8rem; max-width: var(--lebar-teks); }
+.batang-judul { margin: 0 0 .2rem; font-weight: 700; font-size: .95rem; }
+.batang-tahun { margin: 0; }
+.batang-tahun .batang9-baris { grid-template-columns: 2.6rem minmax(0, 1fr) 6.6rem; }
+@media (prefers-reduced-motion: no-preference) {
+  .batang-tumbuh { transform-origin: left center; animation: tumbuh-datar .6s cubic-bezier(.3,.8,.3,1) both; }
+}
+@keyframes tumbuh-datar { from { transform: scaleX(0); } to { transform: scaleX(1); } }

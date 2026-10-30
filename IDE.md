@@ -83,7 +83,7 @@ Acuan tren 2026 yang dipakai:
 - Ide: (a) sebelum memilih, tampilkan contoh cara membaca hasil (ikon lampu hijau/kuning/merah + artinya); (b) setelah memilih, laba dan pendapatan 2024 vs 2025 tampil sebagai dua batang horizontal yang "tumbuh" sekali (CSS `transform: scaleX`, 0,6 detik), dengan angka dan sumber tetap tertulis sebagai teks. Tanpa animasi bila `prefers-reduced-motion`.
 - Acuan tren: visualisasi data mikro di aplikasi keuangan 2026.
 - Dampak bagi pemula: perubahan naik/turun langsung terlihat, tetap berbasis data bersumber.
-- Status: dipilih Bima 30 Okt 13.10 untuk Dewi, masuk BACKLOG.md.
+- Status: dipilih Bima 30 Okt 13.10 untuk Dewi; selesai 30 Okt 15.30 (label batang cukup tahun saja agar muat di 390px).
 
 ## Tinjauan Kirana — 28 Okt 2026, 18.35 WIB
 
