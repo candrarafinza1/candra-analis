@@ -222,3 +222,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: laba 9 bulan 2026 TPIA masuk: laba atribusi US$279,81 jt vs US$1,30 miliar (CNBC Indonesia 30 Okt 2026, PintarSaham; turun ±78% karena keuntungan sekali-waktu transaksi Aster di 2025 tidak berulang, dicatat di `catatan9b`). Kini 10 dari 31 emiten. Rp2,41 T JPFA di hasil pencarian ternyata angka 2025, tidak dipakai. 21 emiten lain belum ada berita kuartal III 2026.
 - Nina: `node tests/cek.mjs` lolos (8 halaman, 8 pelajaran, 31 emiten). Profil TPIA dicek 390px & 1280px: batang laba 9 bulan tampil, tanpa scroll horizontal, tanpa galat JS; Radar tanpa galat.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).
+
+## 30 Okt 2026, 14.15–14.25 WIB — Arif, Laras, Nina, Fajar (via Bima)
+- Arif: perkiraan waktu baca (IDE.md #12). Kartu di halaman Belajar dan judul tiap pelajaran kini menampilkan "Waktu baca ± n menit", dihitung otomatis dari jumlah kata isi pelajaran (±200 kata/menit, dibulatkan ke atas, minimal 1). Modul PDF memakai rumus yang sama dan sudah dibuat ulang.
+- Laras: hanya isi pelajaran yang dihitung (kuis tidak); teks "Waktu baca ± n menit". Keputusan ringan Bima: field `durasi` lama (7–20 menit, ditulis tangan tanpa dasar hitungan) dihapus karena hasil hitung hanya 1–2 menit (118–253 kata); angka yang tampil kini bisa diperiksa.
+- Nina: cek baru di `tests/cek.mjs` (menitBaca dari `m.isi` saja, kartu memakai teksWaktuBaca, `durasi` tidak boleh ditulis tangan; dicoba gagal dengan `durasi` dikembalikan). Lolos (8 halaman, 8 pelajaran, 31 emiten). Belajar & pelajaran dicek 1280px & 390px: tanpa scroll horizontal, tanpa galat JS.
+- Fajar: laba 9 bulan dicek lagi (TLKM masih semester I; KLBF, ICBP belum ada kuartal III 2026). Tetap 10 dari 31; batas rilis 31 Okt.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).

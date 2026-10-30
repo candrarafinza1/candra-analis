@@ -1,6 +1,7 @@
 /* Kurikulum belajar Candra Analis — disusun tim Sari (Konten Edukasi),
    diperiksa tim Hana (Syariah & Kepatuhan).
-   Setiap pelajaran: id, judul, ringkas, durasi, kuis, isi (HTML).
+   Setiap pelajaran: id, judul, ringkas, kuis, isi (HTML).
+   Waktu baca tidak ditulis tangan: dihitung dari jumlah kata isi (assets/app.js, menitBaca).
    kuis (tim Laras, bahasa ditinjau Sari, soal syariah ditinjau Hana): 3 soal,
    tiap soal { soal, pilihan[3], benar = indeks pilihan yang benar, jelas = penjelasan singkat }. */
 window.MODUL = [
@@ -8,7 +9,6 @@ window.MODUL = [
     id: "apa-itu-saham",
     judul: "Apa itu saham?",
     ringkas: "Saham sebagai bukti kepemilikan perusahaan, dan dua cara saham memberi hasil.",
-    durasi: "8 menit",
     kuis: [
       {
         "soal": "Apa arti memegang saham sebuah perusahaan?",
@@ -64,7 +64,6 @@ window.MODUL = [
     id: "saham-syariah",
     judul: "Saham syariah dan Daftar Efek Syariah",
     ringkas: "Bagaimana sebuah saham dinyatakan syariah, siapa yang menetapkan, dan seberapa sering daftarnya diperbarui.",
-    durasi: "10 menit",
     kuis: [
       {
         "soal": "Siapa yang menetapkan Daftar Efek Syariah (DES)?",
@@ -127,7 +126,6 @@ window.MODUL = [
     id: "buka-rekening",
     judul: "Membuka rekening saham",
     ringkas: "Rekening efek, RDN, dan cara memastikan sekuritas Anda resmi.",
-    durasi: "7 menit",
     kuis: [
       {
         "soal": "Di mana uang transaksi saham Anda disimpan?",
@@ -190,7 +188,6 @@ window.MODUL = [
     id: "lot-dan-transaksi",
     judul: "Lot, harga, dan biaya transaksi",
     ringkas: "Berapa uang yang dibutuhkan untuk membeli saham pertama Anda, beserta biayanya.",
-    durasi: "9 menit",
     kuis: [
       {
         "soal": "Satu lot saham di BEI sama dengan berapa lembar?",
@@ -246,7 +243,6 @@ window.MODUL = [
     id: "laporan-keuangan",
     judul: "Membaca laporan keuangan",
     ringkas: "Tujuh angka yang paling sering dipakai untuk menilai kesehatan dan harga sebuah saham.",
-    durasi: "12 menit",
     kuis: [
       {
         "soal": "Rumus ROE adalah…",
@@ -312,7 +308,6 @@ window.MODUL = [
     id: "mengelola-risiko",
     judul: "Mengelola risiko",
     ringkas: "Kebiasaan sederhana yang melindungi modal Anda, dan jebakan yang paling sering menjerat pemula.",
-    durasi: "9 menit",
     kuis: [
       {
         "soal": "Apa yang sebaiknya disiapkan sebelum berinvestasi saham?",
@@ -368,7 +363,6 @@ window.MODUL = [
     id: "praktik-beli-pertama",
     judul: "Praktik: membeli saham pertama Anda",
     ringkas: "Latihan dengan uang virtual dulu, lalu langkah demi langkah membeli satu lot sungguhan.",
-    durasi: "15 menit",
     kuis: [
       {
         "soal": "Apa langkah pertama yang disarankan pelajaran ini?",
@@ -440,7 +434,6 @@ window.MODUL = [
     id: "praktik-analisis-sendiri",
     judul: "Praktik: menganalisis perusahaan sendiri",
     ringkas: "Lembar kerja sepuluh langkah untuk menilai satu perusahaan dari laporan keuangannya.",
-    durasi: "20 menit",
     kuis: [
       {
         "soal": "Apa yang pertama kali dicari di Bagian A lembar kerja?",

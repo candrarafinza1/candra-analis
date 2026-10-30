@@ -104,6 +104,10 @@ ok(/function posisi\(kunci[\s\S]{0,900}peserta\(kunci\)/.test(readFileSync("asse
   ok(/el\("label", \{ for: "pilih-sektor"/.test(js), "select #pilih-sektor wajib punya label");
   ok(/urutkan\(kunci, sektor\)/.test(js), "Peringkat harus memakai sektor terpilih saat mengurutkan");
   ok(/batang9-isi[^\n]*"aria-hidden": "true"/.test(js) && /class: "batang9-angka", text: rp\(/.test(js), "batang9: batang aria-hidden dan angka wajib tertulis");
+  // Nina (30 Okt 14.15): waktu baca (IDE.md #12) — dihitung dari isi saja, bukan ditulis tangan
+  ok(/function menitBaca\(m\)[\s\S]{0,200}m\.isi[\s\S]{0,300}Math\.max\(1, Math\.ceil\(kata \/ KATA_PER_MENIT\)\)/.test(js) && !/menitBaca[^\n]*kuis/.test(js), "menitBaca harus menghitung dari m.isi saja (tanpa kuis), dibulatkan ke atas, minimal 1");
+  ok(/class: "durasi", text: teksWaktuBaca\(m\)/.test(js), "kartu pelajaran harus memakai teksWaktuBaca()");
+  ok(!MODUL.some(m => "durasi" in m), "data/modul.js: durasi tidak boleh ditulis tangan lagi (dihitung otomatis)");
 }
 
 // 3. Aturan Hana (syariah): halaman tidak boleh memakai bahasa ajakan

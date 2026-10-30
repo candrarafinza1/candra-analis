@@ -196,6 +196,14 @@ def kaki_halaman(c, doc):
     c.restoreState()
 
 
+def menit_baca(m):
+    """Sama dengan menitBaca() di assets/app.js: kata isi (tanpa kuis), 200 kata/menit, dibulatkan ke atas, min. 1."""
+    import math, re
+    teks = re.sub(r"&[a-z0-9#]+;", " ", re.sub(r"<[^>]+>", " ", m.get("isi", "")), flags=re.I)
+    kata = [w for w in teks.split() if re.search(r"[0-9A-Za-z\u00C0-\u024F]", w)]
+    return max(1, math.ceil(len(kata) / 200))
+
+
 def main():
     modul = baca_data("data/modul.js", "MODUL")
     rujukan = baca_data("data/rujukan.js", "RUJUKAN")
@@ -225,7 +233,7 @@ def main():
     isi.append(Spacer(1, 10))
     isi.append(Paragraph("Daftar isi", GAYA["h2"]))
     for i, m in enumerate(modul, 1):
-        isi.append(Paragraph(f"<b>{i}.</b>  {m['judul']}  <font color='#4a5266' size='9'>({m['durasi']})</font>", GAYA["daftar"]))
+        isi.append(Paragraph(f"<b>{i}.</b>  {m['judul']}  <font color='#4a5266' size='9'>(waktu baca ± {menit_baca(m)} menit)</font>", GAYA["daftar"]))
     isi.append(Spacer(1, 14))
     isi += kotak(
         "Candra Analis adalah platform belajar dan penyaji data. Kami bukan penasihat investasi dan "
@@ -235,7 +243,7 @@ def main():
     # Pelajaran
     for i, m in enumerate(modul, 1):
         isi.append(PageBreak())
-        isi.append(Paragraph(f"Pelajaran {i} dari {len(modul)} · {m['durasi']}", GAYA["meta"]))
+        isi.append(Paragraph(f"Pelajaran {i} dari {len(modul)} · waktu baca ± {menit_baca(m)} menit", GAYA["meta"]))
         isi.append(Paragraph(m["judul"], GAYA["h1"]))
         isi.append(Paragraph(m["ringkas"], GAYA["meta"]))
         p = KeFlowable()

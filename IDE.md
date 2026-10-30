@@ -175,5 +175,5 @@ Hasil #7, #8, #9 dicek di 390px dan 1280px (tanpa scroll horizontal, tanpa galat
 - **Kategori:** konten/tampilan — usaha **kecil**
 - Ide: "± 6 menit baca" di kartu pelajaran, dihitung dari jumlah kata di `data/modul.js` (±200 kata/menit).
 - Dampak bagi pemula: tahu berapa lama waktu yang dibutuhkan sebelum mulai.
-- Status: dipilih Bima 30 Okt 13.10 untuk Arif, masuk BACKLOG.md.
+- Status: dipilih Bima 30 Okt 13.10 untuk Arif, dikerjakan Arif 30 Okt 14.20 (tayang). Hasil hitung: 1–2 menit per pelajaran (118–253 kata), jauh di bawah perkiraan lama 7–20 menit yang ditulis tangan; perkiraan lama dihapus agar angka bisa diperiksa. Menunggu tinjauan Kirana.
 

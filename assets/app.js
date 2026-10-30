@@ -114,6 +114,17 @@
     return kotak;
   }
 
+  /* ---------- Perkiraan waktu baca (Arif, IDE.md #12; teks Laras) ----------
+     Dihitung dari jumlah kata isi pelajaran saja (tanpa kuis), ±200 kata per menit,
+     dibulatkan ke atas, minimal 1 menit. Rumus yang sama dipakai modul PDF. */
+  var KATA_PER_MENIT = 200;
+  function menitBaca(m) {
+    var teks = String(m.isi || "").replace(/<[^>]+>/g, " ").replace(/&[a-z0-9#]+;/gi, " ");
+    var kata = teks.split(/\s+/).filter(function (w) { return /[0-9A-Za-z\u00C0-\u024F]/.test(w); }).length;
+    return Math.max(1, Math.ceil(kata / KATA_PER_MENIT));
+  }
+  function teksWaktuBaca(m) { return "Waktu baca ± " + menitBaca(m) + " menit"; }
+
   /* ---------- Jalur belajar ---------- */
   function renderJalur(id, lengkap) {
     var ol = document.getElementById(id);
@@ -124,7 +135,7 @@
       var li = el("li", { "data-no": sudah ? "✓" : String(i + 1), class: sudah ? "selesai" : null }, [
         el("h3", null, [el("a", { href: "pelajaran.html?m=" + m.id, text: m.judul }), sudah ? el("span", { class: "label-selesai", text: "Selesai" }) : null]),
         el("p", { text: m.ringkas }),
-        lengkap ? el("span", { class: "durasi", text: m.durasi }) : null
+        lengkap ? el("span", { class: "durasi", text: teksWaktuBaca(m) }) : null
       ]);
       if (!sudah) li.removeAttribute("class");
       ol.appendChild(li);
@@ -236,7 +247,7 @@
     document.title = m.judul + " · Belajar · Candra Analis";
     document.getElementById("judul-pelajaran").textContent = m.judul;
     document.getElementById("sub-pelajaran").textContent =
-      "Pelajaran " + (idx + 1) + " dari " + MODUL.length + " · " + m.durasi;
+      "Pelajaran " + (idx + 1) + " dari " + MODUL.length + " · " + teksWaktuBaca(m).toLowerCase();
 
     wadah.innerHTML = m.isi; // isi berasal dari file kurikulum kita sendiri
     pasangIstilah(wadah);
