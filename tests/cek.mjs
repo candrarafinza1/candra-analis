@@ -93,6 +93,10 @@ ok(/function posisi\(kunci[\s\S]{0,900}peserta\(kunci\)/.test(readFileSync("asse
   ok(/src="assets\/app\.js"/.test(metod), "metodologi.html harus memuat assets/app.js untuk penanda bagian");
   ok(!/scroll-behavior:\s*smooth/.test(css) || /prefers-reduced-motion: no-preference\)[^}]*scroll-behavior/.test(css),
     "scroll halus hanya boleh bila pengguna tidak meminta gerak dikurangi");
+  // Nina (30 Okt): "Lanjutkan belajar" (IDE.md #9) — wadah tersembunyi di beranda, memakai bacaSelesai() yang sama
+  const beranda = readFileSync("index.html", "utf8");
+  ok(/id="lanjutkan-belajar"[^>]*\bhidden\b/.test(beranda), "index.html: wadah #lanjutkan-belajar harus ada dan tersembunyi secara bawaan");
+  ok(/function renderLanjutkan\(\)[\s\S]{0,400}bacaSelesai\(\)/.test(js), "renderLanjutkan harus memakai bacaSelesai() yang sama dengan penanda kemajuan");
 }
 
 // 3. Aturan Hana (syariah): halaman tidak boleh memakai bahasa ajakan

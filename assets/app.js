@@ -139,6 +139,36 @@
     }
   }
 
+  /* ---------- Lanjutkan belajar di beranda (Arif, IDE.md #9; teks Laras) ----------
+     Memakai penanda kemajuan yang sama. Belum ada yang ditandai → kotak tetap tersembunyi. */
+  function renderLanjutkan() {
+    var kotak = document.getElementById("lanjutkan-belajar");
+    if (!kotak || !MODUL.length) return;
+    var selesai = bacaSelesai();
+    if (!selesai.length) return;
+    var n = selesai.length, idx = -1;
+    for (var i = 0; i < MODUL.length; i++) if (selesai.indexOf(MODUL[i].id) < 0) { idx = i; break; }
+    var info = el("p", { class: "lanjutkan-info" }, [
+      el("strong", { text: n + " dari " + MODUL.length + " pelajaran selesai." }),
+      " Tanda hanya tersimpan di perangkat ini."
+    ]);
+    if (idx >= 0) {
+      kotak.appendChild(info);
+      var m = MODUL[idx];
+      kotak.appendChild(el("a", { class: "tombol tombol-utama", href: "pelajaran.html?m=" + m.id }, [
+        "Lanjutkan belajar: Pelajaran " + (idx + 1),
+        el("span", { class: "lanjutkan-judul", text: m.judul })
+      ]));
+    } else {
+      kotak.appendChild(el("p", { class: "lanjutkan-tamat" }, [
+        "Semua " + MODUL.length + " pelajaran selesai. Anda bisa ",
+        el("a", { href: "belajar.html", text: "membuka ulang pelajaran" }),
+        " kapan saja. Tanda hanya tersimpan di perangkat ini."
+      ]));
+    }
+    kotak.hidden = false;
+  }
+
   /* ---------- Kuis akhir pelajaran (tim Laras, Sari, Hana; tampilan Dewi) ----------
      Tanpa server dan tanpa menyimpan apa pun: jawaban hanya diperiksa di perangkat. */
   function buatKuis(m) {
@@ -849,6 +879,7 @@
 
   tandaiMenu();
   renderJalur("jalur-ringkas", false);
+  renderLanjutkan();
   renderJalur("jalur-lengkap", true);
   renderPelajaran();
   renderMini();
