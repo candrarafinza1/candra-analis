@@ -169,7 +169,7 @@ Hasil #7, #8, #9 dicek di 390px dan 1280px (tanpa scroll horizontal, tanpa galat
 - Ide: satu `<select>` "Semua sektor / Barang konsumen primer / ..." di atas tabel/kartu; urutan dihitung ulang di
   dalam sektor itu dengan rumus yang sama. Tanpa simpanan, dapat diakses keyboard.
 - Dampak bagi pemula: pembanding yang adil (bank dengan bank, tambang dengan tambang).
-- Status: dipilih Bima 30 Okt 09.10 untuk Arif.
+- Status: dipilih Bima 30 Okt 09.10 untuk Arif, dikerjakan Arif 30 Okt 10.15 (tayang; 9 sektor, urutan dihitung ulang dengan peserta() yang sama, pesan ramah bila sektor kosong). Menunggu tinjauan Kirana.
 
 ### 12. Belajar: perkiraan waktu baca tiap pelajaran
 - **Kategori:** konten/tampilan — usaha **kecil**

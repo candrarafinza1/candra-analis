@@ -278,9 +278,10 @@
     var k = KRITERIA[kunci];
     return EMITEN.filter(function (e) { return syariahAktif(e) && !e.periksaUlang && !(k.rupiahSaja && usd(e)) && ada(k.nilai(e)); });
   }
-  function urutkan(kunci) {
+  // sektor kosong = semua sektor. Saring sektor (Arif, 30 Okt, IDE.md #11): rumus sama, urutan dihitung ulang di dalam sektor.
+  function urutkan(kunci, sektor) {
     var k = KRITERIA[kunci];
-    return peserta(kunci).sort(function (a, b) { return k.nilai(b) - k.nilai(a); }).slice(0, 10);
+    return peserta(kunci).filter(function (e) { return !sektor || e.sektor === sektor; }).sort(function (a, b) { return k.nilai(b) - k.nilai(a); }).slice(0, 10);
   }
 
   function renderMini() {
@@ -303,10 +304,23 @@
 
     var tabBaris = el("div", { class: "tab-baris", role: "tablist", "aria-label": "Pilih dasar peringkat" });
     var panel = el("div", { role: "tabpanel", id: "panel-peringkat" });
+    var sektorList = EMITEN.filter(syariahAktif).map(function (e) { return e.sektor; })
+      .filter(function (x, i, a) { return x && a.indexOf(x) === i; }).sort(function (a, b) { return a.localeCompare(b, "id"); });
+    var pilihSektor = el("select", { id: "pilih-sektor" });
+    pilihSektor.appendChild(el("option", { value: "", text: "Semua sektor" }));
+    sektorList.forEach(function (x) { pilihSektor.appendChild(el("option", { value: x, text: x })); });
+    var kunciAktif = "laba";
+    pilihSektor.addEventListener("change", function () { tampilkan(kunciAktif); });
     akar.appendChild(tabBaris);
+    akar.appendChild(el("div", { class: "saring-sektor" }, [
+      el("label", { for: "pilih-sektor", text: "Saring sektor" }), pilihSektor,
+      el("p", { class: "saring-ket", id: "ket-sektor", "aria-live": "polite" })
+    ]));
     akar.appendChild(panel);
 
     function tampilkan(kunci) {
+      kunciAktif = kunci;
+      var sektor = pilihSektor.value;
       Array.prototype.forEach.call(tabBaris.children, function (t) {
         t.setAttribute("aria-selected", String(t.dataset.k === kunci));
         t.tabIndex = t.dataset.k === kunci ? 0 : -1;
@@ -315,7 +329,10 @@
       panel.setAttribute("aria-labelledby", "tab-" + kunci);
       tutupIstilah(false);
       panel.innerHTML = "";
-      var daftar = urutkan(kunci);
+      var daftar = urutkan(kunci, sektor);
+      document.getElementById("ket-sektor").textContent = sektor
+        ? daftar.length + " emiten sektor " + sektor.toLowerCase() + " ikut urutan ini. Urutan dihitung ulang di dalam sektor."
+        : "";
       var tbody = el("tbody");
       daftar.forEach(function (e, i) {
         var g = tumbuhPendapatan(e);
@@ -334,7 +351,7 @@
         ["Bingung istilahnya? Ketuk: ROE, DER, YoY, laba bersih, pendapatan, ekuitas."]));
       panel.appendChild(el("div", { class: "tabel-wadah" }, [
         el("table", { class: "tabel-kartu" }, [
-          el("caption", { class: "keterangan-tabel", text: (daftar.length < 10 ? daftar.length : "Sepuluh") + " saham syariah teratas: " + k.label.toLowerCase() }),
+          el("caption", { class: "keterangan-tabel", text: (daftar.length < 10 ? daftar.length : "Sepuluh") + " saham syariah teratas" + (sektor ? " di sektor " + sektor.toLowerCase() : "") + ": " + k.label.toLowerCase() }),
           el("thead", null, [el("tr", null, [
             el("th", { scope: "col", text: "#" }),
             el("th", { scope: "col", text: "Emiten" }),
@@ -348,7 +365,8 @@
           tbody
         ])
       ]));
-      var keluar = EMITEN.filter(function (e) { return syariahAktif(e) && !(k.rupiahSaja && usd(e)) && (e.periksaUlang || !ada(k.nilai(e))); })
+      if (!daftar.length) panel.insertBefore(el("p", { class: "catatan-metode", text: "Belum ada emiten di sektor ini yang angkanya lengkap untuk urutan ini. Pilih dasar peringkat lain atau Semua sektor." }), panel.lastChild);
+      var keluar = EMITEN.filter(function (e) { return syariahAktif(e) && (!sektor || e.sektor === sektor) && !(k.rupiahSaja && usd(e)) && (e.periksaUlang || !ada(k.nilai(e))); })
         .map(function (e) { return e.kode; });
       panel.appendChild(el("p", { class: "catatan-metode", style: "margin-top:12px" },
         ["Cara menghitung: " + k.metode + " Hanya emiten yang tercatat di Daftar Efek Syariah. Urutan ini menggambarkan data, bukan saran membeli." +

@@ -99,6 +99,10 @@ ok(/function posisi\(kunci[\s\S]{0,900}peserta\(kunci\)/.test(readFileSync("asse
   ok(/function renderLanjutkan\(\)[\s\S]{0,400}bacaSelesai\(\)/.test(js), "renderLanjutkan harus memakai bacaSelesai() yang sama dengan penanda kemajuan");
   // Nina (30 Okt): batang laba 9 bulan (IDE.md #10) — hanya bila kedua angka positif, angka tetap tertulis, batang aria-hidden
   ok(/N\[2025\] > 0 && N\[2026\] > 0[\s\S]{0,200}class: "batang9"/.test(js), "batang9 hanya boleh dibuat bila laba 9 bulan 2025 dan 2026 positif");
+  // Nina (30 Okt 10.10): saring sektor Peringkat (IDE.md #11) — select berlabel, saringan memakai peserta() yang sama
+  ok(/function urutkan\(kunci, sektor\)[\s\S]{0,300}peserta\(kunci\)\.filter/.test(js), "saring sektor harus menyaring dari peserta() yang sama");
+  ok(/el\("label", \{ for: "pilih-sektor"/.test(js), "select #pilih-sektor wajib punya label");
+  ok(/urutkan\(kunci, sektor\)/.test(js), "Peringkat harus memakai sektor terpilih saat mengurutkan");
   ok(/batang9-isi[^\n]*"aria-hidden": "true"/.test(js) && /class: "batang9-angka", text: rp\(/.test(js), "batang9: batang aria-hidden dan angka wajib tertulis");
 }
 

@@ -210,3 +210,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Dewi: profil emiten kini punya dua batang pembanding laba Januari–September 2025 vs 2026 (CSS saja, angka tetap tertulis, batang 2026 hijau bila naik/merah bila turun, tanpa animasi). Hanya muncul bila kedua angka positif (kini 9 emiten).
 - Nina: cek baru di `tests/cek.mjs` (batang hanya bila kedua angka positif, angka wajib tertulis; dicoba gagal dengan syarat dihapus); lolos (8 halaman, 8 pelajaran, 31 emiten). Profil MYOR, SIDO, UNTR, PTBA, TLKM, AADI dicek 390px & 1280px: tanpa scroll horizontal, tanpa galat JS.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).
+
+## 30 Okt 2026, 10.10–10.20 WIB — Arif, Nina, Fajar (via Bima)
+- Arif: Peringkat kini punya pilihan "Saring sektor" (IDE.md #11). Pilih satu dari 9 sektor, urutan dihitung ulang di dalam sektor itu dengan rumus dan aturan yang sama (mis. Energi: ROE 5 emiten, laba rupiah 2 emiten karena emiten dolar AS tidak ikut urutan laba). Judul tabel dan keterangan jumlah emiten ikut berubah (dibacakan pembaca layar). Tanpa simpanan, bisa dipakai dengan keyboard.
+- Nina: cek baru di `tests/cek.mjs` (saringan memakai `peserta()` yang sama, select berlabel); komentar ganda di cek batang9 dirapikan. Lolos (8 halaman, 8 pelajaran, 31 emiten). Dicek 1280px & 390px untuk Semua/Energi/Keuangan/Kesehatan × 2 dasar peringkat: tanpa scroll horizontal, tanpa galat JS.
+- Fajar: laba 9 bulan dicek lagi (TLKM, KLBF, ICBP belum ada kuartal III 2026). Tetap 9 dari 24; batas rilis 31 Okt.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).

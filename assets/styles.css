@@ -253,6 +253,16 @@ tbody tr:hover { background: #f0f2ea; }
 
 .catatan-metode { font-size: .92rem; color: var(--tinta-2); max-width: var(--lebar-teks); }
 
+/* Saring sektor di Peringkat (Arif, IDE.md #11) */
+.saring-sektor { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin: 0 0 12px; }
+.saring-sektor label { font-weight: 700; }
+.saring-sektor select {
+  font: inherit; min-height: 48px; padding: 0 14px; border-radius: var(--radius-kecil);
+  border: 2px solid var(--garis); background: var(--putih); color: var(--tinta); flex: 1 1 220px; max-width: 360px; min-width: 0;
+}
+.saring-ket { width: 100%; margin: 0; font-size: .9rem; color: var(--tinta-2); }
+.saring-ket:empty { display: none; }
+
 /* Radar risiko */
 .radar-form { display: flex; gap: 10px; flex-wrap: wrap; margin: 24px 0; }
 .radar-form label { width: 100%; font-weight: 700; }
