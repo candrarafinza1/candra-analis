@@ -565,3 +565,4 @@ button.istilah:hover, button.istilah[aria-expanded="true"] { color: var(--malam-
   .batang-tumbuh { transform-origin: left center; animation: tumbuh-datar .6s cubic-bezier(.3,.8,.3,1) both; }
 }
 @keyframes tumbuh-datar { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.ringkasan-usaha { max-width: var(--lebar-teks); margin: 0 0 6px; }

@@ -172,6 +172,21 @@ ok(/function posisi\(kunci[\s\S]{0,900}peserta\(kunci\)/.test(readFileSync("asse
   for (const kode of ["UNTR", "TPIA"]) ok(ASLI.some(e => e.kode === kode && e.sekaliWaktu9b), `${kode} seharusnya bertanda sekaliWaktu9b`);
 }
 
+// 2b. Ringkasan usaha (Raka & Sari, 30 Okt): bila diisi, wajib bersumber, singkat, tanpa ajakan
+{
+  const app = readFileSync("assets/app.js", "utf8");
+  ok(/e\.usaha\.sumber\.url/.test(app) && /Usaha perusahaan/.test(app), "app.js: profil harus menampilkan ringkasan usaha beserta sumbernya");
+  const ajakan = /\b(wajib beli|pasti naik|buruan (beli|jual)|dijamin untung|rekomendasi beli|layak (dibeli|dikoleksi)|prospek cerah)\b/i;
+  for (const e of ASLI) {
+    if (!("usaha" in e)) continue;
+    const u = e.usaha;
+    ok(u && typeof u.teks === "string" && u.teks.length >= 40 && u.teks.length <= 260, `${e.kode}: usaha.teks harus 40–260 karakter`);
+    ok(u && u.teks && (u.teks.match(/[.!?](\s|$)/g) || []).length <= 2, `${e.kode}: usaha.teks maksimal 2 kalimat`);
+    ok(u && u.sumber && u.sumber.judul && /^https:\/\//.test(u.sumber.url || ""), `${e.kode}: usaha butuh sumber { judul, url https }`);
+    ok(!ajakan.test(u.teks || ""), `${e.kode}: usaha.teks memuat bahasa ajakan`);
+  }
+}
+
 // 3. Aturan Hana (syariah): halaman tidak boleh memakai bahasa ajakan
 const terlarang = /\b(wajib beli|pasti naik|buruan (beli|jual)|dijamin untung|rekomendasi beli)\b/i;
 for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"]) {

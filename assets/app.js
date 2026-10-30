@@ -625,6 +625,13 @@
         ? "Bukti: " + DES_LABEL + ", baris " + e.desBaris + ". Masuk daftar bukan berarti disarankan untuk dibeli."
         : "Emiten ini tidak ada di Daftar Efek Syariah periode terbaru." })
     ]));
+    // Raka & Sari (30 Okt): ringkasan usaha 1–2 kalimat, hanya bila ada sumbernya
+    if (e.usaha && e.usaha.teks && e.usaha.sumber && e.usaha.sumber.url) {
+      akar.appendChild(el("h2", { class: "judul-profil-bagian", text: "Usaha perusahaan" }));
+      akar.appendChild(el("p", { class: "ringkasan-usaha", text: e.usaha.teks }));
+      akar.appendChild(el("p", { class: "catatan-metode" }, ["Sumber: ",
+        el("a", { href: e.usaha.sumber.url, rel: "noopener", text: e.usaha.sumber.judul })]));
+    }
     if (usd(e)) akar.appendChild(el("p", { class: "catatan-metode", text: "Emiten ini melapor dalam dolar AS. Angka ditampilkan dalam dolar AS sesuai laporannya, tanpa dikonversi ke rupiah." }));
     if (e.periksaUlang) akar.appendChild(el("p", { class: "catatan-metode", text: "Angka laba emiten ini sedang dicek ulang atau tidak bisa dibandingkan secara adil, jadi sementara tidak ikut Peringkat. Penjelasannya ada di catatan di bawah." }));
     if (e.sekaliWaktu) akar.appendChild(el("p", { class: "catatan-metode" }, [

@@ -262,3 +262,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Nina: cek baru di `tests/cek.mjs` (fungsi + batas 25%, dipakai Radar & profil, bentuk field, disebut di metodologi). Lolos (8 halaman, 8 pelajaran, 31 emiten). Profil UNTR/TPIA/ANTM, metodologi, Radar dicek 1280px & 390px: tanpa scroll horizontal, tanpa galat JS.
 - Fajar: laba 9 bulan dicek lagi (TLKM masih semester I; KLBF, ICBP belum ada kuartal III 2026). Tetap 10 dari 31; batas rilis 31 Okt.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).
+
+## 30 Okt 2026, 20.30–20.45 WIB — Raka, Sari, Nina, Fajar (via Bima)
+- Raka & Sari: ringkasan usaha 1–2 kalimat kini ada untuk 9 dari 31 emiten (TLKM, KLBF, ICBP, ANTM, UNTR, INDF, UNVR, MYOR, SIDO). Sumber: halaman profil perusahaan di Lembar Saham, ditulis ulang dengan bahasa sederhana. UNVR tidak menyebut es krim karena bisnis itu sudah dijual. Profil emiten menampilkan bagian "Usaha perusahaan" + tautan sumber; emiten tanpa ringkasan tidak menampilkan apa-apa (tidak diisi tebakan).
+- Nina: cek baru di `tests/cek.mjs` (profil menampilkan ringkasan + sumber; teks 40–260 karakter, maks. 2 kalimat, sumber https, tanpa bahasa ajakan). Lolos (8 halaman, 8 pelajaran, 31 emiten). Profil UNVR & TPIA dicek 1280px & 390px: tanpa scroll horizontal, tanpa galat JS.
+- Fajar: laba 9 bulan dicek lagi (TLKM masih kuartal I/semester I; KLBF, ICBP belum ada kuartal III 2026). Tetap 10 dari 31; batas rilis 31 Okt.
+- Masalah ringan: halaman PTBA di Lembar Saham menolak dibaca alat tim; dicari sumber lain sesi berikutnya.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, sudah diemailkan, tidak diulang).

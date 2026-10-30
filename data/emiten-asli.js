@@ -20,6 +20,8 @@ window.EMITEN_ASLI = [
   {
     kode: "TLKM", nama: "PT Telkom Indonesia (Persero) Tbk", sektor: "Infrastruktur",
     desBaris: 580,
+    usaha: { teks: "Menyediakan layanan telekomunikasi dan jaringan: internet dan TV untuk rumah, layanan seluler untuk perorangan, serta jaringan, satelit, dan layanan TI untuk perusahaan.",
+      sumber: { judul: "Lembar Saham: Profil Perusahaan TLKM (dibaca 30 Okt 2026)", url: "https://lembarsaham.com/fundamental-saham/emiten/TLKM" } },
     labaTahun: { 2024: 22400, 2025: 17810 },
     pendapatan: { 2024: 149960, 2025: 145740 },
     liabilitas2025: 137220, ekuitas2025: 150530,
@@ -31,6 +33,8 @@ window.EMITEN_ASLI = [
   {
     kode: "KLBF", nama: "PT Kalbe Farma Tbk", sektor: "Kesehatan",
     desBaris: 413,
+    usaha: { teks: "Membuat dan menjual obat resep, obat bebas, minuman kesehatan, dan produk nutrisi (antara lain Prenagen dan Extra Joss). Perusahaan juga punya usaha distribusi dan logistik lewat anak usahanya.",
+      sumber: { judul: "Lembar Saham: Profil Perusahaan KLBF (dibaca 30 Okt 2026)", url: "https://lembarsaham.com/fundamental-saham/emiten/KLBF" } },
     labaTahun: { 2024: 3240, 2025: 3660 },
     pendapatan: { 2024: 32630, 2025: 35320 },
     liabilitas2025: 5970.85, ekuitas2025: 24728.50,
@@ -44,6 +48,8 @@ window.EMITEN_ASLI = [
   {
     kode: "ICBP", nama: "PT Indofood CBP Sukses Makmur Tbk", sektor: "Barang konsumen primer",
     desBaris: 241,
+    usaha: { teks: "Membuat makanan kemasan, terutama mi instan (Indomie, Supermi). Produk lainnya susu, makanan ringan, biskuit, bumbu, minuman, serta makanan nutrisi.",
+      sumber: { judul: "Lembar Saham: Profil Perusahaan ICBP (dibaca 30 Okt 2026)", url: "https://lembarsaham.com/fundamental-saham/emiten/ICBP" } },
     labaTahun: { 2024: 7080, 2025: 9220 },
     pendapatan: { 2024: 72600, 2025: 74850 },
     liabilitas2025: 61860, ekuitas2025: 73680,
@@ -55,6 +61,8 @@ window.EMITEN_ASLI = [
   {
     kode: "ANTM", nama: "PT Aneka Tambang Tbk", sektor: "Bahan baku",
     desBaris: 76,
+    usaha: { teks: "Perusahaan tambang dan logam yang mengerjakan dari eksplorasi sampai pemasaran. Komoditas utamanya nikel, emas, dan bauksit.",
+      sumber: { judul: "Lembar Saham: Profil Perusahaan ANTM (dibaca 30 Okt 2026)", url: "https://lembarsaham.com/fundamental-saham/emiten/ANTM" } },
     labaTahun: { 2024: 3650, 2025: 7210 },
     pendapatan: { 2024: 69190, 2025: 84640 },
     liabilitas2025: 15930, ekuitas2025: 36600,
@@ -76,6 +84,8 @@ window.EMITEN_ASLI = [
   {
     kode: "UNTR", nama: "PT United Tractors Tbk", sektor: "Industri",
     desBaris: 199,
+    usaha: { teks: "Menjual dan menyewakan alat berat, menjadi kontraktor pertambangan, menambang batu bara, dan mengerjakan jasa konstruksi.",
+      sumber: { judul: "Lembar Saham: Profil Perusahaan UNTR (dibaca 30 Okt 2026)", url: "https://lembarsaham.com/fundamental-saham/emiten/UNTR" } },
     labaTahun: { 2024: 19530, 2025: 14810 },
     pendapatan: { 2024: 134400, 2025: 131300 },
     liabilitas2025: 74500, ekuitas2025: 103100,
@@ -102,6 +112,8 @@ window.EMITEN_ASLI = [
   {
     kode: "INDF", nama: "PT Indofood Sukses Makmur Tbk", sektor: "Barang konsumen primer",
     desBaris: 243,
+    usaha: { teks: "Bergerak di industri makanan dan minuman (mi instan, makanan ringan, susu, bumbu) serta agribisnis, yaitu perkebunan kelapa sawit dan minyak goreng.",
+      sumber: { judul: "Lembar Saham: Profil Perusahaan INDF (dibaca 30 Okt 2026)", url: "https://lembarsaham.com/fundamental-saham/emiten/INDF" } },
     labaTahun: { 2024: 8640, 2025: 10680 },
     pendapatan: { 2024: 115790, 2025: 123490 },
     liabilitas2025: 97740, ekuitas2025: 120230,
@@ -114,6 +126,8 @@ window.EMITEN_ASLI = [
   {
     kode: "UNVR", nama: "PT Unilever Indonesia Tbk", sektor: "Barang konsumen primer",
     desBaris: 290,
+    usaha: { teks: "Membuat, memasarkan, dan mendistribusikan barang konsumsi sehari-hari, seperti sabun, deterjen, produk perawatan kulit dan rambut, serta makanan dan minuman.",
+      sumber: { judul: "Lembar Saham: Profil Perusahaan UNVR (dibaca 30 Okt 2026)", url: "https://lembarsaham.com/fundamental-saham/emiten/UNVR" } },
     sekaliWaktu: "Keuntungan sekali-waktu Rp3,79 T dari penjualan bisnis es krim = sekitar 50% laba 2025 (Rp7,64 T).",
     labaTahun: { 2024: 3360, 2025: 7640 },
     pendapatan: { 2024: 30620, 2025: 31940 },
@@ -156,6 +170,8 @@ window.EMITEN_ASLI = [
   {
     kode: "MYOR", nama: "PT Mayora Indah Tbk", sektor: "Barang konsumen primer",
     desBaris: 259,
+    usaha: { teks: "Mengolah makanan dan minuman: biskuit, permen, wafer, cokelat, kopi, dan makanan kesehatan (antara lain Roma, Kopiko, Beng Beng, Torabika).",
+      sumber: { judul: "Lembar Saham: Profil Perusahaan MYOR (dibaca 30 Okt 2026)", url: "https://lembarsaham.com/fundamental-saham/emiten/MYOR" } },
     labaTahun: { 2024: 3000, 2025: 2860 },
     pendapatan: { 2024: 36070, 2025: 38680 },
     liabilitas2025: 13010, ekuitas2025: 18360,
@@ -177,6 +193,8 @@ window.EMITEN_ASLI = [
   {
     kode: "SIDO", nama: "PT Industri Jamu Dan Farmasi Sido Muncul Tbk", sektor: "Kesehatan",
     desBaris: 432,
+    usaha: { teks: "Membuat jamu dan produk herbal, seperti minuman herbal, jamu tradisional dan instan, permen herbal, dan suplemen (antara lain Tolak Angin dan Kuku Bima).",
+      sumber: { judul: "Lembar Saham: Profil Perusahaan SIDO (dibaca 30 Okt 2026)", url: "https://lembarsaham.com/fundamental-saham/emiten/SIDO" } },
     labaTahun: { 2024: 1170, 2025: 1220 },
     pendapatan: { 2024: 3910, 2025: 4070 },
     liabilitas2025: 561.44, ekuitas2025: 3120,
