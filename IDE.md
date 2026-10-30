@@ -127,23 +127,23 @@ Metodologi di HP:
   yang sama), dengan tautan ke Peringkat. Emiten yang tidak ikut Peringkat diberi alasannya (periksa ulang / dolar AS).
 - Acuan tren: konteks "relatif terhadap rekan" di aplikasi data saham.
 - Dampak bagi pemula: angka satu emiten jadi punya pembanding. Tetap data, bukan saran.
-- Status: dipilih Bima 29 Okt 20.20, dikerjakan Arif 29 Okt 21.30 (tayang). Ditinjau Kirana 30 Okt 09.30: baik.
+- Status: dipilih Bima 29 Okt 20.20, dikerjakan Arif 29 Okt 21.30 (tayang). Ditinjau Kirana 30 Okt 09.10: baik.
 
 ### 8. Metodologi: penanda bagian yang sedang dibaca
 - **Kategori:** tampilan — usaha **kecil**
 - Ide: di desktop (≥900px), kotak "Isi halaman" menempel di samping (sticky) dan menebalkan bagian yang sedang dibaca.
   Di HP tetap di atas. Tanpa pustaka.
 - Dampak bagi pemula: tidak tersesat di halaman panjang.
-- Status: dipilih Bima 29 Okt 20.20, dikerjakan Dewi 30 Okt 07.45 (tayang). Ditinjau Kirana 30 Okt 09.30: baik.
+- Status: dipilih Bima 29 Okt 20.20, dikerjakan Dewi 30 Okt 07.45 (tayang). Ditinjau Kirana 30 Okt 09.10: baik.
 
 ### 9. Beranda: "Lanjutkan belajar"
 - **Kategori:** fitur — usaha **kecil**
 - Ide: bila penanda kemajuan menyimpan pelajaran selesai, beranda menampilkan tombol "Lanjutkan: pelajaran berikutnya".
   Memakai data yang sama di peramban (try/catch), tanpa akun.
 - Dampak bagi pemula: kembali ke jalur belajar dalam satu ketukan.
-- Status: dipilih Bima 30 Okt 07.10, dikerjakan Arif 30 Okt 08.30 (tayang). Ditinjau Kirana 30 Okt 09.30: baik.
+- Status: dipilih Bima 30 Okt 07.10, dikerjakan Arif 30 Okt 08.30 (tayang). Ditinjau Kirana 30 Okt 09.10: baik.
 
-## Tinjauan Kirana — 30 Okt 2026, 09.30 WIB
+## Tinjauan Kirana — 30 Okt 2026, 09.10 WIB
 
 Hasil #7, #8, #9 dicek di 390px dan 1280px (tanpa scroll horizontal, tanpa galat JS):
 - #7 Posisi di Peringkat (profil MYOR & TLKM): dua baris urutan jelas, ada kalimat "gambaran data, bukan saran
@@ -161,7 +161,7 @@ Hasil #7, #8, #9 dicek di 390px dan 1280px (tanpa scroll horizontal, tanpa galat
   tertulis (tidak bergantung warna). Hanya muncul bila kedua angka ada dan positif; rugi tetap kalimat.
 - Acuan tren: grafik mini "year-on-year" di aplikasi data saham, versi tanpa pustaka.
 - Dampak bagi pemula: naik/turun langsung terlihat. Tetap data, bukan saran. Ringan di HP murah (tanpa JS tambahan).
-- Status: dipilih Bima 30 Okt 09.30 untuk Dewi, dikerjakan Dewi 30 Okt 09.45 (tayang; batang abu-abu 2025, hijau/merah 2026, kolom angka sejajar). Menunggu tinjauan Kirana.
+- Status: dipilih Bima 30 Okt 09.10 untuk Dewi, dikerjakan Dewi 30 Okt 09.15 (tayang; batang abu-abu 2025, hijau/merah 2026, kolom angka sejajar). Menunggu tinjauan Kirana.
 
 ### 11. Peringkat: saring per sektor
 - **Kategori:** fitur — usaha **kecil**
@@ -169,7 +169,7 @@ Hasil #7, #8, #9 dicek di 390px dan 1280px (tanpa scroll horizontal, tanpa galat
 - Ide: satu `<select>` "Semua sektor / Barang konsumen primer / ..." di atas tabel/kartu; urutan dihitung ulang di
   dalam sektor itu dengan rumus yang sama. Tanpa simpanan, dapat diakses keyboard.
 - Dampak bagi pemula: pembanding yang adil (bank dengan bank, tambang dengan tambang).
-- Status: dipilih Bima 30 Okt 09.30 untuk Arif.
+- Status: dipilih Bima 30 Okt 09.10 untuk Arif.
 
 ### 12. Belajar: perkiraan waktu baca tiap pelajaran
 - **Kategori:** konten/tampilan — usaha **kecil**
