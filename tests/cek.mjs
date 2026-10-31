@@ -223,6 +223,36 @@ ok(/function posisi\(kunci[\s\S]{0,900}peserta\(kunci\)/.test(readFileSync("asse
   }
 }
 
+// 2c. Laba 9 bulan (Arif, 31 Okt): angka 2026 wajib berpasangan dengan pembanding 2025 dan bersumber
+const cekLaba9b = (e) => {
+  const l = e.laba9b;
+  if (!l || l[2026] === null || l[2026] === undefined) return true;
+  return typeof l[2026] === "number" && Number.isFinite(l[2026])
+    && typeof l[2025] === "number" && Number.isFinite(l[2025])
+    && Array.isArray(e.sumber) && e.sumber.length > 0;
+};
+for (const e of ASLI) {
+  const l = e.laba9b || {};
+  for (const t of [2025, 2026]) ok(l[t] === null || l[t] === undefined || (typeof l[t] === "number" && Number.isFinite(l[t])), `${e.kode}: laba9b ${t} harus angka atau null`);
+  ok(cekLaba9b(e), `${e.kode}: laba9b 2026 terisi tanpa pembanding 2025 (angka) atau tanpa sumber`);
+}
+// uji negatif: pasangan tidak lengkap harus tertangkap
+ok(!cekLaba9b({ laba9b: { 2025: null, 2026: 100 }, sumber: [{}] }), "cek laba9b tidak menangkap 2025 kosong");
+ok(!cekLaba9b({ laba9b: { 2025: "100", 2026: 100 }, sumber: [{}] }), "cek laba9b tidak menangkap 2025 berupa teks");
+ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tidak menangkap sumber kosong");
+
+// 2d. Keamanan tautan (Tegar, 31 Okt): setiap target="_blank" wajib rel="noopener"
+{
+  const berkas = [...halaman, ...readdirSync("assets").filter(f => f.endsWith(".js")).map(f => "assets/" + f),
+    ...readdirSync("data").filter(f => f.endsWith(".js")).map(f => "data/" + f)];
+  const tanpaNoopener = (teks) => teks.split("\n").filter(b => /_blank/.test(b) && !/noopener/.test(b));
+  for (const f of berkas) {
+    const salah = tanpaNoopener(readFileSync(f, "utf8"));
+    ok(salah.length === 0, `${f}: ${salah.length} tautan target _blank tanpa rel noopener`);
+  }
+  ok(tanpaNoopener('<a href="x" target="_blank">').length === 1, "cek noopener tidak menangkap tautan tanpa rel");
+}
+
 // 3. Aturan Hana (syariah): halaman tidak boleh memakai bahasa ajakan
 const terlarang = /\b(wajib beli|pasti naik|buruan (beli|jual)|dijamin untung|rekomendasi beli)\b/i;
 for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"]) {

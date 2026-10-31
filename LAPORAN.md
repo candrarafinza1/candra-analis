@@ -300,3 +300,13 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Arif: `tests/cek.mjs` kini memeriksa parameter tautan: `emiten.html?kode=` harus kode di data asli, `pelajaran.html?m=` harus id pelajaran yang ada, dan halaman tujuan membaca nama parameter yang sama. Uji negatif menangkap kode & id palsu.
 - Nina: `node tests/cek.mjs` lolos (8 halaman, 8 pelajaran, 31 emiten). Tidak ada perubahan tampilan.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 31 Okt 2026, 13.10–13.25 WIB — Fajar, Arif, Tegar, Dewi, Nina, Yoga (via Bima)
+- Laporan masuk kerja siang dikirim ke Rafinza. Tugas pendukung baru di backlog untuk Arif, Laras, Tegar, Yoga.
+- Fajar: laba 9 bulan dicek lagi. CTRA sudah rilis, tetapi sumber (PintarSaham 30 Okt) hanya menulis "laba bersih" Rp1.433,19 M vs Rp1.750,59 M, kemungkinan laba periode berjalan → ditahan. TLKM, KLBF, ICBP, CPIN, SMGR, INTP belum ada laba atribusi kuartal III 2026. Tetap 11 dari 31.
+- Arif: `tests/cek.mjs` kini memastikan laba 9 bulan 2026 selalu berpasangan dengan angka 2025 dan bersumber (uji negatif menangkap pasangan tidak lengkap).
+- Tegar: semua tautan tab baru sudah `rel="noopener"`, tidak ada `http://`; dijadikan cek otomatis.
+- Dewi: bagian "Usaha perusahaan" (MIKA & KLBF, ringkasan terpanjang) dicek 390px & 1280px: tanpa scroll horizontal, tanpa galat JS, tidak perlu perbaikan.
+- Nina: `node tests/cek.mjs` lolos (8 halaman, 8 pelajaran, 31 emiten).
+- Masalah ringan: Yoga tidak bisa membaca status deploy Vercel lewat alat GitHub tim → ditandai macet.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
