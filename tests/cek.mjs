@@ -19,6 +19,25 @@ for (const h of halaman) {
   ok(/bukan penasihat investasi/.test(isi), `${h} tidak memuat penafian di kaki halaman`);
 }
 
+// 1b. Tautan internal (Arif & Yoga): halaman .html yang disebut di skrip harus ada,
+// dan tautan jangkar (#bagian) harus menunjuk id yang ada di halaman tujuan.
+{
+  const idDi = new Map(halaman.map(h => [h, new Set([...readFileSync(h, "utf8").matchAll(/\bid="([^"]+)"/g)].map(m => m[1]))]));
+  const skrip = ["assets", "data"].flatMap(d => readdirSync(d).filter(f => f.endsWith(".js")).map(f => `${d}/${f}`));
+  for (const f of skrip) {
+    for (const [, nama, jangkar] of readFileSync(f, "utf8").matchAll(/(?<![\/\w.-])([a-z][a-z0-9-]*\.html)(?:#([A-Za-z0-9_-]+))?/g)) {
+      ok(existsSync(nama), `${f} menaut ke ${nama}, halaman tidak ada`);
+      if (jangkar && idDi.has(nama)) ok(idDi.get(nama).has(jangkar), `${f} menaut ke ${nama}#${jangkar}, id tidak ada di halaman itu`);
+    }
+  }
+  for (const h of halaman) {
+    for (const [, nama, jangkar] of readFileSync(h, "utf8").matchAll(/href="([a-z0-9-]*\.html)?#([A-Za-z0-9_-]+)"/g)) {
+      const tujuan = nama || h;
+      if (idDi.has(tujuan)) ok(idDi.get(tujuan).has(jangkar), `${h} menaut ke ${tujuan}#${jangkar}, id tidak ada di halaman itu`);
+    }
+  }
+}
+
 // 2. Data dapat dibaca dan lengkap
 const ctx = { window: {} };
 vm.createContext(ctx);

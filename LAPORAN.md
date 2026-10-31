@@ -288,3 +288,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Raka & Sari: ringkasan usaha SMGR, AKRA (IDX Channel), dan MIKA (Investortrust) masuk → 13 dari 31. Tidak ada kalimat ajakan; hanya isi yang disebut sumber.
 - Nina: `node tests/cek.mjs` lolos (8 halaman, 8 pelajaran, 31 emiten). Profil SMGR/AKRA/MIKA dicek 390px & 1280px: tanpa scroll horizontal, tanpa galat JS.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 31 Okt 2026, 09.10–09.20 WIB — Fajar, Arif, Nina (via Bima)
+- Fajar: laba 9 bulan dicek lagi. TLKM, KLBF, ICBP (laba atribusi dua desimal belum ada), CPIN, CTRA, INTP belum ada berita kuartal III 2026. Tetap 11 dari 31; batas rilis hari ini.
+- Arif: `tests/cek.mjs` kini memeriksa nama halaman .html di skrip `assets/` & `data/` dan tautan jangkar `#bagian` (id harus ada di halaman tujuan). Uji negatif menangkap tautan palsu. Tugas lanjutan untuk Arif dicatat (cek `?kode=` dan `?id=`).
+- Nina: `node tests/cek.mjs` lolos (8 halaman, 8 pelajaran, 31 emiten). Tidak ada perubahan tampilan.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
