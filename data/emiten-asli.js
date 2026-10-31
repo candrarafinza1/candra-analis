@@ -428,6 +428,8 @@ window.EMITEN_ASLI = [
   {
     kode: "EXCL", nama: "PT XLSmart Telecom Sejahtera Tbk", sektor: "Infrastruktur",
     desBaris: 547,
+    usaha: { teks: "Menyediakan layanan telepon seluler: suara, SMS, data, dan layanan tambahan lainnya. Perusahaan juga menyewakan jaringan khusus (leased line) dan menara telekomunikasi, serta menyediakan layanan internet dan roaming nasional.",
+      sumber: { judul: "Lembar Saham: Profil Perusahaan EXCL (dibaca 31 Okt 2026)", url: "https://lembarsaham.com/fundamental-saham/emiten/EXCL" } },
     labaTahun: { 2024: 1810, 2025: -4420 },
     pendapatan: { 2024: 34390, 2025: 42440 },
     liabilitas2025: 85300, ekuitas2025: 30000,
@@ -440,6 +442,8 @@ window.EMITEN_ASLI = [
   {
     kode: "BRIS", nama: "PT Bank Syariah Indonesia Tbk", sektor: "Keuangan",
     desBaris: 3,
+    usaha: { teks: "Bank umum yang menjalankan kegiatan usaha berdasarkan prinsip syariah, dengan fokus pada nasabah menengah ke bawah. Layanannya hadir lewat kantor cabang, kantor cabang pembantu, kantor kas, dan kantor layanan syariah.",
+      sumber: { judul: "Lembar Saham: Profil Perusahaan BRIS (dibaca 31 Okt 2026)", url: "https://lembarsaham.com/fundamental-saham/emiten/BRIS" } },
     labaTahun: { 2024: 7000, 2025: 7560 },
     pendapatan: { 2024: null, 2025: null },
     liabilitas2025: null, ekuitas2025: 51950,
