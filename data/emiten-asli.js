@@ -155,6 +155,8 @@ window.EMITEN_ASLI = [
   {
     kode: "PTBA", nama: "PT Bukit Asam (Persero) Tbk", sektor: "Energi",
     desBaris: 50,
+    usaha: { teks: "Menambang batu bara, mulai dari eksplorasi, pengolahan, pengangkutan, sampai penjualan, dengan wilayah tambang antara lain di Tanjung Enim, Ombilin, Peranap, dan Palaran. Perusahaan juga mengelola dermaga batu bara, pembangkit listrik, dan pabrik briket.",
+      sumber: { judul: "Lembar Saham: Profil Perusahaan PTBA (dibaca 31 Okt 2026)", url: "https://lembarsaham.com/fundamental-saham/emiten/PTBA" } },
     labaTahun: { 2024: 5100, 2025: 2930 },
     pendapatan: { 2024: 42760, 2025: 42650 },
     liabilitas2025: 21300, ekuitas2025: 22610,
@@ -234,6 +236,8 @@ window.EMITEN_ASLI = [
   {
     kode: "JPFA", nama: "PT Japfa Comfeed Indonesia Tbk", sektor: "Barang konsumen primer",
     desBaris: 246,
+    usaha: { teks: "Membuat pakan ternak, beternak dan mengolah ayam, serta membuat pakan dan membudidayakan ikan dan udang. Perusahaan juga beternak sapi potong dan membuat vaksin serta produk kesehatan hewan.",
+      sumber: { judul: "Lembar Saham: Profil Perusahaan JPFA (dibaca 31 Okt 2026)", url: "https://lembarsaham.com/fundamental-saham/emiten/JPFA" } },
     labaTahun: { 2024: 3010, 2025: 4000 },
     pendapatan: { 2024: 55800, 2025: 60710 },
     liabilitas2025: 20041.47, ekuitas2025: 20018.96,
@@ -250,6 +254,8 @@ window.EMITEN_ASLI = [
   {
     kode: "INTP", nama: "PT Indocement Tunggal Prakarsa Tbk", sektor: "Bahan baku",
     desBaris: 108,
+    usaha: { teks: "Membuat semen untuk bangunan, termasuk semen putih, dengan pabrik di Jawa Barat (antara lain di Citeureup, Bogor) dan Kalimantan Selatan. Lewat anak usahanya, perusahaan juga menjual beton siap pakai dan agregat (batu pecah).",
+      sumber: { judul: "Indonesia Investments: Indocement Tunggal Prakarsa (dibaca 31 Okt 2026)", url: "https://www.indonesia-investments.com/id/bisnis/profil-perusahaan/indocement-tunggal-prakarsa/item205" } },
     sekaliWaktu: "Laba dari divestasi bisnis mortar Rp670,0 miliar = sekitar 30% laba 2025 (Rp2,24 T), menurut siaran pers resmi Indocement.",
     labaTahun: { 2024: 2000, 2025: 2240 },
     pendapatan: { 2024: 18540, 2025: 17730 },
