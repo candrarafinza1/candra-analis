@@ -528,6 +528,8 @@ window.EMITEN_ASLI = [
   {
     kode: "MDKA", nama: "PT Merdeka Copper Gold Tbk", sektor: "Bahan baku",
     desBaris: 116, mataUang: "USD",
+    usaha: { teks: "Perusahaan induk yang lewat anak usahanya menambang dan mengolah emas, perak, dan mineral lain. Wilayah usahanya antara lain Banyuwangi (proyek Tujuh Bukit), Pulau Wetar, Morowali, dan Gorontalo.",
+      sumber: { judul: "IDX Channel: Simak sejarah dan profil MDKA (4 Agu 2022, dibaca 31 Okt 2026)", url: "https://www.idxchannel.com/market-news/simak-sejarah-dan-profil-mdka-emiten-yang-bergerak-di-sektor-pertambangan/all" } },
     labaTahun: { 2024: -55.76, 2025: -62.06 },
     pendapatan: { 2024: 2240, 2025: 1890 },
     liabilitas2025: 2780, ekuitas2025: 2920,
@@ -542,6 +544,8 @@ window.EMITEN_ASLI = [
   {
     kode: "MBMA", nama: "PT Merdeka Battery Materials Tbk", sektor: "Bahan baku",
     desBaris: 115, mataUang: "USD",
+    usaha: { teks: "Menambang dan mengolah nikel, kobalt, dan mineral lain di Indonesia dan Tiongkok. Perusahaan juga membuat logam dasar bukan besi serta menjalankan kawasan industri dan pembangkit listrik.",
+      sumber: { judul: "StockAnalysis: profil PT Merdeka Battery Materials Tbk (dibaca 31 Okt 2026)", url: "https://stockanalysis.com/quote/idx/MBMA/company/" } },
     labaTahun: { 2024: 22.78, 2025: 29.56 },
     pendapatan: { 2024: 1840, 2025: 1430 },
     liabilitas2025: 1380, ekuitas2025: 2340,
