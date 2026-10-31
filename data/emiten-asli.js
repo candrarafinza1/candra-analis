@@ -322,6 +322,8 @@ window.EMITEN_ASLI = [
   {
     kode: "CTRA", nama: "PT Ciputra Development Tbk", sektor: "Properti & real estat",
     desBaris: 457,
+    usaha: { teks: "Membangun dan mengelola perumahan di beberapa kota, serta properti komersial seperti pusat perbelanjaan, hotel, apartemen, perkantoran, dan lapangan golf.",
+      sumber: { judul: "Lembar Saham: Profil Perusahaan CTRA (dibaca 31 Okt 2026)", url: "https://lembarsaham.com/fundamental-saham/emiten/CTRA" } },
     labaTahun: { 2024: 2120, 2025: 2660 },
     pendapatan: { 2024: 11180, 2025: 12610 },
     liabilitas2025: 21060, ekuitas2025: 26910,
@@ -334,6 +336,8 @@ window.EMITEN_ASLI = [
   {
     kode: "BSDE", nama: "PT Bumi Serpong Damai Tbk", sektor: "Properti & real estat",
     desBaris: 454,
+    usaha: { teks: "Pengembang properti yang sejak 1989 membangun kota mandiri BSD City di Serpong, Tangerang: kawasan hunian dan bisnis lengkap dengan taman, sarana pendidikan, dan hotel.",
+      sumber: { judul: "Indonesia Investments: Bumi Serpong Damai (dibaca 31 Okt 2026)", url: "https://indonesia-investments.com/business/indonesian-companies/bumi-serpong-damai/item530" } },
     labaTahun: { 2024: 4350, 2025: 2540 },
     pendapatan: { 2024: 13790, 2025: 12780 },
     liabilitas2025: 26590, ekuitas2025: 52660,
@@ -346,6 +350,8 @@ window.EMITEN_ASLI = [
   {
     kode: "MAPI", nama: "PT Mitra Adiperkasa Tbk", sektor: "Barang konsumen non-primer",
     desBaris: 356, periksaUlang: true,
+    usaha: { teks: "Peritel gaya hidup dengan ribuan gerai untuk olahraga, busana, department store, anak, serta makanan dan minuman (antara lain SOGO, Zara, Starbucks). Perusahaan juga menjadi distributor merek olahraga dan anak.",
+      sumber: { judul: "Stockbit Snips: Profil Saham MAPI (dibaca 31 Okt 2026)", url: "https://snips.stockbit.com/investasi/cara-beli-saham-mapi" } },
     labaTahun: { 2024: 1767.62, 2025: 2231.16 },
     pendapatan: { 2024: 37835.89, 2025: 43083.21 },
     liabilitas2025: 15612.72, ekuitas2025: 17211.48,
