@@ -294,3 +294,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Arif: `tests/cek.mjs` kini memeriksa nama halaman .html di skrip `assets/` & `data/` dan tautan jangkar `#bagian` (id harus ada di halaman tujuan). Uji negatif menangkap tautan palsu. Tugas lanjutan untuk Arif dicatat (cek `?kode=` dan `?id=`).
 - Nina: `node tests/cek.mjs` lolos (8 halaman, 8 pelajaran, 31 emiten). Tidak ada perubahan tampilan.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 31 Okt 2026, 10.10–10.25 WIB — Fajar, Arif, Nina (via Bima)
+- Fajar: laba 9 bulan dicek lagi. ICBP tetap ditahan (artikel Bisnis 31 Okt tidak terbaca; angka Rp8,04 T di Industry.co.id adalah core profit, bukan laba atribusi). TLKM, KLBF, CPIN, SMGR, INTP belum rilis. Tetap 11 dari 31.
+- Arif: `tests/cek.mjs` kini memeriksa parameter tautan: `emiten.html?kode=` harus kode di data asli, `pelajaran.html?m=` harus id pelajaran yang ada, dan halaman tujuan membaca nama parameter yang sama. Uji negatif menangkap kode & id palsu.
+- Nina: `node tests/cek.mjs` lolos (8 halaman, 8 pelajaran, 31 emiten). Tidak ada perubahan tampilan.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

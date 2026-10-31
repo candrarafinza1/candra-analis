@@ -81,6 +81,23 @@ for (const e of ASLI || []) {
     ok(v === null || Number.isFinite(v), `data asli ${e.kode}: ${g} harus angka atau null`);
 }
 
+// 1c. Parameter tautan (Arif, 31 Okt): ?kode= harus kode yang ada di data asli, ?m= harus id pelajaran yang ada.
+// Tautan tertulis (literal) dicek nilainya; tautan buatan skrip wajib memakai e.kode/x.kode dan m.id/MODUL[..].id,
+// dan halaman tujuan harus membaca nama parameter yang sama.
+{
+  const app = readFileSync("assets/app.js", "utf8");
+  const berkasCek = [...halaman, ...["assets", "data"].flatMap(d => readdirSync(d).filter(f => f.endsWith(".js")).map(f => `${d}/${f}`))];
+  for (const f of berkasCek) {
+    const isi = readFileSync(f, "utf8");
+    for (const [, k] of isi.matchAll(/emiten\.html\?kode=([A-Z0-9]{4})\b/g)) if (k !== "XXXX") ok(kodeAsli.has(k), `${f}: tautan emiten.html?kode=${k}, kode tidak ada di data/emiten-asli.js`);
+    for (const [, m] of isi.matchAll(/pelajaran\.html\?m=([a-z0-9-]+)/g)) ok(idModul.has(m), `${f}: tautan pelajaran.html?m=${m}, id pelajaran tidak ada di data/modul.js`);
+    ok(!/pelajaran\.html\?id=/.test(isi), `${f}: pelajaran.html memakai ?m=, bukan ?id=`);
+  }
+  for (const [, ekspr] of app.matchAll(/"emiten\.html\?kode=" \+ ([\w.\[\]]+)/g)) ok(/^(e|x)\.kode$/.test(ekspr), `app.js: ?kode= dibuat dari ${ekspr}, harus dari kode data emiten`);
+  for (const [, ekspr] of app.matchAll(/"pelajaran\.html\?m=" \+ ([\w.\[\] +-]+?)(?=[,)])/g)) ok(/^(m\.id|MODUL\[[^\]]+\]\.id|t\.pelajaran)$/.test(ekspr.trim()), `app.js: ?m= dibuat dari ${ekspr}, harus dari id pelajaran`);
+  ok(/URLSearchParams\(location\.search\)\.get\("kode"\)/.test(app) && /URLSearchParams\(location\.search\)\.get\("m"\)/.test(app), "app.js: emiten.html harus membaca ?kode= dan pelajaran.html harus membaca ?m=");
+}
+
 // Kamus istilah (tim Arif): setiap istilah punya penjelasan, pola, dan pelajaran yang benar-benar ada
 vm.runInContext(readFileSync("data/istilah.js", "utf8"), ctx);
 const ISTILAH = ctx.window.ISTILAH;
