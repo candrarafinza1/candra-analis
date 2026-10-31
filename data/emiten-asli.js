@@ -267,7 +267,7 @@ window.EMITEN_ASLI = [
   {
     kode: "SMGR", nama: "PT Semen Indonesia (Persero) Tbk", sektor: "Bahan baku",
     desBaris: 136, periksaUlang: true,
-    usaha: { teks: "Perusahaan BUMN yang membuat semen. Pabriknya tersebar di beberapa daerah di Indonesia dan juga ada di Vietnam.",
+    usaha: { teks: "Perusahaan milik negara (BUMN) yang membuat semen. Pabriknya tersebar di beberapa daerah di Indonesia dan juga ada di Vietnam.",
       sumber: { judul: "IDX Channel: Sejarah Saham SMGR, Emiten Produsen Semen Terbesar di Indonesia (16 Agu 2022, dibaca 31 Okt 2026)", url: "https://www.idxchannel.com/market-news/sejarah-saham-smgr-emiten-produsen-semen-terbesar-di-indonesia" } },
     labaTahun: { 2024: 719.76, 2025: 190.84 },
     pendapatan: { 2024: 36180, 2025: 35240 },
@@ -350,7 +350,7 @@ window.EMITEN_ASLI = [
   {
     kode: "MAPI", nama: "PT Mitra Adiperkasa Tbk", sektor: "Barang konsumen non-primer",
     desBaris: 356, periksaUlang: true,
-    usaha: { teks: "Peritel gaya hidup dengan ribuan gerai untuk olahraga, busana, department store, anak, serta makanan dan minuman (antara lain SOGO, Zara, Starbucks). Perusahaan juga menjadi distributor merek olahraga dan anak.",
+    usaha: { teks: "Peritel gaya hidup dengan ribuan gerai untuk olahraga, busana, department store, anak, serta makanan dan minuman. Perusahaan juga menjadi distributor merek olahraga dan anak.",
       sumber: { judul: "Stockbit Snips: Profil Saham MAPI (dibaca 31 Okt 2026)", url: "https://snips.stockbit.com/investasi/cara-beli-saham-mapi" } },
     labaTahun: { 2024: 1767.62, 2025: 2231.16 },
     pendapatan: { 2024: 37835.89, 2025: 43083.21 },
