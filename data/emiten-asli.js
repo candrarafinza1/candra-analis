@@ -117,11 +117,18 @@ window.EMITEN_ASLI = [
     labaTahun: { 2024: 8640, 2025: 10680 },
     pendapatan: { 2024: 115790, 2025: 123490 },
     liabilitas2025: 97740, ekuitas2025: 120230,
-    laba9b: { 2025: null, 2026: null },
+    laba9b: { 2025: 7880, 2026: 7870 },
+    catatan9b: "Laba 9 bulan = laba periode berjalan yang diatribusikan kepada pemilik entitas induk: Rp7,87 T (Jan–Sep 2026; Kontan & Warta Ekonomi 30 Okt 2026, \"relatif stabil\") vs Rp7,88 T (Jan–Sep 2025; BCA Sekuritas 3 Nov 2025, sama dengan Media Asuransi News). Laba inti (core profit, tanpa selisih kurs dan pos tidak berulang) naik 11% menjadi Rp9,37 T; laba tertahan rugi selisih kurs yang belum terealisasi dari pendanaan, nilainya tidak disebut sumber.",
     dps: null, harga: null,
     catatan: "Sumber menyebut \"laba bersih\" tanpa merinci bagian yang diatribusikan ke pemilik entitas induk.",
     sumber: [{ judul: "Warta Ekonomi, 31 Mar 2026: Indofood kantongi laba Rp10,68 triliun sepanjang 2025",
-      url: "https://wartaekonomi.co.id/read606096/indofood-milik-grup-salim-indf-kantongi-laba-rp1068-triliun-sepanjang-2025" }]
+      url: "https://wartaekonomi.co.id/read606096/indofood-milik-grup-salim-indf-kantongi-laba-rp1068-triliun-sepanjang-2025" },
+      { judul: "Kontan, 30 Okt 2026: Pendapatan INDF naik 12% jadi Rp101,49 triliun per kuartal III-2026 (laba diatribusikan Rp7,87 T)",
+        url: "https://investasi.kontan.co.id/news/pendapatan-indf-naik-12-jadi-rp-10149-triliun-laba-naik-11-per-kuartal-iii-2026" },
+      { judul: "Warta Ekonomi, 30 Okt 2026: Tertekan selisih kurs, Indofood raup laba Rp7,87 triliun",
+        url: "https://wartaekonomi.co.id/read644723/tertekan-selisih-kurs-indofood-raup-laba-rp787-triliun" },
+      { judul: "BCA Sekuritas, 3 Nov 2025: Penjualan Indofood tembus Rp90,98 triliun di triwulan III 2025 (laba diatribusikan Rp7,88 T)",
+        url: "https://bcasekuritas.co.id/latest-news/news/penjualan-indofood-indf-tembus-rp9098-triliun-di-triwulan-iii-2025" }]
   },
   {
     kode: "UNVR", nama: "PT Unilever Indonesia Tbk", sektor: "Barang konsumen primer",

@@ -55,5 +55,11 @@ window.ISTILAH = [
     pelajaran: "buka-rekening" },
   { istilah: "Lot", pola: ["lot"],
     arti: "Satuan jual beli saham di Bursa Efek Indonesia. 1 lot = 100 lembar saham.",
-    pelajaran: "lot-dan-transaksi" }
+    pelajaran: "lot-dan-transaksi" },
+  { istilah: "Laba 9 bulan", pola: ["laba 9 bulan"],
+    arti: "Laba Januari sampai September, dari laporan keuangan kuartal III. Candra Analis membandingkannya dengan Januari–September tahun sebelumnya.",
+    pelajaran: "laporan-keuangan" },
+  { istilah: "Keuntungan atau beban sekali-waktu", pola: ["sekali-waktu"],
+    arti: "Laba atau rugi dari kejadian yang tidak berulang, misalnya hasil menjual anak usaha. Bila nilainya 25% atau lebih dari laba, emiten tidak ikut Peringkat (laba tahunan) atau diberi catatan (laba 9 bulan).",
+    pelajaran: "laporan-keuangan" }
 ];
