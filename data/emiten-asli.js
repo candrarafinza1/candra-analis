@@ -372,6 +372,8 @@ window.EMITEN_ASLI = [
   {
     kode: "HEAL", nama: "PT Medikaloka Hermina Tbk", sektor: "Kesehatan",
     desBaris: 410,
+    usaha: { teks: "Mengelola jaringan rumah sakit umum swasta dengan banyak spesialisasi: layanan ibu dan anak, operasi, laboratorium, radiologi, perawatan kesuburan, apotek, serta gawat darurat.",
+      sumber: { judul: "Lembar Saham: Profil Perusahaan HEAL (dibaca 31 Okt 2026)", url: "https://lembarsaham.com/fundamental-saham/emiten/HEAL" } },
     labaTahun: { 2024: 535.94, 2025: 429.55 },
     pendapatan: { 2024: 6720, 2025: 7130 },
     liabilitas2025: 4680, ekuitas2025: 7210,
@@ -393,6 +395,8 @@ window.EMITEN_ASLI = [
   {
     kode: "ACES", nama: "PT Aspirasi Hidup Indonesia Tbk", sektor: "Barang konsumen non-primer",
     desBaris: 294,
+    usaha: { teks: "Peritel perlengkapan rumah dan gaya hidup: perkakas, peralatan rumah tangga, lampu, bahan bangunan, perabot, alat olahraga, dan perlengkapan hewan. Lewat anak usahanya, perusahaan juga menjual mainan.",
+      sumber: { judul: "Lembar Saham: Profil Perusahaan ACES (dibaca 31 Okt 2026)", url: "https://lembarsaham.com/fundamental-saham/emiten/ACES" } },
     labaTahun: { 2024: 892.04, 2025: 668.73 },
     pendapatan: { 2024: 8580, 2025: 8640 },
     liabilitas2025: 1920, ekuitas2025: 6600,
