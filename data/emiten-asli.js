@@ -267,6 +267,8 @@ window.EMITEN_ASLI = [
   {
     kode: "SMGR", nama: "PT Semen Indonesia (Persero) Tbk", sektor: "Bahan baku",
     desBaris: 136, periksaUlang: true,
+    usaha: { teks: "Perusahaan BUMN yang membuat semen. Pabriknya tersebar di beberapa daerah di Indonesia dan juga ada di Vietnam.",
+      sumber: { judul: "IDX Channel: Sejarah Saham SMGR, Emiten Produsen Semen Terbesar di Indonesia (16 Agu 2022, dibaca 31 Okt 2026)", url: "https://www.idxchannel.com/market-news/sejarah-saham-smgr-emiten-produsen-semen-terbesar-di-indonesia" } },
     labaTahun: { 2024: 719.76, 2025: 190.84 },
     pendapatan: { 2024: 36180, 2025: 35240 },
     liabilitas2025: 28849.01, ekuitas2025: 47719.72,
@@ -283,6 +285,8 @@ window.EMITEN_ASLI = [
   {
     kode: "AKRA", nama: "PT AKR Corporindo Tbk", sektor: "Energi",
     desBaris: 12,
+    usaha: { teks: "Menyalurkan bahan bakar minyak (BBM) untuk industri dan memperdagangkan bahan kimia. Perusahaan juga menyewakan gudang, tangki, dan kendaraan angkutan, serta menyediakan jasa logistik.",
+      sumber: { judul: "IDX Channel: Sejarah dan Profil AKRA (9 Okt 2023, dibaca 31 Okt 2026)", url: "https://www.idxchannel.com/market-news/sejarah-dan-profil-akra-emiten-minyak-dan-gas-bumi-yang-progresif/all" } },
     labaTahun: { 2024: 2220, 2025: 2470 },
     pendapatan: { 2024: 38730, 2025: 46020 },
     liabilitas2025: 20950, ekuitas2025: 15610,
@@ -304,6 +308,8 @@ window.EMITEN_ASLI = [
   {
     kode: "MIKA", nama: "PT Mitra Keluarga Karyasehat Tbk", sektor: "Kesehatan",
     desBaris: 418,
+    usaha: { teks: "Mengelola jaringan rumah sakit swasta Mitra Keluarga di berbagai kota besar Indonesia, terutama untuk segmen menengah atas. Perusahaan terus mengembangkan layanan spesialis dan fasilitas medisnya.",
+      sumber: { judul: "Investortrust: Mitra Keluarga (MIKA) Kandidat Kuat The Best Investortrust Companies 2026 (19 Mei 2026, dibaca 31 Okt 2026)", url: "https://investortrust.id/market/103592/mitra-keluarga-karyasehat-mika-kandidat-kuat-peraih-the-best-investortrust-companies-2026" } },
     labaTahun: { 2024: 1146.35, 2025: 1364.81 },
     pendapatan: { 2024: 4874.37, 2025: 5368.32 },
     liabilitas2025: 1092.28, ekuitas2025: 8174.06,
