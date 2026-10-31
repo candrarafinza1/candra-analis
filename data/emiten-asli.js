@@ -492,6 +492,8 @@ window.EMITEN_ASLI = [
   {
     kode: "AADI", nama: "PT Adaro Andalan Indonesia Tbk", sektor: "Energi",
     desBaris: 8, mataUang: "USD",
+    usaha: { teks: "Perusahaan induk yang anak usahanya menambang batu bara dan menyediakan jasa pertambangan, listrik, pengelolaan air, serta angkutan barang khusus. Grup ini juga punya perkebunan kelapa sawit dan karet.",
+      sumber: { judul: "Lembar Saham: Profil Perusahaan AADI (dibaca 31 Okt 2026)", url: "https://lembarsaham.com/fundamental-saham/emiten/AADI" } },
     labaTahun: { 2024: 1210, 2025: 760.18 },
     pendapatan: { 2024: 5310, 2025: 4910 },
     liabilitas2025: 2050, ekuitas2025: 3640,
@@ -508,6 +510,8 @@ window.EMITEN_ASLI = [
   {
     kode: "HRUM", nama: "PT Harum Energy Tbk", sektor: "Energi",
     desBaris: 33, mataUang: "USD",
+    usaha: { teks: "Menambang batu bara termal di Kalimantan Timur dan Kalimantan Tengah untuk pembangkit listrik dan pabrik semen. Perusahaan juga menambang nikel di Halmahera dan mengolahnya menjadi nikel pig iron, serta punya usaha logistik.",
+      sumber: { judul: "IDX Channel: Emiten HRUM bergerak di bidang apa (29 Okt 2025, dibaca 31 Okt 2026)", url: "https://www.idxchannel.com/market-news/emiten-hrum-bergerak-di-bidang-apa-inti-profil-usaha-dan-informasi-sahamnya/all" } },
     labaTahun: { 2024: 54.07, 2025: 37.42 },
     pendapatan: { 2024: 1295, 2025: 1330 },
     liabilitas2025: 1610, ekuitas2025: 1810,
