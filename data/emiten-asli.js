@@ -458,6 +458,8 @@ window.EMITEN_ASLI = [
   {
     kode: "PGAS", nama: "PT Perusahaan Gas Negara Tbk", sektor: "Energi",
     desBaris: 46, mataUang: "USD",
+    usaha: { teks: "Menyalurkan (distribusi) dan mengangkut (transmisi) gas bumi kepada pelanggan industri, usaha komersial, dan rumah tangga.",
+      sumber: { judul: "PintarSaham: Profil Perusahaan PGAS (artikel 21 Jul 2019, dibaca 31 Okt 2026)", url: "https://pintarsaham.id/profil-perusahaan-pgas/" } },
     labaTahun: { 2024: 339.42, 2025: 215.36 },
     pendapatan: { 2024: 3790, 2025: 3980 },
     liabilitas2025: 2620, ekuitas2025: 3610,
@@ -472,6 +474,8 @@ window.EMITEN_ASLI = [
   {
     kode: "ITMG", nama: "PT Indo Tambangraya Megah Tbk", sektor: "Energi",
     desBaris: 37, mataUang: "USD",
+    usaha: { teks: "Menambang dan mengolah batu bara di Kalimantan Timur, Tengah, dan Selatan, termasuk logistik pengangkutannya. Batu bara dijual ke pembeli di Indonesia dan diekspor ke negara lain, terutama di Asia.",
+      sumber: { judul: "Indonesia Investments: Indo Tambangraya Megah (dibaca 31 Okt 2026)", url: "https://www.indonesia-investments.com/id/bisnis/profil-perusahaan/indo-tambangraya-megah/item394" } },
     labaTahun: { 2024: 374.11, 2025: 190.94 },
     pendapatan: { 2024: 2300, 2025: 1880 },
     liabilitas2025: null, ekuitas2025: null,
