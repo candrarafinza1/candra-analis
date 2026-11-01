@@ -387,3 +387,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: cek laba 9 bulan TLKM, KLBF, ICBP — belum ada sumber baru, tetap 11 dari 31.
 - Tugas baru: Raka (isi kabar berjalan), Hana (tinjau kabar), Laras + Sari (istilah buyback), Kirana (tinjau halaman Kabar).
 - Masalah ringan: perintah `git reset --hard` ditolak sistem keamanan di awal sesi; diganti `git merge --ff-only` (repo sudah bersih). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 1 Nov 2026, 10.10 WIB (Bima)
+- Laras + Sari: istilah "Pembelian kembali saham (buyback)" ditambah di `data/istilah.js` (netral, tanpa ajakan); kini ditandai di halaman Kabar. Hana memeriksa istilah itu dan meninjau 15 kabar di `data/kabar.js`: tanpa kalimat ajakan, tidak ada yang perlu diubah.
+- Fajar: cek laba 9 bulan TLKM & KLBF, belum ada sumber baru; tetap 11 dari 31.
+- Nina: `node tests/cek.mjs` lolos (9 halaman). Dewi: halaman Kabar dicek 390px & 1280px, tanpa scroll horizontal dan tanpa galat JS.
+- Masalah ringan: tidak ada. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
