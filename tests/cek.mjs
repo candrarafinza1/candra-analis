@@ -157,6 +157,20 @@ ok(/function posisi\(kunci[\s\S]{0,900}peserta\(kunci\)/.test(readFileSync("asse
       ok(indeksHariIni(25, new Date(2026, 10, 1)) !== indeksHariIni(25, new Date(2026, 10, 2)), "istilah harus berganti antarhari");
     }
   }
+  // Nina (1 Nov 14.10): "Kabar terbaru" di beranda (IDE.md #16) — tersembunyi bawaan, data/kabar.js dimuat sebelum app.js,
+  // maksimal 3 kartu memakai kartuKabar() yang sama, ada catatan "bukan saran" dan tautan ke kabar.html, tanpa simpanan.
+  ok(/id="kabar-beranda"[^>]*\bhidden\b/.test(beranda), "index.html: wadah #kabar-beranda harus ada dan tersembunyi secara bawaan");
+  ok(/src="data\/kabar\.js"[\s\S]*src="assets\/app\.js"/.test(beranda), "index.html: data/kabar.js harus dimuat sebelum assets/app.js");
+  {
+    const fn = (js.match(/function renderKabarBeranda\(\)[\s\S]*?\n  \}/) || [""])[0];
+    ok(fn, "renderKabarBeranda tidak ditemukan");
+    ok(/daftarKabar\(\)\.slice\(0, 3\)/.test(fn), "renderKabarBeranda harus mengambil maksimal 3 kabar dari daftarKabar()");
+    ok(/kartuKabar\(/.test(fn), "renderKabarBeranda harus memakai kartuKabar() yang sama dengan halaman Kabar");
+    ok(/Kabar bukan saran membeli atau menjual/.test(fn), "renderKabarBeranda harus memuat catatan bukan saran");
+    ok(/href: "kabar\.html"/.test(fn), "renderKabarBeranda harus menautkan ke kabar.html");
+    ok(!/localStorage|sessionStorage|fetch\(/.test(fn), "renderKabarBeranda tidak boleh menyimpan atau memanggil server");
+    ok(/renderKabarBeranda\(\);/.test(js), "renderKabarBeranda harus dipanggil");
+  }
   // Nina (30 Okt): batang laba 9 bulan (IDE.md #10) — hanya bila kedua angka positif, angka tetap tertulis, batang aria-hidden
   ok(/N\[2025\] > 0 && N\[2026\] > 0[\s\S]{0,200}class: "batang9"/.test(js), "batang9 hanya boleh dibuat bila laba 9 bulan 2025 dan 2026 positif");
   // Nina (30 Okt 10.10): saring sektor Peringkat (IDE.md #11) — select berlabel, saringan memakai peserta() yang sama

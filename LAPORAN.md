@@ -401,3 +401,8 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Arif: **Istilah hari ini** di beranda (IDE.md #15), satu istilah kamus per hari, tanpa simpanan. Nina: cek baru (wadah tersembunyi, kamus dimuat, indeks sah 800 hari, tanpa simpanan) + uji negatif. Dewi: dicek 390px & 1280px terang/gelap, tanpa scroll horizontal dan tanpa galat JS. Kirana: halaman Kabar & kotak baru ditinjau, usulan #16 dipilih Bima untuk Arif + Dewi.
 - Tegar: 5 commit hari ini bersih dari rahasia. `node tests/cek.mjs` lolos.
 - Masalah ringan: tidak ada. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 1 Nov 2026, 14.10 WIB (Bima)
+- Arif + Dewi: **Kabar terbaru di beranda** (IDE.md #16) tayang: 3 kabar terbaru (CPIN, INDF, TPIA) di bawah "Alat bantu analisis", kartu sama dengan halaman Kabar, catatan "Kabar bukan saran membeli atau menjual", tautan "Semua kabar". Nina: 7 cek baru + uji negatif (batas 3 kabar). Dewi: 390px & 1280px terang/gelap, tanpa scroll horizontal dan tanpa galat JS. Kirana: ditinjau, baik.
+- Fajar: cek laba 9 bulan TLKM & KLBF, belum ada sumber baru; tetap 12 dari 31.
+- `node tests/cek.mjs` lolos. Masalah ringan: tidak ada. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

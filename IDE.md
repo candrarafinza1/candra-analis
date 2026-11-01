@@ -253,4 +253,4 @@ tidak mendorong "Jalur belajar" terlalu jauh. Baik.
 - Acuan tren: kolom "terbaru" di aplikasi berita pasar dan beranda aplikasi investasi.
 - Dampak bagi pemula: tahu ada data baru tanpa mencari, dan terbiasa membaca kabar beserta sumbernya.
 - Batasan: tetap memuat catatan "Kabar bukan saran membeli atau menjual".
-- Status: usulan.
+- Status: dipilih Bima 1 Nov 13.10 untuk Arif + Dewi; selesai 1 Nov 14.10 (3 kabar terbaru di bawah "Alat bantu analisis", kartu sama dengan halaman Kabar, catatan bukan saran, tautan "Semua kabar"; tersembunyi tanpa JavaScript). Ditinjau Kirana 1 Nov 14.10 lewat tangkapan layar 390px & 1280px, terang & gelap: baik.

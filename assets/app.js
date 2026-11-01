@@ -796,6 +796,27 @@
     pasangIstilah(akar);
   }
 
+  /* ---------- Kabar terbaru di beranda (Arif & Dewi, IDE.md #16, 1 Nov) ----------
+     3 kabar terbaru dari data/kabar.js dengan kartu yang sama seperti halaman Kabar.
+     Tanpa JavaScript atau data kosong → bagian tetap tersembunyi. Tanpa simpanan. */
+  function renderKabarBeranda() {
+    var wadah = document.getElementById("kabar-beranda");
+    if (!wadah) return;
+    var terbaru = daftarKabar().slice(0, 3);
+    if (!terbaru.length) return;
+    var ul = el("ul", { class: "kabar-daftar" });
+    terbaru.forEach(function (k) { ul.appendChild(kartuKabar(k, true)); });
+    wadah.appendChild(el("div", { class: "wadah" }, [
+      el("h2", { id: "judul-kabar-beranda", text: "Kabar terbaru" }),
+      el("p", { class: "pengantar" }, ["Ringkasan pengumuman emiten syariah dalam data kami, lengkap dengan sumbernya. ",
+        el("strong", { text: "Kabar bukan saran membeli atau menjual." })]),
+      ul,
+      el("p", { style: "margin-top:20px" }, [el("a", { href: "kabar.html", text: "Semua kabar" })])
+    ]));
+    wadah.hidden = false;
+    pasangIstilah(wadah);
+  }
+
   /* ---------- Rujukan belajar ---------- */
   function renderRujukan() {
     var akar = document.getElementById("rujukan");
@@ -1100,6 +1121,7 @@
   renderRadar();
   renderProfil();
   renderKabar();
+  renderKabarBeranda();
   renderRujukan();
   renderAsisten();
   renderIsiHalaman();
