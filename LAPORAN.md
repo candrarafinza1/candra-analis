@@ -417,3 +417,7 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Nina: 8 cek baru di `tests/cek.mjs` + uji negatif (kata "lebih baik" tertangkap). Dewi: dicek 390px & 1280px terang/gelap; tabel sempat terpotong di 390px, diperbaiki (sel boleh turun baris), kini tanpa scroll horizontal dan tanpa galat JS.
 - Fajar: cek laba 9 bulan TLKM, KLBF, BSDE, MIKA, JPFA, belum ada sumber laba atribusi baru; tetap 12 dari 31.
 - `node tests/cek.mjs` lolos. Masalah ringan: tabel banding terpotong di HP (sudah diperbaiki). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 1 Nov 2026, 17.10 WIB (Bima)
+- Fajar: cek laba 9 bulan 2026 untuk KLBF, TLKM, BRIS, SMGR, MIKA, INTP, EXCL, ITMG, PGAS. Belum ada sumber laba atribusi baru (artikel PGAS "kuartal III" ternyata terbit 2014, tidak dipakai). Tetap 12 dari 31; tidak ada data yang diubah.
+- `node tests/cek.mjs` lolos. Masalah ringan: tidak ada. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
