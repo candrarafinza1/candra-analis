@@ -238,6 +238,17 @@ p { margin: 0 0 1em; }
 .panel h3 { margin-bottom: .4em; }
 .panel p { color: var(--tinta-2); }
 .panel-gelap { background: var(--malam); border-color: var(--malam); color: #fff; }
+/* Istilah hari ini di beranda (Arif & Dewi, IDE.md #15) */
+.bagian-istilah { padding-top: 40px; padding-bottom: 0; }
+.bagian-istilah[hidden] { display: none; }
+.bagian-istilah:not([hidden]) + .bagian { padding-top: 48px; }
+.bagian-istilah[hidden] + .bagian { padding-top: 64px; }
+.kartu-istilah-hari { max-width: var(--lebar-teks); border-left: 4px solid var(--bulan); }
+.kartu-istilah-hari h2 { font-size: 1.35rem; margin: 0 0 .35em; }
+.kartu-istilah-hari p { margin: 0 0 .6em; }
+.kartu-istilah-hari .label-istilah-hari { font-size: .85rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--tinta-2); margin-bottom: .3em; }
+.kartu-istilah-hari .tautan-istilah-hari a { color: var(--aksen); font-weight: 600; }
+.kartu-istilah-hari .catatan-istilah-hari { font-size: .88rem; margin: 0; }
 .panel-gelap p { color: #cfd3f2; }
 
 /* Tabel mini & tabel peringkat */

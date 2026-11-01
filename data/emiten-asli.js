@@ -226,12 +226,17 @@ window.EMITEN_ASLI = [
     labaTahun: { 2024: 3710, 2025: 5640 },
     pendapatan: { 2024: 67470, 2025: 70700 },
     liabilitas2025: 11710, ekuitas2025: 34150,
-    laba9b: { 2025: null, 2026: null },
+    laba9b: { 2025: 3360, 2026: 5180 },
+    catatan9b: "Laba 9 bulan = laba periode berjalan yang dapat diatribusikan kepada pemilik entitas induk: Rp5,18 T (Jan–Sep 2026, Emiten News 31 Okt 2026, naik 53,86%; penjualan neto Rp60,20 T vs Rp50,60 T) vs Rp3,36 T (Jan–Sep 2025, Bisnis 1 Nov 2025 & Kontan). Runtut dengan laba semester I 2026 Rp3,71 T (Databoks). Sumber tidak menyebut pos sekali-waktu.",
     dps: null, harga: null,
     sumber: [{ judul: "Kontan Insight, 9 Apr 2026: Pakan ternak menopang laba Charoen Pokphand pada 2025",
       url: "https://insight.kontan.co.id/news/pakan-ternak-menopang-laba-charoen-pokphand-cpin-pada-2025" },
       { judul: "Bisnis, 31 Mar 2026: Adu nyaring kokok duo emiten unggas JPFA-CPIN di 2025 (neraca akhir 2025)",
-        url: "https://market.bisnis.com/read/20260331/192/1963318/adu-nyaring-kokok-duo-emiten-unggas-jpfa-cpin-di-2025" }]
+        url: "https://market.bisnis.com/read/20260331/192/1963318/adu-nyaring-kokok-duo-emiten-unggas-jpfa-cpin-di-2025" },
+      { judul: "Emiten News, 31 Okt 2026: Dua segmen usaha CPIN dongkrak laba naik 53,8 persen (laba atribusi 9 bulan 2026)",
+        url: "https://www.emitennews.com/news/dua-segmen-usaha-cpin-dongkrak-laba-naik-538-persen-ini-rinciannya" },
+      { judul: "Bisnis, 1 Nov 2025: Laba Charoen Pokphand (CPIN) melesat 41% jadi Rp3,36 triliun per kuartal III/2025",
+        url: "https://market.bisnis.com/read/20251101/192/1925166/laba-charoen-pokphand-cpin-melesat-41-jadi-rp336-triliun-per-kuartal-iii2025" }]
   },
   {
     kode: "JPFA", nama: "PT Japfa Comfeed Indonesia Tbk", sektor: "Barang konsumen primer",

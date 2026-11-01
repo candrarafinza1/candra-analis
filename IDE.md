@@ -231,4 +231,26 @@ Usulan minggu ini (3 usulan baru):
   Laras, dan Hana.
 - Acuan tren: kartu "kata hari ini" di aplikasi belajar bahasa dan literasi keuangan.
 - Dampak bagi pemula: menambah satu istilah setiap kunjungan, alasan untuk kembali belajar.
+- Status: dipilih Bima 1 Nov 13.10 untuk Arif; selesai 1 Nov 13.10 (kotak di antara hero dan "Jalur belajar", dipilih dari tanggal perangkat, tanpa simpanan; tautan ke pelajaran terkait bila ada). Ditinjau Kirana 1 Nov 13.10 lewat tangkapan layar 390px & 1280px, terang & gelap: baik.
+
+## Tinjauan Kirana — 1 Nov 2026, 13.10 WIB
+
+Halaman Kabar emiten (tugas 1 Nov 09.10), dicek lewat tangkapan layar 390px & 1280px, terang & gelap:
+- 390px: judul, catatan "Kabar bukan saran membeli atau menjual", dan saringan jenis muat di layar pertama; kartu kabar
+  pertama mulai ±650px dari atas. Tanggal dan label jenis sebaris, kode emiten tebal. Tanpa scroll horizontal.
+- 1280px & mode gelap: kontras label jenis dan teks kartu terbaca baik. Urutan terbaru di atas sesuai (CPIN 31 Okt paling atas).
+- "Kabar terbaru" di profil (CPIN, 390px): tampil di bawah angka utama, tautan sumber jelas. Tidak ada perbaikan.
+
+Kotak "Istilah hari ini" (#15) di beranda: garis kiri warna bulan membedakannya dari panel lain; di 390px tinggi ±360px,
+tidak mendorong "Jalur belajar" terlalu jauh. Baik.
+
+### 16. Beranda: "Kabar terbaru" (3 kabar)
+- **Kabar terbaru di beranda** — fitur, usaha kecil
+- Masalah atau peluang: halaman Kabar emiten hanya terlihat lewat tautan di kaki halaman; pengunjung beranda tidak tahu
+  ada laporan 9 bulan baru.
+- Ide: di bawah panel "Alat bantu analisis", daftar 3 kabar terbaru dari `data/kabar.js` (tanggal, kode, ringkasan,
+  tautan sumber) + tautan "Semua kabar". Memakai fungsi tampilan kartu yang sama dengan halaman Kabar. Tanpa simpanan.
+- Acuan tren: kolom "terbaru" di aplikasi berita pasar dan beranda aplikasi investasi.
+- Dampak bagi pemula: tahu ada data baru tanpa mencari, dan terbiasa membaca kabar beserta sumbernya.
+- Batasan: tetap memuat catatan "Kabar bukan saran membeli atau menjual".
 - Status: usulan.

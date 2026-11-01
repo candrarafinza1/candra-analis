@@ -1030,6 +1030,31 @@
   window.addEventListener("scroll", letakkan, { passive: true });
   document.addEventListener("scroll", letakkan, { passive: true, capture: true });
 
+  /* ---------- Beranda: Istilah hari ini (Arif, IDE.md #15; teks dari kamus yang sudah ditinjau Sari, Laras, Hana) ----------
+     Satu istilah dari data/istilah.js, dipilih dari tanggal di perangkat (berganti tiap hari, sama sepanjang hari).
+     Tanpa simpanan dan tanpa server. Tanpa JavaScript atau kamus kosong → bagian tetap tersembunyi. */
+  function indeksHariIni(jumlah, tgl) {
+    var d = tgl || new Date();
+    var hari = Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 86400000);
+    return ((hari % jumlah) + jumlah) % jumlah;
+  }
+  function renderIstilahHari() {
+    var wadah = document.getElementById("istilah-hari");
+    if (!wadah || !ISTILAH.length) return;
+    var t = ISTILAH[indeksHariIni(ISTILAH.length)];
+    var kartu = el("div", { class: "panel kartu-istilah-hari" }, [
+      el("p", { class: "label-istilah-hari", text: "Istilah hari ini" }),
+      el("h2", { id: "judul-istilah-hari", text: t.istilah }),
+      el("p", { text: t.arti })
+    ]);
+    if (t.pelajaran && JUDUL_MODUL[t.pelajaran]) kartu.appendChild(el("p", { class: "tautan-istilah-hari" }, [
+      el("a", { href: "pelajaran.html?m=" + t.pelajaran, text: "Pelajari lebih lanjut: " + JUDUL_MODUL[t.pelajaran] })
+    ]));
+    kartu.appendChild(el("p", { class: "catatan-istilah-hari", text: "Berganti setiap hari. Ketuk istilah bergaris putus-putus di halaman lain untuk penjelasan serupa." }));
+    wadah.appendChild(el("div", { class: "wadah" }, [kartu]));
+    wadah.hidden = false;
+  }
+
   /* ---------- Metodologi: tandai bagian yang sedang dibaca (Dewi, IDE.md #8) ---------- */
   function renderIsiHalaman() {
     var nav = document.getElementById("isi-halaman");
@@ -1067,6 +1092,7 @@
   tandaiMenu();
   renderJalur("jalur-ringkas", false);
   renderLanjutkan();
+  renderIstilahHari();
   renderJalur("jalur-lengkap", true);
   renderPelajaran();
   renderMini();

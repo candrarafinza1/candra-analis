@@ -133,6 +133,30 @@ ok(/function posisi\(kunci[\s\S]{0,900}peserta\(kunci\)/.test(readFileSync("asse
   const beranda = readFileSync("index.html", "utf8");
   ok(/id="lanjutkan-belajar"[^>]*\bhidden\b/.test(beranda), "index.html: wadah #lanjutkan-belajar harus ada dan tersembunyi secara bawaan");
   ok(/function renderLanjutkan\(\)[\s\S]{0,400}bacaSelesai\(\)/.test(js), "renderLanjutkan harus memakai bacaSelesai() yang sama dengan penanda kemajuan");
+  // Nina (1 Nov 13.10): "Istilah hari ini" (IDE.md #15) — tersembunyi bawaan, kamus dimuat sebelum app.js,
+  // dipilih dari tanggal tanpa simpanan, dan pilihan hari selalu indeks yang sah (uji 800 hari berturut-turut).
+  ok(/id="istilah-hari"[^>]*\bhidden\b/.test(beranda), "index.html: wadah #istilah-hari harus ada dan tersembunyi secara bawaan");
+  ok(/src="data\/istilah\.js"[\s\S]*src="assets\/app\.js"/.test(beranda), "index.html: data/istilah.js harus dimuat sebelum assets/app.js");
+  {
+    const fn = (js.match(/function renderIstilahHari\(\)[\s\S]*?\n  \}/) || [""])[0];
+    ok(fn, "renderIstilahHari tidak ditemukan");
+    ok(!/localStorage|sessionStorage|fetch\(/.test(fn), "renderIstilahHari tidak boleh menyimpan atau memanggil server");
+    const fIdx = (js.match(/function indeksHariIni\(jumlah, tgl\) \{[\s\S]*?\n  \}/) || [""])[0];
+    ok(fIdx, "indeksHariIni tidak ditemukan");
+    if (fIdx) {
+      const indeksHariIni = vm.runInNewContext(`(${fIdx.replace(/^function indeksHariIni/, "function")})`);
+      const terlihat = new Set();
+      for (let i = 0; i < 800; i++) {
+        const t = new Date(2026, 0, 1 + i, 23, 59);
+        const k = indeksHariIni(25, t);
+        ok(Number.isInteger(k) && k >= 0 && k < 25, `indeksHariIni menghasilkan indeks tidak sah: ${k}`);
+        ok(k === indeksHariIni(25, new Date(2026, 0, 1 + i, 0, 1)), "indeksHariIni harus sama sepanjang satu hari");
+        terlihat.add(k);
+      }
+      ok(terlihat.size === 25, "indeksHariIni harus memutar semua istilah");
+      ok(indeksHariIni(25, new Date(2026, 10, 1)) !== indeksHariIni(25, new Date(2026, 10, 2)), "istilah harus berganti antarhari");
+    }
+  }
   // Nina (30 Okt): batang laba 9 bulan (IDE.md #10) — hanya bila kedua angka positif, angka tetap tertulis, batang aria-hidden
   ok(/N\[2025\] > 0 && N\[2026\] > 0[\s\S]{0,200}class: "batang9"/.test(js), "batang9 hanya boleh dibuat bila laba 9 bulan 2025 dan 2026 positif");
   // Nina (30 Okt 10.10): saring sektor Peringkat (IDE.md #11) — select berlabel, saringan memakai peserta() yang sama
