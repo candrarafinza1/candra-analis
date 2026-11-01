@@ -210,7 +210,7 @@ Usulan minggu ini (3 usulan baru):
 - Acuan tren: hampir semua aplikasi investasi dan belajar kini mengikuti mode gelap sistem; `prefers-color-scheme`
   didukung semua peramban modern.
 - Dampak bagi pemula: nyaman dibaca malam hari, mata tidak cepat lelah, website terasa modern.
-- Status: dipilih Bima 1 Nov 07.10 untuk Dewi, masuk BACKLOG.md.
+- Status: dipilih Bima 1 Nov 07.10 untuk Dewi; selesai 1 Nov 08.10 (mengikuti pengaturan perangkat, tanpa tombol). Ditinjau Kirana 1 Nov 08.10 lewat tangkapan layar: baik; tombol terpilih diberi garis aksen. Tinjauan di HP sungguhan menyusul setelah tayang.
 
 ### 14. Profil emiten: bandingkan dengan emiten lain
 - **Bandingkan dua emiten** — fitur, usaha sedang

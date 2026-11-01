@@ -253,6 +253,37 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
   ok(tanpaNoopener('<a href="x" target="_blank">').length === 1, "cek noopener tidak menangkap tautan tanpa rel");
 }
 
+// Nina (1 Nov): mode gelap (Dewi, IDE.md #13). Warna di :root wajib punya pasangan di prefers-color-scheme: dark,
+// dan pasangan teks/latar utama kontras min. 4,5:1 di kedua mode (garis & lampu min. 3:1).
+{
+  const css = readFileSync("assets/styles.css", "utf8");
+  const ambil = blok => Object.fromEntries([...blok.matchAll(/--([a-z0-9-]+):\s*(#[0-9a-f]{6})\b/gi)].map(m => [m[1], m[2]]));
+  const terang = ambil(css.match(/:root\s*\{([\s\S]*?)\}/)[1]);
+  const mGelap = css.match(/@media \(prefers-color-scheme: dark\)\s*\{\s*:root\s*\{([\s\S]*?)\}/);
+  ok(mGelap, "styles.css belum punya mode gelap (prefers-color-scheme: dark)");
+  if (mGelap) {
+    const gelap = { ...terang, ...ambil(mGelap[1]) };
+    for (const k of ["kertas", "putih", "tinta", "tinta-2", "garis", "naik", "turun", "waspada", "naik-muda", "turun-muda", "waspada-muda"])
+      ok(gelap[k] !== terang[k], `mode gelap belum mengganti --${k}`);
+    const lum = h => { const c = [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16) / 255).map(v => v <= .03928 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4); return .2126 * c[0] + .7152 * c[1] + .0722 * c[2]; };
+    const kontras = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((p, q) => q - p); return (x + .05) / (y + .05); };
+    ok(kontras("#ffffff", "#000000") > 20.9 && kontras("#777777", "#777777") === 1, "rumus kontras salah");
+    const teks = [["tinta", "kertas"], ["tinta", "putih"], ["tinta-2", "kertas"], ["tinta-2", "putih"],
+      ["naik", "putih"], ["turun", "putih"], ["waspada", "putih"], ["naik", "naik-muda"], ["turun", "turun-muda"],
+      ["waspada", "waspada-muda"], ["tinta", "naik-muda"], ["tinta", "turun-muda"], ["tinta", "waspada-muda"],
+      ["demo-teks", "waspada-muda"], ["sumber-teks", "naik-muda"]];
+    const aksenGelap = gelap["aksen"]; // di mode terang --aksen = var(--malam-2)
+    for (const [nama, w] of [["terang", { ...terang, aksen: terang["malam-2"] }], ["gelap", { ...gelap, aksen: aksenGelap }]]) {
+      for (const [t, l] of [...teks, ["aksen", "putih"], ["aksen", "kertas"]]) {
+        const k = kontras(w[t], w[l]);
+        const batas = 4.5;
+        ok(k >= batas, `kontras --${t} di atas --${l} (mode ${nama}) ${k.toFixed(2)}:1 < ${batas}:1`);
+      }
+      for (const lampu of ["naik", "turun", "waspada", "aksen"]) ok(kontras(w[lampu], w["putih"]) >= 3, `lampu --${lampu} (mode ${nama}) kurang kontras`);
+    }
+  }
+}
+
 // 3. Aturan Hana (syariah): halaman tidak boleh memakai bahasa ajakan
 const terlarang = /\b(wajib beli|pasti naik|buruan (beli|jual)|dijamin untung|rekomendasi beli)\b/i;
 for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"]) {

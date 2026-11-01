@@ -374,3 +374,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Tegar: tidak ada rahasia di 50 commit terakhir. Yoga: tautan internal lolos.
 - Nina: `node tests/cek.mjs` lolos (8 halaman, 8 pelajaran, 31 emiten). Profil ISAT/TPIA dicek 390px & 1280px, tanpa scroll horizontal dan tanpa galat JS.
 - Masalah ringan: tidak ada. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 1 Nov 2026, 08.10 WIB (Bima)
+- Dewi: mode gelap mengikuti pengaturan HP/komputer (IDE.md #13) selesai. Semua warna kini token di `:root`; warna status mode terang digelapkan sedikit agar teks kontras ≥4,5:1.
+- Nina: cek otomatis baru di `tests/cek.mjs` (mode gelap wajib ada, kontras teks ≥4,5:1 dan lampu ≥3:1 di kedua mode). `node tests/cek.mjs` lolos. 8 halaman dicek 390px & 1280px, terang dan gelap: tanpa scroll horizontal dan tanpa galat JS.
+- Kirana: tinjau tangkapan layar mode gelap; tombol pilihan terpilih diberi garis aksen agar lebih jelas.
+- Masalah ringan: tidak ada. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
