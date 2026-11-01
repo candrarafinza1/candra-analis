@@ -411,6 +411,8 @@ window.EMITEN_ASLI = [
   {
     kode: "ISAT", nama: "PT Indosat Tbk", sektor: "Infrastruktur",
     desBaris: 556,
+    usaha: { teks: "Menyediakan layanan telekomunikasi dan teknologi digital di Indonesia: layanan seluler, internet dan komunikasi data, serta telekomunikasi tetap. Untuk perusahaan tersedia antara lain pusat data dan layanan cloud.",
+      sumber: { judul: "StockAnalysis: profil PT Indosat Tbk (dibaca 1 Nov 2026)", url: "https://stockanalysis.com/quote/idx/ISAT/company/" } },
     labaTahun: { 2024: 4910.1, 2025: 5509 },
     pendapatan: { 2024: 55890, 2025: 56518 },
     liabilitas2025: 79120, ekuitas2025: 39510,
@@ -560,6 +562,8 @@ window.EMITEN_ASLI = [
   {
     kode: "TPIA", nama: "PT Chandra Asri Pacific Tbk", sektor: "Bahan baku",
     desBaris: 147, mataUang: "USD",
+    usaha: { teks: "Perusahaan petrokimia terpadu yang memproduksi olefin (etilena, propilena), polietilena, polipropilena, stirena monomer, dan butadiena untuk pasar dalam negeri dan regional. Perusahaan juga punya usaha penyewaan tangki dan dermaga (jetty).",
+      sumber: { judul: "Lembar Saham: Profil Perusahaan TPIA (dibaca 1 Nov 2026)", url: "https://lembarsaham.com/fundamental-saham/emiten/TPIA" } },
     sekaliWaktu: "Laba 2025 berbalik dari rugi berkat keuntungan akuntansi sekali-waktu dari transaksi Aster; nilainya tidak disebut sumber.",
     labaTahun: { 2024: -68.61, 2025: 1090 },
     pendapatan: { 2024: 1780, 2025: 7020 },

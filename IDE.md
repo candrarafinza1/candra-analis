@@ -190,3 +190,45 @@ Hasil #10, #11, #12, dan #6 dicek di 390px dan 1280px (tanpa scroll horizontal, 
 - #6 Radar (AADI dll.): kotak "Cara membaca hasil Radar" muncul sebelum memilih, batang 2024 vs 2025 rapi di 390px,
   label tidak meluap. Tidak ada perbaikan.
 
+
+## Tinjauan & usulan Kirana — 1 Nov 2026, 07.10 WIB
+
+Tinjauan tanda "+" (tugas 30 Okt 16.10), dicek di 390px dan 1280px, tanpa scroll horizontal:
+- Peringkat (390 & 1280): angka naik tertulis "+6,6%", "+22,3%", dst. Sesuai.
+- Radar (ISAT, 390): "+38,2%" pada laba 9 bulan. Sesuai.
+- Profil ISAT (390): "+12,2%", "+1,1%", "+38,2%". Tidak ada angka naik tanpa tanda. Tidak ada perbaikan.
+
+Usulan minggu ini (3 usulan baru):
+
+### 13. Mode gelap mengikuti pengaturan HP ★ paling berdampak
+- **Mode gelap otomatis** — tampilan, usaha sedang
+- Masalah atau peluang: website selalu terang. Banyak pemula membaca di HP malam hari dengan mode gelap aktif;
+  halaman putih terasa silau dan tidak konsisten dengan aplikasi lain di HP mereka.
+- Ide: warna utama dijadikan variabel CSS di `:root`, lalu diganti di `@media (prefers-color-scheme: dark)`.
+  Tanpa tombol dan tanpa simpanan; mengikuti pengaturan HP/komputer. Warna lampu Radar (hijau/kuning/merah) dan
+  batang tetap kontras minimal 4,5:1. CSS saja, tanpa pustaka.
+- Acuan tren: hampir semua aplikasi investasi dan belajar kini mengikuti mode gelap sistem; `prefers-color-scheme`
+  didukung semua peramban modern.
+- Dampak bagi pemula: nyaman dibaca malam hari, mata tidak cepat lelah, website terasa modern.
+- Status: dipilih Bima 1 Nov 07.10 untuk Dewi, masuk BACKLOG.md.
+
+### 14. Profil emiten: bandingkan dengan emiten lain
+- **Bandingkan dua emiten** — fitur, usaha sedang
+- Masalah atau peluang: pemula sering bertanya "lebih besar mana labanya, A atau B?" dan harus membuka dua profil
+  bergantian.
+- Ide: di profil, `<select>` "Bandingkan dengan…" (daftar 31 emiten). Tabel dua kolom: laba, pendapatan, ROE, DER,
+  laba 9 bulan, dengan sumber masing-masing. Emiten berlaporan dolar AS tidak dikonversi (aturan Galih); bila mata uang
+  berbeda, tampil catatan "tidak sebanding langsung". Tanpa kata "lebih baik", hanya angka.
+- Acuan tren: fitur "compare" di aplikasi saham dan situs data keuangan.
+- Dampak bagi pemula: belajar membaca angka dengan membandingkan, tanpa diarahkan memilih.
+- Status: usulan.
+
+### 15. Beranda: "Istilah hari ini"
+- **Istilah hari ini** — fitur, usaha kecil
+- Masalah atau peluang: kamus istilah (`data/istilah.js`) hanya terlihat bila pengguna mengetuk istilah di halaman.
+- Ide: kotak kecil di beranda menampilkan satu istilah dari kamus yang berganti tiap hari (dipilih dari tanggal,
+  tanpa simpanan), dengan tautan ke pelajaran terkait bila ada. Teks diambil dari kamus yang sudah ditinjau Sari,
+  Laras, dan Hana.
+- Acuan tren: kartu "kata hari ini" di aplikasi belajar bahasa dan literasi keuangan.
+- Dampak bagi pemula: menambah satu istilah setiap kunjungan, alasan untuk kembali belajar.
+- Status: usulan.
