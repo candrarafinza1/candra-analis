@@ -599,3 +599,17 @@ button.istilah:hover, button.istilah[aria-expanded="true"] { color: var(--aksen)
 }
 @keyframes tumbuh-datar { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 .ringkasan-usaha { max-width: var(--lebar-teks); margin: 0 0 6px; }
+
+/* Kabar emiten (Dewi & Arif, 1 Nov) */
+.kabar-daftar { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
+.kabar {
+  background: var(--putih); border: 1px solid var(--garis);
+  border-radius: var(--radius-kecil); padding: 14px 18px; min-width: 0;
+}
+.kabar-kepala { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin: 0 0 6px; font-size: .88rem; color: var(--tinta-2); }
+.kabar-jenis { padding: 2px 10px; border-radius: 999px; border: 1px solid var(--garis); font-weight: 700; color: var(--tinta); }
+.kabar-judul { margin: 0 0 4px; font-size: 1.05rem; }
+.kabar-judul .nama-emiten { display: inline; margin-left: 8px; }
+.kabar-isi { margin: 0; color: var(--tinta); overflow-wrap: anywhere; }
+.kabar-sumber { margin: 8px 0 0; font-size: .88rem; overflow-wrap: anywhere; }
+.kabar-sumber a { color: var(--tinta-2); }

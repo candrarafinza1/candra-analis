@@ -718,6 +718,16 @@
     });
     akar.appendChild(ul);
 
+    // Kabar terbaru (Arif & Raka, 1 Nov): maksimal 3, sisanya di kabar.html
+    var kabarIni = daftarKabar(e.kode);
+    if (kabarIni.length) {
+      akar.appendChild(el("h2", { class: "judul-profil-bagian", text: "Kabar terbaru" }));
+      var ulKabar = el("ul", { class: "kabar-daftar" });
+      kabarIni.slice(0, 3).forEach(function (k) { ulKabar.appendChild(kartuKabar(k, false)); });
+      akar.appendChild(ulKabar);
+      akar.appendChild(el("p", { class: "catatan-metode" }, [el("a", { href: "kabar.html", text: "Semua kabar emiten" })]));
+    }
+
     // Sumber
     akar.appendChild(el("h2", { class: "judul-profil-bagian", text: "Sumber data" }));
     var sumber = el("ul", { class: "daftar-sumber" });
@@ -730,6 +740,59 @@
       el("a", { href: "metodologi.html", text: "halaman Metodologi" }), ". ",
       el("a", { href: "peringkat.html", text: "Kembali ke Peringkat" }), "."
     ]));
+    pasangIstilah(akar);
+  }
+
+  /* ---------- Kabar emiten (Arif & Raka, 1 Nov) ----------
+     Data dari data/kabar.js. Hanya kabar untuk emiten yang ada di data kita. Tanpa simpanan. */
+  var BULAN = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
+  function tanggalId(t) {
+    var p = String(t).split("-");
+    return parseInt(p[2], 10) + " " + BULAN[parseInt(p[1], 10) - 1] + " " + p[0];
+  }
+  function daftarKabar(kode) {
+    return (window.KABAR || []).filter(function (k) {
+      return (!kode || k.kode === kode) && EMITEN.some(function (e) { return e.kode === k.kode; });
+    }).slice().sort(function (a, b) { return a.tanggal < b.tanggal ? 1 : a.tanggal > b.tanggal ? -1 : a.kode.localeCompare(b.kode); });
+  }
+  function kartuKabar(k, denganKode) {
+    var e = EMITEN.find(function (x) { return x.kode === k.kode; });
+    var kepala = [el("time", { datetime: k.tanggal, text: tanggalId(k.tanggal) }), el("span", { class: "kabar-jenis", text: k.jenis })];
+    return el("li", { class: "kabar" }, [
+      el("p", { class: "kabar-kepala" }, kepala),
+      denganKode ? el("h3", { class: "kabar-judul" }, [
+        el("a", { class: "kode tautan-kode", href: "emiten.html?kode=" + e.kode, text: e.kode, "aria-label": "Profil " + e.kode }),
+        el("span", { class: "nama-emiten", text: e.nama })
+      ]) : null,
+      el("p", { class: "kabar-isi", text: k.ringkas }),
+      el("p", { class: "kabar-sumber" }, [el("a", { href: k.sumber.url, target: "_blank", rel: "noopener", text: k.sumber.judul + " (tab baru)" })])
+    ]);
+  }
+  function renderKabar() {
+    var akar = document.getElementById("kabar");
+    if (!akar) return;
+    var semua = daftarKabar();
+    var jenisAda = (window.KABAR_JENIS || []).filter(function (j) { return semua.some(function (k) { return k.jenis === j; }); });
+    var pilih = el("select", { id: "pilih-jenis" });
+    pilih.appendChild(el("option", { value: "", text: "Semua jenis" }));
+    jenisAda.forEach(function (j) { pilih.appendChild(el("option", { value: j, text: j })); });
+    var ket = el("p", { class: "saring-ket", id: "ket-jenis", "aria-live": "polite" });
+    var ul = el("ul", { class: "kabar-daftar" });
+    akar.appendChild(el("div", { class: "pita-sumber", role: "note" }, [
+      el("p", null, ["Kabar disalin ringkas dari berita atau pengumuman resmi; angka ditulis seperti di sumbernya. ",
+        el("strong", { text: "Kabar bukan saran membeli atau menjual." })])
+    ]));
+    akar.appendChild(el("div", { class: "saring-sektor" }, [el("label", { for: "pilih-jenis", text: "Saring jenis kabar" }), pilih, ket]));
+    akar.appendChild(ul);
+    function tampilkan() {
+      var j = pilih.value;
+      var hasil = semua.filter(function (k) { return !j || k.jenis === j; });
+      ul.textContent = "";
+      hasil.forEach(function (k) { ul.appendChild(kartuKabar(k, true)); });
+      ket.textContent = hasil.length + " kabar" + (j ? " jenis " + j : "") + ", terbaru di atas.";
+    }
+    pilih.addEventListener("change", tampilkan);
+    tampilkan();
     pasangIstilah(akar);
   }
 
@@ -1010,6 +1073,7 @@
   renderPeringkat();
   renderRadar();
   renderProfil();
+  renderKabar();
   renderRujukan();
   renderAsisten();
   renderIsiHalaman();

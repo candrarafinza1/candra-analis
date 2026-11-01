@@ -284,6 +284,38 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
   }
 }
 
+// 2e. Kabar emiten (Arif & Nina, 1 Nov): kode ada di data, tanggal valid & tidak di masa depan, jenis dikenal,
+// ringkasan singkat tanpa ajakan, sumber https. Halaman kabar.html memuat wadah #kabar dan data/kabar.js.
+{
+  vm.runInContext(readFileSync("data/kabar.js", "utf8"), ctx);
+  const { KABAR, KABAR_JENIS } = ctx.window;
+  const ajakan = /\b(wajib beli|pasti naik|buruan (beli|jual)|dijamin untung|rekomendasi beli|layak (dibeli|dikoleksi)|prospek cerah|saatnya (beli|masuk|jual)|target harga)\b/i;
+  const hariIni = new Date(Date.now() + 7 * 3600e3).toISOString().slice(0, 10); // WIB
+  const salahKabar = (k) => {
+    const s = [];
+    if (!kodeAsli.has(k.kode)) s.push("kode tidak ada di data asli");
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(k.tanggal || "") || isNaN(Date.parse(k.tanggal)) || k.tanggal > hariIni) s.push("tanggal tidak valid/di masa depan");
+    if (!(KABAR_JENIS || []).includes(k.jenis)) s.push("jenis tidak dikenal");
+    if (typeof k.ringkas !== "string" || k.ringkas.length < 20 || k.ringkas.length > 260) s.push("ringkas harus 20–260 karakter");
+    if (ajakan.test(k.ringkas || "")) s.push("ringkas memuat kalimat ajakan");
+    if (!k.sumber || !k.sumber.judul || !/^https:\/\//.test(k.sumber.url || "")) s.push("sumber wajib judul + https");
+    return s;
+  };
+  ok(Array.isArray(KABAR) && KABAR.length > 0, "data/kabar.js kosong");
+  const kunci = new Set();
+  for (const k of KABAR || []) {
+    for (const s of salahKabar(k)) ok(false, `kabar ${k.kode} ${k.tanggal}: ${s}`);
+    const id = `${k.kode}|${k.tanggal}|${k.jenis}`;
+    ok(!kunci.has(id), `kabar ganda: ${id}`); kunci.add(id);
+  }
+  // uji negatif
+  ok(salahKabar({ kode: "ZZZZ", tanggal: "2099-01-01", jenis: "Gosip", ringkas: "Saham ini prospek cerah, saatnya beli.", sumber: { judul: "x", url: "http://x" } }).length === 5,
+    "cek kabar tidak menangkap entri yang salah");
+  const hk = existsSync("kabar.html") ? readFileSync("kabar.html", "utf8") : "";
+  ok(/id="kabar"/.test(hk) && /data\/kabar\.js/.test(hk), "kabar.html tidak ada, tanpa wadah #kabar, atau tidak memuat data/kabar.js");
+  ok(/data\/kabar\.js/.test(readFileSync("emiten.html", "utf8")), "emiten.html belum memuat data/kabar.js (kabar terbaru di profil)");
+}
+
 // 3. Aturan Hana (syariah): halaman tidak boleh memakai bahasa ajakan
 const terlarang = /\b(wajib beli|pasti naik|buruan (beli|jual)|dijamin untung|rekomendasi beli)\b/i;
 for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"]) {
