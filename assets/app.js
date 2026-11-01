@@ -584,6 +584,61 @@
 
   /* ---------- Profil emiten (tim Dewi & Arif) ---------- */
   // emiten.html?kode=XXXX. Hanya menampilkan angka yang ada di data; yang kosong tampil "–".
+  /* ---------- Bandingkan dua emiten (Arif, IDE.md #14, 1 Nov) ----------
+     Hanya angka berdampingan, tanpa kata "lebih baik". Dolar AS tidak dikonversi; bila mata uang beda, diberi catatan.
+     Tanpa simpanan. */
+  function bagianBanding(e) {
+    var wadah = el("section", { class: "banding", "aria-labelledby": "judul-banding" });
+    wadah.appendChild(el("h2", { class: "judul-profil-bagian", id: "judul-banding", text: "Bandingkan dengan emiten lain" }));
+    var pilih = el("select", { id: "pilih-banding", class: "pilih-banding" });
+    pilih.appendChild(el("option", { value: "", text: "Pilih emiten…" }));
+    EMITEN.filter(function (x) { return x.kode !== e.kode; }).sort(function (a, b) { return a.kode.localeCompare(b.kode); })
+      .forEach(function (x) { pilih.appendChild(el("option", { value: x.kode, text: x.kode + " · " + x.nama })); });
+    wadah.appendChild(el("div", { class: "saring-sektor kontrol-banding" }, [el("label", { for: "pilih-banding", text: "Bandingkan " + e.kode + " dengan" }), pilih]));
+    var hasil = el("div", { id: "hasil-banding", "aria-live": "polite" });
+    wadah.appendChild(hasil);
+
+    function nilaiPos(x) {
+      var rp = uang(x), L = x.labaTahun || {}, P = x.pendapatan || {}, N = x.laba9b || {};
+      var g9 = tumbuh(N[2025], N[2026]);
+      return [
+        strip(L[2025], rp),
+        strip(P[2025], rp),
+        strip(roe(x), persen),
+        strip(der(x), function (v) { return angka.format(v) + "x"; }),
+        ada(N[2026]) ? rp(N[2026]) + (ada(g9) ? " (" + ubah(g9) + ")" : "") : "belum ada",
+        syariahAktif(x) ? "Baris " + x.desBaris : "Tidak tercatat"
+      ];
+    }
+    var POS = ["Laba bersih 2025", "Pendapatan 2025", "ROE 2025", "DER akhir 2025", "Laba Jan–Sep 2026 (perubahan dari 2025)", "Daftar Efek Syariah"];
+
+    pilih.addEventListener("change", function () {
+      hasil.textContent = "";
+      var x = EMITEN.find(function (y) { return y.kode === pilih.value; });
+      if (!x) return;
+      var a = nilaiPos(e), b = nilaiPos(x);
+      var tbody = el("tbody");
+      POS.forEach(function (nama, i) {
+        tbody.appendChild(el("tr", null, [el("th", { scope: "row", text: nama }),
+          el("td", { class: "angka", text: a[i] }), el("td", { class: "angka", text: b[i] })]));
+      });
+      hasil.appendChild(el("div", { class: "tabel-wadah" }, [el("table", { class: "tabel-profil tabel-banding" }, [
+        el("caption", { class: "keterangan-tabel", text: e.kode + " dan " + x.kode + " berdampingan. Laba = laba yang diatribusikan kepada pemilik entitas induk." }),
+        el("thead", null, [el("tr", null, [el("th", { scope: "col", text: "Pos" }),
+          el("th", { scope: "col", class: "angka", text: e.kode }), el("th", { scope: "col", class: "angka", text: x.kode })])]),
+        tbody
+      ])]));
+      if (usd(e) !== usd(x)) hasil.appendChild(el("p", { class: "catatan-metode", text:
+        "Satu emiten melapor dalam dolar AS dan yang lain dalam rupiah. Angka uangnya tidak sebanding langsung karena tidak kami konversi; ROE dan DER (persen dan kali) tetap bisa dibaca berdampingan." }));
+      if (x.periksaUlang || x.sekaliWaktu || e.periksaUlang || e.sekaliWaktu) hasil.appendChild(el("p", { class: "catatan-metode", text:
+        "Laba salah satu emiten sedang dicek ulang atau banyak ditopang keuntungan sekali-waktu. Baca catatannya di profil masing-masing sebelum membandingkan." }));
+      hasil.appendChild(el("p", { class: "catatan-metode" }, [
+        "Perbandingan ini hanya menyandingkan angka, bukan saran membeli atau menjual. Sumber tiap angka ada di bagian Sumber data profil masing-masing: ",
+        el("a", { href: "emiten.html?kode=" + x.kode, text: "profil " + x.kode }), "."]));
+    });
+    return wadah;
+  }
+
   function renderProfil() {
     var akar = document.getElementById("profil");
     if (!akar) return;
@@ -706,6 +761,8 @@
       });
       akar.appendChild(daftar9);
     }
+
+    akar.appendChild(bagianBanding(e));
 
     // Radar Risiko (rumus yang sama dengan radar.html)
     var s = periksa(e);

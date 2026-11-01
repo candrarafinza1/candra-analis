@@ -221,7 +221,7 @@ Usulan minggu ini (3 usulan baru):
   berbeda, tampil catatan "tidak sebanding langsung". Tanpa kata "lebih baik", hanya angka.
 - Acuan tren: fitur "compare" di aplikasi saham dan situs data keuangan.
 - Dampak bagi pemula: belajar membaca angka dengan membandingkan, tanpa diarahkan memilih.
-- Status: usulan.
+- Status: dipilih Bima 1 Nov 16.10 untuk Arif; selesai 1 Nov 16.10 (bagian "Bandingkan dengan emiten lain" di profil, sebelum Radar Risiko: laba & pendapatan 2025, ROE, DER, laba Jan–Sep 2026, baris DES; catatan mata uang beda dan laba bertanda; tanpa simpanan). Dewi: dicek 390px & 1280px terang/gelap, tabel muat tanpa geser. Tinjauan Kirana di HP sungguhan menyusul.
 
 ### 15. Beranda: "Istilah hari ini"
 - **Istilah hari ini** — fitur, usaha kecil

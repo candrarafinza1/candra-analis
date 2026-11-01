@@ -411,3 +411,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Laras + Sari + Hana: 19 istilah "Istilah hari ini" ditinjau; semua bisa berdiri sendiri dan punya tautan pelajaran. Kalimat istilah "sekali-waktu" diperjelas. Nina: cek baru di `tests/cek.mjs` (arti tanpa rujukan konteks halaman, `pelajaran` wajib) + uji negatif.
 - Fajar: cek laba 9 bulan TLKM, KLBF, SMGR, belum ada sumber laba atribusi baru; tetap 12 dari 31.
 - `node tests/cek.mjs` lolos. Masalah ringan: backlog menyebut 25 istilah, ternyata 19 (dikoreksi). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 1 Nov 2026, 16.10 WIB (Bima)
+- Arif: **Bandingkan dua emiten** (IDE.md #14, dipilih Bima) tayang di profil emiten: pilih emiten lain, tampil angka berdampingan (laba & pendapatan 2025, ROE, DER, laba Jan–Sep 2026, baris DES). Dolar AS tidak dikonversi; bila mata uang beda ada catatan "tidak sebanding langsung". Tanpa kata penilaian, tanpa simpanan.
+- Nina: 8 cek baru di `tests/cek.mjs` + uji negatif (kata "lebih baik" tertangkap). Dewi: dicek 390px & 1280px terang/gelap; tabel sempat terpotong di 390px, diperbaiki (sel boleh turun baris), kini tanpa scroll horizontal dan tanpa galat JS.
+- Fajar: cek laba 9 bulan TLKM, KLBF, BSDE, MIKA, JPFA, belum ada sumber laba atribusi baru; tetap 12 dari 31.
+- `node tests/cek.mjs` lolos. Masalah ringan: tabel banding terpotong di HP (sudah diperbaiki). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

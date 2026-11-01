@@ -249,6 +249,22 @@ ok(/function posisi\(kunci[\s\S]{0,900}peserta\(kunci\)/.test(readFileSync("asse
   for (const kode of ["UNTR", "TPIA"]) ok(ASLI.some(e => e.kode === kode && e.sekaliWaktu9b), `${kode} seharusnya bertanda sekaliWaktu9b`);
 }
 
+// Nina (1 Nov 16.10): Bandingkan dua emiten (Arif, IDE.md #14)
+{
+  const app = readFileSync("assets/app.js", "utf8");
+  const m = app.match(/function bagianBanding\(e\) \{[\s\S]*?\n  \}\n/);
+  ok(m, "app.js: bagianBanding() tidak ada");
+  const f = m ? m[0] : "";
+  ok(/akar\.appendChild\(bagianBanding\(e\)\)/.test(app), "app.js: profil emiten harus memasang bagianBanding(e)");
+  ok(/<label|el\("label", \{ for: "pilih-banding"/.test(f) && /id: "pilih-banding"/.test(f), "banding: <select> wajib punya label");
+  ok(/x\.kode !== e\.kode/.test(f), "banding: emiten yang sedang dibuka tidak boleh muncul di pilihan");
+  ok(/usd\(e\) !== usd\(x\)/.test(f) && /tidak sebanding langsung/.test(f), "banding: catatan mata uang beda wajib ada");
+  ok(/bukan saran membeli atau menjual/.test(f), "banding: catatan bukan saran wajib ada");
+  ok(!/lebih baik|lebih unggul|pemenang|terbaik/i.test(f), "banding: dilarang kata penilaian (lebih baik/unggul/terbaik)");
+  ok(!/localStorage|sessionStorage/.test(f), "banding: tidak boleh menyimpan apa pun");
+  ok(/aria-live/.test(f), "banding: hasil harus diumumkan ke pembaca layar (aria-live)");
+}
+
 // 2b. Ringkasan usaha (Raka & Sari, 30 Okt): bila diisi, wajib bersumber, singkat, tanpa ajakan
 {
   const app = readFileSync("assets/app.js", "utf8");

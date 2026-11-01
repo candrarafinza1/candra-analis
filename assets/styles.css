@@ -540,6 +540,13 @@ button.istilah:hover, button.istilah[aria-expanded="true"] { color: var(--aksen)
 .daftar-emiten a { display: block; padding: 12px 14px; min-height: 48px; background: var(--putih); border: 1px solid var(--garis); border-radius: var(--radius-kecil); text-decoration: none; color: var(--tinta); }
 .daftar-emiten a:hover { border-color: var(--aksen); }
 @media (max-width: 600px) { .tabel-profil th, .tabel-profil td { padding: 8px 6px; } }
+/* Bandingkan dua emiten (Arif & Dewi, IDE.md #14): di HP sel boleh turun baris agar tabel muat tanpa geser */
+.kontrol-banding { margin-top: 4px; }
+.tabel-banding td.angka { white-space: normal; overflow-wrap: anywhere; }
+@media (max-width: 600px) {
+  .tabel-banding { table-layout: fixed; font-size: .9rem; }
+  .tabel-banding th[scope="row"] { width: 36%; }
+}
 
 /* Perpindahan halaman halus antarhalaman (Dewi, IDE.md #5).
    Hanya bila pengguna tidak meminta gerak dikurangi; peramban lama mengabaikannya. */
