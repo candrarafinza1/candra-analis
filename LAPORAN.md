@@ -406,3 +406,8 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Arif + Dewi: **Kabar terbaru di beranda** (IDE.md #16) tayang: 3 kabar terbaru (CPIN, INDF, TPIA) di bawah "Alat bantu analisis", kartu sama dengan halaman Kabar, catatan "Kabar bukan saran membeli atau menjual", tautan "Semua kabar". Nina: 7 cek baru + uji negatif (batas 3 kabar). Dewi: 390px & 1280px terang/gelap, tanpa scroll horizontal dan tanpa galat JS. Kirana: ditinjau, baik.
 - Fajar: cek laba 9 bulan TLKM & KLBF, belum ada sumber baru; tetap 12 dari 31.
 - `node tests/cek.mjs` lolos. Masalah ringan: tidak ada. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 1 Nov 2026, 15.10 WIB (Bima)
+- Laras + Sari + Hana: 19 istilah "Istilah hari ini" ditinjau; semua bisa berdiri sendiri dan punya tautan pelajaran. Kalimat istilah "sekali-waktu" diperjelas. Nina: cek baru di `tests/cek.mjs` (arti tanpa rujukan konteks halaman, `pelajaran` wajib) + uji negatif.
+- Fajar: cek laba 9 bulan TLKM, KLBF, SMGR, belum ada sumber laba atribusi baru; tetap 12 dari 31.
+- `node tests/cek.mjs` lolos. Masalah ringan: backlog menyebut 25 istilah, ternyata 19 (dikoreksi). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

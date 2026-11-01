@@ -105,6 +105,9 @@ ok(Array.isArray(ISTILAH) && ISTILAH.length > 0, "kamus istilah kosong");
 for (const t of ISTILAH || []) {
   ok(t.istilah && t.arti && Array.isArray(t.pola) && t.pola.length > 0, `istilah tidak lengkap: ${t.istilah}`);
   ok(!t.pelajaran || idModul.has(t.pelajaran), `istilah ${t.istilah}: pelajaran "${t.pelajaran}" tidak ada`);
+  // Laras & Sari (1 Nov): istilah tampil sendirian di beranda, jadi arti harus bisa dipahami tanpa konteks halaman
+  ok(!/\b(di atas|di bawah ini|tabel ini|kolom ini|halaman ini|grafik ini)\b/i.test(t.arti), `istilah ${t.istilah}: arti merujuk konteks halaman`);
+  ok(!!t.pelajaran, `istilah ${t.istilah}: field pelajaran kosong`);
 }
 
 // Profil emiten (Nina, 29 Okt): halaman ada, memuat wadah #profil, dan Peringkat menaut ke profil

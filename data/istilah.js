@@ -63,6 +63,6 @@ window.ISTILAH = [
     arti: "Laba Januari sampai September, dari laporan keuangan kuartal III. Candra Analis membandingkannya dengan Januari–September tahun sebelumnya.",
     pelajaran: "laporan-keuangan" },
   { istilah: "Keuntungan atau beban sekali-waktu", pola: ["sekali-waktu"],
-    arti: "Laba atau rugi dari kejadian yang tidak berulang, misalnya hasil menjual anak usaha. Bila nilainya 25% atau lebih dari laba, emiten tidak ikut Peringkat (laba tahunan) atau diberi catatan (laba 9 bulan).",
+    arti: "Laba atau rugi dari kejadian yang tidak berulang, misalnya hasil menjual anak usaha. Di Candra Analis, bila nilainya 25% atau lebih dari laba, emiten tidak ikut Peringkat untuk laba tahunan, atau diberi catatan untuk laba 9 bulan.",
     pelajaran: "laporan-keuangan" }
 ];
