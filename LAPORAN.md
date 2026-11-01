@@ -431,3 +431,8 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: cek laba 9 bulan 2026 untuk TLKM, KLBF, SMGR. Belum ada sumber laba atribusi baru; tetap 12 dari 31.
 - Fajar: DPS tahun buku 2025 KLBF Rp20 per saham masuk data (BCA Sekuritas & Stockwatch, 25 Mei 2026; Bareksa menulis Rp21, dicatat dan tidak dipakai). Kini DPS terisi untuk 5 emiten. TLKM Rp222 baru dari satu sumber, ditahan.
 - `node tests/cek.mjs` lolos. Masalah ringan: dua sumber berbeda untuk DPS KLBF (diputuskan pakai angka yang sama di dua sumber). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 1 Nov 2026, 20.10 WIB (Bima)
+- Fajar: laba 9 bulan 2026 SMGR masuk data: laba atribusi Rp532 miliar vs Rp114,84 miliar (Kontan 1 Nov 2026; Pasardana 3 Nov 2025). Kini 13 dari 31. TLKM sudah rilis (Rp14,45 T vs Rp15,03 T, Investortrust) tetapi ditahan: baru satu sumber dan pembanding 2025 berbeda dari angka Bisnis (Rp15,78 T).
+- Raka: kabar SMGR ditambah (17 kabar). Galih: profil SMGR runtut, dicek 390px & 1280px.
+- `node tests/cek.mjs` lolos. Masalah ringan: beda angka pembanding TLKM (ditahan). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
