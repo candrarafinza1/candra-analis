@@ -54,9 +54,13 @@ window.EMITEN_ASLI = [
     pendapatan: { 2024: 72600, 2025: 74850 },
     liabilitas2025: 61860, ekuitas2025: 73680,
     laba9b: { 2025: null, 2026: null },
-    dps: null, harga: null,
+    dps: 265, harga: null,
     sumber: [{ judul: "Warta Ekonomi, 31 Mar 2026: ICBP raih penjualan Rp74,85 triliun di 2025",
-      url: "https://wartaekonomi.co.id/read606113/produsen-indomie-icbp-raih-penjualan-rp7485-triliun-di-2025-laba-naik-30" }]
+      url: "https://wartaekonomi.co.id/read606113/produsen-indomie-icbp-raih-penjualan-rp7485-triliun-di-2025-laba-naik-30" },
+      { judul: "Warta Ekonomi, 26 Jun 2026: Dividen ICBP cair 28 Juli, Rp265 per saham (tahun buku 2025)",
+        url: "https://wartaekonomi.co.id/read619269/bersiap-dividen-icbp-cair-28-juli-nilainya-rp265-per-saham" },
+      { judul: "RCTI+, 26 Jun 2026: Indofood CBP tetapkan dividen Rp265 per saham, dibayar akhir Juli 2026",
+        url: "https://www.rctiplus.com/news/detail/ekonomi/5415099/indofood-cbp--icbp--tetapkan-dividen-rp265-per-saham--dibayar-akhir-juli-2026" }]
   },
   {
     kode: "ANTM", nama: "PT Aneka Tambang Tbk", sektor: "Bahan baku",
