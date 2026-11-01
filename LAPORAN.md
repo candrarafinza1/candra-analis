@@ -426,3 +426,8 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: cek laba 9 bulan 2026 untuk TLKM, KLBF, ICBP, SMGR, BSDE. Belum ada sumber laba atribusi baru; tetap 12 dari 31.
 - Fajar: DPS tahun buku 2025 ICBP Rp265 per saham masuk data (Warta Ekonomi & RCTI+, 26 Jun 2026, dua sumber sama). Kini DPS terisi untuk 4 emiten; belum ditampilkan di website.
 - `node tests/cek.mjs` lolos. Masalah ringan: tidak ada. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 1 Nov 2026, 19.10 WIB (Bima)
+- Fajar: cek laba 9 bulan 2026 untuk TLKM, KLBF, SMGR. Belum ada sumber laba atribusi baru; tetap 12 dari 31.
+- Fajar: DPS tahun buku 2025 KLBF Rp20 per saham masuk data (BCA Sekuritas & Stockwatch, 25 Mei 2026; Bareksa menulis Rp21, dicatat dan tidak dipakai). Kini DPS terisi untuk 5 emiten. TLKM Rp222 baru dari satu sumber, ditahan.
+- `node tests/cek.mjs` lolos. Masalah ringan: dua sumber berbeda untuk DPS KLBF (diputuskan pakai angka yang sama di dua sumber). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

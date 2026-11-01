@@ -39,11 +39,17 @@ window.EMITEN_ASLI = [
     pendapatan: { 2024: 32630, 2025: 35320 },
     liabilitas2025: 5970.85, ekuitas2025: 24728.50,
     laba9b: { 2025: null, 2026: null },
-    dps: null, harga: null,
+    // dps: Rp20 (total Rp936.267.830.800, RUPST 21 Mei 2026) dari BCA Sekuritas & Stockwatch (mengutip risalah RUPS).
+    // Bareksa 26 Mei 2026 menulis Rp21 (mengutip riset Ciptadana); tidak dipakai karena dua sumber lain sama-sama Rp20.
+    dps: 20, harga: null,
     sumber: [{ judul: "Investortrust, 31 Mar 2026: Laba Kalbe Farma naik di 2025, penjualan Rp35,32 triliun",
       url: "https://investortrust.id/market/98460/laba-kalbe-farma-klbf-naik-15-3-di-2025-penjualan-tembus-rp35-32-triliun" },
       { judul: "PintarSaham, 8 Apr 2026: Laba bersih Kalbe Farma tumbuh 13% di 2025 (neraca 31 Des 2025, juta Rp)",
-        url: "https://pintarsaham.id/laba-bersih-kalbe-farma-klbf-tumbuh-13-di-2025-simak-analisis-saham-klbf-berikut/" }]
+        url: "https://pintarsaham.id/laba-bersih-kalbe-farma-klbf-tumbuh-13-di-2025-simak-analisis-saham-klbf-berikut/" },
+      { judul: "BCA Sekuritas, 25 Mei 2026: KLBF bagikan dividen Rp20 per saham (tahun buku 2025) pada 24 Juni 2026",
+        url: "https://bcasekuritas.co.id/latest-news/news/klbf-akan-bagikan-dividen-pada-24-juni-2026" },
+      { judul: "Stockwatch, 25 Mei 2026: Selain dividen Rp20 per saham, KLBF rombak jajaran pengurus",
+        url: "https://stockwatch.id/selain-dividen-rp20-per-saham-klbf-juga-rombak-jajaran-pengurus/" }]
   },
   {
     kode: "ICBP", nama: "PT Indofood CBP Sukses Makmur Tbk", sektor: "Barang konsumen primer",
