@@ -380,3 +380,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Nina: cek otomatis baru di `tests/cek.mjs` (mode gelap wajib ada, kontras teks ≥4,5:1 dan lampu ≥3:1 di kedua mode). `node tests/cek.mjs` lolos. 8 halaman dicek 390px & 1280px, terang dan gelap: tanpa scroll horizontal dan tanpa galat JS.
 - Kirana: tinjau tangkapan layar mode gelap; tombol pilihan terpilih diberi garis aksen agar lebih jelas.
 - Masalah ringan: tidak ada. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 1 Nov 2026, 09.10 WIB (Bima)
+- Arif + Raka: halaman **Kabar emiten** (`kabar.html`) tayang, dengan saring jenis kabar; profil emiten kini punya bagian "Kabar terbaru" (maks. 3). Isi awal 15 kabar bersumber: 4 rencana buyback (UNTR Rp2 T, KLBF Rp500 M, MBMA Rp1,38 T, HRUM Rp120 M; Kontan 3 Okt 2026) dan 11 laporan Januari–September 2026 yang angkanya sama dengan data emiten.
+- Nina: cek 2e di `tests/cek.mjs` (kode ada di data, tanggal tidak di masa depan, jenis dikenal, 20–260 karakter, tanpa ajakan, sumber https) + uji negatif. `node tests/cek.mjs` lolos (9 halaman). Dewi: dicek 390px & 1280px terang/gelap, tanpa scroll horizontal dan tanpa galat JS. Yoga: tautan "Kabar emiten" di kaki semua halaman.
+- Fajar: cek laba 9 bulan TLKM, KLBF, ICBP — belum ada sumber baru, tetap 11 dari 31.
+- Tugas baru: Raka (isi kabar berjalan), Hana (tinjau kabar), Laras + Sari (istilah buyback), Kirana (tinjau halaman Kabar).
+- Masalah ringan: perintah `git reset --hard` ditolak sistem keamanan di awal sesi; diganti `git merge --ff-only` (repo sudah bersih). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
