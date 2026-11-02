@@ -25,10 +25,15 @@ window.EMITEN_ASLI = [
     labaTahun: { 2024: 22400, 2025: 17810 },
     pendapatan: { 2024: 149960, 2025: 145740 },
     liabilitas2025: 137220, ekuitas2025: 150530,
-    laba9b: { 2025: null, 2026: null },
+    laba9b: { 2025: 15030, 2026: 14440 },
+    catatan9b: "Laba 9 bulan = laba diatribusikan kepada pemilik entitas induk: Rp14,44 T (Jan–Sep 2026) vs Rp15,03 T (Jan–Sep 2025). Rp14,44 T ditulis Investor Daily (2 Nov 2026) dan Feedberry (mengutip Emitennews); Investortrust menulis Rp14,45 T (beda pembulatan). Pembanding Rp15,03 T sama di Investortrust dan Feedberry; angka ini berbeda dari Rp15,78 T yang diberitakan pada 2025 (kemungkinan disajikan ulang dalam laporan 2026). Rp19,46 T vs Rp19,84 T yang juga dikutip media adalah laba periode berjalan. Sumber tidak menyebut pos sekali-waktu.",
     dps: null, harga: null,
     sumber: [{ judul: "Kontan, 12 Mei 2026: Telkom bukukan laba bersih Rp17,81 triliun di 2025",
-      url: "https://investasi.kontan.co.id/news/telkom-tlkm-bukukan-laba-bersih-rp-1781-triliun-di-2025" }]
+      url: "https://investasi.kontan.co.id/news/telkom-tlkm-bukukan-laba-bersih-rp-1781-triliun-di-2025" },
+      { judul: "Investor Daily, 2 Nov 2026: Telkom (TLKM) raup laba Rp14 triliun hingga kuartal III-2026 (laba atribusi 9 bulan 2026)",
+        url: "https://investor.id/market/460258/telkom-tlkm-raup-laba-rp-14-triliun-hingga-kuartal-iii2026" },
+      { judul: "Feedberry, 1 Nov 2026 (mengutip Emitennews): TLKM pendapatan naik 3,55%, laba bersih turun 3,92% (laba atribusi 9 bulan 2026 & 2025)",
+        url: "https://feedberry.com/artikel/tlkm-pendapatan-naik-355-laba-bersih-turun-392" }]
   },
   {
     kode: "KLBF", nama: "PT Kalbe Farma Tbk", sektor: "Kesehatan",

@@ -365,6 +365,27 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
     const id = `${k.kode}|${k.tanggal}|${k.jenis}`;
     ok(!kunci.has(id), `kabar ganda: ${id}`); kunci.add(id);
   }
+  // Arif (2 Nov): angka laba di kabar laporan Januari–September 2026 harus sama dengan laba9b di data emiten
+  // (dalam batas pembulatan angka yang ditulis di kabar). Satuan: miliar Rp, atau juta US$ untuk emiten dolar AS.
+  const emitenByKode = new Map(ASLI.map((e) => [e.kode, e]));
+  const angkaKabar = (teks) => [...teks.matchAll(/(Rp|US\$)\s?([\d.]+(?:,\d+)?)\s(triliun|miliar|juta)/g)].map((m) => {
+    const [bulat, des = ""] = m[2].replace(/\./g, "").split(",");
+    const nilai = Number(`${bulat}.${des || 0}`), langkah = 10 ** -des.length / 2;
+    const kali = m[1] === "Rp" ? { triliun: 1000, miliar: 1, juta: 0.001 }[m[3]] : { miliar: 1000, juta: 1, triliun: 1e6 }[m[3]];
+    return { nilai: nilai * kali, toleransi: langkah * kali + 1e-9 };
+  });
+  const salahAngka9b = (k, e) => {
+    if (!/Januari–September 2026/.test(k.ringkas || "") || !e) return [];
+    const [a26, a25] = angkaKabar(k.ringkas);
+    if (!a26 || !a25 || !e.laba9b) return ["angka laba 9 bulan tidak terbaca"];
+    const s = [];
+    if (Math.abs(a26.nilai - e.laba9b[2026]) > a26.toleransi) s.push(`laba 2026 di kabar (${a26.nilai}) beda dengan data (${e.laba9b[2026]})`);
+    if (Math.abs(a25.nilai - e.laba9b[2025]) > a25.toleransi) s.push(`laba 2025 di kabar (${a25.nilai}) beda dengan data (${e.laba9b[2025]})`);
+    return s;
+  };
+  for (const k of KABAR || []) for (const s of salahAngka9b(k, emitenByKode.get(k.kode))) ok(false, `kabar ${k.kode} ${k.tanggal}: ${s}`);
+  ok(salahAngka9b({ ringkas: "Laporan Januari–September 2026 terbit. Laba Rp5,20 triliun, dibanding Rp3,36 triliun." }, { laba9b: { 2025: 3360, 2026: 5180 } }).length === 1,
+    "cek angka kabar 9 bulan tidak menangkap angka yang berbeda");
   // uji negatif
   ok(salahKabar({ kode: "ZZZZ", tanggal: "2099-01-01", jenis: "Gosip", ringkas: "Saham ini prospek cerah, saatnya beli.", sumber: { judul: "x", url: "http://x" } }).length === 5,
     "cek kabar tidak menangkap entri yang salah");

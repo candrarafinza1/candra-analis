@@ -254,3 +254,41 @@ tidak mendorong "Jalur belajar" terlalu jauh. Baik.
 - Dampak bagi pemula: tahu ada data baru tanpa mencari, dan terbiasa membaca kabar beserta sumbernya.
 - Batasan: tetap memuat catatan "Kabar bukan saran membeli atau menjual".
 - Status: dipilih Bima 1 Nov 13.10 untuk Arif + Dewi; selesai 1 Nov 14.10 (3 kabar terbaru di bawah "Alat bantu analisis", kartu sama dengan halaman Kabar, catatan bukan saran, tautan "Semua kabar"; tersembunyi tanpa JavaScript). Ditinjau Kirana 1 Nov 14.10 lewat tangkapan layar 390px & 1280px, terang & gelap: baik.
+
+## Tinjauan & usulan Kirana — 2 Nov 2026, 07.14 WIB
+
+"Bandingkan dengan emiten lain" (tugas 1 Nov 16.10), dicek bersama Dewi lewat tangkapan layar profil TLKM vs TPIA,
+390px & 1280px, terang & gelap:
+- Daftar pilihan 31 emiten memakai `<select>` bawaan HP, jadi panjang daftar tidak masalah. Tabel dua kolom muat di 390px
+  tanpa scroll horizontal; mode gelap terbaca baik. Label "Laba Jan–Sep 2026 (perubahan dari 2025)" turun menjadi 4 baris
+  di 390px, masih terbaca.
+- Temuan: catatan "Laba salah satu emiten sedang dicek ulang…" tidak menyebut emiten mana → jadi usulan #18, langsung
+  dikerjakan Arif sesi ini.
+
+### 17. Peringkat & beranda: "Musim laporan 9 bulan" ★ paling berdampak
+- **Penanda kemajuan laporan Januari–September 2026** — fitur, usaha kecil
+- Masalah atau peluang: laporan 9 bulan masuk satu per satu (kini 14 dari 31). Pemula tidak tahu emiten mana yang
+  angkanya sudah baru dan mana yang belum, sehingga bisa membandingkan angka yang belum lengkap.
+- Ide: satu baris di halaman Peringkat (dan Radar): "Laporan Januari–September 2026 sudah masuk untuk 14 dari 31 emiten",
+  dengan batang kemajuan CSS dan `<details>` berisi daftar kode yang sudah dan belum. Dihitung otomatis dari `laba9b`,
+  tanpa simpanan, angka selalu tertulis (tidak hanya warna).
+- Acuan tren: penanda "musim laporan" di aplikasi pasar modal dan pelacak kemajuan di aplikasi belajar.
+- Dampak bagi pemula: paham bahwa data diperbarui bertahap dan tahu kapan perbandingan 9 bulan sudah adil.
+- Batasan: tanpa kata ajakan; ringan (teks + satu batang CSS); hormati `prefers-reduced-motion` bila batang diberi animasi.
+- Status: dipilih Bima 2 Nov 07.14 untuk Arif (bersama Dewi untuk tampilan).
+
+### 18. Bandingkan: sebut kode emiten pada catatan "dicek ulang"
+- **Catatan bertanda menyebut nama** — perbaikan tampilan, usaha kecil
+- Masalah: catatan menulis "salah satu emiten", pemula harus menebak profil mana yang perlu dibaca.
+- Ide: tulis kode emitennya ("Laba TPIA sedang dicek ulang… Baca catatannya di profil TPIA").
+- Dampak bagi pemula: langsung tahu catatan mana yang penting.
+- Status: dipilih Bima 2 Nov 07.14; selesai 2 Nov 07.14 oleh Arif (dicek 390px & 1280px, tanpa galat JS).
+
+### 19. Kabar emiten: label "Baru" untuk kabar 3 hari terakhir
+- **Label teks "Baru"** — tampilan, usaha kecil
+- Masalah atau peluang: di musim laporan kabar bertambah tiap hari; kabar terbaru sulit dibedakan dari kabar lama.
+- Ide: kabar bertanggal ≤3 hari dari tanggal perangkat diberi label teks "Baru" (bukan warna saja) di halaman Kabar,
+  beranda, dan profil. Tanpa simpanan, tanpa animasi kedip.
+- Acuan tren: label "Baru" di aplikasi berita dan kotak masuk.
+- Dampak bagi pemula: cepat melihat apa yang berubah sejak kunjungan terakhir.
+- Batasan: label dibacakan pembaca layar; tidak memakai kata ajakan.

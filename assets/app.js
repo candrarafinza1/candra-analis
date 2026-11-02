@@ -630,8 +630,11 @@
       ])]));
       if (usd(e) !== usd(x)) hasil.appendChild(el("p", { class: "catatan-metode", text:
         "Satu emiten melapor dalam dolar AS dan yang lain dalam rupiah. Angka uangnya tidak sebanding langsung karena tidak kami konversi; ROE dan DER (persen dan kali) tetap bisa dibaca berdampingan." }));
-      if (x.periksaUlang || x.sekaliWaktu || e.periksaUlang || e.sekaliWaktu) hasil.appendChild(el("p", { class: "catatan-metode", text:
-        "Laba salah satu emiten sedang dicek ulang atau banyak ditopang keuntungan sekali-waktu. Baca catatannya di profil masing-masing sebelum membandingkan." }));
+      // IDE.md #18 (2 Nov): sebut kode emitennya agar pemula tahu catatan mana yang harus dibaca.
+      var bertanda = [e, x].filter(function (y) { return y.periksaUlang || y.sekaliWaktu; }).map(function (y) { return y.kode; });
+      if (bertanda.length) hasil.appendChild(el("p", { class: "catatan-metode", text:
+        "Laba " + bertanda.join(" dan ") + " sedang dicek ulang atau banyak ditopang keuntungan sekali-waktu. Baca catatannya di profil " +
+        (bertanda.length > 1 ? "masing-masing" : bertanda[0]) + " sebelum membandingkan." }));
       hasil.appendChild(el("p", { class: "catatan-metode" }, [
         "Perbandingan ini hanya menyandingkan angka, bukan saran membeli atau menjual. Sumber tiap angka ada di bagian Sumber data profil masing-masing: ",
         el("a", { href: "emiten.html?kode=" + x.kode, text: "profil " + x.kode }), "."]));
