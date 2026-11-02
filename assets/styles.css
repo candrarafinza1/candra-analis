@@ -462,6 +462,7 @@ tbody tr:hover { background: var(--hover-baris); }
 .musim-laporan details { margin-top: 6px; }
 .musim-laporan details p { margin-top: 6px; overflow-wrap: anywhere; }
 .musim-laporan summary { cursor: pointer; font-weight: 700; padding: 6px 0; }
+.musim-beranda { margin: 12px 0 0; font-size: .9rem; color: var(--tinta-2); overflow-wrap: anywhere; }
 .musim-laporan summary:focus-visible { outline: 3px solid var(--aksen); outline-offset: 2px; border-radius: 4px; }
 .sinyal-info { border-left-color: var(--aksen); }
 .sinyal-info h4 { color: var(--aksen); }

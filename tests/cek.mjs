@@ -412,6 +412,20 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
   ok(sudah >= 0 && sudah <= ASLI.length, "jumlah laporan 9 bulan tidak masuk akal");
 }
 
+// Nina (2 Nov 09.10): baris musim laporan di beranda — hitungan sama (laba9b 2026), angka tertulis, tanpa simpanan.
+{
+  const app = readFileSync("assets/app.js", "utf8"), idx = readFileSync("index.html", "utf8");
+  const m = app.match(/function musimBeranda\(\) \{[\s\S]*?\n  \}\n/);
+  ok(!!m, "app.js: musimBeranda() tidak ada");
+  const f = m ? m[0] : "";
+  ok(/laba9b && ada\(e\.laba9b\[2026\]\)/.test(f), "musimBeranda harus menghitung dari laba9b 2026");
+  ok(/n \+ " dari " \+ total \+ " emiten"/.test(f), "musimBeranda harus menulis 'n dari total emiten'");
+  ok(/peringkat\.html/.test(f), "musimBeranda harus menaut ke Peringkat");
+  ok(!/localStorage|sessionStorage/.test(f), "musimBeranda tidak boleh menyimpan apa pun");
+  ok(/id="musim-beranda"[^>]*hidden/.test(idx), "index.html: wadah musim-beranda harus ada dan tersembunyi tanpa JavaScript");
+  ok(/musimBeranda\(\);/.test(app), "musimBeranda() harus dipanggil");
+}
+
 // 3. Aturan Hana (syariah): halaman tidak boleh memakai bahasa ajakan
 const terlarang = /\b(wajib beli|pasti naik|buruan (beli|jual)|dijamin untung|rekomendasi beli)\b/i;
 for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"]) {

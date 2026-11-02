@@ -453,3 +453,8 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: KLBF & BRIS dicek, belum ada laba atribusi 9 bulan 2026. Tetap 14 dari 31.
 - Tugas baru: Kirana meninjau kotak musim laporan; Arif menambah baris musim laporan di beranda.
 - `node tests/cek.mjs` lolos. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza, tidak diemailkan ulang).
+
+## 2 Nov 2026, 09.10 WIB (Bima)
+- Arif: baris "Laporan Januari–September 2026: 14 dari 31 emiten sudah masuk" tayang di panel Peringkat beranda, menaut ke Peringkat (IDE.md #17 tuntas). Hitungan sama dengan kotak di Peringkat & Radar, tanpa simpanan. Nina: 7 cek baru. Dicek 390px & 1280px terang/gelap: tanpa galat JS, tanpa scroll horizontal.
+- Fajar: KLBF, BRIS, ICBP dicek ulang, belum ada laba atribusi 9 bulan 2026. Tetap 14 dari 31.
+- `node tests/cek.mjs` lolos. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza, tidak diemailkan ulang).

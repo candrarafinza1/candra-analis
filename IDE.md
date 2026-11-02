@@ -275,7 +275,7 @@ tidak mendorong "Jalur belajar" terlalu jauh. Baik.
 - Acuan tren: penanda "musim laporan" di aplikasi pasar modal dan pelacak kemajuan di aplikasi belajar.
 - Dampak bagi pemula: paham bahwa data diperbarui bertahap dan tahu kapan perbandingan 9 bulan sudah adil.
 - Batasan: tanpa kata ajakan; ringan (teks + satu batang CSS); hormati `prefers-reduced-motion` bila batang diberi animasi.
-- Status: dipilih Bima 2 Nov 07.14; selesai 2 Nov 08.10 di Peringkat & Radar (Arif + Dewi, Nina 7 cek). Bagian beranda masuk backlog Arif.
+- Status: dipilih Bima 2 Nov 07.14; selesai 2 Nov 08.10 di Peringkat & Radar (Arif + Dewi, Nina 7 cek). Bagian beranda selesai 2 Nov 09.10 (Arif: satu baris di panel Peringkat beranda, menaut ke Peringkat).
 
 ### 18. Bandingkan: sebut kode emiten pada catatan "dicek ulang"
 - **Catatan bertanda menyebut nama** — perbaikan tampilan, usaha kecil

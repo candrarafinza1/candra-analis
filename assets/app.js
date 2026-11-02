@@ -100,6 +100,17 @@
       ])
     ]));
   }
+  /* Beranda (Arif, 2 Nov 09.10, IDE.md #17): satu baris ringkas, hitungan sama dengan musimLaporan(). */
+  function musimBeranda() {
+    var wadah = document.getElementById("musim-beranda");
+    if (!wadah) return;
+    var n = EMITEN.filter(function (e) { return e.laba9b && ada(e.laba9b[2026]); }).length, total = EMITEN.length;
+    wadah.appendChild(document.createTextNode("Laporan Januari–September 2026: "));
+    wadah.appendChild(el("strong", { text: n + " dari " + total + " emiten" }));
+    wadah.appendChild(document.createTextNode(" sudah masuk. "));
+    wadah.appendChild(el("a", { href: "peringkat.html#pita", text: "Lihat di Peringkat" }));
+    wadah.hidden = false;
+  }
   function tautanSumber(e) {
     var s = (e.sumber || [])[0];
     return s ? el("a", { href: s.url, target: "_blank", rel: "noopener", text: "Sumber", "aria-label": "Sumber data " + e.kode + " (tab baru)" }) : document.createTextNode("–");
@@ -1206,6 +1217,7 @@
   renderJalur("jalur-lengkap", true);
   renderPelajaran();
   renderMini();
+  musimBeranda();
   renderPeringkat();
   renderRadar();
   renderProfil();
