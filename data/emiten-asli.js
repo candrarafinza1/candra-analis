@@ -489,13 +489,18 @@ window.EMITEN_ASLI = [
     labaTahun: { 2024: 339.42, 2025: 215.36 },
     pendapatan: { 2024: 3790, 2025: 3980 },
     liabilitas2025: 2620, ekuitas2025: 3610,
-    laba9b: { 2025: null, 2026: null },
+    laba9b: { 2025: 237.89, 2026: 292.95 },
+    catatan9b: "Laba 9 bulan = laba diatribusikan kepada pemilik entitas induk, juta US$: US$292,95 juta (Jan–Sep 2026) vs US$237,89 juta (Jan–Sep 2025), naik ±23,1% (StockWatch 29 Okt 2026); IDX Channel 31 Okt 2026 menulis US$293 juta vs US$238 juta (dibulatkan). Laba periode berjalan US$397,25 juta vs US$338,61 juta sengaja tidak dipakai. Sumber tidak menyebut pos sekali-waktu yang sudah dibukukan; Feedberry (mengutip IDX Channel) mencatat provisi putusan arbitrase Gunvor US$128,6 juta yang belum dibukukan.",
     dps: null, harga: null,
     catatan: "Melapor dalam dolar AS; angka dalam juta US$ sesuai laporan, tidak dikonversi ke rupiah. Laba = laba diatribusikan kepada pemilik entitas induk. Pendapatan dan neraca dibulatkan sumber ke 2 desimal miliar US$. Cek: liabilitas US$2,62 miliar + ekuitas US$3,61 miliar = aset US$6,23 miliar.",
     sumber: [{ judul: "KabarBursa, 7 Mar 2026: PGAS catat pendapatan USD3,98 miliar di 2025, laba bersih turun",
       url: "https://www.kabarbursa.com/market-hari-ini/pgas-catat-pendapatan-usd398-miliar-di-2025-laba-bersih-turun" },
       { judul: "Stockwatch: Perusahaan Gas Negara (PGN) bukukan laba US$215,36 juta di 2025, turun 36,55%",
-        url: "https://stockwatch.id/perusahaan-gas-negara-pgn-bukukan-laba-us21536-juta-di-2025-turun-3655" }]
+        url: "https://stockwatch.id/perusahaan-gas-negara-pgn-bukukan-laba-us21536-juta-di-2025-turun-3655" },
+      { judul: "StockWatch, 29 Okt 2026: Laba bersih PGAS naik 17,3% jadi US$397,25 juta hingga September 2026 (laba atribusi US$292,95 juta)",
+        url: "https://stockwatch.id/laba-bersih-pgas-naik-173-jadi-usd39725-juta-hingga-september-2026/" },
+      { judul: "IDX Channel, 31 Okt 2026: Laba PGAS naik 23 persen jadi US$293 juta hingga kuartal III",
+        url: "https://www.idxchannel.com/market-news/laba-pgas-naik-23-persen-jadi-usd293-juta-hingga-kuartal-iii" }]
   },
   {
     kode: "ITMG", nama: "PT Indo Tambangraya Megah Tbk", sektor: "Energi",

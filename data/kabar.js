@@ -67,5 +67,8 @@ window.KABAR = [
     sumber: { judul: "Kontan, 30 Okt 2026: Pendapatan INDF per kuartal III-2026", url: "https://investasi.kontan.co.id/news/pendapatan-indf-naik-12-jadi-rp-10149-triliun-laba-naik-11-per-kuartal-iii-2026" } },
   { kode: "TPIA", tanggal: "2026-10-30", jenis: "Laporan keuangan",
     ringkas: "Laporan Januari–September 2026 terbit. Laba bersih yang diatribusikan ke pemilik US$279,81 juta, dibanding US$1,30 miliar pada periode yang sama 2025 yang memuat keuntungan sekali-waktu dari transaksi Aster.",
-    sumber: { judul: "CNBC Indonesia, 30 Okt 2026: Laba Chandra Asri (TPIA) kuartal III-2026", url: "https://www.cnbcindonesia.com/market/20261030112319-17-780872/laba-chandra-asri--tpia--anjlok-78-di-kuartal-iii-2026-ini-sebabnya" } }
+    sumber: { judul: "CNBC Indonesia, 30 Okt 2026: Laba Chandra Asri (TPIA) kuartal III-2026", url: "https://www.cnbcindonesia.com/market/20261030112319-17-780872/laba-chandra-asri--tpia--anjlok-78-di-kuartal-iii-2026-ini-sebabnya" } },
+  { kode: "PGAS", tanggal: "2026-10-29", jenis: "Laporan keuangan",
+    ringkas: "Laporan Januari–September 2026 terbit. Laba yang diatribusikan ke pemilik entitas induk US$292,95 juta, dibanding US$237,89 juta pada periode yang sama 2025.",
+    sumber: { judul: "StockWatch, 29 Okt 2026: Laba PGAS hingga September 2026", url: "https://stockwatch.id/laba-bersih-pgas-naik-173-jadi-usd39725-juta-hingga-september-2026/" } }
 ];
