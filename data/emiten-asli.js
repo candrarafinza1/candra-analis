@@ -64,14 +64,21 @@ window.EMITEN_ASLI = [
     labaTahun: { 2024: 7080, 2025: 9220 },
     pendapatan: { 2024: 72600, 2025: 74850 },
     liabilitas2025: 61860, ekuitas2025: 73680,
-    laba9b: { 2025: null, 2026: null },
+    laba9b: { 2025: 7100, 2026: 6160 },
+    catatan9b: "Laba 9 bulan = laba diatribusikan kepada pemilik entitas induk: Rp6,16 T (Jan–Sep 2026) vs Rp7,10 T (Jan–Sep 2025), Fortune IDN 2 Nov 2026; IDX Channel 30 Okt 2026 menulis Rp6,1 T vs Rp7,1 T (pembulatan). Cek runtut: laba per saham Rp529 vs Rp610 (Liputan6 30 Okt 2026). Rp7,50 T vs Rp8,18 T yang juga dikutip media adalah laba periode berjalan. Laba inti (tanpa selisih kurs dan pos tidak berulang) naik 5% menjadi Rp8,04 T; nilai rugi selisih kurs tidak disebut sumber.",
     dps: 265, harga: null,
     sumber: [{ judul: "Warta Ekonomi, 31 Mar 2026: ICBP raih penjualan Rp74,85 triliun di 2025",
       url: "https://wartaekonomi.co.id/read606113/produsen-indomie-icbp-raih-penjualan-rp7485-triliun-di-2025-laba-naik-30" },
       { judul: "Warta Ekonomi, 26 Jun 2026: Dividen ICBP cair 28 Juli, Rp265 per saham (tahun buku 2025)",
         url: "https://wartaekonomi.co.id/read619269/bersiap-dividen-icbp-cair-28-juli-nilainya-rp265-per-saham" },
       { judul: "RCTI+, 26 Jun 2026: Indofood CBP tetapkan dividen Rp265 per saham, dibayar akhir Juli 2026",
-        url: "https://www.rctiplus.com/news/detail/ekonomi/5415099/indofood-cbp--icbp--tetapkan-dividen-rp265-per-saham--dibayar-akhir-juli-2026" }]
+        url: "https://www.rctiplus.com/news/detail/ekonomi/5415099/indofood-cbp--icbp--tetapkan-dividen-rp265-per-saham--dibayar-akhir-juli-2026" },
+      { judul: "Fortune IDN, 2 Nov 2026: Penjualan ICBP naik 15%, laba Rp6,16 triliun hingga September 2026",
+        url: "https://www.fortuneidn.com/business/penjualan-icbp-naik-15-biaya-produksi-tekan-margin-00-4pj81-1dd5zr" },
+      { judul: "IDX Channel, 30 Okt 2026: Laba ICBP turun 14 persen jadi Rp6,1 triliun hingga kuartal III",
+        url: "https://www.idxchannel.com/market-news/laba-produsen-indomie-icbp-turun-14-persen-jadi-rp61-triliun-hingga-kuartal-iii" },
+      { judul: "Liputan6, 30 Okt 2026: Emiten ICBP raup penjualan Rp64,45 triliun (laba per saham Rp529)",
+        url: "https://www.liputan6.com/saham/read/8325311/emiten-icbp-raup-penjualan-rp-6445-triliun" }]
   },
   {
     kode: "ANTM", nama: "PT Aneka Tambang Tbk", sektor: "Bahan baku",

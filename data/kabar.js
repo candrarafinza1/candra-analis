@@ -11,6 +11,10 @@
 window.KABAR_JENIS = ["Laporan keuangan", "Pembelian kembali saham", "Dividen", "Rapat umum pemegang saham", "Aksi korporasi lain"];
 
 window.KABAR = [
+  // Laporan 9 bulan ICBP — IDX Channel, 30 Okt 2026
+  { kode: "ICBP", tanggal: "2026-10-30", jenis: "Laporan keuangan",
+    ringkas: "Indofood CBP merilis laporan 9 bulan 2026: laba yang diatribusikan kepada pemilik entitas induk Rp6,1 triliun, turun sekitar 14,1% dari Rp7,1 triliun.",
+    sumber: { judul: "IDX Channel, 30 Okt 2026: Laba ICBP turun 14 persen jadi Rp6,1 triliun hingga kuartal III", url: "https://www.idxchannel.com/market-news/laba-produsen-indomie-icbp-turun-14-persen-jadi-rp61-triliun-hingga-kuartal-iii" } },
   // Pembelian kembali saham (buyback) — Kontan, 3 Okt 2026
   { kode: "UNTR", tanggal: "2026-10-03", jenis: "Pembelian kembali saham",
     ringkas: "United Tractors menyiapkan dana hingga Rp2 triliun untuk membeli kembali sahamnya sendiri (buyback).",
