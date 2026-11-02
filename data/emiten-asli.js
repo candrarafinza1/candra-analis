@@ -390,13 +390,18 @@ window.EMITEN_ASLI = [
     labaTahun: { 2024: 1767.62, 2025: 2231.16 },
     pendapatan: { 2024: 37835.89, 2025: 43083.21 },
     liabilitas2025: 15612.72, ekuitas2025: 17211.48,
-    laba9b: { 2025: null, 2026: null },
+    laba9b: { 2025: 1370, 2026: 1720 },
+    catatan9b: "Laba 9 bulan = laba periode berjalan yang diatribusikan kepada pemilik entitas induk: Rp1,72 T (Jan–Sep 2026) vs Rp1,37 T (Jan–Sep 2025), naik 25,16% (Databoks Katadata, 28 Okt 2026, mengutip rilis perusahaan; pendapatan bersih Rp37,44 T sama dengan angka 9 bulan di BCA Sekuritas). Kontan menulis Rp1,72 T dan Bisnis (1 Nov 2025) Rp1,37 T. Angka Rp2,1 T (IDX Channel & BCA Sekuritas, naik 25,1%) adalah laba bersih konsolidasian, tidak dipakai. Sumber tidak menyebut pos sekali-waktu.",
     dps: null, harga: null,
     catatan: "PintarSaham menulis laba diatribusikan Rp2.231,16 M (2025) dan Rp1.767,62 M (2024); Kontan menulis laba bersih 2025 Rp2,33 T. Perlu cek ke laporan keuangan resmi sebelum ikut Peringkat. Neraca cocok: liabilitas + ekuitas = aset Rp32.824,21 M.",
     sumber: [{ judul: "PintarSaham, 14 Apr 2026: Kinerja keuangan saham MAPI meningkat di tengah ekspansi ritel 2025 (juta Rp)",
       url: "https://pintarsaham.id/kinerja-keuangan-saham-mapi-meningkat-di-tengah-ekspansi-ritel-2025/" },
       { judul: "Kontan, 6 Apr 2026: Mitra Adiperkasa (MAPI) raih kenaikan pendapatan dan laba pada 2025",
-        url: "https://investasi.kontan.co.id/news/mitra-adiperkasa-mapi-raih-kenaikan-pendapatan-dan-laba-pada-2025" }]
+        url: "https://investasi.kontan.co.id/news/mitra-adiperkasa-mapi-raih-kenaikan-pendapatan-dan-laba-pada-2025" },
+      { judul: "Databoks Katadata, 28 Okt 2026: MAPI gaet laba Rp1,72 triliun pada kuartal III 2026, melesat 25,16% (laba atribusi 9 bulan 2026 & 2025)",
+        url: "https://databoks.katadata.co.id/pasar/statistik/6ae026957224a/mapi-gaet-laba-rp172-triliun-pada-kuartal-iii-2026-melesat-2516" },
+      { judul: "Bisnis, 1 Nov 2025: Laba Mitra Adiperkasa (MAPI) Rp1,37 triliun per kuartal III/2025",
+        url: "https://market.bisnis.com/read/20251101/192/1925253/laba-mitra-adiperkasa-mapi-rp137-triliun-per-kuartal-iii2025-naik-575" }]
   },
   {
     kode: "HEAL", nama: "PT Medikaloka Hermina Tbk", sektor: "Kesehatan",

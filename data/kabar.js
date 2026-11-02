@@ -73,5 +73,8 @@ window.KABAR = [
     sumber: { judul: "StockWatch, 29 Okt 2026: Laba PGAS hingga September 2026", url: "https://stockwatch.id/laba-bersih-pgas-naik-173-jadi-usd39725-juta-hingga-september-2026/" } },
   { kode: "BSDE", tanggal: "2026-11-02", jenis: "Laporan keuangan",
     ringkas: "Laporan Januari–September 2026 terbit. Laba yang diatribusikan ke pemilik entitas induk Rp844,70 miliar, dibanding Rp1,36 triliun pada periode yang sama 2025.",
-    sumber: { judul: "Receh.in, 2 Nov 2026: Laba BSDE Januari–September 2026", url: "https://www.receh.in/2026/11/laba-bsde-turun-38-residensial-melemah.html" } }
+    sumber: { judul: "Receh.in, 2 Nov 2026: Laba BSDE Januari–September 2026", url: "https://www.receh.in/2026/11/laba-bsde-turun-38-residensial-melemah.html" } },
+  { kode: "MAPI", tanggal: "2026-10-28", jenis: "Laporan keuangan",
+    ringkas: "Laporan Januari–September 2026 terbit. Laba yang diatribusikan ke pemilik entitas induk Rp1,72 triliun, dibanding Rp1,37 triliun pada periode yang sama 2025. Pendapatan bersih Rp37,44 triliun.",
+    sumber: { judul: "Databoks Katadata, 28 Okt 2026: Laba MAPI kuartal III 2026", url: "https://databoks.katadata.co.id/pasar/statistik/6ae026957224a/mapi-gaet-laba-rp172-triliun-pada-kuartal-iii-2026-melesat-2516" } }
 ];
