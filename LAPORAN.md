@@ -490,3 +490,8 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: 14 emiten sisa dicek ulang (KLBF, ICBP, BRIS, CTRA, JPFA, MIKA, EXCL, INTP, ACES, AADI, ITMG, HRUM, MDKA, MBMA): belum ada sumber laba atribusi 9 bulan 2026. Artikel BRIS dan AADI yang tampak baru ternyata semester I 2026 / hingga April 2026, tidak dipakai. Tetap 17 dari 31.
 - Tidak ada perubahan tampilan atau data website sesi ini. Raka: tidak ada kabar baru.
 - `node tests/cek.mjs` lolos. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 2 Nov 2026, 18.10 WIB (Bima)
+- Fajar: 14 emiten sisa dicek lagi (KLBF, CTRA, ICBP, JPFA, BRIS, INTP, EXCL, ITMG, MIKA, HRUM, MDKA, ACES, AADI, MBMA): belum ada sumber laba 9 bulan 2026 (ACES baru rilis SSSG; BRIS menunggu laporan ditelaah terbatas). Tetap 17 dari 31.
+- Kirana: kotak "Musim laporan 9 bulan" di Peringkat, Radar, dan beranda ditinjau di 390px & 1280px terang/gelap: terbaca baik, tanpa scroll horizontal dan tanpa galat JS, tanpa perbaikan. Tugas baru Arif + Dewi: ringkas kotak setelah musim laporan selesai.
+- `node tests/cek.mjs` lolos. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

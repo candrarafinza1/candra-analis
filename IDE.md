@@ -293,3 +293,15 @@ tidak mendorong "Jalur belajar" terlalu jauh. Baik.
 - Dampak bagi pemula: cepat melihat apa yang berubah sejak kunjungan terakhir.
 - Batasan: label dibacakan pembaca layar; tidak memakai kata ajakan.
 - Status: dipilih Bima 2 Nov 13.19 untuk Arif + Dewi; selesai 2 Nov 13.19 (label teks berbingkai warna aksen sebelum tanggal, di Kabar, beranda, dan profil). Ditinjau Kirana lewat tangkapan layar 390px terang & gelap: terbaca jelas dan beda dari label jenis kabar.
+
+## Tinjauan Kirana — 2 Nov 2026, 18.10 WIB
+
+Kotak "Musim laporan 9 bulan" (tugas 2 Nov 08.10), dicek lewat tangkapan layar Peringkat, Radar, dan beranda,
+390px & 1280px, terang & gelap (kini 17 dari 31 emiten):
+- Kalimat utama dan angka tebal terbaca jelas di kedua mode; batang kemajuan kontras cukup, angka tetap tertulis.
+- Tinggi kotak tertutup: 282px di 390px, 166px di 1280px. Saat "Lihat daftar kode" dibuka di 390px: 465px; daftar
+  17 "sudah masuk" dan 14 "belum masuk" terbaca, kode dipisah koma, tanpa scroll horizontal (lebar halaman tetap 390px).
+- Baris beranda (46px) satu kalimat + tautan "Lihat di Peringkat", terbaca baik.
+- Tanpa galat JS di 12 kombinasi halaman/lebar/mode. Tidak ada perbaikan yang perlu dikerjakan sekarang.
+- Catatan untuk nanti: setelah musim laporan selesai (semua 31 masuk atau akhir November), kotak ini sebaiknya diringkas
+  atau disembunyikan agar tabel Peringkat naik kembali di HP.
