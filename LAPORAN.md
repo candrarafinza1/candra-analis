@@ -475,3 +475,8 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: BSDE masuk laba 9 bulan: laba atribusi Rp844,70 miliar vs Rp1,36 triliun (Receh.in 2 Nov 2026 menyebut atribusi dan laba konsolidasian Rp995,10 M terpisah; Kontan 1 Nov Rp844,69 M). Kini 16 dari 31 emiten. KLBF masih belum ada sumber 9 bulan 2026.
 - Raka: kabar BSDE ditambah (20 kabar); Hana: netral. Galih: profil BSDE dicek 390px & 1280px, tanda Radar runtut, tanpa galat JS dan tanpa scroll horizontal.
 - `node tests/cek.mjs` lolos. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 2 Nov 2026, 15.28 WIB (Bima)
+- Fajar: 14 emiten sisa dicek (KLBF, ICBP, BRIS, CTRA, JPFA, MIKA, EXCL, INTP, ACES, AADI, ITMG, HRUM, MDKA, MBMA): belum ada sumber laba atribusi 9 bulan 2026 (yang muncul masih kuartal I/semester I 2026 atau 2025). Tetap 16 dari 31. Dividen TLKM: total persis Rp21.999.902.180.685 ditemukan (BCA Sekuritas), angka per saham tetap belum pasti → ditahan.
+- Tidak ada perubahan tampilan atau data website sesi ini. Raka: tidak ada kabar baru.
+- `node tests/cek.mjs` lolos. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
