@@ -485,3 +485,8 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: MAPI masuk laba 9 bulan: laba atribusi Rp1,72 triliun vs Rp1,37 triliun (Databoks 28 Okt 2026 menyebut atribusi secara tegas; Rp2,1 T di media lain = laba konsolidasian). Kini 17 dari 31 emiten. MAPI tetap di luar Peringkat (angka tahunan masih dicek ulang). KLBF, ICBP, CTRA, JPFA, EXCL, INTP, MIKA, ITMG belum ada sumber 9 bulan 2026.
 - Raka: kabar MAPI ditambah (21 kabar); Hana: netral. Galih: profil MAPI dicek 390px & 1280px, tanpa galat JS dan tanpa scroll horizontal.
 - `node tests/cek.mjs` lolos. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 2 Nov 2026, 17.11 WIB (Bima)
+- Fajar: 14 emiten sisa dicek ulang (KLBF, ICBP, BRIS, CTRA, JPFA, MIKA, EXCL, INTP, ACES, AADI, ITMG, HRUM, MDKA, MBMA): belum ada sumber laba atribusi 9 bulan 2026. Artikel BRIS dan AADI yang tampak baru ternyata semester I 2026 / hingga April 2026, tidak dipakai. Tetap 17 dari 31.
+- Tidak ada perubahan tampilan atau data website sesi ini. Raka: tidak ada kabar baru.
+- `node tests/cek.mjs` lolos. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
