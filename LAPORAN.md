@@ -463,3 +463,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: PGAS masuk laba 9 bulan (dolar AS): laba atribusi US$292,95 juta vs US$237,89 juta (StockWatch 29 Okt; IDX Channel 31 Okt menulis US$293 juta vs US$238 juta). Kini 15 dari 31 emiten. KLBF, ICBP, CTRA, JPFA, BSDE, INTP, MIKA, AADI belum ada sumber laba atribusi 9 bulan 2026.
 - Raka: kabar PGAS ditambah (19 kabar); Hana: netral. Galih: profil PGAS dicek 390px & 1280px terang/gelap, tanda Radar runtut, tanpa galat JS dan tanpa scroll horizontal.
 - `node tests/cek.mjs` lolos. Masalah ringan: provisi arbitrase Gunvor US$128,6 juta belum dibukukan PGAS, dicatat di data. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza, tidak diemailkan ulang).
+
+## 2 Nov 2026, 13.19 WIB (Bima)
+- Email masuk kerja siang terkirim ke Rafinza.
+- Arif + Dewi: label teks "Baru" untuk kabar 0–3 hari terakhir (IDE.md #19, dipilih Bima) di Kabar, beranda, dan profil; dicek 390px & 1280px terang/gelap, tanpa galat JS dan tanpa scroll horizontal. Nina: 5 cek baru. Tegar: kode aman (textContent, tanggal salah = bukan baru). Kirana: terbaca jelas.
+- Sari + Laras: istilah "Laba periode berjalan" masuk kamus (bedanya dengan laba atribusi); Hana: netral.
+- Fajar: tetap 15 dari 31. BSDE sudah rilis (Rp844,6 M vs Rp1,36 T, turun 38%), tetapi sumber terbaca belum menyebut angka 2026 sebagai laba atribusi → ditahan. ITMG, HRUM, MDKA, KLBF, MIKA, JPFA, CTRA, EXCL belum ada sumber 9 bulan 2026. Raka: tidak ada kabar baru (tidak ada laba 9 bulan baru yang masuk).
+- `node tests/cek.mjs` lolos. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza, tidak diemailkan ulang).

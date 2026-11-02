@@ -394,6 +394,24 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
   ok(/data\/kabar\.js/.test(readFileSync("emiten.html", "utf8")), "emiten.html belum memuat data/kabar.js (kabar terbaru di profil)");
 }
 
+// Nina (2 Nov 13.19): label "Baru" pada kabar (IDE.md #19) — teks, 0–3 hari dari tanggal perangkat,
+// tanggal tidak valid/masa depan bukan baru, dipakai di kartuKabar() (halaman Kabar, beranda, profil), tanpa animasi kedip.
+{
+  const app = readFileSync("assets/app.js", "utf8");
+  const m = app.match(/function kabarBaru\(t, kini\) \{[\s\S]*?\n  \}/);
+  ok(m, "assets/app.js: fungsi kabarBaru(t, kini) tidak ditemukan");
+  if (m) {
+    const kabarBaru = new Function("return " + m[0])();
+    const kini = new Date(2026, 10, 2, 13, 30);
+    ok(kabarBaru("2026-11-02", kini) && kabarBaru("2026-10-30", kini), "kabarBaru: kabar 0–3 hari harus diberi label Baru");
+    ok(!kabarBaru("2026-10-29", kini) && !kabarBaru("2026-11-03", kini), "kabarBaru: kabar >3 hari atau di masa depan tidak boleh berlabel Baru");
+    ok(!kabarBaru("bukan-tanggal", kini) && !kabarBaru(undefined, kini), "kabarBaru: tanggal tidak valid harus dianggap bukan baru");
+  }
+  ok(/function kartuKabar[\s\S]{0,500}kabarBaru\(k\.tanggal\)[\s\S]{0,120}text: "Baru"/.test(app), "kartuKabar harus menambah label teks \"Baru\"");
+  const css = readFileSync("assets/styles.css", "utf8");
+  ok(/\.kabar-baru\s*\{/.test(css) && !/\.kabar-baru[^{]*\{[^}]*animation/.test(css), "styles.css: .kabar-baru harus ada dan tanpa animasi");
+}
+
 // Nina (2 Nov 08.10): "Musim laporan 9 bulan" (IDE.md #17) — dihitung dari laba9b 2026, tampil di Peringkat & Radar,
 // jumlah tertulis sebagai teks, batang disembunyikan dari pembaca layar, tanpa simpanan.
 {

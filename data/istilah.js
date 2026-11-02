@@ -64,5 +64,8 @@ window.ISTILAH = [
     pelajaran: "laporan-keuangan" },
   { istilah: "Keuntungan atau beban sekali-waktu", pola: ["sekali-waktu"],
     arti: "Laba atau rugi dari kejadian yang tidak berulang, misalnya hasil menjual anak usaha. Di Candra Analis, bila nilainya 25% atau lebih dari laba, emiten tidak ikut Peringkat untuk laba tahunan, atau diberi catatan untuk laba 9 bulan.",
+    pelajaran: "laporan-keuangan" },
+  { istilah: "Laba periode berjalan", pola: ["laba periode berjalan"],
+    arti: "Laba seluruh grup perusahaan, termasuk bagian milik pemegang saham minoritas di anak usaha. Angkanya sering lebih besar daripada laba yang diatribusikan ke pemilik entitas induk, yang dipakai Candra Analis. Berita sering hanya menulis \"laba bersih\", jadi cek dulu laba yang mana.",
     pelajaran: "laporan-keuangan" }
 ];

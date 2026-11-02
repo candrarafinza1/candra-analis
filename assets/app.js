@@ -855,9 +855,21 @@
       return (!kode || k.kode === kode) && EMITEN.some(function (e) { return e.kode === k.kode; });
     }).slice().sort(function (a, b) { return a.tanggal < b.tanggal ? 1 : a.tanggal > b.tanggal ? -1 : a.kode.localeCompare(b.kode); });
   }
+  /* Label "Baru" (IDE.md #19, Arif & Dewi, 2 Nov): kabar bertanggal 0–3 hari sebelum tanggal perangkat.
+     Berupa teks (bukan warna saja), tanpa animasi, tanpa simpanan. Tanggal tidak valid = bukan baru. */
+  function kabarBaru(t, kini) {
+    var p = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(t));
+    if (!p) return false;
+    var d = new Date(+p[1], +p[2] - 1, +p[3]);
+    var h = kini || new Date();
+    var hariIni = new Date(h.getFullYear(), h.getMonth(), h.getDate());
+    var selisih = Math.round((hariIni - d) / 86400000);
+    return selisih >= 0 && selisih <= 3;
+  }
   function kartuKabar(k, denganKode) {
     var e = EMITEN.find(function (x) { return x.kode === k.kode; });
     var kepala = [el("time", { datetime: k.tanggal, text: tanggalId(k.tanggal) }), el("span", { class: "kabar-jenis", text: k.jenis })];
+    if (kabarBaru(k.tanggal)) kepala.unshift(el("span", { class: "kabar-baru", text: "Baru", title: "Kabar 3 hari terakhir" }));
     return el("li", { class: "kabar" }, [
       el("p", { class: "kabar-kepala" }, kepala),
       denganKode ? el("h3", { class: "kabar-judul" }, [

@@ -292,3 +292,4 @@ tidak mendorong "Jalur belajar" terlalu jauh. Baik.
 - Acuan tren: label "Baru" di aplikasi berita dan kotak masuk.
 - Dampak bagi pemula: cepat melihat apa yang berubah sejak kunjungan terakhir.
 - Batasan: label dibacakan pembaca layar; tidak memakai kata ajakan.
+- Status: dipilih Bima 2 Nov 13.19 untuk Arif + Dewi; selesai 2 Nov 13.19 (label teks berbingkai warna aksen sebelum tanggal, di Kabar, beranda, dan profil). Ditinjau Kirana lewat tangkapan layar 390px terang & gelap: terbaca jelas dan beda dari label jenis kabar.
