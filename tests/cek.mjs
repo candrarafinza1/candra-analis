@@ -394,6 +394,24 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
   ok(/data\/kabar\.js/.test(readFileSync("emiten.html", "utf8")), "emiten.html belum memuat data/kabar.js (kabar terbaru di profil)");
 }
 
+// Nina (2 Nov 08.10): "Musim laporan 9 bulan" (IDE.md #17) — dihitung dari laba9b 2026, tampil di Peringkat & Radar,
+// jumlah tertulis sebagai teks, batang disembunyikan dari pembaca layar, tanpa simpanan.
+{
+  const app = readFileSync("assets/app.js", "utf8");
+  const m = app.match(/function musimLaporan\(wadah\) \{[\s\S]*?\n  \}\n/);
+  ok(!!m, "app.js: musimLaporan() tidak ada");
+  const f = m ? m[0] : "";
+  ok(/laba9b && ada\(e\.laba9b\[2026\]\)/.test(f), "musimLaporan harus menghitung dari laba9b 2026");
+  ok(/n \+ " dari " \+ total \+ " emiten"/.test(f), "musimLaporan harus menulis jumlah 'n dari total emiten' sebagai teks");
+  ok(/"musim-jalur", "aria-hidden": "true"/.test(f), "batang musim laporan harus aria-hidden (angka sudah tertulis)");
+  ok(/el\("details"/.test(f), "musimLaporan harus punya <details> daftar kode");
+  ok(!/localStorage|sessionStorage/.test(f), "musimLaporan tidak boleh menyimpan apa pun");
+  const pr = app.match(/function renderPeringkat\(\) \{[\s\S]{0,300}/)[0], rd = app.match(/function renderRadar\(\) \{[\s\S]{0,300}/)[0];
+  ok(/musimLaporan\(/.test(pr) && /musimLaporan\(/.test(rd), "musimLaporan harus dipanggil di Peringkat dan Radar");
+  const sudah = ASLI.filter((e) => e.laba9b && typeof e.laba9b[2026] === "number").length;
+  ok(sudah >= 0 && sudah <= ASLI.length, "jumlah laporan 9 bulan tidak masuk akal");
+}
+
 // 3. Aturan Hana (syariah): halaman tidak boleh memakai bahasa ajakan
 const terlarang = /\b(wajib beli|pasti naik|buruan (beli|jual)|dijamin untung|rekomendasi beli)\b/i;
 for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"]) {

@@ -73,6 +73,33 @@
       ])
     ]));
   }
+  /* ---------- Musim laporan 9 bulan (Arif + Dewi, IDE.md #17) ----------
+     Dihitung dari laba9b 2026 di data emiten: tanpa simpanan, angka selalu tertulis. */
+  function musimLaporan(wadah) {
+    if (!wadah) return;
+    var urut = EMITEN.slice().sort(function (a, b) { return a.kode.localeCompare(b.kode); });
+    var sudah = urut.filter(function (e) { return e.laba9b && ada(e.laba9b[2026]); }).map(function (e) { return e.kode; });
+    var belum = urut.filter(function (e) { return !(e.laba9b && ada(e.laba9b[2026])); }).map(function (e) { return e.kode; });
+    var n = sudah.length, total = urut.length;
+    var pct = total ? Math.round(n / total * 100) : 0;
+    var isi = el("span", { class: "musim-isi" });
+    isi.style.width = pct + "%";
+    var jalur = el("div", { class: "musim-jalur", "aria-hidden": "true" }, [isi]);
+    wadah.appendChild(el("div", { class: "musim-laporan", role: "note", "aria-label": "Musim laporan 9 bulan" }, [
+      el("p", { class: "musim-teks" }, [
+        "Laporan Januari–September 2026 sudah masuk untuk ",
+        el("strong", { text: n + " dari " + total + " emiten" }),
+        "."
+      ]),
+      jalur,
+      el("p", { class: "musim-catatan", text: "Angka masuk bertahap. \"Belum masuk\" berarti angkanya belum ada di data kami: laporannya belum terbit, atau sumbernya belum bisa dipastikan. Perbandingan laba 9 bulan antaremiten baru sebanding bila keduanya sudah masuk." }),
+      el("details", null, [
+        el("summary", { text: "Lihat daftar kode" }),
+        el("p", null, [el("strong", { text: "Sudah masuk (" + n + "): " }), sudah.length ? sudah.join(", ") : "belum ada"]),
+        el("p", null, [el("strong", { text: "Belum masuk (" + belum.length + "): " }), belum.length ? belum.join(", ") : "tidak ada"])
+      ])
+    ]));
+  }
   function tautanSumber(e) {
     var s = (e.sumber || [])[0];
     return s ? el("a", { href: s.url, target: "_blank", rel: "noopener", text: "Sumber", "aria-label": "Sumber data " + e.kode + " (tab baru)" }) : document.createTextNode("–");
@@ -315,6 +342,7 @@
     var akar = document.getElementById("peringkat");
     if (!akar) return;
     pitaSumber(document.getElementById("pita"));
+    musimLaporan(document.getElementById("pita"));
     pasangIstilah(document.getElementById("pita"));
 
     var tabBaris = el("div", { class: "tab-baris", role: "tablist", "aria-label": "Pilih dasar peringkat" });
@@ -525,6 +553,7 @@
     var akar = document.getElementById("radar");
     if (!akar) return;
     pitaSumber(document.getElementById("pita"));
+    musimLaporan(document.getElementById("pita"));
 
     var pilih = el("select", { id: "pilih-saham" });
     pilih.appendChild(el("option", { value: "", text: "Pilih kode saham" }));

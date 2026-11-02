@@ -453,6 +453,16 @@ tbody tr:hover { background: var(--hover-baris); }
 .pita-sumber details p { margin-top: 6px; }
 .pita-sumber summary { cursor: pointer; font-weight: 700; color: var(--sumber-tebal); padding: 6px 0; }
 .pita-sumber summary:focus-visible { outline: 3px solid var(--aksen); outline-offset: 2px; border-radius: 4px; }
+/* Musim laporan 9 bulan (Dewi, IDE.md #17): teks selalu tertulis, batang hanya pelengkap */
+.musim-laporan { border: 1px solid var(--garis); border-radius: var(--radius-kecil); padding: 12px 16px; margin: 0 0 20px; font-size: .95rem; }
+.musim-laporan p { margin: 0; }
+.musim-jalur { background: var(--garis); border-radius: var(--radius-kecil); height: .7rem; overflow: hidden; margin: 8px 0; max-width: var(--lebar-teks); }
+.musim-isi { display: block; height: 100%; background: var(--naik); border-radius: var(--radius-kecil); }
+.musim-catatan { color: var(--tinta-2); font-size: .9rem; }
+.musim-laporan details { margin-top: 6px; }
+.musim-laporan details p { margin-top: 6px; overflow-wrap: anywhere; }
+.musim-laporan summary { cursor: pointer; font-weight: 700; padding: 6px 0; }
+.musim-laporan summary:focus-visible { outline: 3px solid var(--aksen); outline-offset: 2px; border-radius: 4px; }
 .sinyal-info { border-left-color: var(--aksen); }
 .sinyal-info h4 { color: var(--aksen); }
 .daftar-sumber { padding-left: 1.2em; margin: 0; font-size: .95rem; }
