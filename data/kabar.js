@@ -70,5 +70,8 @@ window.KABAR = [
     sumber: { judul: "CNBC Indonesia, 30 Okt 2026: Laba Chandra Asri (TPIA) kuartal III-2026", url: "https://www.cnbcindonesia.com/market/20261030112319-17-780872/laba-chandra-asri--tpia--anjlok-78-di-kuartal-iii-2026-ini-sebabnya" } },
   { kode: "PGAS", tanggal: "2026-10-29", jenis: "Laporan keuangan",
     ringkas: "Laporan Januari–September 2026 terbit. Laba yang diatribusikan ke pemilik entitas induk US$292,95 juta, dibanding US$237,89 juta pada periode yang sama 2025.",
-    sumber: { judul: "StockWatch, 29 Okt 2026: Laba PGAS hingga September 2026", url: "https://stockwatch.id/laba-bersih-pgas-naik-173-jadi-usd39725-juta-hingga-september-2026/" } }
+    sumber: { judul: "StockWatch, 29 Okt 2026: Laba PGAS hingga September 2026", url: "https://stockwatch.id/laba-bersih-pgas-naik-173-jadi-usd39725-juta-hingga-september-2026/" } },
+  { kode: "BSDE", tanggal: "2026-11-02", jenis: "Laporan keuangan",
+    ringkas: "Laporan Januari–September 2026 terbit. Laba yang diatribusikan ke pemilik entitas induk Rp844,70 miliar, dibanding Rp1,36 triliun pada periode yang sama 2025.",
+    sumber: { judul: "Receh.in, 2 Nov 2026: Laba BSDE Januari–September 2026", url: "https://www.receh.in/2026/11/laba-bsde-turun-38-residensial-melemah.html" } }
 ];

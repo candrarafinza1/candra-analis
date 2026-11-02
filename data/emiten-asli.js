@@ -371,11 +371,16 @@ window.EMITEN_ASLI = [
     labaTahun: { 2024: 4350, 2025: 2540 },
     pendapatan: { 2024: 13790, 2025: 12780 },
     liabilitas2025: 26590, ekuitas2025: 52660,
-    laba9b: { 2025: null, 2026: null },
+    laba9b: { 2025: 1360, 2026: 844.7 },
+    catatan9b: "Laba 9 bulan = laba periode berjalan yang diatribusikan kepada pemilik entitas induk: Rp844,70 M (Jan–Sep 2026) vs Rp1,36 T (Jan–Sep 2025), turun 38% (Receh.in 2 Nov 2026, yang juga menulis laba konsolidasian Rp995,10 M vs Rp1,47 T). Kontan 1 Nov 2026 menulis laba bersih Rp844,69 M vs Rp1,36 T; IDX Channel Rp844,6 M dan StockWatch Rp845 M (pembulatan). Pembanding Rp1,36 T sama dengan laba atribusi yang diberitakan Kontan 30 Okt 2025. Sumber tidak menyebut pos sekali-waktu.",
     dps: null, harga: null,
     catatan: "Laba diatribusikan kepada pemilik entitas induk. Cek: liabilitas + ekuitas = Rp79,25 T, aset Rp79,26 T (selisih pembulatan).",
     sumber: [{ judul: "Kontan, 8 Mar 2026: Laba Bumi Serpong Damai (BSDE) di 2025 melorot 41,6% dan penjualan turun 7,3%",
-      url: "https://investasi.kontan.co.id/news/laba-bumi-serpong-damai-bsde-di-2025-melorot-416-dan-penjualan-turun-73" }]
+      url: "https://investasi.kontan.co.id/news/laba-bumi-serpong-damai-bsde-di-2025-melorot-416-dan-penjualan-turun-73" },
+      { judul: "Receh.in, 2 Nov 2026: Laba BSDE turun 38% (laba atribusi 9 bulan 2026 & 2025)",
+        url: "https://www.receh.in/2026/11/laba-bsde-turun-38-residensial-melemah.html" },
+      { judul: "Kontan, 1 Nov 2026: Bumi Serpong Damai (BSDE) catat laba bersih turun 38% per September 2026",
+        url: "https://investasi.kontan.co.id/news/bumi-serpong-damai-bsde-catat-laba-bersih-turun-38-per-september-2026" }]
   },
   {
     kode: "MAPI", nama: "PT Mitra Adiperkasa Tbk", sektor: "Barang konsumen non-primer",

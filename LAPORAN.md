@@ -470,3 +470,8 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Sari + Laras: istilah "Laba periode berjalan" masuk kamus (bedanya dengan laba atribusi); Hana: netral.
 - Fajar: tetap 15 dari 31. BSDE sudah rilis (Rp844,6 M vs Rp1,36 T, turun 38%), tetapi sumber terbaca belum menyebut angka 2026 sebagai laba atribusi → ditahan. ITMG, HRUM, MDKA, KLBF, MIKA, JPFA, CTRA, EXCL belum ada sumber 9 bulan 2026. Raka: tidak ada kabar baru (tidak ada laba 9 bulan baru yang masuk).
 - `node tests/cek.mjs` lolos. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza, tidak diemailkan ulang).
+
+## 2 Nov 2026, 14.12 WIB (Bima)
+- Fajar: BSDE masuk laba 9 bulan: laba atribusi Rp844,70 miliar vs Rp1,36 triliun (Receh.in 2 Nov 2026 menyebut atribusi dan laba konsolidasian Rp995,10 M terpisah; Kontan 1 Nov Rp844,69 M). Kini 16 dari 31 emiten. KLBF masih belum ada sumber 9 bulan 2026.
+- Raka: kabar BSDE ditambah (20 kabar); Hana: netral. Galih: profil BSDE dicek 390px & 1280px, tanda Radar runtut, tanpa galat JS dan tanpa scroll horizontal.
+- `node tests/cek.mjs` lolos. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
