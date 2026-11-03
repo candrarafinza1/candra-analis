@@ -479,7 +479,9 @@ window.EMITEN_ASLI = [
     liabilitas2025: 4680, ekuitas2025: 7210,
     laba9b: { 2025: 356.01, 2026: 303.31 },
     catatan9b: "Laba 9 bulan = laba diatribusikan kepada pemilik entitas induk: Rp303,31 M (Jan–Sep 2026) vs Rp356,01 M (Jan–Sep 2025), turun 14,8% (Receh.in; Bisnis menulis Rp303,31 M). Warta Ekonomi (24 Okt 2025) memastikan Rp356,01 M adalah laba bersih, sedangkan laba periode berjalan termasuk kepentingan nonpengendali Rp451,06 M.",
-    dps: null, harga: null,
+    // dps: Rp13,5 (tahun buku 2025, total Rp207.440.325.000, RUPST 23 Apr 2026, dibayar 22 Mei 2026; tanpa interim disebut) dari BCA Sekuritas 27 Apr 2026 & Bareksa 30 Apr 2026 (Fajar, 3 Nov 20.10).
+    dps: 13.5, harga: null,
+    dpsSumber: { judul: "BCA Sekuritas, 27 Apr 2026: HEAL akan bagikan dividen Rp13,5 per saham (tahun buku 2025) pada 22 Mei 2026", url: "https://bcasekuritas.co.id/latest-news/news/heal-akan-bagikan-dividen-pada-22-mei-2026" },
     catatan: "Laba diatribusikan kepada pemilik entitas induk (laba tahun berjalan termasuk kepentingan nonpengendali Rp548,96 M). Cek: liabilitas + ekuitas = aset Rp11,89 T. BCA Sekuritas menulis angka yang sama (pendapatan 2024 Rp6,71 T, selisih pembulatan).",
     sumber: [{ judul: "Kabar Bursa, 26 Mar 2026: HEAL bukukan laba Rp429,55 miliar sepanjang 2025",
       url: "https://www.kabarbursa.com/market-hari-ini/heal-bukukan-laba-rp42955-miliar-anjlok-199-persen-sepanjang-2025" },
@@ -546,9 +548,13 @@ window.EMITEN_ASLI = [
     liabilitas2025: 85300, ekuitas2025: 30000,
     laba9b: { 2025: null, 2026: null },
     dps: null, harga: null,
-    catatan: "Rugi diatribusikan kepada pemilik entitas induk 2025 Rp4,42 T (2024 laba Rp1,81 T). Angka 2025 sudah termasuk penggabungan XL Axiata dengan Smartfren; angka 2024 sebelum penggabungan, jadi perbandingan tidak setara. Cek: liabilitas + ekuitas = aset Rp115,3 T.",
+    catatan: "Rugi diatribusikan kepada pemilik entitas induk 2025 Rp4,42 T (2024 laba Rp1,81 T). Angka 2025 sudah termasuk penggabungan XL Axiata dengan Smartfren; angka 2024 sebelum penggabungan, jadi perbandingan tidak setara. Cek: liabilitas + ekuitas = aset Rp115,3 T. Dividen tahun buku 2025: tidak dibagikan karena perusahaan mencatat rugi pada 2025 (paparan publik & RUPS Mei 2026; Okezone 20 Mei 2026, Kabar Bursa 25 Mei 2026). dps dibiarkan kosong karena profil hanya menampilkan dividen yang dibagikan.",
     sumber: [{ judul: "Warta Ekonomi, 13 Feb 2026: Pendapatan naik tapi EXCL justru rugi Rp4,42 triliun pada 2025",
-      url: "https://wartaekonomi.co.id/read600982/pendapatan-naik-tapi-excl-justru-rugi-rp442-triliun-pada-2025" }]
+      url: "https://wartaekonomi.co.id/read600982/pendapatan-naik-tapi-excl-justru-rugi-rp442-triliun-pada-2025" },
+      { judul: "Okezone, 20 Mei 2026: Rugi Rp4,4 triliun, EXCL absen bagi dividen (tahun buku 2025)",
+        url: "https://economy.okezone.com/read/2026/05/20/278/3219608/rugi-rp4-4-triliun-excl-absen-bagi-dividen" },
+      { judul: "Kabar Bursa, 25 Mei 2026: Tak bagi dividen karena rugi (EXCL, tahun buku 2025)",
+        url: "https://www.kabarbursa.com/syariah/tak-bagi-dividen-karena-rugi-excl-melesat-ke-2800" }]
   },
   {
     kode: "BRIS", nama: "PT Bank Syariah Indonesia Tbk", sektor: "Keuangan",
@@ -559,7 +565,9 @@ window.EMITEN_ASLI = [
     pendapatan: { 2024: null, 2025: null },
     liabilitas2025: null, ekuitas2025: 51950,
     laba9b: { 2025: null, 2026: null },
-    dps: null, harga: null,
+    // dps: Rp32,81 (tahun buku 2025, total Rp1,51 T = 20% laba 2025, RUPST 5 Mei 2026, dibayar 5 Juni 2026; tahun buku 2024 Rp22,78) dari BCA Sekuritas 5 Jun 2026 & Bisnis.com 5 Mei 2026 (Fajar, 3 Nov 20.10).
+    dps: 32.81, harga: null,
+    dpsSumber: { judul: "BCA Sekuritas, 5 Jun 2026: BSI cairkan dividen Rp32,81 per saham (tahun buku 2025, total Rp1,51 T) hari ini", url: "https://bcasekuritas.co.id/latest-news/news/bsi-cairkan-dividen-rp151-triliun-ke-pemegang-saham-hari-ini" },
     catatan: "Bank syariah: sumber menyebut laba bersih Rp7,56 T (2024 Rp7,00 T); belum dipastikan apakah sama dengan laba diatribusikan. Pendapatan bank tidak dijumlah dalam satu angka di sumber (pendapatan jual beli Rp14,51 T, bagi hasil Rp10,12 T), jadi dikosongkan. DER sengaja tidak dihitung: di bank syariah, selain liabilitas Rp104,92 T ada dana syirkah temporer Rp299,31 T (dana nasabah bagi hasil), sehingga DER tidak sebanding dengan perusahaan non-bank. Cek: liabilitas + dana syirkah temporer + ekuitas = aset Rp456,19 T.",
     sumber: [{ judul: "Emitennews, 7 Feb 2026: Tumbuh minimalis, BRIS 2025 tabulasi laba Rp7,56 triliun",
       url: "https://emitennews.com/news/tumbuh-minimalis-bris-2025-tabulasi-laba-rp756-triliun" },

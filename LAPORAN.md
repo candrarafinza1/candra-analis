@@ -575,3 +575,8 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Bima + Nina: cek 2f kini mengizinkan dividen rupiah untuk emiten berlaporan US$ hanya dengan tanda `dpsRupiah: true`, plus dua uji baru. Galih & Hana diminta meninjau keputusan ini.
 - Nina: profil PGAS, PTBA, BSDE dicek di 390px & 1280px: tanpa scroll horizontal, tanpa galat JS.
 - `node tests/cek.mjs` lolos. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 3 Nov 2026, 20.10 WIB (Bima)
+- Fajar: dividen tunai tahun buku 2025 HEAL Rp13,5 per saham (BCA Sekuritas & Bareksa) dan BRIS Rp32,81 (BCA Sekuritas & Bisnis.com) masuk, kini tampil di profil 20 emiten. EXCL tidak membagi dividen tahun buku 2025 karena rugi, dicatat di catatan. TLKM ditahan: sumber hanya menulis total Rp21,99 T, angka per saham belum ditemukan (tim tidak menghitung sendiri). Laba 9 bulan KLBF, BRIS, JPFA, MIKA dicek lagi: belum ada sumber. Tetap 21 dari 31.
+- Nina: profil HEAL, BRIS, EXCL dicek di 390px & 1280px: baris dividen benar, tanpa scroll horizontal, tanpa galat JS.
+- `node tests/cek.mjs` lolos. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
