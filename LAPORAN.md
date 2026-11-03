@@ -526,3 +526,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Kirana: tombol "Tampilkan 10 kabar lagi" ditinjau (gelap/terang, keyboard): baik.
 - Tugas baru: Galih cek Peringkat setelah SMGR & MAPI masuk; Fajar cari sumber kedua DPS MAPI.
 - `node tests/cek.mjs` lolos. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 3 Nov 2026, 10.15 WIB (Bima)
+- Fajar: DPS MAPI tahun buku 2025 Rp10 per saham dimasukkan setelah sumber kedua (BCA Sekuritas 29 Jun 2026) cocok dengan StockWatch; kini DPS 6 emiten.
+- Fajar: 10 emiten sisa laba 9 bulan dicek lagi (KLBF, BRIS, JPFA, INTP, MIKA, EXCL dll.), belum ada sumber baru. Tetap 21 dari 31.
+- Galih: SMGR & MAPI dicek di semua tab Peringkat dan saring sektor, kotak "Posisi di Peringkat" runtut, tidak ada teks "dicek ulang" tersisa. 1280px & 390px tanpa galat JS, tanpa scroll horizontal.
+- Tugas baru: Galih + Hana menimbang tampilan DPS di profil.
+- `node tests/cek.mjs` lolos. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
