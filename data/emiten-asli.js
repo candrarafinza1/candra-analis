@@ -174,7 +174,9 @@ window.EMITEN_ASLI = [
     liabilitas2025: 15540, ekuitas2025: 4470,
     laba9b: { 2025: 3330, 2026: 4200 },
     catatan9b: "Laba 9 bulan Rp4,20 T (Jan–Sep 2026) vs Rp3,33 T (Jan–Sep 2025), EmitenNews; Databoks menulis Rp3,34 T (pembulatan). Laba dari operasi yang dilanjutkan Rp3,31 T vs Rp2,99 T; sisanya dari operasi yang dihentikan (bisnis es krim).",
-    dps: null, harga: null,
+    // dps: Rp201 = total tahun buku 2025 (interim Rp87 dibayar 30 Des 2025 + final Rp114 dibayar 30 Jun 2026; total sekitar Rp7,63 T), Metro TV & Republika 4 Jun 2026 (Fajar, 3 Nov 15.20).
+    dps: 201, harga: null,
+    dpsSumber: { judul: "Metro TV, 4 Jun 2026: Unilever bagi dividen Rp201 per saham tahun buku 2025 (interim Rp87 + final Rp114), total Rp7,63 T", url: "https://www.metrotvnews.com/read/NP6CL21j-unilever-bagi-dividen-rp201-per-saham-total-rp7-63-triliun" },
     catatan: "Laba 2025 naik 127% karena keuntungan sekali-waktu Rp3,79 T dari penjualan anak usaha es krim (PT The Magnum Ice Cream Indonesia, selesai Desember 2025), menurut Investortrust. Angka ini benar, tetapi lebih dari separuh laba 2025 bukan dari usaha rutin, sehingga UNVR tidak ikut Peringkat agar perbandingan adil (aturan laba sekali-waktu Galih & Hana, 30 Okt). Laba tanpa keuntungan itu tidak disebut sumber, jadi tidak dihitung sendiri.",
     sumber: [{ judul: "Bisnis, 12 Feb 2026: Laba Unilever melonjak 126% jadi Rp7,64 triliun sepanjang 2025",
       url: "https://market.bisnis.com/read/20260212/192/1952314/laba-unilever-unvr-melonjak-126-jadi-rp764-triliun-sepanjang-2025" },
@@ -243,7 +245,9 @@ window.EMITEN_ASLI = [
     liabilitas2025: 561.44, ekuitas2025: 3120,
     laba9b: { 2025: 818.54, 2026: 619.1 },
     catatan9b: "Laba 9 bulan = laba periode berjalan yang diatribusikan kepada pemilik entitas induk: Rp619,1 M (Jan–Sep 2026) vs Rp818,54 M (Jan–Sep 2025), turun 24,36% (Databoks Katadata). IDX Channel menulis Rp619 M vs Rp818 M (pembulatan).",
-    dps: null, harga: null,
+    // dps: Rp37 = total tahun buku 2025 (interim Rp22 dibayar 20 Nov 2025 + final Rp15 dibayar 7 Mei 2026; total Rp1.089.102.400.000, payout 88,6%), RUPST 9 Apr 2026. PintarSaham & Receh.in 10 Apr 2026 (Fajar, 3 Nov 15.20).
+    dps: 37, harga: null,
+    dpsSumber: { judul: "PintarSaham, Apr 2026: SIDO bagikan dividen Rp37 per saham tahun buku 2025 (interim Rp22 + final Rp15)", url: "https://pintarsaham.id/sido-bagikan-dividen-rp37-per-saham-simak-jadwal-dividen-sido-2026/" },
     catatan: "Sumber menulis liabilitas \"Rp561,44 triliun\"; dibaca sebagai Rp561,44 miliar karena total aset hanya Rp3,68 triliun dan ekuitas Rp3,12 triliun.",
     sumber: [{ judul: "Bisnis, 28 Feb 2026: Sido Muncul cetak laba bersih Rp1,22 triliun pada 2025",
       url: "https://market.bisnis.com/read/20260228/192/1956569/sido-muncul-sido-cetak-laba-bersih-rp122-triliun-pada-2025-naik-dari-2024" },
@@ -262,7 +266,9 @@ window.EMITEN_ASLI = [
     liabilitas2025: 11710, ekuitas2025: 34150,
     laba9b: { 2025: 3360, 2026: 5180 },
     catatan9b: "Laba 9 bulan = laba periode berjalan yang dapat diatribusikan kepada pemilik entitas induk: Rp5,18 T (Jan–Sep 2026, Emiten News 31 Okt 2026, naik 53,86%; penjualan neto Rp60,20 T vs Rp50,60 T) vs Rp3,36 T (Jan–Sep 2025, Bisnis 1 Nov 2025 & Kontan). Runtut dengan laba semester I 2026 Rp3,71 T (Databoks). Sumber tidak menyebut pos sekali-waktu.",
-    dps: null, harga: null,
+    // dps: Rp180 (tahun buku 2025, total Rp2.951.640.000.000, dibayar 12 Juni 2026) dari BCA Sekuritas 21 Mei 2026 & StockWatch (Fajar, 3 Nov 15.20).
+    dps: 180, harga: null,
+    dpsSumber: { judul: "BCA Sekuritas, 21 Mei 2026: CPIN akan bagikan dividen Rp180 per saham (tahun buku 2025) pada 12 Juni 2026", url: "https://bcasekuritas.co.id/latest-news/news/cpin-akan-bagikan-dividen-pada-12-juni-2026" },
     sumber: [{ judul: "Kontan Insight, 9 Apr 2026: Pakan ternak menopang laba Charoen Pokphand pada 2025",
       url: "https://insight.kontan.co.id/news/pakan-ternak-menopang-laba-charoen-pokphand-cpin-pada-2025" },
       { judul: "Bisnis, 31 Mar 2026: Adu nyaring kokok duo emiten unggas JPFA-CPIN di 2025 (neraca akhir 2025)",
