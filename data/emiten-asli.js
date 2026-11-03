@@ -328,7 +328,9 @@ window.EMITEN_ASLI = [
     pendapatan: { 2024: 36180, 2025: 35240 },
     liabilitas2025: 28849.01, ekuitas2025: 47719.72,
     laba9b: { 2025: 114.84, 2026: 532 },
-    dps: null, harga: null,
+    // dps: Rp28,33 (tahun buku 2025, total Rp190.848.000.000 = seluruh laba atribusi 2025, RUPST 8 Mei 2026, dibayar 11 Juni 2026) dari BCA Sekuritas 13 Mei 2026 & IDX Channel 13 Mei 2026 (Fajar, 3 Nov 18.08).
+    dps: 28.33, harga: null,
+    dpsSumber: { judul: "BCA Sekuritas, 13 Mei 2026: SMGR akan bagikan dividen Rp28,33 per saham (tahun buku 2025) pada 11 Juni 2026", url: "https://bcasekuritas.co.id/latest-news/news/smgr-akan-bagikan-dividen-pada-11-juni-2026" },
     sumber: [{ judul: "Investortrust, 2026: Laba bersih Semen Indonesia anjlok 76,8% di 2025",
       url: "https://www.investortrust.id/market/98479/laba-bersih-semen-indonesia-smgr-anjlok-76-8-di-2025-ini-pemicunya" },
       { judul: "StockAnalysis: neraca tahunan Semen Indonesia (juta Rp)",
@@ -488,7 +490,9 @@ window.EMITEN_ASLI = [
     liabilitas2025: 1920, ekuitas2025: 6600,
     laba9b: { 2025: 481.09, 2026: 604.7 },
     catatan9b: "Laba 9 bulan = laba bersih yang dapat diatribusikan kepada pemilik entitas induk: Rp604,7 M (Jan–Sep 2026), tumbuh 25,7% (IDX Channel 2 Nov 2026; Fortune IDN & Marketeers 2 Nov 2026 menulis angka sama). Pembanding Rp481,09 M (Jan–Sep 2025) dari Bisnis 1 Nov 2025; runtut: 481,09 × 1,257 ≈ 604,7. Sumber tidak menyebut pos sekali-waktu.",
-    dps: null, harga: null,
+    // dps: Rp32,01 (tahun buku 2025, total Rp548,02 M, RUPST 10 Juni 2026, dibayar 10 Juli 2026) dari BCA Sekuritas 10 Jun 2026 & Katadata 10 Jun 2026 (Fajar, 3 Nov 18.08).
+    dps: 32.01, harga: null,
+    dpsSumber: { judul: "BCA Sekuritas, 10 Jun 2026: RUPST ACES setujui dividen Rp32,01 per saham (tahun buku 2025), dibayar 10 Juli 2026", url: "https://bcasekuritas.co.id/latest-news/news/aces-setuju-pembagian-dividen-dan-perkuat-strategi-pertumbuhan" },
     catatan: "Laba diatribusikan kepada pemilik entitas induk (BCA Sekuritas: Rp668,72 M vs Rp892,04 M). Cek: liabilitas + ekuitas = aset Rp8,52 T.",
     sumber: [{ judul: "Kabar Bursa, 1 Apr 2026: Kinerja tertekan, laba bersih ACES susut ke Rp668 miliar",
       url: "https://www.kabarbursa.com/market-hari-ini/kinerja-tertekan-laba-bersih-aces-susut-ke-rp668-miliar" },
@@ -509,7 +513,9 @@ window.EMITEN_ASLI = [
     liabilitas2025: 79120, ekuitas2025: 39510,
     laba9b: { 2025: 3560, 2026: 4920 },
     catatan9b: "Laba 9 bulan = laba diatribusikan kepada pemilik entitas induk: Rp4,92 T (Jan–Sep 2026) vs Rp3,56 T (Jan–Sep 2025), Investor Daily mengutip laporan keuangan 30 Sep 2026. Receh.in menulis Rp3,59 T untuk 2025; dipakai angka Investor Daily.",
-    dps: null, harga: null,
+    // dps: Rp111 (tahun buku 2025, total Rp3.579.840.016.227, RUPST 5 Mei 2026, dibayar 5 Juni 2026; tanpa interim disebut) dari BCA Sekuritas 7 Mei 2026 & Bareksa 7 Mei 2026 (Fajar, 3 Nov 18.08).
+    dps: 111, harga: null,
+    dpsSumber: { judul: "BCA Sekuritas, 7 Mei 2026: Indosat akan bagikan dividen Rp111 per saham (tahun buku 2025) pada 5 Juni 2026", url: "https://bcasekuritas.co.id/latest-news/news/indosat-akan-bagikan-dividen-pada-5-juni-2026" },
     catatan: "Laba diatribusikan kepada pemilik entitas induk. Laba 2024 = Rp5.509 M dikurangi kenaikan Rp598,9 M yang disebut BCA Sekuritas. Cek: liabilitas + ekuitas = aset Rp118,63 T.",
     sumber: [{ judul: "PintarSaham, 9 Feb 2026: Kinerja keuangan PT Indosat Tbk (ISAT) tahun 2025",
       url: "https://pintarsaham.id/kinerja-keuangan-pt-indosat-tbk-isat-tahun-2025/" },

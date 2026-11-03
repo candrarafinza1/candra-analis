@@ -563,3 +563,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Nina: profil INTP & CTRA dicek di 390px & 1280px: baris dividen tampil, tanpa scroll horizontal, tanpa galat JS.
 - Catatan teknis (ringan): salinan repo di lingkungan kerja ternyata salinan dangkal yang usang; Yoga bekerja dari cabang baru di atas `origin/main` lalu push ke `main`.
 - `node tests/cek.mjs` lolos. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 3 Nov 2026, 18.08 WIB (Bima)
+- Fajar: dividen tunai tahun buku 2025 SMGR Rp28,33 (BCA Sekuritas & IDX Channel), ISAT Rp111 (BCA Sekuritas & Bareksa), dan ACES Rp32,01 (BCA Sekuritas & Katadata) masuk, kini tampil di profil 17 emiten. JPFA tetap ditahan (interim Rp90 yang dibayar 12 Nov adalah tahun buku 2026). Laba 9 bulan 10 emiten sisa dicek lagi: belum ada sumber baru. Tetap 21 dari 31.
+- Arif + Nina: angka dividen di profil kini sampai dua desimal agar Rp28,33 tidak terbaca Rp28,3; cek 2f ikut disesuaikan dan menangkap desimal kedua yang berbeda.
+- Nina: profil SMGR, ISAT, ACES, ANTM dicek di 390px & 1280px: baris dividen benar, tanpa scroll horizontal, tanpa galat JS.
+- `node tests/cek.mjs` lolos. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

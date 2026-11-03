@@ -478,7 +478,7 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
 //     dan profil tidak menghitung imbal hasil (harga acuan belum ada)
 {
   const app = readFileSync("assets/app.js", "utf8");
-  const fmtRp = v => "Rp" + new Intl.NumberFormat("id-ID", { maximumFractionDigits: 1 }).format(v);
+  const fmtRp = v => "Rp" + new Intl.NumberFormat("id-ID", { maximumFractionDigits: 2 }).format(v);
   const cekDps = e => {
     if (e.dps == null) return true;
     return typeof e.dps === "number" && e.dps > 0 && !e.mataUang && !!e.dpsSumber
@@ -490,8 +490,10 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
   ok(!cekDps({ ...contoh, dps: 21 }), "cek dps tidak menangkap angka yang beda dengan judul sumber");
   ok(!cekDps({ ...contoh, dpsSumber: { judul: contoh.dpsSumber.judul, url: "http://contoh.id/a" } }), "cek dps tidak menangkap sumber non-https");
   ok(!cekDps({ ...contoh, dps: "20" }), "cek dps tidak menangkap dps berupa teks");
+  ok(!cekDps({ dps: 28.33, dpsSumber: { judul: "X: dividen Rp28,3 per saham", url: "https://contoh.id/a" } }), "cek dps tidak menangkap desimal kedua yang beda dengan judul sumber");
   const m = app.match(/function dividenTampil[\s\S]*?\n  }\n/);
   ok(!!m, "app.js: dividenTampil() tidak ada");
+  ok(/maximumFractionDigits: 2/.test(m ? m[0] : ""), "dividenTampil() harus menampilkan dua desimal agar angka DPS tidak dibulatkan");
   ok(/Dividen tunai tahun buku 2025/.test(app) && /e\.dpsSumber\.url/.test(app), "profil harus menampilkan dividen beserta sumbernya");
   ok(/tidak menjamin dividen tahun berikutnya/.test(app), "baris dividen harus memuat catatan bahwa dividen tidak dijamin");
   ok(!/imbal hasil|yield/i.test(m ? m[0] : ""), "baris dividen tidak boleh menghitung imbal hasil");

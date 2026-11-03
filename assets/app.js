@@ -686,7 +686,8 @@
   function dividenTampil(e) {
     if (typeof e.dps !== "number" || !(e.dps > 0)) return null;
     if (!e.dpsSumber || !e.dpsSumber.judul || !/^https:\/\//.test(e.dpsSumber.url || "")) return null;
-    return "Rp" + angka.format(e.dps);
+    // DPS bisa berdesimal dua (mis. SMGR Rp28,33), jadi tidak dibulatkan ke satu desimal
+    return "Rp" + new Intl.NumberFormat("id-ID", { maximumFractionDigits: 2 }).format(e.dps);
   }
 
   function renderProfil() {
