@@ -896,14 +896,31 @@
     ]));
     akar.appendChild(el("div", { class: "saring-sektor" }, [el("label", { for: "pilih-jenis", text: "Saring jenis kabar" }), pilih, ket]));
     akar.appendChild(ul);
-    function tampilkan() {
+    /* 10 kabar dulu, lalu "Tampilkan 10 kabar lagi" (IDE.md #20, Arif & Dewi, 3 Nov).
+       Saringan bekerja pada semua kabar; ganti saringan = kembali ke 10. Fokus pindah ke kabar pertama
+       yang baru muncul agar pengguna keyboard & pembaca layar tidak tertinggal. Tanpa simpanan. */
+    var PER_HAL = 10, batas = PER_HAL;
+    var lagi = el("button", { type: "button", class: "tombol tombol-lagi", id: "kabar-lagi" });
+    akar.appendChild(el("p", { class: "kabar-lagi-baris" }, [lagi]));
+    function tampilkan(fokusDari) {
       var j = pilih.value;
       var hasil = semua.filter(function (k) { return !j || k.jenis === j; });
+      var tampil = hasil.slice(0, batas);
       ul.textContent = "";
-      hasil.forEach(function (k) { ul.appendChild(kartuKabar(k, true)); });
-      ket.textContent = hasil.length + " kabar" + (j ? " jenis " + j : "") + ", terbaru di atas.";
+      tampil.forEach(function (k) { ul.appendChild(kartuKabar(k, true)); });
+      var sisa = hasil.length - tampil.length;
+      ket.textContent = (sisa > 0 ? "Menampilkan " + tampil.length + " dari " : "") + hasil.length + " kabar" +
+        (j ? " jenis " + j : "") + ", terbaru di atas.";
+      lagi.hidden = sisa <= 0;
+      lagi.textContent = "Tampilkan " + Math.min(PER_HAL, sisa) + " kabar lagi (" + sisa + " tersisa)";
+      if (fokusDari != null && ul.children[fokusDari]) {
+        var tujuan = ul.children[fokusDari];
+        tujuan.setAttribute("tabindex", "-1");
+        tujuan.focus();
+      }
     }
-    pilih.addEventListener("change", tampilkan);
+    pilih.addEventListener("change", function () { batas = PER_HAL; tampilkan(); });
+    lagi.addEventListener("click", function () { var awal = batas; batas += PER_HAL; tampilkan(awal); });
     tampilkan();
     pasangIstilah(akar);
   }

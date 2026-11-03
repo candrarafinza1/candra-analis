@@ -513,3 +513,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Arif + Nina: cek baru "setiap laba 9 bulan wajib punya kabar laporan" + uji negatif. Sari + Laras: istilah "Laba inti (core profit)". Tegar: 13 commit bersih. Dewi + Kirana: halaman Kabar 8.340px di HP → usulan #20 dipilih Bima untuk Arif + Dewi.
 - Masalah ringan: sesi ini sempat menimpa data/kabar.js saat uji negatif, langsung dipulihkan dari salinan sebelum commit.
 - `node tests/cek.mjs` lolos. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 3 Nov 2026, 08.09 WIB (Bima)
+- Arif + Dewi: halaman Kabar kini menampilkan 10 kabar dulu, lalu tombol "Tampilkan 10 kabar lagi (n tersisa)" (IDE.md #20). Saringan jenis tetap bekerja pada semua kabar dan kembali ke 10 saat diganti; fokus keyboard pindah ke kabar pertama yang baru muncul; jumlah tampil dibacakan pembaca layar. Di 390px halaman memendek dari 8.360px ke 4.224px. Dicek 390px & 1280px terang/gelap, tanpa galat JS dan tanpa scroll horizontal.
+- Nina: 9 cek baru di `tests/cek.mjs` + uji negatif (batas 30 dan tombol tanpa `hidden` tertangkap).
+- Fajar: 10 emiten sisa dicek lagi, belum ada sumber laba 9 bulan 2026. Tetap 21 dari 31.
+- `node tests/cek.mjs` lolos. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

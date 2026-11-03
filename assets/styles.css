@@ -643,3 +643,9 @@ button.istilah:hover, button.istilah[aria-expanded="true"] { color: var(--aksen)
 .kabar-isi { margin: 0; color: var(--tinta); overflow-wrap: anywhere; }
 .kabar-sumber { margin: 8px 0 0; font-size: .88rem; overflow-wrap: anywhere; }
 .kabar-sumber a { color: var(--tinta-2); }
+/* Tombol "Tampilkan 10 kabar lagi" (Dewi, IDE.md #20) */
+.kabar-lagi-baris { margin: 20px 0 0; text-align: center; }
+.tombol-lagi { background: transparent; color: var(--tinta); border-color: var(--aksen); max-width: 100%; white-space: normal; }
+.tombol-lagi:hover { background: var(--hover-baris); }
+.tombol-lagi[hidden] { display: none; }
+.kabar:focus { outline: 3px solid var(--aksen); outline-offset: 2px; }

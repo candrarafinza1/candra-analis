@@ -421,6 +421,27 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
   ok(/\.kabar-baru\s*\{/.test(css) && !/\.kabar-baru[^{]*\{[^}]*animation/.test(css), "styles.css: .kabar-baru harus ada dan tanpa animasi");
 }
 
+// Nina (3 Nov 08.09): halaman Kabar tampil 10 dulu + tombol "Tampilkan 10 kabar lagi (n tersisa)" (IDE.md #20).
+// Tombol <button> asli (bisa keyboard), jumlah tampil di keterangan aria-live, saringan mengulang ke 10, tanpa simpanan.
+{
+  const app = readFileSync("assets/app.js", "utf8");
+  const m = app.match(/function renderKabar\(\) \{[\s\S]*?\n  \}\n/);
+  const f = m ? m[0] : "";
+  ok(!!m, "app.js: renderKabar() tidak ditemukan");
+  ok(/PER_HAL = 10/.test(f) && /hasil\.slice\(0, batas\)/.test(f), "renderKabar: harus menampilkan 10 kabar dulu (hasil.slice(0, batas))");
+  ok(/el\("button", \{ type: "button"/.test(f) && /kabar lagi \(" \+ sisa \+ " tersisa\)"/.test(f), "renderKabar: tombol <button> \"Tampilkan n kabar lagi (n tersisa)\" harus ada");
+  ok(/lagi\.hidden = sisa <= 0/.test(f), "renderKabar: tombol harus tersembunyi bila tidak ada sisa kabar");
+  ok(/addEventListener\("change", function \(\) \{ batas = PER_HAL;/.test(f), "renderKabar: ganti saringan harus mengulang ke 10 kabar");
+  ok(/"Menampilkan " \+ tampil\.length \+ " dari "/.test(f), "renderKabar: keterangan aria-live harus menyebut jumlah yang tampil");
+  ok(/\.focus\(\)/.test(f), "renderKabar: fokus harus pindah ke kabar pertama yang baru muncul");
+  ok(!/localStorage|sessionStorage/.test(f), "renderKabar: tidak boleh memakai simpanan browser");
+  // Uji negatif: logika potong sama dengan halaman (25 kabar → 10, sisa 15; 30 → sisa 0 setelah 3 klik)
+  const potong = (n, batas) => ({ tampil: Math.min(n, batas), sisa: Math.max(0, n - batas) });
+  ok(potong(25, 10).sisa === 15 && potong(25, 30).sisa === 0 && potong(4, 10).tampil === 4, "uji potong kabar gagal");
+  const css = readFileSync("assets/styles.css", "utf8");
+  ok(/\.tombol-lagi\[hidden\]\s*\{\s*display: none/.test(css), "styles.css: .tombol-lagi[hidden] harus display:none");
+}
+
 // Nina (2 Nov 08.10): "Musim laporan 9 bulan" (IDE.md #17) — dihitung dari laba9b 2026, tampil di Peringkat & Radar,
 // jumlah tertulis sebagai teks, batang disembunyikan dari pembaca layar, tanpa simpanan.
 {
