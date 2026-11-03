@@ -222,7 +222,9 @@ window.EMITEN_ASLI = [
     liabilitas2025: 13010, ekuitas2025: 18360,
     laba9b: { 2025: 1850, 2026: 2430 },
     catatan9b: "Laba 9 bulan = laba diatribusikan kepada pemilik entitas induk: Rp2,43 T (Jan–Sep 2026, Kontan 29 Okt 2026, naik 31,23%) vs Rp1,85 T (Jan–Sep 2025, BCA Sekuritas). Cek runtut: Rp2,43 T ÷ 1,3123 = Rp1,85 T. Liputan6 menulis Rp1,84 T untuk 2025 (pembulatan). Rp2,47 T vs Rp1,88 T di media = laba periode berjalan (termasuk kepentingan nonpengendali), tidak dipakai.",
-    dps: null, harga: null,
+    // dps: Rp60 (tahun buku 2025, total Rp1.321.601.053.500, RUPST 4 Jun 2026, dibayar 7 Juli 2026; tanpa interim disebut) dari BCA Sekuritas 9 Jun 2026 & Liputan6 9 Jun 2026 (Fajar, 3 Nov 16.09).
+    dps: 60, harga: null,
+    dpsSumber: { judul: "BCA Sekuritas, 9 Jun 2026: MYOR akan bagikan dividen Rp60 per saham (tahun buku 2025) pada 7 Juli 2026", url: "https://bcasekuritas.co.id/latest-news/news/myor-akan-bagikan-dividen-rp60-per-saham" },
     catatan: "Laba 2024 = Rp3,00 triliun (Fortune IDN, dua desimal seperti angka 2025). Cocok dengan Investortrust dan KabarBursa (Rp3 triliun) dan dengan penurunan 4,66% ke Rp2,86 triliun di 2025.",
     sumber: [{ judul: "Emiten News, 18 Mar 2026: Mayora raup laba Rp2,86 triliun, menciut 4,66 persen",
       url: "https://emitennews.com/news/mayora-myor-raup-laba-286-triliun-menciut-466-persen" },
