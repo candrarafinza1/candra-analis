@@ -16,6 +16,8 @@
    - roe & der dihitung dari angka di sumber: roe = labaTahun[2025] ÷ ekuitas 2025,
      der = liabilitas 2025 ÷ ekuitas 2025.
    - dps: dividen tunai per saham tahun buku 2025 (rupiah); dpsSumber { judul, url }
+     Emiten mataUang "USD" hanya boleh punya dps bila sumber menulis angka per saham dalam rupiah
+     (dibayar dalam rupiah); tandai dpsRupiah: true. Tim tidak mengonversi sendiri (Bima, 3 Nov 19.10).
      = sumber yang ditampilkan di profil, judulnya wajib memuat angka Rp per saham (Galih & Hana, 3 Nov).
    - catatan: keterangan bila definisi angka berbeda dari biasanya. */
 window.EMITEN_ASLI = [
@@ -197,14 +199,20 @@ window.EMITEN_ASLI = [
     liabilitas2025: 21300, ekuitas2025: 22610,
     laba9b: { 2025: 1390, 2026: 4410 },
     catatan9b: "Laba 9 bulan = laba diatribusikan kepada pemilik entitas induk: Rp4,41 T (Jan–Sep 2026) vs Rp1,39 T (Jan–Sep 2025), CNBC Indonesia 29 Okt 2026; angka 2025 sama dengan Bisnis 30 Okt 2025. Cek runtut: semester I 2026 Rp2,65 T dan semester I 2025 Rp833 M (BCA Sekuritas), jadi kuartal III tiap tahun bernilai positif.",
-    dps: 114, harga: null,
-    dpsSumber: { judul: "JawaPos, 12 Jun 2026: Cetak laba Rp2,93 T, Bukit Asam tebar dividen Rp114 per saham", url: "https://jawapos.com/bisnis/2606110334/cetak-laba-rp-293-t-bukit-asam-tebar-dividen-rp-114-per-saham" },
-    catatan: "Ekuitas 2025 disebut sumber sebagai angka kisaran. Dividen Rp114 per saham disebut \"kisaran\" (total Rp1,32 triliun, 45% laba 2025).",
+    // dps: Rp114,5 (tahun buku 2025, total Rp1,32 T, dibayar 10 Juli 2026) dari BCA Sekuritas 15 Jun 2026; RCTI+ 13 Jun 2026 menulis Rp114,508.
+    // Sebelumnya tertulis Rp114 (JawaPos menyebutnya "kisaran"), dikoreksi Fajar 3 Nov 19.10.
+    dps: 114.5, harga: null,
+    dpsSumber: { judul: "BCA Sekuritas, 15 Jun 2026: PTBA bagikan dividen Rp114,5 per saham (tahun buku 2025) pada 10 Juli 2026", url: "https://bcasekuritas.co.id/latest-news/news/ptba-akan-bagikan-dividen-pada-10-juli-2026" },
+    catatan: "Ekuitas 2025 disebut sumber sebagai angka kisaran. Dividen tahun buku 2025: Rp114,5 per saham (BCA Sekuritas), Rp114,508 (RCTI+), total Rp1,32 triliun = 45% laba 2025; JawaPos menulis kisaran Rp114.",
     sumber: [
       { judul: "Kabar Bursa, 2 Apr 2026: Laba bersih 2025 tergerus, bos PTBA langsung pasang target",
         url: "https://www.kabarbursa.com/market-hari-ini/laba-bersih-2025-tergerus-bos-ptba-langsung-pasang-target" },
       { judul: "JawaPos, 12 Jun 2026: Cetak laba Rp2,93 T, Bukit Asam tebar dividen Rp114 per saham",
         url: "https://jawapos.com/bisnis/2606110334/cetak-laba-rp-293-t-bukit-asam-tebar-dividen-rp-114-per-saham" },
+      { judul: "BCA Sekuritas, 15 Jun 2026: PTBA bagikan dividen Rp114,5 per saham (tahun buku 2025) pada 10 Juli 2026",
+        url: "https://bcasekuritas.co.id/latest-news/news/ptba-akan-bagikan-dividen-pada-10-juli-2026" },
+      { judul: "RCTI+, 13 Jun 2026: Simak jadwal dividen PTBA Rp114 per saham (Rp114,508), cair 10 Juli",
+        url: "https://www.rctiplus.com/news/detail/ekonomi/5405210/simak-jadwal-dividen-ptba-rp114-per-saham--cair-10-juli" },
       { judul: "CNBC Indonesia, 29 Okt 2026: Kuartal III-2026, laba Bukit Asam (PTBA) melesat 216% jadi Rp4,41 T",
         url: "https://www.cnbcindonesia.com/market/20261029132034-17-780560/kuartal-iii-2026-laba-bukit-asam--ptba--melesat-216-jadi-rp441-t" },
       { judul: "Bisnis, 30 Okt 2025: Bukit Asam (PTBA) cetak laba bersih Rp1,39 triliun sampai September 2025",
@@ -418,11 +426,15 @@ window.EMITEN_ASLI = [
     laba9b: { 2025: 1360, 2026: 844.7 },
     catatan9b: "Laba 9 bulan = laba periode berjalan yang diatribusikan kepada pemilik entitas induk: Rp844,70 M (Jan–Sep 2026) vs Rp1,36 T (Jan–Sep 2025), turun 38% (Receh.in 2 Nov 2026, yang juga menulis laba konsolidasian Rp995,10 M vs Rp1,47 T). Kontan 1 Nov 2026 menulis laba bersih Rp844,69 M vs Rp1,36 T; IDX Channel Rp844,6 M dan StockWatch Rp845 M (pembulatan). Pembanding Rp1,36 T sama dengan laba atribusi yang diberitakan Kontan 30 Okt 2025. Sumber tidak menyebut pos sekali-waktu.",
     dps: null, harga: null,
-    catatan: "Laba diatribusikan kepada pemilik entitas induk. Cek: liabilitas + ekuitas = Rp79,25 T, aset Rp79,26 T (selisih pembulatan).",
+    catatan: "Laba diatribusikan kepada pemilik entitas induk. Cek: liabilitas + ekuitas = Rp79,25 T, aset Rp79,26 T (selisih pembulatan). Dividen tahun buku 2025: RUPST 17 Juni 2026 memutuskan tidak membagi dividen; sekitar Rp2,54 T laba ditahan dan Rp2,00 M untuk cadangan (BCA Sekuritas 18 Jun 2026, Katadata). dps dibiarkan kosong karena profil hanya menampilkan dividen yang dibagikan.",
     sumber: [{ judul: "Kontan, 8 Mar 2026: Laba Bumi Serpong Damai (BSDE) di 2025 melorot 41,6% dan penjualan turun 7,3%",
       url: "https://investasi.kontan.co.id/news/laba-bumi-serpong-damai-bsde-di-2025-melorot-416-dan-penjualan-turun-73" },
       { judul: "Receh.in, 2 Nov 2026: Laba BSDE turun 38% (laba atribusi 9 bulan 2026 & 2025)",
         url: "https://www.receh.in/2026/11/laba-bsde-turun-38-residensial-melemah.html" },
+      { judul: "BCA Sekuritas, 18 Jun 2026: RUPS BSDE putuskan tak bagi dividen (tahun buku 2025)",
+        url: "https://bcasekuritas.co.id/latest-news/news/rups-bsde-putuskan-tak-bagi-dividen" },
+      { judul: "Katadata, Jun 2026: BSDE rombak susunan komisaris, tahan laba Rp2,5 triliun demi perkuat modal",
+        url: "https://katadata.co.id/finansial/bursa/6a3885ee24906/bsde-rombak-susunan-komisaris-tahan-laba-rp-2-5-triliun-demi-perkuat-modal" },
       { judul: "Kontan, 1 Nov 2026: Bumi Serpong Damai (BSDE) catat laba bersih turun 38% per September 2026",
         url: "https://investasi.kontan.co.id/news/bumi-serpong-damai-bsde-catat-laba-bersih-turun-38-per-september-2026" }]
   },
@@ -564,9 +576,16 @@ window.EMITEN_ASLI = [
     liabilitas2025: 2620, ekuitas2025: 3610,
     laba9b: { 2025: 237.89, 2026: 292.95 },
     catatan9b: "Laba 9 bulan = laba diatribusikan kepada pemilik entitas induk, juta US$: US$292,95 juta (Jan–Sep 2026) vs US$237,89 juta (Jan–Sep 2025), naik ±23,1% (StockWatch 29 Okt 2026); IDX Channel 31 Okt 2026 menulis US$293 juta vs US$238 juta (dibulatkan). Laba periode berjalan US$397,25 juta vs US$338,61 juta sengaja tidak dipakai. Sumber tidak menyebut pos sekali-waktu yang sudah dibukukan; Feedberry (mengutip IDX Channel) mencatat provisi putusan arbitrase Gunvor US$128,6 juta yang belum dibukukan.",
-    dps: null, harga: null,
+    // dps: Rp125,6 per saham tahun buku 2025 (total US$172,29 jt, dibayar 24 Juni 2026, dibayar dalam rupiah) dari Kabar Bursa & Bareksa 26 Mei 2026 (Fajar, 3 Nov 19.10).
+    // dpsRupiah: true = sumber menulis dividen per saham dalam rupiah (bukan hasil konversi tim), jadi boleh tampil walau laporan dalam US$.
+    dps: 125.6, dpsRupiah: true, harga: null,
+    dpsSumber: { judul: "Kabar Bursa, 26 Mei 2026: PGAS tebar dividen, investor dapat Rp125,6 per saham (tahun buku 2025)", url: "https://www.kabarbursa.com/market-hari-ini/pgas-tebar-dividen-investor-dapat-rp1256-per-saham" },
     catatan: "Melapor dalam dolar AS; angka dalam juta US$ sesuai laporan, tidak dikonversi ke rupiah. Laba = laba diatribusikan kepada pemilik entitas induk. Pendapatan dan neraca dibulatkan sumber ke 2 desimal miliar US$. Cek: liabilitas US$2,62 miliar + ekuitas US$3,61 miliar = aset US$6,23 miliar.",
-    sumber: [{ judul: "KabarBursa, 7 Mar 2026: PGAS catat pendapatan USD3,98 miliar di 2025, laba bersih turun",
+    sumber: [{ judul: "Kabar Bursa, 26 Mei 2026: PGAS tebar dividen, investor dapat Rp125,6 per saham (tahun buku 2025)",
+      url: "https://www.kabarbursa.com/market-hari-ini/pgas-tebar-dividen-investor-dapat-rp1256-per-saham" },
+      { judul: "Bareksa, 26 Mei 2026: PGN (PGAS) bagi dividen Rp125,6 per saham (Rp125,61, dibayar dalam rupiah)",
+        url: "https://www.bareksa.com/berita/saham/2026-05-26/pgn-pgas-bagi-dividen-rp1256-per-saham-ini-estimasi-yield-jadwal-lengkapnya" },
+      { judul: "KabarBursa, 7 Mar 2026: PGAS catat pendapatan USD3,98 miliar di 2025, laba bersih turun",
       url: "https://www.kabarbursa.com/market-hari-ini/pgas-catat-pendapatan-usd398-miliar-di-2025-laba-bersih-turun" },
       { judul: "Stockwatch: Perusahaan Gas Negara (PGN) bukukan laba US$215,36 juta di 2025, turun 36,55%",
         url: "https://stockwatch.id/perusahaan-gas-negara-pgn-bukukan-laba-us21536-juta-di-2025-turun-3655" },

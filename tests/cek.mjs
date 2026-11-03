@@ -481,7 +481,7 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
   const fmtRp = v => "Rp" + new Intl.NumberFormat("id-ID", { maximumFractionDigits: 2 }).format(v);
   const cekDps = e => {
     if (e.dps == null) return true;
-    return typeof e.dps === "number" && e.dps > 0 && !e.mataUang && !!e.dpsSumber
+    return typeof e.dps === "number" && e.dps > 0 && (!e.mataUang || e.dpsRupiah === true) && !!e.dpsSumber
       && /^https:\/\//.test(e.dpsSumber.url || "") && (e.dpsSumber.judul || "").includes(fmtRp(e.dps));
   };
   for (const e of ASLI) ok(cekDps(e), `${e.kode}: dps butuh dpsSumber https yang judulnya memuat ${e.dps != null ? fmtRp(e.dps) : "angkanya"}`);
@@ -490,6 +490,8 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
   ok(!cekDps({ ...contoh, dps: 21 }), "cek dps tidak menangkap angka yang beda dengan judul sumber");
   ok(!cekDps({ ...contoh, dpsSumber: { judul: contoh.dpsSumber.judul, url: "http://contoh.id/a" } }), "cek dps tidak menangkap sumber non-https");
   ok(!cekDps({ ...contoh, dps: "20" }), "cek dps tidak menangkap dps berupa teks");
+  ok(!cekDps({ ...contoh, mataUang: "USD" }), "cek dps tidak menangkap emiten US$ tanpa tanda dpsRupiah");
+  ok(cekDps({ ...contoh, mataUang: "USD", dpsRupiah: true }), "cek dps menolak emiten US$ yang dividennya dibayar rupiah");
   ok(!cekDps({ dps: 28.33, dpsSumber: { judul: "X: dividen Rp28,3 per saham", url: "https://contoh.id/a" } }), "cek dps tidak menangkap desimal kedua yang beda dengan judul sumber");
   const m = app.match(/function dividenTampil[\s\S]*?\n  }\n/);
   ok(!!m, "app.js: dividenTampil() tidak ada");

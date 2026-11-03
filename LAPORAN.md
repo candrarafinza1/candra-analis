@@ -569,3 +569,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Arif + Nina: angka dividen di profil kini sampai dua desimal agar Rp28,33 tidak terbaca Rp28,3; cek 2f ikut disesuaikan dan menangkap desimal kedua yang berbeda.
 - Nina: profil SMGR, ISAT, ACES, ANTM dicek di 390px & 1280px: baris dividen benar, tanpa scroll horizontal, tanpa galat JS.
 - `node tests/cek.mjs` lolos. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 3 Nov 2026, 19.09 WIB (Bima)
+- Fajar: dividen PTBA dikoreksi dari Rp114 (angka "kisaran" JawaPos) menjadi Rp114,5 (BCA Sekuritas; RCTI+ Rp114,508). PGAS Rp125,6 per saham masuk (Kabar Bursa & Bareksa; dibayar dalam rupiah). BSDE tidak membagi dividen tahun buku 2025 (RUPST 17 Jun 2026), dicatat di catatan. Kini 18 emiten bertampilan dividen. KLBF dicek ulang untuk laba 9 bulan: belum ada sumber. Tetap 21 dari 31.
+- Bima + Nina: cek 2f kini mengizinkan dividen rupiah untuk emiten berlaporan US$ hanya dengan tanda `dpsRupiah: true`, plus dua uji baru. Galih & Hana diminta meninjau keputusan ini.
+- Nina: profil PGAS, PTBA, BSDE dicek di 390px & 1280px: tanpa scroll horizontal, tanpa galat JS.
+- `node tests/cek.mjs` lolos. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
