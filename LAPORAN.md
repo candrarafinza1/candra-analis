@@ -557,3 +557,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: dividen tunai tahun buku 2025 MYOR Rp60 per saham (BCA Sekuritas & Liputan6, dibayar 7 Juli 2026) masuk, kini tampil di profil 12 emiten. ITMG ditahan karena sumber menulis angka per saham berbeda (dividen final dihitung dari dolar AS dengan kurs). Laba 9 bulan 10 emiten sisa dicek lagi: belum ada sumber baru. Tetap 21 dari 31.
 - Nina: profil MYOR dicek di 390px & 1280px: baris dividen tampil, tanpa scroll horizontal, tanpa galat JS.
 - `node tests/cek.mjs` lolos. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 3 Nov 2026, 17.09 WIB (Bima)
+- Fajar: dividen tunai tahun buku 2025 INTP Rp468 per saham (Metro TV & Liputan6) dan CTRA Rp36 (StockWatch & PintarSaham) masuk, kini tampil di profil 14 emiten. JPFA (Rp140) ditahan karena belum pasti ada/tidaknya dividen interim tahun buku 2025. Laba 9 bulan 10 emiten sisa dicek lagi: belum ada sumber baru. Tetap 21 dari 31.
+- Nina: profil INTP & CTRA dicek di 390px & 1280px: baris dividen tampil, tanpa scroll horizontal, tanpa galat JS.
+- Catatan teknis (ringan): salinan repo di lingkungan kerja ternyata salinan dangkal yang usang; Yoga bekerja dari cabang baru di atas `origin/main` lalu push ke `main`.
+- `node tests/cek.mjs` lolos. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

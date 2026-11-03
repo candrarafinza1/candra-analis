@@ -308,7 +308,9 @@ window.EMITEN_ASLI = [
     pendapatan: { 2024: 18540, 2025: 17730 },
     liabilitas2025: 8522.2, ekuitas2025: 23203.1,
     laba9b: { 2025: null, 2026: null },
-    dps: null, harga: null,
+    // dps: Rp468 (tahun buku 2025, total Rp1,53 T dari laba Rp2,24 T, RUPST 21 Mei 2026, dibayar 19 Juni 2026; tanpa interim disebut) dari Metro TV 21 Mei 2026 & Liputan6 23 Mei 2026 (Fajar, 3 Nov 17.09).
+    dps: 468, harga: null,
+    dpsSumber: { judul: "Metro TV, 21 Mei 2026: Indocement bagi dividen Rp468 per saham (tahun buku 2025), dibayar 19 Juni 2026", url: "https://www.metrotvnews.com/read/KvJCJRR1-indocement-bagi-dividen-rp468-per-saham-simak-jadwal-transferannya" },
     catatan: "Laba 2025 ikut ditopang keuntungan sekali-waktu dari penjualan 60% bisnis mortar (Des 2025). Laba = laba tahun berjalan yang diatribusikan ke pemilik entitas induk menurut BCA Sekuritas: Rp2,24 T (2025), Rp2,00 T (2024); angka Rp2,25 T / Rp2,01 T sebelumnya adalah laba tahun berjalan. Dipastikan 29 Okt 08.20, periksaUlang dicabut; Siaran pers resmi menyebut \"Laba dari Divestasi\" Rp670,0 miliar (sebelum pajak), sekitar 30% laba 2025; tanpa itu laba 2025 kemungkinan tidak naik. Karena itu, sejak 30 Okt INTP tidak ikut Peringkat (aturan laba sekali-waktu Galih & Hana). Liabilitas = jangka pendek 6.104,2 + jangka panjang 2.418,0 (miliar Rp) dari siaran pers resmi.",
     sumber: [{ judul: "Investortrust, 2 Apr 2026: Indocement cetak kenaikan laba 12% di 2025, ditopang divestasi aset",
       url: "https://investortrust.id/market/98742/indocement-intp-cetak-kenaikan-laba-12-di-2025-ditopang-divestasi-aset" },
@@ -392,7 +394,9 @@ window.EMITEN_ASLI = [
     liabilitas2025: 21060, ekuitas2025: 26910,
     laba9b: { 2025: 1620, 2026: 1320 },
     catatan9b: "Laba 9 bulan = laba diatribusikan kepada pemilik entitas induk: Rp1,32 T (Jan–Sep 2026) vs Rp1,62 T (Jan–Sep 2025), turun 18,5% (Kontan 1 Nov 2026 & Bisnis 2 Nov 2026; pembanding Bisnis 31 Okt 2025). Cek runtut: laba per saham dasar Rp71 vs Rp88 (Kontan), sejalan dengan Rp1,32 T dan Rp1,62 T. Rp1.433,19 M vs Rp1.750,59 M yang ditulis PintarSaham lebih besar, kemungkinan laba periode berjalan, tidak dipakai. Sumber tidak menyebut pos sekali-waktu.",
-    dps: null, harga: null,
+    // dps: Rp36 (tahun buku 2025, total Rp667.285.029.180, RUPST 26 Jun 2026, dibayar 24 Juli 2026; tanpa interim disebut) dari StockWatch 29 Jun 2026 & PintarSaham 30 Jun 2026 (Fajar, 3 Nov 17.09).
+    dps: 36, harga: null,
+    dpsSumber: { judul: "StockWatch, 29 Jun 2026: Ciputra Development (CTRA) sepakati dividen Rp36 per saham (tahun buku 2025), dibayar 24 Juli 2026", url: "https://stockwatch.id/ciputra-development-ctra-sepakati-dividen-rp36-per-saham-dan-pengesahan-laporan-keuangan/" },
     catatan: "Laba diatribusikan kepada pemilik entitas induk. Cek: liabilitas + ekuitas = Rp47,97 T, aset Rp47,98 T (selisih pembulatan).",
     sumber: [{ judul: "Kontan, 2 Apr 2026: Kinerja Ciputra Development (CTRA) positif di sepanjang 2025",
       url: "https://industri.kontan.co.id/news/kinerja-ciputra-development-ctra-positif-di-sepanjang-2025-cek-rinciannya" },
