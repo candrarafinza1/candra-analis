@@ -299,7 +299,7 @@ window.EMITEN_ASLI = [
   },
   {
     kode: "SMGR", nama: "PT Semen Indonesia (Persero) Tbk", sektor: "Bahan baku",
-    desBaris: 136, periksaUlang: true,
+    desBaris: 136,
     usaha: { teks: "Perusahaan milik negara (BUMN) yang membuat semen. Pabriknya tersebar di beberapa daerah di Indonesia dan juga ada di Vietnam.",
       sumber: { judul: "IDX Channel: Sejarah Saham SMGR, Emiten Produsen Semen Terbesar di Indonesia (16 Agu 2022, dibaca 31 Okt 2026)", url: "https://www.idxchannel.com/market-news/sejarah-saham-smgr-emiten-produsen-semen-terbesar-di-indonesia" } },
     labaTahun: { 2024: 719.76, 2025: 190.84 },
@@ -316,8 +316,12 @@ window.EMITEN_ASLI = [
       { judul: "Kontan, 1 Nov 2026: Semen Indonesia (SMGR) bukukan laba Rp532 miliar pada kuartal III 2026 (laba atribusi 9 bulan 2026)",
         url: "https://investasi.kontan.co.id/news/semen-indonesia-smgr-bukukan-laba-rp-532-miliar-pada-kuartal-iii-2026" },
       { judul: "Pasardana, 3 Nov 2025: Efisiensi dan kinerja ekspor topang profitabilitas Semen Indonesia (laba atribusi 9 bulan 2025)",
-        url: "https://pasardana.id/news/2025/11/3/efisiensi-dan-kinerja-ekspor-topang-profitabilitas-semen-indonesia" }],
-    catatan: "Neraca 31 Des 2025 dari StockAnalysis (juta Rp): liabilitas 28.849.009 + ekuitas 47.719.715 = aset 76.568.724 (cocok). Ekuitas Rp47,72 T dan aset Rp76,57 T sama dengan Liputan6, PintarSaham, dan KabarBursa; angka liabilitas Rp27,15 T di berita tidak dipakai karena tidak cocok dengan total aset. Ekuitas termasuk kepentingan nonpengendali. Kabar Bursa (14 Agu 2026) menulis laba diatribusikan Rp179,44 M (2025) dan Rp771,67 M (2024), berbeda dari angka di atas, jadi SMGR ditandai periksaUlang (28 Okt 19.50)."
+        url: "https://pasardana.id/news/2025/11/3/efisiensi-dan-kinerja-ekspor-topang-profitabilitas-semen-indonesia" },
+      { judul: "EmitenNews, 8 Mei 2026: Emiten semen BUMN (SMGR) bagikan seluruh laba 2025 sebagai dividen (laba atribusi 2025 = Rp190,848 M)",
+        url: "https://www.emitennews.com/news/emiten-semen-bumn-smgr-bagikan-seluruh-laba-2025-sebagai-dividen" },
+      { judul: "EmitenNews, 1 Apr 2025: Drop 67 persen, laba SIG (SMGR) 2024 sisa Rp719,76 miliar",
+        url: "https://emitennews.com/news/drop-67-persen-laba-sig-smgr-2024-sisa-rp71976-miliar" }],
+    catatan: "Neraca 31 Des 2025 dari StockAnalysis (juta Rp): liabilitas 28.849.009 + ekuitas 47.719.715 = aset 76.568.724 (cocok). Ekuitas Rp47,72 T dan aset Rp76,57 T sama dengan Liputan6, PintarSaham, dan KabarBursa; angka liabilitas Rp27,15 T di berita tidak dipakai karena tidak cocok dengan total aset. Ekuitas termasuk kepentingan nonpengendali. Kabar Bursa (14 Agu 2026) menulis laba diatribusikan Rp179,44 M (2025) dan Rp771,67 M (2024), berbeda dari angka di atas, jadi SMGR sempat ditandai periksaUlang (28 Okt 19.50). Dipastikan 3 Nov 09.10 (Fajar): Investortrust (31 Mar 2026) menulis laba tahun berjalan yang dapat diatribusikan kepada pemilik entitas induk Rp190,84 M (2025) dan Rp719,76 M (2024), terpisah dari laba bersih Rp179,43 M / Rp771,67 M; EmitenNews (8 Mei 2026) menulis RUPS memakai seluruh laba yang dapat diatribusikan kepada pemilik entitas induk tahun buku 2025 sebagai dividen Rp190,848 M (cocok); EmitenNews (1 Apr 2025) menulis laba 2024 Rp719,76 M dan laba tahun berjalan Rp771,67 M terpisah. Jadi angka Kabar Bursa adalah laba tahun berjalan (konsolidasian), periksaUlang dicabut."
   },
   {
     kode: "AKRA", nama: "PT AKR Corporindo Tbk", sektor: "Energi",
@@ -396,7 +400,7 @@ window.EMITEN_ASLI = [
   },
   {
     kode: "MAPI", nama: "PT Mitra Adiperkasa Tbk", sektor: "Barang konsumen non-primer",
-    desBaris: 356, periksaUlang: true,
+    desBaris: 356,
     usaha: { teks: "Peritel gaya hidup dengan ribuan gerai untuk olahraga, busana, department store, anak, serta makanan dan minuman. Perusahaan juga menjadi distributor merek olahraga dan anak.",
       sumber: { judul: "Stockbit Snips: Profil Saham MAPI (dibaca 31 Okt 2026)", url: "https://snips.stockbit.com/investasi/cara-beli-saham-mapi" } },
     labaTahun: { 2024: 1767.62, 2025: 2231.16 },
@@ -405,7 +409,7 @@ window.EMITEN_ASLI = [
     laba9b: { 2025: 1370, 2026: 1720 },
     catatan9b: "Laba 9 bulan = laba periode berjalan yang diatribusikan kepada pemilik entitas induk: Rp1,72 T (Jan–Sep 2026) vs Rp1,37 T (Jan–Sep 2025), naik 25,16% (Databoks Katadata, 28 Okt 2026, mengutip rilis perusahaan; pendapatan bersih Rp37,44 T sama dengan angka 9 bulan di BCA Sekuritas). Kontan menulis Rp1,72 T dan Bisnis (1 Nov 2025) Rp1,37 T. Angka Rp2,1 T (IDX Channel & BCA Sekuritas, naik 25,1%) adalah laba bersih konsolidasian, tidak dipakai. Sumber tidak menyebut pos sekali-waktu.",
     dps: null, harga: null,
-    catatan: "PintarSaham menulis laba diatribusikan Rp2.231,16 M (2025) dan Rp1.767,62 M (2024); Kontan menulis laba bersih 2025 Rp2,33 T. Perlu cek ke laporan keuangan resmi sebelum ikut Peringkat. Neraca cocok: liabilitas + ekuitas = aset Rp32.824,21 M.",
+    catatan: "PintarSaham menulis laba diatribusikan Rp2.231,16 M (2025) dan Rp1.767,62 M (2024), naik 26,2%. Dipastikan 3 Nov 09.10 (Fajar): StockWatch (26 Jun 2026) menulis laba bersih yang dapat diatribusikan kepada pemilik entitas induk Rp2,23 T pada 2025; IDX Channel (30 Mar 2026) menulis Rp2,2 T (2025) vs Rp1,8 T (2024), cocok dengan pembulatan. Rp2,33 T di Kontan tidak menyebut atribusi dan tidak dipakai (pola sama dengan laba 9 bulan: angka lebih besar = laba konsolidasian). periksaUlang dicabut. Neraca cocok: liabilitas + ekuitas = aset Rp32.824,21 M.",
     sumber: [{ judul: "PintarSaham, 14 Apr 2026: Kinerja keuangan saham MAPI meningkat di tengah ekspansi ritel 2025 (juta Rp)",
       url: "https://pintarsaham.id/kinerja-keuangan-saham-mapi-meningkat-di-tengah-ekspansi-ritel-2025/" },
       { judul: "Kontan, 6 Apr 2026: Mitra Adiperkasa (MAPI) raih kenaikan pendapatan dan laba pada 2025",
@@ -413,7 +417,11 @@ window.EMITEN_ASLI = [
       { judul: "Databoks Katadata, 28 Okt 2026: MAPI gaet laba Rp1,72 triliun pada kuartal III 2026, melesat 25,16% (laba atribusi 9 bulan 2026 & 2025)",
         url: "https://databoks.katadata.co.id/pasar/statistik/6ae026957224a/mapi-gaet-laba-rp172-triliun-pada-kuartal-iii-2026-melesat-2516" },
       { judul: "Bisnis, 1 Nov 2025: Laba Mitra Adiperkasa (MAPI) Rp1,37 triliun per kuartal III/2025",
-        url: "https://market.bisnis.com/read/20251101/192/1925253/laba-mitra-adiperkasa-mapi-rp137-triliun-per-kuartal-iii2025-naik-575" }]
+        url: "https://market.bisnis.com/read/20251101/192/1925253/laba-mitra-adiperkasa-mapi-rp137-triliun-per-kuartal-iii2025-naik-575" },
+      { judul: "StockWatch, 26 Jun 2026: Cetak laba Rp2,23 triliun, Mitra Adiperkasa (MAPI) tebar dividen Rp10 per saham (laba atribusi 2025)",
+        url: "https://stockwatch.id/?p=72044" },
+      { judul: "IDX Channel, 30 Mar 2026: Mitra Adiperkasa (MAPI) kantongi laba bersih Rp2,2 triliun di 2025",
+        url: "https://www.idxchannel.com/market-news/mitra-adiperkasa-mapi-kantongi-laba-bersih-rp22-triliun-di-2025/all" }]
   },
   {
     kode: "HEAL", nama: "PT Medikaloka Hermina Tbk", sektor: "Kesehatan",

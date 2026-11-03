@@ -519,3 +519,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Nina: 9 cek baru di `tests/cek.mjs` + uji negatif (batas 30 dan tombol tanpa `hidden` tertangkap).
 - Fajar: 10 emiten sisa dicek lagi, belum ada sumber laba 9 bulan 2026. Tetap 21 dari 31.
 - `node tests/cek.mjs` lolos. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 3 Nov 2026, 09.10 WIB (Bima)
+- Fajar: angka bertanda SMGR & MAPI dipastikan dengan sumber kedua yang menyebut laba atribusi (SMGR Rp190,84 M / Rp719,76 M, cocok dengan dividen 100% laba atribusi Rp190,848 M; MAPI Rp2,23 T / Rp1,77 T dari PintarSaham, StockWatch, IDX Channel). `periksaUlang` dicabut, keduanya kini ikut Peringkat. Dicek 390px & 1280px: tanpa galat JS, tanpa scroll horizontal.
+- Fajar: 10 emiten sisa laba 9 bulan dicek lagi, belum ada sumber baru. Tetap 21 dari 31.
+- Kirana: tombol "Tampilkan 10 kabar lagi" ditinjau (gelap/terang, keyboard): baik.
+- Tugas baru: Galih cek Peringkat setelah SMGR & MAPI masuk; Fajar cari sumber kedua DPS MAPI.
+- `node tests/cek.mjs` lolos. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

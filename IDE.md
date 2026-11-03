@@ -321,4 +321,4 @@ Halaman Kabar (kini 25 kabar), dicek bersama Dewi lewat tangkapan layar 390px & 
 - Acuan: pola "load more" di aplikasi berita & investasi (lebih ramah HP daripada nomor halaman).
 - Dampak bagi pemula: halaman lebih pendek, kabar terbaru tetap di atas.
 - Usaha: kecil (Arif; Dewi untuk tampilan tombol).
-- Status: dipilih Bima 3 Nov 07.09 untuk Arif + Dewi, masuk BACKLOG.md. Selesai 3 Nov 08.09 (tayang): 10 kabar dulu, tombol "Tampilkan 10 kabar lagi (n tersisa)"; halaman di 390px kini 4.224px (sebelumnya 8.360px). Tinjauan Kirana menyusul.
+- Status: dipilih Bima 3 Nov 07.09 untuk Arif + Dewi, masuk BACKLOG.md. Selesai 3 Nov 08.09 (tayang): 10 kabar dulu, tombol "Tampilkan 10 kabar lagi (n tersisa)"; halaman di 390px kini 4.224px (sebelumnya 8.360px). Ditinjau Kirana 3 Nov 09.10 (browser tim, 390px gelap & 1280px terang, tombol ditekan dengan Enter): tombol berbingkai aksen terbaca jelas di mode gelap, 10 kabar tambahan muncul, fokus pindah ke kabar pertama yang baru, tanpa scroll horizontal. Baik. Tinjauan di HP sungguhan tetap belum bisa dilakukan tim.
