@@ -31,13 +31,18 @@ window.EMITEN_ASLI = [
     liabilitas2025: 137220, ekuitas2025: 150530,
     laba9b: { 2025: 15030, 2026: 14440 },
     catatan9b: "Laba 9 bulan = laba diatribusikan kepada pemilik entitas induk: Rp14,44 T (Jan–Sep 2026) vs Rp15,03 T (Jan–Sep 2025). Rp14,44 T ditulis Investor Daily (2 Nov 2026) dan Feedberry (mengutip Emitennews); Investortrust menulis Rp14,45 T (beda pembulatan). Pembanding Rp15,03 T sama di Investortrust dan Feedberry; angka ini berbeda dari Rp15,78 T yang diberitakan pada 2025 (kemungkinan disajikan ulang dalam laporan 2026). Rp19,46 T vs Rp19,84 T yang juga dikutip media adalah laba periode berjalan. Sumber tidak menyebut pos sekali-waktu.",
-    dps: null, harga: null,
+    // dps: Rp222,08 (tahun buku 2025, total Rp21.999.902.180.685, RUPST 8 Juni 2026, dibayar 10 Juli 2026) dari EmitenNews 9 Jun 2026;
+    // IDX Channel 11 Jun 2026 menulis Rp222 (dibulatkan), Kontan 17 Jun 2026 "sekitar Rp222". CNBC Indonesia 8 Jun 2026 menulis Rp221 (tidak dipakai) (Fajar, 3 Nov 21.15).
+    dps: 222.08, harga: null,
+    dpsSumber: { judul: "EmitenNews, 9 Jun 2026: TLKM bagikan dividen Rp222,08 per saham (tahun buku 2025), dibayar 10 Juli 2026", url: "https://www.emitennews.com/news/tlkm-jadwal-dividen-bank-of-new-york-serok-jutaan-lembar" },
     sumber: [{ judul: "Kontan, 12 Mei 2026: Telkom bukukan laba bersih Rp17,81 triliun di 2025",
       url: "https://investasi.kontan.co.id/news/telkom-tlkm-bukukan-laba-bersih-rp-1781-triliun-di-2025" },
       { judul: "Investor Daily, 2 Nov 2026: Telkom (TLKM) raup laba Rp14 triliun hingga kuartal III-2026 (laba atribusi 9 bulan 2026)",
         url: "https://investor.id/market/460258/telkom-tlkm-raup-laba-rp-14-triliun-hingga-kuartal-iii2026" },
       { judul: "Feedberry, 1 Nov 2026 (mengutip Emitennews): TLKM pendapatan naik 3,55%, laba bersih turun 3,92% (laba atribusi 9 bulan 2026 & 2025)",
-        url: "https://feedberry.com/artikel/tlkm-pendapatan-naik-355-laba-bersih-turun-392" }]
+        url: "https://feedberry.com/artikel/tlkm-pendapatan-naik-355-laba-bersih-turun-392" },
+      { judul: "IDX Channel, 11 Jun 2026: Ini jadwal pembayaran dividen Telkom (TLKM), nilainya Rp222 per saham (tahun buku 2025)",
+        url: "https://www.idxchannel.com/market-news/ini-jadwal-pembayaran-dividen-telkom-tlkm-nilainya-rp222-per-saham" }]
   },
   {
     kode: "KLBF", nama: "PT Kalbe Farma Tbk", sektor: "Kesehatan",

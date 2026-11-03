@@ -580,3 +580,8 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: dividen tunai tahun buku 2025 HEAL Rp13,5 per saham (BCA Sekuritas & Bareksa) dan BRIS Rp32,81 (BCA Sekuritas & Bisnis.com) masuk, kini tampil di profil 20 emiten. EXCL tidak membagi dividen tahun buku 2025 karena rugi, dicatat di catatan. TLKM ditahan: sumber hanya menulis total Rp21,99 T, angka per saham belum ditemukan (tim tidak menghitung sendiri). Laba 9 bulan KLBF, BRIS, JPFA, MIKA dicek lagi: belum ada sumber. Tetap 21 dari 31.
 - Nina: profil HEAL, BRIS, EXCL dicek di 390px & 1280px: baris dividen benar, tanpa scroll horizontal, tanpa galat JS.
 - `node tests/cek.mjs` lolos. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 3 Nov 2026, 21.12 WIB (sesi malam, Bima)
+- Fajar: dividen tunai tahun buku 2025 TLKM Rp222,08 per saham masuk (EmitenNews 9 Jun 2026; IDX Channel menulis Rp222 dibulatkan, Kontan "sekitar Rp222"; CNBC Indonesia menulis Rp221, tidak dipakai). Kini tampil di profil 21 emiten. Laba 9 bulan KLBF dan BRIS dicek lagi: belum ada sumber. Tetap 21 dari 31.
+- Nina: profil TLKM dicek di 390px & 1280px: baris dividen benar, tanpa scroll horizontal, tanpa galat JS.
+- `node tests/cek.mjs` lolos. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
