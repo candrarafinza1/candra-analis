@@ -67,5 +67,8 @@ window.ISTILAH = [
     pelajaran: "laporan-keuangan" },
   { istilah: "Laba periode berjalan", pola: ["laba periode berjalan"],
     arti: "Laba seluruh grup perusahaan, termasuk bagian milik pemegang saham minoritas di anak usaha. Angkanya sering lebih besar daripada laba yang diatribusikan ke pemilik entitas induk, yang dipakai Candra Analis. Berita sering hanya menulis \"laba bersih\", jadi cek dulu laba yang mana.",
+    pelajaran: "laporan-keuangan" },
+  { istilah: "Laba inti (core profit)", pola: ["laba inti", "core profit"],
+    arti: "Laba dari usaha utama setelah dikurangi pos yang tidak berulang, misalnya untung atau rugi selisih kurs. Angka ini dihitung sendiri oleh perusahaan, jadi bisa berbeda jauh dari laba yang diatribusikan ke pemilik entitas induk, yang dipakai Candra Analis.",
     pelajaran: "laporan-keuangan" }
 ];

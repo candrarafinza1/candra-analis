@@ -11,6 +11,18 @@
 window.KABAR_JENIS = ["Laporan keuangan", "Pembelian kembali saham", "Dividen", "Rapat umum pemegang saham", "Aksi korporasi lain"];
 
 window.KABAR = [
+  // Laporan 9 bulan AADI — depok24jam, 2 Nov 2026
+  { kode: "AADI", tanggal: "2026-11-02", jenis: "Laporan keuangan",
+    ringkas: "Adaro Andalan Indonesia merilis laporan 9 bulan 2026: laba yang diatribusikan kepada pemilik entitas induk US$683,34 juta, naik dari US$587,32 juta. Pendapatan usaha US$3,96 miliar, naik 9,70%.",
+    sumber: { judul: "depok24jam, 2 Nov 2026: Laba Adaro Andalan Indonesia (AADI) naik 16% kuartal III 2026", url: "https://www.depok24jam.com/2026/11/02/laba-adaro-andalan-indonesia-aadi-kuartal-iii-2026/" } },
+  // Laporan 9 bulan ACES — IDX Channel, 2 Nov 2026
+  { kode: "ACES", tanggal: "2026-11-02", jenis: "Laporan keuangan",
+    ringkas: "Aspirasi Hidup Indonesia merilis laporan 9 bulan 2026: laba bersih yang dapat diatribusikan kepada pemilik entitas induk tumbuh 25,7% menjadi Rp604,7 miliar. Penjualan bersih Rp6,9 triliun, naik 8,3%.",
+    sumber: { judul: "IDX Channel, 2 Nov 2026: ACES cetak laba bersih Rp604,7 miliar hingga kuartal III-2026", url: "https://www.idxchannel.com/market-news/aces-cetak-laba-bersih-rp6047-miliar-hingga-kuartal-iii-2026-tumbuh-26-persen" } },
+  // Laporan 9 bulan CTRA — Kontan, 1 Nov 2026
+  { kode: "CTRA", tanggal: "2026-11-01", jenis: "Laporan keuangan",
+    ringkas: "Ciputra Development merilis laporan 9 bulan 2026: laba bersih Rp1,32 triliun, turun 18,5%. Penjualan dan pendapatan usaha Rp7,48 triliun, turun 10,79% dari Rp8,39 triliun.",
+    sumber: { judul: "Kontan, 1 Nov 2026: Laba Ciputra Development (CTRA) susut jadi Rp1,32 triliun di kuartal III-2026", url: "https://investasi.kontan.co.id/news/laba-ciputra-development-ctra-susut-jadi-rp-132-triliun-di-kuartal-iii-2026" } },
   // Laporan 9 bulan ICBP — IDX Channel, 30 Okt 2026
   { kode: "ICBP", tanggal: "2026-10-30", jenis: "Laporan keuangan",
     ringkas: "Indofood CBP merilis laporan 9 bulan 2026: laba yang diatribusikan kepada pemilik entitas induk Rp6,1 triliun, turun sekitar 14,1% dari Rp7,1 triliun.",

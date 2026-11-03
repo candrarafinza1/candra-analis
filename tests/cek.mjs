@@ -386,6 +386,15 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
   for (const k of KABAR || []) for (const s of salahAngka9b(k, emitenByKode.get(k.kode))) ok(false, `kabar ${k.kode} ${k.tanggal}: ${s}`);
   ok(salahAngka9b({ ringkas: "Laporan Januari–September 2026 terbit. Laba Rp5,20 triliun, dibanding Rp3,36 triliun." }, { laba9b: { 2025: 3360, 2026: 5180 } }).length === 1,
     "cek angka kabar 9 bulan tidak menangkap angka yang berbeda");
+  // Arif & Nina (3 Nov): setiap emiten yang laba9b 2026-nya terisi wajib punya kabar "Laporan keuangan",
+  // agar halaman Kabar tidak tertinggal dari data Peringkat.
+  const tanpaKabarLaporan = (emiten, kabar) => {
+    const ada = new Set((kabar || []).filter((k) => k.jenis === "Laporan keuangan").map((k) => k.kode));
+    return emiten.filter((e) => e.laba9b && typeof e.laba9b[2026] === "number" && !ada.has(e.kode)).map((e) => e.kode);
+  };
+  for (const kode of tanpaKabarLaporan(ASLI, KABAR)) ok(false, `${kode}: laba 9 bulan 2026 sudah ada di data, tetapi belum ada kabar "Laporan keuangan" di data/kabar.js`);
+  ok(tanpaKabarLaporan([{ kode: "AAAA", laba9b: { 2025: 1, 2026: 2 } }, { kode: "BBBB", laba9b: { 2025: null, 2026: null } }],
+    [{ kode: "AAAA", jenis: "Dividen" }]).join() === "AAAA", "cek kabar laporan 9 bulan tidak menangkap emiten tanpa kabar");
   // uji negatif
   ok(salahKabar({ kode: "ZZZZ", tanggal: "2099-01-01", jenis: "Gosip", ringkas: "Saham ini prospek cerah, saatnya beli.", sumber: { judul: "x", url: "http://x" } }).length === 5,
     "cek kabar tidak menangkap entri yang salah");

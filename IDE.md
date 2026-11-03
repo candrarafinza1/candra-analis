@@ -305,3 +305,20 @@ Kotak "Musim laporan 9 bulan" (tugas 2 Nov 08.10), dicek lewat tangkapan layar P
 - Tanpa galat JS di 12 kombinasi halaman/lebar/mode. Tidak ada perbaikan yang perlu dikerjakan sekarang.
 - Catatan untuk nanti: setelah musim laporan selesai (semua 31 masuk atau akhir November), kotak ini sebaiknya diringkas
   atau disembunyikan agar tabel Peringkat naik kembali di HP.
+
+## Tinjauan & usulan Kirana — 3 Nov 2026, 07.09 WIB
+
+Halaman Kabar (kini 25 kabar), dicek bersama Dewi lewat tangkapan layar 390px & 1280px, terang & gelap:
+- Saringan jenis, label "Baru", dan catatan "Kabar bukan saran membeli atau menjual" terbaca jelas di kedua mode;
+  tanpa scroll horizontal dan tanpa galat JS.
+- Halaman makin panjang: 8.340px di 390px (±9 layar HP) dan 5.343px di 1280px. Kabar laporan 9 bulan akan terus
+  bertambah sampai akhir November (sisa 10 emiten).
+
+### 20. Kabar emiten: tampilkan 10 kabar dulu, lalu "Tampilkan lebih banyak"
+- Masalah: di HP pemula harus menggulir ±9 layar untuk melihat kabar lama; makin panjang setiap ada laporan baru.
+- Ide: tampilkan 10 kabar terbaru, lalu tombol "Tampilkan 10 kabar lagi (n tersisa)". Saringan jenis tetap bekerja
+  pada semua kabar. Tanpa simpanan, tanpa pustaka, tombol bisa dipakai keyboard dan jumlah kabar dibacakan pembaca layar.
+- Acuan: pola "load more" di aplikasi berita & investasi (lebih ramah HP daripada nomor halaman).
+- Dampak bagi pemula: halaman lebih pendek, kabar terbaru tetap di atas.
+- Usaha: kecil (Arif; Dewi untuk tampilan tombol).
+- Status: dipilih Bima 3 Nov 07.09 untuk Arif + Dewi, masuk BACKLOG.md.

@@ -364,11 +364,16 @@ window.EMITEN_ASLI = [
     labaTahun: { 2024: 2120, 2025: 2660 },
     pendapatan: { 2024: 11180, 2025: 12610 },
     liabilitas2025: 21060, ekuitas2025: 26910,
-    laba9b: { 2025: null, 2026: null },
+    laba9b: { 2025: 1620, 2026: 1320 },
+    catatan9b: "Laba 9 bulan = laba diatribusikan kepada pemilik entitas induk: Rp1,32 T (Jan–Sep 2026) vs Rp1,62 T (Jan–Sep 2025), turun 18,5% (Kontan 1 Nov 2026 & Bisnis 2 Nov 2026; pembanding Bisnis 31 Okt 2025). Cek runtut: laba per saham dasar Rp71 vs Rp88 (Kontan), sejalan dengan Rp1,32 T dan Rp1,62 T. Rp1.433,19 M vs Rp1.750,59 M yang ditulis PintarSaham lebih besar, kemungkinan laba periode berjalan, tidak dipakai. Sumber tidak menyebut pos sekali-waktu.",
     dps: null, harga: null,
     catatan: "Laba diatribusikan kepada pemilik entitas induk. Cek: liabilitas + ekuitas = Rp47,97 T, aset Rp47,98 T (selisih pembulatan).",
     sumber: [{ judul: "Kontan, 2 Apr 2026: Kinerja Ciputra Development (CTRA) positif di sepanjang 2025",
-      url: "https://industri.kontan.co.id/news/kinerja-ciputra-development-ctra-positif-di-sepanjang-2025-cek-rinciannya" }]
+      url: "https://industri.kontan.co.id/news/kinerja-ciputra-development-ctra-positif-di-sepanjang-2025-cek-rinciannya" },
+      { judul: "Kontan, 1 Nov 2026: Laba Ciputra Development (CTRA) susut jadi Rp1,32 triliun di kuartal III-2026",
+        url: "https://investasi.kontan.co.id/news/laba-ciputra-development-ctra-susut-jadi-rp-132-triliun-di-kuartal-iii-2026" },
+      { judul: "Bisnis, 31 Okt 2025: Ciputra (CTRA) catat laba bersih naik 27% jadi Rp1,62 triliun kuartal III/2025",
+        url: "https://market.bisnis.com/read/20251031/192/1925047/ciputra-ctra-catat-laba-bersih-naik-27-jadi-rp162-triliun-kuartal-iii2025" }]
   },
   {
     kode: "BSDE", nama: "PT Bumi Serpong Damai Tbk", sektor: "Properti & real estat",
@@ -441,13 +446,18 @@ window.EMITEN_ASLI = [
     labaTahun: { 2024: 892.04, 2025: 668.73 },
     pendapatan: { 2024: 8580, 2025: 8640 },
     liabilitas2025: 1920, ekuitas2025: 6600,
-    laba9b: { 2025: null, 2026: null },
+    laba9b: { 2025: 481.09, 2026: 604.7 },
+    catatan9b: "Laba 9 bulan = laba bersih yang dapat diatribusikan kepada pemilik entitas induk: Rp604,7 M (Jan–Sep 2026), tumbuh 25,7% (IDX Channel 2 Nov 2026; Fortune IDN & Marketeers 2 Nov 2026 menulis angka sama). Pembanding Rp481,09 M (Jan–Sep 2025) dari Bisnis 1 Nov 2025; runtut: 481,09 × 1,257 ≈ 604,7. Sumber tidak menyebut pos sekali-waktu.",
     dps: null, harga: null,
     catatan: "Laba diatribusikan kepada pemilik entitas induk (BCA Sekuritas: Rp668,72 M vs Rp892,04 M). Cek: liabilitas + ekuitas = aset Rp8,52 T.",
     sumber: [{ judul: "Kabar Bursa, 1 Apr 2026: Kinerja tertekan, laba bersih ACES susut ke Rp668 miliar",
       url: "https://www.kabarbursa.com/market-hari-ini/kinerja-tertekan-laba-bersih-aces-susut-ke-rp668-miliar" },
       { judul: "BCA Sekuritas, 1 Apr 2026: ACES catat penjualan bersih Rp8,63 triliun di 2025",
-        url: "https://bcasekuritas.co.id/latest-news/news/aces-catat-penjualan-bersih-rp863-triliun-di-2025" }]
+        url: "https://bcasekuritas.co.id/latest-news/news/aces-catat-penjualan-bersih-rp863-triliun-di-2025" },
+      { judul: "IDX Channel, 2 Nov 2026: ACES cetak laba bersih Rp604,7 miliar hingga kuartal III-2026, tumbuh 26 persen",
+        url: "https://www.idxchannel.com/market-news/aces-cetak-laba-bersih-rp6047-miliar-hingga-kuartal-iii-2026-tumbuh-26-persen" },
+      { judul: "Bisnis, 1 Nov 2025: Laba AZKO (ACES) turun 16,21% jadi Rp481,09 miliar kuartal III/2025",
+        url: "https://market.bisnis.com/read/20251101/192/1925249/laba-azko-aces-turun-1621-jadi-rp48109-miliar-kuartal-iii2025" }]
   },
   {
     kode: "ISAT", nama: "PT Indosat Tbk", sektor: "Infrastruktur",
@@ -545,7 +555,8 @@ window.EMITEN_ASLI = [
     labaTahun: { 2024: 1210, 2025: 760.18 },
     pendapatan: { 2024: 5310, 2025: 4910 },
     liabilitas2025: 2050, ekuitas2025: 3640,
-    laba9b: { 2025: null, 2026: null },
+    laba9b: { 2025: 587.32, 2026: 683.34 },
+    catatan9b: "Laba 9 bulan = laba diatribusikan kepada pemilik entitas induk, juta US$: US$683,34 juta (Jan–Sep 2026) vs US$587,32 juta (Jan–Sep 2025), naik ±16,4% (depok24jam 2 Nov 2026, yang juga menulis laba periode berjalan US$760,63 juta vs US$654,87 juta terpisah; angka Rp12,2 triliun di Bisnis = konversi laba periode berjalan, tidak dipakai). Cek: pembanding cocok dengan laba bersih 9 bulan 2025 US$587 juta (Kontan 6 Nov 2025); laba semester I 2026 US$474 juta (Kabar Bursa 31 Agu 2026) + laba kuartal III 2026 US$209 juta (IDX Channel 2 Nov 2026) = US$683 juta, runtut. Sumber tidak menyebut pos sekali-waktu.",
     dps: null, harga: null,
     catatan: "Melapor dalam dolar AS; angka dalam juta US$ sesuai laporan, tidak dikonversi ke rupiah. Laba = laba tahun berjalan yang diatribusikan kepada pemilik entitas induk (disebut tegas oleh Warta Ekonomi dan EmitenNews). Laba 2024 dan pendapatan hanya tersedia dibulatkan sumber ke 2 desimal miliar US$ (laba 2024 US$1,21 miliar; turun 37,17% menurut EmitenNews, cocok). Cek neraca: liabilitas US$2,05 miliar + ekuitas US$3,64 miliar = US$5,69 miliar, aset US$5,70 miliar (selisih pembulatan). Pecahan dari Adaro (ADRO), tercatat di bursa Desember 2024.",
     sumber: [{ judul: "Warta Ekonomi, 9 Mar 2026: Adaro Andalan (AADI) raih laba USD760,18 juta pada 2025, turun 37%",
@@ -553,7 +564,13 @@ window.EMITEN_ASLI = [
       { judul: "EmitenNews, 8 Mar 2026: Laba bersih Adaro Andalan (AADI) terpangkas 37,17 persen pada 2025",
         url: "https://www.emitennews.com/news/laba-bersih-adaro-andalan-aadi-terpangkas-3717-persen-pada-2025" },
       { judul: "BCA Sekuritas (IQPlus), 6 Mar 2026: Adaro Andalan Indonesia catat pendapatan USD4,91 miliar hingga Desember 2025",
-        url: "https://bcasekuritas.co.id/latest-news/news/adaro-andalan-indonesia-catat-pendapatan-usd491-miliar-hingga-desember-2025" }]
+        url: "https://bcasekuritas.co.id/latest-news/news/adaro-andalan-indonesia-catat-pendapatan-usd491-miliar-hingga-desember-2025" },
+      { judul: "depok24jam, 2 Nov 2026: Laba Adaro Andalan Indonesia (AADI) naik 16% kuartal III 2026",
+        url: "https://www.depok24jam.com/2026/11/02/laba-adaro-andalan-indonesia-aadi-kuartal-iii-2026/" },
+      { judul: "IDX Channel, 2 Nov 2026: Saham Adaro Andalan (AADI) turun 6 persen usai rilis kinerja Q3-2026",
+        url: "https://www.idxchannel.com/market-news/saham-adaro-andalan-aadi-turun-6-persen-usai-rilis-kinerja-q3-2026" },
+      { judul: "Kontan, 6 Nov 2025: Laba bersih Adaro Andalan (AADI) kuartal III turun, tapi prospeknya masih positif",
+        url: "https://investasi.kontan.co.id/news/laba-bersih-adaro-andalan-aadi-kuartal-iii-turun-tapi-prospeknya-masih-positif" }]
   },
   {
     kode: "HRUM", nama: "PT Harum Energy Tbk", sektor: "Energi",
