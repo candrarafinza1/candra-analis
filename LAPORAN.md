@@ -533,3 +533,11 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Galih: SMGR & MAPI dicek di semua tab Peringkat dan saring sektor, kotak "Posisi di Peringkat" runtut, tidak ada teks "dicek ulang" tersisa. 1280px & 390px tanpa galat JS, tanpa scroll horizontal.
 - Tugas baru: Galih + Hana menimbang tampilan DPS di profil.
 - `node tests/cek.mjs` lolos. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 3 Nov 2026, 13.09 WIB (Bima)
+- Laporan masuk kerja siang dikirim ke Rafinza (12 karyawan, tugas per orang).
+- Galih + Hana: diputuskan profil emiten menampilkan dividen tunai tahun buku 2025, tanpa imbal hasil, dengan kalimat netral.
+- Arif: baris "Dividen tunai tahun buku 2025: Rp… per saham" + tautan sumber tayang di profil 6 emiten (field baru `dpsSumber`). Nina: 8 cek baru (2f) + uji negatif. Dewi: 390px & 1280px terang/gelap, tanpa galat JS dan tanpa scroll horizontal.
+- Fajar: DPS ANTM dikoreksi Rp210 → Rp209,9 (BCA Sekuritas 15 Jun 2026); sumber per saham AKRA Rp100 ditambahkan (BCA Sekuritas 28 Apr 2026). Laba 9 bulan 10 emiten sisa dicek lagi: belum ada sumber baru (BRIS baru ada laba bank per Agustus Rp5,3 T, bukan 9 bulan). Tetap 21 dari 31.
+- Tegar: 4 commit sejak 07.00 dipindai, tidak ada pola rahasia, tidak ada `.env`. Yoga: cek tautan internal lolos.
+- Masalah ringan: DPS ANTM sebelumnya dibulatkan (sudah dikoreksi). `node tests/cek.mjs` lolos. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

@@ -15,6 +15,8 @@
      persis seperti laporannya. Jangan dikonversi ke rupiah (keputusan Galih, 29 Okt 2026).
    - roe & der dihitung dari angka di sumber: roe = labaTahun[2025] ÷ ekuitas 2025,
      der = liabilitas 2025 ÷ ekuitas 2025.
+   - dps: dividen tunai per saham tahun buku 2025 (rupiah); dpsSumber { judul, url }
+     = sumber yang ditampilkan di profil, judulnya wajib memuat angka Rp per saham (Galih & Hana, 3 Nov).
    - catatan: keterangan bila definisi angka berbeda dari biasanya. */
 window.EMITEN_ASLI = [
   {
@@ -47,6 +49,7 @@ window.EMITEN_ASLI = [
     // dps: Rp20 (total Rp936.267.830.800, RUPST 21 Mei 2026) dari BCA Sekuritas & Stockwatch (mengutip risalah RUPS).
     // Bareksa 26 Mei 2026 menulis Rp21 (mengutip riset Ciptadana); tidak dipakai karena dua sumber lain sama-sama Rp20.
     dps: 20, harga: null,
+    dpsSumber: { judul: "BCA Sekuritas, 25 Mei 2026: KLBF bagikan dividen Rp20 per saham (tahun buku 2025) pada 24 Juni 2026", url: "https://bcasekuritas.co.id/latest-news/news/klbf-akan-bagikan-dividen-pada-24-juni-2026" },
     sumber: [{ judul: "Investortrust, 31 Mar 2026: Laba Kalbe Farma naik di 2025, penjualan Rp35,32 triliun",
       url: "https://investortrust.id/market/98460/laba-kalbe-farma-klbf-naik-15-3-di-2025-penjualan-tembus-rp35-32-triliun" },
       { judul: "PintarSaham, 8 Apr 2026: Laba bersih Kalbe Farma tumbuh 13% di 2025 (neraca 31 Des 2025, juta Rp)",
@@ -67,6 +70,7 @@ window.EMITEN_ASLI = [
     laba9b: { 2025: 7100, 2026: 6160 },
     catatan9b: "Laba 9 bulan = laba diatribusikan kepada pemilik entitas induk: Rp6,16 T (Jan–Sep 2026) vs Rp7,10 T (Jan–Sep 2025), Fortune IDN 2 Nov 2026; IDX Channel 30 Okt 2026 menulis Rp6,1 T vs Rp7,1 T (pembulatan). Cek runtut: laba per saham Rp529 vs Rp610 (Liputan6 30 Okt 2026). Rp7,50 T vs Rp8,18 T yang juga dikutip media adalah laba periode berjalan. Laba inti (tanpa selisih kurs dan pos tidak berulang) naik 5% menjadi Rp8,04 T; nilai rugi selisih kurs tidak disebut sumber.",
     dps: 265, harga: null,
+    dpsSumber: { judul: "Warta Ekonomi, 26 Jun 2026: Dividen ICBP cair 28 Juli, Rp265 per saham (tahun buku 2025)", url: "https://wartaekonomi.co.id/read619269/bersiap-dividen-icbp-cair-28-juli-nilainya-rp265-per-saham" },
     sumber: [{ judul: "Warta Ekonomi, 31 Mar 2026: ICBP raih penjualan Rp74,85 triliun di 2025",
       url: "https://wartaekonomi.co.id/read606113/produsen-indomie-icbp-raih-penjualan-rp7485-triliun-di-2025-laba-naik-30" },
       { judul: "Warta Ekonomi, 26 Jun 2026: Dividen ICBP cair 28 Juli, Rp265 per saham (tahun buku 2025)",
@@ -90,9 +94,12 @@ window.EMITEN_ASLI = [
     liabilitas2025: 15930, ekuitas2025: 36600,
     laba9b: { 2025: 5970, 2026: 8830 },
     catatan9b: "Laba 9 bulan = laba diatribusikan kepada pemilik entitas induk: Rp8,83 T (Jan–Sep 2026) vs Rp5,97 T (Jan–Sep 2025), Investor Daily. Angka Rp9,66 T vs Rp6,61 T yang banyak dikutip media adalah laba periode berjalan (termasuk kepentingan nonpengendali).",
-    dps: 210, harga: null,
+    // dps: Rp209,9 (BCA Sekuritas 15 Jun 2026; total Rp5,04 T). Sebelumnya tertulis Rp210 (pembulatan), dikoreksi Fajar 3 Nov 13.30.
+    dps: 209.9, harga: null,
+    dpsSumber: { judul: "BCA Sekuritas, 15 Jun 2026: Antam bagikan dividen Rp209,9 per saham (tahun buku 2025) pada 10 Juli 2026", url: "https://bcasekuritas.co.id/latest-news/news/antam-akan-bagikan-dividen-pada-10-juli-2026" },
     catatan: "Laba = laba bersih yang diatribusikan kepada pemilik entitas induk (Katadata): Rp7,21 T (2025), Rp3,65 T (2024). Rp7,92 T di JawaPos adalah laba tahun berjalan (termasuk kepentingan nonpengendali). Cek silang Fortune IDN: dividen Rp5,04 T = 70% laba atribusi dan laba ditahan Rp2,16 T = 30%, jumlahnya Rp7,20 T (cocok). Dipastikan 29 Okt 08.20, periksaUlang dicabut. Liabilitas & ekuitas dari Katadata (15,93 + 36,60 = aset 52,53 T).",
-    sumber: [{ judul: "Katadata, 31 Mar 2026: Laba Antam nyaris dua kali lipat jadi Rp7,21 triliun pada 2025",
+    sumber: [{ judul: "BCA Sekuritas, 15 Jun 2026: Antam bagikan dividen Rp209,9 per saham (tahun buku 2025) pada 10 Juli 2026", url: "https://bcasekuritas.co.id/latest-news/news/antam-akan-bagikan-dividen-pada-10-juli-2026" },
+      { judul: "Katadata, 31 Mar 2026: Laba Antam nyaris dua kali lipat jadi Rp7,21 triliun pada 2025",
         url: "https://katadata.co.id/finansial/bursa/69cbbc3f148fa/laba-antam-antm-nyaris-dua-kali-lipat-jadi-rp-7-21-triliun-pada-2025" },
       { judul: "Fortune IDN, 11 Jun 2026: Antam tebar dividen Rp5,04 triliun, setara 70% dari laba",
         url: "https://www.fortuneidn.com/market/antam-antm-tebar-dividen-rp5-04-triliun-setara-70-dari-laba-00-6cmtl-v1573t" },
@@ -185,6 +192,7 @@ window.EMITEN_ASLI = [
     laba9b: { 2025: 1390, 2026: 4410 },
     catatan9b: "Laba 9 bulan = laba diatribusikan kepada pemilik entitas induk: Rp4,41 T (Jan–Sep 2026) vs Rp1,39 T (Jan–Sep 2025), CNBC Indonesia 29 Okt 2026; angka 2025 sama dengan Bisnis 30 Okt 2025. Cek runtut: semester I 2026 Rp2,65 T dan semester I 2025 Rp833 M (BCA Sekuritas), jadi kuartal III tiap tahun bernilai positif.",
     dps: 114, harga: null,
+    dpsSumber: { judul: "JawaPos, 12 Jun 2026: Cetak laba Rp2,93 T, Bukit Asam tebar dividen Rp114 per saham", url: "https://jawapos.com/bisnis/2606110334/cetak-laba-rp-293-t-bukit-asam-tebar-dividen-rp-114-per-saham" },
     catatan: "Ekuitas 2025 disebut sumber sebagai angka kisaran. Dividen Rp114 per saham disebut \"kisaran\" (total Rp1,32 triliun, 45% laba 2025).",
     sumber: [
       { judul: "Kabar Bursa, 2 Apr 2026: Laba bersih 2025 tergerus, bos PTBA langsung pasang target",
@@ -334,8 +342,10 @@ window.EMITEN_ASLI = [
     laba9b: { 2025: 1650, 2026: 2210 },
     catatan9b: "Laba 9 bulan = laba diatribusikan kepada pemilik entitas induk: Rp2,21 T (Jan–Sep 2026) vs Rp1,65 T (Jan–Sep 2025), StockWatch dan Kontan (sama). Rp2,44 T vs Rp1,85 T yang juga dikutip media adalah laba periode berjalan (termasuk kepentingan nonpengendali).",
     dps: 100, harga: null,
+    dpsSumber: { judul: "BCA Sekuritas, 28 Apr 2026: RUPS 2026 AKRA setujui dividen Rp100 per saham (tahun buku 2025)", url: "https://bcasekuritas.co.id/latest-news/news/rups-2026-akra-setujui-dividen-rp100-per-saham" },
     catatan: "Dividen tahun buku 2025 = interim Rp50 + final Rp50. Laba 2024 diatribusikan = Rp2,22 T (Investortrust); Rp2,39 T yang sering dikutip adalah laba tahun berjalan termasuk kepentingan nonpengendali. Rp2,22 T → Rp2,47 T cocok dengan kenaikan 11,12% yang ditulis Bisnis. Ekuitas 2025 dihitung dari total aset Rp36,56 T dikurangi liabilitas Rp20,95 T (Bisnis).",
-    sumber: [{ judul: "Katadata, 27 Apr 2026: AKRA sepakat bagi dividen Rp1,98 triliun",
+    sumber: [{ judul: "BCA Sekuritas, 28 Apr 2026: RUPS 2026 AKRA setujui dividen Rp100 per saham (tahun buku 2025)", url: "https://bcasekuritas.co.id/latest-news/news/rups-2026-akra-setujui-dividen-rp100-per-saham" },
+      { judul: "Katadata, 27 Apr 2026: AKRA sepakat bagi dividen Rp1,98 triliun",
       url: "https://katadata.co.id/finansial/bursa/69ef175cc3f38/akra-sepakat-bagi-dividen-rp-1-98-triliun-umumkan-perubahan-direksi" },
       { judul: "Bisnis, 18 Mar 2026: Kinerja 2025, pendapatan AKRA tumbuh 18,82%, laba bersih naik 11,12%",
         url: "https://market.bisnis.com/read/20260318/192/1961272/kinerja-2025-pendapatan-akra-tumbuh-1882-laba-bersih-naik-1112" },
@@ -410,6 +420,7 @@ window.EMITEN_ASLI = [
     catatan9b: "Laba 9 bulan = laba periode berjalan yang diatribusikan kepada pemilik entitas induk: Rp1,72 T (Jan–Sep 2026) vs Rp1,37 T (Jan–Sep 2025), naik 25,16% (Databoks Katadata, 28 Okt 2026, mengutip rilis perusahaan; pendapatan bersih Rp37,44 T sama dengan angka 9 bulan di BCA Sekuritas). Kontan menulis Rp1,72 T dan Bisnis (1 Nov 2025) Rp1,37 T. Angka Rp2,1 T (IDX Channel & BCA Sekuritas, naik 25,1%) adalah laba bersih konsolidasian, tidak dipakai. Sumber tidak menyebut pos sekali-waktu.",
     // dps: Rp10 (tahun buku 2025, total Rp166 M, dibayar 24 Juli 2026) dari StockWatch 26 Jun 2026 & BCA Sekuritas 29 Jun 2026 (Fajar, 3 Nov 10.20).
     dps: 10, harga: null,
+    dpsSumber: { judul: "BCA Sekuritas, 29 Jun 2026: Dividen MAPI akan dibagikan pada 24 Juli 2026 (tahun buku 2025, Rp10 per saham)", url: "https://bcasekuritas.co.id/latest-news/news/dividen-mapi-akan-dibagikan-pada-24-juli-2026" },
     catatan: "PintarSaham menulis laba diatribusikan Rp2.231,16 M (2025) dan Rp1.767,62 M (2024), naik 26,2%. Dipastikan 3 Nov 09.10 (Fajar): StockWatch (26 Jun 2026) menulis laba bersih yang dapat diatribusikan kepada pemilik entitas induk Rp2,23 T pada 2025; IDX Channel (30 Mar 2026) menulis Rp2,2 T (2025) vs Rp1,8 T (2024), cocok dengan pembulatan. Rp2,33 T di Kontan tidak menyebut atribusi dan tidak dipakai (pola sama dengan laba 9 bulan: angka lebih besar = laba konsolidasian). periksaUlang dicabut. Neraca cocok: liabilitas + ekuitas = aset Rp32.824,21 M.",
     sumber: [{ judul: "BCA Sekuritas, 29 Jun 2026: Dividen MAPI akan dibagikan pada 24 Juli 2026 (tahun buku 2025, Rp10 per saham)",
       url: "https://bcasekuritas.co.id/latest-news/news/dividen-mapi-akan-dibagikan-pada-24-juli-2026" },

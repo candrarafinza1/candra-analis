@@ -474,6 +474,29 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
   ok(/musimBeranda\(\);/.test(app), "musimBeranda() harus dipanggil");
 }
 
+// 2f. Dividen di profil (Galih & Hana, Arif, Nina, 3 Nov): dps wajib bersumber, judul sumber memuat angka yang sama,
+//     dan profil tidak menghitung imbal hasil (harga acuan belum ada)
+{
+  const app = readFileSync("assets/app.js", "utf8");
+  const fmtRp = v => "Rp" + new Intl.NumberFormat("id-ID", { maximumFractionDigits: 1 }).format(v);
+  const cekDps = e => {
+    if (e.dps == null) return true;
+    return typeof e.dps === "number" && e.dps > 0 && !e.mataUang && !!e.dpsSumber
+      && /^https:\/\//.test(e.dpsSumber.url || "") && (e.dpsSumber.judul || "").includes(fmtRp(e.dps));
+  };
+  for (const e of ASLI) ok(cekDps(e), `${e.kode}: dps butuh dpsSumber https yang judulnya memuat ${e.dps != null ? fmtRp(e.dps) : "angkanya"}`);
+  const contoh = { dps: 20, dpsSumber: { judul: "X: dividen Rp20 per saham", url: "https://contoh.id/a" } };
+  ok(!cekDps({ ...contoh, dpsSumber: undefined }), "cek dps tidak menangkap dps tanpa sumber");
+  ok(!cekDps({ ...contoh, dps: 21 }), "cek dps tidak menangkap angka yang beda dengan judul sumber");
+  ok(!cekDps({ ...contoh, dpsSumber: { judul: contoh.dpsSumber.judul, url: "http://contoh.id/a" } }), "cek dps tidak menangkap sumber non-https");
+  ok(!cekDps({ ...contoh, dps: "20" }), "cek dps tidak menangkap dps berupa teks");
+  const m = app.match(/function dividenTampil[\s\S]*?\n  }\n/);
+  ok(!!m, "app.js: dividenTampil() tidak ada");
+  ok(/Dividen tunai tahun buku 2025/.test(app) && /e\.dpsSumber\.url/.test(app), "profil harus menampilkan dividen beserta sumbernya");
+  ok(/tidak menjamin dividen tahun berikutnya/.test(app), "baris dividen harus memuat catatan bahwa dividen tidak dijamin");
+  ok(!/imbal hasil|yield/i.test(m ? m[0] : ""), "baris dividen tidak boleh menghitung imbal hasil");
+}
+
 // 3. Aturan Hana (syariah): halaman tidak boleh memakai bahasa ajakan
 const terlarang = /\b(wajib beli|pasti naik|buruan (beli|jual)|dijamin untung|rekomendasi beli)\b/i;
 for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"]) {

@@ -682,6 +682,13 @@
     return wadah;
   }
 
+  // Dividen per saham untuk profil: hanya bila dps angka > 0 dan dpsSumber https ada; selalu dalam rupiah.
+  function dividenTampil(e) {
+    if (typeof e.dps !== "number" || !(e.dps > 0)) return null;
+    if (!e.dpsSumber || !e.dpsSumber.judul || !/^https:\/\//.test(e.dpsSumber.url || "")) return null;
+    return "Rp" + angka.format(e.dps);
+  }
+
   function renderProfil() {
     var akar = document.getElementById("profil");
     if (!akar) return;
@@ -803,6 +810,17 @@
         ]));
       });
       akar.appendChild(daftar9);
+    }
+
+    // Dividen tunai tahun buku 2025 (Galih & Hana, Arif, 3 Nov): hanya angka bersumber, tanpa imbal hasil
+    // (harga acuan belum ada). Kalimat netral: dividen lalu tidak menjamin dividen berikutnya.
+    var dps = dividenTampil(e);
+    if (dps) {
+      akar.appendChild(el("p", { class: "catatan-metode baris-dividen" }, [
+        el("strong", { text: "Dividen tunai tahun buku 2025: " + dps + " per saham. " }),
+        "Sumber: ", el("a", { href: e.dpsSumber.url, target: "_blank", rel: "noopener", text: e.dpsSumber.judul }), ". ",
+        "Dividen yang sudah dibagikan tidak menjamin dividen tahun berikutnya. Ini data, bukan saran membeli atau menjual."
+      ]));
     }
 
     akar.appendChild(bagianBanding(e));
