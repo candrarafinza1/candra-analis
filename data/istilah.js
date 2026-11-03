@@ -48,7 +48,7 @@ window.ISTILAH = [
     arti: "Perusahaan yang sahamnya tercatat dan bisa dibeli masyarakat di bursa. Disebut juga perusahaan terbuka.",
     pelajaran: "apa-itu-saham" },
   { istilah: "Dividen", pola: ["dividen"],
-    arti: "Bagian laba perusahaan yang dibagikan kepada pemegang saham. Tidak semua perusahaan membagikannya setiap tahun.",
+    arti: "Bagian laba perusahaan yang dibagikan kepada pemegang saham; tidak semua perusahaan membagikannya setiap tahun. Dividen \"tahun buku 2025\" berasal dari laba tahun 2025 dan biasanya dibayarkan pada tahun 2026, ada yang sebagian dibayar lebih dulu sebagai dividen interim.",
     pelajaran: "apa-itu-saham" },
   { istilah: "Pembelian kembali saham (buyback)", pola: ["buyback", "membeli kembali saham", "pembelian kembali saham"],
     arti: "Perusahaan membeli lagi sebagian sahamnya sendiri dari pasar dengan uang perusahaan, sehingga jumlah saham yang beredar di publik berkurang. Rencana buyback adalah aksi korporasi, bukan jaminan harga saham akan naik atau turun.",

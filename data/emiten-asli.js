@@ -121,7 +121,9 @@ window.EMITEN_ASLI = [
     laba9b: { 2025: 11480, 2026: 4470 },
     sekaliWaktu9b: { tahun: 2026, nilai: 3500, jenis: "beban", ket: "pos sekali-waktu Rp3,5 T (penurunan nilai Supreme Energy dan pembayaran izin kawasan hutan tambang nikel) menurut Kontan" },
     catatan9b: "Laba 9 bulan = laba diatribusikan kepada pemilik entitas induk: Rp4,47 T (Jan–Sep 2026) vs Rp11,48 T (Jan–Sep 2025), Databoks Katadata; BCA Sekuritas (31 Okt 2025) menulis Rp11,47 T untuk 2025 (selisih pembulatan). Penurunan antara lain karena pos sekali-waktu Rp3,5 T (penurunan nilai Supreme Energy dan pembayaran izin kawasan hutan tambang nikel); tanpa pos itu laba Rp7,9 T (Kontan).",
-    dps: null, harga: null,
+    // dps: Rp1.663 = total tahun buku 2025 (interim Rp567 dibayar 24 Okt 2025 + final Rp1.096 dibayar 18 Mei 2026; total s.d. Rp5,92 T), RUPST 16 Apr 2026. Infobanknews 16 Apr 2026 & JawaPos 17 Apr 2026 (Fajar, 3 Nov 14.20).
+    dps: 1663, harga: null,
+    dpsSumber: { judul: "Infobanknews, 16 Apr 2026: RUPST UNTR sepakat tebar dividen Rp1.663 per saham tahun buku 2025 (termasuk interim Rp567)", url: "https://infobanknews.com/rupst-untr-sepakat-tebar-dividen-rp59-triliun-tahun-buku-2025/" },
     sumber: [
       { judul: "Kontan, 27 Feb 2026: United Tractors cetak pendapatan bersih Rp131,3 triliun pada 2025",
         url: "https://investasi.kontan.co.id/news/united-tractors-untr-cetak-pendapatan-bersih-rp-1313-triliun-pada-2025" },
@@ -148,7 +150,9 @@ window.EMITEN_ASLI = [
     liabilitas2025: 97740, ekuitas2025: 120230,
     laba9b: { 2025: 7880, 2026: 7870 },
     catatan9b: "Laba 9 bulan = laba periode berjalan yang diatribusikan kepada pemilik entitas induk: Rp7,87 T (Jan–Sep 2026; Kontan & Warta Ekonomi 30 Okt 2026, \"relatif stabil\") vs Rp7,88 T (Jan–Sep 2025; BCA Sekuritas 3 Nov 2025, sama dengan Media Asuransi News). Laba inti (core profit, tanpa selisih kurs dan pos tidak berulang) naik 11% menjadi Rp9,37 T; laba tertahan rugi selisih kurs yang belum terealisasi dari pendanaan, nilainya tidak disebut sumber.",
-    dps: null, harga: null,
+    // dps: Rp290 (tahun buku 2025, total Rp2.546.323.685.000, dibayar 29 Juli 2026) dari BCA Sekuritas 1 Jul 2026 & Warta Ekonomi 26 Jun 2026 (Fajar, 3 Nov 14.20).
+    dps: 290, harga: null,
+    dpsSumber: { judul: "BCA Sekuritas, 1 Jul 2026: INDF akan bagikan dividen Rp290 per saham (tahun buku 2025) pada 29 Juli 2026", url: "https://bcasekuritas.co.id/latest-news/news/indf-akan-bagikan-dividen-rp290-per-saham" },
     catatan: "Sumber menyebut \"laba bersih\" tanpa merinci bagian yang diatribusikan ke pemilik entitas induk.",
     sumber: [{ judul: "Warta Ekonomi, 31 Mar 2026: Indofood kantongi laba Rp10,68 triliun sepanjang 2025",
       url: "https://wartaekonomi.co.id/read606096/indofood-milik-grup-salim-indf-kantongi-laba-rp1068-triliun-sepanjang-2025" },

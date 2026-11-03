@@ -541,3 +541,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: DPS ANTM dikoreksi Rp210 → Rp209,9 (BCA Sekuritas 15 Jun 2026); sumber per saham AKRA Rp100 ditambahkan (BCA Sekuritas 28 Apr 2026). Laba 9 bulan 10 emiten sisa dicek lagi: belum ada sumber baru (BRIS baru ada laba bank per Agustus Rp5,3 T, bukan 9 bulan). Tetap 21 dari 31.
 - Tegar: 4 commit sejak 07.00 dipindai, tidak ada pola rahasia, tidak ada `.env`. Yoga: cek tautan internal lolos.
 - Masalah ringan: DPS ANTM sebelumnya dibulatkan (sudah dikoreksi). `node tests/cek.mjs` lolos. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 3 Nov 2026, 14.20 WIB (Bima)
+- Fajar: dividen tunai tahun buku 2025 UNTR Rp1.663 per saham (interim Rp567 + final Rp1.096; Infobanknews & JawaPos) dan INDF Rp290 (BCA Sekuritas & Warta Ekonomi) masuk, kini tampil di profil 8 emiten. Laba 9 bulan 10 emiten sisa dicek lagi: belum ada sumber baru. Tetap 21 dari 31.
+- Sari + Laras: istilah "Dividen" kini menjelaskan arti "tahun buku 2025" dan dividen interim. Hana: netral.
+- Kirana: baris dividen ditinjau di 390px gelap & 1280px terang: baik, tanpa scroll horizontal dan tanpa galat JS.
+- `node tests/cek.mjs` lolos. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
