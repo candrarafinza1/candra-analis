@@ -601,3 +601,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Sari + Laras: bahasa catatan dividen ditinjau; Arif menerapkan: istilah internal "dps" dihapus dari catatan BSDE & EXCL, "laba ditahan" dijelaskan, profil PGAS kini menerangkan kenapa dividen tertulis dalam rupiah.
 - Nina: profil PGAS, MIKA, BSDE dicek di 390px & 1280px: tanpa scroll horizontal, tanpa galat JS. `node tests/cek.mjs` lolos. Tugas baru Nina: cek nama field internal di catatan.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 4 Nov 2026, 09.09 WIB (sesi pagi, Bima)
+- Fajar: laba 9 bulan 2026 dicek lagi untuk 9 emiten sisa (KLBF, BRIS, MIKA, INTP, EXCL, ITMG, MBMA, HRUM, MDKA): hasil pencarian masih laporan 2025 atau semester I 2026. Tetap 22 dari 31.
+- Nina: cek baru di `tests/cek.mjs` (2g): catatan emiten tidak boleh memuat nama field internal; 4 uji negatif/positif. Cek ini langsung menemukan kata "periksaUlang" di catatan ANTM, INTP, SMGR, MAPI.
+- Sari: keempat catatan diganti dengan bahasa pemula ("pemeriksaan ulang selesai", "perlu diperiksa ulang"); angka tidak diubah. Nina: profil keempatnya dicek 390px & 1280px, tanpa scroll horizontal, tanpa galat JS. `node tests/cek.mjs` lolos.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

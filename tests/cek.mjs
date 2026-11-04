@@ -501,6 +501,18 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
   ok(!/imbal hasil|yield/i.test(m ? m[0] : ""), "baris dividen tidak boleh menghitung imbal hasil");
 }
 
+// 2g. Nina (4 Nov 09.09): kalimat catatan untuk pembaca tidak boleh memuat nama field internal
+{
+  const fieldInternal = /\b(dps|dpsRupiah|dpsSumber|laba9b|labaTahun|periksaUlang|sekaliWaktu9b|sekaliWaktu|desBaris|mataUang|catatan9b)\b/;
+  const cekCatatan = (e) => ["catatan", "catatan9b"].every(k => typeof e[k] !== "string" || !fieldInternal.test(e[k]));
+  for (const e of ASLI) ok(cekCatatan(e), `${e.kode}: catatan memuat nama field internal (mis. "dps", "laba9b"); tulis dengan bahasa pemula`);
+  // uji negatif
+  ok(!cekCatatan({ catatan: "Tidak membagi dividen, dps tetap kosong." }), "cek catatan tidak menangkap kata \"dps\"");
+  ok(!cekCatatan({ catatan9b: "Angka laba9b 2025 belum ada." }), "cek catatan tidak menangkap \"laba9b\" di catatan9b");
+  ok(!cekCatatan({ catatan: "Ditandai periksaUlang oleh tim." }), "cek catatan tidak menangkap \"periksaUlang\"");
+  ok(cekCatatan({ catatan: "Dividen per saham (DPS) Rp20, dibayar 24 Juni 2026." }), "cek catatan menolak singkatan DPS yang dijelaskan");
+}
+
 // 3. Aturan Hana (syariah): halaman tidak boleh memakai bahasa ajakan
 const terlarang = /\b(wajib beli|pasti naik|buruan (beli|jual)|dijamin untung|rekomendasi beli)\b/i;
 for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"]) {
