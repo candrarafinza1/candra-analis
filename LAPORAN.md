@@ -630,3 +630,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Nina: cek 2h di `tests/cek.mjs` (setiap tautan punya judul tujuan, +uji negatif). `node tests/cek.mjs` lolos (9 halaman, 8 pelajaran, 31 emiten). Profil INTP, TLKM, dan halaman tanpa kode dicek 390px & 1280px (terang & gelap): tanpa scroll horizontal, tanpa galat JS. Kirana meninjau: baik.
 - Fajar: laba 9 bulan 2026 KLBF & BRIS dicek lagi: belum ada sumber kuartal III 2026 (hasil pencarian masih 2025/2023). Tetap 23 dari 31; MIKA tetap ditahan.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 4 Nov 2026, 15.11 WIB — sesi kerja (Bima)
+- Fajar: laba 9 bulan 2026 dicek lagi (KLBF, BRIS, MIKA, EXCL, ITMG, HRUM, MDKA, MBMA): belum ada sumber Jan–Sep 2026; MIKA tetap tanpa sumber kedua. Tetap 23 dari 31.
+- Fajar: DPS tahun buku 2025 tetap 22 emiten. AADI & TPIA ditahan (ada interim + final, tetapi tidak ada sumber yang menulis total per saham; tim tidak menjumlah sendiri). HRUM tidak membagi dividen tahun buku 2025 (baru satu sumber). MDKA: dividen dari saldo laba, per saham baru perkiraan → tidak dimasukkan.
+- Raka + Hana: kabar dividen pertama di `data/kabar.js`: JPFA dividen interim tahun buku 2026 Rp90 per saham, dibayar 12 Nov 2026 (BCA Sekuritas & Kontan 28 Okt 2026). Kalimat netral, tanpa ajakan.
+- Nina: `node tests/cek.mjs` lolos (9 halaman, 8 pelajaran, 31 emiten). Kabar & profil JPFA dicek 390px & 1280px: tanpa scroll horizontal, tanpa galat JS; kabar baru muncul setelah "Tampilkan 10 kabar lagi".
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

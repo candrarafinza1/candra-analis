@@ -27,6 +27,10 @@ window.KABAR = [
   { kode: "JPFA", tanggal: "2026-11-02", jenis: "Laporan keuangan",
     ringkas: "Laporan Januari–September 2026 terbit. Laba bersih Rp3,23 triliun, naik 34% dibanding Rp2,41 triliun pada periode yang sama 2025. Pendapatan Rp54,53 triliun, naik 26%.",
     sumber: { judul: "Kontan, 2 Nov 2026: Segmen DOC dan livebird topang kinerja Japfa (JPFA) di tengah tekanan beban bunga", url: "https://investasi.kontan.co.id/news/segmen-doc-dan-livebird-topang-kinerja-japfa-jpfa-di-tengah-tekanan-beban-bunga" } },
+  // Dividen interim JPFA tahun buku 2026 — BCA Sekuritas & Kontan, 28 Okt 2026 (Raka, ditinjau Hana)
+  { kode: "JPFA", tanggal: "2026-10-28", jenis: "Dividen",
+    ringkas: "Japfa Comfeed Indonesia menetapkan dividen interim tahun buku 2026 sebesar Rp90 per saham, total Rp1.052.780.364.090. Tanggal pencatatan 9 November 2026, pembayaran 12 November 2026.",
+    sumber: { judul: "BCA Sekuritas, 28 Okt 2026: JPFA akan bagikan dividen interim Rp90 per saham (tahun buku 2026) pada 12 November 2026", url: "https://bcasekuritas.co.id/latest-news/news/jpfa-akan-bagikan-dividen-interim-12-november-2026" } },
   // Laporan 9 bulan CTRA — Kontan, 1 Nov 2026
   { kode: "CTRA", tanggal: "2026-11-01", jenis: "Laporan keuangan",
     ringkas: "Ciputra Development merilis laporan 9 bulan 2026: laba bersih Rp1,32 triliun, turun 18,5%. Penjualan dan pendapatan usaha Rp7,48 triliun, turun 10,79% dari Rp8,39 triliun.",
