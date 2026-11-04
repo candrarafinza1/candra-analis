@@ -624,3 +624,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Kirana: usulan #21 "Lompat ke" di profil emiten (IDE.md). Dewi: profil INTP 390px gelap terbaca baik.
 - Tegar: commit hari ini dipindai, tanpa rahasia. Nina: `node tests/cek.mjs` lolos; profil INTP, Radar, Peringkat dicek 390px & 1280px (terang & gelap): tanpa scroll horizontal, tanpa galat JS.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 4 Nov 2026, 14.11 WIB (sesi siang, Bima)
+- Bima memilih usulan Kirana #21. Arif + Dewi: baris "Lompat ke" di profil emiten (Angka utama · Bandingkan · Radar Risiko · Kabar · Sumber data); tautan Kabar hanya muncul bila ada kabar; gulir halus menghormati `prefers-reduced-motion`.
+- Nina: cek 2h di `tests/cek.mjs` (setiap tautan punya judul tujuan, +uji negatif). `node tests/cek.mjs` lolos (9 halaman, 8 pelajaran, 31 emiten). Profil INTP, TLKM, dan halaman tanpa kode dicek 390px & 1280px (terang & gelap): tanpa scroll horizontal, tanpa galat JS. Kirana meninjau: baik.
+- Fajar: laba 9 bulan 2026 KLBF & BRIS dicek lagi: belum ada sumber kuartal III 2026 (hasil pencarian masih 2025/2023). Tetap 23 dari 31; MIKA tetap ditahan.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

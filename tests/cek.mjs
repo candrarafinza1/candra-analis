@@ -513,6 +513,20 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
   ok(cekCatatan({ catatan: "Dividen per saham (DPS) Rp20, dibayar 24 Juni 2026." }), "cek catatan menolak singkatan DPS yang dijelaskan");
 }
 
+// 2h. Nina (4 Nov 14.11, IDE.md #21): setiap tautan "Lompat ke" di profil harus punya judul tujuan dengan id yang sama
+{
+  const app = readFileSync("assets/app.js", "utf8");
+  const m = app.match(/var tujuan = \[([\s\S]*?)\];/);
+  ok(!!m, "app.js: daftar tujuan \"Lompat ke\" di profil tidak ada");
+  const ids = m ? [...m[1].matchAll(/\["([a-z-]+)", "[^"]+"\]/g)].map(x => x[1]) : [];
+  ok(ids.length >= 4, "\"Lompat ke\" harus menaut minimal 4 bagian profil");
+  const cekJangkar = (sumber, daftar) => daftar.every(id => new RegExp(`id: "${id}"`).test(sumber));
+  ok(cekJangkar(app, ids), "ada tautan \"Lompat ke\" yang tujuannya tidak punya id di app.js");
+  ok(!cekJangkar('el("h2", { id: "angka-utama" })', ["angka-utama", "sumber-data"]), "cek jangkar tidak menangkap tujuan yang hilang");
+  ok(/akar\.querySelector\("#" \+ t\[0\]\)/.test(app), "\"Lompat ke\" harus hanya menaut bagian yang tampil");
+  ok(/prefers-reduced-motion: no-preference\) \{\s*html:has\(#profil\) \{ scroll-behavior: smooth/.test(readFileSync("assets/styles.css", "utf8")), "gulir halus \"Lompat ke\" harus menghormati prefers-reduced-motion");
+}
+
 // 3. Aturan Hana (syariah): halaman tidak boleh memakai bahasa ajakan
 const terlarang = /\b(wajib beli|pasti naik|buruan (beli|jual)|dijamin untung|rekomendasi beli)\b/i;
 for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"]) {

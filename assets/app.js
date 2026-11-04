@@ -749,7 +749,7 @@
       return el("div", { class: "ubin" }, [el("span", { class: "ubin-label", text: label }), el("strong", { class: "ubin-nilai", text: nilai }), ket ? el("span", { class: "ubin-ket", text: ket }) : null]);
     }
     var gl = tumbuhLaba(e), gp = tumbuhPendapatan(e), g9 = tumbuh(N[2025], N[2026]);
-    akar.appendChild(el("h2", { class: "judul-profil-bagian", text: "Angka utama" }));
+    akar.appendChild(el("h2", { class: "judul-profil-bagian", id: "angka-utama", text: "Angka utama" }));
     akar.appendChild(el("div", { class: "kisi-ubin" }, [
       ubin("Laba bersih 2025", strip(L[2025], rp), ada(L[2024]) && L[2024] < 0 ? "2024: rugi " + rp(-L[2024]) : (ada(gl) ? ubah(gl) + " dibanding 2024" : null)),
       ubin("Pendapatan 2025", strip(P[2025], rp), ada(gp) ? ubah(gp) + " dibanding 2024" : null),
@@ -830,7 +830,7 @@
 
     // Radar Risiko (rumus yang sama dengan radar.html)
     var s = periksa(e);
-    akar.appendChild(el("h2", { class: "judul-profil-bagian", text: "Radar Risiko" }));
+    akar.appendChild(el("h2", { class: "judul-profil-bagian", id: "radar-risiko", text: "Radar Risiko" }));
     var ul = el("ul", { class: "sinyal-daftar" });
     s.forEach(function (x) {
       ul.appendChild(el("li", { class: "sinyal sinyal-" + x.tingkat }, [
@@ -842,7 +842,7 @@
     // Kabar terbaru (Arif & Raka, 1 Nov): maksimal 3, sisanya di kabar.html
     var kabarIni = daftarKabar(e.kode);
     if (kabarIni.length) {
-      akar.appendChild(el("h2", { class: "judul-profil-bagian", text: "Kabar terbaru" }));
+      akar.appendChild(el("h2", { class: "judul-profil-bagian", id: "kabar-terbaru", text: "Kabar terbaru" }));
       var ulKabar = el("ul", { class: "kabar-daftar" });
       kabarIni.slice(0, 3).forEach(function (k) { ulKabar.appendChild(kartuKabar(k, false)); });
       akar.appendChild(ulKabar);
@@ -850,7 +850,7 @@
     }
 
     // Sumber
-    akar.appendChild(el("h2", { class: "judul-profil-bagian", text: "Sumber data" }));
+    akar.appendChild(el("h2", { class: "judul-profil-bagian", id: "sumber-data", text: "Sumber data" }));
     var sumber = el("ul", { class: "daftar-sumber" });
     (e.sumber || []).forEach(function (x) {
       sumber.appendChild(el("li", null, [el("a", { href: x.url, target: "_blank", rel: "noopener", text: x.judul })]));
@@ -861,6 +861,18 @@
       el("a", { href: "metodologi.html", text: "halaman Metodologi" }), ". ",
       el("a", { href: "peringkat.html", text: "Kembali ke Peringkat" }), "."
     ]));
+
+    // Arif + Dewi (IDE.md #21, 4 Nov): baris "Lompat ke" di atas profil. Dibuat setelah semua bagian ada,
+    // jadi hanya menaut ke judul yang benar-benar tampil (Kabar tidak muncul bila emiten belum punya kabar).
+    var tujuan = [["angka-utama", "Angka utama"], ["judul-banding", "Bandingkan"], ["radar-risiko", "Radar Risiko"],
+      ["kabar-terbaru", "Kabar"], ["sumber-data", "Sumber data"]];
+    var ulLompat = el("ul");
+    tujuan.forEach(function (t) {
+      if (akar.querySelector("#" + t[0])) ulLompat.appendChild(el("li", null, [el("a", { href: "#" + t[0], text: t[1] })]));
+    });
+    akar.insertBefore(el("nav", { class: "lompat-ke", "aria-label": "Lompat ke bagian profil" }, [
+      el("span", { class: "lompat-ke-label", text: "Lompat ke:" }), ulLompat
+    ]), akar.firstChild);
     pasangIstilah(akar);
   }
 

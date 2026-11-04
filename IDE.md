@@ -344,4 +344,4 @@ bagian Bandingkan, Radar, catatan laba 9 bulan, dividen, Kabar, dan Sumber.
 - Dampak bagi pemula: langsung sampai ke bagian yang dicari; Sumber data lebih mudah ditemukan.
 - Batasan: tautan bisa dipakai keyboard; gulir halus hanya bila `prefers-reduced-motion` tidak aktif; tanpa kata ajakan.
 - Usaha: kecil (Arif; Dewi untuk tampilan). Nina menambah cek bahwa setiap jangkar punya tujuan.
-- Status: usulan baru, belum dipilih.
+- Status: dipilih Bima 4 Nov 14.11 untuk Arif + Dewi; selesai 4 Nov 14.11: "Lompat ke: Angka utama · Bandingkan · Radar Risiko · Kabar · Sumber data" di atas kotak status syariah; tautan Kabar hanya muncul bila emiten punya kabar; gulir halus hanya bila `prefers-reduced-motion` tidak aktif. Nina: cek 2h (+uji negatif). Ditinjau Kirana lewat tangkapan layar (INTP 390px gelap, 1280px terang): tautan membungkus rapi di HP, terbaca jelas, Enter pada "Sumber data" menuju bagiannya; tanpa scroll horizontal, tanpa galat JS. Tinjauan di HP sungguhan menyusul.
