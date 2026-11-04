@@ -19,6 +19,10 @@ window.KABAR = [
   { kode: "ACES", tanggal: "2026-11-02", jenis: "Laporan keuangan",
     ringkas: "Aspirasi Hidup Indonesia merilis laporan 9 bulan 2026: laba bersih yang dapat diatribusikan kepada pemilik entitas induk tumbuh 25,7% menjadi Rp604,7 miliar. Penjualan bersih Rp6,9 triliun, naik 8,3%.",
     sumber: { judul: "IDX Channel, 2 Nov 2026: ACES cetak laba bersih Rp604,7 miliar hingga kuartal III-2026", url: "https://www.idxchannel.com/market-news/aces-cetak-laba-bersih-rp6047-miliar-hingga-kuartal-iii-2026-tumbuh-26-persen" } },
+  // Laporan 9 bulan JPFA — Kontan, 2 Nov 2026 (Raka, ditinjau Hana)
+  { kode: "JPFA", tanggal: "2026-11-02", jenis: "Laporan keuangan",
+    ringkas: "Laporan Januari–September 2026 terbit. Laba bersih Rp3,23 triliun, naik 34% dibanding Rp2,41 triliun pada periode yang sama 2025. Pendapatan Rp54,53 triliun, naik 26%.",
+    sumber: { judul: "Kontan, 2 Nov 2026: Segmen DOC dan livebird topang kinerja Japfa (JPFA) di tengah tekanan beban bunga", url: "https://investasi.kontan.co.id/news/segmen-doc-dan-livebird-topang-kinerja-japfa-jpfa-di-tengah-tekanan-beban-bunga" } },
   // Laporan 9 bulan CTRA — Kontan, 1 Nov 2026
   { kode: "CTRA", tanggal: "2026-11-01", jenis: "Laporan keuangan",
     ringkas: "Ciputra Development merilis laporan 9 bulan 2026: laba bersih Rp1,32 triliun, turun 18,5%. Penjualan dan pendapatan usaha Rp7,48 triliun, turun 10,79% dari Rp8,39 triliun.",
