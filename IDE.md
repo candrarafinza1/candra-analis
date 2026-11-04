@@ -328,3 +328,20 @@ Baris "Dividen tunai tahun buku 2025" di profil, dicek lewat browser tim (UNTR &
 - Angka tebal, tautan sumber, dan catatan "tidak menjamin dividen tahun berikutnya" terbaca jelas di kedua mode; angka ribuan (Rp1.663) tampil dengan titik; tanpa scroll horizontal dan tanpa galat JS.
 - Kata "Dividen" sudah bergaris putus-putus (kamus) dan kini menjelaskan arti "tahun buku 2025" serta dividen interim.
 - Emiten tanpa angka dividen (kini 23 dari 31) tidak menampilkan baris apa pun. Ini sudah tepat untuk saat ini: menulis "belum ada data" di 23 profil justru bisa terbaca seolah emiten tidak membagikan dividen. Usulan ditunda sampai DPS lebih lengkap; tidak ada perbaikan.
+
+## Usulan Kirana — 4 Nov 2026, 13.09 WIB
+
+Profil INTP dicek bersama Dewi lewat tangkapan layar 390px mode gelap (setelah catatan diringkas Sari): terbaca baik,
+tanpa scroll horizontal, tanpa galat JS. Halaman profil kini sekitar 5.150px di 390px (±6–7 layar HP) karena bertambah
+bagian Bandingkan, Radar, catatan laba 9 bulan, dividen, Kabar, dan Sumber.
+
+### 21. Profil emiten: baris "Lompat ke" di bawah judul
+- **Navigasi singkat di halaman panjang** — tampilan, usaha kecil
+- Masalah: di HP pemula harus menggulir ±6 layar untuk sampai ke Radar Risiko atau Sumber data di profil.
+- Ide: satu baris tautan biasa di bawah nama emiten: "Lompat ke: Angka utama · Radar Risiko · Kabar · Sumber data",
+  menuju judul bagian yang sudah ada (tautan jangkar). Bukan menu melayang, tanpa pustaka, tanpa simpanan.
+- Acuan tren: "jump links" di halaman produk dan artikel panjang di aplikasi investasi & berita.
+- Dampak bagi pemula: langsung sampai ke bagian yang dicari; Sumber data lebih mudah ditemukan.
+- Batasan: tautan bisa dipakai keyboard; gulir halus hanya bila `prefers-reduced-motion` tidak aktif; tanpa kata ajakan.
+- Usaha: kecil (Arif; Dewi untuk tampilan). Nina menambah cek bahwa setiap jangkar punya tujuan.
+- Status: usulan baru, belum dipilih.

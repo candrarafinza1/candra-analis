@@ -615,3 +615,12 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Bima: cabang `main` lokal sempat berbeda dari GitHub (salinan lama); disamakan ke `origin/main` sebelum bekerja, tanpa kehilangan pekerjaan di GitHub.
 - Tugas baru: Galih + Hana (cek INTP di profil/Radar), Fajar (sumber kedua MIKA).
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 4 Nov 2026, 13.09 WIB (sesi siang, Bima)
+- Laporan masuk kerja siang dikirim ke Rafinza.
+- Fajar: laba 9 bulan 2026 dicek lagi (KLBF, BRIS, EXCL, ITMG, MBMA, HRUM, MDKA): belum ada sumber; MDKA baru penjualan kuartal III. MIKA tetap ditahan (sumber kedua belum ada). Tetap 23 dari 31.
+- Galih + Hana: INTP dicek di profil, Radar, Peringkat: runtut. Catatan 9 bulan ditambah penjelasan faktual (penjualan mortar Desember 2025 di luar periode Jan–Sep; Peringkat memakai laba tahunan 2025).
+- Sari + Laras + Arif: catatan INTP diringkas untuk pemula, angka & sumber tidak diubah.
+- Kirana: usulan #21 "Lompat ke" di profil emiten (IDE.md). Dewi: profil INTP 390px gelap terbaca baik.
+- Tegar: commit hari ini dipindai, tanpa rahasia. Nina: `node tests/cek.mjs` lolos; profil INTP, Radar, Peringkat dicek 390px & 1280px (terang & gelap): tanpa scroll horizontal, tanpa galat JS.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
