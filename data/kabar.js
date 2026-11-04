@@ -19,6 +19,10 @@ window.KABAR = [
   { kode: "ACES", tanggal: "2026-11-02", jenis: "Laporan keuangan",
     ringkas: "Aspirasi Hidup Indonesia merilis laporan 9 bulan 2026: laba bersih yang dapat diatribusikan kepada pemilik entitas induk tumbuh 25,7% menjadi Rp604,7 miliar. Penjualan bersih Rp6,9 triliun, naik 8,3%.",
     sumber: { judul: "IDX Channel, 2 Nov 2026: ACES cetak laba bersih Rp604,7 miliar hingga kuartal III-2026", url: "https://www.idxchannel.com/market-news/aces-cetak-laba-bersih-rp6047-miliar-hingga-kuartal-iii-2026-tumbuh-26-persen" } },
+  // Laporan 9 bulan INTP — IDX Channel, 4 Nov 2026 (Raka, ditinjau Hana)
+  { kode: "INTP", tanggal: "2026-11-04", jenis: "Laporan keuangan",
+    ringkas: "Laporan Januari–September 2026 terbit. Laba bersih Rp1,30 triliun, naik sekitar 22% dibanding Rp1,06 triliun pada periode yang sama 2025. Pendapatan neto Rp14,07 triliun, naik 8,9%.",
+    sumber: { judul: "IDX Channel, 4 Nov 2026: Indocement (INTP) cetak laba bersih Rp1,3 triliun hingga kuartal III-2026, tumbuh 22 persen", url: "https://www.idxchannel.com/market-news/indocement-intp-cetak-laba-bersih-rp13-triliun-hingga-kuartal-iii-2026-tumbuh-22-persen" } },
   // Laporan 9 bulan JPFA — Kontan, 2 Nov 2026 (Raka, ditinjau Hana)
   { kode: "JPFA", tanggal: "2026-11-02", jenis: "Laporan keuangan",
     ringkas: "Laporan Januari–September 2026 terbit. Laba bersih Rp3,23 triliun, naik 34% dibanding Rp2,41 triliun pada periode yang sama 2025. Pendapatan Rp54,53 triliun, naik 26%.",
