@@ -594,3 +594,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Tegar: 13 commit sejak 3 Nov dipindai, tidak ada pola rahasia. Sari + Laras diberi tugas tinjau bahasa catatan dividen.
 - Nina: profil JPFA, Peringkat, Radar, Kabar dicek di 390px & 1280px: tanpa scroll horizontal, tanpa galat JS. `node tests/cek.mjs` lolos.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 4 Nov 2026, 08.09 WIB (sesi pagi, Bima)
+- Fajar: laba 9 bulan 2026 dicek lagi untuk 9 emiten sisa (KLBF, BRIS, MIKA, INTP, EXCL, ITMG, MBMA, HRUM, MDKA): belum ada sumber. Tetap 22 dari 31.
+- Fajar: dividen tahun buku 2025 MIKA Rp43 per saham masuk (Fortune IDN & PintarSaham 11 Jun 2026) → DPS 22 emiten. ITMG ditahan karena angka dividen final berbeda antarsumber (Rp992 vs sekitar Rp917).
+- Sari + Laras: bahasa catatan dividen ditinjau; Arif menerapkan: istilah internal "dps" dihapus dari catatan BSDE & EXCL, "laba ditahan" dijelaskan, profil PGAS kini menerangkan kenapa dividen tertulis dalam rupiah.
+- Nina: profil PGAS, MIKA, BSDE dicek di 390px & 1280px: tanpa scroll horizontal, tanpa galat JS. `node tests/cek.mjs` lolos. Tugas baru Nina: cek nama field internal di catatan.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

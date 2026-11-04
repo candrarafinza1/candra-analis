@@ -820,6 +820,8 @@
       akar.appendChild(el("p", { class: "catatan-metode baris-dividen" }, [
         el("strong", { text: "Dividen tunai tahun buku 2025: " + dps + " per saham. " }),
         "Sumber: ", el("a", { href: e.dpsSumber.url, target: "_blank", rel: "noopener", text: e.dpsSumber.judul }), ". ",
+        // Sari & Laras (4 Nov): emiten berlaporan dolar AS → jelaskan kenapa dividen tertulis dalam rupiah
+        e.dpsRupiah ? "Dividen ini dibayar dalam rupiah; angkanya ditulis oleh sumber, bukan hasil konversi kami dari dolar AS. " : "",
         "Dividen yang sudah dibagikan tidak menjamin dividen tahun berikutnya. Ini data, bukan saran membeli atau menjual."
       ]));
     }
