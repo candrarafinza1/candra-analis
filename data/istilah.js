@@ -124,5 +124,11 @@ window.ISTILAH = [
     pelajaran: "apa-itu-saham" },
   { istilah: "Dana darurat", pola: ["dana darurat"],
     arti: "Uang cadangan untuk kebutuhan mendadak, disiapkan terpisah sebelum berinvestasi saham. Dengan dana darurat, Anda tidak terpaksa menjual saham saat butuh uang cepat.",
-    pelajaran: "mengelola-risiko" }
+    pelajaran: "mengelola-risiko" },
+  { istilah: "OJK (Otoritas Jasa Keuangan)", pola: ["OJK", "Otoritas Jasa Keuangan"], besarKecil: true,
+    arti: "Lembaga negara yang mengawasi pasar modal dan jasa keuangan di Indonesia. OJK menetapkan Daftar Efek Syariah (DES), dan izin perusahaan sekuritas bisa dicek di situs resminya.",
+    pelajaran: "apa-itu-saham" },
+  { istilah: "Total aset", pola: ["total aset"],
+    arti: "Jumlah semua harta yang dimiliki perusahaan, misalnya kas, bangunan, dan mesin. Total aset sama dengan total liabilitas ditambah ekuitas. Salah satu syarat DES: utang berbasis bunga tidak lebih dari 45% total aset.",
+    pelajaran: "saham-syariah" }
 ];
