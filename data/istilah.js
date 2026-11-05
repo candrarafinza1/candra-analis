@@ -88,5 +88,11 @@ window.ISTILAH = [
     pelajaran: "laporan-keuangan" },
   { istilah: "Kuartal (triwulan)", pola: ["kuartal", "kuartalan", "triwulan"],
     arti: "Periode tiga bulan dalam satu tahun buku: kuartal I (Januari–Maret), II (April–Juni), III (Juli–September), dan IV (Oktober–Desember). Laporan kuartal III memuat angka sejak Januari sampai September, jadi angka itulah yang disebut laba 9 bulan.",
-    pelajaran: "laporan-keuangan" }
+    pelajaran: "laporan-keuangan" },
+  { istilah: "Dividend yield (imbal hasil dividen)", pola: ["dividend yield", "imbal hasil dividen"],
+    arti: "Dividen per saham setahun dibagi harga saham, dalam persen. Angkanya berubah setiap kali harga saham bergerak, dan dividen tahun lalu belum tentu dibagikan lagi dengan jumlah yang sama.",
+    pelajaran: "laporan-keuangan" },
+  { istilah: "Diversifikasi", pola: ["diversifikasi"],
+    arti: "Menyebar modal ke beberapa saham dan sektor yang berbeda, supaya masalah di satu perusahaan tidak menghabiskan seluruh modal. Diversifikasi mengurangi risiko, tetapi tidak menghilangkannya.",
+    pelajaran: "mengelola-risiko" }
 ];
