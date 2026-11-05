@@ -750,3 +750,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Sari + Laras: istilah "OJK (Otoritas Jasa Keuangan)" dan "Total aset" masuk kamus (kini 41 istilah); Arif: pola aman (tidak menandai "POJK"); Hana: netral, tanpa ajakan. Nina & Dewi: dicek 390px & 1280px, tanpa scroll horizontal dan galat JS.
 - `node tests/cek.mjs` lolos (9 halaman, 8 pelajaran, 31 emiten). Kurikulum tidak berubah, modul PDF tidak dibuat ulang.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 5 Nov 2026, 21.10 WIB (Bima)
+- Fajar: cek laba 9 bulan emiten yang belum masuk (KLBF, BRIS, ITMG, EXCL, HRUM, MDKA, MBMA, MIKA): hasil pencarian hanya artikel lama (KLBF 2021 & 2024) atau tanpa laba. Tetap 23 dari 31. Raka & Hana: tidak ada kabar baru.
+- Sari + Laras: istilah "Pendapatan tidak halal" dan "Likuid" masuk kamus (kini 43 istilah); Hana: netral, tanpa ajakan. Arif: penanda istilah kini memilih istilah yang lebih panjang bila mulai di tempat yang sama (masalah ringan, ditemukan Nina). Nina & Dewi: dicek 390px & 1280px, tanpa scroll horizontal dan galat JS.
+- `node tests/cek.mjs` lolos (9 halaman, 8 pelajaran, 31 emiten). Kurikulum tidak berubah, modul PDF tidak dibuat ulang.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

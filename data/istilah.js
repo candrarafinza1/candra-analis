@@ -130,5 +130,11 @@ window.ISTILAH = [
     pelajaran: "apa-itu-saham" },
   { istilah: "Total aset", pola: ["total aset"],
     arti: "Jumlah semua harta yang dimiliki perusahaan, misalnya kas, bangunan, dan mesin. Total aset sama dengan total liabilitas ditambah ekuitas. Salah satu syarat DES: utang berbasis bunga tidak lebih dari 45% total aset.",
+    pelajaran: "saham-syariah" },
+  { istilah: "Pendapatan tidak halal", pola: ["pendapatan tidak halal"],
+    arti: "Bagian pendapatan perusahaan yang tidak sesuai prinsip syariah, termasuk pendapatan bunga. Salah satu syarat DES: pendapatan tidak halal tidak lebih dari 10% dari total pendapatan.",
+    pelajaran: "saham-syariah" },
+  { istilah: "Likuid (mudah diperdagangkan)", pola: ["likuid"],
+    arti: "Saham yang likuid ramai diperdagangkan, sehingga lebih mudah dibeli atau dijual pada harga yang tidak jauh dari harga terakhir. JII dan JII70 berisi saham syariah yang paling likuid.",
     pelajaran: "saham-syariah" }
 ];

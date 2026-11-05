@@ -1191,7 +1191,9 @@
         POLA.forEach(function (p) {
           if (dipakai[p.i]) return;
           var m = p.re.exec(n.nodeValue);
-          if (m && (!terbaik || m.index + m[1].length < terbaik.mulai))
+          var mulai = m ? m.index + m[1].length : 0;
+          // Bila dua istilah mulai di tempat yang sama, pilih yang lebih panjang ("Pendapatan tidak halal" > "Pendapatan")
+          if (m && (!terbaik || mulai < terbaik.mulai || (mulai === terbaik.mulai && m[2].length > terbaik.teks.length)))
             terbaik = { i: p.i, mulai: m.index + m[1].length, teks: m[2] };
         });
         if (!terbaik) break;
