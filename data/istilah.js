@@ -94,5 +94,11 @@ window.ISTILAH = [
     pelajaran: "laporan-keuangan" },
   { istilah: "Diversifikasi", pola: ["diversifikasi"],
     arti: "Menyebar modal ke beberapa saham dan sektor yang berbeda, supaya masalah di satu perusahaan tidak menghabiskan seluruh modal. Diversifikasi mengurangi risiko, tetapi tidak menghilangkannya.",
-    pelajaran: "mengelola-risiko" }
+    pelajaran: "mengelola-risiko" },
+  { istilah: "SOTS (Sharia Online Trading System)", pola: ["SOTS", "Sharia Online Trading System"], besarKecil: true,
+    arti: "Sistem transaksi saham online di sekuritas yang dirancang mengikuti fatwa DSN-MUI. Sistem ini tidak memakai pembiayaan berbunga (margin) dan tidak melayani short selling, yaitu menjual saham yang belum dimiliki.",
+    pelajaran: "saham-syariah" },
+  { istilah: "Fraksi harga", pola: ["fraksi harga", "fraksi"],
+    arti: "Langkah terkecil naik atau turunnya harga saham di bursa. Besarnya bergantung pada rentang harga saham, sehingga harga yang dimasukkan di aplikasi sekuritas mengikuti langkah tersebut.",
+    pelajaran: "lot-dan-transaksi" }
 ];
