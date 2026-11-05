@@ -726,3 +726,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Sari + Laras: istilah "T+2 (penyelesaian transaksi)" dan "SID (Single Investor Identification)" masuk kamus (kini 33 istilah); Hana: netral, sesuai pelajaran. Nina & Dewi: dicek 390px & 1280px, tanpa scroll horizontal dan galat JS.
 - `node tests/cek.mjs` lolos (9 halaman, 8 pelajaran, 31 emiten). Kurikulum tidak berubah, modul PDF tidak dibuat ulang.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 5 Nov 2026, 17.09 WIB — sesi sore (Bima)
+- Fajar: MDKA sudah merilis kinerja kuartal III 2026, tetapi sumber yang bisa dibuka (Kontan & IDX Channel, 2 Nov) hanya menyebut penjualan US$817,3 juta tanpa laba → belum dimasukkan. KLBF, BRIS, ITMG, EXCL, HRUM, MBMA belum ada laba Jan–Sep 2026 bersumber. Tetap 23 dari 31. Raka: tidak ada kabar baru bersumber.
+- Sari + Laras: istilah "Rekening efek" dan "AKSes KSEI" masuk kamus (kini 35 istilah); Hana: netral, sesuai pelajaran Buka rekening. Nina & Dewi: dicek 390px & 1280px, tanpa scroll horizontal dan galat JS.
+- `node tests/cek.mjs` lolos (9 halaman, 8 pelajaran, 31 emiten). Kurikulum tidak berubah, modul PDF tidak dibuat ulang.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

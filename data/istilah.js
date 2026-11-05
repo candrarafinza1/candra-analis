@@ -106,5 +106,11 @@ window.ISTILAH = [
     pelajaran: "lot-dan-transaksi" },
   { istilah: "SID (Single Investor Identification)", pola: ["SID"], besarKecil: true,
     arti: "Nomor identitas tunggal investor di pasar modal Indonesia. Nomor ini didapat saat membuka rekening efek di perusahaan sekuritas.",
+    pelajaran: "buka-rekening" },
+  { istilah: "Rekening efek", pola: ["rekening efek"],
+    arti: "Rekening di perusahaan sekuritas tempat saham milik investor dicatat. Rekening ini berbeda dengan RDN, yang menampung uang untuk transaksi.",
+    pelajaran: "buka-rekening" },
+  { istilah: "AKSes KSEI", pola: ["AKSes KSEI", "KSEI"], besarKecil: true,
+    arti: "Layanan daring dari KSEI (Kustodian Sentral Efek Indonesia), lembaga yang mencatat kepemilikan efek. Lewat AKSes KSEI investor bisa memantau sendiri saham yang tercatat atas namanya.",
     pelajaran: "buka-rekening" }
 ];
