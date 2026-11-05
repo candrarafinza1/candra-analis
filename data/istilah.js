@@ -100,5 +100,11 @@ window.ISTILAH = [
     pelajaran: "saham-syariah" },
   { istilah: "Fraksi harga", pola: ["fraksi harga", "fraksi"],
     arti: "Langkah terkecil naik atau turunnya harga saham di bursa. Besarnya bergantung pada rentang harga saham, sehingga harga yang dimasukkan di aplikasi sekuritas mengikuti langkah tersebut.",
-    pelajaran: "lot-dan-transaksi" }
+    pelajaran: "lot-dan-transaksi" },
+  { istilah: "T+2 (penyelesaian transaksi)", pola: ["T+2"], besarKecil: true,
+    arti: "Transaksi saham di pasar reguler diselesaikan dua hari bursa setelah hari transaksi. Pada hari itu uang benar-benar berpindah dan saham tercatat di rekening efek.",
+    pelajaran: "lot-dan-transaksi" },
+  { istilah: "SID (Single Investor Identification)", pola: ["SID"], besarKecil: true,
+    arti: "Nomor identitas tunggal investor di pasar modal Indonesia. Nomor ini didapat saat membuka rekening efek di perusahaan sekuritas.",
+    pelajaran: "buka-rekening" }
 ];
