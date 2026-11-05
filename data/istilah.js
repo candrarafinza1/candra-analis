@@ -112,5 +112,11 @@ window.ISTILAH = [
     pelajaran: "buka-rekening" },
   { istilah: "AKSes KSEI", pola: ["AKSes KSEI", "KSEI"], besarKecil: true,
     arti: "Layanan daring dari KSEI (Kustodian Sentral Efek Indonesia), lembaga yang mencatat kepemilikan efek. Lewat AKSes KSEI investor bisa memantau sendiri saham yang tercatat atas namanya.",
+    pelajaran: "buka-rekening" },
+  { istilah: "Capital gain (kenaikan harga)", pola: ["capital gain"],
+    arti: "Selisih harga jual dan harga beli saham bila harga jual lebih tinggi. Contoh: dibeli Rp1.000, dijual Rp1.300, selisihnya Rp300 per lembar. Harga juga bisa turun di bawah harga beli, sehingga hasilnya rugi (capital loss).",
+    pelajaran: "apa-itu-saham" },
+  { istilah: "Perusahaan sekuritas", pola: ["perusahaan sekuritas"],
+    arti: "Perantara pedagang efek yang berizin OJK dan menjadi anggota BEI. Lewat perusahaan sekuritas investor membuka rekening efek dan melakukan transaksi saham.",
     pelajaran: "buka-rekening" }
 ];
