@@ -1238,6 +1238,47 @@
     wadah.hidden = false;
   }
 
+  /* ---------- Belajar: Kamus istilah lengkap (Arif + Dewi, IDE.md #22) ----------
+     Semua istilah dari data/istilah.js (tanpa salinan teks), urut abjad, dengan kotak cari sederhana. */
+  function renderKamus() {
+    var wadah = document.getElementById("kamus-istilah");
+    if (!wadah || !ISTILAH.length) return;
+    var urut = ISTILAH.slice().sort(function (a, b) { return a.istilah.localeCompare(b.istilah, "id"); });
+    var nomor = {};
+    MODUL.forEach(function (m, i) { nomor[m.id] = i + 1; });
+    var cari = el("input", { type: "search", id: "cari-istilah", autocomplete: "off", placeholder: "Contoh: dividen" });
+    var info = el("p", { class: "info-kamus", role: "status", "aria-live": "polite" });
+    var daftar = el("dl", { class: "daftar-kamus" });
+    var kosong = el("p", { class: "kosong-kamus", text: "Tidak ada istilah yang cocok. Coba kata lain." });
+    kosong.hidden = true;
+    var baris = urut.map(function (t) {
+      var dt = el("dt", { text: t.istilah });
+      var dd = el("dd", {}, [el("p", { text: t.arti })]);
+      if (t.pelajaran && JUDUL_MODUL[t.pelajaran]) dd.appendChild(el("p", { class: "tautan-kamus" }, [
+        el("a", { href: "pelajaran.html?m=" + t.pelajaran, text: "Pelajari di: Pelajaran " + nomor[t.pelajaran] + ", " + JUDUL_MODUL[t.pelajaran] })
+      ]));
+      daftar.appendChild(dt); daftar.appendChild(dd);
+      return { dt: dt, dd: dd, teks: (t.istilah + " " + t.arti + " " + t.pola.join(" ")).toLowerCase() };
+    });
+    function saring() {
+      var q = cari.value.trim().toLowerCase(), n = 0;
+      baris.forEach(function (b) {
+        var cocok = !q || b.teks.indexOf(q) !== -1;
+        b.dt.hidden = b.dd.hidden = !cocok;
+        if (cocok) n++;
+      });
+      kosong.hidden = n > 0;
+      info.textContent = q ? n + " dari " + baris.length + " istilah cocok" : baris.length + " istilah";
+    }
+    cari.addEventListener("input", saring);
+    wadah.textContent = "";
+    wadah.appendChild(el("div", { class: "cari-kamus" }, [el("label", { for: "cari-istilah", text: "Cari istilah" }), cari]));
+    wadah.appendChild(info);
+    wadah.appendChild(daftar);
+    wadah.appendChild(kosong);
+    saring();
+  }
+
   /* ---------- Metodologi: tandai bagian yang sedang dibaca (Dewi, IDE.md #8) ---------- */
   function renderIsiHalaman() {
     var nav = document.getElementById("isi-halaman");
@@ -1277,6 +1318,7 @@
   renderLanjutkan();
   renderIstilahHari();
   renderJalur("jalur-lengkap", true);
+  renderKamus();
   renderPelajaran();
   renderMini();
   musimBeranda();

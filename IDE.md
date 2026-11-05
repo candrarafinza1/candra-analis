@@ -345,3 +345,23 @@ bagian Bandingkan, Radar, catatan laba 9 bulan, dividen, Kabar, dan Sumber.
 - Batasan: tautan bisa dipakai keyboard; gulir halus hanya bila `prefers-reduced-motion` tidak aktif; tanpa kata ajakan.
 - Usaha: kecil (Arif; Dewi untuk tampilan). Nina menambah cek bahwa setiap jangkar punya tujuan.
 - Status: dipilih Bima 4 Nov 14.11 untuk Arif + Dewi; selesai 4 Nov 14.11: "Lompat ke: Angka utama · Bandingkan · Radar Risiko · Kabar · Sumber data" di atas kotak status syariah; tautan Kabar hanya muncul bila emiten punya kabar; gulir halus hanya bila `prefers-reduced-motion` tidak aktif. Nina: cek 2h (+uji negatif). Ditinjau Kirana lewat tangkapan layar (INTP 390px gelap, 1280px terang): tautan membungkus rapi di HP, terbaca jelas, Enter pada "Sumber data" menuju bagiannya; tanpa scroll horizontal, tanpa galat JS. Tinjauan di HP sungguhan menyusul.
+
+## Usulan Kirana — 5 Nov 2026, 07.09 WIB
+
+Kamus kini 22 istilah (terbaru: "Laporan ditelaah terbatas"), tetapi pemula hanya bisa melihatnya satu per hari di
+beranda atau saat kata itu kebetulan muncul di halaman. Tidak ada tempat untuk membaca semuanya sekaligus.
+
+### 22. Belajar: bagian "Kamus istilah" berisi semua istilah ★ paling berdampak
+- **Glosarium satu tempat** — fitur, usaha kecil
+- Masalah: istilah seperti "laba periode berjalan" atau "ditelaah terbatas" sering muncul di berita musim laporan,
+  tetapi pemula tidak tahu di mana mencarinya di Candra Analis.
+- Ide: bagian "Kamus istilah" di akhir halaman Belajar, dibuat dari `data/istilah.js` yang sama (tanpa salinan teks):
+  daftar `<dl>` urut abjad, tiap istilah dengan arti dan tautan "Pelajari di: Pelajaran n" bila ada. Kotak cari
+  sederhana (`<input type="search">` berlabel) menyaring daftar saat mengetik, jumlah hasil dibacakan pembaca layar.
+- Acuan tren: halaman glosarium di aplikasi edukasi investasi dan pusat bantuan bank digital.
+- Dampak bagi pemula: semua istilah bisa dibaca dan dicari kapan saja; kamus yang sudah ditinjau Sari, Laras, dan Hana
+  jadi lebih bermanfaat.
+- Batasan: tanpa pustaka, tanpa simpanan, tanpa animasi; tetap terbaca tanpa JavaScript (pesan singkat + tautan ke
+  pelajaran); dapat dipakai keyboard; tanpa kata ajakan.
+- Usaha: kecil (Arif; Dewi untuk tampilan). Nina menambah cek bahwa jumlah istilah di bagian ini sama dengan kamus.
+- Status: dipilih Bima 5 Nov 07.09 untuk Arif + Dewi; selesai 5 Nov 07.09 (bagian "Kamus istilah" di Belajar, 22 istilah urut abjad, kotak cari berlabel, jumlah hasil dibacakan pembaca layar, pesan bila tidak ada yang cocok). Nina: cek baru + uji negatif. Ditinjau Kirana lewat tangkapan layar 390px gelap & terang, 1280px: terbaca baik, tanpa scroll horizontal, tanpa galat JS. Tinjauan di HP sungguhan menyusul.

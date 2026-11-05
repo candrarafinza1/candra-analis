@@ -307,6 +307,24 @@ tbody tr:hover { background: var(--hover-baris); }
 .saring-ket { width: 100%; margin: 0; font-size: .9rem; color: var(--tinta-2); }
 .saring-ket:empty { display: none; }
 
+/* Kamus istilah di halaman Belajar (Arif + Dewi, IDE.md #22) */
+.kamus { max-width: var(--lebar-teks); }
+.cari-kamus { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin: 0 0 8px; }
+.cari-kamus label { font-weight: 700; }
+.cari-kamus input {
+  font: inherit; min-height: 48px; padding: 0 14px; border-radius: var(--radius-kecil);
+  border: 2px solid var(--garis); background: var(--putih); color: var(--tinta); flex: 1 1 220px; max-width: 360px; min-width: 0;
+}
+.info-kamus { margin: 0 0 12px; font-size: .9rem; color: var(--tinta-2); }
+.daftar-kamus { margin: 0; }
+.daftar-kamus dt { font-weight: 700; margin-top: 1em; padding-top: .9em; border-top: 1px solid var(--garis); overflow-wrap: anywhere; }
+.daftar-kamus dt:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
+.daftar-kamus dd { margin: .3em 0 0; }
+.daftar-kamus dd p { margin: 0 0 .35em; }
+.tautan-kamus { font-size: .92rem; }
+.tautan-kamus a { color: var(--aksen); font-weight: 600; }
+.kosong-kamus { color: var(--tinta-2); }
+
 /* Radar risiko */
 .radar-form { display: flex; gap: 10px; flex-wrap: wrap; margin: 24px 0; }
 .radar-form label { width: 100%; font-weight: 700; }

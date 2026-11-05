@@ -70,5 +70,8 @@ window.ISTILAH = [
     pelajaran: "laporan-keuangan" },
   { istilah: "Laba inti (core profit)", pola: ["laba inti", "core profit"],
     arti: "Laba dari usaha utama setelah dikurangi pos yang tidak berulang, misalnya untung atau rugi selisih kurs. Angka ini dihitung sendiri oleh perusahaan, jadi bisa berbeda jauh dari laba yang diatribusikan ke pemilik entitas induk, yang dipakai Candra Analis.",
+    pelajaran: "laporan-keuangan" },
+  { istilah: "Laporan ditelaah terbatas (limited review)", pola: ["ditelaah terbatas", "limited review"],
+    arti: "Laporan keuangan kuartalan atau semesteran yang diperiksa akuntan publik secara terbatas, lewat tanya jawab dan perbandingan angka. Pemeriksaannya tidak seluas audit laporan tahunan, jadi akuntan tidak memberi opini penuh atas laporan itu.",
     pelajaran: "laporan-keuangan" }
 ];

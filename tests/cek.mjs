@@ -109,6 +109,38 @@ for (const t of ISTILAH || []) {
   ok(!/\b(di atas|di bawah ini|tabel ini|kolom ini|halaman ini|grafik ini)\b/i.test(t.arti), `istilah ${t.istilah}: arti merujuk konteks halaman`);
   ok(!!t.pelajaran, `istilah ${t.istilah}: field pelajaran kosong`);
 }
+// Arif & Nina (5 Nov 07.09): nama istilah dan pola tidak boleh kembar, agar satu kata di halaman
+// tidak dicocokkan ke dua penjelasan yang berbeda
+function istilahKembar(daftar) {
+  const salah = [], nama = new Set(), pola = new Map();
+  for (const t of daftar || []) {
+    const n = String(t.istilah || "").toLowerCase();
+    if (nama.has(n)) salah.push(`nama istilah kembar: ${t.istilah}`);
+    nama.add(n);
+    for (const p of t.pola || []) {
+      const k = String(p).toLowerCase();
+      if (pola.has(k) && pola.get(k) !== t.istilah) salah.push(`pola "${p}" dipakai ${pola.get(k)} dan ${t.istilah}`);
+      pola.set(k, t.istilah);
+    }
+  }
+  return salah;
+}
+for (const s of istilahKembar(ISTILAH)) ok(false, `kamus istilah: ${s}`);
+ok(istilahKembar([{ istilah: "A", pola: ["laba"] }, { istilah: "B", pola: ["Laba"] }, { istilah: "a", pola: ["x"] }]).length === 2,
+  "uji negatif istilahKembar harus menangkap pola kembar dan nama kembar");
+// Nina (5 Nov 07.09, IDE.md #22): Kamus istilah di Belajar memakai semua istilah dari data/istilah.js
+{
+  const bel = readFileSync("belajar.html", "utf8"), js = readFileSync("assets/app.js", "utf8");
+  ok(/id="kamus-istilah"/.test(bel), "belajar.html: wadah #kamus-istilah harus ada");
+  ok(/src="data\/istilah\.js"[\s\S]*src="assets\/app\.js"/.test(bel), "belajar.html: data/istilah.js harus dimuat sebelum assets/app.js");
+  const f = (js.match(/function renderKamus\(\)[\s\S]*?\n  \}\n/) || [""])[0];
+  ok(!!f, "assets/app.js: renderKamus() tidak ditemukan");
+  ok(/ISTILAH\.slice\(\)\.sort\(/.test(f) && !/\.slice\(0,/.test(f) && !/ISTILAH\.filter\(/.test(f), "renderKamus harus menampilkan semua istilah (tanpa dipotong/disaring di awal)");
+  ok(/el\("label", \{ for: "cari-istilah"/.test(f) && /id: "cari-istilah"/.test(f), "kotak cari kamus harus berlabel");
+  ok(/"aria-live": "polite"/.test(f), "jumlah hasil kamus harus dibacakan pembaca layar");
+  ok(!/innerHTML/.test(f), "renderKamus tidak boleh memakai innerHTML");
+  ok(/renderKamus\(\);/.test(js), "renderKamus() harus dipanggil");
+}
 
 // Profil emiten (Nina, 29 Okt): halaman ada, memuat wadah #profil, dan Peringkat menaut ke profil
 ok(existsSync("emiten.html") && /id="profil"/.test(readFileSync("emiten.html", "utf8")), "emiten.html tidak ada atau tanpa wadah #profil");
