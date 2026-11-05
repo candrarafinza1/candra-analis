@@ -1161,6 +1161,10 @@
     if (t.pelajaran && JUDUL_MODUL[t.pelajaran]) kotak.appendChild(el("a", {
       href: "pelajaran.html?m=" + t.pelajaran, text: "Pelajari lebih lanjut: " + JUDUL_MODUL[t.pelajaran]
     }));
+    // IDE.md #23: tautan ke Kamus lengkap, kecuali bila pembaca sudah di halaman Belajar
+    if (!document.getElementById("kamus-istilah")) kotak.appendChild(el("a", {
+      href: "belajar.html#kamus", class: "kotak-istilah-kamus", text: "Lihat semua istilah"
+    }));
     // Kotak diletakkan tepat setelah tombol agar urutan Tab tetap wajar (tombol → tautan di kotak)
     b.parentNode.insertBefore(kotak, b.nextSibling);
     kotak.hidden = false;

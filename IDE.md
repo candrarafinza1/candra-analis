@@ -365,3 +365,22 @@ beranda atau saat kata itu kebetulan muncul di halaman. Tidak ada tempat untuk m
   pelajaran); dapat dipakai keyboard; tanpa kata ajakan.
 - Usaha: kecil (Arif; Dewi untuk tampilan). Nina menambah cek bahwa jumlah istilah di bagian ini sama dengan kamus.
 - Status: dipilih Bima 5 Nov 07.09 untuk Arif + Dewi; selesai 5 Nov 07.09 (bagian "Kamus istilah" di Belajar, 22 istilah urut abjad, kotak cari berlabel, jumlah hasil dibacakan pembaca layar, pesan bila tidak ada yang cocok). Nina: cek baru + uji negatif. Ditinjau Kirana lewat tangkapan layar 390px gelap & terang, 1280px: terbaca baik, tanpa scroll horizontal, tanpa galat JS. Tinjauan di HP sungguhan menyusul.
+
+## Usulan Kirana — 5 Nov 2026, 13.08 WIB
+
+Kamus kini 27 istilah (terbaru: "Kuartal (triwulan)"). Kotak istilah di tempat hanya menaut ke pelajaran, belum ke
+bagian "Kamus istilah" di Belajar, sehingga pemula yang ingin membaca istilah lain yang mirip harus mencari sendiri.
+
+### 23. Kotak istilah: tautan "Lihat semua istilah" ke Kamus di Belajar
+- **Penghubung kamus** — fitur, usaha kecil
+- Masalah: setelah membaca satu istilah (mis. "Laba 9 bulan"), pemula sering butuh istilah terkait ("Kuartal",
+  "Laba periode berjalan"), tetapi kotak istilah tidak menunjukkan bahwa ada kamus lengkap.
+- Ide: di bawah tautan "Pelajari lebih lanjut", tambah tautan kecil "Lihat semua istilah" menuju
+  `belajar.html#kamus` (id bagian Kamus yang sudah ada, atau ditambah bila belum). Tidak tampil saat pemula sudah
+  berada di halaman Belajar.
+- Acuan tren: tooltip glosarium di aplikasi edukasi keuangan yang menaut ke pusat glosarium.
+- Dampak bagi pemula: dari satu istilah langsung bisa menjelajah semua istilah yang sudah ditinjau tim.
+- Batasan: tanpa pustaka, tanpa simpanan, tanpa animasi; tautan biasa sehingga bisa dipakai keyboard; urutan Tab tetap
+  wajar (tombol → tautan pelajaran → tautan kamus); tanpa kata ajakan.
+- Usaha: kecil (Arif). Nina menambah cek tautan jangkar (`#kamus` harus ada di belajar.html).
+- Status: dipilih Bima 5 Nov 13.08 untuk Arif; selesai 5 Nov 13.08 (tautan "Lihat semua istilah" di bawah tautan pelajaran, tidak tampil di Belajar). Nina: cek 2i. Ditinjau Kirana lewat tangkapan layar Peringkat 390px gelap: terbaca jelas, tanpa scroll horizontal. Tinjauan di HP sungguhan menyusul.

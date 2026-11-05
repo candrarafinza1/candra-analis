@@ -85,5 +85,8 @@ window.ISTILAH = [
     pelajaran: "laporan-keuangan" },
   { istilah: "Laporan ditelaah terbatas (limited review)", pola: ["ditelaah terbatas", "limited review"],
     arti: "Laporan keuangan kuartalan atau semesteran yang diperiksa akuntan publik secara terbatas, lewat tanya jawab dan perbandingan angka. Pemeriksaannya tidak seluas audit laporan tahunan, jadi akuntan tidak memberi opini penuh atas laporan itu.",
+    pelajaran: "laporan-keuangan" },
+  { istilah: "Kuartal (triwulan)", pola: ["kuartal", "kuartalan", "triwulan"],
+    arti: "Periode tiga bulan dalam satu tahun buku: kuartal I (Januari–Maret), II (April–Juni), III (Juli–September), dan IV (Oktober–Desember). Laporan kuartal III memuat angka sejak Januari sampai September, jadi angka itulah yang disebut laba 9 bulan.",
     pelajaran: "laporan-keuangan" }
 ];

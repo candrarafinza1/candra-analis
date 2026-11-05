@@ -533,7 +533,8 @@ button.istilah:hover, button.istilah[aria-expanded="true"] { color: var(--aksen)
 .kotak-istilah[hidden] { display: none; }
 .kotak-istilah strong { display: block; font-size: .95rem; color: var(--aksen); margin-bottom: 4px; }
 .kotak-istilah p { margin: 0 0 8px; color: var(--tinta-2); }
-.kotak-istilah a { font-weight: 600; font-size: .88rem; }
+.kotak-istilah a { display: block; font-weight: 600; font-size: .88rem; }
+.kotak-istilah a + a { margin-top: 6px; }
 .baris-istilah { font-size: .9rem; color: var(--tinta-2); margin: 0 0 12px; }
 @media (prefers-reduced-motion: no-preference) {
   .kotak-istilah:not([hidden]) { animation: muncul-istilah .14s ease-out; }

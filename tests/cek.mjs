@@ -559,6 +559,16 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
   ok(/prefers-reduced-motion: no-preference\) \{\s*html:has\(#profil\) \{ scroll-behavior: smooth/.test(readFileSync("assets/styles.css", "utf8")), "gulir halus \"Lompat ke\" harus menghormati prefers-reduced-motion");
 }
 
+// 2i. Nina (5 Nov 13.08, IDE.md #23): kotak istilah menaut ke Kamus di Belajar, kecuali di halaman Belajar sendiri
+{
+  const app = readFileSync("assets/app.js", "utf8"), belajar = readFileSync("belajar.html", "utf8");
+  const cekKamus = (js, html) => /href: "belajar\.html#kamus"/.test(js) && /if \(!document\.getElementById\("kamus-istilah"\)\)/.test(js)
+    && /<section[^>]*id="kamus"/.test(html) && /id="kamus-istilah"/.test(html);
+  ok(cekKamus(app, belajar), "kotak istilah harus menaut ke belajar.html#kamus (tidak di halaman Belajar), dan bagian #kamus harus ada");
+  ok(!cekKamus(app, belajar.replace('id="kamus" ', "")), "cek kamus tidak menangkap bagian #kamus yang hilang");
+  ok(!cekKamus(app.replace('if (!document.getElementById("kamus-istilah")) ', ""), belajar), "cek kamus tidak menangkap tautan yang tampil di halaman Belajar");
+}
+
 // 3. Aturan Hana (syariah): halaman tidak boleh memakai bahasa ajakan
 const terlarang = /\b(wajib beli|pasti naik|buruan (beli|jual)|dijamin untung|rekomendasi beli)\b/i;
 for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"]) {
