@@ -118,5 +118,11 @@ window.ISTILAH = [
     pelajaran: "apa-itu-saham" },
   { istilah: "Perusahaan sekuritas", pola: ["perusahaan sekuritas"],
     arti: "Perantara pedagang efek yang berizin OJK dan menjadi anggota BEI. Lewat perusahaan sekuritas investor membuka rekening efek dan melakukan transaksi saham.",
-    pelajaran: "buka-rekening" }
+    pelajaran: "buka-rekening" },
+  { istilah: "BEI (Bursa Efek Indonesia)", pola: ["BEI", "Bursa Efek Indonesia"], besarKecil: true,
+    arti: "Tempat saham perusahaan terbuka (emiten) diperdagangkan di Indonesia, diawasi OJK. Laporan keuangan emiten bisa diunduh gratis dari situs BEI.",
+    pelajaran: "apa-itu-saham" },
+  { istilah: "Dana darurat", pola: ["dana darurat"],
+    arti: "Uang cadangan untuk kebutuhan mendadak, disiapkan terpisah sebelum berinvestasi saham. Dengan dana darurat, Anda tidak terpaksa menjual saham saat butuh uang cepat.",
+    pelajaran: "mengelola-risiko" }
 ];
