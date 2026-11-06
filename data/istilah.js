@@ -148,5 +148,11 @@ window.ISTILAH = [
     pelajaran: "lot-dan-transaksi" },
   { istilah: "Matched (order terjadi)", pola: ["matched"],
     arti: "Order beli atau jual Anda sudah bertemu dengan order pihak lain di harga yang sama, sehingga transaksi terjadi. Bila belum matched, order menunggu sampai ada penjual atau pembeli di harga itu.",
-    pelajaran: "praktik-beli-pertama" }
+    pelajaran: "praktik-beli-pertama" },
+  { istilah: "Saham beredar", pola: ["saham beredar"],
+    arti: "Jumlah lembar saham perusahaan yang dimiliki para pemegang saham, tidak termasuk saham yang sudah dibeli kembali oleh perusahaan sendiri. Angka ini dipakai untuk menghitung laba per saham (EPS): laba bersih dibagi jumlah saham beredar.",
+    pelajaran: "laporan-keuangan" },
+  { istilah: "Laporan keuangan", pola: ["laporan keuangan"],
+    arti: "Laporan resmi perusahaan tentang pendapatan, laba, aset, liabilitas (utang), dan ekuitas (modal sendiri) dalam satu periode. Emiten menerbitkannya setiap kuartal dan setiap tahun, dan laporan itu bisa diunduh gratis dari situs BEI.",
+    pelajaran: "laporan-keuangan" }
 ];
