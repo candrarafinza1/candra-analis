@@ -136,5 +136,11 @@ window.ISTILAH = [
     pelajaran: "saham-syariah" },
   { istilah: "Likuid (mudah diperdagangkan)", pola: ["likuid"],
     arti: "Saham yang likuid ramai diperdagangkan, sehingga lebih mudah dibeli atau dijual pada harga yang tidak jauh dari harga terakhir. JII dan JII70 berisi saham syariah yang paling likuid.",
+    pelajaran: "saham-syariah" },
+  { istilah: "Transaksi margin", pola: ["transaksi margin", "margin"],
+    arti: "Membeli saham memakai pinjaman dana dari perusahaan sekuritas yang dikenai bunga. Karena berbasis bunga, transaksi ini tidak dilayani SOTS yang mengikuti fatwa DSN-MUI.",
+    pelajaran: "saham-syariah" },
+  { istilah: "Short selling (jual kosong)", pola: ["short selling"],
+    arti: "Menjual saham yang belum dimiliki, dengan meminjamnya lebih dulu, lalu membelinya kembali kemudian. SOTS yang mengikuti fatwa DSN-MUI tidak melayani transaksi ini.",
     pelajaran: "saham-syariah" }
 ];

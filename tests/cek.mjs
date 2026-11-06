@@ -128,6 +128,54 @@ function istilahKembar(daftar) {
 for (const s of istilahKembar(ISTILAH)) ok(false, `kamus istilah: ${s}`);
 ok(istilahKembar([{ istilah: "A", pola: ["laba"] }, { istilah: "B", pola: ["Laba"] }, { istilah: "a", pola: ["x"] }]).length === 2,
   "uji negatif istilahKembar harus menangkap pola kembar dan nama kembar");
+// Nina + Arif (6 Nov 07.08): penanda istilah memilih istilah yang muncul paling awal; bila mulai di tempat
+// yang sama, istilah yang lebih panjang menang ("Pendapatan tidak halal" > "Pendapatan").
+{
+  const js = readFileSync("assets/app.js", "utf8");
+  const fn = (js.match(/function pilihIstilah\(pola, teks, dipakai\) \{[\s\S]*?\n  \}/) || [""])[0];
+  ok(fn, "pilihIstilah tidak ditemukan di assets/app.js");
+  ok(/var terbaik = pilihIstilah\(POLA, n\.nodeValue, dipakai\)/.test(js), "pasangIstilah harus memakai pilihIstilah");
+  const bangun = (daftar) => {
+    const hasil = [];
+    daftar.forEach((t, i) => t.pola.forEach((p) => {
+      const aman = p.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      hasil.push({ i, re: new RegExp("(^|[^A-Za-z0-9À-ÿ])(" + aman + ")(?![A-Za-z0-9À-ÿ])", t.besarKecil ? "" : "i") });
+    }));
+    return hasil;
+  };
+  ok(js.includes(`"(^|[^A-Za-z0-9À-ÿ])(" + aman + ")(?![A-Za-z0-9À-ÿ])"`), "pola istilah di app.js berubah: sesuaikan uji pilihIstilah");
+  if (fn) {
+    const pilih = vm.runInNewContext(`(${fn.replace(/^function pilihIstilah/, "function")})`);
+    const POLA = bangun(ISTILAH);
+    const nama = (r) => (r ? ISTILAH[r.i].istilah : null);
+    const pth = ISTILAH.find((t) => /^Pendapatan tidak halal/.test(t.istilah));
+    ok(!!pth, "istilah \"Pendapatan tidak halal\" harus ada di kamus");
+    if (pth) {
+      const r = pilih(POLA, "Batas pendapatan tidak halal adalah 10% dari total pendapatan.", {});
+      ok(nama(r) === pth.istilah && r.teks.toLowerCase() === "pendapatan tidak halal", `istilah panjang harus menang, didapat: ${nama(r)}`);
+    }
+    // Semua pasangan istilah yang satu pola-nya diawali pola lain: yang panjang harus menang di teks yang sama
+    for (const a of ISTILAH) for (const p of a.pola) for (const b of ISTILAH) {
+      if (a === b) continue;
+      for (const q of b.pola) {
+        if (q.length >= p.length || !p.toLowerCase().startsWith(q.toLowerCase() + " ")) continue;
+        const r = pilih(POLA, "Contoh: " + p + ".", {});
+        ok(r && r.teks === p, `"${p}" harus menang atas "${q}", didapat: ${r && r.teks}`);
+      }
+    }
+    // Istilah yang sudah dipakai di wadah dilewati; yang paling awal di teks didahulukan
+    const iP = ISTILAH.indexOf(pth);
+    const r2 = pilih(POLA, "Pendapatan tidak halal", { [iP]: true });
+    ok(r2 && r2.teks.toLowerCase() === "pendapatan", "istilah yang sudah ditandai harus dilewati");
+    const contoh = [{ istilah: "X", pola: ["laba"] }, { istilah: "Y", pola: ["laba bersih"] }, { istilah: "Z", pola: ["ekuitas"] }];
+    const r3 = pilih(bangun(contoh), "ekuitas dan laba bersih", {});
+    ok(r3 && r3.teks === "ekuitas", "istilah yang muncul paling awal harus dipilih");
+    // Uji negatif: versi lama (yang pertama di daftar menang) harus tertangkap oleh pemeriksaan ini
+    const lama = (pola, teks) => { for (const p of pola) { const m = p.re.exec(teks); if (m) return { i: p.i, teks: m[2] }; } return null; };
+    ok(lama(bangun(contoh), "laba bersih naik").teks === "laba", "uji negatif: versi lama harus memilih istilah pendek");
+    ok(pilih(bangun(contoh), "laba bersih naik", {}).teks === "laba bersih", "uji negatif: pilihIstilah harus berbeda dari versi lama");
+  }
+}
 // Nina (5 Nov 07.09, IDE.md #22): Kamus istilah di Belajar memakai semua istilah dari data/istilah.js
 {
   const bel = readFileSync("belajar.html", "utf8"), js = readFileSync("assets/app.js", "utf8");

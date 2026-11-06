@@ -1173,6 +1173,21 @@
     letakkan();
   }
 
+  // Pilih istilah yang muncul paling awal di teks. Bila dua istilah mulai di tempat yang sama,
+  // pilih yang lebih panjang ("Pendapatan tidak halal" > "Pendapatan"). Diuji di tests/cek.mjs (Nina, 6 Nov).
+  function pilihIstilah(pola, teks, dipakai) {
+    var terbaik = null;
+    pola.forEach(function (p) {
+      if (dipakai[p.i]) return;
+      var m = p.re.exec(teks);
+      if (!m) return;
+      var mulai = m.index + m[1].length;
+      if (!terbaik || mulai < terbaik.mulai || (mulai === terbaik.mulai && m[2].length > terbaik.teks.length))
+        terbaik = { i: p.i, mulai: mulai, teks: m[2] };
+    });
+    return terbaik;
+  }
+
   // Beri tanda istilah di dalam wadah: setiap istilah hanya ditandai sekali per wadah.
   function pasangIstilah(wadah) {
     if (!wadah || !POLA.length) return;
@@ -1187,15 +1202,7 @@
     while (jalan.nextNode()) simpul.push(jalan.currentNode);
     simpul.forEach(function (n) {
       while (n) {
-        var terbaik = null;
-        POLA.forEach(function (p) {
-          if (dipakai[p.i]) return;
-          var m = p.re.exec(n.nodeValue);
-          var mulai = m ? m.index + m[1].length : 0;
-          // Bila dua istilah mulai di tempat yang sama, pilih yang lebih panjang ("Pendapatan tidak halal" > "Pendapatan")
-          if (m && (!terbaik || mulai < terbaik.mulai || (mulai === terbaik.mulai && m[2].length > terbaik.teks.length)))
-            terbaik = { i: p.i, mulai: m.index + m[1].length, teks: m[2] };
-        });
+        var terbaik = pilihIstilah(POLA, n.nodeValue, dipakai);
         if (!terbaik) break;
         dipakai[terbaik.i] = true;
         var sisa = n.splitText(terbaik.mulai);
