@@ -252,17 +252,17 @@ window.MODUL = [
           "Harga saham ÷ EPS"
         ],
         "benar": 1,
-        "jelas": "ROE mengukur seberapa efisien perusahaan menghasilkan laba dari modal pemiliknya. Rumus lain di pilihan adalah DER dan PER."
+        "jelas": "ROE mengukur seberapa efisien perusahaan menghasilkan laba dari modal pemegang saham (ekuitas). Rumus lain di pilihan adalah DER dan PER."
       },
       {
         "soal": "DER yang tinggi berarti…",
         "pilihan": [
-          "Utang perusahaan besar dibanding modal sendiri",
+          "Kewajiban (liabilitas) perusahaan besar dibanding modal sendiri",
           "Laba perusahaan pasti besar",
           "Dividen pasti dibagikan"
         ],
         "benar": 0,
-        "jelas": "Makin tinggi DER, makin berat beban perusahaan saat kondisi sulit."
+        "jelas": "DER = total liabilitas ÷ ekuitas. Makin tinggi DER, makin berat beban perusahaan saat kondisi sulit."
       },
       {
         "soal": "Apakah PER yang rendah selalu berarti sahamnya murah?",
