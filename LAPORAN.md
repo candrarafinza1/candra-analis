@@ -828,3 +828,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Nina & Dewi: pelajaran Membuka rekening, Belajar, dan Beranda dicek 390px & 1280px, tanpa scroll horizontal dan galat JS; KTP & NPWP tertandai di pelajaran dan tampil di Kamus. Tegar: perubahan sesi dipindai, tanpa rahasia.
 - `node tests/cek.mjs` lolos (9 halaman, 8 pelajaran, 31 emiten). Kurikulum tidak berubah, modul PDF tidak dibuat ulang.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 6 Nov 2026, 20.13 WIB — sesi malam (Bima)
+- Fajar: KLBF, BRIS, ITMG, EXCL, HRUM, MDKA, MBMA, MIKA dicek ulang: belum ada laba 9 bulan 2026 bersumber. Tetap 23 dari 31. MIKA tetap ditahan (belum ada sumber kedua). Raka, Hana, Galih: tidak ada kabar/tanda Radar baru.
+- Sari + Laras: "swafoto", "tanda tangan digital", "anggota bursa" tidak dipakai di pelajaran; OJK dan BEI sudah ada. Istilah baru "Mode Syariah (IDX Mobile)" masuk kamus, kini 64 istilah. Hana: netral. Tugas berikutnya: istilah "sektor".
+- Nina & Dewi: pelajaran Praktik beli pertama, Belajar (kamus), dan Beranda dicek 390px & 1280px, tanpa scroll horizontal dan galat JS; Mode Syariah tertandai di pelajaran dan tampil di Kamus. Tegar: perubahan sesi dipindai, tanpa rahasia.
+- `node tests/cek.mjs` lolos (9 halaman, 8 pelajaran, 31 emiten). Kurikulum tidak berubah, modul PDF tidak dibuat ulang.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

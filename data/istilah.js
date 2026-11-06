@@ -196,5 +196,8 @@ window.ISTILAH = [
     pelajaran: "buka-rekening" },
   { istilah: "NPWP (Nomor Pokok Wajib Pajak)", pola: ["NPWP"], besarKecil: true,
     arti: "Nomor identitas pembayar pajak dari Direktorat Jenderal Pajak. Sekuritas biasanya memintanya saat pembukaan rekening, tetapi di beberapa sekuritas NPWP boleh menyusul.",
-    pelajaran: "buka-rekening" }
+    pelajaran: "buka-rekening" },
+  { istilah: "Mode Syariah (IDX Mobile)", pola: ["Mode Syariah"],
+    arti: "Tampilan khusus di aplikasi IDX Mobile yang berisi daftar saham syariah, materi edukasi, fatwa, dan fitur latihan Sharia Virtual Trading. Mode ini untuk belajar dan latihan; pembelian saham sungguhan tetap lewat aplikasi sekuritas.",
+    pelajaran: "praktik-beli-pertama" }
 ];
