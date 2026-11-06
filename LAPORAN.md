@@ -835,3 +835,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Nina & Dewi: pelajaran Praktik beli pertama, Belajar (kamus), dan Beranda dicek 390px & 1280px, tanpa scroll horizontal dan galat JS; Mode Syariah tertandai di pelajaran dan tampil di Kamus. Tegar: perubahan sesi dipindai, tanpa rahasia.
 - `node tests/cek.mjs` lolos (9 halaman, 8 pelajaran, 31 emiten). Kurikulum tidak berubah, modul PDF tidak dibuat ulang.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 6 Nov 2026, 21.12 WIB — sesi malam (Bima)
+- Fajar: KLBF dan BRIS dicek ulang: hasil pencarian masih angka 9 bulan 2025 atau semester I 2026, belum ada laba 9 bulan 2026 bersumber. Tetap 23 dari 31. Raka, Hana, Galih: tidak ada kabar/tanda Radar baru.
+- Sari + Laras: istilah "Sektor" masuk kamus (pelajaran Mengelola risiko), kini 65 istilah. Hana: netral. Tugas berikutnya: sisir istilah di pelajaran Praktik analisis sendiri dan Mengelola risiko.
+- Nina & Dewi: pelajaran Mengelola risiko, Belajar (kamus), Peringkat, dan Beranda dicek 390px & 1280px, tanpa scroll horizontal dan galat JS; "sektor" tertandai di pelajaran dan tampil di Kamus. Tegar: perubahan sesi dipindai, tanpa rahasia.
+- `node tests/cek.mjs` lolos (9 halaman, 8 pelajaran, 31 emiten). Kurikulum tidak berubah, modul PDF tidak dibuat ulang.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

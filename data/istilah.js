@@ -199,5 +199,8 @@ window.ISTILAH = [
     pelajaran: "buka-rekening" },
   { istilah: "Mode Syariah (IDX Mobile)", pola: ["Mode Syariah"],
     arti: "Tampilan khusus di aplikasi IDX Mobile yang berisi daftar saham syariah, materi edukasi, fatwa, dan fitur latihan Sharia Virtual Trading. Mode ini untuk belajar dan latihan; pembelian saham sungguhan tetap lewat aplikasi sekuritas.",
-    pelajaran: "praktik-beli-pertama" }
+    pelajaran: "praktik-beli-pertama" },
+  { istilah: "Sektor", pola: ["sektor"],
+    arti: "Kelompok perusahaan yang usahanya sejenis, misalnya energi, kesehatan, atau barang konsumen primer. Menyebar modal ke beberapa sektor membantu agar masalah di satu jenis usaha tidak menghantam semua saham Anda sekaligus.",
+    pelajaran: "mengelola-risiko" }
 ];
