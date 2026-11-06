@@ -178,5 +178,17 @@ window.ISTILAH = [
     pelajaran: "praktik-analisis-sendiri" },
   { istilah: "Rasio keuangan", pola: ["rasio keuangan", "rasio"],
     arti: "Angka hasil membagi satu pos laporan keuangan dengan pos lain, misalnya ROE (laba bersih ÷ ekuitas) dan DER (total liabilitas ÷ ekuitas). Rasio membantu membandingkan perusahaan yang ukurannya berbeda, tetapi tetap perlu dibaca bersama pemahaman tentang usahanya.",
-    pelajaran: "praktik-analisis-sendiri" }
+    pelajaran: "praktik-analisis-sendiri" },
+  { istilah: "Fatwa DSN-MUI", pola: ["fatwa DSN-MUI", "DSN-MUI"], besarKecil: true,
+    arti: "Pedoman syariah dari Dewan Syariah Nasional Majelis Ulama Indonesia (DSN-MUI). Sistem transaksi saham syariah (SOTS) di sekuritas dirancang mengikuti fatwa ini, misalnya tidak memakai pembiayaan berbunga.",
+    pelajaran: "saham-syariah" },
+  { istilah: "Utang berbasis bunga", pola: ["utang berbasis bunga"],
+    arti: "Pinjaman yang mewajibkan perusahaan membayar bunga. Salah satu syarat saham masuk Daftar Efek Syariah: utang berbasis bunga tidak lebih dari 45% total aset.",
+    pelajaran: "saham-syariah" },
+  { istilah: "Order (pesanan beli/jual)", pola: ["order"],
+    arti: "Pesanan untuk membeli atau menjual saham yang Anda kirim lewat aplikasi sekuritas, berisi kode saham, harga, dan jumlah lot. Order baru menjadi transaksi bila sudah matched dengan order pihak lain.",
+    pelajaran: "praktik-beli-pertama" },
+  { istilah: "Pasar reguler", pola: ["pasar reguler"],
+    arti: "Pasar di Bursa Efek Indonesia tempat investor biasa membeli dan menjual saham dalam satuan lot lewat aplikasi sekuritas. Transaksi di pasar ini diselesaikan dua hari bursa kemudian (T+2).",
+    pelajaran: "lot-dan-transaksi" }
 ];
