@@ -142,5 +142,11 @@ window.ISTILAH = [
     pelajaran: "saham-syariah" },
   { istilah: "Short selling (jual kosong)", pola: ["short selling"],
     arti: "Menjual saham yang belum dimiliki, dengan meminjamnya lebih dulu, lalu membelinya kembali kemudian. SOTS yang mengikuti fatwa DSN-MUI tidak melayani transaksi ini.",
-    pelajaran: "saham-syariah" }
+    pelajaran: "saham-syariah" },
+  { istilah: "Biaya transaksi (fee)", pola: ["biaya transaksi", "biaya (fee)"],
+    arti: "Biaya yang dikenakan sekuritas setiap kali Anda membeli atau menjual saham. Besarnya berbeda-beda per sekuritas; biaya jual biasanya sedikit lebih tinggi karena ada pajak penjualan saham.",
+    pelajaran: "lot-dan-transaksi" },
+  { istilah: "Matched (order terjadi)", pola: ["matched"],
+    arti: "Order beli atau jual Anda sudah bertemu dengan order pihak lain di harga yang sama, sehingga transaksi terjadi. Bila belum matched, order menunggu sampai ada penjual atau pembeli di harga itu.",
+    pelajaran: "praktik-beli-pertama" }
 ];

@@ -764,3 +764,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Sari + Laras: istilah "Transaksi margin" dan "Short selling (jual kosong)" (kini 45 istilah); Hana: netral. Nina & Dewi: 390px & 1280px tanpa scroll horizontal dan galat JS. Tegar: 9 commit dipindai, bersih. Kirana: kuota usulan minggu ini sudah terpenuhi (#17–#23).
 - `node tests/cek.mjs` lolos. Kurikulum tidak berubah, modul PDF tidak dibuat ulang.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 6 Nov 2026, 08.09 WIB (Bima)
+- Fajar: KLBF, BRIS, ITMG, EXCL, HRUM, MDKA, MBMA, MIKA dicek ulang: belum ada laba 9 bulan 2026 bersumber. Tetap 23 dari 31. Raka & Hana: tidak ada kabar baru.
+- Sari + Laras: istilah "Biaya transaksi (fee)" dan "Matched (order terjadi)" masuk kamus (kini 47 istilah); Hana: netral. Nina & Dewi: dicek 390px & 1280px, tanpa scroll horizontal dan galat JS.
+- `node tests/cek.mjs` lolos (9 halaman, 8 pelajaran, 31 emiten). Kurikulum tidak berubah, modul PDF tidak dibuat ulang.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
