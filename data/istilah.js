@@ -154,5 +154,11 @@ window.ISTILAH = [
     pelajaran: "laporan-keuangan" },
   { istilah: "Laporan keuangan", pola: ["laporan keuangan"],
     arti: "Laporan resmi perusahaan tentang pendapatan, laba, aset, liabilitas (utang), dan ekuitas (modal sendiri) dalam satu periode. Emiten menerbitkannya setiap kuartal dan setiap tahun, dan laporan itu bisa diunduh gratis dari situs BEI.",
-    pelajaran: "laporan-keuangan" }
+    pelajaran: "laporan-keuangan" },
+  { istilah: "Capital loss (penurunan harga)", pola: ["capital loss"],
+    arti: "Kerugian karena harga saham turun di bawah harga beli Anda. Contoh: membeli di Rp1.000 lalu harganya turun ke Rp800, berarti rugi Rp200 per lembar bila dijual di harga itu.",
+    pelajaran: "apa-itu-saham" },
+  { istilah: "Suspensi (penghentian sementara)", pola: ["suspensi"],
+    arti: "Penghentian sementara perdagangan sebuah saham oleh bursa. Selama suspensi, saham itu tidak bisa dibeli atau dijual sampai bursa membukanya kembali.",
+    pelajaran: "apa-itu-saham" }
 ];
