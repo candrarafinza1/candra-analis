@@ -190,5 +190,11 @@ window.ISTILAH = [
     pelajaran: "praktik-beli-pertama" },
   { istilah: "Pasar reguler", pola: ["pasar reguler"],
     arti: "Pasar di Bursa Efek Indonesia tempat investor biasa membeli dan menjual saham dalam satuan lot lewat aplikasi sekuritas. Transaksi di pasar ini diselesaikan dua hari bursa kemudian (T+2).",
-    pelajaran: "lot-dan-transaksi" }
+    pelajaran: "lot-dan-transaksi" },
+  { istilah: "KTP (Kartu Tanda Penduduk)", pola: ["KTP"], besarKecil: true,
+    arti: "Kartu identitas resmi penduduk Indonesia. Sekuritas memintanya saat Anda membuka rekening, agar rekening efek, RDN, dan SID tercatat atas nama Anda sendiri.",
+    pelajaran: "buka-rekening" },
+  { istilah: "NPWP (Nomor Pokok Wajib Pajak)", pola: ["NPWP"], besarKecil: true,
+    arti: "Nomor identitas pembayar pajak dari Direktorat Jenderal Pajak. Sekuritas biasanya memintanya saat pembukaan rekening, tetapi di beberapa sekuritas NPWP boleh menyusul.",
+    pelajaran: "buka-rekening" }
 ];
