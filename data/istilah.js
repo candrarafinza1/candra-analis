@@ -166,5 +166,11 @@ window.ISTILAH = [
     pelajaran: "mengelola-risiko" },
   { istilah: "Kontak OJK 157", pola: ["Kontak OJK 157"],
     arti: "Layanan kontak Otoritas Jasa Keuangan untuk bertanya atau melapor, misalnya bila menemukan tawaran investasi yang mencurigakan.",
-    pelajaran: "mengelola-risiko" }
+    pelajaran: "mengelola-risiko" },
+  { istilah: "IDX Mobile", pola: ["IDX Mobile"],
+    arti: "Aplikasi resmi dari Bursa Efek Indonesia. Di dalamnya ada Mode Syariah dan fitur latihan Sharia Virtual Trading. Pembelian saham sungguhan dilakukan lewat aplikasi sekuritas tempat Anda membuka rekening.",
+    pelajaran: "praktik-beli-pertama" },
+  { istilah: "Sharia Virtual Trading", pola: ["Sharia Virtual Trading"],
+    arti: "Fitur latihan jual beli saham syariah dengan modal virtual (bukan uang sungguhan) di aplikasi IDX Mobile. Harganya bergerak sungguhan, jadi Anda bisa merasakan naik-turun harga tanpa risiko kehilangan uang.",
+    pelajaran: "praktik-beli-pertama" }
 ];

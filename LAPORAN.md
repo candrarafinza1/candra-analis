@@ -789,3 +789,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Sari + Laras: istilah "Pom-pom saham" dan "Kontak OJK 157" masuk kamus (kini 53 istilah), selaras pelajaran Mengelola risiko; Hana: netral. Nina & Dewi: 9 halaman dicek 390px & 1280px, tanpa scroll horizontal dan galat JS. Tegar: perubahan sesi dipindai, tanpa rahasia.
 - `node tests/cek.mjs` lolos (9 halaman, 8 pelajaran, 31 emiten). Kurikulum tidak berubah, modul PDF tidak dibuat ulang.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 6 Nov 2026, 14.10 WIB — sesi siang (Bima)
+- Fajar: KLBF, BRIS, MIKA, ITMG, EXCL, HRUM, MDKA, MBMA dicek ulang: belum ada laba 9 bulan 2026 bersumber. Tetap 23 dari 31. MIKA: sumber kedua untuk Rp1,08 T belum ada. Raka, Hana, Galih: tidak ada kabar/tanda Radar baru.
+- Sari + Laras: istilah "IDX Mobile" dan "Sharia Virtual Trading" masuk kamus (kini 55 istilah), selaras pelajaran Praktik: membeli saham pertama Anda; Hana: netral. Nina & Dewi: 9 halaman dicek 390px & 1280px, tanpa scroll horizontal dan galat JS; kedua istilah tampil di Kamus. Tegar: perubahan sesi dipindai, tanpa rahasia.
+- `node tests/cek.mjs` lolos (9 halaman, 8 pelajaran, 31 emiten). Kurikulum tidak berubah, modul PDF tidak dibuat ulang.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
