@@ -160,5 +160,11 @@ window.ISTILAH = [
     pelajaran: "apa-itu-saham" },
   { istilah: "Suspensi (penghentian sementara)", pola: ["suspensi"],
     arti: "Penghentian sementara perdagangan sebuah saham oleh bursa. Selama suspensi, saham itu tidak bisa dibeli atau dijual sampai bursa membukanya kembali.",
-    pelajaran: "apa-itu-saham" }
+    pelajaran: "apa-itu-saham" },
+  { istilah: "Pom-pom saham", pola: ["pom-pom saham", "pom-pom"],
+    arti: "Ajakan beramai-ramai membeli sebuah saham agar harganya naik, lalu pihak yang mengajak menjual lebih dulu. Yang ikut belakangan bisa tertinggal dengan harga yang turun.",
+    pelajaran: "mengelola-risiko" },
+  { istilah: "Kontak OJK 157", pola: ["Kontak OJK 157"],
+    arti: "Layanan kontak Otoritas Jasa Keuangan untuk bertanya atau melapor, misalnya bila menemukan tawaran investasi yang mencurigakan.",
+    pelajaran: "mengelola-risiko" }
 ];
