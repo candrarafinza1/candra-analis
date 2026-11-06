@@ -172,5 +172,11 @@ window.ISTILAH = [
     pelajaran: "praktik-beli-pertama" },
   { istilah: "Sharia Virtual Trading", pola: ["Sharia Virtual Trading"],
     arti: "Fitur latihan jual beli saham syariah dengan modal virtual (bukan uang sungguhan) di aplikasi IDX Mobile. Harganya bergerak sungguhan, jadi Anda bisa merasakan naik-turun harga tanpa risiko kehilangan uang.",
-    pelajaran: "praktik-beli-pertama" }
+    pelajaran: "praktik-beli-pertama" },
+  { istilah: "Pesaing (pembanding)", pola: ["pesaing"],
+    arti: "Perusahaan lain yang usahanya sejenis. Angka seperti ROE atau PER lebih mudah dinilai bila dibandingkan dengan dua atau tiga perusahaan sejenis, bukan dilihat sendirian.",
+    pelajaran: "praktik-analisis-sendiri" },
+  { istilah: "Rasio keuangan", pola: ["rasio keuangan", "rasio"],
+    arti: "Angka hasil membagi satu pos laporan keuangan dengan pos lain, misalnya ROE (laba bersih ÷ ekuitas) dan DER (total liabilitas ÷ ekuitas). Rasio membantu membandingkan perusahaan yang ukurannya berbeda, tetapi tetap perlu dibaca bersama pemahaman tentang usahanya.",
+    pelajaran: "praktik-analisis-sendiri" }
 ];
