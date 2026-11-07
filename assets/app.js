@@ -585,6 +585,8 @@
       if (!e) {
         hasil.appendChild(el("p", { class: "catatan-metode", text: "Pilih satu kode saham untuk melihat hasil pemeriksaan. Saham yang belum ada di daftar sedang dikumpulkan datanya." }));
         hasil.appendChild(panduanRadar());
+        // Arif (7 Nov 17.09): kalimat petunjuk & panduan ikut ditandai istilah; <select> ada di luar #hasil-radar.
+        pasangIstilah(hasil);
         return;
       }
       var s = periksa(e);
@@ -939,8 +941,11 @@
       var j = pilih.value;
       var hasil = semua.filter(function (k) { return !j || k.jenis === j; });
       var tampil = hasil.slice(0, batas);
+      tutupIstilah(false);
       ul.textContent = "";
       tampil.forEach(function (k) { ul.appendChild(kartuKabar(k, true)); });
+      // Arif (7 Nov 17.09): kartu yang muncul lewat saringan atau "Tampilkan lagi" juga ditandai istilah.
+      pasangIstilah(ul);
       var sisa = hasil.length - tampil.length;
       ket.textContent = (sisa > 0 ? "Menampilkan " + tampil.length + " dari " : "") + hasil.length + " kabar" +
         (j ? " jenis " + j : "") + ", terbaru di atas.";

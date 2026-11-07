@@ -903,3 +903,11 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Nina & Dewi: Radar, Peringkat, Belajar, profil EXCL dicek 390px & 1280px, tanpa scroll horizontal dan galat JS; "rugi bersih" dan "diaudit" tertanda. Tegar: perubahan dipindai, tanpa rahasia. Yoga: rilis lewat push ke main.
 - `node tests/cek.mjs` lolos (9 halaman, 8 pelajaran, 31 emiten). Kurikulum tidak berubah, modul PDF tidak dibuat ulang.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 7 Nov 2026, 17.09 WIB — sesi kerja (Bima)
+- Fajar: KLBF, BRIS, ITMG dicek ulang: belum ada laba 9 bulan 2026 bersumber. Tetap 23 dari 31. Raka, Hana, Galih: tidak ada kabar/tanda Radar baru.
+- Sari + Laras: halaman Kabar & Asisten AI disisir; "Entitas induk", "Penjualan bersih (penjualan neto)", "Tanggal pencatatan (dividen)" masuk kamus, kini 87 istilah. Hana: netral, tanpa ajakan beli.
+- Arif: petunjuk "Pilih satu kode saham…" dan panduan Radar kini ditandai istilah (`<select>` tidak terganggu). Bug ringan ditemukan & diperbaiki: kartu Kabar yang muncul lewat saringan atau "Tampilkan lagi" tidak ditandai istilah. Tugas lanjutan (cek render ulang di bagian lain) masuk backlog untuk Arif + Nina.
+- Nina & Dewi: Radar, Kabar (termasuk saringan Dividen & "Tampilkan lagi"), Beranda, Asisten dicek 390px & 1280px: tanpa scroll horizontal dan galat JS. Tegar: perubahan dipindai, tanpa rahasia. Yoga: rilis lewat push ke main.
+- `node tests/cek.mjs` lolos (9 halaman, 8 pelajaran, 31 emiten). Kurikulum tidak berubah, modul PDF tidak dibuat ulang.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

@@ -259,5 +259,14 @@ window.ISTILAH = [
     pelajaran: "laporan-keuangan" },
   { istilah: "Kode saham", pola: ["kode saham"],
     arti: "Singkatan empat huruf untuk menyebut saham suatu perusahaan di bursa, misalnya TLKM untuk Telkom Indonesia. Kode ini dipakai saat mencari saham dan mengirim order di aplikasi sekuritas.",
-    pelajaran: "praktik-beli-pertama" }
+    pelajaran: "praktik-beli-pertama" },
+  { istilah: "Entitas induk", pola: ["entitas induk"],
+    arti: "Perusahaan utama yang memiliki anak-anak usaha. Laba yang diatribusikan ke pemilik entitas induk adalah bagian laba milik pemegang saham perusahaan induk itu, setelah dikurangi bagian pemegang saham lain di anak usaha.",
+    pelajaran: "laporan-keuangan" },
+  { istilah: "Penjualan bersih (penjualan neto)", pola: ["penjualan bersih", "penjualan neto"],
+    arti: "Nilai penjualan setelah dikurangi potongan harga dan barang yang dikembalikan pembeli. Di laporan keuangan, angka ini sering dipakai sebagai pendapatan perusahaan.",
+    pelajaran: "laporan-keuangan" },
+  { istilah: "Tanggal pencatatan (dividen)", pola: ["tanggal pencatatan"],
+    arti: "Tanggal perusahaan melihat daftar pemegang sahamnya untuk menentukan siapa yang berhak menerima dividen. Karena penyelesaian transaksi T+2, pembeli baru ikut tercatat hanya bila transaksinya terjadi paling lambat dua hari bursa sebelum tanggal itu.",
+    pelajaran: "apa-itu-saham" }
 ];
