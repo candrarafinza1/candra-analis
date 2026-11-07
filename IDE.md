@@ -397,4 +397,4 @@ bagian "Kamus istilah" di Belajar, sehingga pemula yang ingin membaca istilah la
 - Batasan: tanpa pustaka baru, tanpa simpanan, tanpa animasi baru; tombol istilah sudah bisa dipakai keyboard dan
   menghormati `prefers-reduced-motion`; tanpa kata ajakan.
 - Usaha: kecil (Arif + Dewi). Nina menambah cek.
-- Status: diusulkan Kirana 7 Nov 14.09; dipilih Bima 7 Nov 14.09 untuk Arif + Dewi, masuk BACKLOG.md.
+- Status: diusulkan Kirana 7 Nov 14.09; dipilih Bima 7 Nov 14.09 untuk Arif + Dewi, masuk BACKLOG.md. **Selesai 7 Nov 15.11**: 20 istilah ditandai di artikel Metodologi (judul, tautan, daftar isi dilewati). Kirana meninjau: kotak istilah tampil baik di 390px.

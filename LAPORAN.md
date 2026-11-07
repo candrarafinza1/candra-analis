@@ -888,3 +888,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - `node tests/cek.mjs` lolos (9 halaman, 8 pelajaran, 31 emiten). Kurikulum tidak berubah, modul PDF tidak dibuat ulang.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
 
+### 7 Nov 2026, 15.11 WIB — sesi siang (Bima)
+- Arif + Dewi (IDE.md #24): istilah kamus kini bisa diketuk di halaman Metodologi (20 istilah, sekali per halaman; judul, tautan, daftar isi tidak ditandai).
+- Masalah ringan ditemukan & diperbaiki: judul bagian 4 Metodologi ber-id `peringkat`, sehingga tabel Peringkat ikut tergambar di dalam judul itu. Id diganti `cara-peringkat`. Nina menambah cek urutan skrip dan cek id bentrok; tugas perluasan cek ke semua halaman masuk backlog.
+- Nina & Dewi: Metodologi dicek 390px & 1280px, tanpa scroll horizontal dan galat JS, kotak istilah terbuka benar. Kirana meninjau hasil. Tegar: perubahan dipindai, tanpa rahasia. Yoga: rilis lewat push ke main.
+- Fajar: KLBF, BRIS, ITMG dicek ulang, belum ada laba 9 bulan 2026 bersumber (tetap 23 dari 31).
+- `node tests/cek.mjs` lolos (9 halaman, 8 pelajaran, 31 emiten). Kurikulum tidak berubah, modul PDF tidak dibuat ulang.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

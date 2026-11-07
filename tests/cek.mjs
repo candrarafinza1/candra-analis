@@ -210,6 +210,13 @@ ok(/function posisi\(kunci[\s\S]{0,900}peserta\(kunci\)/.test(readFileSync("asse
   for (const [, id] of navIsi.matchAll(/href="#([^"]+)"/g))
     ok(new RegExp(`id="${id}"`).test(metod), `metodologi.html: tautan #${id} tidak punya tujuan`);
   ok(/src="assets\/app\.js"/.test(metod), "metodologi.html harus memuat assets/app.js untuk penanda bagian");
+  // Nina (7 Nov): id yang dipakai app.js sebagai wadah halaman lain tidak boleh ada di Metodologi
+  //  (dulu h2#peringkat membuat tabel Peringkat ikut tergambar di dalam judul bagian 4)
+  for (const id of ["peringkat", "radar", "profil", "kabar", "pita"])
+    ok(!new RegExp(`id="${id}"`).test(metod), `metodologi.html: id="${id}" bentrok dengan wadah halaman lain di app.js`);
+  // Nina (7 Nov, IDE.md #24): istilah kamus ditandai di Metodologi → istilah.js dimuat sebelum app.js
+  ok(metod.indexOf('src="data/istilah.js"') > -1 && metod.indexOf('src="data/istilah.js"') < metod.indexOf('src="assets/app.js"'),
+    "metodologi.html harus memuat data/istilah.js sebelum assets/app.js");
   ok(!/scroll-behavior:\s*smooth/.test(css) || /prefers-reduced-motion: no-preference\)[^}]*scroll-behavior/.test(css),
     "scroll halus hanya boleh bila pengguna tidak meminta gerak dikurangi");
   // Nina (30 Okt): "Lanjutkan belajar" (IDE.md #9) — wadah tersembunyi di beranda, memakai bacaSelesai() yang sama

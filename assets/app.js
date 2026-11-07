@@ -1292,6 +1292,13 @@
     saring();
   }
 
+  /* ---------- Metodologi: tandai istilah kamus di isi utama (Arif + Dewi, IDE.md #24) ----------
+     Hanya artikel; judul, tautan, dan daftar isi dilewati (LEWATI). Setiap istilah sekali per halaman. */
+  function istilahMetodologi() {
+    if (!document.getElementById("isi-halaman")) return;
+    pasangIstilah(document.querySelector("main .artikel"));
+  }
+
   /* ---------- Metodologi: tandai bagian yang sedang dibaca (Dewi, IDE.md #8) ---------- */
   function renderIsiHalaman() {
     var nav = document.getElementById("isi-halaman");
@@ -1342,5 +1349,6 @@
   renderKabarBeranda();
   renderRujukan();
   renderAsisten();
+  istilahMetodologi();
   renderIsiHalaman();
 })();
