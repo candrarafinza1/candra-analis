@@ -918,3 +918,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Nina & Dewi: profil EXCL (Bandingkan ANTM lalu ITMG) dan Peringkat (saringan sektor) dicek 390px & 1280px: istilah tertanda, tanpa scroll horizontal dan galat JS. Tegar: perubahan dipindai, tanpa rahasia. Yoga: rilis lewat push ke main.
 - `node tests/cek.mjs` lolos (9 halaman, 8 pelajaran, 31 emiten). Kurikulum tidak berubah, modul PDF tidak dibuat ulang.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 7 Nov 2026, 19.09 WIB — sesi kerja (Bima)
+- Fajar: KLBF, BRIS, ITMG dicek ulang: belum ada laba 9 bulan 2026 bersumber. Tetap 23 dari 31. Raka, Hana, Galih: tidak ada kabar/tanda Radar baru.
+- Arif + Nina + Dewi: tombol istilah di tabel (Peringkat, judul tabel profil, Bandingkan) diukur di 390px & 1280px. Tingginya 22px → kini 26px lewat padding tanpa menggeser tata letak. Bug ringan: di HP tombol istilah di kepala tabel Peringkat yang tersembunyi masih bisa difokus keyboard → kini tabindex -1 di lebar ≤600px. Nina menambah cek 2l (dengan uji negatif). Tugas lanjutan (istilah di label kartu HP) masuk backlog.
+- Nina & Dewi: 9 halaman dicek 390px & 1280px: tanpa scroll horizontal dan tanpa galat JS. Tegar: perubahan dipindai, tanpa rahasia. Yoga: rilis lewat push ke main.
+- `node tests/cek.mjs` lolos (9 halaman, 8 pelajaran, 31 emiten). Kurikulum tidak berubah, modul PDF tidak dibuat ulang.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

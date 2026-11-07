@@ -1222,6 +1222,22 @@
         n = lanjut;
       }
     });
+    aturIstilahKepalaKartu(wadah);
+  }
+
+  // Arif + Nina (7 Nov 19.09): di HP, Peringkat tampil sebagai kartu dan kepala tabel disembunyikan.
+  // Tombol istilah di kepala yang tersembunyi tidak boleh tetap bisa difokus keyboard (fokus jadi tak terlihat).
+  var KARTU_HP = window.matchMedia ? window.matchMedia("(max-width: 600px)") : null;
+  function aturIstilahKepalaKartu(akar) {
+    var sembunyi = !!(KARTU_HP && KARTU_HP.matches);
+    (akar || document).querySelectorAll(".tabel-kartu thead button.istilah").forEach(function (b) {
+      if (sembunyi) b.setAttribute("tabindex", "-1"); else b.removeAttribute("tabindex");
+    });
+  }
+  if (KARTU_HP) {
+    var gantiKartu = function () { aturIstilahKepalaKartu(document); };
+    if (KARTU_HP.addEventListener) KARTU_HP.addEventListener("change", gantiKartu);
+    else if (KARTU_HP.addListener) KARTU_HP.addListener(gantiKartu);
   }
 
   document.addEventListener("click", function (ev) {

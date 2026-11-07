@@ -681,6 +681,26 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
     "cek 2k tidak menangkap Bandingkan yang lupa menandai istilah");
 }
 
+// 2l. Nina + Arif (7 Nov 19.09): tombol istilah di tabel punya bidang ketuk >= 24px (padding atas-bawah >= 2px
+//  pada teks 22px), dan tombol di kepala tabel kartu yang disembunyikan di HP tidak bisa difokus keyboard.
+{
+  const css = readFileSync("assets/styles.css", "utf8");
+  const app = readFileSync("assets/app.js", "utf8");
+  const cekSentuh = (c, js) => {
+    const salah = [];
+    const m = c.match(/table button\.istilah\s*\{([^}]*)\}/);
+    const pad = m && m[1].match(/padding:\s*(\d+(?:\.\d+)?)px/);
+    if (!pad || parseFloat(pad[1]) < 2) salah.push("CSS: table button.istilah butuh padding atas-bawah minimal 2px");
+    const fn = js.match(/function pasangIstilah\(wadah\) \{[\s\S]*?\n  \}\n/);
+    if (!fn || !fn[0].includes("aturIstilahKepalaKartu(wadah)")) salah.push("JS: pasangIstilah harus memanggil aturIstilahKepalaKartu(wadah)");
+    if (!/\.tabel-kartu thead button\.istilah[\s\S]{0,200}tabindex", "-1"/.test(js)) salah.push("JS: tombol istilah di kepala tabel kartu harus diberi tabindex -1 di HP");
+    return salah;
+  };
+  for (const pesan of cekSentuh(css, app)) ok(false, `cek 2l: ${pesan}`);
+  ok(cekSentuh(css.replace(/table button\.istilah\s*\{[^}]*\}/, ""), app).length === 1, "cek 2l tidak menangkap padding tombol istilah yang hilang");
+  ok(cekSentuh(css, app.replace("    aturIstilahKepalaKartu(wadah);\n", "")).length === 1, "cek 2l tidak menangkap pasangIstilah yang lupa mengatur kepala tabel");
+}
+
 // 3. Aturan Hana (syariah): halaman tidak boleh memakai bahasa ajakan
 const terlarang = /\b(wajib beli|pasti naik|buruan (beli|jual)|dijamin untung|rekomendasi beli)\b/i;
 for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"]) {

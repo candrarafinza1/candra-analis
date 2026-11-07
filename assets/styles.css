@@ -523,6 +523,8 @@ button.istilah {
   cursor: help; text-decoration: underline dotted; text-decoration-thickness: 1.5px;
   text-underline-offset: 3px; text-decoration-color: var(--aksen);
 }
+/* Di tabel (kepala kolom & judul tabel) bidang ketuk minimal 24px tanpa menggeser tata letak (Dewi, 7 Nov 19.09) */
+table button.istilah { padding: 2px 0; margin: -2px 0; }
 button.istilah:hover, button.istilah[aria-expanded="true"] { color: var(--aksen); background: var(--sorot-istilah); border-radius: 3px; }
 .kotak-istilah {
   position: fixed; z-index: 20; display: block; white-space: normal; text-align: left;
