@@ -250,5 +250,14 @@ window.ISTILAH = [
     pelajaran: "laporan-keuangan" },
   { istilah: "Divestasi", pola: ["divestasi"],
     arti: "Penjualan sebagian atau seluruh bisnis atau anak usaha milik perusahaan. Keuntungan dari divestasi biasanya hanya terjadi sekali, jadi tidak menggambarkan hasil usaha rutin.",
-    pelajaran: "laporan-keuangan" }
+    pelajaran: "laporan-keuangan" },
+  { istilah: "Rugi bersih", pola: ["rugi bersih"],
+    arti: "Kebalikan dari laba bersih: biaya dan pajak perusahaan dalam satu periode lebih besar daripada pendapatannya. Di laporan keuangan, angka rugi biasanya ditulis dengan tanda minus atau di dalam kurung.",
+    pelajaran: "laporan-keuangan" },
+  { istilah: "Audit (diaudit)", pola: ["diaudit", "audit"],
+    arti: "Pemeriksaan laporan keuangan oleh akuntan publik yang independen. Laporan tahunan wajib diaudit, sedangkan laporan kuartalan umumnya tidak, sehingga angkanya masih bisa berubah.",
+    pelajaran: "laporan-keuangan" },
+  { istilah: "Kode saham", pola: ["kode saham"],
+    arti: "Singkatan empat huruf untuk menyebut saham suatu perusahaan di bursa, misalnya TLKM untuk Telkom Indonesia. Kode ini dipakai saat mencari saham dan mengirim order di aplikasi sekuritas.",
+    pelajaran: "praktik-beli-pertama" }
 ];

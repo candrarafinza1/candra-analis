@@ -624,6 +624,46 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
   ok(!cekKamus(app.replace('if (!document.getElementById("kamus-istilah")) ', ""), belajar), "cek kamus tidak menangkap tautan yang tampil di halaman Belajar");
 }
 
+// 2j. Nina + Arif (7 Nov 16.08): setiap id yang dicari app.js lewat getElementById hanya boleh ada
+//  di halaman miliknya (dulu h2#peringkat di Metodologi membuat tabel Peringkat ikut tergambar).
+//  Id baru di app.js wajib didaftarkan di peta ini; id yang dibuat app.js sendiri masuk `dibuatJs`.
+{
+  const app = readFileSync("assets/app.js", "utf8");
+  const pemilik = {
+    asisten: ["asisten.html"], "isi-halaman": ["metodologi.html"],
+    "isi-pelajaran": ["pelajaran.html"], "judul-pelajaran": ["pelajaran.html"], "sub-pelajaran": ["pelajaran.html"],
+    "judul-profil": ["emiten.html"], "sub-profil": ["emiten.html"], profil: ["emiten.html"],
+    "istilah-hari": ["index.html"], "kabar-beranda": ["index.html"], "lanjutkan-belajar": ["index.html"],
+    "mini-peringkat": ["index.html"], "musim-beranda": ["index.html"],
+    kabar: ["kabar.html"], "kamus-istilah": ["belajar.html"], rujukan: ["belajar.html"],
+    peringkat: ["peringkat.html"], radar: ["radar.html"],
+    pita: ["emiten.html", "peringkat.html", "radar.html"],
+  };
+  const dibuatJs = ["ket-sektor"];
+  const cekWadah = (js, isiHalaman) => {
+    const salah = [];
+    for (const [, id] of js.matchAll(/getElementById\("([^"]+)"\)/g)) {
+      if (dibuatJs.includes(id)) continue;
+      if (!pemilik[id]) { salah.push(`id "${id}" di app.js belum didaftarkan di peta pemilik cek 2j`); continue; }
+      for (const [f, html] of Object.entries(isiHalaman)) {
+        const ada = new RegExp(`\\bid="${id}"`).test(html);
+        if (ada && !pemilik[id].includes(f)) salah.push(`${f}: id="${id}" bentrok dengan wadah ${pemilik[id].join("/")}`);
+        if (!ada && pemilik[id].includes(f)) salah.push(`${f}: wadah id="${id}" hilang`);
+      }
+    }
+    return [...new Set(salah)];
+  };
+  const isiHalaman = Object.fromEntries(halaman.map((f) => [f, readFileSync(f, "utf8")]));
+  for (const pesan of cekWadah(app, isiHalaman)) ok(false, pesan);
+  // Uji negatif: id bentrok, wadah hilang, dan id baru tak terdaftar harus tertangkap
+  ok(cekWadah(app, { ...isiHalaman, "metodologi.html": isiHalaman["metodologi.html"] + '<h2 id="radar">x</h2>' }).length > 0,
+    "cek 2j tidak menangkap id bentrok");
+  ok(cekWadah(app, { ...isiHalaman, "kabar.html": isiHalaman["kabar.html"].replace(/\bid="kabar"/, 'id="kabar-x"') }).length > 0,
+    "cek 2j tidak menangkap wadah yang hilang");
+  ok(cekWadah(app + 'document.getElementById("wadah-baru")', isiHalaman).length > 0,
+    "cek 2j tidak menangkap id baru yang belum didaftarkan");
+}
+
 // 3. Aturan Hana (syariah): halaman tidak boleh memakai bahasa ajakan
 const terlarang = /\b(wajib beli|pasti naik|buruan (beli|jual)|dijamin untung|rekomendasi beli)\b/i;
 for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"]) {
