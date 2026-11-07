@@ -208,5 +208,14 @@ window.ISTILAH = [
     pelajaran: "mengelola-risiko" },
   { istilah: "Investasi rutin", pola: ["investasi rutin", "investasikan rutin"],
     arti: "Menyisihkan jumlah uang yang sama untuk berinvestasi setiap periode, misalnya tiap bulan, tanpa menunggu waktu yang dianggap \"pas\". Cara ini membantu membangun kebiasaan, tetapi tidak menjamin untung.",
-    pelajaran: "mengelola-risiko" }
+    pelajaran: "mengelola-risiko" },
+  { istilah: "Pemegang saham", pola: ["pemegang saham"],
+    arti: "Orang atau lembaga yang memiliki saham sebuah perusahaan, sehingga ikut memiliki sebagian kecil perusahaan itu. Pemegang saham berhak atas dividen bila dibagikan dan boleh ikut RUPS.",
+    pelajaran: "apa-itu-saham" },
+  { istilah: "Hari bursa", pola: ["hari bursa"],
+    arti: "Hari ketika Bursa Efek Indonesia buka untuk perdagangan saham, yaitu hari kerja Senin–Jumat di luar hari libur bursa. Sabtu, Minggu, dan hari libur tidak dihitung.",
+    pelajaran: "lot-dan-transaksi" },
+  { istilah: "Pajak penjualan saham", pola: ["pajak penjualan saham"],
+    arti: "Pajak yang langsung dipotong setiap kali Anda menjual saham, dihitung dari nilai penjualan, untung maupun rugi. Karena pajak ini, biaya jual biasanya sedikit lebih tinggi daripada biaya beli.",
+    pelajaran: "lot-dan-transaksi" }
 ];

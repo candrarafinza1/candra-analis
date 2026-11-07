@@ -850,3 +850,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Nina & Dewi: pelajaran Mengelola risiko, Belajar (kamus), Beranda, Peringkat dicek 390px & 1280px, tanpa scroll horizontal dan galat JS; dua istilah baru tertandai di pelajaran. Tegar: perubahan sesi dipindai, tanpa rahasia.
 - `node tests/cek.mjs` lolos (9 halaman, 8 pelajaran, 31 emiten). Kurikulum tidak berubah, modul PDF tidak dibuat ulang.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 7 Nov 2026, 08.08 WIB — sesi pagi (Bima)
+- Fajar: KLBF, BRIS, ITMG dicek ulang: belum ada laba 9 bulan 2026 bersumber. Tetap 23 dari 31. Raka, Hana, Galih: tidak ada kabar/tanda Radar baru.
+- Sari + Laras: "Pemegang saham" (pelajaran Apa itu saham?), "Hari bursa" dan "Pajak penjualan saham" (pelajaran Lot, harga, dan biaya transaksi) masuk kamus, kini 70 istilah. Hana: netral, tanpa ajakan beli. Tugas berikutnya: sisir pelajaran Membuka rekening saham dan Membaca laporan keuangan.
+- Nina & Dewi: kedua pelajaran, Belajar (kamus), Beranda dicek 390px & 1280px, tanpa scroll horizontal dan galat JS; tiga istilah baru tertandai di pelajaran. Tegar: perubahan sesi dipindai, tanpa rahasia.
+- `node tests/cek.mjs` lolos (9 halaman, 8 pelajaran, 31 emiten). Kurikulum tidak berubah, modul PDF tidak dibuat ulang.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
