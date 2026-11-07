@@ -217,5 +217,14 @@ window.ISTILAH = [
     pelajaran: "lot-dan-transaksi" },
   { istilah: "Pajak penjualan saham", pola: ["pajak penjualan saham"],
     arti: "Pajak yang langsung dipotong setiap kali Anda menjual saham, dihitung dari nilai penjualan, untung maupun rugi. Karena pajak ini, biaya jual biasanya sedikit lebih tinggi daripada biaya beli.",
-    pelajaran: "lot-dan-transaksi" }
+    pelajaran: "lot-dan-transaksi" },
+  { istilah: "Perantara pedagang efek", pola: ["perantara pedagang efek"],
+    arti: "Izin usaha dari OJK bagi perusahaan sekuritas untuk melayani jual-beli saham atas nama nasabah. Investor tidak bertransaksi langsung di bursa, melainkan lewat perantara ini.",
+    pelajaran: "buka-rekening" },
+  { istilah: "Anggota bursa", pola: ["anggota bursa"],
+    arti: "Perusahaan sekuritas yang terdaftar di BEI dan boleh meneruskan order nasabah ke bursa. Daftarnya bisa dicek di situs BEI untuk memastikan sekuritas Anda resmi.",
+    pelajaran: "buka-rekening" },
+  { istilah: "Dividen per saham (DPS)", pola: ["dividen per saham"],
+    arti: "Jumlah dividen untuk setiap lembar saham, dalam rupiah. Contoh: dividen Rp100 per saham untuk 1 lot (100 lembar) berarti Rp10.000 sebelum pajak.",
+    pelajaran: "laporan-keuangan" }
 ];
