@@ -385,3 +385,16 @@ bagian "Kamus istilah" di Belajar, sehingga pemula yang ingin membaca istilah la
 - Usaha: kecil (Arif). Nina menambah cek tautan jangkar (`#kamus` harus ada di belajar.html).
 - Status: dipilih Bima 5 Nov 13.08 untuk Arif; selesai 5 Nov 13.08 (tautan "Lihat semua istilah" di bawah tautan pelajaran, tidak tampil di Belajar). Nina: cek 2i. Ditinjau Kirana lewat tangkapan layar Peringkat 390px gelap: terbaca jelas, tanpa scroll horizontal. Tinjauan di HP sungguhan menyusul.
 - Tinjauan Kirana 7 Nov 13.08: dua istilah baru ("Harga saham", "Laporan keuangan tahunan") tertandai di pelajaran pada 390px dan 1280px tanpa scroll horizontal. "Harga saham" kini tertandai di banyak pelajaran; karena tiap istilah hanya ditandai sekali per halaman, halaman tidak terlihat ramai. Tidak ada temuan baru.
+
+### 24. Metodologi: tandai istilah kamus seperti halaman lain
+- **Kamus di semua halaman** — fitur, usaha kecil
+- Masalah: halaman Metodologi memuat banyak istilah teknis (DES, ROE, DER, liabilitas, ekuitas, neraca, dana syirkah
+  temporer, divestasi), tetapi halaman ini belum memuat `data/istilah.js`, jadi istilahnya tidak bisa diketuk seperti di
+  Peringkat, Radar, dan pelajaran. Pemula yang ingin memeriksa cara hitung justru paling butuh penjelasan istilah.
+- Ide: muat kamus di Metodologi dan tandai istilah di isi utama (tiap istilah sekali, seperti halaman lain).
+- Acuan tren: glosarium yang konsisten di seluruh situs pada aplikasi edukasi keuangan.
+- Dampak bagi pemula: halaman "cara kami mengolah data" jadi bisa dipahami tanpa membuka tab lain.
+- Batasan: tanpa pustaka baru, tanpa simpanan, tanpa animasi baru; tombol istilah sudah bisa dipakai keyboard dan
+  menghormati `prefers-reduced-motion`; tanpa kata ajakan.
+- Usaha: kecil (Arif + Dewi). Nina menambah cek.
+- Status: diusulkan Kirana 7 Nov 14.09; dipilih Bima 7 Nov 14.09 untuk Arif + Dewi, masuk BACKLOG.md.

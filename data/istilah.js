@@ -241,5 +241,14 @@ window.ISTILAH = [
     pelajaran: "lot-dan-transaksi" },
   { istilah: "Laporan keuangan tahunan", pola: ["laporan keuangan tahunan"],
     arti: "Laporan keuangan untuk satu tahun buku penuh. Laporan ini bisa diunduh gratis dari situs BEI dan menjadi bahan utama untuk menghitung ROE, DER, dan PER.",
-    pelajaran: "praktik-analisis-sendiri" }
+    pelajaran: "praktik-analisis-sendiri" },
+  { istilah: "Neraca (laporan posisi keuangan)", pola: ["neraca"],
+    arti: "Bagian laporan keuangan yang mencatat aset, liabilitas, dan ekuitas perusahaan pada satu tanggal, misalnya 31 Desember. Isinya selalu seimbang: total aset = liabilitas + ekuitas.",
+    pelajaran: "laporan-keuangan" },
+  { istilah: "Dana syirkah temporer", pola: ["dana syirkah temporer"],
+    arti: "Dana nasabah bank syariah yang dikelola dengan akad bagi hasil. Di laporan keuangan bank syariah, dana ini dicatat terpisah dari liabilitas dan ekuitas, sehingga DER bank syariah tidak bisa dibaca seperti perusahaan biasa.",
+    pelajaran: "laporan-keuangan" },
+  { istilah: "Divestasi", pola: ["divestasi"],
+    arti: "Penjualan sebagian atau seluruh bisnis atau anak usaha milik perusahaan. Keuntungan dari divestasi biasanya hanya terjadi sekali, jadi tidak menggambarkan hasil usaha rutin.",
+    pelajaran: "laporan-keuangan" }
 ];
