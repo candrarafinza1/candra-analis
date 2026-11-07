@@ -202,5 +202,11 @@ window.ISTILAH = [
     pelajaran: "praktik-beli-pertama" },
   { istilah: "Sektor", pola: ["sektor"],
     arti: "Kelompok perusahaan yang usahanya sejenis, misalnya energi, kesehatan, atau barang konsumen primer. Menyebar modal ke beberapa sektor membantu agar masalah di satu jenis usaha tidak menghantam semua saham Anda sekaligus.",
+    pelajaran: "mengelola-risiko" },
+  { istilah: "Penasihat investasi", pola: ["penasihat investasi"],
+    arti: "Pihak yang punya izin dari OJK untuk memberi nasihat atau rekomendasi tentang efek, termasuk saham, kepada orang lain. Orang yang memberi rekomendasi saham tanpa izin ini perlu diwaspadai.",
+    pelajaran: "mengelola-risiko" },
+  { istilah: "Investasi rutin", pola: ["investasi rutin", "investasikan rutin"],
+    arti: "Menyisihkan jumlah uang yang sama untuk berinvestasi setiap periode, misalnya tiap bulan, tanpa menunggu waktu yang dianggap \"pas\". Cara ini membantu membangun kebiasaan, tetapi tidak menjamin untung.",
     pelajaran: "mengelola-risiko" }
 ];
