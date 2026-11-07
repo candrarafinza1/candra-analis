@@ -226,5 +226,14 @@ window.ISTILAH = [
     pelajaran: "buka-rekening" },
   { istilah: "Dividen per saham (DPS)", pola: ["dividen per saham"],
     arti: "Jumlah dividen untuk setiap lembar saham, dalam rupiah. Contoh: dividen Rp100 per saham untuk 1 lot (100 lembar) berarti Rp10.000 sebelum pajak.",
-    pelajaran: "laporan-keuangan" }
+    pelajaran: "laporan-keuangan" },
+  { istilah: "Rekomendasi efek", pola: ["rekomendasi efek"],
+    arti: "Saran untuk membeli, menjual, atau menahan saham tertentu. Menurut aturan OJK, saran seperti ini hanya boleh diberikan oleh pihak yang punya izin penasihat investasi.",
+    pelajaran: "mengelola-risiko" },
+  { istilah: "Janji keuntungan tetap", pola: ["keuntungan tetap"],
+    arti: "Tawaran yang menjanjikan hasil pasti setiap bulan atau setiap tahun. Harga saham bisa naik dan turun, jadi janji seperti ini adalah tanda bahaya yang perlu dicek ke Kontak OJK 157.",
+    pelajaran: "mengelola-risiko" },
+  { istilah: "Modal virtual", pola: ["modal virtual"],
+    arti: "Uang pura-pura yang diberikan aplikasi latihan seperti Sharia Virtual Trading. Anda bisa berlatih jual-beli dengan harga sungguhan tanpa risiko kehilangan uang asli.",
+    pelajaran: "praktik-beli-pertama" }
 ];
