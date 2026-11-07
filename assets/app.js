@@ -655,6 +655,8 @@
     var POS = ["Laba bersih 2025", "Pendapatan 2025", "ROE 2025", "DER akhir 2025", "Laba Jan–Sep 2026 (perubahan dari 2025)", "Daftar Efek Syariah"];
 
     pilih.addEventListener("change", function () {
+      // Arif (7 Nov 18.08): kotak istilah yang terbuka di hasil lama ditutup dulu; hasil baru ikut ditandai istilah.
+      tutupIstilah(false);
       hasil.textContent = "";
       var x = EMITEN.find(function (y) { return y.kode === pilih.value; });
       if (!x) return;
@@ -680,6 +682,7 @@
       hasil.appendChild(el("p", { class: "catatan-metode" }, [
         "Perbandingan ini hanya menyandingkan angka, bukan saran membeli atau menjual. Sumber tiap angka ada di bagian Sumber data profil masing-masing: ",
         el("a", { href: "emiten.html?kode=" + x.kode, text: "profil " + x.kode }), "."]));
+      pasangIstilah(hasil);
     });
     return wadah;
   }

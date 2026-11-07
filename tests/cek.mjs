@@ -664,6 +664,23 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
     "cek 2j tidak menangkap id baru yang belum didaftarkan");
 }
 
+// 2k. Nina + Arif (7 Nov 18.08): bagian yang merender ulang isinya (saringan sektor Peringkat, Radar,
+//  Kabar, Bandingkan di profil) harus memanggil pasangIstilah lagi pada wadahnya, agar istilah tetap ditandai.
+{
+  const app = readFileSync("assets/app.js", "utf8");
+  const potong = (js, awal, akhir) => { const i = js.indexOf(awal); if (i < 0) return null; const j = js.indexOf(akhir, i); return j < 0 ? null : js.slice(i, j); };
+  const RENDER_ULANG = [
+    ["Peringkat (tab & saringan sektor)", "function tampilkan(kunci) {", "Object.keys(KRITERIA).forEach", "pasangIstilah(panel)"],
+    ["Radar (pilih emiten)", "function renderRadar() {", "pilih.addEventListener(\"change\", tampil)", "pasangIstilah(hasil)"],
+    ["Kabar (saringan & Tampilkan lagi)", "function renderKabar() {", "function renderKabarBeranda()", "pasangIstilah(ul)"],
+    ["Bandingkan di profil", "pilih.addEventListener(\"change\", function () {\n      // Arif (7 Nov 18.08)", "return wadah;", "pasangIstilah(hasil)"],
+  ];
+  const cekUlang = (js) => RENDER_ULANG.filter(([, awal, akhir, panggil]) => { const b = potong(js, awal, akhir); return !b || !b.includes(panggil); }).map(([n]) => n);
+  for (const n of cekUlang(app)) ok(false, `${n}: isi yang dirender ulang harus ditandai istilah lagi (pasangIstilah)`);
+  ok(cekUlang(app.replace("      pasangIstilah(hasil);\n    });\n    return wadah;", "    });\n    return wadah;")).length === 1,
+    "cek 2k tidak menangkap Bandingkan yang lupa menandai istilah");
+}
+
 // 3. Aturan Hana (syariah): halaman tidak boleh memakai bahasa ajakan
 const terlarang = /\b(wajib beli|pasti naik|buruan (beli|jual)|dijamin untung|rekomendasi beli)\b/i;
 for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"]) {

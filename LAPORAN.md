@@ -911,3 +911,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Nina & Dewi: Radar, Kabar (termasuk saringan Dividen & "Tampilkan lagi"), Beranda, Asisten dicek 390px & 1280px: tanpa scroll horizontal dan galat JS. Tegar: perubahan dipindai, tanpa rahasia. Yoga: rilis lewat push ke main.
 - `node tests/cek.mjs` lolos (9 halaman, 8 pelajaran, 31 emiten). Kurikulum tidak berubah, modul PDF tidak dibuat ulang.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 7 Nov 2026, 18.08 WIB — sesi kerja (Bima)
+- Fajar: KLBF, BRIS, ITMG dicek ulang: belum ada laba 9 bulan 2026 bersumber. Tetap 23 dari 31. Raka, Hana, Galih: tidak ada kabar/tanda Radar baru.
+- Arif + Nina: bagian yang merender ulang isi diperiksa. Peringkat, Radar, Kabar sudah benar. Bug ringan di Bandingkan (profil emiten): hasil perbandingan tidak ditandai istilah, dan kotak istilah yang terbuka tidak ditutup saat emiten diganti → diperbaiki. Nina menambah cek 2k di `tests/cek.mjs` (dengan uji negatif). Tugas lanjutan (ukuran sentuh tombol istilah di tabel 390px) masuk backlog.
+- Nina & Dewi: profil EXCL (Bandingkan ANTM lalu ITMG) dan Peringkat (saringan sektor) dicek 390px & 1280px: istilah tertanda, tanpa scroll horizontal dan galat JS. Tegar: perubahan dipindai, tanpa rahasia. Yoga: rilis lewat push ke main.
+- `node tests/cek.mjs` lolos (9 halaman, 8 pelajaran, 31 emiten). Kurikulum tidak berubah, modul PDF tidak dibuat ulang.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
