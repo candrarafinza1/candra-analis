@@ -268,5 +268,15 @@ window.ISTILAH = [
     pelajaran: "laporan-keuangan" },
   { istilah: "Tanggal pencatatan (dividen)", pola: ["tanggal pencatatan"],
     arti: "Tanggal perusahaan melihat daftar pemegang sahamnya untuk menentukan siapa yang berhak menerima dividen. Karena penyelesaian transaksi T+2, pembeli baru ikut tercatat hanya bila transaksinya terjadi paling lambat dua hari bursa sebelum tanggal itu.",
+    pelajaran: "apa-itu-saham" },
+  // Sari + Laras (7 Nov 20.09): dari sisir halaman Profil emiten
+  { istilah: "Pertumbuhan laba", pola: ["pertumbuhan laba"],
+    arti: "Perubahan laba bersih dibanding periode yang sama tahun sebelumnya, dalam persen. Laba yang naik dari Rp100 miliar menjadi Rp110 miliar berarti pertumbuhan laba 10%; bila turun, angkanya negatif.",
+    pelajaran: "laporan-keuangan" },
+  { istilah: "Laporan dalam dolar AS", pola: ["dolar AS"],
+    arti: "Sebagian emiten, misalnya perusahaan batu bara yang banyak menjual ke luar negeri, menyusun laporan keuangannya dalam dolar Amerika Serikat. Angkanya tidak bisa dibandingkan langsung dengan laporan dalam rupiah, tetapi rasio seperti ROE dan DER tetap bisa dibaca berdampingan.",
+    pelajaran: "laporan-keuangan" },
+  { istilah: "Dividen tunai", pola: ["dividen tunai"],
+    arti: "Dividen yang dibayarkan dalam bentuk uang ke rekening pemegang saham. Bentuk lain adalah dividen saham, yaitu pembagian berupa tambahan lembar saham.",
     pelajaran: "apa-itu-saham" }
 ];
