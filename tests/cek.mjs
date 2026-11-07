@@ -174,6 +174,15 @@ ok(istilahKembar([{ istilah: "A", pola: ["laba"] }, { istilah: "B", pola: ["Laba
     const lama = (pola, teks) => { for (const p of pola) { const m = p.re.exec(teks); if (m) return { i: p.i, teks: m[2] }; } return null; };
     ok(lama(bangun(contoh), "laba bersih naik").teks === "laba", "uji negatif: versi lama harus memilih istilah pendek");
     ok(pilih(bangun(contoh), "laba bersih naik", {}).teks === "laba bersih", "uji negatif: pilihIstilah harus berbeda dari versi lama");
+    // Nina + Arif (7 Nov 21.10): judul profil "Laba Januari–September" dan kolom Bandingkan "Laba Jan–Sep 2026"
+    // ditandai sebagai istilah "Laba 9 bulan"; "Laporan Januari–September" (bukan laba) tidak ikut ditandai.
+    for (const teks of ["Laba Januari–September: Rp1 T (2025)", "Laba Jan–Sep 2026 (perubahan dari 2025)", "Laba 9 bulan naik"]) {
+      const r = pilih(POLA, teks, {});
+      ok(nama(r) === "Laba 9 bulan" && r.mulai === 0, `cek 2m: "${teks}" harus ditandai sebagai "Laba 9 bulan", didapat: ${nama(r)}`);
+    }
+    const r4 = pilih(POLA, "Laporan Januari–September 2026 sudah masuk", {});
+    ok(!r4 || nama(r4) !== "Laba 9 bulan", "cek 2m: \"Laporan Januari–September\" tidak boleh ditandai sebagai Laba 9 bulan");
+    ok(nama(pilih(bangun([{ istilah: "Laba 9 bulan", pola: ["laba 9 bulan"] }]), "Laba Jan–Sep 2026", {})) === null, "cek 2m tidak menangkap pola Jan–Sep yang hilang");
   }
 }
 // Nina (5 Nov 07.09, IDE.md #22): Kamus istilah di Belajar memakai semua istilah dari data/istilah.js

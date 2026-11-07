@@ -71,7 +71,7 @@ window.ISTILAH = [
   { istilah: "Lot", pola: ["lot"],
     arti: "Satuan jual beli saham di Bursa Efek Indonesia. 1 lot = 100 lembar saham.",
     pelajaran: "lot-dan-transaksi" },
-  { istilah: "Laba 9 bulan", pola: ["laba 9 bulan"],
+  { istilah: "Laba 9 bulan", pola: ["laba 9 bulan", "laba Januari–September", "laba Jan–Sep"],
     arti: "Laba Januari sampai September, dari laporan keuangan kuartal III. Candra Analis membandingkannya dengan Januari–September tahun sebelumnya.",
     pelajaran: "laporan-keuangan" },
   { istilah: "Keuntungan atau beban sekali-waktu", pola: ["sekali-waktu"],
