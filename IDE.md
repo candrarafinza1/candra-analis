@@ -384,3 +384,4 @@ bagian "Kamus istilah" di Belajar, sehingga pemula yang ingin membaca istilah la
   wajar (tombol → tautan pelajaran → tautan kamus); tanpa kata ajakan.
 - Usaha: kecil (Arif). Nina menambah cek tautan jangkar (`#kamus` harus ada di belajar.html).
 - Status: dipilih Bima 5 Nov 13.08 untuk Arif; selesai 5 Nov 13.08 (tautan "Lihat semua istilah" di bawah tautan pelajaran, tidak tampil di Belajar). Nina: cek 2i. Ditinjau Kirana lewat tangkapan layar Peringkat 390px gelap: terbaca jelas, tanpa scroll horizontal. Tinjauan di HP sungguhan menyusul.
+- Tinjauan Kirana 7 Nov 13.08: dua istilah baru ("Harga saham", "Laporan keuangan tahunan") tertandai di pelajaran pada 390px dan 1280px tanpa scroll horizontal. "Harga saham" kini tertandai di banyak pelajaran; karena tiap istilah hanya ditandai sekali per halaman, halaman tidak terlihat ramai. Tidak ada temuan baru.

@@ -235,5 +235,11 @@ window.ISTILAH = [
     pelajaran: "mengelola-risiko" },
   { istilah: "Modal virtual", pola: ["modal virtual"],
     arti: "Uang pura-pura yang diberikan aplikasi latihan seperti Sharia Virtual Trading. Anda bisa berlatih jual-beli dengan harga sungguhan tanpa risiko kehilangan uang asli.",
-    pelajaran: "praktik-beli-pertama" }
+    pelajaran: "praktik-beli-pertama" },
+  { istilah: "Harga saham", pola: ["harga saham"],
+    arti: "Harga satu lembar saham di bursa, dalam rupiah. Harganya bisa naik dan turun setiap hari bursa, dan modal untuk membeli dihitung dari harga per lembar × 100 × jumlah lot.",
+    pelajaran: "lot-dan-transaksi" },
+  { istilah: "Laporan keuangan tahunan", pola: ["laporan keuangan tahunan"],
+    arti: "Laporan keuangan untuk satu tahun buku penuh. Laporan ini bisa diunduh gratis dari situs BEI dan menjadi bahan utama untuk menghitung ROE, DER, dan PER.",
+    pelajaran: "praktik-analisis-sendiri" }
 ];
