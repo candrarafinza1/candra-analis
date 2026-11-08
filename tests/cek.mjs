@@ -724,14 +724,16 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
 }
 
 // 2o (Nina, 8 Nov 10.08): istilah di kepala halaman gelap harus bergaris emas (terlihat di --malam),
-// kotak istilah di sana tidak mewarisi teks pucat kepala halaman, dan halaman Kabar menandai kalimat pembukanya.
+// kotak istilah di sana tidak mewarisi teks pucat kepala halaman, dan kalimat pembuka Kabar tidak ditandai ganda.
 {
   const css = readFileSync("assets/styles.css", "utf8");
   const app = readFileSync("assets/app.js", "utf8");
   const garis = (c) => /\.judul-halaman button\.istilah\s*\{[^}]*text-decoration-color:\s*var\(--bulan\)/.test(c);
   ok(garis(css), "cek 2o: .judul-halaman button.istilah harus bergaris var(--bulan)");
   ok(/\.judul-halaman \.kotak-istilah p\s*\{[^}]*color:\s*var\(--tinta-2\)/.test(css), "cek 2o: teks kotak istilah di kepala halaman harus var(--tinta-2)");
-  ok(app.includes('pasangIstilah(document.querySelector(".judul-halaman .wadah > p"))'), "cek 2o: kalimat pembuka Kabar harus ditandai istilah");
+  // Sejak 8 Nov 14.10 kalimat pembuka Kabar ditandai lewat pasangIstilahKepala() (cek 2p), bukan pasangIstilah() langsung,
+  // agar istilah yang sudah ada di kartu kabar tidak ganda.
+  ok(!app.includes('pasangIstilah(document.querySelector(".judul-halaman .wadah > p"))'), "cek 2o: kalimat pembuka Kabar harus ditandai lewat pasangIstilahKepala(), bukan langsung (agar tidak ganda)");
   ok(!garis(css.replace("text-decoration-color: var(--bulan); }\n.judul-halaman button.istilah:hover", "}\n.judul-halaman button.istilah:hover")), "cek 2o tidak menangkap garis emas yang hilang");
 }
 

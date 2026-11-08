@@ -966,8 +966,8 @@
     lagi.addEventListener("click", function () { var awal = batas; batas += PER_HAL; tampilkan(awal); });
     tampilkan();
     pasangIstilah(akar);
-    // Dewi + Arif (8 Nov 10.08): kalimat pembuka di kepala halaman gelap ikut ditandai (gaya khusus di styles.css).
-    pasangIstilah(document.querySelector(".judul-halaman .wadah > p"));
+    // Dewi + Arif (8 Nov 14.10): kalimat pembuka Kabar kini ditandai lewat pasangIstilahKepala() di akhir berkas,
+    // sehingga istilah yang sudah ditandai di kartu kabar (mis. "laporan keuangan") tidak ditandai dua kali.
   }
 
   /* ---------- Kabar terbaru di beranda (Arif & Dewi, IDE.md #16, 1 Nov) ----------
@@ -1391,7 +1391,7 @@
   renderAsisten();
   istilahMetodologi();
   renderIsiHalaman();
-  // Dewi + Arif (8 Nov 13.08): kalimat pembuka kepala halaman (selain Kabar, yang sudah ditandai sendiri) ikut ditandai,
+  // Dewi + Arif (8 Nov 13.08; Kabar ikut sejak 14.10): kalimat pembuka kepala halaman ikut ditandai,
   // tetapi istilah yang sudah ditandai di isi halaman dilewati agar tidak ganda.
   if (!document.querySelector(".judul-halaman button.istilah")) pasangIstilahKepala();
 })();

@@ -980,3 +980,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Tegar: tanpa rahasia. Yoga: rilis lewat push ke main. `node tests/cek.mjs` lolos. Kurikulum tidak berubah.
 - Tugas baru: Dewi + Arif menimbang tanda ganda "laporan keuangan" di halaman Kabar.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 8 Nov 2026, 14.10 WIB (Bima)
+- Dewi + Arif: tanda istilah ganda di halaman Kabar dihapus. Kalimat pembuka Kabar kini ditandai lewat `pasangIstilahKepala()`, jadi "laporan keuangan" yang sudah ditandai di kartu kabar tidak ditandai lagi di kepala. Nina: cek 2o disesuaikan. Dewi: 390px & 1280px (Kabar, Beranda, Peringkat, Profil) tanpa scroll horizontal, tanpa galat JS, tanpa istilah ganda.
+- Fajar: KLBF dan BRIS dicari ulang; hasil pencarian hanya memuat angka 2025 atau Jan–Agustus 2026 (BRIS Rp5,3 T, bukan 9 bulan). Tetap 23 dari 31. Raka, Hana, Galih: tidak ada kabar/tanda Radar baru.
+- Tegar: tanpa rahasia. Yoga: rilis lewat push ke main. `node tests/cek.mjs` lolos. Kurikulum tidak berubah.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
