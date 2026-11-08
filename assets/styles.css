@@ -686,6 +686,12 @@ button.istilah:hover, button.istilah[aria-expanded="true"] { color: var(--aksen)
 .judul-halaman button.istilah { text-decoration-color: var(--bulan); }
 .judul-halaman button.istilah:hover,
 .judul-halaman button.istilah[aria-expanded="true"] { color: #fff; background: rgba(255, 255, 255, .16); }
+/* Beranda (Dewi, 8 Nov 17.08): istilah di hero dan kartu gelap memakai warna yang terbaca di latar malam */
+.hero button.istilah, .panel-gelap button.istilah { text-decoration-color: var(--bulan); }
+.hero button.istilah:hover, .hero button.istilah[aria-expanded="true"],
+.panel-gelap button.istilah:hover, .panel-gelap button.istilah[aria-expanded="true"] { color: #fff; background: rgba(255, 255, 255, .16); }
+.hero .kotak-istilah, .panel-gelap .kotak-istilah { box-shadow: 0 10px 30px rgba(0, 0, 0, .35); }
+.hero .kotak-istilah p, .panel-gelap .kotak-istilah p { color: var(--tinta-2); font-size: .92rem; }
 .judul-halaman .kotak-istilah { max-width: none; font-size: .92rem; box-shadow: 0 10px 30px rgba(0, 0, 0, .35); }
 .judul-halaman .kotak-istilah strong { color: var(--aksen); }
 .judul-halaman .kotak-istilah p { color: var(--tinta-2); font-size: .92rem; max-width: none; margin: 0 0 8px; }

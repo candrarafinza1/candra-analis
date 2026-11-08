@@ -991,6 +991,21 @@
     pasangIstilah(wadah);
   }
 
+  /* ---------- Beranda: tanda istilah di hero dan kartu "Alat bantu analisis" (Arif + Dewi, 8 Nov 17.08) ----------
+     Satu himpunan bersama: tiap istilah ditandai sekali saja dari hero sampai kartu terakhir, agar kartu tidak sesak di HP.
+     Judul, tautan, tombol, dan tabel mini tidak disentuh. */
+  function istilahBeranda() {
+    var hero = document.querySelector(".hero-teks > p");
+    var kartu = document.querySelectorAll(".alat .panel > p:not([class]):not([style])");
+    if (!hero || !kartu.length) return;
+    var sudah = {};
+    var catat = function (akar) {
+      Array.prototype.forEach.call(akar.querySelectorAll("button.istilah"), function (b) { sudah[b.dataset.istilah] = true; });
+    };
+    pasangIstilah(hero, sudah); catat(hero);
+    Array.prototype.forEach.call(kartu, function (p) { pasangIstilah(p, sudah); catat(p); });
+  }
+
   /* ---------- Rujukan belajar ---------- */
   function renderRujukan() {
     var akar = document.getElementById("rujukan");
@@ -1387,6 +1402,7 @@
   renderProfil();
   renderKabar();
   renderKabarBeranda();
+  istilahBeranda();
   renderRujukan();
   renderAsisten();
   istilahMetodologi();

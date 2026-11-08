@@ -760,6 +760,24 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
   ok(!muatKamus('<script src="assets/app.js"></script>'), "cek 2q tidak menangkap halaman tanpa kamus");
 }
 
+// 2r (Nina, 8 Nov 17.08): Beranda menandai istilah di hero dan kartu "Alat bantu analisis" dengan satu himpunan bersama
+//  (tiap istilah sekali), dan istilah di latar gelap (hero, kartu Radar) bergaris emas dengan teks kotak tidak pucat.
+{
+  const css = readFileSync("assets/styles.css", "utf8");
+  const app = readFileSync("assets/app.js", "utf8");
+  const js = (c) => {
+    const f = c.match(/function istilahBeranda\(\) \{[\s\S]*?\n  \}\n/);
+    return !!f && f[0].includes("pasangIstilah(hero, sudah)") && f[0].includes("function (p) { pasangIstilah(p, sudah)")
+      && /\n  istilahBeranda\(\);/.test(c);
+  };
+  const gaya = (c) => /\.hero button\.istilah, \.panel-gelap button\.istilah\s*\{[^}]*text-decoration-color:\s*var\(--bulan\)/.test(c)
+    && /\.hero \.kotak-istilah p, \.panel-gelap \.kotak-istilah p\s*\{[^}]*color:\s*var\(--tinta-2\)/.test(c);
+  ok(js(app), "cek 2r: Beranda harus menandai hero dan kartu alat lewat istilahBeranda() dengan himpunan bersama");
+  ok(gaya(css), "cek 2r: istilah di hero dan kartu gelap harus bergaris var(--bulan), teks kotak var(--tinta-2)");
+  ok(!js(app.replace("function (p) { pasangIstilah(p, sudah)", "function (p) { pasangIstilah(p)")), "cek 2r tidak menangkap kartu yang menandai ganda");
+  ok(!gaya(css.replace(".hero .kotak-istilah p, .panel-gelap .kotak-istilah p", ".hero .kotak-istilah p")), "cek 2r tidak menangkap gaya kotak yang hilang");
+}
+
 // 3. Aturan Hana (syariah): halaman tidak boleh memakai bahasa ajakan
 const terlarang = /\b(wajib beli|pasti naik|buruan (beli|jual)|dijamin untung|rekomendasi beli)\b/i;
 for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"]) {

@@ -1004,3 +1004,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: 9 emiten yang belum punya laba Jan–Sep 2026 dicari ulang (KLBF, BRIS, MIKA, ITMG, EXCL, HRUM, MDKA, MBMA, BSSR): belum ada yang bersumber. Tetap 23 dari 32. Pembanding ITMG Jan–Sep 2025 diisi: US$131 juta laba atribusi (Warta Ekonomi 12 Nov 2025; US$134 juta = laba periode berjalan, tidak dipakai).
 - Neraca ITMG 2025 dan sumber kedua MIKA masih belum ditemukan. Galih: profil ITMG tampil benar. Nina & Dewi: profil ITMG 390px & 1280px tanpa scroll horizontal, tanpa galat JS. `node tests/cek.mjs` lolos. Tegar: tanpa rahasia. Yoga: rilis lewat push ke main.
 - Masalah berat: tidak ada baru.
+
+### 8 Nov 2026, 17.08 WIB (Bima)
+- Arif + Dewi: istilah di Beranda kini bisa diketuk: kalimat hero (emiten, Daftar Efek Syariah, OJK) dan deskripsi kartu "Alat bantu analisis" (pertumbuhan laba, pertumbuhan pendapatan, ROE, laporan keuangan, saham syariah). Tiap istilah ditandai sekali; garis emas agar terlihat di latar gelap. Nina: cek 2r (+ uji negatif). Kirana & Dewi: 390px & 1280px tanpa scroll horizontal, tanpa galat JS, kotak istilah terbaca.
+- Fajar: KLBF dan BRIS dicari ulang, belum ada laba Jan–Sep 2026 bersumber. Tetap 23 dari 32. Raka, Hana, Galih: tidak ada kabar/tanda Radar baru.
+- Tegar: tanpa rahasia. Yoga: rilis lewat push ke main. `node tests/cek.mjs` lolos. Kurikulum tidak berubah.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
