@@ -986,3 +986,11 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: KLBF dan BRIS dicari ulang; hasil pencarian hanya memuat angka 2025 atau Jan–Agustus 2026 (BRIS Rp5,3 T, bukan 9 bulan). Tetap 23 dari 31. Raka, Hana, Galih: tidak ada kabar/tanda Radar baru.
 - Tegar: tanpa rahasia. Yoga: rilis lewat push ke main. `node tests/cek.mjs` lolos. Kurikulum tidak berubah.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 8 Nov 2026, 15.10 WIB (Bima)
+- Sari + Laras: Beranda dan Asisten AI disisir. 2 istilah baru di kamus: "Saham syariah" dan "Pertumbuhan pendapatan" (kini 97). "Efek" tidak ditambah karena polanya bentrok dengan Daftar Efek Syariah dan Bursa Efek Indonesia. Hana: netral, selaras pelajaran.
+- Arif: Asisten AI ternyata satu-satunya halaman yang belum memuat kamus; kini memuat `data/istilah.js`, kalimat pembuka menandai "rasio keuangan" dan "saham syariah". Nina: cek 2q (+ uji negatif). Dewi & Nina: 9 halaman 390/1280px tanpa scroll horizontal, tanpa galat JS. Kirana: kotak istilah Asisten 390px rapi.
+- Fajar: EXCL dan ITMG dicari ulang, belum ada laba 9 bulan 2026. Tetap 23 dari 31. Raka, Hana, Galih: tidak ada kabar/tanda Radar baru.
+- Tegar: tanpa rahasia. Yoga: rilis lewat push ke main. `node tests/cek.mjs` lolos. Kurikulum tidak berubah.
+- Tugas baru: Arif + Dewi menimbang tanda istilah di deskripsi kartu Beranda; Sari + Laras + Hana memeriksa ulang arti kamus terhadap pelajaran.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

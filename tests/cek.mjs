@@ -748,6 +748,18 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
   ok(!fungsi(app.replace("!b.closest(\".judul-halaman\")", "true")), "cek 2p tidak menangkap penyaringan yang hilang");
 }
 
+// 2q (Nina, 8 Nov 15.10): setiap halaman yang memuat app.js juga memuat data/istilah.js sebelum app.js,
+//  agar istilah di kalimat pembuka (mis. Asisten AI) bisa ditandai. Sebelumnya Asisten AI tidak memuat kamus.
+{
+  const muatKamus = (isi) => {
+    const k = isi.indexOf('<script src="data/istilah.js"></script>');
+    const a = isi.indexOf('<script src="assets/app.js"></script>');
+    return a < 0 || (k >= 0 && k < a);
+  };
+  for (const f of halaman) ok(muatKamus(readFileSync(f, "utf8")), `cek 2q: ${f} harus memuat data/istilah.js sebelum assets/app.js`);
+  ok(!muatKamus('<script src="assets/app.js"></script>'), "cek 2q tidak menangkap halaman tanpa kamus");
+}
+
 // 3. Aturan Hana (syariah): halaman tidak boleh memakai bahasa ajakan
 const terlarang = /\b(wajib beli|pasti naik|buruan (beli|jual)|dijamin untung|rekomendasi beli)\b/i;
 for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"]) {

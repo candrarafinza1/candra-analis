@@ -295,5 +295,11 @@ window.ISTILAH = [
     pelajaran: "apa-itu-saham" },
   { istilah: "Pengumuman resmi (keterbukaan informasi)", pola: ["pengumuman resmi", "keterbukaan informasi"],
     arti: "Informasi yang wajib diumumkan emiten kepada publik, misalnya laporan keuangan, dividen, dan aksi korporasi. Pengumuman ini bisa dibaca di situs BEI (idx.co.id) dan situs perusahaan, sehingga angkanya bisa dicek sendiri.",
-    pelajaran: "praktik-analisis-sendiri" }
+    pelajaran: "praktik-analisis-sendiri" },
+  { istilah: "Saham syariah", pola: ["saham syariah"],
+    arti: "Saham emiten yang kegiatan usaha dan keuangannya memenuhi prinsip syariah di pasar modal. Di Indonesia, daftarnya ditetapkan OJK dalam Daftar Efek Syariah (DES) dan diperbarui secara berkala.",
+    pelajaran: "saham-syariah" },
+  { istilah: "Pertumbuhan pendapatan", pola: ["pertumbuhan pendapatan"],
+    arti: "Perubahan pendapatan dibanding periode yang sama tahun sebelumnya, dalam persen. Pendapatan yang naik dari Rp1 triliun menjadi Rp1,2 triliun berarti pertumbuhan pendapatan 20%; bila turun, angkanya negatif.",
+    pelajaran: "laporan-keuangan" }
 ];
