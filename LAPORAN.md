@@ -999,3 +999,8 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Permintaan Rafinza: BSSR (PT Baramulti Suksessarana Tbk) ditambahkan. Hana: tercatat di DES periode I 2026, sektor Energi baris 19. Fajar: data tahun buku 2024–2025 dalam dolar AS, neraca akhir 2025, laba Jan–Sep 2025; tiap angka bersumber (7 sumber). Dividen per saham dan laba Jan–Sep 2026 belum diisi (belum ada sumber yang memenuhi aturan).
 - Galih: BSSR tampil di profil, Radar (laba dan pendapatan 2025 menurun), dan Peringkat ROE (urutan 2). Nina & Dewi: 390px & 1280px tanpa scroll horizontal, tanpa galat JS. `node tests/cek.mjs` lolos (32 emiten). Tegar: tanpa rahasia. Yoga: rilis lewat push ke main.
 - Masalah berat: tidak ada baru.
+
+### 8 Nov 2026, 16.20 WIB (Bima)
+- Fajar: 9 emiten yang belum punya laba Jan–Sep 2026 dicari ulang (KLBF, BRIS, MIKA, ITMG, EXCL, HRUM, MDKA, MBMA, BSSR): belum ada yang bersumber. Tetap 23 dari 32. Pembanding ITMG Jan–Sep 2025 diisi: US$131 juta laba atribusi (Warta Ekonomi 12 Nov 2025; US$134 juta = laba periode berjalan, tidak dipakai).
+- Neraca ITMG 2025 dan sumber kedua MIKA masih belum ditemukan. Galih: profil ITMG tampil benar. Nina & Dewi: profil ITMG 390px & 1280px tanpa scroll horizontal, tanpa galat JS. `node tests/cek.mjs` lolos. Tegar: tanpa rahasia. Yoga: rilis lewat push ke main.
+- Masalah berat: tidak ada baru.
