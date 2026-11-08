@@ -956,3 +956,11 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - `node tests/cek.mjs` lolos (9 halaman, 8 pelajaran, 31 emiten). Kurikulum tidak berubah, modul PDF tidak dibuat ulang.
 - Tugas pendukung baru: Sari + Laras + Arif menyisir halaman Kabar emiten untuk istilah baru.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 8 Nov 2026, 09.08 WIB — sesi kerja (Bima)
+- Fajar: KLBF, BRIS, MIKA, ITMG dicari ulang: belum ada laba 9 bulan 2026 bersumber (dua hasil "kuartal III" ternyata 2023 dan 2024). Tetap 23 dari 31. Raka, Hana, Galih: tidak ada kabar/tanda Radar baru.
+- Sari + Laras: halaman Kabar emiten disisir; 2 istilah baru masuk kamus: "Aksi korporasi" dan "Pengumuman resmi (keterbukaan informasi)" (kini 95 istilah). Hana: arti netral; kalimat yang memuat "pasti naik" ditolak cek dan diganti.
+- Arif: mencoba menandai kalimat pembuka halaman Kabar, tetapi di kepala halaman gelap kotak istilah tampak pudar dan menutupi isi di 390px → dibatalkan (masalah ringan, diputuskan Bima). Tugas baru untuk Dewi + Arif: gaya istilah di kepala halaman gelap.
+- Nina & Dewi: Kabar, Beranda, Belajar dicek 390px & 1280px: tanpa scroll horizontal dan tanpa galat JS. Tegar: tanpa rahasia. Yoga: rilis lewat push ke main.
+- `node tests/cek.mjs` lolos (9 halaman, 8 pelajaran, 31 emiten). Kurikulum tidak berubah, modul PDF tidak dibuat ulang.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

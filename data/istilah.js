@@ -288,5 +288,12 @@ window.ISTILAH = [
     pelajaran: "laporan-keuangan" },
   { istilah: "Selisih kurs", pola: ["selisih kurs"],
     arti: "Untung atau rugi yang muncul karena nilai tukar mata uang berubah, misalnya utang dalam dolar AS terhitung lebih besar saat rupiah melemah. Bila belum terealisasi, untung atau rugi itu baru tercatat di pembukuan dan belum benar-benar dibayar atau diterima.",
-    pelajaran: "laporan-keuangan" }
+    pelajaran: "laporan-keuangan" },
+  // Sari + Laras (8 Nov 09.08): dari sisir halaman Kabar emiten; Hana meninjau
+  { istilah: "Aksi korporasi", pola: ["aksi korporasi"],
+    arti: "Keputusan perusahaan yang memengaruhi pemegang saham atau jumlah sahamnya, misalnya pembagian dividen, pembelian kembali saham (buyback), atau penerbitan saham baru. Aksi korporasi adalah kabar tentang perusahaan, bukan petunjuk arah harga sahamnya.",
+    pelajaran: "apa-itu-saham" },
+  { istilah: "Pengumuman resmi (keterbukaan informasi)", pola: ["pengumuman resmi", "keterbukaan informasi"],
+    arti: "Informasi yang wajib diumumkan emiten kepada publik, misalnya laporan keuangan, dividen, dan aksi korporasi. Pengumuman ini bisa dibaca di situs BEI (idx.co.id) dan situs perusahaan, sehingga angkanya bisa dicek sendiri.",
+    pelajaran: "praktik-analisis-sendiri" }
 ];
