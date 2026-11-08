@@ -1201,9 +1201,21 @@
   }
 
   // Beri tanda istilah di dalam wadah: setiap istilah hanya ditandai sekali per wadah.
-  function pasangIstilah(wadah) {
+  // Tandai kalimat pembuka di kepala halaman gelap; lewati istilah yang sudah ditandai di <main> di luar kepala.
+  function pasangIstilahKepala() {
+    var p = document.querySelector(".judul-halaman .wadah > p");
+    if (!p) return;
+    var sudah = {};
+    Array.prototype.forEach.call(document.querySelectorAll("main button.istilah"), function (b) {
+      if (!b.closest(".judul-halaman")) sudah[b.dataset.istilah] = true;
+    });
+    pasangIstilah(p, sudah);
+  }
+
+  function pasangIstilah(wadah, sudah) {
     if (!wadah || !POLA.length) return;
     var dipakai = {}, simpul = [];
+    if (sudah) Object.keys(sudah).forEach(function (k) { dipakai[k] = true; });
     var jalan = document.createTreeWalker(wadah, NodeFilter.SHOW_TEXT, {
       acceptNode: function (n) {
         for (var p = n.parentNode; p && p !== wadah; p = p.parentNode)
@@ -1379,4 +1391,7 @@
   renderAsisten();
   istilahMetodologi();
   renderIsiHalaman();
+  // Dewi + Arif (8 Nov 13.08): kalimat pembuka kepala halaman (selain Kabar, yang sudah ditandai sendiri) ikut ditandai,
+  // tetapi istilah yang sudah ditandai di isi halaman dilewati agar tidak ganda.
+  if (!document.querySelector(".judul-halaman button.istilah")) pasangIstilahKepala();
 })();

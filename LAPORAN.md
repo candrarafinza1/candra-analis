@@ -972,3 +972,11 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - `node tests/cek.mjs` lolos (9 halaman, 8 pelajaran, 31 emiten). Kurikulum tidak berubah, modul PDF tidak dibuat ulang.
 - Tugas baru: Dewi + Arif menimbang penandaan kalimat pembuka kepala halaman lain.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 8 Nov 2026, 13.08 WIB — sesi kerja (Bima)
+- Laporan masuk kerja siang dikirim ke Rafinza (13.08).
+- Dewi + Arif: kalimat pembuka kepala halaman kini ditandai otomatis di semua halaman, kecuali istilah yang sudah ditandai di isi (agar tidak ganda). Akibatnya hanya Profil emiten yang bertambah tanda ("emiten" di daftar, "Sektor" di profil satu emiten); Peringkat, Radar, Belajar, Metodologi tetap. Nina: cek 2p (+ uji negatif), cek 2l disesuaikan. Kirana & Dewi: 390px & 1280px tanpa scroll horizontal, tanpa galat JS.
+- Fajar: KLBF dan BRIS dicari ulang, belum ada laba 9 bulan 2026 bersumber. Tetap 23 dari 31. Raka, Hana, Galih: tidak ada kabar/tanda Radar baru.
+- Tegar: tanpa rahasia. Yoga: rilis lewat push ke main. `node tests/cek.mjs` lolos. Kurikulum tidak berubah.
+- Tugas baru: Dewi + Arif menimbang tanda ganda "laporan keuangan" di halaman Kabar.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

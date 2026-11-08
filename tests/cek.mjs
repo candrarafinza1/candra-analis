@@ -700,7 +700,7 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
     const m = c.match(/table button\.istilah\s*\{([^}]*)\}/);
     const pad = m && m[1].match(/padding:\s*(\d+(?:\.\d+)?)px/);
     if (!pad || parseFloat(pad[1]) < 2) salah.push("CSS: table button.istilah butuh padding atas-bawah minimal 2px");
-    const fn = js.match(/function pasangIstilah\(wadah\) \{[\s\S]*?\n  \}\n/);
+    const fn = js.match(/function pasangIstilah\(wadah(?:, sudah)?\) \{[\s\S]*?\n  \}\n/);
     if (!fn || !fn[0].includes("aturIstilahKepalaKartu(wadah)")) salah.push("JS: pasangIstilah harus memanggil aturIstilahKepalaKartu(wadah)");
     if (!/\.tabel-kartu thead button\.istilah[\s\S]{0,200}tabindex", "-1"/.test(js)) salah.push("JS: tombol istilah di kepala tabel kartu harus diberi tabindex -1 di HP");
     return salah;
@@ -733,6 +733,17 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
   ok(/\.judul-halaman \.kotak-istilah p\s*\{[^}]*color:\s*var\(--tinta-2\)/.test(css), "cek 2o: teks kotak istilah di kepala halaman harus var(--tinta-2)");
   ok(app.includes('pasangIstilah(document.querySelector(".judul-halaman .wadah > p"))'), "cek 2o: kalimat pembuka Kabar harus ditandai istilah");
   ok(!garis(css.replace("text-decoration-color: var(--bulan); }\n.judul-halaman button.istilah:hover", "}\n.judul-halaman button.istilah:hover")), "cek 2o tidak menangkap garis emas yang hilang");
+}
+
+// 2p (Nina, 8 Nov 13.08): kalimat pembuka kepala halaman lain ikut ditandai lewat pasangIstilahKepala(),
+// yang melewati istilah yang sudah ditandai di isi halaman (agar tidak ganda).
+{
+  const app = readFileSync("assets/app.js", "utf8");
+  const fungsi = (c) => /function pasangIstilahKepala\(\)\s*\{[\s\S]*?!b\.closest\("\.judul-halaman"\)[\s\S]*?pasangIstilah\(p, sudah\)/.test(c);
+  ok(fungsi(app), "cek 2p: pasangIstilahKepala() harus melewati istilah yang sudah ditandai di isi halaman");
+  ok(/if \(sudah\) Object\.keys\(sudah\)\.forEach\(function \(k\) \{ dipakai\[k\] = true; \}\)/.test(app), "cek 2p: pasangIstilah() harus menerima daftar istilah yang sudah dipakai");
+  ok(/\n  if \(!document\.querySelector\("\.judul-halaman button\.istilah"\)\) pasangIstilahKepala\(\);/.test(app), "cek 2p: pasangIstilahKepala() harus dipanggil setelah isi halaman dirender");
+  ok(!fungsi(app.replace("!b.closest(\".judul-halaman\")", "true")), "cek 2p tidak menangkap penyaringan yang hilang");
 }
 
 // 3. Aturan Hana (syariah): halaman tidak boleh memakai bahasa ajakan
