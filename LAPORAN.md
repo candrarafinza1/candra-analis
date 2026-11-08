@@ -994,3 +994,8 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Tegar: tanpa rahasia. Yoga: rilis lewat push ke main. `node tests/cek.mjs` lolos. Kurikulum tidak berubah.
 - Tugas baru: Arif + Dewi menimbang tanda istilah di deskripsi kartu Beranda; Sari + Laras + Hana memeriksa ulang arti kamus terhadap pelajaran.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 8 Nov 2026, 16.10 WIB (Bima)
+- Permintaan Rafinza: BSSR (PT Baramulti Suksessarana Tbk) ditambahkan. Hana: tercatat di DES periode I 2026, sektor Energi baris 19. Fajar: data tahun buku 2024–2025 dalam dolar AS, neraca akhir 2025, laba Jan–Sep 2025; tiap angka bersumber (7 sumber). Dividen per saham dan laba Jan–Sep 2026 belum diisi (belum ada sumber yang memenuhi aturan).
+- Galih: BSSR tampil di profil, Radar (laba dan pendapatan 2025 menurun), dan Peringkat ROE (urutan 2). Nina & Dewi: 390px & 1280px tanpa scroll horizontal, tanpa galat JS. `node tests/cek.mjs` lolos (32 emiten). Tegar: tanpa rahasia. Yoga: rilis lewat push ke main.
+- Masalah berat: tidak ada baru.
