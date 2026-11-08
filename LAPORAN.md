@@ -1028,3 +1028,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: 9 emiten tanpa laba Jan–Sep 2026 dicari ulang, belum ada yang bersumber (KLBF "turun 16,9%" ternyata 2023; BRIS Rp5,30 T hanya sampai Agustus 2026; MDKA hanya penjualan). Tetap 23 dari 32. Raka, Hana, Galih: tidak ada kabar/tanda Radar baru.
 - Nina: `node tests/cek.mjs` lolos; Belajar dicek 390px & 1280px tanpa scroll horizontal dan tanpa galat. Tegar: tanpa rahasia. Yoga: rilis lewat push ke main.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 8 Nov 2026, 21.10 WIB (Bima)
+- Sari + Laras + Hana: 25 judul bagian di 8 pelajaran dicek terhadap isinya. 3 diperjelas: "Tiga hal yang Anda dapatkan" (rekening efek, RDN, SID), "Harga dibanding laba dan dividen" (pengganti "Mahal atau murah?", tanpa vonis), dan "Bagian C: harga dibanding laba dan dividen". PDF modul dibuat ulang. Tugas berikutnya: periksa kotak catatan pelajaran.
+- Fajar: KLBF dan BRIS dicari ulang, belum ada laba Jan–Sep 2026 bersumber (BRIS hanya sampai Agustus 2026). Tetap 23 dari 32. Raka, Hana, Galih: tidak ada kabar/tanda Radar baru.
+- Nina: `node tests/cek.mjs` lolos; 3 pelajaran yang berubah dicek 390px & 1280px tanpa scroll horizontal dan tanpa galat. Tegar: tanpa rahasia. Yoga: rilis lewat push ke main.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

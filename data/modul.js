@@ -161,7 +161,7 @@ window.MODUL = [
     isi: `
       <p>Untuk membeli saham, Anda membuka rekening di <strong>perusahaan sekuritas</strong> (perantara pedagang efek) yang berizin OJK dan menjadi anggota BEI. Sekarang prosesnya bisa sepenuhnya daring lewat aplikasi.</p>
 
-      <h2>Yang Anda dapatkan</h2>
+      <h2>Tiga hal yang Anda dapatkan</h2>
       <ul>
         <li><strong>Rekening efek</strong>: tempat saham Anda dicatat.</li>
         <li><strong>Rekening Dana Nasabah (RDN)</strong>: rekening bank atas nama Anda untuk menampung uang transaksi. Uang Anda tidak masuk ke rekening sekuritas.</li>
@@ -290,7 +290,7 @@ window.MODUL = [
       </ul>
       <div class="kotak-rumus">DER = total liabilitas ÷ total ekuitas</div>
 
-      <h2>Mahal atau murah?</h2>
+      <h2>Harga dibanding laba dan dividen</h2>
       <ul>
         <li><strong>EPS</strong> (laba per saham): laba bersih dibagi jumlah saham beredar.</li>
         <li><strong>PER</strong> (Price to Earnings Ratio): berapa kali laba per saham yang Anda bayar.</li>
@@ -484,7 +484,7 @@ window.MODUL = [
         <li><strong>DER</strong>: hitung total liabilitas ÷ ekuitas. Di atas 2 berarti utangnya berat.</li>
       </ol>
 
-      <h2>Bagian C: nilai harganya</h2>
+      <h2>Bagian C: harga dibanding laba dan dividen</h2>
       <ol start="8">
         <li><strong>PER</strong>: harga saham ÷ laba per saham. Bandingkan dengan pesaing dan dengan PER tahun-tahun sebelumnya.</li>
         <li><strong>Dividen</strong>: apakah rutin dibagikan? Berapa dividend yield-nya?</li>
