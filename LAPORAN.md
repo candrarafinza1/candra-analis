@@ -939,3 +939,12 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Nina & Dewi: profil ANTM + Bandingkan, Radar, Peringkat, Beranda dicek 390px & 1280px: tanpa scroll horizontal. Tegar: tanpa rahasia. Yoga: rilis lewat push ke main.
 - `node tests/cek.mjs` lolos (9 halaman, 8 pelajaran, 31 emiten). Kurikulum tidak berubah, modul PDF tidak dibuat ulang.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 8 Nov 2026, 07.09 WIB — sesi kerja (Bima)
+- Laporan masuk kerja pagi dikirim ke Rafinza.
+- Fajar: KLBF dan BRIS dicari ulang: belum ada laba 9 bulan 2026 bersumber. Tetap 23 dari 31. Raka, Hana, Galih: tidak ada kabar/tanda Radar baru.
+- Arif + Dewi: istilah "emiten" dan "sektor" kini disebut di baris "Bingung istilahnya?" di atas tabel Peringkat, sehingga bisa diketuk di HP (kepala tabel tersembunyi) tanpa membuat kartu sesak. Sari & Laras: arti tetap pas. Kirana meninjau 390px: rapi. Nina menambah cek 2n (dengan uji negatif).
+- Nina & Dewi: Peringkat dicek 390px & 1280px: tanpa scroll horizontal dan tanpa galat JS. Tegar: tanpa rahasia. Yoga: rilis lewat push ke main.
+- `node tests/cek.mjs` lolos (9 halaman, 8 pelajaran, 31 emiten). Kurikulum tidak berubah, modul PDF tidak dibuat ulang.
+- Tugas pendukung baru: Sari + Laras + Arif menyisir halaman Radar Risiko untuk istilah baru.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

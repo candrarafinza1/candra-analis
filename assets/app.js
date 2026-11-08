@@ -402,7 +402,9 @@
         ]));
       });
       if (ISTILAH.length) panel.appendChild(el("p", { class: "baris-istilah" },
-        ["Bingung istilahnya? Ketuk: ROE, DER, YoY, laba bersih, pendapatan, ekuitas."]));
+        // Arif + Dewi (8 Nov 07.09): "emiten" & "sektor" disebut di sini agar tetap bisa diketuk di HP,
+        // karena kepala tabel disembunyikan saat Peringkat tampil sebagai kartu. Kartu tidak ditambah apa pun.
+        ["Bingung istilahnya? Ketuk: emiten, sektor, ROE, DER, YoY, laba bersih, pendapatan, ekuitas."]));
       panel.appendChild(el("div", { class: "tabel-wadah" }, [
         el("table", { class: "tabel-kartu" }, [
           el("caption", { class: "keterangan-tabel", text: (daftar.length < 10 ? daftar.length : "Sepuluh") + " saham syariah teratas" + (sektor ? " di sektor " + sektor.toLowerCase() : "") + ": " + k.label.toLowerCase() }),

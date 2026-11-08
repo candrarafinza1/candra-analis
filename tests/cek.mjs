@@ -710,6 +710,19 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
   ok(cekSentuh(css, app.replace("    aturIstilahKepalaKartu(wadah);\n", "")).length === 1, "cek 2l tidak menangkap pasangIstilah yang lupa mengatur kepala tabel");
 }
 
+// 2n. Nina + Arif (8 Nov 07.09): di HP kepala tabel Peringkat disembunyikan, jadi istilah "emiten" dan "sektor"
+//  harus disebut di baris "Bingung istilahnya?" (sebelum tabel) agar tetap bisa diketuk di kartu.
+{
+  const app = readFileSync("assets/app.js", "utf8");
+  const kurang = (js) => {
+    const m = js.match(/"Bingung istilahnya\? Ketuk: ([^"]*)"/);
+    if (!m) return ["baris Bingung istilahnya?"];
+    return ["emiten", "sektor"].filter((k) => !new RegExp(`\\b${k}\\b`, "i").test(m[1]));
+  };
+  for (const k of kurang(app)) ok(false, `cek 2n: baris istilah Peringkat harus menyebut "${k}"`);
+  ok(kurang(app.replace("Ketuk: emiten, sektor, ", "Ketuk: ")).length === 2, "cek 2n tidak menangkap istilah emiten/sektor yang hilang");
+}
+
 // 3. Aturan Hana (syariah): halaman tidak boleh memakai bahasa ajakan
 const terlarang = /\b(wajib beli|pasti naik|buruan (beli|jual)|dijamin untung|rekomendasi beli)\b/i;
 for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"]) {
