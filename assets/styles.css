@@ -680,3 +680,13 @@ button.istilah:hover, button.istilah[aria-expanded="true"] { color: var(--aksen)
 @media (prefers-reduced-motion: no-preference) {
   html:has(#profil) { scroll-behavior: smooth; }
 }
+
+/* Istilah di kepala halaman berlatar gelap (Dewi + Arif, 8 Nov 10.08):
+   garis bawah emas agar terlihat di --malam; kotak tetap berwarna kartu, tidak mewarisi teks pucat kepala halaman. */
+.judul-halaman button.istilah { text-decoration-color: var(--bulan); }
+.judul-halaman button.istilah:hover,
+.judul-halaman button.istilah[aria-expanded="true"] { color: #fff; background: rgba(255, 255, 255, .16); }
+.judul-halaman .kotak-istilah { max-width: none; font-size: .92rem; box-shadow: 0 10px 30px rgba(0, 0, 0, .35); }
+.judul-halaman .kotak-istilah strong { color: var(--aksen); }
+.judul-halaman .kotak-istilah p { color: var(--tinta-2); font-size: .92rem; max-width: none; margin: 0 0 8px; }
+.judul-halaman .kotak-istilah a { color: var(--aksen); }

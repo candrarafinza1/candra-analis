@@ -964,3 +964,11 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Nina & Dewi: Kabar, Beranda, Belajar dicek 390px & 1280px: tanpa scroll horizontal dan tanpa galat JS. Tegar: tanpa rahasia. Yoga: rilis lewat push ke main.
 - `node tests/cek.mjs` lolos (9 halaman, 8 pelajaran, 31 emiten). Kurikulum tidak berubah, modul PDF tidak dibuat ulang.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 8 Nov 2026, 10.08 WIB — sesi kerja (Bima)
+- Dewi + Arif: istilah di kepala halaman gelap kini bergaris emas dan kotak istilahnya tetap terbaca (terang & gelap). Kalimat pembuka halaman Kabar ditandai (5 istilah, termasuk "aksi korporasi"). Kesan "pudar" sesi 09.08 ternyata hanya tangkapan layar saat animasi 0,14 detik (masalah ringan, diputuskan Bima).
+- Nina: cek 2o ditambahkan. Nina & Dewi: Kabar dicek 390px & 1280px (terang) dan 390px (gelap): tanpa scroll horizontal, tanpa galat JS. Tegar: tanpa rahasia. Yoga: rilis lewat push ke main.
+- Fajar: KLBF dicari ulang, belum ada laba 9 bulan 2026 bersumber. Tetap 23 dari 31. Raka, Hana, Galih: tidak ada kabar/tanda Radar baru.
+- `node tests/cek.mjs` lolos (9 halaman, 8 pelajaran, 31 emiten). Kurikulum tidak berubah, modul PDF tidak dibuat ulang.
+- Tugas baru: Dewi + Arif menimbang penandaan kalimat pembuka kepala halaman lain.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

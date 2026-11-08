@@ -966,6 +966,8 @@
     lagi.addEventListener("click", function () { var awal = batas; batas += PER_HAL; tampilkan(awal); });
     tampilkan();
     pasangIstilah(akar);
+    // Dewi + Arif (8 Nov 10.08): kalimat pembuka di kepala halaman gelap ikut ditandai (gaya khusus di styles.css).
+    pasangIstilah(document.querySelector(".judul-halaman .wadah > p"));
   }
 
   /* ---------- Kabar terbaru di beranda (Arif & Dewi, IDE.md #16, 1 Nov) ----------
