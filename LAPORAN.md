@@ -1016,3 +1016,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: KLBF dan BRIS dicari ulang, belum ada laba Jan–Sep 2026 bersumber (BRIS terbaru semester I 2026). Tetap 23 dari 32. Raka, Hana, Galih: tidak ada kabar/tanda Radar baru.
 - Nina: `node tests/cek.mjs` lolos. Perubahan hanya teks kotak istilah, tata letak tidak berubah. Tegar: tanpa rahasia. Yoga: rilis lewat push ke main. Kurikulum tidak berubah.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 8 Nov 2026, 19.09 WIB (Bima)
+- Sari + Laras + Hana: 24 soal kuis dicek terhadap 8 pelajaran dan kamus. Semua jawaban benar sudah tepat. 3 penjelasan diperjelas: DES (masuk DES bukan berarti disarankan untuk dibeli), diversifikasi (mengurangi risiko, tidak menghilangkannya), meninjau saham (cek alasan setiap laporan kuartal). PDF modul dibuat ulang. Tugas berikutnya: periksa kalimat ringkas 8 pelajaran.
+- Fajar: 9 emiten yang belum punya laba Jan–Sep 2026 dicari ulang, belum ada yang bersumber. Angka BSI Rp5,69 T di Kontan Insight ternyata Jan–Sep 2025 dan tanpa keterangan atribusi, tidak dipakai. Tetap 23 dari 32. Raka, Hana, Galih: tidak ada kabar/tanda Radar baru.
+- Nina: `node tests/cek.mjs` lolos. Perubahan hanya teks penjelasan kuis, tata letak tidak berubah. Tegar: tanpa rahasia. Yoga: rilis lewat push ke main.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

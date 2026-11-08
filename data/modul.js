@@ -73,7 +73,7 @@ window.MODUL = [
           "Emitennya sendiri"
         ],
         "benar": 0,
-        "jelas": "DES ditetapkan oleh OJK."
+        "jelas": "DES ditetapkan oleh OJK. Masuk DES berarti lolos kriteria syariah, bukan berarti saham itu disarankan untuk dibeli."
       },
       {
         "soal": "Berapa batas utang berbasis bunga dibanding total aset agar saham bisa masuk DES?",
@@ -327,7 +327,7 @@ window.MODUL = [
           "Sering keluar-masuk saham setiap hari"
         ],
         "benar": 1,
-        "jelas": "Dengan menyebar modal, satu masalah tidak menghabiskan semua modal Anda."
+        "jelas": "Dengan menyebar modal, satu masalah tidak menghabiskan semua modal Anda. Diversifikasi mengurangi risiko, tetapi tidak menghilangkannya."
       },
       {
         "soal": "Ke mana Anda bisa memeriksa atau melaporkan tawaran investasi yang mencurigakan?",
@@ -392,7 +392,7 @@ window.MODUL = [
           "Setiap kali laporan kuartal terbit"
         ],
         "benar": 2,
-        "jelas": "Tinjau berdasarkan laporan keuangan, bukan pergerakan harga harian."
+        "jelas": "Setiap laporan kuartal terbit, cek apakah alasan Anda dulu masih berlaku. Patokannya laporan keuangan, bukan pergerakan harga harian."
       }
     ],
     isi: `
