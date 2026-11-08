@@ -278,5 +278,15 @@ window.ISTILAH = [
     pelajaran: "laporan-keuangan" },
   { istilah: "Dividen tunai", pola: ["dividen tunai"],
     arti: "Dividen yang dibayarkan dalam bentuk uang ke rekening pemegang saham. Bentuk lain adalah dividen saham, yaitu pembagian berupa tambahan lembar saham.",
-    pelajaran: "apa-itu-saham" }
+    pelajaran: "apa-itu-saham" },
+  // Sari + Laras (8 Nov 08.09): dari sisir halaman Radar Risiko (catatan data); Hana meninjau
+  { istilah: "Kepentingan nonpengendali", pola: ["kepentingan nonpengendali"],
+    arti: "Bagian milik pemegang saham lain di anak usaha, yang tidak dimiliki perusahaan induk. Laba yang diatribusikan ke pemilik entitas induk sudah dikurangi bagian ini.",
+    pelajaran: "laporan-keuangan" },
+  { istilah: "Laba ditahan", pola: ["laba ditahan"],
+    arti: "Bagian laba yang tidak dibagikan sebagai dividen, melainkan disimpan di perusahaan, misalnya untuk memperkuat modal atau membiayai usaha. Pembagiannya diputuskan dalam RUPS.",
+    pelajaran: "laporan-keuangan" },
+  { istilah: "Selisih kurs", pola: ["selisih kurs"],
+    arti: "Untung atau rugi yang muncul karena nilai tukar mata uang berubah, misalnya utang dalam dolar AS terhitung lebih besar saat rupiah melemah. Bila belum terealisasi, untung atau rugi itu baru tercatat di pembukuan dan belum benar-benar dibayar atau diterima.",
+    pelajaran: "laporan-keuangan" }
 ];

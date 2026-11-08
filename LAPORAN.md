@@ -948,3 +948,11 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - `node tests/cek.mjs` lolos (9 halaman, 8 pelajaran, 31 emiten). Kurikulum tidak berubah, modul PDF tidak dibuat ulang.
 - Tugas pendukung baru: Sari + Laras + Arif menyisir halaman Radar Risiko untuk istilah baru.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 8 Nov 2026, 08.09 WIB — sesi kerja (Bima)
+- Fajar: KLBF dan HRUM/MDKA/MBMA/EXCL dicari ulang: belum ada laba 9 bulan 2026 bersumber. Tetap 23 dari 31. Raka, Hana, Galih: tidak ada kabar/tanda Radar baru (buyback HRUM sudah tercatat 3 Okt).
+- Sari + Laras: halaman Radar Risiko (31 emiten) disisir; 3 istilah baru masuk kamus: "Kepentingan nonpengendali", "Laba ditahan", "Selisih kurs" (kini 93 istilah). Arif: tertandai di catatan Radar INTP, BSDE, ICBP, INDF. Hana: netral, tanpa ajakan.
+- Nina & Dewi: Radar dicek 390px & 1280px: tanpa scroll horizontal dan tanpa galat JS. Tegar: tanpa rahasia. Yoga: rilis lewat push ke main.
+- `node tests/cek.mjs` lolos (9 halaman, 8 pelajaran, 31 emiten). Kurikulum tidak berubah, modul PDF tidak dibuat ulang.
+- Tugas pendukung baru: Sari + Laras + Arif menyisir halaman Kabar emiten untuk istilah baru.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
