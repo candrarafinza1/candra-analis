@@ -1022,3 +1022,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: 9 emiten yang belum punya laba Jan–Sep 2026 dicari ulang, belum ada yang bersumber. Angka BSI Rp5,69 T di Kontan Insight ternyata Jan–Sep 2025 dan tanpa keterangan atribusi, tidak dipakai. Tetap 23 dari 32. Raka, Hana, Galih: tidak ada kabar/tanda Radar baru.
 - Nina: `node tests/cek.mjs` lolos. Perubahan hanya teks penjelasan kuis, tata letak tidak berubah. Tegar: tanpa rahasia. Yoga: rilis lewat push ke main.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 8 Nov 2026, 20.11 WIB (Bima)
+- Sari + Laras + Hana: 8 kalimat ringkas pelajaran dicek terhadap isinya. 3 diperbaiki: Lot & biaya (kini menyebut modal per lot, biaya, T+2, fraksi harga), Mengelola risiko ("menjaga modal dan mengurangi risiko", tidak menjanjikan), Praktik beli pertama ("jumlah kecil", bukan "satu lot"). PDF modul dibuat ulang. Tugas berikutnya: periksa judul bagian pelajaran.
+- Fajar: 9 emiten tanpa laba Jan–Sep 2026 dicari ulang, belum ada yang bersumber (KLBF "turun 16,9%" ternyata 2023; BRIS Rp5,30 T hanya sampai Agustus 2026; MDKA hanya penjualan). Tetap 23 dari 32. Raka, Hana, Galih: tidak ada kabar/tanda Radar baru.
+- Nina: `node tests/cek.mjs` lolos; Belajar dicek 390px & 1280px tanpa scroll horizontal dan tanpa galat. Tegar: tanpa rahasia. Yoga: rilis lewat push ke main.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

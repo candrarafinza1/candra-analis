@@ -187,7 +187,7 @@ window.MODUL = [
   {
     id: "lot-dan-transaksi",
     judul: "Lot, harga, dan biaya transaksi",
-    ringkas: "Berapa uang yang dibutuhkan untuk membeli saham pertama Anda, beserta biayanya.",
+    ringkas: "Cara menghitung modal per lot dan biaya transaksi, serta arti T+2 dan fraksi harga.",
     kuis: [
       {
         "soal": "Satu lot saham di BEI sama dengan berapa lembar?",
@@ -307,7 +307,7 @@ window.MODUL = [
   {
     id: "mengelola-risiko",
     judul: "Mengelola risiko",
-    ringkas: "Kebiasaan sederhana yang melindungi modal Anda, dan jebakan yang paling sering menjerat pemula.",
+    ringkas: "Kebiasaan sederhana untuk menjaga modal dan mengurangi risiko, serta jebakan yang paling sering menjerat pemula.",
     kuis: [
       {
         "soal": "Apa yang sebaiknya disiapkan sebelum berinvestasi saham?",
@@ -362,7 +362,7 @@ window.MODUL = [
   {
     id: "praktik-beli-pertama",
     judul: "Praktik: membeli saham pertama Anda",
-    ringkas: "Latihan dengan uang virtual dulu, lalu langkah demi langkah membeli satu lot sungguhan.",
+    ringkas: "Latihan dengan uang virtual dulu, lalu langkah demi langkah membeli saham syariah sungguhan dengan jumlah kecil.",
     kuis: [
       {
         "soal": "Apa langkah pertama yang disarankan pelajaran ini?",
