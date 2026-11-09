@@ -180,7 +180,7 @@ window.EMITEN_ASLI = [
     pendapatan: { 2024: 30620, 2025: 31940 },
     liabilitas2025: 15540, ekuitas2025: 4470,
     laba9b: { 2025: 3330, 2026: 4200 },
-    catatan9b: "Laba 9 bulan Rp4,20 T (Jan–Sep 2026) vs Rp3,33 T (Jan–Sep 2025), EmitenNews; Databoks menulis Rp3,34 T (pembulatan). Laba dari operasi yang dilanjutkan Rp3,31 T vs Rp2,99 T; sisanya dari operasi yang dihentikan (bisnis es krim).",
+    catatan9b: "Laba 9 bulan Rp4,20 T (Jan–Sep 2026) vs Rp3,33 T (Jan–Sep 2025), EmitenNews; Databoks menulis Rp3,34 T (pembulatan). Laba dari operasi yang dilanjutkan Rp3,31 T vs Rp2,99 T; sisanya dari operasi yang dihentikan (bisnis es krim). Databoks (23 Okt 2026) hanya menulis laba perseroan, tanpa menyebut apakah angka ini laba yang diatribusikan kepada pemilik entitas induk (dicek 9 Nov 2026).",
     // dps: Rp201 = total tahun buku 2025 (interim Rp87 dibayar 30 Des 2025 + final Rp114 dibayar 30 Jun 2026; total sekitar Rp7,63 T), Metro TV & Republika 4 Jun 2026 (Fajar, 3 Nov 15.20).
     dps: 201, harga: null,
     dpsSumber: { judul: "Metro TV, 4 Jun 2026: Unilever bagi dividen Rp201 per saham tahun buku 2025 (interim Rp87 + final Rp114), total Rp7,63 T", url: "https://www.metrotvnews.com/read/NP6CL21j-unilever-bagi-dividen-rp201-per-saham-total-rp7-63-triliun" },
@@ -357,6 +357,7 @@ window.EMITEN_ASLI = [
     pendapatan: { 2024: 36180, 2025: 35240 },
     liabilitas2025: 28849.01, ekuitas2025: 47719.72,
     laba9b: { 2025: 114.84, 2026: 532 },
+    catatan9b: "Laba 9 bulan = laba periode berjalan yang diatribusikan kepada pemilik entitas induk: Rp532 M (Jan–Sep 2026, belum diaudit; EmitenNews 1 Nov 2026, naik 363,1%; Kontan 1 Nov 2026 menulis Rp532 M, Bisnis Rp531 M karena pembulatan) vs Rp114,84 M (Jan–Sep 2025, Pasardana 3 Nov 2025). Cek runtut: Rp532 M ÷ Rp114,84 M = naik ±363%, sama dengan sumber. Sumber tidak menyebut pos sekali-waktu (Fajar, 9 Nov 18.14).",
     // dps: Rp28,33 (tahun buku 2025, total Rp190.848.000.000 = seluruh laba atribusi 2025, RUPST 8 Mei 2026, dibayar 11 Juni 2026) dari BCA Sekuritas 13 Mei 2026 & IDX Channel 13 Mei 2026 (Fajar, 3 Nov 18.08).
     dps: 28.33, harga: null,
     dpsSumber: { judul: "BCA Sekuritas, 13 Mei 2026: SMGR akan bagikan dividen Rp28,33 per saham (tahun buku 2025) pada 11 Juni 2026", url: "https://bcasekuritas.co.id/latest-news/news/smgr-akan-bagikan-dividen-pada-11-juni-2026" },
@@ -368,6 +369,7 @@ window.EMITEN_ASLI = [
         url: "https://www.kabarbursa.com/market-hari-ini/laba-semen-indonesia-smgr-diklaim-naik-408-persen-dari-mana-angkanya" },
       { judul: "Kontan, 1 Nov 2026: Semen Indonesia (SMGR) bukukan laba Rp532 miliar pada kuartal III 2026 (laba atribusi 9 bulan 2026)",
         url: "https://investasi.kontan.co.id/news/semen-indonesia-smgr-bukukan-laba-rp-532-miliar-pada-kuartal-iii-2026" },
+      { judul: "EmitenNews, 1 Nov 2026: Laba SIG (SMGR) melonjak 363%, tembus Rp532 miliar per September 2026 (laba atribusi 9 bulan 2026)", url: "https://emitennews.com/news/laba-sig-smgr-melonjak-363-tembus-rp532-miliar-per-september-2026" },
       { judul: "Pasardana, 3 Nov 2025: Efisiensi dan kinerja ekspor topang profitabilitas Semen Indonesia (laba atribusi 9 bulan 2025)",
         url: "https://pasardana.id/news/2025/11/3/efisiensi-dan-kinerja-ekspor-topang-profitabilitas-semen-indonesia" },
       { judul: "EmitenNews, 8 Mei 2026: Emiten semen BUMN (SMGR) bagikan seluruh laba 2025 sebagai dividen (laba atribusi 2025 = Rp190,848 M)",

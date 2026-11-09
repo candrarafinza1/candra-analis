@@ -942,6 +942,25 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
   for (const e of ASLI) ok(e.mataUang === undefined || e.mataUang === "USD" || e.mataUang === "IDR", "data/emiten-asli.js: mataUang " + e.kode + " tidak dikenal (" + e.mataUang + "), penyaring usd() bisa salah");
 }
 
+// Nina & Arif (9 Nov 18.14): kotak "Laba 9 bulan" di profil emiten harus memakai istilah yang sama dengan Metodologi:
+// Januari–September, 2025 dibanding 2026, laporan kuartalan belum diaudit; dan setiap laba 9 bulan di data
+// wajib punya catatan yang menyebut apakah angkanya laba diatribusikan kepada pemilik entitas induk (aturan Metodologi bagian Laba bersih).
+{
+  const app = readFileSync("assets/app.js", "utf8");
+  const metod = readFileSync("metodologi.html", "utf8");
+  ok(/"Laba Januari–September: " \+ rp\(N\[2025\]\) \+ " \(2025\) → " \+ rp\(N\[2026\]\) \+ " \(2026\), " \+ ubah\(g9\) \+ "\. Laporan kuartalan umumnya belum diaudit\."/.test(app), "app.js: kalimat laba 9 bulan di profil tidak lagi 'Laba Januari–September: … (2025) → … (2026)' + 'belum diaudit', sesuaikan Metodologi");
+  ok(/"Laba Januari–September 2026 belum kami masukkan: laporan kuartal III belum rilis atau angkanya belum bisa dipastikan\."/.test(app), "app.js: kalimat 'belum kami masukkan' laba 9 bulan di profil berubah, cek Metodologi bagian jadwal");
+  ok(/"Jan–Sep " \+ th/.test(app) && /\[2025, 2026\]\.forEach\(function \(th\)/.test(app), "app.js: label batang 9 bulan harus 'Jan–Sep 2025' dan 'Jan–Sep 2026'");
+  ok(/Laba 9 bulan \(Januari–September\) mulai ditambahkan bertahap/.test(metod) && /Radar Risiko membandingkannya dengan periode yang sama tahun lalu\. Laporan kuartalan biasanya belum diaudit\./.test(metod), "metodologi.html: kalimat jadwal laba 9 bulan (Januari–September, periode sama tahun lalu, belum diaudit) hilang");
+  ok(/Laba 9 bulan 2026 dibanding 9 bulan 2025/.test(metod), "metodologi.html: aturan Radar 'Laba 9 bulan 2026 dibanding 9 bulan 2025' hilang");
+  ok(/Bila sumber tidak memisahkannya, kami tulis keterangannya di catatan emiten\./.test(metod), "metodologi.html: aturan 'bila sumber tidak memisahkan laba atribusi, ditulis di catatan' hilang");
+  for (const e of ASLI) {
+    const n = e.laba9b || {};
+    if (n[2025] == null && n[2026] == null) continue;
+    ok(/diatribusikan/.test(e.catatan9b || ""), "data/emiten-asli.js: " + e.kode + " punya laba 9 bulan tetapi catatan9b tidak menyebut apakah angkanya laba diatribusikan kepada pemilik entitas induk");
+  }
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);
 

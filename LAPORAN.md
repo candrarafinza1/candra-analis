@@ -1101,3 +1101,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: KLBF & BRIS dicari ulang: hanya ada laba semester I 2026 (KLBF) dan Januari–Agustus 2026 bank saja (BRIS), belum laba Jan–Sep 2026 bersumber. Tetap 23 dari 32.
 - Tugas baru: cek kotak "Laba 9 bulan" di profil vs Metodologi (Nina, Arif). Karyawan lain: tugas berjalan di backlog, tanpa perubahan sesi ini; Yoga rilis lewat push ke main.
 - `node tests/cek.mjs` lolos (10 halaman). Tampilan tidak berubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 9 Nov 2026, sesi 18.14 WIB (Bima)
+- Nina & Arif: tes baru: kotak "Laba 9 bulan" di profil (Januari–September, 2025 → 2026, belum diaudit, label batang) harus sama dengan Metodologi, dan setiap emiten berlaba 9 bulan wajib punya catatan soal laba diatribusikan. Uji negatif gagal sesuai harapan.
+- Fajar: temuan tes: SMGR belum punya catatan 9 bulan → diisi (EmitenNews 1 Nov 2026: laba atribusi Rp532 M, runtut naik ±363% dari Rp114,84 M; sumber ditambahkan). UNVR: Databoks hanya menulis "laba perseroan", dicatat apa adanya; tugas cari sumber atribusi ditambahkan.
+- Fajar: KLBF, BRIS, MIKA, MDKA, MBMA, HRUM dicari ulang, belum ada laba Jan–Sep 2026 bersumber. Tetap 23 dari 32.
+- Tugas baru: cek bukti & ambang Radar laba 9 bulan vs Metodologi (Nina, Arif). Karyawan lain: tugas berjalan di backlog; Yoga rilis lewat push ke main.
+- `node tests/cek.mjs` lolos (10 halaman). Tampilan tidak berubah (hanya teks catatan). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
