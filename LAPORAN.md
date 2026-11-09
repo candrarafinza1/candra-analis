@@ -1073,3 +1073,11 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: KLBF & BRIS dicari ulang: belum ada laba Jan–Sep 2026 bersumber (BRIS baru sampai Agustus 2026, laporan bulanan bank, tidak dipakai). Tetap 23 dari 32. Raka, Galih: tidak ada kabar/tanda Radar baru.
 - Tegar: perubahan hanya HTML teks, tes, catatan; tanpa rahasia. Yoga: rilis lewat push ke main. `node tests/cek.mjs` lolos (10 halaman).
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 9 Nov 2026, sesi 14.13 WIB (Bima)
+- Sari, Laras & Hana: bagian "Cara menghitung" di Metodologi disisir vs kode, 2 perbaikan: rumus pertumbuhan saat angka 2024 rugi/nol (sesuai `tumbuh()`, juga untuk laba 9 bulan) dan ROE/DER hanya bila ekuitas > 0. Bank syariah & aturan dolar AS sudah sesuai.
+- Arif & Nina: tes baru membandingkan angka batas Radar (−50, 0, DER > 2) dan sekali-waktu 25% di app.js dengan Metodologi. Uji negatif lolos (gagal saat DER diubah ke 3).
+- Dewi & Kirana: Metodologi 390px/1280px tanpa scroll horizontal, tanpa galat JS.
+- Fajar: KLBF & BRIS dicari ulang, belum ada laba Jan–Sep 2026 bersumber. Tetap 23 dari 32. Raka, Galih: tidak ada kabar/tanda Radar baru.
+- Tegar: perubahan hanya teks HTML, tes, catatan; tanpa rahasia. Yoga: rilis lewat push ke main. `node tests/cek.mjs` lolos (10 halaman).
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

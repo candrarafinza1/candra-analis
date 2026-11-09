@@ -856,6 +856,38 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
   ok(!/dihentikan bursa|suspensi/i.test(aturan), "metodologi.html: aturan Radar masih menyebut penghentian perdagangan, padahal sinyalnya tidak dijalankan");
 }
 
+// Arif & Nina (9 Nov 14.15): angka batas Radar & sekali-waktu di app.js harus sama dengan angka di Metodologi.
+// Kedua angka dibaca dari file masing-masing; bila salah satu diubah tanpa yang lain, tes gagal.
+{
+  const app = readFileSync("assets/app.js", "utf8");
+  const metod = readFileSync("metodologi.html", "utf8");
+  const awal = app.indexOf("function periksa(e)");
+  const badan = awal >= 0 ? app.slice(awal, app.indexOf("var urut", awal)) : "";
+  const m = metod.match(/Radar Risiko<\/strong> memeriksa fakta berikut[\s\S]*?<\/ul>/);
+  const aturan = m ? m[0] : "";
+  const sw = metod.match(/id="sekali-waktu"[\s\S]*?<\/ul>/);
+  const sekali = sw ? sw[0] : "";
+  const fSw9 = app.slice(app.indexOf("function sekaliWaktu9b"), app.indexOf("function periksa(e)"));
+  const BATAS = [
+    ["laba tahunan turun tajam (tinggi)", badan.match(/gl <= -(\d+)/), aturan.match(/laba turun (\d+)% atau lebih/)],
+    ["laba tahunan menurun (sedang)", badan.match(/gl <= -(\d+)/), aturan.match(/Laba turun kurang dari (\d+)%/)],
+    ["laba 9 bulan turun tajam (tinggi)", badan.match(/g9 <= -(\d+)/), aturan.match(/turun (\d+)% atau lebih = <strong>tinggi/)],
+    ["laba 9 bulan menurun (sedang)", badan.match(/g9 <= -(\d+)/), aturan.match(/turun kurang dari (\d+)% = <strong>sedang/)],
+    ["DER tinggi", badan.match(/d > (\d+(?:\.\d+)?)\)/), aturan.match(/DER lebih dari (\d+(?:,\d+)?) kali/)],
+    ["sekali-waktu 9 bulan", fSw9.match(/porsi < (\d+)\)/), sekali.match(/nilainya (\d+)% atau lebih dari laba 9 bulan/)],
+  ];
+  for (const [nama, k, t] of BATAS) {
+    ok(k, `app.js: angka batas "${nama}" tidak terbaca (pola kode berubah? sesuaikan tes ini)`);
+    ok(t, `metodologi.html: angka batas "${nama}" tidak ditemukan`);
+    if (k && t) ok(Number(k[1]) === Number(t[1].replace(",", ".")), `Batas "${nama}" berbeda: app.js ${k[1]}, Metodologi ${t[1]}`);
+  }
+  // Batas nol: "menurun" berarti di bawah 0, "naik" selain itu.
+  ok(/gl < 0\)/.test(badan) && /gp < 0\)/.test(badan) && /g9 < 0\)/.test(badan), "app.js: batas nol sinyal 'menurun' berubah, sesuaikan Metodologi & tes");
+  // Sekali-waktu tahunan juga 25% (aturan data, ditandai tim): angkanya harus sama dengan 9 bulan.
+  const swT = sekali.match(/Seperempat \((\d+)%\) atau lebih/);
+  ok(swT && fSw9.match(/porsi < (\d+)\)/) && swT[1] === fSw9.match(/porsi < (\d+)\)/)[1], "metodologi.html: batas sekali-waktu tahunan dan 9 bulan harus sama");
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);
 
