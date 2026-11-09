@@ -1114,3 +1114,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: KLBF dan BRIS dicari ulang, belum ada laba Jan–Sep 2026 bersumber (artikel Kontan "turun 16,9%" ternyata 2023). Tetap 23 dari 32.
 - Tugas baru: tes serupa untuk sinyal Radar tahunan (Nina, Arif). Karyawan lain: tugas berjalan di backlog.
 - `node tests/cek.mjs` lolos (10 halaman). Tampilan tidak berubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 9 Nov 2026, 20.16 WIB — sesi kerja (Bima)
+- Nina & Arif: tes baru di `tests/cek.mjs` menjalankan fungsi `periksa()` Radar Risiko secara utuh dengan contoh angka untuk sinyal tahunan (rugi 2025, laba turun ≥50%/<50%, pendapatan turun, DER > 2, emiten tanpa tanda, keluar DES, bukti US$). Tingkat & bukti cocok dengan Metodologi. Diuji balik: bila aturan DER atau pendapatan diubah, tes gagal.
+- Fajar: KLBF dan BRIS dicari ulang, belum ada laba Jan–Sep 2026 bersumber. Tetap 23 dari 32.
+- Tugas baru: tes serupa untuk aturan ikut/tidak ikut Peringkat (Nina, Arif). Karyawan lain: tugas berjalan di backlog.
+- `node tests/cek.mjs` lolos (10 halaman). Tampilan tidak berubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

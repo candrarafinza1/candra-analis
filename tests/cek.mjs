@@ -1003,6 +1003,66 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
   }
 }
 
+// Nina & Arif (9 Nov 20.16): sinyal Radar tahunan dijalankan langsung lewat fungsi periksa() di app.js
+// (bukan hanya dibaca polanya) dengan contoh angka, lalu dicocokkan dengan Metodologi bagian Radar:
+// rugi 2025 atau laba turun ≥50% = tinggi; laba turun <50% atau pendapatan turun = sedang; DER > 2 = sedang;
+// tanpa tanda tinggi/sedang → "Tidak ada tanda risiko dari pemeriksaan ini".
+{
+  const app = readFileSync("assets/app.js", "utf8");
+  const metod = readFileSync("metodologi.html", "utf8");
+  ok(/Rugi bersih pada 2025, atau laba turun (\d+)% atau lebih: tanda <strong>tinggi<\/strong>/.test(metod), "metodologi.html: aturan Radar 'Rugi bersih pada 2025, atau laba turun N% atau lebih: tinggi' hilang");
+  ok(/Laba turun kurang dari (\d+)%, atau pendapatan turun: tanda <strong>sedang<\/strong>/.test(metod), "metodologi.html: aturan Radar 'Laba turun kurang dari N%, atau pendapatan turun: sedang' hilang");
+  ok(/DER lebih dari 2 kali: tanda <strong>sedang<\/strong>/.test(metod), "metodologi.html: aturan Radar 'DER lebih dari 2 kali: sedang' hilang");
+  const batas = Number((metod.match(/laba turun (\d+)% atau lebih: tanda <strong>tinggi/) || [])[1]);
+  const batas2 = Number((metod.match(/Laba turun kurang dari (\d+)%/) || [])[1]);
+  ok(batas && batas === batas2, "metodologi.html: batas 'laba turun N%' untuk tinggi dan sedang tidak sama");
+  // Ambil satu fungsi utuh dari app.js dengan menghitung kurung kurawal.
+  const fungsi = nama => {
+    const i = app.indexOf("function " + nama + "(");
+    if (i < 0) return "";
+    let k = app.indexOf("{", i), d = 0;
+    for (let j = k; j < app.length; j++) { if (app[j] === "{") d++; else if (app[j] === "}" && --d === 0) return app.slice(i, j + 1); }
+    return "";
+  };
+  const nama = ["uang", "rupiahMiliar", "dolarJuta", "usd", "persen", "ubah", "ada", "tumbuh", "tumbuhLaba", "tumbuhPendapatan", "der", "sekaliWaktu9b", "periksa"];
+  const kode = nama.map(fungsi);
+  const des = (app.match(/var DES_LABEL = [^\n]*/) || [""])[0];
+  const fmt = ["angka", "angka2"].map(n => (app.match(new RegExp("var " + n + " = [^\\n]*")) || [""])[0]).join("\n");
+  ok(kode.every(Boolean) && des && fmt.split("\n").every(Boolean), "app.js: fungsi periksa() atau fungsi bantunya (" + nama.filter((n, i) => !kode[i]).join(", ") + ") tidak ditemukan, sesuaikan tes ini");
+  if (kode.every(Boolean) && des && fmt && batas) {
+    const periksa = vm.runInNewContext(`(function () { ${des}\n${fmt}\n${kode.join("\n")}\n return periksa; })()`);
+    const tanda = e => periksa(Object.assign({ kode: "CONTOH", labaTahun: { 2024: 100, 2025: 100 }, pendapatan: { 2024: 1000, 2025: 1000 }, ekuitas2025: 100, liabilitas2025: 100 }, e));
+    const tingkatJudul = (s, re) => (s.find(x => re.test(x.judul)) || {}).tingkat;
+    const contoh = [
+      ["rugi 2025", { labaTahun: { 2024: 100, 2025: -10 } }, /^Merugi pada 2025$/, "tinggi", /^Laba 2025: .+\.$/],
+      ["laba turun tepat batas", { labaTahun: { 2024: 100, 2025: 100 - batas } }, /^Laba turun lebih dari separuh$/, "tinggi", /^Laba: .+ \(2024\) → .+ \(2025\), −\S+%\.$/],
+      ["laba turun di bawah batas", { labaTahun: { 2024: 100, 2025: 100 - batas + 1 } }, /^Laba menurun$/, "sedang", /^Laba: .+ \(2024\) → .+ \(2025\), −\S+%\.$/],
+      ["laba turun tipis", { labaTahun: { 2024: 100, 2025: 99.9 } }, /^Laba menurun$/, "sedang", /−0,1%/],
+      ["pendapatan turun", { pendapatan: { 2024: 1000, 2025: 990 } }, /^Pendapatan menurun$/, "sedang", /^Pendapatan: .+ → .+ \(−1%\)\.$/],
+      ["DER di atas 2", { liabilitas2025: 201 }, /^Utang tinggi dibanding modal$/, "sedang", /^DER akhir 2025: 2x\.$/],
+    ];
+    for (const [nm, e, judul, harap, bukti] of contoh) {
+      const s = tanda(e), x = s.find(y => judul.test(y.judul));
+      ok(x && x.tingkat === harap, `app.js: Radar tahunan contoh "${nm}" memberi tingkat ${x ? x.tingkat : "(tidak ada)"}, Metodologi mengatur ${harap}`);
+      ok(x && bukti.test(x.bukti), `app.js: bukti Radar tahunan contoh "${nm}" tidak sesuai bentuk yang diharapkan (${x && x.bukti})`);
+      ok(!s.some(y => y.tingkat === "aman"), `app.js: Radar contoh "${nm}" punya tanda ${harap} tetapi tetap menulis "Tidak ada tanda risiko"`);
+    }
+    // Batas yang TIDAK boleh memberi tanda
+    ok(!tingkatJudul(tanda({ liabilitas2025: 200 }), /^Utang tinggi/), "app.js: DER tepat 2 kali sudah diberi tanda, padahal Metodologi: 'lebih dari 2 kali'");
+    ok(!tingkatJudul(tanda({ labaTahun: { 2024: 100, 2025: 130 }, pendapatan: { 2024: 1000, 2025: 1200 } }), /^(Laba|Pendapatan)/), "app.js: laba/pendapatan naik malah diberi tanda Radar");
+    const bersih = tanda({});
+    ok(bersih.length === 1 && bersih[0].tingkat === "aman" && bersih[0].judul === "Tidak ada tanda risiko dari pemeriksaan ini",
+      "app.js: emiten tanpa tanda harus mendapat satu sinyal 'Tidak ada tanda risiko dari pemeriksaan ini' (sesuai Metodologi)");
+    const dobel = tanda({ labaTahun: { 2024: 100, 2025: 40 }, liabilitas2025: 300 });
+    ok(dobel[0] && dobel[0].tingkat === "tinggi" && dobel.every((x, i) => i === 0 || ["tinggi", "sedang", "info", "aman"].indexOf(x.tingkat) >= ["tinggi", "sedang", "info", "aman"].indexOf(dobel[i - 1].tingkat)),
+      "app.js: sinyal Radar tidak diurutkan tinggi → sedang → info");
+    ok(tingkatJudul(tanda({ keluarDES: true }), /^Tidak lagi tercatat sebagai saham syariah$/) === "tinggi", "app.js: emiten keluar DES tidak diberi tanda tinggi (Metodologi: tinggi)");
+    // Emiten dolar AS: bukti memakai US$, bukan Rp
+    const dolar = tanda({ mataUang: "USD", labaTahun: { 2024: 100, 2025: 40 } }).find(x => /^Laba turun/.test(x.judul));
+    ok(dolar && /US\$/.test(dolar.bukti) && !/Rp/.test(dolar.bukti), `app.js: bukti Radar emiten dolar AS harus memakai US$ (${dolar && dolar.bukti})`);
+  }
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);
 
