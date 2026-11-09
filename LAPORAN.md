@@ -1049,3 +1049,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: KLBF, BRIS, MDKA dicari ulang, belum ada laba Jan–Sep 2026 bersumber. Tetap 23 dari 32. Raka, Galih: tidak ada kabar/tanda Radar baru.
 - Tegar: perubahan sesi hanya CSS, tes, dan catatan; tanpa rahasia. Yoga: rilis lewat push ke main.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 9 Nov 2026, 09.09 WIB (Bima)
+- Sari, Laras & Hana: teks tetap beranda, Peringkat, Radar, profil disisir. 3 perbaikan: beranda & deskripsi Radar tidak lagi menyebut "pengumuman bursa" (belum ada pemantauan suspensi), hero tidak lagi menyiratkan Radar memeriksa semua saham yang dipegang (hanya 32 emiten dalam data), kartu Asisten tidak lagi "Tanya apa saja". Tugas lanjutan: sisir teks buatan `assets/app.js`.
+- Hana: DES periode II 2026 belum terbit di OJK. Pembanding resmi KEP-59/D.04/2025 (ditetapkan 24 Nov 2025, berlaku 1 Des 2025). Catatan tanggal (IDE.md #27) belum ditayangkan; Arif menunggu, cek lagi mulai 24 Nov.
+- Fajar: KLBF dan MBMA dicari ulang, belum ada laba Jan–Sep 2026 bersumber. Tetap 23 dari 32.
+- Nina: `node tests/cek.mjs` lolos (10 halaman); index & radar 390px/1280px tanpa scroll horizontal. Tegar: perubahan hanya teks, tanpa rahasia. Yoga: rilis lewat push ke main.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
