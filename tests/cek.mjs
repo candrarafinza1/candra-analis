@@ -888,6 +888,23 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
   ok(swT && fSw9.match(/porsi < (\d+)\)/) && swT[1] === fSw9.match(/porsi < (\d+)\)/)[1], "metodologi.html: batas sekali-waktu tahunan dan 9 bulan harus sama");
 }
 
+// Nina & Tegar (9 Nov 15.13): rumus ROE & DER harus sama di empat tempat: kode roe()/der(), Metodologi,
+// ubin penjelasan di profil emiten, dan teks `metode` Peringkat ROE. Bila satu diubah tanpa yang lain, tes gagal.
+{
+  const app = readFileSync("assets/app.js", "utf8");
+  const metod = readFileSync("metodologi.html", "utf8");
+  const fRoe = (app.match(/function roe\(e\) \{([^\n]*)\}/) || [])[1] || "";
+  const fDer = (app.match(/function der\(e\) \{([^\n]*)\}/) || [])[1] || "";
+  ok(/laba25\(e\) \/ e\.ekuitas2025 \* 100/.test(fRoe), "app.js: rumus roe() bukan lagi laba 2025 ÷ ekuitas 2025 × 100, sesuaikan Metodologi, profil & tes");
+  ok(/e\.liabilitas2025 \/ e\.ekuitas2025/.test(fDer), "app.js: rumus der() bukan lagi liabilitas 2025 ÷ ekuitas 2025, sesuaikan Metodologi, profil & tes");
+  ok(/e\.ekuitas2025 > 0/.test(fRoe) && /e\.ekuitas2025 > 0/.test(fDer), "app.js: roe()/der() tidak lagi mensyaratkan ekuitas > 0, sesuaikan Metodologi");
+  ok(/<strong>ROE<\/strong>: laba bersih 2025 ÷ total ekuitas akhir 2025 × 100%/.test(metod), "metodologi.html: kalimat rumus ROE tidak sama dengan kode (laba bersih 2025 ÷ total ekuitas akhir 2025 × 100%)");
+  ok(/<strong>DER<\/strong>: total liabilitas akhir 2025 ÷ total ekuitas akhir 2025/.test(metod), "metodologi.html: kalimat rumus DER tidak sama dengan kode (total liabilitas akhir 2025 ÷ total ekuitas akhir 2025)");
+  ok(/ubin\("ROE 2025", strip\(roe\(e\)[^\n]*"Laba bersih ÷ ekuitas"\)/.test(app), "app.js: ubin ROE di profil harus memakai roe(e) dengan keterangan \"Laba bersih ÷ ekuitas\"");
+  ok(/ubin\("DER akhir 2025", strip\(der\(e\)[^\n]*"Liabilitas ÷ ekuitas"\)/.test(app), "app.js: ubin DER di profil harus memakai der(e) dengan keterangan \"Liabilitas ÷ ekuitas\"");
+  ok(/metode: "Laba bersih 2025 dibagi total ekuitas akhir 2025\./.test(app), "app.js: teks metode Peringkat ROE tidak sama dengan rumus Metodologi");
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);
 

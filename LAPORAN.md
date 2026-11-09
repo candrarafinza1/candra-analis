@@ -1081,3 +1081,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: KLBF & BRIS dicari ulang, belum ada laba Jan–Sep 2026 bersumber. Tetap 23 dari 32. Raka, Galih: tidak ada kabar/tanda Radar baru.
 - Tegar: perubahan hanya teks HTML, tes, catatan; tanpa rahasia. Yoga: rilis lewat push ke main. `node tests/cek.mjs` lolos (10 halaman).
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 9 Nov 2026, sesi 15.13 WIB (Bima)
+- Fajar: KLBF, HRUM, EXCL dicari ulang, belum ada laba Jan–Sep 2026 bersumber. Tetap 23 dari 32. Raka, Galih: tidak ada kabar/tanda Radar baru.
+- Nina & Tegar: tes baru: rumus ROE/DER di `roe()`/`der()` harus sama dengan Metodologi, ubin profil, dan teks metode Peringkat. Uji negatif gagal sesuai harapan.
+- Sari, Laras & Hana: Metodologi bagian 5–6 disisir vs kode, sudah sesuai (tanpa perbaikan). Seluruh Metodologi selesai disisir. Temuan: 3 judul sumber StockAnalysis tanpa tahun buku → tugas Fajar & Sari.
+- Tugas baru: sisir teks Bandingkan & Kabar (Sari, Laras, Hana); cek teks metode pertumbuhan (Nina, Arif). Dewi, Kirana, Yoga: tanpa perubahan tampilan sesi ini; Yoga rilis lewat push ke main.
+- `node tests/cek.mjs` lolos (10 halaman). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
