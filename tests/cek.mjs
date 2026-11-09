@@ -816,6 +816,46 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
   }
 }
 
+// Nina & Arif (9 Nov 13.15): setiap sinyal Radar di periksa() harus punya aturan tertulis di Metodologi
+// (bagian "Radar Risiko memeriksa fakta berikut"), dan Metodologi tidak boleh menyebut sinyal yang tidak dijalankan kode.
+{
+  const app = readFileSync("assets/app.js", "utf8");
+  const metod = readFileSync("metodologi.html", "utf8");
+  const awal = app.indexOf("function periksa(e)");
+  const badan = awal >= 0 ? app.slice(awal, app.indexOf("var urut", awal)) : "";
+  ok(badan.length > 0, "app.js: function periksa(e) tidak ditemukan");
+  const judul = [...badan.matchAll(/judul:\s*"([^"]+)"/g)].map(m => m[1]);
+  const m = metod.match(/Radar Risiko<\/strong> memeriksa fakta berikut[\s\S]*?<\/ul>/);
+  ok(m, "metodologi.html: daftar aturan Radar Risiko tidak ditemukan");
+  const aturan = m ? m[0] : "";
+  // Tiap judul sinyal → kata kunci yang wajib ada di daftar aturan Metodologi.
+  const PETA = {
+    "Tidak lagi tercatat sebagai saham syariah": /Tidak lagi tercatat di DES/,
+    "Merugi pada 2025": /Rugi bersih pada 2025/,
+    "Laba turun lebih dari separuh": /laba turun 50% atau lebih/,
+    "Laba menurun": /Laba turun kurang dari 50%/,
+    "Pendapatan menurun": /pendapatan turun/,
+    "Merugi dalam 9 bulan pertama 2026": /Laba 9 bulan 2026[^<]*rugi/,
+    "Laba 9 bulan 2026 turun lebih dari separuh": /turun 50% atau lebih = <strong>tinggi/,
+    "Laba 9 bulan 2026 menurun": /turun kurang dari 50% = <strong>sedang/,
+    "Laba 9 bulan 2026 naik": /naik = catatan informasi/,
+    "Perbandingan laba 9 bulan tidak sebanding": null, // dijelaskan di bagian #sekali-waktu
+    "Catatan laba 9 bulan": /keterangan khusus laba 9 bulan/,
+    "Utang tinggi dibanding modal": /DER lebih dari 2 kali/,
+    "Catatan data dari tim kami": /Catatan dari tim kami/,
+    "Tidak ada tanda risiko dari pemeriksaan ini": /Tidak ada tanda risiko dari pemeriksaan ini/,
+  };
+  ok(judul.length >= 10, `app.js: hanya ${judul.length} judul sinyal Radar terbaca`);
+  for (const j of judul) {
+    ok(j in PETA, `Radar: sinyal "${j}" belum punya aturan tertulis di Metodologi (tambahkan ke metodologi.html dan ke PETA di tes ini)`);
+    if (PETA[j]) ok(PETA[j].test(aturan), `metodologi.html: aturan untuk sinyal Radar "${j}" tidak ditemukan`);
+  }
+  ok(/Perbandingan laba 9 bulan tidak sebanding/.test(metod), "metodologi.html: aturan \"Perbandingan laba 9 bulan tidak sebanding\" tidak ada");
+  for (const j of Object.keys(PETA)) ok(judul.includes(j), `tes: sinyal "${j}" ada di PETA tetapi tidak lagi dijalankan app.js`);
+  // Sinyal yang sudah dihapus tidak boleh masih dijanjikan di Metodologi.
+  ok(!/dihentikan bursa|suspensi/i.test(aturan), "metodologi.html: aturan Radar masih menyebut penghentian perdagangan, padahal sinyalnya tidak dijalankan");
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);
 

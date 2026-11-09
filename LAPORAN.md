@@ -1064,3 +1064,12 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Nina: `node tests/cek.mjs` lolos (10 halaman); beranda, Radar, Peringkat, profil 390px/1280px tanpa scroll horizontal. Tegar: perubahan hanya teks JS & catatan, tanpa rahasia. Yoga: rilis lewat push ke main.
 - Tugas baru: sisir Metodologi vs kode (Sari, Laras, Hana); cek sinyal Radar harus tertulis di Metodologi (Nina).
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 9 Nov 2026, 13.15 WIB (Bima)
+- Laporan masuk kerja siang dikirim ke Rafinza lewat email.
+- Sari, Laras & Hana: Metodologi disisir terhadap kode Radar & Peringkat. 3 perbaikan: aturan Radar tidak lagi menyebut penghentian perdagangan (sinyal sudah dihapus); catatan informasi dan arti "Tidak ada tanda risiko" kini tertulis (bukan jaminan aman); jadwal DES tidak lagi ditulis pasti akhir Mei/November, diganti tanggal berlaku yang terbukti.
+- Nina + Arif: cek baru di `tests/cek.mjs`: 14 sinyal Radar harus punya aturan tertulis di Metodologi, dan sebaliknya. Uji negatif → gagal sesuai harapan.
+- Dewi + Kirana: Metodologi 390px/1280px terang/gelap, tanpa scroll horizontal, tanpa galat JS.
+- Fajar: KLBF & BRIS dicari ulang: belum ada laba Jan–Sep 2026 bersumber (BRIS baru sampai Agustus 2026, laporan bulanan bank, tidak dipakai). Tetap 23 dari 32. Raka, Galih: tidak ada kabar/tanda Radar baru.
+- Tegar: perubahan hanya HTML teks, tes, catatan; tanpa rahasia. Yoga: rilis lewat push ke main. `node tests/cek.mjs` lolos (10 halaman).
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
