@@ -800,6 +800,22 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
   ok(!/<script/.test(isi), "404.html: tidak memakai JavaScript");
 }
 
+// Tampilan cetak (Nina, 9 Nov, IDE.md #26): @media print ada, menyembunyikan kuis/tombol/navigasi,
+// dan penafian di kaki halaman (.kaki) tidak pernah disembunyikan saat dicetak.
+{
+  const css = readFileSync("assets/styles.css", "utf8");
+  const m = css.match(/@media print\s*\{([\s\S]*)$/);
+  ok(m, "styles.css: @media print belum ada");
+  if (m) {
+    const cetak = m[1];
+    for (const k of [".nav", ".kuis", ".tandai-selesai", ".navigasi-pelajaran"]) {
+      ok(new RegExp("\\" + k + "[^{]*\\{[^}]*display:\\s*none").test(cetak) || new RegExp("\\" + k + "\\s*,[^{]*\\{[^}]*display:\\s*none").test(cetak), `cetak: ${k} harus disembunyikan`);
+    }
+    for (const [, sel, isi] of cetak.matchAll(/([^{}]+)\{([^}]*)\}/g))
+      if (/display:\s*none|visibility:\s*hidden/.test(isi)) ok(!/\.kaki\b|footer/.test(sel), "cetak: penafian (.kaki) tidak boleh disembunyikan");
+  }
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);
 

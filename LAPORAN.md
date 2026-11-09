@@ -1042,3 +1042,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: 9 emiten dicari ulang, belum ada laba Jan–Sep 2026 bersumber baru. Tetap 23 dari 32. Raka, Galih: tidak ada kabar/tanda Radar baru.
 - Tegar: 3 commit sejak 8 Nov siang + perubahan sesi ini dipindai, tanpa rahasia, tanpa `.env`. Yoga: rilis lewat push ke main. `node tests/cek.mjs` lolos (10 halaman).
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 9 Nov 2026, 08.12 WIB — sesi pagi (Bima)
+- Dewi: tampilan cetak pelajaran (IDE.md #26) tayang. Saat dicetak/disimpan PDF: menu, kuis, tombol "Tandai selesai", navigasi, dan kotak istilah disembunyikan; hitam di atas putih (juga bila HP memakai mode gelap); alamat tautan sumber ditulis di belakang tautan; penafian tetap tercetak. Pelajaran 1 = 1 halaman A4.
+- Nina: cek baru di `tests/cek.mjs` (print menyembunyikan kuis/tombol/navigasi, penafian tidak boleh disembunyikan), diuji dengan sengaja merusak CSS → gagal sesuai harapan. Tampilan layar 390px & 1280px tetap tanpa scroll horizontal. `node tests/cek.mjs` lolos (10 halaman).
+- Fajar: KLBF, BRIS, MDKA dicari ulang, belum ada laba Jan–Sep 2026 bersumber. Tetap 23 dari 32. Raka, Galih: tidak ada kabar/tanda Radar baru.
+- Tegar: perubahan sesi hanya CSS, tes, dan catatan; tanpa rahasia. Yoga: rilis lewat push ke main.
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

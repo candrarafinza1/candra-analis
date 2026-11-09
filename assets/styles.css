@@ -701,3 +701,35 @@ button.istilah:hover, button.istilah[aria-expanded="true"] { color: var(--aksen)
 .daftar-404 { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; max-width: 640px; }
 .daftar-404 li { padding: 14px 16px; border: 1px solid var(--garis); border-radius: 12px; background: var(--putih); line-height: 1.5; }
 .daftar-404 a { font-weight: 700; }
+
+/* Tampilan cetak (IDE.md #26, Dewi; dicek Nina, 9 Nov 08.xx).
+   Satu pelajaran tercetak rapi: hitam di atas putih, tanpa menu, kuis, tombol, dan navigasi.
+   Penafian di kaki halaman TETAP tercetak. Hanya CSS, tanpa simpanan. */
+@media print {
+  :root {
+    color-scheme: light;
+    --kertas: #fff; --putih: #fff; --tinta: #000; --tinta-2: #222; --garis: #999;
+    --aksen: #000; --sorot-istilah: transparent; --bayangan: transparent;
+  }
+  @page { margin: 18mm 16mm; }
+  html, body { background: #fff !important; color: #000 !important; font-size: 11pt; }
+  *, *::before, *::after { box-shadow: none !important; text-shadow: none !important; animation: none !important; transition: none !important; }
+  .lompat, .nav, .kuis, .tandai-selesai, .navigasi-pelajaran, .kotak-istilah { display: none !important; }
+  .kepala { background: none !important; color: #000 !important; border-bottom: 1px solid #999; }
+  .kepala .wadah { min-height: 0; padding-bottom: 6px; }
+  .merek { color: #000 !important; }
+  .judul-halaman { background: none !important; color: #000 !important; padding: 12px 0 4px; }
+  .judul-halaman h1 { color: #000 !important; font-size: 20pt; }
+  .judul-halaman p { color: #222 !important; }
+  .bagian { padding-top: 8px !important; padding-bottom: 8px !important; }
+  .wadah { max-width: none; padding: 0 !important; }
+  .artikel { max-width: none; }
+  .artikel h2, .artikel h3 { break-after: avoid; page-break-after: avoid; }
+  .kotak-penting, .kotak-rumus { background: none !important; color: #000 !important; border: 1px solid #666 !important; }
+  .artikel p, .artikel li, .artikel table, .artikel figure, .artikel blockquote, .artikel aside, .kotak-penting, .kotak-rumus { break-inside: avoid; page-break-inside: avoid; }
+  a { color: #000 !important; }
+  .artikel a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 9pt; word-break: break-all; }
+  button.istilah { text-decoration: none; color: #000 !important; background: none !important; cursor: auto; }
+  .kaki { display: block !important; border-top: 1px solid #999; margin-top: 12px; padding: 10px 0 0; color: #222 !important; break-inside: avoid; }
+  .kaki strong { color: #000 !important; }
+}

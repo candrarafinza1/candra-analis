@@ -429,7 +429,7 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Dampak bagi pemula: satu pelajaran bisa dicetak 1–3 lembar rapi tanpa mengunduh modul PDF lengkap.
 - Batasan: CSS saja, tanpa simpanan, tanpa kata ajakan.
 - Usaha: kecil (Dewi). Nina menambah cek bahwa `@media print` ada dan penafian tidak disembunyikan.
-- Status: diusulkan Kirana 9 Nov 07.09; masuk BACKLOG.md untuk sesi berikutnya.
+- Status: diusulkan Kirana 9 Nov 07.09; dipilih Bima; **tayang 9 Nov 08.12** (Dewi, cek Nina). Kirana: tinjau hasil cetak di peramban HP bila sempat.
 
 ### 27. Beranda & Radar: catatan "DES baru berlaku 1 Desember"
 - **Pengingat pergantian daftar** — fitur, usaha kecil
