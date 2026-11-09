@@ -961,6 +961,48 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
   }
 }
 
+// Nina & Arif (9 Nov 19.16): sinyal Radar laba 9 bulan dijalankan langsung (bukan hanya dibaca polanya) dengan
+// contoh angka, lalu tingkat & kalimat buktinya dicocokkan dengan aturan Metodologi bagian Radar:
+// rugi atau turun ≥ batas = tinggi, turun < batas = sedang, naik = catatan informasi; bukti selalu menyebut
+// "Laba Januari–September: … (2025) → … (2026), …".
+{
+  const app = readFileSync("assets/app.js", "utf8");
+  const metod = readFileSync("metodologi.html", "utf8");
+  const aturan = (metod.match(/Laba 9 bulan 2026 dibanding 9 bulan 2025[^<]*(?:<[^>]+>[^<]*)*?<\/li>/) || [""])[0];
+  ok(/rugi atau turun (\d+)% atau lebih = <strong>tinggi<\/strong>, turun kurang dari \1% = <strong>sedang<\/strong>, naik = catatan informasi/.test(aturan),
+    "metodologi.html: aturan Radar laba 9 bulan tidak lagi 'rugi atau turun N% atau lebih = tinggi, turun kurang dari N% = sedang, naik = catatan informasi'");
+  const batas = Number((aturan.match(/turun (\d+)% atau lebih/) || [])[1]);
+  const mulai = app.indexOf("// Laba 9 bulan (Januari–September) 2026");
+  const akhir = app.indexOf("var sw9", mulai);
+  const helper = ["ubah", "ada", "tumbuh"].map(n => (app.match(new RegExp("function " + n + "\\([^\\n]*")) || [""])[0]).join("\n");
+  ok(mulai >= 0 && akhir > mulai && helper.split("\n").every(Boolean), "app.js: blok Radar laba 9 bulan atau fungsi bantu (ubah/ada/tumbuh) tidak ditemukan, sesuaikan tes ini");
+  if (mulai >= 0 && akhir > mulai && batas) {
+    const sinyal9 = vm.runInNewContext(`(function (e) {
+      function persen(p) { return p.toFixed(1) + "%"; }
+      function rp(v) { return "Rp" + v; }
+      ${helper}
+      var s = [];
+      ${app.slice(mulai, akhir)} }
+      return s; })`);
+    const contoh = [
+      ["rugi", { 2025: 100, 2026: -10 }, "tinggi"],
+      ["turun tepat batas", { 2025: 100, 2026: 100 - batas }, "tinggi"],
+      ["turun sedikit di bawah batas", { 2025: 100, 2026: 100 - batas + 1 }, "sedang"],
+      ["turun tipis", { 2025: 100, 2026: 99.9 }, "sedang"],
+      ["tetap", { 2025: 100, 2026: 100 }, "info"],
+      ["naik", { 2025: 100, 2026: 130 }, "info"],
+    ];
+    for (const [nama, laba9b, harap] of contoh) {
+      const s = sinyal9({ laba9b });
+      ok(s.length === 1 && s[0].tingkat === harap, `app.js: Radar laba 9 bulan contoh "${nama}" memberi tingkat ${s.map(x => x.tingkat).join(",") || "(tidak ada)"}, Metodologi mengatur ${harap}`);
+      ok(s[0] && /^Laba Januari–September: Rp\S+ \(2025\) → Rp\S+ \(2026\), [+-]?\S+%\.$/.test(s[0].bukti), `app.js: bukti Radar laba 9 bulan contoh "${nama}" tidak berbentuk 'Laba Januari–September: … (2025) → … (2026), …%.' (${s[0] && s[0].bukti})`);
+      ok(s[0] && /Januari–September 2026/.test(s[0].isi), `app.js: isi sinyal Radar laba 9 bulan contoh "${nama}" tidak menyebut periode Januari–September 2026`);
+    }
+    ok(sinyal9({ laba9b: { 2026: 50 } }).length === 0, "app.js: Radar laba 9 bulan muncul tanpa pembanding 2025, padahal Metodologi membandingkan dengan periode yang sama tahun lalu");
+    ok(/belum diaudit/.test((sinyal9({ laba9b: { 2025: 100, 2026: 130 } })[0] || {}).isi || ""), "app.js: sinyal 'Laba 9 bulan 2026 naik' harus mengingatkan laporan kuartalan umumnya belum diaudit (sama dengan Metodologi)");
+  }
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);
 
