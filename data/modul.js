@@ -109,7 +109,7 @@ window.MODUL = [
 
       <h2>Diperbarui dua kali setahun</h2>
       <p>OJK menerbitkan DES secara berkala pada akhir Mei dan akhir November, berlaku efektif 1 Juni dan 1 Desember. Di antara jadwal itu, OJK juga bisa menambahkan saham baru secara insidentil, misalnya emiten yang baru mencatatkan saham.</p>
-      <div class="kotak-penting">Artinya status syariah bisa berubah. Saham yang hari ini syariah bisa keluar dari daftar periode berikutnya. Radar Risiko Candra Analis akan memberi tahu Anda bila itu terjadi pada saham yang Anda pegang.</div>
+      <div class="kotak-penting">Artinya status syariah bisa berubah. Saham yang hari ini syariah bisa keluar dari daftar periode berikutnya. Radar Risiko Candra Analis memberi tanda merah pada emiten dalam data kami yang tidak ada di daftar periode terbaru. Radar tidak tahu saham apa yang Anda pegang, jadi periksa sendiri saham Anda setiap daftar baru terbit.</div>
 
       <h2>Indeks saham syariah</h2>
       <ul>
@@ -301,7 +301,7 @@ window.MODUL = [
       </ul>
       <div class="kotak-rumus">Dividend yield = dividen per saham ÷ harga saham × 100%</div>
 
-      <div class="kotak-penting">Satu angka saja tidak pernah cukup. PER rendah bisa berarti murah, bisa juga berarti pasar khawatir labanya akan turun. Bandingkan dengan tahun-tahun sebelumnya dan dengan perusahaan sejenis.</div>
+      <div class="kotak-penting">Satu angka saja tidak pernah cukup. PER rendah bisa berarti harga saham rendah dibanding labanya, bisa juga berarti pasar khawatir labanya akan turun. Bandingkan dengan tahun-tahun sebelumnya dan dengan perusahaan sejenis.</div>
     `
   },
   {
@@ -494,7 +494,7 @@ window.MODUL = [
       <ol start="10">
         <li>Tulis tiga hal yang membuat Anda yakin dan tiga hal yang membuat Anda ragu tentang perusahaan ini. Keputusan Anda harus bisa dijelaskan dari daftar itu.</li>
       </ol>
-      <div class="kotak-penting">Kalau Anda tidak bisa menjelaskan cara perusahaan itu menghasilkan uang, tunda dulu. Memahami usaha lebih penting daripada menghafal rasio.</div>
+      <div class="kotak-penting">Kalau Anda belum bisa menjelaskan cara perusahaan itu menghasilkan uang, pelajari usahanya dulu sebelum mengambil keputusan apa pun. Memahami usaha lebih penting daripada menghafal rasio.</div>
     `
   }
 ];

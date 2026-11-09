@@ -696,3 +696,8 @@ button.istilah:hover, button.istilah[aria-expanded="true"] { color: var(--aksen)
 .judul-halaman .kotak-istilah strong { color: var(--aksen); }
 .judul-halaman .kotak-istilah p { color: var(--tinta-2); font-size: .92rem; max-width: none; margin: 0 0 8px; }
 .judul-halaman .kotak-istilah a { color: var(--aksen); }
+
+/* Halaman 404 (Dewi, 9 Nov) */
+.daftar-404 { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; max-width: 640px; }
+.daftar-404 li { padding: 14px 16px; border: 1px solid var(--garis); border-radius: 12px; background: var(--putih); line-height: 1.5; }
+.daftar-404 a { font-weight: 700; }

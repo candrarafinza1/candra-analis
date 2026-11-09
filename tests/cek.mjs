@@ -12,7 +12,7 @@ for (const h of halaman) {
   const isi = readFileSync(h, "utf8");
   for (const [, url] of isi.matchAll(/(?:href|src)="([^"#]+)"/g)) {
     if (/^(https?:|mailto:)/.test(url)) continue;
-    const berkas = url.split("?")[0];
+    const berkas = url.split("?")[0].replace(/^\//, "");
     ok(existsSync(berkas), `${h} merujuk ${url}, berkas tidak ada`);
   }
   ok(/<html lang="id">/.test(isi), `${h} tidak memakai lang="id"`);
@@ -786,5 +786,20 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
   ok(!terlarang.test(isi), `${f} memuat bahasa ajakan yang dilarang`);
 }
 
+// Nina (9 Nov 07.09): halaman 404 ramah. Vercel menampilkannya untuk alamat yang tidak ada,
+// juga alamat bertingkat (mis. /a/b), jadi semua rujukan lokal wajib alamat absolut (/...).
+{
+  const isi = existsSync("404.html") ? readFileSync("404.html", "utf8") : "";
+  ok(isi, "404.html tidak ada");
+  for (const [, url] of isi.matchAll(/(?:href|src)="([^"]+)"/g)) {
+    if (/^(https?:|mailto:|#)/.test(url)) continue;
+    ok(url.startsWith("/"), `404.html: rujukan ${url} harus alamat absolut (/...)`);
+  }
+  for (const h of ["/index.html", "/belajar.html", "/emiten.html"]) ok(isi.includes(`href="${h}"`), `404.html: tautan ke ${h} tidak ada`);
+  ok(/<meta name="robots" content="noindex">/.test(isi), "404.html: harus noindex");
+  ok(!/<script/.test(isi), "404.html: tidak memakai JavaScript");
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);
+

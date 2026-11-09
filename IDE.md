@@ -398,3 +398,49 @@ bagian "Kamus istilah" di Belajar, sehingga pemula yang ingin membaca istilah la
   menghormati `prefers-reduced-motion`; tanpa kata ajakan.
 - Usaha: kecil (Arif + Dewi). Nina menambah cek.
 - Status: diusulkan Kirana 7 Nov 14.09; dipilih Bima 7 Nov 14.09 untuk Arif + Dewi, masuk BACKLOG.md. **Selesai 7 Nov 15.11**: 20 istilah ditandai di artikel Metodologi (judul, tautan, daftar isi dilewati). Kirana meninjau: kotak istilah tampil baik di 390px.
+
+## Usulan Kirana — 9 Nov 2026, 07.09 WIB (minggu baru)
+
+Minggu ini Kirana menyisir hal-hal kecil yang dialami pemula di luar halaman utama: alamat yang salah, membaca
+pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
+
+### 25. Halaman "tidak ditemukan" (404) yang ramah ★ paling berdampak
+- **Jalan keluar dari tautan salah** — tampilan, usaha kecil
+- Masalah: tautan yang salah ketik atau tautan lama (dibagikan di grup chat) berakhir di halaman 404 bawaan Vercel
+  berbahasa Inggris, tanpa menu dan tanpa jalan kembali. Pemula mengira situsnya rusak.
+- Ide: `404.html` berbahasa Indonesia dengan kepala & kaki halaman yang sama, satu kalimat penjelasan, dan 4 tautan
+  pilihan (Beranda, Belajar, Profil semua emiten, Peringkat & Radar). Semua rujukan memakai alamat absolut (`/...`)
+  agar tetap rapi di alamat bertingkat. Tanpa JavaScript, `noindex`.
+- Acuan tren: halaman 404 yang membantu (bukan sekadar lucu) di aplikasi bank digital dan situs edukasi.
+- Dampak bagi pemula: tidak tersesat; selalu ada jalan ke pelajaran atau data.
+- Batasan: tanpa pustaka, tanpa animasi, tanpa simpanan; ringan; tanpa kata ajakan.
+- Usaha: kecil (Dewi tampilan, Arif berkas). Nina menambah cek.
+- Status: dipilih Bima 9 Nov 07.09 untuk Dewi + Arif; **selesai 9 Nov 07.09** (`404.html`, kartu tautan dengan token
+  warna yang sama, dicek 390px & 1280px terang/gelap tanpa scroll horizontal). Nina: cek alamat absolut, tautan wajib,
+  noindex, tanpa skrip + uji negatif. Tinjauan di situs langsung menyusul (tim belum bisa membuka situs).
+
+### 26. Pelajaran rapi saat dicetak
+- **Cetak satu pelajaran** — tampilan, usaha kecil
+- Masalah: sebagian pemula belajar dari kertas atau menyimpan sebagai PDF lewat "Cetak" di peramban. Kini menu, tombol
+  kuis, dan kaki halaman ikut tercetak dan latar gelap menghabiskan tinta.
+- Ide: `@media print` di `assets/styles.css`: sembunyikan menu, tombol "Tandai selesai", kuis interaktif, dan tautan
+  "Sebelumnya/Berikutnya"; teks hitam di latar putih; alamat sumber ditulis setelah tautan. Penafian tetap tercetak.
+- Acuan tren: tampilan cetak di situs dokumentasi dan pusat edukasi keuangan.
+- Dampak bagi pemula: satu pelajaran bisa dicetak 1–3 lembar rapi tanpa mengunduh modul PDF lengkap.
+- Batasan: CSS saja, tanpa simpanan, tanpa kata ajakan.
+- Usaha: kecil (Dewi). Nina menambah cek bahwa `@media print` ada dan penafian tidak disembunyikan.
+- Status: diusulkan Kirana 9 Nov 07.09; masuk BACKLOG.md untuk sesi berikutnya.
+
+### 27. Beranda & Radar: catatan "DES baru berlaku 1 Desember"
+- **Pengingat pergantian daftar** — fitur, usaha kecil
+- Masalah: Daftar Efek Syariah periode II 2026 berlaku 1 Desember. Pemula tidak tahu bahwa status syariah bisa
+  berubah dan kapan perlu memeriksa ulang.
+- Ide: satu baris netral di beranda dan Radar: "Daftar Efek Syariah periode berikutnya berlaku 1 Desember 2026. Tim akan
+  mencocokkan ulang status semua emiten setelah daftar terbit." Tanggal diambil dari satu tempat di `assets/app.js`;
+  baris hilang sendiri setelah daftar baru dimuat ke data. Tautan ke pelajaran "Saham syariah dan Daftar Efek Syariah".
+- Acuan tren: pengingat jadwal di aplikasi investasi (tanpa notifikasi, tanpa akun).
+- Dampak bagi pemula: paham bahwa status syariah ditinjau berkala dan kapan perlu memeriksa saham yang dipegang.
+- Batasan: tanpa simpanan, tanpa animasi, tanpa kata ajakan; tanggal harus bersumber dari keterangan resmi OJK
+  (Hana memastikan sebelum tayang).
+- Usaha: kecil (Arif). Nina menambah cek.
+- Status: diusulkan Kirana 9 Nov 07.09; masuk BACKLOG.md, menunggu Hana memastikan tanggal berlaku dari sumber resmi.
