@@ -1120,3 +1120,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: KLBF dan BRIS dicari ulang, belum ada laba Jan–Sep 2026 bersumber. Tetap 23 dari 32.
 - Tugas baru: tes serupa untuk aturan ikut/tidak ikut Peringkat (Nina, Arif). Karyawan lain: tugas berjalan di backlog.
 - `node tests/cek.mjs` lolos (10 halaman). Tampilan tidak berubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 9 Nov 2026, 21.14 WIB — sesi kerja (Bima)
+- Nina & Arif: tes baru di `tests/cek.mjs` menjalankan `peserta()` dan `urutkan()` Peringkat dengan 8 contoh emiten (biasa, tidak di DES, keluar DES, periksa ulang, sekali-waktu, dolar AS, bank syariah tanpa angka pendapatan, laba 2024 kosong). Siapa ikut/tidak ikut tiap ukuran cocok dengan Metodologi. Diuji balik: menghapus aturan periksa ulang atau saringan dolar AS membuat tes gagal.
+- Fajar: KLBF dan BRIS dicari ulang, belum ada laba Jan–Sep 2026 bersumber. Tetap 23 dari 32.
+- Tugas baru: tes serupa untuk kotak "Posisi di Peringkat" di profil (Nina, Arif). Karyawan lain: tugas berjalan di backlog.
+- `node tests/cek.mjs` lolos (10 halaman). Tampilan tidak berubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

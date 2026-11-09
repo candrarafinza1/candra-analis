@@ -1063,6 +1063,54 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
   }
 }
 
+// Nina & Arif (9 Nov 21.14): aturan ikut/tidak ikut Peringkat dijalankan langsung lewat peserta() dan urutkan()
+// di app.js dengan contoh emiten, lalu dicocokkan dengan Metodologi: hanya saham di DES, angka lengkap,
+// tanda periksa ulang & sekali-waktu tidak ikut, emiten dolar AS hanya keluar dari "Laba bersih terbesar",
+// bank syariah (DER tidak dihitung) tetap ikut ukuran yang angkanya ada.
+{
+  const app = readFileSync("assets/app.js", "utf8");
+  const metod = readFileSync("metodologi.html", "utf8");
+  ok(/Hanya saham yang masih tercatat di DES dan angkanya lengkap yang ikut diurutkan/.test(metod), "metodologi.html: kalimat 'Hanya saham yang masih tercatat di DES dan angkanya lengkap yang ikut diurutkan' hilang");
+  ok(/tanda <strong>periksa ulang<\/strong>[^<]*tidak ikut Peringkat sampai angkanya pasti/.test(metod), "metodologi.html: aturan 'periksa ulang → tidak ikut Peringkat' hilang");
+  ok(/Seperempat \(25%\) atau lebih: emiten <strong>tidak ikut Peringkat<\/strong>/.test(metod), "metodologi.html: aturan sekali-waktu 25% hilang");
+  ok(/emiten ini tetap ikut Peringkat untuk ukuran tersebut\. Untuk "Laba bersih terbesar", hanya emiten yang melapor dalam rupiah yang dibandingkan/.test(metod), "metodologi.html: aturan emiten dolar AS di Peringkat hilang");
+  const blok = (awal) => {
+    const i = app.indexOf(awal);
+    if (i < 0) return "";
+    let k = app.indexOf("{", i), d = 0;
+    for (let j = k; j < app.length; j++) { if (app[j] === "{") d++; else if (app[j] === "}" && --d === 0) return app.slice(i, j + 1) + ";"; }
+    return "";
+  };
+  const nama = ["uang", "rupiahMiliar", "dolarJuta", "usd", "persen", "ubah", "ada", "tumbuh", "laba25", "tumbuhLaba", "tumbuhPendapatan", "roe", "syariahAktif", "diluarPeringkat", "peserta", "urutkan"];
+  const kode = nama.map(n => blok("function " + n + "("));
+  const krit = blok("var KRITERIA = {");
+  const fmt = ["angka", "angka2"].map(n => (app.match(new RegExp("var " + n + " = [^\\n]*")) || [""])[0]).join("\n");
+  ok(kode.every(Boolean) && krit && fmt.split("\n").every(Boolean), "app.js: fungsi Peringkat (" + nama.filter((n, i) => !kode[i]).join(", ") + ") atau KRITERIA tidak ditemukan, sesuaikan tes ini");
+  if (kode.every(Boolean) && krit) {
+    const dasar = { desBaris: 1, labaTahun: { 2024: 100, 2025: 120 }, pendapatan: { 2024: 1000, 2025: 1100 }, ekuitas2025: 600, sektor: "Contoh" };
+    const contoh = [
+      ["BIASA", {}],
+      ["NONDES", { desBaris: null }],
+      ["KELUAR", { keluarDES: true }],
+      ["ULANG", { periksaUlang: "dua sumber berbeda" }],
+      ["SEKALI", { sekaliWaktu: "laba penjualan anak usaha sekitar 30%." }],
+      ["DOLAR", { mataUang: "USD", labaTahun: { 2024: 100, 2025: 900 }, ekuitas2025: 1000 }],
+      ["BANK", { pendapatan: null, catatan: "Bank syariah: DER tidak dihitung." }],
+      ["KOSONG", { labaTahun: { 2025: 50 } }],
+    ].map(([kd, x]) => Object.assign({ kode: kd }, dasar, x));
+    const r = vm.runInNewContext(`(function (EMITEN) { ${fmt}\n${kode.join("\n")}\n${krit}\n return { peserta: peserta, urutkan: urutkan, KRITERIA: KRITERIA }; })`)(contoh);
+    const ikut = k => r.peserta(k).map(e => e.kode).sort().join(",");
+    ok(ikut("laba") === "BANK,BIASA,KOSONG", `app.js: peserta 'Laba bersih terbesar' = ${ikut("laba")}, Metodologi: tanpa non-DES, keluar DES, periksa ulang, sekali-waktu, dan dolar AS`);
+    ok(ikut("tumbuhLaba") === "BANK,BIASA,DOLAR", `app.js: peserta 'Pertumbuhan laba' = ${ikut("tumbuhLaba")}, Metodologi: dolar AS tetap ikut, angka tak lengkap (laba 2024 kosong) tidak ikut`);
+    ok(ikut("tumbuh") === "BIASA,DOLAR,KOSONG", `app.js: peserta 'Pertumbuhan pendapatan' = ${ikut("tumbuh")}, bank tanpa angka pendapatan tidak boleh ikut`);
+    ok(ikut("roe") === "BANK,BIASA,DOLAR,KOSONG", `app.js: peserta 'ROE tertinggi' = ${ikut("roe")}, bank syariah & dolar AS tetap ikut ROE`);
+    const urut = r.urutkan("tumbuhLaba").map(e => e.kode).join(",");
+    ok(urut === "DOLAR,BANK,BIASA" || urut === "DOLAR,BIASA,BANK", `app.js: urutan 'Pertumbuhan laba' salah (${urut}); DOLAR (+800%) harus di atas`);
+    ok(r.urutkan("laba", "Lain").length === 0 && r.urutkan("laba", "Contoh").length === 3, "app.js: saring sektor di Peringkat tidak bekerja");
+    ok(Object.keys(r.KRITERIA).filter(k => r.KRITERIA[k].rupiahSaja).join() === "laba", "app.js: hanya 'Laba bersih terbesar' yang boleh rupiahSaja (Metodologi)");
+  }
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);
 
