@@ -927,6 +927,21 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
   for (const m of raw.matchAll(/judul: "([^"]*)"/g)) ok(/20\d\d/.test(m[1]), "data/emiten-asli.js: judul sumber tanpa tahun: " + m[1]);
 }
 
+// Nina & Arif (9 Nov 17.09): Peringkat "Laba bersih terbesar" hanya membandingkan emiten berlaporan rupiah.
+// Teks metode, kode penyaring (rupiahSaja + usd()), dan Metodologi harus mengatakan hal yang sama.
+{
+  const app = readFileSync("assets/app.js", "utf8");
+  const metod = readFileSync("metodologi.html", "utf8");
+  ok(/laba: \{\s*label: "Laba bersih terbesar", nilai: laba25,[^}]*rupiahSaja: true,[^}]*kolom: "Laba 2025",\s*metode: "Laba bersih tahun buku 2025\. Emiten yang melapor dalam dolar AS tidak ikut urutan ini/.test(app), "app.js: kriteria 'Laba bersih terbesar' harus memakai laba25, rupiahSaja: true, dan teks metode yang menyebut emiten dolar AS tidak ikut");
+  ok(/function usd\(e\) \{ return e && e\.mataUang === "USD"; \}/.test(app), "app.js: usd() tidak lagi membaca mataUang === \"USD\", penyaring rupiahSaja bisa bocor");
+  const fPeserta = (app.match(/function peserta\(kunci\) \{[\s\S]*?\n  \}/) || [""])[0];
+  ok(/!\(k\.rupiahSaja && usd\(e\)\)/.test(fPeserta), "app.js: peserta() tidak lagi menyaring emiten dolar AS untuk kriteria rupiahSaja");
+  const rupiahSaja = (app.match(/rupiahSaja: true/g) || []).length;
+  ok(rupiahSaja === 1, "app.js: rupiahSaja: true dipakai " + rupiahSaja + " kali; Metodologi hanya menyebut 'Laba bersih terbesar' yang khusus rupiah");
+  ok(/Untuk "Laba bersih terbesar", hanya emiten yang melapor dalam rupiah yang dibandingkan\./.test(metod), "metodologi.html: kalimat 'Laba bersih terbesar hanya emiten rupiah' hilang, padahal kode menyaringnya");
+  for (const e of ASLI) ok(e.mataUang === undefined || e.mataUang === "USD" || e.mataUang === "IDR", "data/emiten-asli.js: mataUang " + e.kode + " tidak dikenal (" + e.mataUang + "), penyaring usd() bisa salah");
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);
 

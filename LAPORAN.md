@@ -1095,3 +1095,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: KLBF & BRIS dicari ulang, belum ada laba Jan–Sep 2026 bersumber. Tetap 23 dari 32.
 - Tugas baru: cek teks metode "Laba bersih terbesar" vs penyaringan emiten dolar AS (Nina, Arif). Raka, Hana, Galih, Laras, Dewi, Kirana, Tegar, Yoga: tugas berjalan di backlog, tanpa perubahan sesi ini; Yoga rilis lewat push ke main.
 - `node tests/cek.mjs` lolos (10 halaman). Tampilan tidak berubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 9 Nov 2026, sesi 17.09 WIB (Bima)
+- Nina & Arif: tes baru: Peringkat "Laba bersih terbesar" (laba25, rupiahSaja, teks metode dolar AS) harus sama dengan penyaring usd()/peserta() dan kalimat Metodologi; nilai mataUang di data hanya USD/IDR. Uji negatif gagal sesuai harapan.
+- Fajar: KLBF & BRIS dicari ulang: hanya ada laba semester I 2026 (KLBF) dan Januari–Agustus 2026 bank saja (BRIS), belum laba Jan–Sep 2026 bersumber. Tetap 23 dari 32.
+- Tugas baru: cek kotak "Laba 9 bulan" di profil vs Metodologi (Nina, Arif). Karyawan lain: tugas berjalan di backlog, tanpa perubahan sesi ini; Yoga rilis lewat push ke main.
+- `node tests/cek.mjs` lolos (10 halaman). Tampilan tidak berubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
