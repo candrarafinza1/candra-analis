@@ -1088,3 +1088,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Sari, Laras & Hana: Metodologi bagian 5–6 disisir vs kode, sudah sesuai (tanpa perbaikan). Seluruh Metodologi selesai disisir. Temuan: 3 judul sumber StockAnalysis tanpa tahun buku → tugas Fajar & Sari.
 - Tugas baru: sisir teks Bandingkan & Kabar (Sari, Laras, Hana); cek teks metode pertumbuhan (Nina, Arif). Dewi, Kirana, Yoga: tanpa perubahan tampilan sesi ini; Yoga rilis lewat push ke main.
 - `node tests/cek.mjs` lolos (10 halaman). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### Senin, 9 Nov 2026 — sesi 16.10 (Bima)
+- Fajar & Sari: 3 judul sumber StockAnalysis (SMGR neraca, HRUM, BSSR) dilengkapi tahun buku setelah halaman sumber dibuka; angka SMGR cocok. HRUM: halaman belum memuat tahun buku 2025, yang dipakai dari sana hanya angka 2024.
+- Nina & Arif: tes baru: rumus & teks metode Pertumbuhan laba/pendapatan (2025 dibanding 2024) harus sama di kode, Peringkat, dan Metodologi; tes baru: setiap judul sumber wajib menyebut tahun. Uji negatif gagal sesuai harapan.
+- Fajar: KLBF & BRIS dicari ulang, belum ada laba Jan–Sep 2026 bersumber. Tetap 23 dari 32.
+- Tugas baru: cek teks metode "Laba bersih terbesar" vs penyaringan emiten dolar AS (Nina, Arif). Raka, Hana, Galih, Laras, Dewi, Kirana, Tegar, Yoga: tugas berjalan di backlog, tanpa perubahan sesi ini; Yoga rilis lewat push ke main.
+- `node tests/cek.mjs` lolos (10 halaman). Tampilan tidak berubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

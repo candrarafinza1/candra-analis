@@ -905,6 +905,28 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
   ok(/metode: "Laba bersih 2025 dibagi total ekuitas akhir 2025\./.test(app), "app.js: teks metode Peringkat ROE tidak sama dengan rumus Metodologi");
 }
 
+// Nina & Arif (9 Nov 16.10): teks `metode` Peringkat pertumbuhan laba & pendapatan ("2025 dibanding 2024")
+// harus cocok dengan fungsi di kode (tumbuh(2024 → 2025)), dengan kriteria yang memakai fungsi itu, dan dengan Metodologi.
+{
+  const app = readFileSync("assets/app.js", "utf8");
+  const metod = readFileSync("metodologi.html", "utf8");
+  const fT = (app.match(/function tumbuh\(a, b\) \{([^\n]*)\}/) || [])[1] || "";
+  ok(/\(b - a\) \/ Math\.abs\(a\) \* 100/.test(fT), "app.js: rumus tumbuh() bukan lagi (b − a) ÷ |a| × 100, sesuaikan Metodologi & tes");
+  ok(/function tumbuhLaba\(e\) \{[^\n]*tumbuh\(e\.labaTahun\[2024\], e\.labaTahun\[2025\]\)/.test(app), "app.js: tumbuhLaba() tidak lagi membandingkan laba 2025 dengan 2024, sesuaikan teks metode & Metodologi");
+  ok(/function tumbuhPendapatan\(e\) \{[^\n]*tumbuh\(e\.pendapatan\[2024\], e\.pendapatan\[2025\]\)/.test(app), "app.js: tumbuhPendapatan() tidak lagi membandingkan pendapatan 2025 dengan 2024, sesuaikan teks metode & Metodologi");
+  ok(/tumbuhLaba: \{\s*label: "Pertumbuhan laba", nilai: tumbuhLaba,[^}]*kolom: "Laba 2025 vs 2024",\s*metode: "Perubahan laba bersih 2025 dibanding 2024\."/.test(app), "app.js: kriteria Pertumbuhan laba harus memakai tumbuhLaba dengan kolom & metode '2025 dibanding 2024'");
+  ok(/tumbuh: \{\s*label: "Pertumbuhan pendapatan", nilai: tumbuhPendapatan,[^}]*kolom: "Pendapatan 2025 vs 2024",\s*metode: "Perubahan pendapatan 2025 dibanding 2024\."/.test(app), "app.js: kriteria Pertumbuhan pendapatan harus memakai tumbuhPendapatan dengan kolom & metode '2025 dibanding 2024'");
+  ok(/<strong>Pertumbuhan laba<\/strong> dan <strong>pertumbuhan pendapatan<\/strong>: \(angka 2025 − angka 2024\) ÷ angka 2024 × 100%/.test(metod), "metodologi.html: rumus pertumbuhan tidak sama dengan kode ((angka 2025 − angka 2024) ÷ angka 2024 × 100%)");
+  ok(/pembaginya memakai angka 2024 tanpa tanda minus/.test(metod), "metodologi.html: penjelasan pembagi tanpa tanda minus (Math.abs) hilang, padahal kode memakainya");
+}
+
+// Nina & Fajar (9 Nov 16.10): setiap judul sumber di data emiten harus menyebut tahun (periode atau tanggal baca),
+// supaya pembaca tahu angka itu dari tahun buku mana.
+{
+  const raw = readFileSync("data/emiten-asli.js", "utf8");
+  for (const m of raw.matchAll(/judul: "([^"]*)"/g)) ok(/20\d\d/.test(m[1]), "data/emiten-asli.js: judul sumber tanpa tahun: " + m[1]);
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);
 
