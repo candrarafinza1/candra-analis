@@ -1056,3 +1056,11 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: KLBF dan MBMA dicari ulang, belum ada laba Jan–Sep 2026 bersumber. Tetap 23 dari 32.
 - Nina: `node tests/cek.mjs` lolos (10 halaman); index & radar 390px/1280px tanpa scroll horizontal. Tegar: perubahan hanya teks, tanpa rahasia. Yoga: rilis lewat push ke main.
 - Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 9 Nov 2026, 10.09 WIB (Bima)
+- Sari, Laras & Hana (dengan Galih): teks buatan `assets/app.js` disisir. 3 perbaikan: sinyal Radar "Perdagangan dihentikan sementara" dihapus (tidak ada data/pemantauan suspensi, bukti tidak menyebut pengumuman tertentu); "Angka kuartalan belum diaudit" → "Laporan kuartalan umumnya belum diaudit" (selaras Metodologi); "Tentang data ini" kini menyebut laba Januari–September. Tidak ditemukan janji fitur atau kata vonis lain.
+- Kirana: hero & kartu beranda ditinjau di 390px (5 baris, ±37 huruf/baris) dan 1280px; rapi, dicatat di IDE.md.
+- Fajar: KLBF, BRIS, EXCL dicari ulang, belum ada laba Jan–Sep 2026 bersumber. Tetap 23 dari 32. Raka, Galih: tidak ada kabar/tanda Radar baru.
+- Nina: `node tests/cek.mjs` lolos (10 halaman); beranda, Radar, Peringkat, profil 390px/1280px tanpa scroll horizontal. Tegar: perubahan hanya teks JS & catatan, tanpa rahasia. Yoga: rilis lewat push ke main.
+- Tugas baru: sisir Metodologi vs kode (Sari, Laras, Hana); cek sinyal Radar harus tertulis di Metodologi (Nina).
+- Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

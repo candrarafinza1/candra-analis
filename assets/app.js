@@ -69,7 +69,7 @@
       ]),
       el("details", null, [
         el("summary", { text: "Tentang data ini" }),
-        el("p", { text: "Angka tahun buku 2024–2025 dari laporan keuangan emiten sebagaimana diberitakan media; tiap emiten punya tautan sumber. Status syariah: " + DES_LABEL + "." })
+        el("p", { text: "Angka tahun buku 2024–2025 dan laba Januari–September dari laporan keuangan emiten sebagaimana diberitakan media; tiap emiten punya tautan sumber. Status syariah: " + DES_LABEL + "." })
       ])
     ]));
   }
@@ -468,8 +468,7 @@
     if (e.keluarDES) s.push({ tingkat: "tinggi", judul: "Tidak lagi tercatat sebagai saham syariah",
       isi: "Emiten ini tidak ada di Daftar Efek Syariah periode terbaru.", bukti: "Sumber: " + DES_LABEL + "." });
 
-    if (e.suspensi) s.push({ tingkat: "tinggi", judul: "Perdagangan sedang dihentikan sementara",
-      isi: "Bursa menghentikan sementara perdagangan saham ini.", bukti: "Sumber: pengumuman Bursa Efek Indonesia." });
+    // Sinyal suspensi dihapus (9 Nov, Galih & Hana): belum ada data/pemantauan suspensi dan buktinya tidak menyebut pengumuman tertentu.
 
     if (ada(L[2025]) && L[2025] < 0) s.push({ tingkat: "tinggi", judul: "Merugi pada 2025",
       isi: "Perusahaan mencatat rugi bersih pada tahun buku 2025.", bukti: "Laba 2025: " + rp(L[2025]) + "." });
@@ -498,7 +497,7 @@
       else if (g9 < 0) s.push({ tingkat: "sedang", judul: "Laba 9 bulan 2026 menurun",
         isi: "Laba Januari–September 2026 lebih rendah daripada periode yang sama tahun lalu.", bukti: bukti9 });
       else s.push({ tingkat: "info", judul: "Laba 9 bulan 2026 naik",
-        isi: "Laba Januari–September 2026 lebih tinggi daripada periode yang sama tahun lalu. Angka kuartalan belum diaudit.", bukti: bukti9 });
+        isi: "Laba Januari–September 2026 lebih tinggi daripada periode yang sama tahun lalu. Laporan kuartalan umumnya belum diaudit.", bukti: bukti9 });
       var sw9 = sekaliWaktu9b(e);
       if (sw9) s.push({ tingkat: "info", judul: "Perbandingan laba 9 bulan tidak sebanding", isi: sw9,
         bukti: "Aturan laba sekali-waktu: lihat Metodologi. Angka laba tetap ditampilkan apa adanya." });
@@ -800,7 +799,7 @@
       tbody
     ])]));
     akar.appendChild(el("p", { class: "catatan-metode", text: ada(g9)
-      ? "Laba Januari–September: " + rp(N[2025]) + " (2025) → " + rp(N[2026]) + " (2026), " + ubah(g9) + ". Angka kuartalan belum diaudit."
+      ? "Laba Januari–September: " + rp(N[2025]) + " (2025) → " + rp(N[2026]) + " (2026), " + ubah(g9) + ". Laporan kuartalan umumnya belum diaudit."
       : "Laba Januari–September 2026 belum kami masukkan: laporan kuartal III belum rilis atau angkanya belum bisa dipastikan." }));
     var sw9p = sekaliWaktu9b(e);
     if (sw9p) akar.appendChild(el("p", { class: "catatan-metode" }, [sw9p + " ", el("a", { href: "metodologi.html#sekali-waktu", text: "Baca aturannya" }), "."]));

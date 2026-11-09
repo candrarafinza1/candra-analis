@@ -444,3 +444,8 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
   (Hana memastikan sebelum tayang).
 - Usaha: kecil (Arif). Nina menambah cek.
 - Status: diusulkan Kirana 9 Nov 07.09; masuk BACKLOG.md, menunggu Hana memastikan tanggal berlaku dari sumber resmi.
+
+### Tinjauan Kirana, 9 Nov 10.09: hero & kartu beranda setelah teks diubah
+- 390px: kalimat hero 5 baris, rata-rata ±37 huruf per baris (nyaman dibaca di HP); istilah bergaris tetap terbaca, tombol "Mulai belajar" & "Lihat peringkat saham" masih di layar pertama 390×844.
+- 1280px: 4 baris, ±47 huruf per baris. Tanpa scroll horizontal di kedua lebar (juga Radar, Peringkat, profil ANTM).
+- Tidak ada perbaikan baru.
