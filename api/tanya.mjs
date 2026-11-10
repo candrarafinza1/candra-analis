@@ -68,6 +68,28 @@ async function bacaBody(req) {
   return JSON.parse(teks || "{}");
 }
 
+// Tegar & Arif (10 Nov): validasi masukan dipisah agar bisa dites tanpa memanggil Gemini.
+// Masukan aneh selalu dijawab 400 dengan pesan ramah; pesan riwayat yang tidak dikenal dibuang.
+export function periksaMasukan(body) {
+  if (!body || typeof body !== "object" || Array.isArray(body)) return { galat: "Format permintaan tidak valid." };
+  if (body.pertanyaan != null && typeof body.pertanyaan !== "string") return { galat: "Pertanyaan harus berupa teks." };
+  const pertanyaan = (body.pertanyaan || "").trim();
+  if (!pertanyaan) return { galat: "Tulis pertanyaan Anda dulu." };
+  if (pertanyaan.length > MAKS_PERTANYAAN) return { galat: `Pertanyaan terlalu panjang. Maksimal ${MAKS_PERTANYAAN} karakter.` };
+  if (body.riwayat != null && !Array.isArray(body.riwayat)) {
+    return { galat: "Riwayat percakapan tidak valid. Muat ulang halaman lalu coba lagi." };
+  }
+  const riwayat = (body.riwayat || [])
+    .slice(-MAKS_RIWAYAT)
+    .filter((p) => p && typeof p === "object" && (p.peran === "pengguna" || p.peran === "asisten")
+      && typeof p.teks === "string" && p.teks.trim())
+    .map((p) => ({
+      role: p.peran === "asisten" ? "model" : "user",
+      parts: [{ text: p.teks.slice(0, 2000) }],
+    }));
+  return { pertanyaan, riwayat };
+}
+
 export default async function handler(req, res) {
   const kunci = process.env.GEMINI_API_KEY;
 
@@ -85,19 +107,9 @@ export default async function handler(req, res) {
   let body;
   try { body = await bacaBody(req); } catch { return kirim(res, 400, { galat: "Format permintaan tidak valid." }); }
 
-  const pertanyaan = String(body.pertanyaan || "").trim();
-  if (!pertanyaan) return kirim(res, 400, { galat: "Tulis pertanyaan Anda dulu." });
-  if (pertanyaan.length > MAKS_PERTANYAAN) {
-    return kirim(res, 400, { galat: `Pertanyaan terlalu panjang. Maksimal ${MAKS_PERTANYAAN} karakter.` });
-  }
-
-  const riwayat = (Array.isArray(body.riwayat) ? body.riwayat : [])
-    .slice(-MAKS_RIWAYAT)
-    .filter((p) => p && typeof p.teks === "string" && p.teks.trim())
-    .map((p) => ({
-      role: p.peran === "asisten" ? "model" : "user",
-      parts: [{ text: p.teks.slice(0, 2000) }],
-    }));
+  const masukan = periksaMasukan(body);
+  if (masukan.galat) return kirim(res, 400, { galat: masukan.galat });
+  const { pertanyaan, riwayat } = masukan;
   // Buang pesan paling lama bila total riwayat terlalu panjang (hemat kuota gratis)
   while (riwayat.reduce((n, p) => n + p.parts[0].text.length, 0) > MAKS_TOTAL_RIWAYAT) riwayat.shift();
 
