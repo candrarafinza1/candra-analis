@@ -311,6 +311,39 @@ ok(/function posisi\(kunci[\s\S]{0,900}peserta\(kunci\)/.test(readFileSync("asse
     ok(!rahasia.test(readFileSync(f, "utf8")), `${f} tampak memuat API key/rahasia`);
 }
 
+// Tegar (10 Nov 08.10): pemeriksaan rahasia diperluas ke semua berkas teks (data, tools, tests, workflow, catatan),
+// CSP dijaga ketat, halaman tanpa skrip sebaris, dan semua tautan di data wajib https.
+{
+  const rahasiaLuas = /AIza[0-9A-Za-z_-]{30,}|ghp_[0-9A-Za-z]{30,}|github_pat_[0-9A-Za-z_]{30,}|sk-[0-9A-Za-z]{30,}|AKIA[0-9A-Z]{16}|-----BEGIN [A-Z ]*PRIVATE KEY-----|xox[abp]-[0-9A-Za-z-]{20,}/;
+  const teks = /\.(html|js|mjs|json|md|py|yml|yaml|css|svg|txt)$/;
+  const semua = (d) => readdirSync(d, { withFileTypes: true }).flatMap(x =>
+    x.name === ".git" || x.name === "node_modules" ? [] : x.isDirectory() ? semua(`${d}/${x.name}`) : [`${d}/${x.name}`]);
+  const berkasTeks = semua(".").filter(f => teks.test(f));
+  ok(berkasTeks.length > 20, "pemindaian rahasia: daftar berkas terlalu sedikit, periksa fungsi semua()");
+  for (const f of berkasTeks)
+    ok(!rahasiaLuas.test(readFileSync(f, "utf8")), `${f} tampak memuat API key/token/kunci privat`);
+  ok(!existsSync(".env") && !existsSync(".env.local"), "berkas .env tidak boleh ada di repo");
+
+  const vj = JSON.parse(readFileSync("vercel.json", "utf8"));
+  const csp = (vj.headers[0].headers.find(h => h.key === "Content-Security-Policy") || {}).value || "";
+  const scriptSrc = (csp.match(/script-src([^;]*)/) || [])[1] || "";
+  ok(/'self'/.test(scriptSrc) && !/unsafe-inline|unsafe-eval|\*|https?:/.test(scriptSrc), "vercel.json: script-src CSP harus hanya 'self' (tanpa unsafe-inline/unsafe-eval/domain luar)");
+  ok(/frame-ancestors 'none'/.test(csp) && /base-uri 'self'/.test(csp) && /default-src 'self'/.test(csp), "vercel.json: CSP wajib default-src 'self', frame-ancestors 'none', base-uri 'self'");
+  ok(vj.headers[0].source === "/(.*)", "vercel.json: header keamanan harus berlaku untuk semua alamat");
+
+  for (const f of halaman) {
+    const h = readFileSync(f, "utf8");
+    ok(!/<script(?![^>]*\bsrc=)[^>]*>/.test(h), `${f}: ada <script> sebaris (akan diblokir CSP), pindahkan ke berkas .js`);
+    ok(!/\son[a-z]+\s*=\s*["']/.test(h), `${f}: ada atribut on...= (diblokir CSP), pakai addEventListener`);
+    ok(!/href\s*=\s*["']\s*javascript:/i.test(h), `${f}: tautan javascript: dilarang`);
+  }
+  const dataJs = readdirSync("data").filter(f => f.endsWith(".js")).map(f => "data/" + f);
+  for (const f of dataJs) {
+    const buruk = [...readFileSync(f, "utf8").matchAll(/\burl\s*:\s*["']([^"']*)["']/g)].map(m => m[1]).filter(u => !/^https:\/\//.test(u));
+    ok(buruk.length === 0, `${f}: tautan harus https:// (${buruk.slice(0, 3).join(", ")})`);
+  }
+}
+
 // Nina (30 Okt): aturan laba sekali-waktu Galih & Hana
 {
   const app = readFileSync("assets/app.js", "utf8");
