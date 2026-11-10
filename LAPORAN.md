@@ -1173,3 +1173,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: KLBF & BRIS dicari ulang, belum ada laba Jan–Sep 2026 bersumber (tetap 23 dari 32).
 - Tugas baru: Tegar + Arif (fetch hanya ke situs sendiri), Nina + Arif (tes pitaSumber), Hana + Fajar (aturan musim laporan saat DES II), Dewi + Kirana (Asisten mode gelap).
 - `node tests/cek.mjs` lolos. Tampilan tidak berubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 10 Nov 2026, 16.10 WIB (Bima)
+- Tegar & Arif: semua permintaan jaringan di `assets/*.js` dicek: hanya 2 `fetch` ke `api/tanya` (alamat relatif, cocok CSP `connect-src 'self'`). Tes baru menolak alamat berskema, `//`, variabel, template, sendBeacon, XMLHttpRequest, WebSocket; uji balik lolos.
+- Nina & Arif: `pitaSumber()` dijalankan dengan DOM tiruan (3 contoh, data kosong, data asli): "N emiten syariah" = jumlah emiten di data; "Tentang data ini" memuat DES_LABEL yang periodenya sama dengan keterangan desBaris di data. Uji balik: jumlah atau periode salah membuat tes gagal.
+- Fajar: KLBF & BRIS dicari ulang, belum ada laba Jan–Sep 2026 bersumber (BRIS baru s.d. Agustus 2026); tetap 23 dari 32.
+- Dewi & Kirana: tinjauan Asisten mode gelap belum dikerjakan sesi ini, tetap berikutnya. Tugas baru: Tegar + Arif (script/link luar di HTML), Nina + Arif (tes kotak istilah).
+- `node tests/cek.mjs` lolos. Tampilan tidak berubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

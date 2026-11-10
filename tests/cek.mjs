@@ -651,6 +651,62 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
   const n9 = ASLI.filter((e) => e.laba9b && typeof e.laba9b[2026] === "number" && isFinite(e.laba9b[2026]));
   uji(ASLI, "data asli", n9.length, n9.map((e) => e.kode).sort((a, b) => a.localeCompare(b)).join(", "),
     ASLI.filter((e) => !n9.includes(e)).map((e) => e.kode).sort((a, b) => a.localeCompare(b)).join(", "));
+
+  // Nina & Arif (10 Nov 16.10): pitaSumber() dijalankan dengan DOM tiruan.
+  // Aturan: "N emiten syariah" = jumlah emiten di data; "Tentang data ini" memuat DES_LABEL periode berjalan
+  // (sama dengan periode di keterangan desBaris data/emiten-asli.js).
+  const fPita = (() => { const i = app.indexOf("  function pitaSumber(wadah)"); const j = app.indexOf("\n  }\n", i); return i < 0 || j < 0 ? "" : app.slice(i, j + 5); })();
+  const mLabel = app.match(/var DES_LABEL = "([^"]+)";/);
+  ok(!!fPita && !!mLabel, "app.js: pitaSumber() dan DES_LABEL harus bisa diambil untuk diuji");
+  const kepData = (readFileSync("data/emiten-asli.js", "utf8").match(/desBaris:[^\n]*periode (\S+ \d{4}) \((KEP-[^,]+),/) || []);
+  ok(kepData.length === 3 && mLabel && mLabel[1].includes("periode " + kepData[1]) && mLabel[1].includes(kepData[2]),
+    `DES_LABEL harus sama periodenya dengan keterangan desBaris di data (data: ${kepData.slice(1).join(" ")}; label: ${mLabel && mLabel[1]})`);
+  const ujiPita = (EMITEN, nama) => {
+    const { document } = buatDoc();
+    const ctxP = { document, EMITEN, DES_LABEL: mLabel ? mLabel[1] : "" };
+    vm.runInNewContext(kode[0] + "\n" + fPita + "\n;globalThis.pitaSumber = pitaSumber;", ctxP);
+    const wadah = document.createElement("div");
+    ctxP.pitaSumber(wadah); ctxP.pitaSumber(null);
+    const kotak = wadah.anak[0];
+    const teks = kotak ? kotak.textContent : "";
+    ok(wadah.anak.length === 1 && teks.startsWith(EMITEN.length + " emiten syariah dari Daftar Efek Syariah OJK."),
+      `pitaSumber (${nama}): harus menulis "${EMITEN.length} emiten syariah" (dapat: ${teks.slice(0, 80)})`);
+    const det = cari(kotak || {}, (x) => x.tag === "details")[0];
+    ok(det && det.textContent.startsWith("Tentang data ini") && det.textContent.includes("Status syariah: " + ctxP.DES_LABEL + "."),
+      `pitaSumber (${nama}): "Tentang data ini" harus memuat DES_LABEL periode berjalan`);
+  };
+  ujiPita([E("AAA"), E("BBB"), E("CCC")], "contoh 3 emiten");
+  ujiPita([], "data kosong");
+  ujiPita(ASLI, "data asli");
+}
+
+// Tegar & Arif (10 Nov 16.10): setiap fetch() di assets/*.js hanya ke alamat relatif situs sendiri
+// (cocok CSP connect-src 'self'). Alamat harus teks biasa tanpa skema, tanpa "//", tanpa variabel.
+{
+  const csp = readFileSync("vercel.json", "utf8");
+  ok(/connect-src 'self'[;"]/.test(csp), "vercel.json: CSP harus tetap connect-src 'self'");
+  const cekFetch = (teks) => {
+    const salah = [];
+    const re = /\b(fetch|XMLHttpRequest|WebSocket|EventSource|sendBeacon)\s*\(/g;
+    let m;
+    while ((m = re.exec(teks))) {
+      if (m[1] === "XMLHttpRequest") { salah.push("XMLHttpRequest"); continue; }
+      const sisa = teks.slice(m.index + m[0].length).trimStart();
+      const s = sisa.match(/^(["'])([^"'`]*)\1\s*[,)]/);
+      if (!s || /^[a-z][a-z0-9+.-]*:|^\/\//i.test(s[2]) || s[2].includes("//")) salah.push(m[1] + "(" + sisa.slice(0, 40) + ")");
+    }
+    return salah;
+  };
+  for (const f of readdirSync("assets").filter((x) => x.endsWith(".js"))) {
+    const salah = cekFetch(readFileSync("assets/" + f, "utf8"));
+    ok(salah.length === 0, `assets/${f}: permintaan jaringan hanya boleh ke alamat relatif situs sendiri (ditemukan: ${salah.join("; ")})`);
+  }
+  // Uji balik: contoh yang wajib ditolak dan yang wajib diterima.
+  for (const buruk of ['fetch("https://contoh.example/x")', "fetch('//contoh.example/x')", "fetch(alamat)", 'fetch("http:x")',
+    "fetch(`https://contoh.example`)", 'navigator.sendBeacon("https://contoh.example")', "new XMLHttpRequest()", 'new WebSocket("wss://a.example")'])
+    ok(cekFetch(buruk).length === 1, `uji balik fetch: "${buruk}" harus ditolak`);
+  for (const baik of ['fetch("api/tanya", { method: "GET" })', 'fetch("/api/tanya")'])
+    ok(cekFetch(baik).length === 0, `uji balik fetch: "${baik}" harus diterima`);
 }
 
 // 2f. Dividen di profil (Galih & Hana, Arif, Nina, 3 Nov): dps wajib bersumber, judul sumber memuat angka yang sama,
