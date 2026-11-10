@@ -1383,6 +1383,64 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
   }
 }
 
+// Tegar & Arif (10 Nov 14.16): setiap jalur galat /api/tanya (403/429/502/503) menjawab JSON { galat } berpesan ramah,
+// tanpa membocorkan key atau isi galat Gemini, dan halaman Asisten menampilkan h.d.galat apa adanya (sebagai teks).
+{
+  const { default: handler } = await import(new URL("../api/tanya.mjs", import.meta.url));
+  const fetchAsli = globalThis.fetch, keyAsli = process.env.GEMINI_API_KEY, logAsli = console.error;
+  const KUNCI = "uji-rahasia-jangan-bocor";
+  let ipKe = 0;
+  const jalankan = async ({ ip, origin, body = { pertanyaan: "Apa itu ROE?" } } = {}) => {
+    const potongan = [JSON.stringify(body)];
+    const headers = { host: "candra-analis.vercel.app", "x-forwarded-for": ip || `10.9.0.${++ipKe}` };
+    if (origin) headers.origin = origin;
+    const req = { method: "POST", headers, async *[Symbol.asyncIterator]() { yield* potongan; } };
+    const res = { statusCode: 0, isi: "", kepala: {}, setHeader(k, v) { this.kepala[k.toLowerCase()] = v; }, end(x) { this.isi = x; } };
+    await handler(req, res);
+    return { status: res.statusCode, isi: res.isi, kepala: res.kepala, data: JSON.parse(res.isi) };
+  };
+  const ramah = (h, nama, status) => {
+    ok(h.status === status, `api/tanya: ${nama} harus ${status} (dapat ${h.status})`);
+    ok(typeof h.data.galat === "string" && h.data.galat.length > 10 && /[.]$/.test(h.data.galat) && !h.data.jawaban,
+      `api/tanya: ${nama} harus berisi pesan galat ramah (dapat ${h.isi})`);
+    ok(!h.isi.includes(KUNCI) && !/Error|stack|candidates|googleapis|undefined/i.test(h.isi),
+      `api/tanya: ${nama} tidak boleh membocorkan key atau isi galat teknis (dapat ${h.isi})`);
+    ok(h.kepala["cache-control"] === "no-store" && /^application\/json; charset=utf-8$/.test(h.kepala["content-type"] || ""),
+      `api/tanya: ${nama} wajib Cache-Control no-store dan Content-Type JSON utf-8`);
+  };
+  const gemini = (fn) => { globalThis.fetch = fn; };
+  try {
+    console.error = () => {};
+    delete process.env.GEMINI_API_KEY;
+    ramah(await jalankan(), "tanpa key", 503);
+    process.env.GEMINI_API_KEY = KUNCI;
+    gemini(async () => ({ ok: true, status: 200, json: async () => ({ candidates: [{ content: { parts: [{ text: "ok" }] } }] }) }));
+    ramah(await jalankan({ origin: "https://situs-lain.example" }), "permintaan dari situs lain", 403);
+    ok((await jalankan({ origin: "https://candra-analis.vercel.app" })).status === 200, "api/tanya: permintaan dari situs sendiri harus 200");
+    const ip = "10.9.9.9"; let terakhir;
+    for (let i = 0; i < 7; i++) terakhir = await jalankan({ ip });
+    ramah(terakhir, "pertanyaan ke-7 dalam satu menit", 429);
+    gemini(async () => ({ ok: false, status: 429, json: async () => ({ error: { message: "RESOURCE_EXHAUSTED" } }) }));
+    ramah(await jalankan(), "kuota Gemini habis", 429);
+    gemini(async () => ({ ok: false, status: 500, json: async () => ({ error: { message: "Internal Error " + KUNCI } }) }));
+    ramah(await jalankan(), "Gemini galat 500", 502);
+    gemini(async () => ({ ok: true, status: 200, json: async () => ({ candidates: [] }) }));
+    ramah(await jalankan(), "Gemini tanpa jawaban", 502);
+    gemini(async () => ({ ok: true, status: 200, json: async () => { throw new SyntaxError("bukan JSON"); } }));
+    ramah(await jalankan(), "Gemini menjawab bukan JSON", 502);
+    gemini(async () => { throw new TypeError("fetch failed"); });
+    ramah(await jalankan(), "Gemini tidak terjangkau", 502);
+  } finally {
+    globalThis.fetch = fetchAsli; console.error = logAsli;
+    if (keyAsli === undefined) delete process.env.GEMINI_API_KEY; else process.env.GEMINI_API_KEY = keyAsli;
+  }
+  // Halaman Asisten: pesan dari server ditampilkan apa adanya sebagai teks, dengan cadangan bila tidak ada.
+  const app = readFileSync(new URL("../assets/app.js", import.meta.url), "utf8");
+  ok(/class: "pesan-galat", text: h\.d\.galat \|\| "[^"]{10,}"/.test(app),
+    "app.js: galat /api/tanya harus ditampilkan dari h.d.galat (sebagai text, bukan HTML) dengan pesan cadangan");
+  ok(/r\.json\(\)\.catch\(/.test(app), "app.js: jawaban /api/tanya yang bukan JSON (mis. galat Vercel) tidak boleh membuat halaman galat");
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);
 

@@ -449,3 +449,9 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - 390px: kalimat hero 5 baris, rata-rata ±37 huruf per baris (nyaman dibaca di HP); istilah bergaris tetap terbaca, tombol "Mulai belajar" & "Lihat peringkat saham" masih di layar pertama 390×844.
 - 1280px: 4 baris, ±47 huruf per baris. Tanpa scroll horizontal di kedua lebar (juga Radar, Peringkat, profil ANTM).
 - Tidak ada perbaikan baru.
+
+### Tinjauan Kirana & Dewi, 10 Nov 14.16: halaman Kabar dalam mode gelap
+- Tangkapan layar 390px & 1280px (mode gelap). Label "Baru" diuji dengan tanggal perangkat 5 Nov (kabar terbaru 4 Nov).
+- Kontras terukur: label "Baru" 8,3:1; label jenis kabar 13,9:1; tautan sumber 8,6:1; tombol "Tampilkan 10 kabar lagi" 15,4:1, cincin fokus kuning jelas terlihat; kotak hijau penafian terbaca.
+- Kotak saring "Semua jenis" ikut gelap. Tanpa scroll horizontal, tanpa galat JS di kedua lebar.
+- Tidak ada perbaikan baru.
