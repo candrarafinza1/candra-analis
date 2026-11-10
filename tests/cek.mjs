@@ -793,6 +793,38 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
     ok(cekBlank(baik).length === 0, `uji balik noopener: ${baik} harus diterima`);
 }
 
+// Tegar & Arif (10 Nov 19.13): setiap tautan tab baru wajib memberi tahu pembaca layar lewat "(tab baru)"
+// di teks tautan atau aria-label pada objek atribut/tag yang sama (WCAG 3.2.5, konsisten dengan Peringkat & Kabar).
+{
+  const cekTabBaru = (teks) => {
+    const salah = [];
+    for (const [tag] of teks.matchAll(/<a\b[^>]*\btarget\s*=\s*["']_blank["'][^>]*>([^<]*)/gi))
+      if (!/\(tab baru\)/.test(tag)) salah.push(tag.slice(0, 70));
+    const re = /\btarget\s*:\s*["'`]_blank["'`]/g;
+    let m;
+    while ((m = re.exec(teks))) {
+      const awal = teks.lastIndexOf("{", m.index), akhir = teks.indexOf("}", m.index);
+      const obj = awal < 0 || akhir < 0 ? "" : teks.slice(awal, akhir + 1);
+      if (!/\(tab baru\)/.test(obj)) salah.push(teks.slice(m.index, m.index + 50));
+    }
+    return salah;
+  };
+  const berkas = [...halaman, ...["assets", "data"].flatMap((d) => readdirSync(d).filter((f) => f.endsWith(".js")).map((f) => `${d}/${f}`))];
+  for (const f of berkas) {
+    const salah = cekTabBaru(readFileSync(f, "utf8"));
+    ok(salah.length === 0, `${f}: tautan tab baru wajib menyebut "(tab baru)" di teks atau aria-label (ditemukan: ${salah.join("; ")})`);
+  }
+  // Uji balik
+  for (const buruk of ['el("a", { href: u, target: "_blank", rel: "noopener", text: t })',
+    '<a href="https://a.example" target="_blank" rel="noopener">Sumber</a>'])
+    ok(cekTabBaru(buruk).length >= 1, `uji balik tab baru: ${buruk} harus ditolak`);
+  for (const baik of ['el("a", { href: u, target: "_blank", rel: "noopener", text: t, "aria-label": t + " (tab baru)" })',
+    'el("a", { href: u, target: "_blank", rel: "noopener", text: t + " (tab baru)" })',
+    '<a href="https://a.example" target="_blank" rel="noopener" aria-label="Sumber (tab baru)">Sumber</a>',
+    '<a href="https://a.example" target="_blank" rel="noopener">Sumber (tab baru)</a>'])
+    ok(cekTabBaru(baik).length === 0, `uji balik tab baru: ${baik} harus diterima`);
+}
+
 // Dewi & Kirana (10 Nov 17.10): teks contoh di kolom tanya Asisten memakai warna --tinta-2 (kontras ≥7:1
 // terang & gelap), bukan abu bawaan browser (3,6:1 di mode gelap).
 ok(/\.form-tanya textarea::placeholder\s*\{[^}]*color:\s*var\(--tinta-2\)/.test(readFileSync("assets/styles.css", "utf8")),

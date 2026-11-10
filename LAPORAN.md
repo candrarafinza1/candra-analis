@@ -1193,3 +1193,8 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: KLBF & BRIS dicari ulang, belum ada laba Jan–Sep 2026 bersumber (KLBF baru semester I, BRIS s.d. Agustus) → tetap 23 dari 32.
 - Temuan baru (Tegar): 4 tautan sumber tab baru belum menyebut "(tab baru)" untuk pembaca layar → tugas baru Tegar + Arif, ditinjau Dewi.
 - `node tests/cek.mjs` lolos (10 halaman). Tampilan tidak berubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 10 Nov 2026, 19.13 WIB (Bima)
+- Tegar & Arif: 4 tautan sumber tab baru di `assets/app.js` (sumber profil, Bandingkan, dividen, rujukan Belajar) kini memberi tahu pembaca layar "(tab baru)" lewat aria-label; tes baru + uji balik di `tests/cek.mjs`. Dewi: tampilan tidak berubah, 390px & 1280px tanpa scroll horizontal.
+- Fajar: KLBF & BRIS dicari ulang, belum ada laba Jan–Sep 2026 bersumber → tetap 23 dari 32.
+- `node tests/cek.mjs` lolos (10 halaman). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

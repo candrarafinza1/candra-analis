@@ -613,7 +613,7 @@
       }
       var sumber = el("ul", { class: "daftar-sumber" });
       (e.sumber || []).forEach(function (x) {
-        sumber.appendChild(el("li", null, [el("a", { href: x.url, target: "_blank", rel: "noopener", text: x.judul })]));
+        sumber.appendChild(el("li", null, [el("a", { href: x.url, target: "_blank", rel: "noopener", text: x.judul, "aria-label": x.judul + " (tab baru)" })]));
       });
       hasil.appendChild(el("p", null, [el("a", { href: "emiten.html?kode=" + e.kode, text: "Lihat profil lengkap " + e.kode })]));
       hasil.appendChild(el("h3", { style: "margin-top:20px;font-size:1.05rem", text: "Sumber data" }));
@@ -827,7 +827,7 @@
     if (dps) {
       akar.appendChild(el("p", { class: "catatan-metode baris-dividen" }, [
         el("strong", { text: "Dividen tunai tahun buku 2025: " + dps + " per saham. " }),
-        "Sumber: ", el("a", { href: e.dpsSumber.url, target: "_blank", rel: "noopener", text: e.dpsSumber.judul }), ". ",
+        "Sumber: ", el("a", { href: e.dpsSumber.url, target: "_blank", rel: "noopener", text: e.dpsSumber.judul, "aria-label": e.dpsSumber.judul + " (tab baru)" }), ". ",
         // Sari & Laras (4 Nov): emiten berlaporan dolar AS → jelaskan kenapa dividen tertulis dalam rupiah
         e.dpsRupiah ? "Dividen ini dibayar dalam rupiah; angkanya ditulis oleh sumber, bukan hasil konversi kami dari dolar AS. " : "",
         "Dividen yang sudah dibagikan tidak menjamin dividen tahun berikutnya. Ini data, bukan saran membeli atau menjual."
@@ -861,7 +861,7 @@
     akar.appendChild(el("h2", { class: "judul-profil-bagian", id: "sumber-data", text: "Sumber data" }));
     var sumber = el("ul", { class: "daftar-sumber" });
     (e.sumber || []).forEach(function (x) {
-      sumber.appendChild(el("li", null, [el("a", { href: x.url, target: "_blank", rel: "noopener", text: x.judul })]));
+      sumber.appendChild(el("li", null, [el("a", { href: x.url, target: "_blank", rel: "noopener", text: x.judul, "aria-label": x.judul + " (tab baru)" })]));
     });
     akar.appendChild(sumber);
     akar.appendChild(el("p", { class: "catatan-metode", style: "margin-top:16px" }, [
@@ -1015,7 +1015,7 @@
       var ul = el("ul", { class: "rujukan-daftar" });
       k.item.forEach(function (r) {
         ul.appendChild(el("li", null, [
-          el("a", { href: r.url, target: "_blank", rel: "noopener", text: r.judul }),
+          el("a", { href: r.url, target: "_blank", rel: "noopener", text: r.judul, "aria-label": r.judul + " (tab baru)" }),
           el("p", { text: r.ket })
         ]));
       });
