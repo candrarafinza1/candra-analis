@@ -680,6 +680,134 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
   ujiPita(ASLI, "data asli");
 }
 
+// Nina & Arif (10 Nov 20.17): kotak istilah dijalankan sungguhan dengan DOM tiruan.
+// Aturan: setiap pola di data/istilah.js ditandai menjadi tombol bergaris; setiap tombol membuka kotak berisi nama
+// istilah dan penjelasannya (arti); Esc menutup kotak, aria-expanded kembali "false", dan fokus kembali ke tombol.
+{
+  const app = readFileSync("assets/app.js", "utf8");
+  const ambilEl = (() => { const i = app.indexOf("  function el("); const j = app.indexOf("\n  }\n", i); return i < 0 || j < 0 ? "" : app.slice(i, j + 5); })();
+  const iAwal = app.indexOf("  var ISTILAH = window.ISTILAH");
+  const akhirTanda = 'document.addEventListener("scroll", letakkan';
+  const iAkhir = app.indexOf("\n", app.indexOf(akhirTanda));
+  const blok = iAwal < 0 || app.indexOf(akhirTanda) < 0 ? "" : app.slice(iAwal, iAkhir);
+  ok(!!ambilEl && !!blok, "app.js: el() dan blok kamus istilah harus bisa diambil untuk diuji");
+
+  const buatDom = () => {
+    const doc = { pendengar: {}, activeElement: null };
+    class Teks {
+      constructor(v) { this.nodeType = 3; this.nodeName = "#text"; this.nodeValue = String(v); this.parentNode = null; }
+      get textContent() { return this.nodeValue; }
+      get nextSibling() { const p = this.parentNode; return p ? p.anak[p.anak.indexOf(this) + 1] || null : null; }
+      splitText(n) {
+        const baru = new Teks(this.nodeValue.slice(n));
+        this.nodeValue = this.nodeValue.slice(0, n);
+        this.parentNode.insertBefore(baru, this.nextSibling);
+        return baru;
+      }
+    }
+    class Elemen {
+      constructor(tag) {
+        this.nodeType = 1; this.nodeName = tag.toUpperCase(); this.anak = []; this.parentNode = null;
+        this.atribut = {}; this.dataset = {}; this.style = {}; this.className = ""; this.hidden = false; this.offsetHeight = 60;
+        const diri = this; this.classList = { contains: (c) => diri.className.split(/\s+/).includes(c) };
+      }
+      get nextSibling() { const p = this.parentNode; return p ? p.anak[p.anak.indexOf(this) + 1] || null : null; }
+      lepas(n) { if (n.parentNode) { const a = n.parentNode.anak; a.splice(a.indexOf(n), 1); n.parentNode = null; } }
+      appendChild(n) { this.lepas(n); n.parentNode = this; this.anak.push(n); return n; }
+      insertBefore(n, ref) { this.lepas(n); n.parentNode = this; const i = ref ? this.anak.indexOf(ref) : -1; if (i < 0) this.anak.push(n); else this.anak.splice(i, 0, n); return n; }
+      replaceChild(baru, lama) { this.lepas(baru); const i = this.anak.indexOf(lama); this.anak[i] = baru; baru.parentNode = this; lama.parentNode = null; return lama; }
+      setAttribute(k, v) { this.atribut[k] = String(v); if (k === "id") this.id = String(v); }
+      getAttribute(k) { return k in this.atribut ? this.atribut[k] : null; }
+      removeAttribute(k) { delete this.atribut[k]; }
+      set innerHTML(v) { this.anak.forEach((c) => { c.parentNode = null; }); this.anak = []; }
+      set textContent(v) { this.innerHTML = ""; this.appendChild(new Teks(v)); }
+      get textContent() { return this.anak.map((c) => c.textContent).join(""); }
+      contains(n) { for (let p = n; p; p = p.parentNode) if (p === this) return true; return false; }
+      cocok(sel) { const [tag, kelas] = sel.split("."); return (!tag || this.nodeName === tag.toUpperCase()) && (!kelas || this.classList.contains(kelas)); }
+      closest(sel) { for (let p = this; p && p.nodeType === 1; p = p.parentNode) if (p.cocok(sel)) return p; return null; }
+      querySelectorAll() { return []; }
+      addEventListener() {}
+      focus() { doc.activeElement = this; }
+      getBoundingClientRect() { return { left: 20, top: 100, bottom: 120 }; }
+    }
+    const semua = (n, out = []) => { out.push(n); (n.anak || []).forEach((c) => semua(c, out)); return out; };
+    doc.body = new Elemen("body");
+    Object.assign(doc, {
+      createElement: (t) => new Elemen(t),
+      createTextNode: (t) => new Teks(t),
+      getElementById: (id) => semua(doc.body).find((n) => n.id === id) || null,
+      querySelector: () => null,
+      querySelectorAll: () => [],
+      addEventListener: (j, f) => { (doc.pendengar[j] = doc.pendengar[j] || []).push(f); },
+      kirim: (j, ev) => (doc.pendengar[j] || []).forEach((f) => f(ev)),
+      createTreeWalker: (akar, _apa, saring) => {
+        const daftar = semua(akar).filter((n) => n.nodeType === 3 && saring.acceptNode(n) === 1);
+        let i = -1;
+        return { get currentNode() { return daftar[i]; }, nextNode() { i++; return daftar[i] || null; } };
+      },
+    });
+    return { doc, semua };
+  };
+
+  const jalankan = (daftarIstilah, blokUji) => {
+    const { doc, semua } = buatDom();
+    const ctxI = {
+      document: doc, MODUL,
+      NodeFilter: { SHOW_TEXT: 4, FILTER_ACCEPT: 1, FILTER_REJECT: 2, FILTER_SKIP: 3 },
+      window: { ISTILAH: daftarIstilah, innerWidth: 390, innerHeight: 800, addEventListener() {},
+        matchMedia: () => ({ matches: false, addEventListener() {} }) },
+    };
+    vm.runInNewContext(ambilEl + "\n" + blokUji + "\n;globalThis.pasangIstilah = pasangIstilah;", ctxI);
+    // Satu paragraf per pola, agar setiap pola diuji sendiri.
+    const pola = [];
+    daftarIstilah.forEach((t, i) => t.pola.forEach((p) => pola.push({ i, p })));
+    const salah = [];
+    for (const { i, p } of pola) {
+      const wadah = doc.createElement("p");
+      wadah.appendChild(doc.createTextNode("Contoh kalimat: " + p + " pada laporan."));
+      doc.body.appendChild(wadah);
+      ctxI.pasangIstilah(wadah);
+      const tombol = semua(wadah).filter((n) => n.nodeType === 1 && n.cocok("button.istilah"));
+      if (!tombol.length) { salah.push(`pola "${p}" tidak ditandai`); continue; }
+      if (wadah.textContent !== "Contoh kalimat: " + p + " pada laporan.") salah.push(`pola "${p}": teks berubah setelah ditandai`);
+      for (const b of tombol) {
+        const t = daftarIstilah[+b.dataset.istilah];
+        if (!t || !String(t.arti || "").trim()) { salah.push(`tombol "${b.textContent}" tanpa penjelasan`); continue; }
+        doc.kirim("click", { target: b });
+        const kotak = doc.getElementById("kotak-istilah");
+        if (!kotak || kotak.hidden) { salah.push(`"${b.textContent}": kotak tidak terbuka`); continue; }
+        const isi = kotak.textContent;
+        if (!isi.includes(t.istilah) || !isi.includes(t.arti)) salah.push(`"${b.textContent}": kotak tidak memuat istilah & arti`);
+        if (b.getAttribute("aria-expanded") !== "true") salah.push(`"${b.textContent}": aria-expanded harus "true" saat terbuka`);
+        if (b.getAttribute("aria-controls") !== "kotak-istilah") salah.push(`"${b.textContent}": aria-controls harus "kotak-istilah"`);
+        if (kotak.parentNode !== b.parentNode || b.nextSibling !== kotak) salah.push(`"${b.textContent}": kotak harus tepat setelah tombol`);
+        doc.activeElement = null;
+        doc.kirim("keydown", { key: "Escape" });
+        if (!kotak.hidden) salah.push(`"${b.textContent}": Esc tidak menutup kotak`);
+        if (b.getAttribute("aria-expanded") !== "false") salah.push(`"${b.textContent}": aria-expanded harus kembali "false" setelah Esc`);
+        if (doc.activeElement !== b) salah.push(`"${b.textContent}": fokus harus kembali ke tombol setelah Esc`);
+      }
+    }
+    return { salah, jumlahPola: pola.length };
+  };
+
+  const hasil = jalankan(ctx.window.ISTILAH || [], blok);
+  ok(hasil.jumlahPola > 0 && hasil.salah.length === 0,
+    `kotak istilah (DOM tiruan, ${hasil.jumlahPola} pola): ${hasil.salah.slice(0, 5).join("; ")}`);
+  // Uji balik: tes harus gagal bila Esc tidak lagi menutup, bila penjelasan kosong, atau bila aria-expanded tidak diatur.
+  const tanpaEsc = blok.replace('document.addEventListener("keydown", function (ev) { if (ev.key === "Escape" && aktif) tutupIstilah(true); });', "");
+  ok(tanpaEsc !== blok && jalankan(ctx.window.ISTILAH || [], tanpaEsc).salah.some((s) => s.includes("Esc tidak menutup")),
+    "uji balik: tes kotak istilah harus gagal bila Esc tidak menutup kotak");
+  const contoh = [{ istilah: "Uji", pola: ["laba uji"], arti: "" }, { istilah: "Uji dua", pola: ["kata kedua"], arti: "Ada artinya." }];
+  ok(jalankan(contoh, blok).salah.some((s) => s.includes("tanpa penjelasan")), "uji balik: tes kotak istilah harus gagal bila penjelasan kosong");
+  const tanpaAria = blok.replace('b.setAttribute("aria-expanded", "true");', "");
+  ok(tanpaAria !== blok && jalankan(ctx.window.ISTILAH || [], tanpaAria).salah.some((s) => s.includes('aria-expanded harus "true"')),
+    "uji balik: tes kotak istilah harus gagal bila aria-expanded tidak diatur");
+  const tanpaFokus = blok.replace("if (kembalikanFokus) b.focus();", "");
+  ok(tanpaFokus !== blok && jalankan(ctx.window.ISTILAH || [], tanpaFokus).salah.some((s) => s.includes("fokus harus kembali")),
+    "uji balik: tes kotak istilah harus gagal bila fokus tidak kembali ke tombol");
+}
+
 // Tegar & Arif (10 Nov 16.10): setiap fetch() di assets/*.js hanya ke alamat relatif situs sendiri
 // (cocok CSP connect-src 'self'). Alamat harus teks biasa tanpa skema, tanpa "//", tanpa variabel.
 {

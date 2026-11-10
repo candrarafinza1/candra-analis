@@ -1198,3 +1198,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Tegar & Arif: 4 tautan sumber tab baru di `assets/app.js` (sumber profil, Bandingkan, dividen, rujukan Belajar) kini memberi tahu pembaca layar "(tab baru)" lewat aria-label; tes baru + uji balik di `tests/cek.mjs`. Dewi: tampilan tidak berubah, 390px & 1280px tanpa scroll horizontal.
 - Fajar: KLBF & BRIS dicari ulang, belum ada laba Jan–Sep 2026 bersumber → tetap 23 dari 32.
 - `node tests/cek.mjs` lolos (10 halaman). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 10 Nov 2026, 20.17 WIB (Bima)
+- Nina & Arif: tes baru di `tests/cek.mjs` menjalankan kotak istilah dengan DOM tiruan: 125 pola istilah ditandai, setiap tombol membuka penjelasan (nama + arti), Esc menutup kotak dan mengembalikan fokus ke tombol; 4 uji balik + uji sabotage app.js tertangkap. Tampilan tidak berubah.
+- Fajar: KLBF & BRIS dicari ulang, belum ada laba Jan–Sep 2026 bersumber → tetap 23 dari 32.
+- Bima: lingkungan kerja memegang salinan `main` lama yang bercabang dari GitHub; disamakan ke `origin/main` (salinan lama disimpan di cabang lokal, tidak di-push). Masalah ringan.
+- `node tests/cek.mjs` lolos (10 halaman). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
