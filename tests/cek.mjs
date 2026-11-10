@@ -806,6 +806,68 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
   const tanpaFokus = blok.replace("if (kembalikanFokus) b.focus();", "");
   ok(tanpaFokus !== blok && jalankan(ctx.window.ISTILAH || [], tanpaFokus).salah.some((s) => s.includes("fokus harus kembali")),
     "uji balik: tes kotak istilah harus gagal bila fokus tidak kembali ke tombol");
+
+  // Nina & Arif (10 Nov 21.14): perilaku klik. Klik di luar kotak menutupnya; klik di dalam kotak tidak;
+  // klik tombol yang sama dua kali menutup; membuka istilah kedua menutup yang pertama (hanya satu kotak).
+  const ujiKlik = (daftarIstilah, blokUji) => {
+    const { doc, semua } = buatDom();
+    const ctxI = {
+      document: doc, MODUL,
+      NodeFilter: { SHOW_TEXT: 4, FILTER_ACCEPT: 1, FILTER_REJECT: 2, FILTER_SKIP: 3 },
+      window: { ISTILAH: daftarIstilah, innerWidth: 390, innerHeight: 800, addEventListener() {},
+        matchMedia: () => ({ matches: false, addEventListener() {} }) },
+    };
+    vm.runInNewContext(ambilEl + "\n" + blokUji + "\n;globalThis.pasangIstilah = pasangIstilah;", ctxI);
+    const salah = [];
+    const paragraf = daftarIstilah.slice(0, 2).map((t) => {
+      const p = doc.createElement("p");
+      p.appendChild(doc.createTextNode("Contoh kalimat: " + t.pola[0] + " pada laporan."));
+      doc.body.appendChild(p);
+      ctxI.pasangIstilah(p);
+      return p;
+    });
+    const [b1, b2] = paragraf.map((p) => semua(p).find((n) => n.nodeType === 1 && n.cocok("button.istilah")));
+    if (!b1 || !b2) return ["dua tombol istilah tidak terbentuk"];
+    const kotak = () => doc.getElementById("kotak-istilah");
+    const jumlahKotak = () => semua(doc.body).filter((n) => n.id === "kotak-istilah").length;
+    // 1. Klik tombol yang sama dua kali
+    doc.kirim("click", { target: b1 });
+    if (!kotak() || kotak().hidden) salah.push("klik pertama tidak membuka kotak");
+    doc.kirim("click", { target: b1 });
+    if (kotak() && !kotak().hidden) salah.push("klik tombol yang sama dua kali harus menutup kotak");
+    if (b1.getAttribute("aria-expanded") !== "false") salah.push('klik kedua: aria-expanded harus "false"');
+    // 2. Membuka istilah kedua menutup yang pertama
+    doc.kirim("click", { target: b1 });
+    doc.kirim("click", { target: b2 });
+    if (jumlahKotak() !== 1) salah.push(`harus tepat satu kotak, ada ${jumlahKotak()}`);
+    if (b1.getAttribute("aria-expanded") !== "false") salah.push('istilah pertama: aria-expanded harus "false" setelah istilah kedua dibuka');
+    if (b2.getAttribute("aria-expanded") !== "true") salah.push('istilah kedua: aria-expanded harus "true"');
+    if (!kotak() || kotak().hidden || b2.nextSibling !== kotak()) salah.push("kotak harus pindah ke istilah kedua");
+    else if (!kotak().textContent.includes(daftarIstilah[1].arti)) salah.push("kotak harus berisi arti istilah kedua");
+    // 3. Klik di dalam kotak tidak menutup
+    const isi = kotak() && kotak().anak[0];
+    if (isi) doc.kirim("click", { target: isi });
+    if (!kotak() || kotak().hidden) salah.push("klik di dalam kotak tidak boleh menutupnya");
+    // 4. Klik di luar kotak menutup
+    doc.kirim("click", { target: paragraf[0] });
+    if (kotak() && !kotak().hidden) salah.push("klik di luar kotak harus menutupnya");
+    if (b2.getAttribute("aria-expanded") !== "false") salah.push('klik di luar: aria-expanded harus "false"');
+    return salah;
+  };
+  const daftarKlik = (ctx.window.ISTILAH || []).filter((t) => String(t.arti || "").trim()).slice(0, 2);
+  const salahKlik = ujiKlik(daftarKlik, blok);
+  ok(daftarKlik.length === 2 && salahKlik.length === 0, `kotak istilah (klik): ${salahKlik.join("; ")}`);
+  // Uji balik: tiap aturan klik dirusak satu per satu, tes harus gagal.
+  const rusak = [
+    ["if (aktif === b) { tutupIstilah(false); return; }", "", "dua kali harus menutup"],
+    ["    tutupIstilah(false);\n    var t = ISTILAH", "    var t = ISTILAH", "istilah pertama: aria-expanded"],
+    ["if (aktif && kotak && !kotak.contains(ev.target)) tutupIstilah(false);", "", "klik di luar kotak harus"],
+    ["if (aktif && kotak && !kotak.contains(ev.target)) tutupIstilah(false);", "if (aktif && kotak) tutupIstilah(false);", "klik di dalam kotak"],
+  ];
+  for (const [lama, baru, pesan] of rusak) {
+    const b = blok.replace(lama, baru);
+    ok(b !== blok && ujiKlik(daftarKlik, b).some((s) => s.includes(pesan)), `uji balik klik kotak istilah: "${pesan}" harus tertangkap`);
+  }
 }
 
 // Tegar & Arif (10 Nov 16.10): setiap fetch() di assets/*.js hanya ke alamat relatif situs sendiri
