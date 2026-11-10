@@ -455,3 +455,7 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Kontras terukur: label "Baru" 8,3:1; label jenis kabar 13,9:1; tautan sumber 8,6:1; tombol "Tampilkan 10 kabar lagi" 15,4:1, cincin fokus kuning jelas terlihat; kotak hijau penafian terbaca.
 - Kotak saring "Semua jenis" ikut gelap. Tanpa scroll horizontal, tanpa galat JS di kedua lebar.
 - Tidak ada perbaikan baru.
+
+### Tinjauan Kirana & Dewi, 10 Nov 15.11: halaman Metodologi dalam mode gelap
+- Tangkapan layar 390px & 1280px (mode gelap). Kontras teks di seluruh `main` diukur otomatis: terendah 8,32:1 (di atas batas 4,5:1).
+- Daftar isi, tautan bergaris bawah, istilah bertitik (DES, OJK) terbaca jelas. Tanpa scroll horizontal di kedua lebar. Tidak ada perbaikan.

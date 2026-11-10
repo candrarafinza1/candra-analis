@@ -603,6 +603,56 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
   ok(/musimBeranda\(\);/.test(app), "musimBeranda() harus dipanggil");
 }
 
+// Nina & Arif (10 Nov 15.11): musimLaporan() dan musimBeranda() dijalankan sungguhan dengan contoh data dan DOM tiruan.
+// Aturan: hitungan = emiten ber-laba9b[2026] berupa angka; total = semua emiten di data; daftar kode urut abjad; beranda sama.
+{
+  const app = readFileSync("assets/app.js", "utf8");
+  const kode = ["function el(", "function ada(", "function musimLaporan(wadah)", "function musimBeranda()"].map((awal) => {
+    const i = app.indexOf("  " + awal);
+    const j = app.indexOf("\n  }\n", i);
+    return i < 0 || j < 0 ? "" : app.slice(i, j + 5);
+  });
+  ok(kode.every(Boolean), "app.js: el/ada/musimLaporan/musimBeranda harus bisa diambil untuk diuji");
+  const buatDoc = () => {
+    const simpul = (tag) => ({ tag, anak: [], atribut: {}, style: {}, className: "", hidden: true, _teks: "",
+      appendChild(c) { this.anak.push(c); return c; }, setAttribute(k, v) { this.atribut[k] = String(v); },
+      set textContent(v) { this._teks = String(v); }, get textContent() { return this._teks + this.anak.map((c) => c.textContent).join(""); } });
+    const wadahBeranda = simpul("p");
+    return { wadahBeranda, document: { createElement: simpul, createTextNode: (t) => ({ textContent: String(t) }), getElementById: (id) => (id === "musim-beranda" ? wadahBeranda : null) } };
+  };
+  const cari = (n, f, out = []) => { if (f(n)) out.push(n); (n.anak || []).forEach((c) => cari(c, f, out)); return out; };
+  const uji = (EMITEN, nama, harapN, harapSudah, harapBelum) => {
+    const { document, wadahBeranda } = buatDoc();
+    const ctxM = { document, EMITEN };
+    vm.runInNewContext(kode.join("\n") + "\n;globalThis.musimLaporan = musimLaporan; globalThis.musimBeranda = musimBeranda;", ctxM);
+    const wadah = document.createElement("div");
+    ctxM.musimLaporan(wadah); ctxM.musimBeranda();
+    const kotak = wadah.anak[0];
+    const teks = kotak ? kotak.textContent : "";
+    const total = EMITEN.length, pct = total ? Math.round(harapN / total * 100) : 0;
+    ok(teks.includes(`Laporan Januari–September 2026 sudah masuk untuk ${harapN} dari ${total} emiten.`),
+      `musimLaporan (${nama}): harus menulis "${harapN} dari ${total} emiten" (dapat: ${teks.slice(0, 90)})`);
+    const isi = cari(kotak || {}, (x) => x.className === "musim-isi")[0];
+    ok(isi && isi.style.width === pct + "%", `musimLaporan (${nama}): lebar batang harus ${pct}% (dapat ${isi && isi.style.width})`);
+    ok(teks.includes(`Sudah masuk (${harapN}): ${harapSudah}`) && teks.includes(`Belum masuk (${total - harapN}): ${harapBelum}`),
+      `musimLaporan (${nama}): daftar kode sudah/belum harus urut abjad dan lengkap (dapat: ${teks.slice(-140)})`);
+    const b = wadahBeranda.textContent;
+    ok(b.includes(`${harapN} dari ${total} emiten`) && wadahBeranda.hidden === false,
+      `musimBeranda (${nama}): harus sama dengan Peringkat/Radar "${harapN} dari ${total} emiten" dan tampil (dapat: ${b})`);
+  };
+  const E = (kode, l) => ({ kode, laba9b: l });
+  uji([E("UNVR", { 2025: 3.33e12, 2026: 4.2e12 }), E("ANTM", { 2026: 8.83e12 }), E("KLBF", { 2025: 2e12 }), E("BRIS"), E("SIDO", { 2026: -1e9 })],
+    "campuran, rugi tetap dihitung", 3, "ANTM, SIDO, UNVR", "BRIS, KLBF");
+  uji([E("AAA", { 2026: null }), E("BBB", { 2026: "Rp1 T" }), E("CCC", { 2026: NaN }), E("DDD", { 2026: Infinity })],
+    "nilai bukan angka tidak dihitung", 0, "belum ada", "AAA, BBB, CCC, DDD");
+  uji([E("ZZZ", { 2026: 1 }), E("AAA", { 2026: 0 })], "semua masuk, nol tetap angka", 2, "AAA, ZZZ", "tidak ada");
+  uji([], "data kosong", 0, "belum ada", "tidak ada");
+  // Data asli: hitungan kotak sama dengan hitungan langsung dari data.
+  const n9 = ASLI.filter((e) => e.laba9b && typeof e.laba9b[2026] === "number" && isFinite(e.laba9b[2026]));
+  uji(ASLI, "data asli", n9.length, n9.map((e) => e.kode).sort((a, b) => a.localeCompare(b)).join(", "),
+    ASLI.filter((e) => !n9.includes(e)).map((e) => e.kode).sort((a, b) => a.localeCompare(b)).join(", "));
+}
+
 // 2f. Dividen di profil (Galih & Hana, Arif, Nina, 3 Nov): dps wajib bersumber, judul sumber memuat angka yang sama,
 //     dan profil tidak menghitung imbal hasil (harga acuan belum ada)
 {
@@ -1439,6 +1489,54 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
   ok(/class: "pesan-galat", text: h\.d\.galat \|\| "[^"]{10,}"/.test(app),
     "app.js: galat /api/tanya harus ditampilkan dari h.d.galat (sebagai text, bukan HTML) dengan pesan cadangan");
   ok(/r\.json\(\)\.catch\(/.test(app), "app.js: jawaban /api/tanya yang bukan JSON (mis. galat Vercel) tidak boleh membuat halaman galat");
+}
+
+// Tegar (10 Nov 15.11): privasi pengguna. Isi pertanyaan dan riwayat tidak boleh masuk log Vercel (console.*) di jalur mana pun,
+// termasuk saat galat Gemini mengutip isi permintaan.
+{
+  const { default: handler } = await import(new URL("../api/tanya.mjs", import.meta.url));
+  const fetchAsli = globalThis.fetch, keyAsli = process.env.GEMINI_API_KEY;
+  const RAHASIA_T = "pertanyaan-unik-pengguna-7f3a", RAHASIA_R = "riwayat-unik-pengguna-9c1b";
+  const metode = ["log", "info", "warn", "error", "debug"], asli = {};
+  const catatan = [];
+  const hasil = [];
+  let ipKe = 0;
+  const jalankan = async (origin) => {
+    const body = JSON.stringify({ pertanyaan: "Apa itu ROE? " + RAHASIA_T, riwayat: [{ peran: "user", teks: RAHASIA_R }, { peran: "model", teks: "ok" }] });
+    const headers = { host: "candra-analis.vercel.app", "x-forwarded-for": `10.8.0.${++ipKe}` };
+    if (origin) headers.origin = origin;
+    const req = { method: "POST", headers, async *[Symbol.asyncIterator]() { yield body; } };
+    const res = { statusCode: 0, setHeader() {}, end() {} };
+    await handler(req, res);
+    return res.statusCode;
+  };
+  const gema = (status) => async (url, opsi) => ({ ok: false, status, json: async () => ({ error: { code: status, status: "INVALID_ARGUMENT", message: "Invalid value at contents: " + JSON.stringify(JSON.parse(opsi.body).contents) } }) });
+  const jalur = [
+    ["tanpa key", null, null],
+    ["situs lain", () => async () => ({ ok: true, status: 200, json: async () => ({}) }), "https://situs-lain.example"],
+    ["Gemini 400 mengutip permintaan", () => gema(400), null],
+    ["Gemini 500 mengutip permintaan", () => gema(500), null],
+    ["Gemini 429", () => gema(429), null],
+    ["Gemini tidak terjangkau dengan pesan berisi permintaan", () => async (url, opsi) => { const e = new TypeError("fetch failed " + opsi.body); e.cause = opsi.body; throw e; }, null],
+    ["jawaban normal", () => async () => ({ ok: true, status: 200, json: async () => ({ candidates: [{ content: { parts: [{ text: "Jawaban" }] } }] }) }), null],
+  ];
+  try {
+    for (const m of metode) { asli[m] = console[m]; console[m] = (...a) => catatan.push(a.map((x) => (typeof x === "string" ? x : (() => { try { return JSON.stringify(x) + " " + String(x) + " " + String(x?.cause ?? ""); } catch { return String(x); } })())).join(" ")); }
+    for (const [nama, buatFetch, origin] of jalur) {
+      catatan.length = 0;
+      if (buatFetch) { process.env.GEMINI_API_KEY = "uji-key"; globalThis.fetch = buatFetch(); } else delete process.env.GEMINI_API_KEY;
+      await jalankan(origin);
+      hasil.push([nama, catatan.join("\n")]);
+    }
+  } finally {
+    for (const m of metode) console[m] = asli[m];
+    globalThis.fetch = fetchAsli;
+    if (keyAsli === undefined) delete process.env.GEMINI_API_KEY; else process.env.GEMINI_API_KEY = keyAsli;
+  }
+  ok(hasil.length === jalur.length, "api/tanya: semua jalur uji privasi log harus berjalan");
+  for (const [nama, log] of hasil)
+    ok(!log.includes(RAHASIA_T) && !log.includes(RAHASIA_R) && !log.includes("uji-key"),
+      `api/tanya (${nama}): isi pertanyaan, riwayat, atau key tidak boleh masuk log (tercatat: ${log.slice(0, 160)})`);
 }
 
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }

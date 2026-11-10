@@ -134,7 +134,8 @@ export default async function handler(req, res) {
       return kirim(res, 429, { galat: "Kuota harian asisten sedang penuh. Silakan coba lagi nanti." });
     }
     if (!r.ok) {
-      console.error("Gemini galat", r.status, JSON.stringify(data).slice(0, 500));
+      // Tegar (10 Nov): hanya status & kode galat yang dicatat; pesan galat Gemini bisa mengutip isi pertanyaan pengguna.
+      console.error("Gemini galat", r.status, String(data?.error?.status || data?.error?.code || "").slice(0, 40));
       return kirim(res, 502, { galat: "Asisten sedang tidak bisa menjawab. Coba lagi beberapa saat lagi." });
     }
 
@@ -147,7 +148,7 @@ export default async function handler(req, res) {
     }
     return kirim(res, 200, { jawaban });
   } catch (e) {
-    console.error("Gemini tidak terjangkau", e);
+    console.error("Gemini tidak terjangkau", String(e?.name || "galat").slice(0, 40));
     return kirim(res, 502, { galat: "Asisten sedang tidak bisa dihubungi. Coba lagi beberapa saat lagi." });
   }
 }
