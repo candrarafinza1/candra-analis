@@ -459,3 +459,9 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 ### Tinjauan Kirana & Dewi, 10 Nov 15.11: halaman Metodologi dalam mode gelap
 - Tangkapan layar 390px & 1280px (mode gelap). Kontras teks di seluruh `main` diukur otomatis: terendah 8,32:1 (di atas batas 4,5:1).
 - Daftar isi, tautan bergaris bawah, istilah bertitik (DES, OJK) terbaca jelas. Tanpa scroll horizontal di kedua lebar. Tidak ada perbaikan.
+
+### Tinjauan Kirana & Dewi, 10 Nov 17.10: halaman Asisten AI dalam mode gelap
+- Tangkapan layar 390px & 1280px. Dua keadaan diuji: "belum aktif" (seperti situs sekarang) dan aktif dengan pesan galat (jawaban /api/tanya ditiru, tanpa memanggil Gemini).
+- Kontras teks di `main`: terendah 9,55:1 saat belum aktif; pesan galat merah 6,72:1 (gelap) dan 5,93:1 (terang). Tanpa scroll horizontal.
+- Fokus keyboard: tombol contoh pertanyaan dan tombol kirim bergaris fokus kuning 3px; kolom tanya ditandai bingkai biru muda.
+- Temuan diperbaiki: teks contoh "Tulis pertanyaan Anda" memakai abu bawaan browser, kontras hanya 3,64:1 di mode gelap. Kini memakai warna `--tinta-2`: 8,64:1 (gelap), 7,81:1 (terang). Nina: cek baru di tests/cek.mjs.

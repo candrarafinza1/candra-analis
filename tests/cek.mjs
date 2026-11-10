@@ -709,6 +709,51 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
     ok(cekFetch(baik).length === 0, `uji balik fetch: "${baik}" harus diterima`);
 }
 
+// Tegar & Arif (10 Nov 17.10): halaman HTML hanya memuat sumber daya dari situs sendiri, kecuali font
+// Google (cocok CSP: script-src 'self', style-src + fonts.googleapis.com, font-src fonts.gstatic.com).
+// Juga: tanpa <script> sebaris dan tanpa atribut on…="" (keduanya diblokir CSP script-src 'self').
+{
+  const csp = readFileSync("vercel.json", "utf8");
+  ok(/script-src 'self'[;"]/.test(csp), "vercel.json: CSP harus tetap script-src 'self'");
+  const cekHtml = (teks) => {
+    const salah = [];
+    const luar = (u) => /^[a-z][a-z0-9+.-]*:|^\/\//i.test(u.trim()) && !/^data:/i.test(u.trim());
+    for (const [tag, nama, attrs] of teks.matchAll(/<(script|link|img|iframe|source|video|audio|object|embed|track|input)\b([^>]*)>/gi)) {
+      const n = nama.toLowerCase();
+      if (n === "script" && !/\bsrc\s*=/i.test(attrs)) salah.push("<script> sebaris");
+      for (const [, , u] of attrs.matchAll(/\b(src|href|data|poster|srcset)\s*=\s*["']([^"']*)["']/gi)) {
+        if (!luar(u)) continue;
+        const host = (u.match(/^(?:[a-z]+:)?\/\/([^/?#]+)/i) || [])[1] || "";
+        const rel = (attrs.match(/\brel\s*=\s*["']([^"']*)["']/i) || [])[1] || "";
+        const bolehFont = n === "link" && /^https:\/\//i.test(u) &&
+          ((host === "fonts.googleapis.com" && /\b(stylesheet|preconnect)\b/.test(rel)) || (host === "fonts.gstatic.com" && /\bpreconnect\b/.test(rel)));
+        if (!bolehFont) salah.push(tag.slice(0, 70));
+      }
+    }
+    for (const [a] of teks.matchAll(/<[a-z][^>]*\son[a-z]+\s*=\s*["'][^>]*>/gi)) salah.push("atribut on…: " + a.slice(0, 60));
+    return salah;
+  };
+  for (const h of halaman) {
+    const salah = cekHtml(readFileSync(h, "utf8"));
+    ok(salah.length === 0, `${h}: hanya boleh memuat sumber daya situs sendiri + font Google, tanpa script sebaris (ditemukan: ${salah.join("; ")})`);
+  }
+  // Uji balik
+  for (const buruk of ['<script src="https://cdn.example/a.js"></script>', '<script src="//cdn.example/a.js"></script>',
+    "<script>alert(1)</script>", '<link rel="stylesheet" href="https://cdn.example/a.css">', '<img src="http://a.example/x.png">',
+    '<iframe src="https://a.example"></iframe>', '<link rel="stylesheet" href="https://fonts.gstatic.com/x.css">',
+    '<link rel="stylesheet" href="http://fonts.googleapis.com/css2">', '<button onclick="x()">', '<link rel="prefetch" href="https://fonts.googleapis.com/x">'])
+    ok(cekHtml(buruk).length >= 1, `uji balik HTML: ${buruk} harus ditolak`);
+  for (const baik of ['<script src="assets/app.js"></script>', '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=X">',
+    '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>', '<link rel="icon" href="/assets/logo.svg">',
+    '<img src="data:image/png;base64,AA" alt="">', '<a href="https://www.ojk.go.id">OJK</a>'])
+    ok(cekHtml(baik).length === 0, `uji balik HTML: ${baik} harus diterima`);
+}
+
+// Dewi & Kirana (10 Nov 17.10): teks contoh di kolom tanya Asisten memakai warna --tinta-2 (kontras ≥7:1
+// terang & gelap), bukan abu bawaan browser (3,6:1 di mode gelap).
+ok(/\.form-tanya textarea::placeholder\s*\{[^}]*color:\s*var\(--tinta-2\)/.test(readFileSync("assets/styles.css", "utf8")),
+  "styles.css: placeholder kolom tanya Asisten harus berwarna var(--tinta-2) agar terbaca di mode gelap");
+
 // 2f. Dividen di profil (Galih & Hana, Arif, Nina, 3 Nov): dps wajib bersumber, judul sumber memuat angka yang sama,
 //     dan profil tidak menghitung imbal hasil (harga acuan belum ada)
 {

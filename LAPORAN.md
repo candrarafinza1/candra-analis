@@ -1180,3 +1180,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: KLBF & BRIS dicari ulang, belum ada laba Jan–Sep 2026 bersumber (BRIS baru s.d. Agustus 2026); tetap 23 dari 32.
 - Dewi & Kirana: tinjauan Asisten mode gelap belum dikerjakan sesi ini, tetap berikutnya. Tugas baru: Tegar + Arif (script/link luar di HTML), Nina + Arif (tes kotak istilah).
 - `node tests/cek.mjs` lolos. Tampilan tidak berubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 10 Nov 2026, 17.10 WIB (Bima)
+- Tegar & Arif: semua 10 halaman HTML dicek: hanya memuat berkas situs sendiri dan font Google (cocok CSP), tanpa `<script>` sebaris dan tanpa atribut on…. Tes baru + 16 contoh uji balik.
+- Dewi & Kirana: halaman Asisten AI ditinjau dalam mode gelap (390px & 1280px, keadaan "belum aktif" dan pesan galat tiruan). Temuan ringan diperbaiki: teks contoh kolom tanya hanya 3,64:1, kini 8,64:1 (gelap) / 7,81:1 (terang). Nina: cek baru.
+- Fajar: KLBF & BRIS dicari ulang, belum ada laba Jan–Sep 2026 bersumber (tetap 23 dari 32).
+- Tugas baru: Dewi + Kirana (Belajar & pelajaran mode gelap), Tegar + Arif (tes rel="noopener"). Nina + Arif (tes kotak istilah) tetap berikutnya.
+- `node tests/cek.mjs` lolos (10 halaman). Tampilan: hanya warna teks contoh kolom tanya, dicek 390px & 1280px tanpa scroll horizontal. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

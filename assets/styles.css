@@ -456,6 +456,7 @@ tbody tr:hover { background: var(--hover-baris); }
   border: 2px solid var(--garis); background: var(--putih); color: var(--tinta); resize: vertical; min-height: 96px;
 }
 .form-tanya textarea:focus { border-color: var(--aksen); outline: none; }
+.form-tanya textarea::placeholder { color: var(--tinta-2); opacity: 1; }
 .form-tanya textarea:disabled, .form-tanya button:disabled { opacity: .6; cursor: not-allowed; }
 .form-bawah { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 10px; }
 .hitung-karakter { font-size: .85rem; color: var(--tinta-2); }
