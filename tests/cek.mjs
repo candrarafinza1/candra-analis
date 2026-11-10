@@ -749,6 +749,50 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
     ok(cekHtml(baik).length === 0, `uji balik HTML: ${baik} harus diterima`);
 }
 
+// Tegar & Arif (10 Nov 18.11): setiap tautan yang membuka tab baru (target="_blank") wajib rel="noopener"
+// agar halaman luar tidak bisa mengendalikan tab situs (window.opener). window.open() tanpa "noopener" ditolak.
+{
+  const cekBlank = (teks) => {
+    const salah = [];
+    // HTML: <a ... target="_blank" ...>
+    for (const [tag] of teks.matchAll(/<[a-z][^>]*\btarget\s*=\s*["']_blank["'][^>]*>/gi)) {
+      const rel = (tag.match(/\brel\s*=\s*["']([^"']*)["']/i) || [])[1] || "";
+      if (!/\bnoopener\b/i.test(rel)) salah.push(tag.slice(0, 70));
+    }
+    // JS: objek atribut { ... target: "_blank" ... } harus memuat rel berisi noopener di objek yang sama
+    const re = /\btarget\s*:\s*["'`]_blank["'`]/g;
+    let m;
+    while ((m = re.exec(teks))) {
+      const awal = teks.lastIndexOf("{", m.index), akhir = teks.indexOf("}", m.index);
+      const obj = awal < 0 || akhir < 0 ? "" : teks.slice(awal, akhir + 1);
+      if (!/\brel\s*:\s*["'`][^"'`]*\bnoopener\b/.test(obj)) salah.push(teks.slice(m.index, m.index + 50));
+    }
+    // JS: setAttribute("target", "_blank") tanpa setAttribute("rel", "...noopener...") di skrip yang sama
+    if (/setAttribute\(\s*["']target["']\s*,\s*["']_blank["']/.test(teks) && !/setAttribute\(\s*["']rel["']\s*,\s*["'][^"']*noopener/.test(teks))
+      salah.push('setAttribute("target", "_blank") tanpa rel noopener');
+    for (const [w] of teks.matchAll(/\bwindow\.open\s*\([^)]*\)/g)) if (!/noopener/.test(w)) salah.push(w.slice(0, 60));
+    return salah;
+  };
+  const berkas = [...halaman, ...["assets", "data"].flatMap((d) => readdirSync(d).filter((f) => f.endsWith(".js")).map((f) => `${d}/${f}`))];
+  let jumlahBlank = 0;
+  for (const f of berkas) {
+    const teks = readFileSync(f, "utf8");
+    jumlahBlank += (teks.match(/\btarget\s*(?:=|:)\s*["'`]_blank/g) || []).length;
+    const salah = cekBlank(teks);
+    ok(salah.length === 0, `${f}: tautan tab baru wajib rel="noopener" (ditemukan: ${salah.join("; ")})`);
+  }
+  ok(jumlahBlank >= 6, `tes rel="noopener" harus menemukan tautan tab baru di app.js (kini ${jumlahBlank}); periksa pola pencarian`);
+  // Uji balik
+  for (const buruk of ['<a href="https://a.example" target="_blank">x</a>', '<a target="_blank" rel="nofollow" href="x">',
+    'el("a", { href: u, target: "_blank", text: t })', "el('a', { target: '_blank', rel: 'noreferrer' })",
+    'window.open("https://a.example")', 'window.open(u, "_blank")', 'a.setAttribute("target", "_blank");'])
+    ok(cekBlank(buruk).length >= 1, `uji balik noopener: ${buruk} harus ditolak`);
+  for (const baik of ['<a href="https://a.example" target="_blank" rel="noopener">x</a>', '<a target="_blank" rel="noopener noreferrer" href="x">',
+    'el("a", { href: u, target: "_blank", rel: "noopener", text: t })', '<a href="https://www.ojk.go.id">OJK</a>',
+    'window.open(u, "_blank", "noopener")', 'a.setAttribute("target", "_blank"); a.setAttribute("rel", "noopener");'])
+    ok(cekBlank(baik).length === 0, `uji balik noopener: ${baik} harus diterima`);
+}
+
 // Dewi & Kirana (10 Nov 17.10): teks contoh di kolom tanya Asisten memakai warna --tinta-2 (kontras ≥7:1
 // terang & gelap), bukan abu bawaan browser (3,6:1 di mode gelap).
 ok(/\.form-tanya textarea::placeholder\s*\{[^}]*color:\s*var\(--tinta-2\)/.test(readFileSync("assets/styles.css", "utf8")),

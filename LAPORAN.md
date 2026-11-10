@@ -1187,3 +1187,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: KLBF & BRIS dicari ulang, belum ada laba Jan–Sep 2026 bersumber (tetap 23 dari 32).
 - Tugas baru: Dewi + Kirana (Belajar & pelajaran mode gelap), Tegar + Arif (tes rel="noopener"). Nina + Arif (tes kotak istilah) tetap berikutnya.
 - `node tests/cek.mjs` lolos (10 halaman). Tampilan: hanya warna teks contoh kolom tanya, dicek 390px & 1280px tanpa scroll horizontal. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 10 Nov 2026, 18.11 WIB (Bima)
+- Tegar & Arif: tes baru `rel="noopener"`: semua target="_blank" di 10 halaman HTML dan skrip assets/ & data/ wajib rel noopener, window.open() tanpa noopener ditolak. 6 tautan tab baru di app.js sudah aman. Uji balik 13 contoh + uji mutasi.
+- Fajar: KLBF & BRIS dicari ulang, belum ada laba Jan–Sep 2026 bersumber (KLBF baru semester I, BRIS s.d. Agustus) → tetap 23 dari 32.
+- Temuan baru (Tegar): 4 tautan sumber tab baru belum menyebut "(tab baru)" untuk pembaca layar → tugas baru Tegar + Arif, ditinjau Dewi.
+- `node tests/cek.mjs` lolos (10 halaman). Tampilan tidak berubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
