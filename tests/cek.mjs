@@ -1111,6 +1111,59 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
   }
 }
 
+// Nina & Arif (10 Nov 07.10): kotak "Posisi di Peringkat" di profil emiten dijalankan langsung lewat posisi()
+// di app.js dengan contoh emiten, lalu dicocokkan dengan Metodologi (DES, periksa ulang, sekali-waktu, angka
+// lengkap) dan dengan peserta() Peringkat: nomor urut dan jumlah emiten harus sama dengan halaman Peringkat.
+{
+  const app = readFileSync("assets/app.js", "utf8");
+  const blok = (awal) => {
+    const i = app.indexOf(awal);
+    if (i < 0) return "";
+    let k = app.indexOf("{", i), d = 0;
+    for (let j = k; j < app.length; j++) { if (app[j] === "{") d++; else if (app[j] === "}" && --d === 0) return app.slice(i, j + 1) + ";"; }
+    return "";
+  };
+  const nama = ["uang", "rupiahMiliar", "dolarJuta", "usd", "persen", "ubah", "ada", "tumbuh", "laba25", "tumbuhLaba", "tumbuhPendapatan", "roe", "syariahAktif", "diluarPeringkat", "peserta", "urutkan", "posisi"];
+  const kode = nama.map(n => blok("function " + n + "("));
+  const krit = blok("var KRITERIA = {");
+  const fmt = ["angka", "angka2"].map(n => (app.match(new RegExp("var " + n + " = [^\\n]*")) || [""])[0]).join("\n");
+  ok(kode.every(Boolean) && krit, "app.js: fungsi Posisi di Peringkat (" + nama.filter((n, i) => !kode[i]).join(", ") + ") atau KRITERIA tidak ditemukan, sesuaikan tes ini");
+  if (kode.every(Boolean) && krit) {
+    const dasar = { desBaris: 1, pendapatan: { 2024: 1000, 2025: 1100 }, ekuitas2025: 1000, sektor: "Contoh" };
+    const contoh = [
+      ["ATAS", { labaTahun: { 2024: 100, 2025: 300 } }],      // laba +200%, ROE 30%
+      ["TENGAH", { labaTahun: { 2024: 100, 2025: 150 } }],    // laba +50%, ROE 15%
+      ["DOLAR", { mataUang: "USD", labaTahun: { 2024: 100, 2025: 110 } }], // laba +10%, ROE 11%
+      ["KOSONG", { labaTahun: { 2025: 200 } }],               // laba 2024 kosong, ROE 20%
+      ["NONDES", { desBaris: null, labaTahun: { 2024: 1, 2025: 900 } }],
+      ["KELUAR", { keluarDES: true, labaTahun: { 2024: 1, 2025: 900 } }],
+      ["ULANG", { periksaUlang: "dua sumber berbeda", labaTahun: { 2024: 1, 2025: 900 } }],
+      ["SEKALI", { sekaliWaktu: "laba penjualan anak usaha sekitar 30%.", labaTahun: { 2024: 1, 2025: 900 } }],
+    ].map(([kd, x]) => Object.assign({ kode: kd }, dasar, x));
+    const buat = vm.runInNewContext(`(function (EMITEN, e) { ${fmt}\n${kode.join("\n")}\n${krit}\n return { posisi: posisi, peserta: peserta }; })`);
+    const pos = (kd, kunci) => { const e = contoh.find(x => x.kode === kd); return buat(contoh, e).posisi(kunci, "X"); };
+    const harap = [
+      ["ATAS", "tumbuhLaba", /^X: urutan 1 dari 3 emiten \(/],
+      ["TENGAH", "tumbuhLaba", /^X: urutan 2 dari 3 emiten \(/],
+      ["DOLAR", "tumbuhLaba", /^X: urutan 3 dari 3 emiten \(/],
+      ["ATAS", "roe", /^X: urutan 1 dari 4 emiten \(/],
+      ["KOSONG", "roe", /^X: urutan 2 dari 4 emiten \(/],
+      ["DOLAR", "roe", /^X: urutan 4 dari 4 emiten \(/],
+      ["KOSONG", "tumbuhLaba", /^X: belum ikut Peringkat karena datanya belum lengkap\.$/],
+      ["NONDES", "roe", /^X: tidak ikut Peringkat karena tidak tercatat di Daftar Efek Syariah terbaru\.$/],
+      ["KELUAR", "tumbuhLaba", /^X: tidak ikut Peringkat karena tidak tercatat di Daftar Efek Syariah terbaru\.$/],
+      ["ULANG", "roe", /^X: belum ikut Peringkat karena angkanya sedang dicek ulang/],
+      ["SEKALI", "tumbuhLaba", /^X: tidak ikut Peringkat karena laba 2025 banyak ditopang keuntungan sekali-waktu/],
+    ];
+    harap.forEach(([kd, kunci, re]) => { const t = pos(kd, kunci); ok(re.test(t), `app.js: Posisi di Peringkat ${kd}/${kunci} = "${t}", tidak sesuai aturan Metodologi`); });
+    // Jumlah "dari N emiten" harus sama dengan peserta() halaman Peringkat
+    const r = buat(contoh, contoh[0]);
+    ["tumbuhLaba", "roe"].forEach(k => ok(new RegExp("dari " + r.peserta(k).length + " emiten").test(pos("ATAS", k)), `app.js: Posisi di Peringkat (${k}) memakai jumlah emiten berbeda dari Peringkat`));
+    ok(/Urutan 1 = angka tertinggi[^"]*bukan saran membeli atau menjual/.test(app), "app.js: catatan 'Urutan 1 = angka tertinggi … bukan saran membeli atau menjual' di kotak Posisi hilang");
+    ok(/posisi\("tumbuhLaba"[^)]*\)[\s\S]{0,120}posisi\("roe"/.test(app), "app.js: kotak Posisi harus menampilkan Pertumbuhan laba dan ROE");
+  }
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);
 
