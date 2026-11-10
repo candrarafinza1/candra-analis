@@ -871,7 +871,8 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
     "Merugi dalam 9 bulan pertama 2026": /Laba 9 bulan 2026[^<]*rugi/,
     "Laba 9 bulan 2026 turun lebih dari separuh": /turun 50% atau lebih = <strong>tinggi/,
     "Laba 9 bulan 2026 menurun": /turun kurang dari 50% = <strong>sedang/,
-    "Laba 9 bulan 2026 naik": /naik = catatan informasi/,
+    "Laba 9 bulan 2026 naik": /naik atau sama = catatan informasi/,
+    "Laba 9 bulan 2026 tidak berubah": /naik atau sama = catatan informasi/,
     "Perbandingan laba 9 bulan tidak sebanding": null, // dijelaskan di bagian #sekali-waktu
     "Catatan laba 9 bulan": /keterangan khusus laba 9 bulan/,
     "Utang tinggi dibanding modal": /DER lebih dari 2 kali/,
@@ -1002,8 +1003,8 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
   const app = readFileSync("assets/app.js", "utf8");
   const metod = readFileSync("metodologi.html", "utf8");
   const aturan = (metod.match(/Laba 9 bulan 2026 dibanding 9 bulan 2025[^<]*(?:<[^>]+>[^<]*)*?<\/li>/) || [""])[0];
-  ok(/rugi atau turun (\d+)% atau lebih = <strong>tinggi<\/strong>, turun kurang dari \1% = <strong>sedang<\/strong>, naik = catatan informasi/.test(aturan),
-    "metodologi.html: aturan Radar laba 9 bulan tidak lagi 'rugi atau turun N% atau lebih = tinggi, turun kurang dari N% = sedang, naik = catatan informasi'");
+  ok(/rugi atau turun (\d+)% atau lebih = <strong>tinggi<\/strong>, turun kurang dari \1% = <strong>sedang<\/strong>, naik atau sama = catatan informasi/.test(aturan),
+    "metodologi.html: aturan Radar laba 9 bulan tidak lagi 'rugi atau turun N% atau lebih = tinggi, turun kurang dari N% = sedang, naik atau sama = catatan informasi'");
   const batas = Number((aturan.match(/turun (\d+)% atau lebih/) || [])[1]);
   const mulai = app.indexOf("// Laba 9 bulan (Januari–September) 2026");
   const akhir = app.indexOf("var sw9", mulai);
@@ -1247,6 +1248,75 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
     ok(/bukan saran membeli atau menjual/.test(banding), "app.js: kalimat 'bukan saran membeli atau menjual' di Bandingkan hilang");
     ok(!/lebih baik|lebih unggul|lebih menarik|pemenang/i.test(banding), "app.js: Bandingkan tidak boleh memakai kata penilaian ('lebih baik', 'pemenang', …)");
     ok(/laba yang diatribusikan kepada pemilik entitas induk/.test(banding), "app.js: keterangan tabel Bandingkan harus menyebut laba yang diatribusikan kepada pemilik entitas induk");
+  }
+}
+
+// Nina & Arif (10 Nov 10.09): melengkapi tes 9 Nov 19.16 — sinyal laba 9 bulan lewat periksa() utuh di app.js dengan
+// contoh angka, lalu dicocokkan dengan Metodologi: rugi atau turun ≥50% = tinggi; turun <50% = sedang;
+// naik atau sama = catatan informasi; tanpa pembanding 2025 = tidak ada sinyal; pos sekali-waktu ≥25% = catatan.
+{
+  const app = readFileSync("assets/app.js", "utf8");
+  const metod = readFileSync("metodologi.html", "utf8");
+  const m9 = metod.match(/Laba 9 bulan 2026 dibanding 9 bulan 2025[^<]*: rugi atau turun (\d+)% atau lebih = <strong>tinggi<\/strong>, turun kurang dari (\d+)% = <strong>sedang<\/strong>, naik atau sama = catatan informasi\./);
+  ok(m9 && m9[1] === m9[2], "metodologi.html: aturan Radar laba 9 bulan (rugi/turun N% = tinggi, turun < N% = sedang, naik atau sama = informasi) hilang atau batasnya tidak sama");
+  const msw = metod.match(/pos sekali-waktu \(keuntungan atau beban\) yang nilainya (\d+)% atau lebih dari laba 9 bulan/);
+  ok(msw, "metodologi.html: aturan sekali-waktu laba 9 bulan (N% atau lebih) hilang");
+  const fungsi = nama => {
+    const i = app.indexOf("function " + nama + "(");
+    if (i < 0) return "";
+    let k = app.indexOf("{", i), d = 0;
+    for (let j = k; j < app.length; j++) { if (app[j] === "{") d++; else if (app[j] === "}" && --d === 0) return app.slice(i, j + 1); }
+    return "";
+  };
+  const nama = ["uang", "rupiahMiliar", "dolarJuta", "usd", "persen", "ubah", "ada", "tumbuh", "tumbuhLaba", "tumbuhPendapatan", "der", "sekaliWaktu9b", "periksa"];
+  const kode = nama.map(fungsi);
+  const des = (app.match(/var DES_LABEL = [^\n]*/) || [""])[0];
+  const fmt = ["angka", "angka2"].map(n => (app.match(new RegExp("var " + n + " = [^\\n]*")) || [""])[0]).join("\n");
+  ok(kode.every(Boolean) && des, "app.js: fungsi periksa() atau bantunya tidak ditemukan untuk tes laba 9 bulan");
+  if (m9 && msw && kode.every(Boolean) && des) {
+    const batas = Number(m9[1]), bSw = Number(msw[1]);
+    const periksa = vm.runInNewContext(`(function () { ${des}\n${fmt}\n${kode.join("\n")}\n return periksa; })()`);
+    const dasar = { kode: "CONTOH", labaTahun: { 2024: 100, 2025: 100 }, pendapatan: { 2024: 1000, 2025: 1000 }, ekuitas2025: 100, liabilitas2025: 100 };
+    const tanda = e => periksa(Object.assign({}, dasar, e));
+    const sinyal9 = s => s.filter(x => /9 bulan/.test(x.judul) && !/sebanding|^Catatan/.test(x.judul));
+    const B9 = /^Laba Januari–September: .+ \(2025\) → .+ \(2026\), [+−]?\S+%\.$/;
+    const contoh = [
+      ["naik", { 2025: 100, 2026: 120 }, /^Laba 9 bulan 2026 naik$/, "info"],
+      ["sama", { 2025: 100, 2026: 100 }, /^Laba 9 bulan 2026 tidak berubah$/, "info"],
+      ["turun tipis", { 2025: 100, 2026: 99 }, /^Laba 9 bulan 2026 menurun$/, "sedang"],
+      ["turun di bawah batas", { 2025: 100, 2026: 100 - batas + 1 }, /^Laba 9 bulan 2026 menurun$/, "sedang"],
+      ["turun tepat batas", { 2025: 100, 2026: 100 - batas }, /^Laba 9 bulan 2026 turun lebih dari separuh$/, "tinggi"],
+      ["rugi 2026", { 2025: 100, 2026: -5 }, /^Merugi dalam 9 bulan pertama 2026$/, "tinggi"],
+      ["rugi 2025 → laba 2026", { 2025: -50, 2026: 30 }, /^Laba 9 bulan 2026 naik$/, "info"],
+    ];
+    for (const [nm, l9, judul, harap] of contoh) {
+      const s = tanda({ laba9b: l9 }), x9 = sinyal9(s);
+      ok(x9.length === 1 && judul.test(x9[0].judul) && x9[0].tingkat === harap,
+        `app.js: Radar laba 9 bulan contoh "${nm}" memberi ${x9.map(x => x.tingkat + " '" + x.judul + "'").join(", ") || "(tidak ada)"}, Metodologi mengatur ${harap}`);
+      ok(x9[0] && B9.test(x9[0].bukti), `app.js: bukti Radar laba 9 bulan contoh "${nm}" tidak menyebut angka 2025 → 2026 (${x9[0] && x9[0].bukti})`);
+      ok((harap === "info") === s.some(y => y.tingkat === "aman"), `app.js: Radar contoh 9 bulan "${nm}": tanda "Tidak ada tanda risiko" ${harap === "info" ? "harus" : "tidak boleh"} muncul`);
+      ok(!/pasti|buruan|rekomendasi|beli|jual/i.test(s.map(y => y.judul + " " + y.isi).join(" ")), `app.js: kalimat Radar 9 bulan contoh "${nm}" memuat kata ajakan`);
+    }
+    // Tanpa pembanding 2025 (atau tanpa angka 2026, atau pembanding nol): tidak ada sinyal 9 bulan sama sekali
+    for (const [nm, l9] of [["tanpa 2025", { 2026: 50 }], ["tanpa 2026", { 2025: 50 }], ["pembanding nol", { 2025: 0, 2026: 50 }]]) {
+      ok(sinyal9(tanda({ laba9b: l9, catatan9b: "contoh" })).length === 0 && !tanda({ laba9b: l9, catatan9b: "contoh" }).some(y => /^Catatan laba 9 bulan$/.test(y.judul)),
+        `app.js: Radar memberi sinyal/catatan 9 bulan untuk contoh "${nm}", padahal belum ada perbandingan`);
+    }
+    // Pos sekali-waktu: ≥ batas → catatan "tidak sebanding" (info), tingkat tanda tetap menurut angka; < batas → tidak ada
+    const tsb = e => tanda(e).find(y => /^Perbandingan laba 9 bulan tidak sebanding$/.test(y.judul));
+    const sw = (nilai, th) => ({ tahun: th || 2026, nilai, jenis: "beban", ket: "contoh beban" });
+    const besar = tanda({ laba9b: { 2025: 100, 2026: 40 }, sekaliWaktu9b: sw(bSw * 0.4) });
+    ok(tsb({ laba9b: { 2025: 100, 2026: 40 }, sekaliWaktu9b: sw(bSw * 0.4) }) && tsb({}) === undefined, `app.js: catatan sekali-waktu tidak muncul untuk pos tepat ${bSw}% laba 9 bulan`);
+    ok(sinyal9(besar)[0] && sinyal9(besar)[0].tingkat === "tinggi", "app.js: pos sekali-waktu mengubah tingkat tanda laba 9 bulan, padahal Metodologi: tanda tetap sesuai angka");
+    ok((tsb({ laba9b: { 2025: 100, 2026: 40 }, sekaliWaktu9b: sw(bSw * 0.4 - 1) }) === undefined), `app.js: catatan sekali-waktu muncul untuk pos di bawah ${bSw}% laba 9 bulan`);
+    const tpia = tsb({ laba9b: { 2025: 100, 2026: 50 }, sekaliWaktu9b: { tahun: 2025, nilai: 150, jenis: "keuntungan", ket: "contoh keuntungan" } });
+    ok(tpia && tpia.tingkat === "info" && /ditopang contoh keuntungan, lebih besar daripada laba/.test(tpia.isi), `app.js: catatan sekali-waktu 2025 (keuntungan > laba) tidak sesuai (${tpia && tpia.isi})`);
+    // Catatan 9 bulan dari tim tampil sebagai informasi
+    const cat = tanda({ laba9b: { 2025: 100, 2026: 110 }, catatan9b: "contoh catatan" }).find(y => /^Catatan laba 9 bulan$/.test(y.judul));
+    ok(cat && cat.tingkat === "info" && cat.isi === "contoh catatan", "app.js: catatan9b tidak tampil sebagai catatan informasi");
+    // Emiten dolar AS: bukti memakai US$, bukan Rp
+    const d9 = sinyal9(tanda({ mataUang: "USD", laba9b: { 2025: 100, 2026: 70 } }))[0];
+    ok(d9 && /US\$/.test(d9.bukti) && !/Rp/.test(d9.bukti), `app.js: bukti Radar 9 bulan emiten dolar AS harus memakai US$ (${d9 && d9.bukti})`);
   }
 }
 

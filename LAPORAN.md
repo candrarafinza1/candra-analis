@@ -1145,3 +1145,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: KLBF & BRIS dicari ulang, belum ada laba Jan–Sep 2026 bersumber (tetap 23 dari 32).
 - Tugas baru: tes sinyal Radar 9 bulan (Nina, Arif). Tegar: validasi masukan /api/tanya tetap berikutnya. Karyawan lain: tugas berjalan di backlog; Yoga rilis lewat push ke main.
 - `node tests/cek.mjs` lolos (10 halaman). Tampilan tidak berubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 10 Nov 2026, 10.09 WIB (Bima)
+- Nina & Arif: tes baru di `tests/cek.mjs` menjalankan `periksa()` Radar utuh untuk sinyal laba 9 bulan (naik, sama, turun, tepat batas 50%, rugi, rugi 2025 → laba 2026, tanpa pembanding, sekali-waktu tepat/di bawah 25%, catatan9b, dolar AS). Temuan ringan: laba 9 bulan yang sama persis diberi judul "naik" → kini "Laba 9 bulan 2026 tidak berubah"; Metodologi: "naik atau sama = catatan informasi". Diuji balik: mengubah batas 25% atau tingkat catatan membuat tes gagal. Tidak ada emiten dalam data yang terdampak.
+- Fajar: KLBF & BRIS dicari ulang, belum ada laba Jan–Sep 2026 bersumber (tetap 23 dari 32).
+- Tugas baru: tes kotak "Musim laporan 9 bulan" (Nina, Arif). Tegar: validasi masukan /api/tanya tetap berikutnya. Karyawan lain: tugas berjalan di backlog; Yoga rilis lewat push ke main.
+- `node tests/cek.mjs` lolos (10 halaman). Tampilan tidak berubah (hanya satu kalimat Metodologi). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

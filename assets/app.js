@@ -496,6 +496,8 @@
         isi: "Laba Januari–September 2026 turun tajam dibanding periode yang sama tahun lalu.", bukti: bukti9 });
       else if (g9 < 0) s.push({ tingkat: "sedang", judul: "Laba 9 bulan 2026 menurun",
         isi: "Laba Januari–September 2026 lebih rendah daripada periode yang sama tahun lalu.", bukti: bukti9 });
+      else if (g9 === 0) s.push({ tingkat: "info", judul: "Laba 9 bulan 2026 tidak berubah",
+        isi: "Laba Januari–September 2026 sama dengan periode yang sama tahun lalu. Laporan kuartalan umumnya belum diaudit.", bukti: bukti9 });
       else s.push({ tingkat: "info", judul: "Laba 9 bulan 2026 naik",
         isi: "Laba Januari–September 2026 lebih tinggi daripada periode yang sama tahun lalu. Laporan kuartalan umumnya belum diaudit.", bukti: bukti9 });
       var sw9 = sekaliWaktu9b(e);
