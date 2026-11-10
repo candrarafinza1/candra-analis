@@ -1139,3 +1139,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: KLBF & BRIS dicari ulang, belum ada laba Jan–Sep 2026 bersumber (tetap 23 dari 32).
 - Tugas baru: Tegar menguji validasi masukan /api/tanya. Karyawan lain: tugas berjalan di backlog; Yoga rilis lewat push ke main.
 - `node tests/cek.mjs` lolos (10 halaman). Tampilan tidak berubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 10 Nov 2026, 09.10 WIB (Bima)
+- Nina & Arif: tes baru di `tests/cek.mjs` menjalankan `nilaiPos()` kotak Bandingkan dengan 9 contoh emiten (biasa, dolar AS, bank syariah tanpa DER, angka kosong, 9 bulan tanpa pembanding, laba 9 bulan turun, ekuitas minus, tidak di DES, keluar DES). Tiap baris cocok dengan Metodologi (dolar AS tidak dikonversi, DER bank "–", angka kosong "–"); catatan dolar AS, periksa ulang/sekali-waktu, dan "bukan saran membeli atau menjual" dijaga; kata penilaian ("lebih baik", "pemenang") ditolak. Diuji balik: mengubah DER kosong jadi 0x atau syarat catatan dolar membuat tes gagal.
+- Fajar: KLBF & BRIS dicari ulang, belum ada laba Jan–Sep 2026 bersumber (tetap 23 dari 32).
+- Tugas baru: tes sinyal Radar 9 bulan (Nina, Arif). Tegar: validasi masukan /api/tanya tetap berikutnya. Karyawan lain: tugas berjalan di backlog; Yoga rilis lewat push ke main.
+- `node tests/cek.mjs` lolos (10 halaman). Tampilan tidak berubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

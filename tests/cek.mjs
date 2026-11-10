@@ -1197,6 +1197,59 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
   }
 }
 
+// Nina & Arif (10 Nov 09.10): kotak Bandingkan di profil emiten dijalankan langsung lewat nilaiPos() di app.js
+// dengan contoh emiten (biasa, dolar AS, bank syariah tanpa DER, angka kosong, tidak di DES), lalu dicocokkan
+// dengan Metodologi: dolar AS tidak dikonversi, ROE/DER tetap persen/kali, DER bank "–", angka kosong "–".
+{
+  const app = readFileSync("assets/app.js", "utf8");
+  const metod = readFileSync("metodologi.html", "utf8");
+  ok(/tidak bisa dibandingkan langsung dengan angka rupiah\. Bandingkan memakai persentase \(pertumbuhan, ROE\) atau DER/.test(metod), "metodologi.html: kalimat 'Angka emiten dolar AS tidak bisa dibandingkan langsung … Bandingkan memakai persentase (pertumbuhan, ROE) atau DER' hilang");
+  ok(/DER bank syariah tidak kami hitung/.test(metod), "metodologi.html: aturan 'DER bank syariah tidak kami hitung' hilang");
+  const blok = (awal) => {
+    const i = app.indexOf(awal);
+    if (i < 0) return "";
+    let k = app.indexOf("{", i), d = 0;
+    for (let j = k; j < app.length; j++) { if (app[j] === "{") d++; else if (app[j] === "}" && --d === 0) return app.slice(i, j + 1) + ";"; }
+    return "";
+  };
+  const nama = ["rupiahMiliar", "dolarJuta", "usd", "uang", "persen", "ubah", "ada", "tumbuh", "laba25", "roe", "der", "syariahAktif", "strip", "nilaiPos"];
+  const kode = nama.map(n => blok("function " + n + "("));
+  const posLabel = (app.match(/var POS = \[[^\n]*\];/) || [""])[0];
+  const fmt = ["angka", "angka2"].map(n => (app.match(new RegExp("var " + n + " = [^\\n]*")) || [""])[0]).join("\n");
+  const banding = blok("function bagianBanding(");
+  ok(kode.every(Boolean) && posLabel && banding, "app.js: fungsi Bandingkan (" + nama.filter((n, i) => !kode[i]).join(", ") + ") atau daftar POS tidak ditemukan, sesuaikan tes ini");
+  if (kode.every(Boolean) && posLabel && banding) {
+    const r = vm.runInNewContext(`(function () { ${fmt}\n${kode.join("\n")}\n${posLabel}\n return { nilaiPos: nilaiPos, POS: POS }; })()`);
+    ok(r.POS.join("|") === "Laba bersih 2025|Pendapatan 2025|ROE 2025|DER akhir 2025|Laba Jan–Sep 2026 (perubahan dari 2025)|Daftar Efek Syariah",
+      "app.js: baris Bandingkan berubah (" + r.POS.join(", ") + "); sesuaikan tes & Metodologi");
+    const dasar = { desBaris: 7, labaTahun: { 2024: 100, 2025: 120 }, pendapatan: { 2024: 1000, 2025: 1500 }, ekuitas2025: 1000, liabilitas2025: 500, laba9b: { 2025: 80, 2026: 100 } };
+    const v = x => r.nilaiPos(Object.assign({ kode: "C" }, dasar, x));
+    const harap = [
+      ["biasa", {}, ["Rp120 M", "Rp1,5 T", "12%", "0,5x", "Rp100 M (+25%)", "Baris 7"]],
+      ["dolar AS", { mataUang: "USD" }, ["US$120 juta", "US$1,5 miliar", "12%", "0,5x", "US$100 juta (+25%)", "Baris 7"]],
+      ["bank syariah", { liabilitas2025: null, pendapatan: null }, ["Rp120 M", "–", "12%", "–", "Rp100 M (+25%)", "Baris 7"]],
+      ["angka kosong", { labaTahun: {}, ekuitas2025: null, laba9b: {} }, ["–", "Rp1,5 T", "–", "–", "belum ada", "Baris 7"]],
+      ["9 bulan tanpa pembanding", { laba9b: { 2026: 90 } }, ["Rp120 M", "Rp1,5 T", "12%", "0,5x", "Rp90 M", "Baris 7"]],
+      ["laba 9 bulan turun", { laba9b: { 2025: 100, 2026: 60 } }, ["Rp120 M", "Rp1,5 T", "12%", "0,5x", "Rp60 M (−40%)", "Baris 7"]],
+      ["ekuitas minus", { ekuitas2025: -50 }, ["Rp120 M", "Rp1,5 T", "–", "–", "Rp100 M (+25%)", "Baris 7"]],
+      ["tidak di DES", { desBaris: null }, ["Rp120 M", "Rp1,5 T", "12%", "0,5x", "Rp100 M (+25%)", "Tidak tercatat"]],
+      ["keluar DES", { keluarDES: true }, ["Rp120 M", "Rp1,5 T", "12%", "0,5x", "Rp100 M (+25%)", "Tidak tercatat"]],
+    ];
+    harap.forEach(([nm, x, h]) => {
+      const t = v(x);
+      h.forEach((s, i) => ok(t[i] === s, `app.js: Bandingkan contoh "${nm}", baris "${r.POS[i]}" = "${t[i]}", seharusnya "${s}" (Metodologi)`));
+    });
+    // Catatan di bawah tabel: dolar AS vs rupiah, tanda periksa ulang/sekali-waktu, dan penegasan bukan saran
+    ok(/if \(usd\(e\) !== usd\(x\)\)[^\n]*\n\s*"Satu emiten melapor dalam dolar AS dan yang lain dalam rupiah\. Angka uangnya tidak sebanding langsung karena tidak kami konversi; ROE dan DER/.test(banding),
+      "app.js: catatan Bandingkan untuk emiten dolar AS vs rupiah hilang atau syaratnya berubah");
+    ok(/filter\(function \(y\) \{ return y\.periksaUlang \|\| y\.sekaliWaktu; \}\)/.test(banding) && /sedang dicek ulang atau banyak ditopang keuntungan sekali-waktu/.test(banding),
+      "app.js: catatan Bandingkan untuk emiten periksa ulang / sekali-waktu hilang");
+    ok(/bukan saran membeli atau menjual/.test(banding), "app.js: kalimat 'bukan saran membeli atau menjual' di Bandingkan hilang");
+    ok(!/lebih baik|lebih unggul|lebih menarik|pemenang/i.test(banding), "app.js: Bandingkan tidak boleh memakai kata penilaian ('lebih baik', 'pemenang', …)");
+    ok(/laba yang diatribusikan kepada pemilik entitas induk/.test(banding), "app.js: keterangan tabel Bandingkan harus menyebut laba yang diatribusikan kepada pemilik entitas induk");
+  }
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);
 
