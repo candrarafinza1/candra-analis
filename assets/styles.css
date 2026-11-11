@@ -95,7 +95,7 @@ p { margin: 0 0 1em; }
 
 .lompat {
   position: absolute; left: -999px; top: 8px;
-  background: var(--bulan); color: var(--tinta); padding: 8px 12px; z-index: 10;
+  background: var(--bulan); color: var(--malam); padding: 8px 12px; z-index: 10; /* --malam tetap gelap di mode gelap (Dewi, 11 Nov) */
 }
 .lompat:focus { left: 8px; }
 
@@ -457,6 +457,8 @@ tbody tr:hover { background: var(--hover-baris); }
 }
 .form-tanya textarea:focus { border-color: var(--aksen); outline: none; }
 .form-tanya textarea::placeholder { color: var(--tinta-2); opacity: 1; }
+/* Teks contoh di semua kolom isian (mis. cari istilah di Belajar) — terbaca di mode gelap (Dewi, 11 Nov) */
+input::placeholder, textarea::placeholder { color: var(--tinta-2); opacity: 1; }
 .form-tanya textarea:disabled, .form-tanya button:disabled { opacity: .6; cursor: not-allowed; }
 .form-bawah { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 10px; }
 .hitung-karakter { font-size: .85rem; color: var(--tinta-2); }

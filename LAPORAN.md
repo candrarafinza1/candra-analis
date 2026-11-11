@@ -1273,3 +1273,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: KLBF & BRIS dicari ulang. Hasil teratas masih kuartal III 2025 (KLBF) dan kuartal II 2026 (BRIS) → tetap 23 dari 32.
 - Tugas baru: Nina + Arif (uji `renderIstilahHari()`). Dewi + Kirana (Belajar & pelajaran mode gelap) tetap berikutnya.
 - `node tests/cek.mjs` lolos (10 halaman). Tampilan tidak berubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### Rabu 11 Nov 2026, 19.12 WIB (Bima)
+- Dewi & Kirana: halaman Belajar dan pelajaran ditinjau dalam mode gelap & terang di 390px dan 1280px (audit kontras otomatis seluruh halaman, kotak istilah terbuka, fokus keyboard). Dua temuan diperbaiki: tautan "Langsung ke isi" di mode gelap hanya 1,39:1 (kini tinta gelap, berlaku di semua halaman) dan teks contoh kolom cari istilah 3,64:1 (kini --tinta-2 untuk semua kolom isian). Sesudahnya 0 temuan, tanpa scroll horizontal. Nina: 2 tes penjaga baru di `tests/cek.mjs`, uji balik tertangkap.
+- Fajar: KLBF & BRIS dicari ulang. Hasil teratas masih kuartal III 2025 (KLBF) dan kuartal II 2026 (BRIS) → tetap 23 dari 32.
+- Tugas baru: Dewi + Kirana (audit kontras yang sama di halaman lain). Nina + Arif (uji `renderIstilahHari()`) tetap berikutnya.
+- `node tests/cek.mjs` lolos (10 halaman). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

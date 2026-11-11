@@ -465,3 +465,10 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Kontras teks di `main`: terendah 9,55:1 saat belum aktif; pesan galat merah 6,72:1 (gelap) dan 5,93:1 (terang). Tanpa scroll horizontal.
 - Fokus keyboard: tombol contoh pertanyaan dan tombol kirim bergaris fokus kuning 3px; kolom tanya ditandai bingkai biru muda.
 - Temuan diperbaiki: teks contoh "Tulis pertanyaan Anda" memakai abu bawaan browser, kontras hanya 3,64:1 di mode gelap. Kini memakai warna `--tinta-2`: 8,64:1 (gelap), 7,81:1 (terang). Nina: cek baru di tests/cek.mjs.
+
+### Tinjauan Kirana & Dewi, 11 Nov 19.12: halaman Belajar & satu pelajaran dalam mode gelap
+- Audit otomatis di 390px & 1280px, mode gelap dan terang: semua teks yang terlihat di seluruh halaman (bukan hanya `main`) plus teks contoh kolom isian, dengan kotak istilah terbuka; fokus keyboard dicek 6× Tab.
+- Temuan 1 (berlaku di semua halaman): tautan "Langsung ke isi" (muncul saat Tab pertama) berlatar kuning bertinta `--tinta`, yang di mode gelap berubah terang → kontras 1,39:1. Kini bertinta `--malam` (tetap gelap di kedua mode).
+- Temuan 2: teks contoh "Contoh: dividen" di kolom cari istilah Belajar 3,64:1 (abu bawaan browser). Aturan placeholder `--tinta-2` kini berlaku untuk semua input & textarea.
+- Sesudah perbaikan: 0 temuan di kedua mode dan kedua lebar; cincin fokus kuning 3px pada tautan, tombol kuis, dan Tandai selesai; tanpa scroll horizontal; tanpa galat JS.
+- Catatan: tinjauan Metodologi (10 Nov) hanya mengukur `main`, sehingga tautan "Langsung ke isi" terlewat. Audit berikutnya mengukur seluruh halaman.

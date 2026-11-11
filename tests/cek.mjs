@@ -2620,6 +2620,18 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
       `api/tanya (${nama}): isi pertanyaan, riwayat, atau key tidak boleh masuk log (tercatat: ${log.slice(0, 160)})`);
 }
 
+// Dewi & Kirana (11 Nov 19.12): tinjau mode gelap Belajar & pelajaran. Tautan "Langsung ke isi" berlatar
+// kuning --bulan harus bertinta --malam (tetap gelap di mode gelap; dulu --tinta → 1,39:1), dan teks contoh
+// di semua kolom isian memakai --tinta-2 (kolom cari istilah di Belajar dulu 3,64:1).
+{
+  const css = readFileSync("assets/styles.css", "utf8");
+  ok(/\.lompat\s*\{[^}]*background:\s*var\(--bulan\);\s*color:\s*var\(--malam\)/.test(css),
+    "styles.css: .lompat (latar kuning) harus bertinta var(--malam) agar terbaca di mode gelap");
+  ok(/(^|\n)input::placeholder,\s*textarea::placeholder\s*\{[^}]*color:\s*var\(--tinta-2\)/.test(css),
+    "styles.css: placeholder semua input & textarea harus berwarna var(--tinta-2)");
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);
+
 
