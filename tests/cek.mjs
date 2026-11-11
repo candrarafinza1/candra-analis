@@ -1331,6 +1331,93 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
     const b = blokRender.replace(lama, baru);
     ok(b !== blokRender && ujiKuis(b).some((s) => s.includes(pesan)), `uji balik kuis: "${pesan}" harus tertangkap`);
   }
+  // Nina & Arif (11 Nov 16.09): perilaku tombol "Tandai selesai" buatTandaiSelesai() dengan DOM tiruan dan
+  // localStorage tiruan. Awal "Tandai selesai" + aria-pressed="false" tanpa pengumuman; klik → "✓ Sudah selesai",
+  // aria-pressed="true", tersimpan, "n dari N pelajaran selesai" di role="status"; klik lagi → "Tanda selesai dihapus.";
+  // penyimpanan ditolak → pesan "tidak mengizinkan penyimpanan" dan tombol tidak berubah; peramban privat tidak galat.
+  const ujiTandai = (blokFungsi) => {
+    const KUNCI = "candra-analis:pelajaran-selesai";
+    const buatCtx = (simpan, tolakSimpan, tolakBaca) => {
+      const { doc, semua } = buatDom();
+      const ctxI = {
+        document: doc, MODUL: [{ id: "a" }, { id: "b" }, { id: "c" }], URLSearchParams, location: { search: "" },
+        localStorage: {
+          getItem: (k) => { if (tolakBaca) throw new Error("SecurityError"); return k in simpan ? simpan[k] : null; },
+          setItem: (k, v) => { if (tolakSimpan) throw new Error("QuotaExceededError"); simpan[k] = String(v); },
+        },
+        NodeFilter: { SHOW_TEXT: 4, FILTER_ACCEPT: 1, FILTER_REJECT: 2, FILTER_SKIP: 3 },
+        window: { ISTILAH: [], innerWidth: 390, innerHeight: 800, addEventListener() {},
+          matchMedia: () => ({ matches: false, addEventListener() {} }) },
+      };
+      vm.runInNewContext(ambilEl + "\n" + blokFungsi + "\n;globalThis.buatTandaiSelesai = buatTandaiSelesai;", ctxI);
+      const kotak = ctxI.buatTandaiSelesai(ctxI.MODUL[1]);
+      doc.body.appendChild(kotak);
+      const tombol = semua(kotak).find((n) => n.nodeType === 1 && n.nodeName === "BUTTON");
+      const info = semua(kotak).find((n) => n.nodeType === 1 && n.nodeName === "P" && n.classList.contains("tandai-info"));
+      const klik = () => (tombol.pendengar.click || []).forEach((f) => f({ target: tombol }));
+      return { tombol, info, klik };
+    };
+    const salah = [];
+    let c;
+    // 1. Awal: satu pelajaran lain sudah selesai, plus id usang yang harus diabaikan.
+    const simpan = { [KUNCI]: JSON.stringify(["a", "usang"]) };
+    try { c = buatCtx(simpan, false, false); } catch (e) { return ["buatTandaiSelesai() galat: " + e.message]; }
+    if (!c.tombol || !c.info) return ["kotak Tandai selesai harus punya tombol dan info"];
+    if (c.tombol.getAttribute("type") !== "button") salah.push('tombol Tandai selesai harus type="button"');
+    if (c.info.getAttribute("role") !== "status" || c.info.getAttribute("aria-live") !== "polite") salah.push('info harus role="status" aria-live="polite"');
+    if (c.tombol.textContent !== "Tandai selesai" || c.tombol.getAttribute("aria-pressed") !== "false") salah.push('awal harus "Tandai selesai" + aria-pressed="false"');
+    if (c.info.textContent !== "") salah.push("saat halaman dibuka tidak boleh ada pengumuman");
+    // 2. Klik pertama: ditandai.
+    c.klik();
+    if (c.tombol.textContent !== "✓ Sudah selesai" || c.tombol.getAttribute("aria-pressed") !== "true") salah.push('klik harus menjadi "✓ Sudah selesai" + aria-pressed="true"');
+    let isi = [];
+    try { isi = JSON.parse(simpan[KUNCI]); } catch (e) { /* dicatat di bawah */ }
+    if (!(Array.isArray(isi) && isi.includes("b") && isi.includes("a") && !isi.includes("usang"))) salah.push("klik harus menyimpan pelajaran ini (id usang dibuang): " + simpan[KUNCI]);
+    if (c.info.textContent !== "2 dari 3 pelajaran selesai. Tanda hanya tersimpan di perangkat ini.") salah.push("info harus menyebut n dari N pelajaran selesai: " + c.info.textContent);
+    // 3. Klik kedua: tanda dihapus.
+    c.klik();
+    if (c.tombol.textContent !== "Tandai selesai" || c.tombol.getAttribute("aria-pressed") !== "false") salah.push('klik lagi harus kembali "Tandai selesai" + aria-pressed="false"');
+    if (c.info.textContent !== "Tanda selesai dihapus.") salah.push('klik lagi harus mengumumkan "Tanda selesai dihapus."');
+    if (JSON.parse(simpan[KUNCI] || "[]").includes("b")) salah.push("klik lagi harus menghapus pelajaran ini dari penyimpanan");
+    // 4. Sudah selesai sejak awal: tombol langsung "✓ Sudah selesai", tanpa pengumuman.
+    const c2 = buatCtx({ [KUNCI]: JSON.stringify(["b"]) }, false, false);
+    if (c2.tombol.textContent !== "✓ Sudah selesai" || c2.tombol.getAttribute("aria-pressed") !== "true" || c2.info.textContent !== "")
+      salah.push('pelajaran yang sudah selesai harus dibuka sebagai "✓ Sudah selesai" tanpa pengumuman');
+    // 5. Penyimpanan ditolak: pesan jelas, tombol tidak berubah.
+    const c3 = buatCtx({}, true, false);
+    try { c3.klik(); } catch (e) { salah.push("penyimpanan ditolak tidak mengizinkan penyimpanan tetapi malah galat: " + e.message); }
+    if (!c3.info.textContent.includes("tidak mengizinkan penyimpanan")) salah.push('penyimpanan ditolak harus memberi pesan "tidak mengizinkan penyimpanan"');
+    if (c3.tombol.textContent !== "Tandai selesai" || c3.tombol.getAttribute("aria-pressed") !== "false") salah.push("penyimpanan ditolak: tombol tidak boleh berubah");
+    // 6. Membaca penyimpanan pun ditolak (mode privat ketat): tetap jalan tanpa galat.
+    try {
+      const c4 = buatCtx({}, true, true);
+      if (c4.tombol.textContent !== "Tandai selesai") salah.push("tanpa penyimpanan, tombol harus tetap Tandai selesai");
+      c4.klik();
+    } catch (e) { salah.push("penyimpanan diblokir tidak boleh membuat galat: " + e.message); }
+    return salah;
+  };
+  const sTandai = blokRender ? ujiTandai(blokRender) : ["buatTandaiSelesai() tidak ditemukan"];
+  ok(sTandai.length === 0, `Tandai selesai (DOM tiruan): ${sTandai.join("; ")}`);
+  const rusakTandai = [
+    ['tombol.setAttribute("aria-pressed", sudah ? "true" : "false");', "", "aria-pressed"],
+    ['tombol.textContent = sudah ? "✓ Sudah selesai" : "Tandai selesai";', 'tombol.textContent = "Tandai selesai";', "✓ Sudah selesai"],
+    ['role: "status", "aria-live": "polite"', '"aria-live": "polite"', 'role="status"'],
+    [': "Tanda selesai dihapus.";', ': "";', "Tanda selesai dihapus."],
+    ["segarkan(true);", "segarkan(false);", "n dari N pelajaran selesai"],
+    ["segarkan(false);\n    kotak", "segarkan(true);\n    kotak", "tidak boleh ada pengumuman"],
+    ["if (!simpanSelesai(daftar)) { info.textContent", "simpanSelesai(daftar); if (false) { info.textContent", "tidak mengizinkan penyimpanan"],
+    ["try { localStorage.setItem(KUNCI_KEMAJUAN, JSON.stringify(daftar)); return true; } catch (e) { return false; }",
+     "localStorage.setItem(KUNCI_KEMAJUAN, JSON.stringify(daftar)); return true;", "tidak mengizinkan penyimpanan"],
+    ["try { v = JSON.parse(localStorage.getItem(KUNCI_KEMAJUAN) || \"[]\"); } catch (e) { return []; }",
+     "v = JSON.parse(localStorage.getItem(KUNCI_KEMAJUAN) || \"[]\");", "galat"],
+    ["return Array.isArray(v) ? v.filter(function (id) { return MODUL.some(function (m) { return m.id === id; }); }) : [];",
+     "return Array.isArray(v) ? v : [];", "n dari N pelajaran selesai"],
+    ['type: "button", class: "tombol tombol-tandai"', 'class: "tombol tombol-tandai"', 'type="button"'],
+  ];
+  for (const [lama, baru, pesan] of rusakTandai) {
+    const b = blokRender.replace(lama, baru);
+    ok(b !== blokRender && ujiTandai(b).some((s) => s.includes(pesan)), `uji balik Tandai selesai: "${pesan}" harus tertangkap`);
+  }
 }
 
 // Tegar & Arif (10 Nov 16.10): setiap fetch() di assets/*.js hanya ke alamat relatif situs sendiri
