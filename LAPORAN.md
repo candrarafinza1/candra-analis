@@ -1243,3 +1243,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: KLBF & BRIS dicari ulang. Artikel Kontan "BRIS laba Rp5,69 T hingga kuartal III" ternyata 28 Okt 2025, tidak dipakai → tetap 23 dari 32.
 - Tugas baru: Nina + Arif (uji `renderPelajaran()`: kuis tanpa tombol istilah).
 - `node tests/cek.mjs` lolos (10 halaman). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 11 Nov 2026, 14.10 WIB (Bima)
+- Nina & Arif: `renderPelajaran()` kini dijalankan sungguhan dengan DOM tiruan di `tests/cek.mjs`: istilah di isi pelajaran ditandai tepat sekali, kuis dan kotak "Tandai selesai" tanpa tombol istilah, soal dan pilihan jawaban tetap utuh (radio + label), tombol "Periksa jawaban" tetap tombol biasa. 4 uji balik tertangkap.
+- Fajar: KLBF & BRIS dicari ulang. Artikel Investortrust "BRIS rallies… profit growth" ternyata laba tahun buku 2025 (10 Feb 2026), tidak dipakai → tetap 23 dari 32.
+- Tugas baru: Nina + Arif (uji perilaku kuis: umpan balik, skor, Ulangi kuis). Dewi + Kirana (Belajar & pelajaran mode gelap) tetap berikutnya.
+- `node tests/cek.mjs` lolos (10 halaman). Tampilan tidak berubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

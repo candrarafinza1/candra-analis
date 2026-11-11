@@ -1169,6 +1169,78 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
     const b = blok.replace(lama, baru);
     ok(b !== blok && ujiKartuBelajar(daftarKartu, b).some((s) => s.includes(pesan)), `uji balik kartu Belajar: "${pesan}" harus tertangkap`);
   }
+  // Nina & Arif (11 Nov 14.10): renderPelajaran() dijalankan dengan DOM tiruan. Isi pelajaran ditandai istilah,
+  // tetapi kuis dan kotak "Tandai selesai" yang ditambahkan sesudahnya tidak berisi tombol istilah: soal & pilihan
+  // jawaban tetap teks biasa (pilihan = input radio + label), tombol kuis tetap tombol biasa, teks tidak berubah.
+  const iRender = app.indexOf("  var KUNCI_KEMAJUAN");
+  const jRender = app.indexOf("  /* ---------- Peringkat (tim Galih)");
+  const blokRender = iRender < 0 || jRender < iRender ? "" : app.slice(iRender, jRender);
+  ok(/function renderPelajaran\(\)/.test(blokRender) && /function buatKuis\(/.test(blokRender),
+    "app.js: renderPelajaran() dan buatKuis() harus bisa diambil untuk diuji");
+  const ujiPelajaran = (daftarIstilah, blokUji, blokFungsi) => {
+    const { doc, semua } = buatDom();
+    const [A, B] = daftarIstilah.map((t) => t.pola[0]);
+    const teksIsi = "Isi pelajaran: " + A + " dijelaskan di sini, lalu " + A + " lagi.";
+    const soal = "Apa arti " + B + " dan " + A + "?";
+    const pilihan = ["Pilihan tentang " + B, "Pilihan tentang " + A];
+    const modulUji = [{ id: "uji", judul: "Pelajaran uji", ringkas: "Ringkas", isi: teksIsi,
+      kuis: [{ soal, pilihan, benar: 0, jelas: "Penjelasan " + B + "." }] }];
+    const buat = (tag, id) => { const e = doc.createElement(tag); if (id) e.setAttribute("id", id); return e; };
+    const wadah = buat("div", "isi-pelajaran");
+    // innerHTML tiruan: isi uji hanya teks tanpa tag, jadi cukup dijadikan satu simpul teks.
+    Object.defineProperty(wadah, "innerHTML", { set(v) { this.anak.forEach((c) => { c.parentNode = null; }); this.anak = []; this.appendChild(doc.createTextNode(v)); } });
+    [buat("h1", "judul-pelajaran"), buat("p", "sub-pelajaran"), wadah].forEach((e) => doc.body.appendChild(e));
+    const ctxI = {
+      document: doc, MODUL: modulUji, URLSearchParams, location: { search: "?m=uji" },
+      localStorage: { getItem: () => null, setItem() {} },
+      NodeFilter: { SHOW_TEXT: 4, FILTER_ACCEPT: 1, FILTER_REJECT: 2, FILTER_SKIP: 3 },
+      window: { ISTILAH: daftarIstilah, innerWidth: 390, innerHeight: 800, addEventListener() {},
+        matchMedia: () => ({ matches: false, addEventListener() {} }) },
+    };
+    const salah = [];
+    try {
+      vm.runInNewContext(ambilEl + "\n" + blokUji + "\n" + blokFungsi + "\n;globalThis.renderPelajaran = renderPelajaran;", ctxI);
+      ctxI.renderPelajaran();
+    } catch (e) { return ["renderPelajaran() galat: " + e.message]; }
+    const tanda = (n) => semua(n).filter((x) => x.nodeType === 1 && x.cocok("button.istilah")).map((b) => b.dataset.istilah);
+    const form = wadah.anak.find((n) => n.nodeType === 1 && n.nodeName === "FORM");
+    const tandai = wadah.anak.find((n) => n.nodeType === 1 && n.classList.contains("tandai-selesai"));
+    if (!form) return ["kuis tidak ditambahkan ke isi pelajaran"];
+    const t = tanda(wadah).filter((i) => i === "0");
+    if (t.length !== 1) salah.push("istilah di isi pelajaran harus ditandai tepat sekali");
+    if (tanda(form).length) salah.push("kuis tidak boleh berisi tombol istilah");
+    if (tandai && tanda(tandai).length) salah.push("kotak Tandai selesai tidak boleh berisi tombol istilah");
+    const teksIsiKini = wadah.anak.filter((n) => n !== form && n !== tandai && !(n.nodeType === 1 && n.nodeName === "NAV")).map((n) => n.textContent).join("");
+    if (teksIsiKini !== teksIsi) salah.push("teks isi pelajaran berubah");
+    const legend = semua(form).find((n) => n.nodeType === 1 && n.nodeName === "LEGEND");
+    if (!legend || legend.textContent !== "1. " + soal) salah.push("teks soal kuis berubah");
+    const label = semua(form).filter((n) => n.nodeType === 1 && n.nodeName === "LABEL").map((n) => n.textContent);
+    if (label.join("|") !== pilihan.join("|")) salah.push("pilihan jawaban harus tetap label biasa dengan teks utuh");
+    const radio = semua(form).filter((n) => n.nodeType === 1 && n.nodeName === "INPUT" && n.getAttribute("type") === "radio");
+    if (radio.length !== pilihan.length) salah.push("setiap pilihan jawaban harus tetap input radio");
+    const tombolForm = semua(form).filter((n) => n.nodeType === 1 && n.nodeName === "BUTTON");
+    if (tombolForm.some((b) => b.classList.contains("istilah")) || !tombolForm.some((b) => b.getAttribute("type") === "submit"))
+      salah.push("tombol kuis harus tetap tombol biasa (Periksa jawaban)");
+    return salah;
+  };
+  const sPelajaran = daftarKartu.length === 2 && blokRender ? ujiPelajaran(daftarKartu, blok, blokRender) : ["kurang dari 2 istilah atau fungsi tidak ada"];
+  ok(sPelajaran.length === 0, `kotak istilah (pelajaran + kuis): ${sPelajaran.join("; ")}`);
+  const rusakPelajaran = [
+    // Istilah dipasang sesudah kuis ditambahkan → soal kuis ikut ditandai.
+    ["    pasangIstilah(wadah);\n    if (m.kuis && m.kuis.length) wadah.appendChild(buatKuis(m));\n    wadah.appendChild(buatTandaiSelesai(m));",
+     "    if (m.kuis && m.kuis.length) wadah.appendChild(buatKuis(m));\n    wadah.appendChild(buatTandaiSelesai(m));\n    pasangIstilah(wadah);",
+     "kuis tidak boleh berisi tombol istilah", blokRender],
+    // Istilah tidak dipasang sama sekali di isi pelajaran.
+    ["    pasangIstilah(wadah);\n    if (m.kuis", "    if (m.kuis", "harus ditandai tepat sekali", blokRender],
+    // Kuis memasang istilah di soal.
+    ["    form.appendChild(fs);\n", "    form.appendChild(fs); pasangIstilah(fs);\n", "kuis tidak boleh berisi tombol istilah", blokRender],
+    // Pilihan jawaban dijadikan tombol istilah tanpa label.
+    ["el(\"label\", { for: idIn, text: p })", "el(\"button\", { type: \"button\", class: \"istilah\", text: p })", "pilihan jawaban harus tetap label biasa", blokRender],
+  ];
+  for (const [lama, baru, pesan, sumber] of rusakPelajaran) {
+    const b = sumber.replace(lama, baru);
+    ok(b !== sumber && ujiPelajaran(daftarKartu, blok, b).some((s) => s.includes(pesan)), `uji balik pelajaran + kuis: "${pesan}" harus tertangkap`);
+  }
 }
 
 // Tegar & Arif (10 Nov 16.10): setiap fetch() di assets/*.js hanya ke alamat relatif situs sendiri
