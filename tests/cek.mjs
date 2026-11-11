@@ -1582,6 +1582,84 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
     const b = blokRender.replace(lama, baru);
     ok(b !== blokRender && ujiLanjutkan(b).some((s) => s.includes(pesan)), `uji balik Lanjutkan belajar: "${pesan}" harus tertangkap`);
   }
+  // Nina & Arif (11 Nov 20.13): renderIstilahHari() (kotak "Istilah hari ini" di beranda) dengan DOM tiruan dan jam tiruan.
+  // Pagi & malam di hari yang sama → istilah sama; hari berikutnya → istilah lain; teks istilah & penjelasan utuh;
+  // tautan pelajaran hanya bila id pelajaran dikenal; kamus kosong atau wadah tidak ada → tetap tersembunyi tanpa galat.
+  const blokIstilahHari = (() => {
+    const a = (app.match(/  function indeksHariIni\(jumlah, tgl\) \{[\s\S]*?\n  \}\n/) || [""])[0];
+    const b = (app.match(/  function renderIstilahHari\(\) \{[\s\S]*?\n  \}\n/) || [""])[0];
+    return a && b ? a + b : "";
+  })();
+  const ujiIstilahHari = (blokFungsi) => {
+    const KAMUS = [
+      { istilah: "Dividen", arti: "Bagian laba yang dibagikan perusahaan kepada pemegang saham.", pelajaran: "b" },
+      { istilah: "ROE", arti: "Laba bersih dibagi ekuitas, dalam persen.", pelajaran: "tidak-ada" },
+      { istilah: "DES", arti: "Daftar Efek Syariah yang diterbitkan OJK." },
+    ];
+    const jalankan = (kamus, sekarang, adaWadah = true) => {
+      const { doc, semua } = buatDom();
+      const wadah = doc.createElement("section"); wadah.setAttribute("hidden", "");
+      if (adaWadah) { wadah.setAttribute("id", "istilah-hari"); doc.body.appendChild(wadah); }
+      class JamTiruan extends Date { constructor(...a) { if (a.length) super(...a); else super(sekarang.getTime()); } }
+      const ctxH = { document: doc, Date: JamTiruan, ISTILAH: kamus, JUDUL_MODUL: { a: "Judul a", b: "Judul b" } };
+      vm.runInNewContext(ambilEl + "\n" + blokFungsi + "\n;globalThis.renderIstilahHari = renderIstilahHari;", ctxH);
+      ctxH.renderIstilahHari();
+      const cari = (sel) => semua(wadah).filter((x) => x.nodeType === 1 && x !== wadah && x.cocok(sel));
+      return { wadah, cari };
+    };
+    const harapan = (tgl) => KAMUS[Math.floor(Date.UTC(tgl.getFullYear(), tgl.getMonth(), tgl.getDate()) / 86400000) % KAMUS.length];
+    const salah = [];
+    const pagi = new Date(2026, 10, 11, 7, 5), malam = new Date(2026, 10, 11, 21, 55), besok = new Date(2026, 10, 12, 7, 5);
+    let rPagi, rMalam, rBesok;
+    try { rPagi = jalankan(KAMUS, pagi); rMalam = jalankan(KAMUS, malam); rBesok = jalankan(KAMUS, besok); }
+    catch (e) { return ["renderIstilahHari() galat: " + e.message]; }
+    const judul = (r) => { const h = r.cari("h2")[0]; return h ? h.textContent : ""; };
+    if (rPagi.wadah.hidden) salah.push("kamus berisi: kotak harus tampil");
+    if (judul(rPagi) !== harapan(pagi).istilah) salah.push("istilah harus dipilih dari tanggal hari ini (dapat " + judul(rPagi) + ", harap " + harapan(pagi).istilah + ")");
+    if (judul(rPagi) !== judul(rMalam)) salah.push("istilah harus sama sepanjang hari (pagi " + judul(rPagi) + ", malam " + judul(rMalam) + ")");
+    if (judul(rPagi) === judul(rBesok)) salah.push("istilah harus berganti pada hari berikutnya");
+    // Tiga hari berturut-turut → ketiga istilah muncul; tiap kotak diperiksa lengkap.
+    const tigaHari = [0, 1, 2].map((i) => new Date(2026, 10, 11 + i, 12));
+    const tiga = [];
+    for (const tgl of tigaHari) {
+      const r = jalankan(KAMUS, tgl);
+      const t = harapan(tgl);
+      tiga.push(judul(r));
+      const h2 = r.cari("h2")[0];
+      if (!h2 || h2.getAttribute("id") !== "judul-istilah-hari") salah.push('judul istilah harus h2 dengan id="judul-istilah-hari"');
+      const label = r.cari("p.label-istilah-hari")[0];
+      if (!label || label.textContent !== "Istilah hari ini") salah.push('harus ada label "Istilah hari ini"');
+      if (!r.cari("p").some((p) => p.textContent === t.arti)) salah.push("penjelasan istilah " + t.istilah + " harus tampil utuh");
+      const a = r.cari("a");
+      if (t.pelajaran === "b") {
+        if (a.length !== 1 || a[0].getAttribute("href") !== "pelajaran.html?m=b" || a[0].textContent !== "Pelajari lebih lanjut: Judul b") salah.push("istilah dengan pelajaran dikenal harus menaut ke pelajaran.html?m=b");
+      } else if (a.length) salah.push("istilah " + t.istilah + " tanpa pelajaran dikenal tidak boleh punya tautan pelajaran");
+    }
+    if (new Set(tiga).size !== 3) salah.push("tiga hari berturut-turut harus menampilkan tiga istilah berbeda (dapat " + tiga.join(", ") + ")");
+    try {
+      const rKosong = jalankan([], pagi);
+      if (!rKosong.wadah.hidden || rKosong.wadah.anak.length) salah.push("kamus kosong: kotak harus tetap tersembunyi dan kosong");
+    } catch (e) { salah.push("kamus kosong tidak boleh membuat galat: " + e.message); }
+    try { jalankan(KAMUS, pagi, false); } catch (e) { salah.push("wadah tidak ada tidak boleh membuat galat: " + e.message); }
+    return salah;
+  };
+  const sIstilahHari = blokIstilahHari ? ujiIstilahHari(blokIstilahHari) : ["renderIstilahHari()/indeksHariIni() tidak ditemukan"];
+  ok(sIstilahHari.length === 0, `Istilah hari ini (DOM tiruan): ${sIstilahHari.join("; ")}`);
+  const rusakIstilahHari = [
+    ["if (!wadah || !ISTILAH.length) return;", "if (!wadah) return;", "kamus kosong"],
+    ["    wadah.hidden = false;\n", "", "kotak harus tampil"],
+    ["var t = ISTILAH[indeksHariIni(ISTILAH.length)];", "var t = ISTILAH[0];", "berganti pada hari berikutnya"],
+    ["var d = tgl || new Date();", "var d = tgl || new Date(2026, 10, 10);", "dipilih dari tanggal"],
+    ["Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 86400000)", "Math.floor(d.getTime() / 3600000)", "sama sepanjang hari"],
+    ['el("p", { text: t.arti })', 'el("p", { text: t.arti.slice(0, 20) })', "tampil utuh"],
+    ["if (t.pelajaran && JUDUL_MODUL[t.pelajaran])", "if (t.pelajaran)", "tanpa pelajaran dikenal"],
+    ['href: "pelajaran.html?m=" + t.pelajaran, text: "Pelajari', 'href: "belajar.html", text: "Pelajari', "pelajaran.html?m=b"],
+    ['el("h2", { id: "judul-istilah-hari", text: t.istilah })', 'el("h3", { id: "judul-istilah-hari", text: t.istilah })', "h2"],
+  ];
+  for (const [lama, baru, pesan] of rusakIstilahHari) {
+    const b = blokIstilahHari.replace(lama, baru);
+    ok(b !== blokIstilahHari && ujiIstilahHari(b).some((s) => s.includes(pesan)), `uji balik Istilah hari ini: "${pesan}" harus tertangkap`);
+  }
 }
 
 // Tegar & Arif (10 Nov 16.10): setiap fetch() di assets/*.js hanya ke alamat relatif situs sendiri

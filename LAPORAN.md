@@ -1279,3 +1279,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: KLBF & BRIS dicari ulang. Hasil teratas masih kuartal III 2025 (KLBF) dan kuartal II 2026 (BRIS) → tetap 23 dari 32.
 - Tugas baru: Dewi + Kirana (audit kontras yang sama di halaman lain). Nina + Arif (uji `renderIstilahHari()`) tetap berikutnya.
 - `node tests/cek.mjs` lolos (10 halaman). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### Rabu 11 Nov 2026, 20.13 WIB (Bima)
+- Nina & Arif: kotak "Istilah hari ini" di beranda kini diuji dengan DOM tiruan dan jam tiruan (`ujiIstilahHari()` di `tests/cek.mjs`): pagi dan malam di hari yang sama menampilkan istilah yang sama, hari berikutnya berganti, tiga hari berturut-turut menampilkan tiga istilah berbeda, penjelasan tampil utuh, tautan pelajaran hanya bila pelajarannya dikenal, kamus kosong atau wadah tidak ada tetap tersembunyi tanpa galat. 9 uji balik tertangkap; lolos juga dengan zona waktu WIB.
+- Fajar: KLBF & BRIS dicari ulang. KLBF teratas masih kuartal III 2025 dan semester I 2026; BRIS masih kuartal II 2026 → tetap 23 dari 32.
+- Tugas baru: Nina + Arif (uji `renderRujukan()`). Dewi + Kirana (audit kontras halaman lain) tetap berikutnya.
+- `node tests/cek.mjs` lolos (10 halaman). Tampilan tidak diubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
