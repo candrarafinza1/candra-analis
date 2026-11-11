@@ -1210,3 +1210,11 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: KLBF & BRIS dicari ulang. Dua berita "kuartal III" KLBF ternyata 2023 dan 2024; BRIS terbaru semester I 2026 → tetap 23 dari 32.
 - Bima: salinan kerja dalam keadaan HEAD terlepas, sama dengan `origin/main`; dipindah ke cabang `main`. Masalah ringan.
 - `node tests/cek.mjs` lolos (10 halaman). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 11 Nov 2026, 07.09 WIB (Bima)
+- Laporan masuk kerja pagi dikirim ke Rafinza (12 karyawan, tugas per orang, status website).
+- Nina & Arif: tes keyboard kotak istilah di `tests/cek.mjs`: Tab dari tombol masuk ke "Pelajari lebih lanjut" di dalam kotak, Esc dari dalam kotak menutup dan fokus kembali ke tombol, "Lihat semua istilah" tidak muncul di Belajar; 4 uji balik tertangkap. Tampilan tidak berubah.
+- Fajar: KLBF & BRIS dicari ulang. KLBF masih semester I 2026, BRIS masih s.d. Agustus 2026 → tetap 23 dari 32.
+- Tegar: 13 commit sejak 10 Nov 07.00 dipindai, tanpa temuan. Yoga: tautan internal 10 halaman lolos, rilis lewat push.
+- Tugas baru: Nina + Arif (tes tombol istilah di kepala tabel kartu HP). Dewi + Kirana (Belajar & pelajaran mode gelap) tetap berikutnya.
+- `node tests/cek.mjs` lolos (10 halaman). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

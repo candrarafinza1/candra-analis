@@ -726,7 +726,7 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
       cocok(sel) { const [tag, kelas] = sel.split("."); return (!tag || this.nodeName === tag.toUpperCase()) && (!kelas || this.classList.contains(kelas)); }
       closest(sel) { for (let p = this; p && p.nodeType === 1; p = p.parentNode) if (p.cocok(sel)) return p; return null; }
       querySelectorAll() { return []; }
-      addEventListener() {}
+      addEventListener(j, f) { (this.pendengar = this.pendengar || {}); (this.pendengar[j] = this.pendengar[j] || []).push(f); }
       focus() { doc.activeElement = this; }
       getBoundingClientRect() { return { left: 20, top: 100, bottom: 120 }; }
     }
@@ -740,6 +740,8 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
       querySelectorAll: () => [],
       addEventListener: (j, f) => { (doc.pendengar[j] = doc.pendengar[j] || []).push(f); },
       kirim: (j, ev) => (doc.pendengar[j] || []).forEach((f) => f(ev)),
+      // Kejadian yang naik (bubbling): pendengar di elemen sasaran dan induknya dulu, lalu di document.
+      kirimNaik: (j, ev) => { for (let p = ev.target; p; p = p.parentNode) ((p.pendengar && p.pendengar[j]) || []).forEach((f) => f(ev)); doc.kirim(j, ev); },
       createTreeWalker: (akar, _apa, saring) => {
         const daftar = semua(akar).filter((n) => n.nodeType === 3 && saring.acceptNode(n) === 1);
         let i = -1;
@@ -867,6 +869,75 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
   for (const [lama, baru, pesan] of rusak) {
     const b = blok.replace(lama, baru);
     ok(b !== blok && ujiKlik(daftarKlik, b).some((s) => s.includes(pesan)), `uji balik klik kotak istilah: "${pesan}" harus tertangkap`);
+  }
+
+  // Nina & Arif (11 Nov 07.09): perilaku keyboard. Urutan Tab mengikuti urutan DOM: setelah tombol istilah, yang
+  // berikutnya bisa difokus adalah tautan "Pelajari lebih lanjut" di dalam kotak. Esc yang ditekan di dalam kotak
+  // menutup kotak dan mengembalikan fokus ke tombol. Di halaman Belajar (ada #kamus-istilah) tautan
+  // "Lihat semua istilah" tidak muncul; di halaman lain muncul.
+  const ujiKeyboard = (daftarIstilah, blokUji, diBelajar) => {
+    const { doc, semua } = buatDom();
+    const ctxI = {
+      document: doc, MODUL,
+      NodeFilter: { SHOW_TEXT: 4, FILTER_ACCEPT: 1, FILTER_REJECT: 2, FILTER_SKIP: 3 },
+      window: { ISTILAH: daftarIstilah, innerWidth: 390, innerHeight: 800, addEventListener() {},
+        matchMedia: () => ({ matches: false, addEventListener() {} }) },
+    };
+    vm.runInNewContext(ambilEl + "\n" + blokUji + "\n;globalThis.pasangIstilah = pasangIstilah;", ctxI);
+    const salah = [];
+    if (diBelajar) { const k = doc.createElement("section"); k.setAttribute("id", "kamus-istilah"); doc.body.appendChild(k); }
+    const p = doc.createElement("p");
+    p.appendChild(doc.createTextNode("Awal kalimat " + daftarIstilah[0].pola[0] + " di tengah."));
+    const lanjut = doc.createElement("a"); lanjut.setAttribute("href", "#lanjut"); lanjut.appendChild(doc.createTextNode("tautan sesudahnya"));
+    doc.body.appendChild(p); doc.body.appendChild(lanjut);
+    ctxI.pasangIstilah(p);
+    const b = semua(p).find((n) => n.nodeType === 1 && n.cocok("button.istilah"));
+    if (!b) return ["tombol istilah tidak terbentuk"];
+    b.focus();
+    doc.kirim("click", { target: b });
+    const kotak = doc.getElementById("kotak-istilah");
+    if (!kotak || kotak.hidden) return ["kotak tidak terbuka"];
+    // Urutan Tab: elemen yang bisa difokus (button, a[href]) dalam urutan DOM, lewati yang tersembunyi.
+    const tersembunyi = (n) => { for (let q = n; q; q = q.parentNode) if (q.hidden) return true; return false; };
+    const fokusan = semua(doc.body).filter((n) => n.nodeType === 1 && !tersembunyi(n) &&
+      (n.nodeName === "BUTTON" || (n.nodeName === "A" && n.getAttribute("href"))) && n.getAttribute("tabindex") !== "-1");
+    const sesudah = fokusan[fokusan.indexOf(b) + 1];
+    const tautan = semua(kotak).filter((n) => n.nodeType === 1 && n.nodeName === "A");
+    const pelajari = tautan.find((a) => a.textContent.startsWith("Pelajari lebih lanjut"));
+    if (!pelajari) salah.push("kotak harus memuat tautan \"Pelajari lebih lanjut\"");
+    else if (sesudah !== pelajari) salah.push("Tab dari tombol harus masuk ke tautan \"Pelajari lebih lanjut\" di dalam kotak");
+    const kamus = tautan.find((a) => a.textContent === "Lihat semua istilah");
+    if (diBelajar && kamus) salah.push("di halaman Belajar tautan \"Lihat semua istilah\" tidak boleh muncul");
+    if (!diBelajar && !kamus) salah.push("di halaman lain tautan \"Lihat semua istilah\" harus muncul");
+    if (!diBelajar && kamus && fokusan[fokusan.indexOf(kamus) + 1] !== lanjut) salah.push("Tab dari tautan terakhir di kotak harus lanjut ke isi halaman berikutnya");
+    // Esc dari dalam kotak (fokus di tautan)
+    if (pelajari) {
+      pelajari.focus();
+      doc.kirimNaik("keydown", { key: "Escape", target: pelajari });
+      if (!kotak.hidden) salah.push("Esc dari dalam kotak harus menutup kotak");
+      if (b.getAttribute("aria-expanded") !== "false") salah.push("Esc dari dalam kotak: aria-expanded harus \"false\"");
+      if (doc.activeElement !== b) salah.push("Esc dari dalam kotak: fokus harus kembali ke tombol");
+    }
+    return salah;
+  };
+  const daftarKey = (ctx.window.ISTILAH || []).filter((t) => String(t.arti || "").trim() && t.pelajaran &&
+    MODUL.some((m) => m.id === t.pelajaran)).slice(0, 1);
+  for (const diBelajar of [false, true]) {
+    const sk = daftarKey.length ? ujiKeyboard(daftarKey, blok, diBelajar) : ["tidak ada istilah dengan pelajaran"];
+    ok(sk.length === 0, `kotak istilah (keyboard${diBelajar ? ", halaman Belajar" : ""}): ${sk.join("; ")}`);
+  }
+  // Uji balik: tiap aturan keyboard dirusak satu per satu, tes harus gagal.
+  const rusakKey = [
+    ["b.parentNode.insertBefore(kotak, b.nextSibling);", "document.body.appendChild(kotak);", "Tab dari tombol", false],
+    ['kotak.addEventListener("keydown", function (ev) { if (ev.key === "Escape") tutupIstilah(true); });',
+      'kotak.addEventListener("keydown", function (ev) { if (ev.key === "Escape") tutupIstilah(false); });', "fokus harus kembali ke tombol", false],
+    ['if (!document.getElementById("kamus-istilah")) kotak.appendChild', "kotak.appendChild", "tidak boleh muncul", true],
+    ['if (!document.getElementById("kamus-istilah")) kotak.appendChild', 'if (document.getElementById("kamus-istilah")) kotak.appendChild', "harus muncul", false],
+  ];
+  for (const [lama, baru, pesan, diBelajar] of rusakKey) {
+    const b = blok.replace(lama, baru);
+    ok(b !== blok && daftarKey.length && ujiKeyboard(daftarKey, b, diBelajar).some((s) => s.includes(pesan)),
+      `uji balik keyboard kotak istilah: "${pesan}" harus tertangkap`);
   }
 }
 
