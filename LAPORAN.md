@@ -1285,3 +1285,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: KLBF & BRIS dicari ulang. KLBF teratas masih kuartal III 2025 dan semester I 2026; BRIS masih kuartal II 2026 → tetap 23 dari 32.
 - Tugas baru: Nina + Arif (uji `renderRujukan()`). Dewi + Kirana (audit kontras halaman lain) tetap berikutnya.
 - `node tests/cek.mjs` lolos (10 halaman). Tampilan tidak diubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### Rabu 11 Nov 2026, 21.12 WIB (Bima)
+- Nina & Arif: daftar rujukan resmi di Belajar kini diuji dengan DOM tiruan (`ujiRujukan()` di `tests/cek.mjs`, memakai data/rujukan.js asli: 3 kelompok, 9 rujukan): judul kelompok h3, tiap tautan https + target="_blank" + rel="noopener" + aria-label berakhiran "(tab baru)", teks & keterangan utuh; RUJUKAN tidak ada atau wadah tidak ada tetap tanpa galat. 9 uji balik tertangkap.
+- Fajar: KLBF & BRIS dicari ulang. KLBF masih kuartal III 2025 & semester I 2026; artikel Kontan BRIS "Rp5,69 T hingga kuartal III" tanpa tahun dan cocok dengan 2024, tidak dipakai → tetap 23 dari 32.
+- Tugas baru: Nina + Arif (uji `teksKeElemen()` jawaban Asisten). Dewi + Kirana (audit kontras halaman lain) tetap berikutnya.
+- `node tests/cek.mjs` lolos (10 halaman). Tampilan tidak diubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

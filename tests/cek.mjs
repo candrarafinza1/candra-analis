@@ -1660,6 +1660,72 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
     const b = blokIstilahHari.replace(lama, baru);
     ok(b !== blokIstilahHari && ujiIstilahHari(b).some((s) => s.includes(pesan)), `uji balik Istilah hari ini: "${pesan}" harus tertangkap`);
   }
+  // Nina & Arif (11 Nov 21.12): renderRujukan() (daftar rujukan resmi di Belajar) dengan DOM tiruan, memakai data/rujukan.js asli.
+  // Tiap kelompok = div.rujukan-kelompok berjudul h3; tiap tautan https + target="_blank" + rel="noopener" +
+  // aria-label "<judul> (tab baru)"; keterangan utuh; window.RUJUKAN tidak ada atau wadah tidak ada → tanpa galat.
+  const blokRujukan = (app.match(/  function renderRujukan\(\) \{[\s\S]*?\n  \}\n/) || [""])[0];
+  const dataRujukan = (() => { const c = { window: {} }; vm.runInNewContext(readFileSync("data/rujukan.js", "utf8"), c); return c.window.RUJUKAN || []; })();
+  ok(dataRujukan.length > 0, "data/rujukan.js harus berisi window.RUJUKAN");
+  const ujiRujukan = (blokFungsi, data = dataRujukan) => {
+    const jalankan = (rujukan, adaWadah = true) => {
+      const { doc, semua } = buatDom();
+      const wadah = doc.createElement("div");
+      if (adaWadah) { wadah.setAttribute("id", "rujukan"); doc.body.appendChild(wadah); }
+      const win = rujukan === undefined ? {} : { RUJUKAN: rujukan };
+      const ctxR = { document: doc, window: win };
+      vm.runInNewContext(ambilEl + "\n" + blokFungsi + "\n;globalThis.renderRujukan = renderRujukan;", ctxR);
+      ctxR.renderRujukan();
+      const cari = (akar, sel) => semua(akar).filter((x) => x.nodeType === 1 && x !== akar && x.cocok(sel));
+      return { wadah, cari };
+    };
+    const salah = [];
+    let r;
+    try { r = jalankan(data); } catch (e) { return ["renderRujukan() galat: " + e.message]; }
+    const kelompok = r.cari(r.wadah, "div.rujukan-kelompok");
+    if (kelompok.length !== data.length) salah.push(`jumlah kelompok harus ${data.length} (dapat ${kelompok.length})`);
+    kelompok.forEach((kd, i) => {
+      const k = data[i]; if (!k) return;
+      const h3 = r.cari(kd, "h3")[0];
+      if (!h3 || h3.textContent !== k.kelompok) salah.push(`judul kelompok "${k.kelompok}" harus h3`);
+      const ul = r.cari(kd, "ul.rujukan-daftar")[0];
+      const li = ul ? r.cari(ul, "li") : [];
+      if (li.length !== k.item.length) salah.push(`kelompok "${k.kelompok}" harus berisi ${k.item.length} rujukan (dapat ${li.length})`);
+      li.forEach((l, j) => {
+        const it = k.item[j]; if (!it) return;
+        const a = r.cari(l, "a")[0];
+        if (!a) { salah.push(`rujukan "${it.judul}" harus berupa tautan`); return; }
+        if (!/^https:\/\//.test(a.getAttribute("href") || "") || a.getAttribute("href") !== it.url) salah.push(`rujukan "${it.judul}" harus menaut ke alamat https dari data`);
+        if (a.getAttribute("target") !== "_blank") salah.push(`rujukan "${it.judul}" harus target="_blank"`);
+        if (!/\bnoopener\b/.test(a.getAttribute("rel") || "")) salah.push(`rujukan "${it.judul}" harus rel="noopener"`);
+        if (a.getAttribute("aria-label") !== it.judul + " (tab baru)") salah.push(`rujukan "${it.judul}" harus aria-label berakhiran "(tab baru)"`);
+        if (a.textContent !== it.judul) salah.push(`teks tautan "${it.judul}" harus utuh`);
+        const p = r.cari(l, "p")[0];
+        if (!p || p.textContent !== it.ket) salah.push(`keterangan "${it.judul}" harus tampil utuh`);
+      });
+    });
+    try { const rk = jalankan(undefined); if (rk.wadah.anak.length) salah.push("window.RUJUKAN tidak ada: wadah harus tetap kosong"); }
+    catch (e) { salah.push("window.RUJUKAN tidak ada tidak boleh membuat galat: " + e.message); }
+    try { jalankan(data, false); } catch (e) { salah.push("wadah tidak ada tidak boleh membuat galat: " + e.message); }
+    return salah;
+  };
+  for (const k of dataRujukan) for (const it of k.item) ok(/^https:\/\//.test(it.url), `data/rujukan.js: alamat "${it.judul}" harus https`);
+  const sRujukan = blokRujukan ? ujiRujukan(blokRujukan) : ["renderRujukan() tidak ditemukan"];
+  ok(sRujukan.length === 0, `Rujukan belajar (DOM tiruan): ${sRujukan.join("; ")}`);
+  const rusakRujukan = [
+    ['target: "_blank", rel: "noopener", ', 'rel: "noopener", ', 'target="_blank"'],
+    ['rel: "noopener", ', "", 'rel="noopener"'],
+    ['"aria-label": r.judul + " (tab baru)"', '"aria-label": r.judul', "(tab baru)"],
+    ['el("p", { text: r.ket })', 'el("p", { text: r.ket.slice(0, 15) })', "tampil utuh"],
+    ['el("h3", { text: k.kelompok })', 'el("strong", { text: k.kelompok })', "harus h3"],
+    ["if (!akar || !window.RUJUKAN) return;", "if (!akar) return;", "window.RUJUKAN tidak ada"],
+    ["if (!akar || !window.RUJUKAN) return;", "if (!window.RUJUKAN) return;", "wadah tidak ada"],
+    ["href: r.url,", 'href: r.url.replace("https:", "http:"),', "alamat https"],
+    ["k.item.forEach(function (r) {", "k.item.slice(1).forEach(function (r) {", "harus berisi"],
+  ];
+  for (const [lama, baru, pesan] of rusakRujukan) {
+    const b = blokRujukan.replace(lama, baru);
+    ok(b !== blokRujukan && ujiRujukan(b).some((s) => s.includes(pesan)), `uji balik Rujukan belajar: "${pesan}" harus tertangkap`);
+  }
 }
 
 // Tegar & Arif (10 Nov 16.10): setiap fetch() di assets/*.js hanya ke alamat relatif situs sendiri
