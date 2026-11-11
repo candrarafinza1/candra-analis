@@ -1124,6 +1124,51 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
     const fb = fBeranda.replace(lama, baru);
     ok(fb !== fBeranda && ujiBeranda(daftarKartu, blok, fb).some((s) => s.includes(pesan)), `uji balik beranda: "${pesan}" harus tertangkap`);
   }
+  // Nina & Arif (11 Nov 13.14): halaman Belajar tidak punya pemasang istilah khusus (kartu jalur belum ditandai).
+  // Penjaga bila kelak kartu pelajaran ditandai lewat pasangIstilah(): istilah tidak boleh muncul sebagai tombol
+  // di dalam tautan/tombol/label kartu (LEWATI), dan istilah yang sama hanya ditandai sekali per kartu.
+  const ujiKartuBelajar = (daftarIstilah, blokUji) => {
+    const { doc, semua } = buatDom();
+    const ctxI = {
+      document: doc, MODUL,
+      NodeFilter: { SHOW_TEXT: 4, FILTER_ACCEPT: 1, FILTER_REJECT: 2, FILTER_SKIP: 3 },
+      window: { ISTILAH: daftarIstilah, innerWidth: 390, innerHeight: 800, addEventListener() {},
+        matchMedia: () => ({ matches: false, addEventListener() {} }) },
+    };
+    vm.runInNewContext(ambilEl + "\n" + blokUji + "\n;globalThis.pasangIstilah = pasangIstilah;", ctxI);
+    const buat = (tag, kelas, anak) => { const e = doc.createElement(tag); if (kelas) e.className = kelas; (anak || []).forEach((c) => e.appendChild(c)); return e; };
+    const [A, B] = daftarIstilah.map((t) => t.pola[0]);
+    const tautan = buat("a", "", [doc.createTextNode("Pelajaran: " + A)]);
+    const tombolKuis = buat("button", "", [doc.createTextNode("Kuis " + B)]);
+    const label = buat("label", "", [doc.createTextNode("Tandai " + A)]);
+    const teksRingkas = "Ringkas: " + A + ", lalu " + B + ", lalu " + A + " lagi dan " + B + ".";
+    const ringkas = buat("p", "", [doc.createTextNode(teksRingkas)]);
+    // Tautan & tombol kedua di luar judul, sebelum ringkasan, agar LEWATI sendiri yang diuji (bukan H3 atau urutan).
+    const tautanLuar = buat("a", "", [doc.createTextNode("Baca " + A)]);
+    const tombolLuar = buat("button", "", [doc.createTextNode("Ulang " + B)]);
+    const kartu = buat("li", "", [buat("h3", "", [tautan]), buat("p", "aksi", [tautanLuar, tombolLuar, label]), ringkas, tombolKuis]);
+    doc.body.appendChild(buat("ol", "jalur", [kartu]));
+    ctxI.pasangIstilah(kartu);
+    const tanda = (n) => semua(n).filter((x) => x.nodeType === 1 && x.cocok("button.istilah")).map((b) => b.dataset.istilah);
+    const salah = [];
+    if ([tautan, tautanLuar, tombolLuar, tombolKuis, label].some((n) => tanda(n).length)) salah.push("tombol istilah tidak boleh muncul di dalam tautan/tombol/label kartu (LEWATI)");
+    const t = tanda(ringkas);
+    if (t.filter((i) => i === "0").length !== 1 || t.filter((i) => i === "1").length !== 1) salah.push("istilah yang sama harus ditandai tepat sekali di satu kartu");
+    if (ringkas.textContent !== teksRingkas) salah.push("teks kartu berubah");
+    return salah;
+  };
+  const sBelajar = daftarKartu.length === 2 ? ujiKartuBelajar(daftarKartu, blok) : ["kurang dari 2 istilah"];
+  ok(sBelajar.length === 0, `kotak istilah (kartu Belajar): ${sBelajar.join("; ")}`);
+  const rusakBelajar = [
+    ["|TEXTAREA|LABEL)$/", "|TEXTAREA)$/", "di dalam tautan/tombol/label"],
+    ["if (LEWATI.test(p.nodeName) || (p.classList", "if ((p.classList", "di dalam tautan/tombol/label"],
+    ["var LEWATI = /^(A|BUTTON|", "var LEWATI = /^(", "di dalam tautan/tombol/label"],
+    ["dipakai[terbaik.i] = true;", "", "tepat sekali di satu kartu"],
+  ];
+  for (const [lama, baru, pesan] of rusakBelajar) {
+    const b = blok.replace(lama, baru);
+    ok(b !== blok && ujiKartuBelajar(daftarKartu, b).some((s) => s.includes(pesan)), `uji balik kartu Belajar: "${pesan}" harus tertangkap`);
+  }
 }
 
 // Tegar & Arif (10 Nov 16.10): setiap fetch() di assets/*.js hanya ke alamat relatif situs sendiri
