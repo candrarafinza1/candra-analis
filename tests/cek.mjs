@@ -716,9 +716,10 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
       appendChild(n) { this.lepas(n); n.parentNode = this; this.anak.push(n); return n; }
       insertBefore(n, ref) { this.lepas(n); n.parentNode = this; const i = ref ? this.anak.indexOf(ref) : -1; if (i < 0) this.anak.push(n); else this.anak.splice(i, 0, n); return n; }
       replaceChild(baru, lama) { this.lepas(baru); const i = this.anak.indexOf(lama); this.anak[i] = baru; baru.parentNode = this; lama.parentNode = null; return lama; }
-      setAttribute(k, v) { this.atribut[k] = String(v); if (k === "id") this.id = String(v); }
+      // Seperti peramban: atribut hidden ikut mengatur sifat .hidden (dipakai kuis: umpan & tombol Ulangi).
+      setAttribute(k, v) { this.atribut[k] = String(v); if (k === "id") this.id = String(v); if (k === "hidden") this.hidden = true; }
       getAttribute(k) { return k in this.atribut ? this.atribut[k] : null; }
-      removeAttribute(k) { delete this.atribut[k]; }
+      removeAttribute(k) { delete this.atribut[k]; if (k === "hidden") this.hidden = false; }
       set innerHTML(v) { this.anak.forEach((c) => { c.parentNode = null; }); this.anak = []; }
       set textContent(v) { this.innerHTML = ""; this.appendChild(new Teks(v)); }
       get textContent() { return this.anak.map((c) => c.textContent).join(""); }
@@ -1240,6 +1241,95 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
   for (const [lama, baru, pesan, sumber] of rusakPelajaran) {
     const b = sumber.replace(lama, baru);
     ok(b !== sumber && ujiPelajaran(daftarKartu, blok, b).some((s) => s.includes(pesan)), `uji balik pelajaran + kuis: "${pesan}" harus tertangkap`);
+  }
+  // Nina & Arif (11 Nov 15.10): perilaku kuis buatKuis() dengan DOM tiruan. Kirim tanpa jawaban → "Belum dijawab."
+  // + "(n soal belum dijawab)"; jawaban benar/salah → umpan balik ✓/✗ + jawaban benar + kelas warna; skor di
+  // role="status"; "Ulangi kuis" mengosongkan umpan balik, menyembunyikan dirinya, dan memindah fokus ke pilihan pertama.
+  const ujiKuis = (blokFungsi) => {
+    const { doc, semua } = buatDom();
+    const ctxI = {
+      document: doc, MODUL: [], URLSearchParams, location: { search: "" },
+      localStorage: { getItem: () => null, setItem() {} },
+      NodeFilter: { SHOW_TEXT: 4, FILTER_ACCEPT: 1, FILTER_REJECT: 2, FILTER_SKIP: 3 },
+      window: { ISTILAH: [], innerWidth: 390, innerHeight: 800, addEventListener() {},
+        matchMedia: () => ({ matches: false, addEventListener() {} }) },
+    };
+    const m = { id: "uji", judul: "Uji", kuis: [
+      { soal: "Soal satu?", pilihan: ["A1", "B1", "C1"], benar: 1, jelas: "Jelas satu." },
+      { soal: "Soal dua?", pilihan: ["A2", "B2"], benar: 0, jelas: "Jelas dua." },
+    ] };
+    let form;
+    try {
+      vm.runInNewContext(ambilEl + "\n" + blokFungsi + "\n;globalThis.buatKuis = buatKuis;", ctxI);
+      form = ctxI.buatKuis(m);
+    } catch (e) { return ["buatKuis() galat: " + e.message]; }
+    doc.body.appendChild(form);
+    const el = (tag) => semua(form).filter((n) => n.nodeType === 1 && n.nodeName === tag);
+    const radio = el("INPUT").filter((n) => n.getAttribute("type") === "radio");
+    radio.forEach((r) => { r.checked = false; r.value = r.getAttribute("value"); });
+    // Peramban tiruan: querySelector untuk pilihan tercentang & input pertama, dan reset() formulir.
+    form.querySelector = (sel) => {
+      const c = sel.match(/^input\[name="([^"]+)"\]:checked$/);
+      if (c) return radio.find((r) => r.getAttribute("name") === c[1] && r.checked) || null;
+      return sel === "input" ? el("INPUT")[0] || null : null;
+    };
+    form.reset = () => radio.forEach((r) => { r.checked = false; });
+    const pilih = (i, j) => radio.forEach((r) => { if (r.getAttribute("name") === "soal-" + i) r.checked = r.getAttribute("value") === String(j); });
+    const umpan = el("P").filter((n) => n.classList.contains("kuis-umpan"));
+    const hasil = el("P").find((n) => n.classList.contains("kuis-hasil"));
+    const ulang = el("BUTTON").find((n) => n.classList.contains("kuis-ulang"));
+    if (umpan.length !== 2 || !hasil || !ulang) return ["kuis harus punya umpan balik per soal, kotak hasil, dan tombol Ulangi kuis"];
+    const salah = [];
+    let dicegah = false;
+    const kirim = () => { dicegah = false; (form.pendengar.submit || []).forEach((f) => f({ preventDefault() { dicegah = true; } })); };
+    if (hasil.getAttribute("role") !== "status" || hasil.getAttribute("aria-live") !== "polite") salah.push('skor harus di role="status" aria-live="polite"');
+    if (!umpan.every((u) => u.hidden) || !ulang.hidden) salah.push("umpan balik & Ulangi kuis harus tersembunyi sebelum diperiksa");
+    // 1. Kirim tanpa jawaban.
+    kirim();
+    if (!dicegah) salah.push("kirim kuis harus dicegah (tanpa memuat ulang halaman)");
+    if (!umpan.every((u) => !u.hidden && u.textContent === "Belum dijawab." && u.classList.contains("kuis-kosong"))) salah.push('soal kosong harus tampil "Belum dijawab." dengan kelas kuis-kosong');
+    if (hasil.textContent !== "0 dari 2 benar (2 soal belum dijawab).") salah.push("skor tanpa jawaban harus menyebut (n soal belum dijawab): " + hasil.textContent);
+    if (ulang.hidden) salah.push("Ulangi kuis harus muncul setelah diperiksa");
+    // 2. Satu benar, satu kosong.
+    pilih(0, 1); kirim();
+    if (hasil.textContent !== "1 dari 2 benar (1 soal belum dijawab).") salah.push("skor sebagian harus menyebut 1 soal belum dijawab: " + hasil.textContent);
+    // 3. Satu benar, satu salah.
+    pilih(1, 1); kirim();
+    if (!(umpan[0].textContent.startsWith("✓ Benar.") && umpan[0].textContent.includes("Jelas satu.") && umpan[0].classList.contains("kuis-tepat")))
+      salah.push("umpan balik jawaban benar harus ✓ + penjelasan + kelas kuis-tepat");
+    if (!(umpan[1].textContent.startsWith("✗ Belum tepat.") && umpan[1].textContent.includes("Jawaban: A2.") && umpan[1].textContent.includes("Jelas dua.") && umpan[1].classList.contains("kuis-salah")))
+      salah.push("umpan balik jawaban salah harus ✗ + jawaban benar + penjelasan + kelas kuis-salah");
+    if (umpan.some((u) => u.classList.contains("kuis-kosong"))) salah.push("kelas kuis-kosong harus hilang setelah dijawab");
+    if (!hasil.textContent.startsWith("1 dari 2 benar. Baca lagi")) salah.push("skor sebagian benar harus mengajak membaca ulang: " + hasil.textContent);
+    // 4. Semua benar.
+    pilih(1, 0); kirim();
+    if (!hasil.textContent.startsWith("2 dari 2 benar. Bagus")) salah.push("skor semua benar salah: " + hasil.textContent);
+    // 5. Ulangi kuis.
+    doc.activeElement = null;
+    (ulang.pendengar.click || []).forEach((f) => f({ target: ulang }));
+    if (!umpan.every((u) => u.hidden && u.textContent === "")) salah.push("Ulangi kuis harus mengosongkan & menyembunyikan umpan balik");
+    if (hasil.textContent !== "" || !ulang.hidden) salah.push("Ulangi kuis harus mengosongkan skor dan menyembunyikan tombolnya");
+    if (radio.some((r) => r.checked)) salah.push("Ulangi kuis harus mengosongkan pilihan");
+    if (doc.activeElement !== radio[0]) salah.push("Ulangi kuis harus memindah fokus ke pilihan pertama");
+    return salah;
+  };
+  const sKuis = blokRender ? ujiKuis(blokRender) : ["buatKuis() tidak ditemukan"];
+  ok(sKuis.length === 0, `kuis (DOM tiruan): ${sKuis.join("; ")}`);
+  const rusakKuis = [
+    ['u.textContent = "Belum dijawab.";', 'u.textContent = "";', '"Belum dijawab."'],
+    ["Number(pilih.value) === q.benar", "Number(pilih.value) !== q.benar", "jawaban benar harus ✓"],
+    ['"✗ Belum tepat. Jawaban: " + q.pilihan[q.benar] + ". "', '"✗ Belum tepat. "', "jawaban salah harus ✗ + jawaban benar"],
+    ['"kuis-umpan " + (tepat ? "kuis-tepat" : "kuis-salah")', '"kuis-umpan kuis-salah"', "kelas kuis-tepat"],
+    ['" (" + kosong + " soal belum dijawab)."', '"."', "soal belum dijawab"],
+    ['class: "kuis-hasil", role: "status", ', 'class: "kuis-hasil", ', 'role="status"'],
+    ["ev.preventDefault();", "", "harus dicegah"],
+    ['umpan.forEach(function (u) { u.hidden = true; u.textContent = ""; });', "", "mengosongkan & menyembunyikan umpan balik"],
+    ["if (pertama) pertama.focus();", "", "fokus ke pilihan pertama"],
+    ["form.reset();", "", "mengosongkan pilihan"],
+  ];
+  for (const [lama, baru, pesan] of rusakKuis) {
+    const b = blokRender.replace(lama, baru);
+    ok(b !== blokRender && ujiKuis(b).some((s) => s.includes(pesan)), `uji balik kuis: "${pesan}" harus tertangkap`);
   }
 }
 
