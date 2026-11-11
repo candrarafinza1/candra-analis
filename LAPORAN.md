@@ -1230,3 +1230,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: KLBF & BRIS dicari ulang. KLBF hasil terbaru masih kuartal III 2025; BRIS masih s.d. Agustus 2026 → tetap 23 dari 32.
 - Tugas baru: Nina + Arif (tes `istilahBeranda()` dengan DOM tiruan). Dewi + Kirana (Belajar & pelajaran mode gelap) tetap berikutnya.
 - `node tests/cek.mjs` lolos (10 halaman). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 11 Nov 2026, 10.08 WIB (Bima)
+- Nina & Arif: `istilahBeranda()` kini dijalankan sungguhan dengan DOM tiruan di `tests/cek.mjs`: istilah di hero tidak ditandai ulang di kartu alat, istilah di kartu pertama tidak diulang di kartu kedua, paragraf kartu berkelas/bergaya tidak disentuh, teks tidak berubah. 4 uji balik tertangkap.
+- Fajar: KLBF & BRIS dicari ulang. KLBF hasil teratas masih Jan–Sep 2025; BRIS terbaru masih kuartal II 2026 → tetap 23 dari 32.
+- Tugas baru: Nina + Arif (uji istilah di kartu Belajar). Dewi + Kirana (Belajar & pelajaran mode gelap) tetap berikutnya.
+- `node tests/cek.mjs` lolos (10 halaman). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

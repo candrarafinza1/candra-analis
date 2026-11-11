@@ -1052,6 +1052,78 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
     const b = blok.replace(lama, baru);
     ok(b !== blok && ujiKepala(daftarKartu, b).some((s) => s.includes(pesan)), `uji balik kalimat pembuka kepala: "${pesan}" harus tertangkap`);
   }
+
+  // Nina & Arif (11 Nov 10.08): istilahBeranda() dijalankan dengan DOM tiruan. Istilah yang ditandai di kalimat hero
+  // tidak ditandai ulang di kartu alat; istilah yang ditandai di satu kartu tidak diulang di kartu berikutnya
+  // (sekali di seluruh beranda); paragraf kartu yang berkelas/bergaya tidak disentuh; teks tidak berubah.
+  const fBeranda = (() => { const m = app.match(/  function istilahBeranda\(\) \{[\s\S]*?\n  \}\n/); return m ? m[0] : ""; })();
+  ok(!!fBeranda, "app.js: istilahBeranda() harus bisa diambil untuk diuji");
+  const ujiBeranda = (daftarIstilah, blokUji, fungsiUji) => {
+    const { doc, semua } = buatDom();
+    // Pemilih mini: tag, .kelas, :not([atribut]), digabung spasi (keturunan) atau > (anak langsung).
+    const cocokSatu = (n, s) => {
+      const tidak = [...s.matchAll(/:not\(\[([a-z-]+)\]\)/g)].map((m) => m[1]);
+      const inti = s.replace(/:not\(\[[a-z-]+\]\)/g, "");
+      if (!n.cocok(inti)) return false;
+      return tidak.every((a) => !(a === "class" ? n.className : a in n.atribut || (a === "style" && n.atribut.style)));
+    };
+    const cocokPemilih = (n, sel) => {
+      const token = sel.replace(/\s*>\s*/g, " > ").trim().split(/\s+/);
+      const coba = (node, i) => {
+        if (!cocokSatu(node, token[i])) return false;
+        if (i === 0) return true;
+        if (token[i - 1] === ">") { const p = node.parentNode; return !!p && p.nodeType === 1 && coba(p, i - 2); }
+        for (let p = node.parentNode; p && p.nodeType === 1; p = p.parentNode) if (coba(p, i - 1)) return true;
+        return false;
+      };
+      return coba(n, token.length - 1);
+    };
+    const cari = (akar, sel) => semua(akar).filter((n) => n !== akar && n.nodeType === 1 && cocokPemilih(n, sel));
+    Object.getPrototypeOf(doc.body).querySelectorAll = function (sel) { return cari(this, sel); };
+    doc.querySelectorAll = (sel) => cari(doc.body, sel);
+    doc.querySelector = (sel) => cari(doc.body, sel)[0] || null;
+    const ctxI = {
+      document: doc, MODUL,
+      NodeFilter: { SHOW_TEXT: 4, FILTER_ACCEPT: 1, FILTER_REJECT: 2, FILTER_SKIP: 3 },
+      window: { ISTILAH: daftarIstilah, innerWidth: 390, innerHeight: 800, addEventListener() {},
+        matchMedia: () => ({ matches: false, addEventListener() {} }) },
+    };
+    vm.runInNewContext(ambilEl + "\n" + blokUji + "\n" + fungsiUji + "\n;globalThis.istilahBeranda = istilahBeranda;", ctxI);
+    const buat = (tag, kelas, anak) => { const e = doc.createElement(tag); if (kelas) e.className = kelas; (anak || []).forEach((c) => e.appendChild(c)); return e; };
+    const [A, B] = daftarIstilah.map((t) => t.pola[0]);
+    const teksHero = "Hero: " + A + " di sini.", teks1 = "Kartu satu: " + A + " dan " + B + ".", teks2 = "Kartu dua: " + B + " lalu " + A + ".";
+    const hero = buat("p", "", [doc.createTextNode(teksHero)]);
+    const k1 = buat("p", "", [doc.createTextNode(teks1)]);
+    const k2 = buat("p", "", [doc.createTextNode(teks2)]);
+    const kecil = buat("p", "kecil", [doc.createTextNode("Catatan: " + A + ".")]);
+    const bergaya = buat("p", "", [doc.createTextNode("Gaya: " + B + ".")]); bergaya.setAttribute("style", "margin:0");
+    doc.body.appendChild(buat("main", "", [
+      buat("section", "hero", [buat("div", "hero-teks", [buat("h1", "", [doc.createTextNode("Judul")]), hero])]),
+      buat("div", "alat", [buat("div", "panel", [bergaya, k1]), buat("div", "panel", [k2, kecil])]),
+    ]));
+    ctxI.istilahBeranda();
+    const tanda = (p) => semua(p).filter((n) => n.nodeType === 1 && n.cocok("button.istilah")).map((b) => b.dataset.istilah);
+    const salah = [];
+    if (!tanda(hero).includes("0")) salah.push("istilah di kalimat hero harus ditandai");
+    if (tanda(k1).includes("0")) salah.push("istilah yang sudah ditandai di hero tidak boleh ditandai ulang di kartu alat");
+    if (!tanda(k1).includes("1")) salah.push("istilah baru di kartu pertama harus ditandai");
+    if (tanda(k2).length) salah.push("istilah yang sudah ditandai di kartu sebelumnya tidak boleh diulang (sekali di seluruh beranda)");
+    if (tanda(kecil).length || tanda(bergaya).length) salah.push("paragraf kartu yang berkelas/bergaya tidak boleh disentuh");
+    if (hero.textContent !== teksHero || k1.textContent !== teks1 || k2.textContent !== teks2) salah.push("teks beranda berubah");
+    return salah;
+  };
+  const sBeranda = daftarKartu.length === 2 && fBeranda ? ujiBeranda(daftarKartu, blok, fBeranda) : ["kurang dari 2 istilah atau fungsi tidak ada"];
+  ok(sBeranda.length === 0, `kotak istilah (beranda): ${sBeranda.join("; ")}`);
+  const rusakBeranda = [
+    ["pasangIstilah(hero, sudah); catat(hero);", "pasangIstilah(hero, sudah);", "tidak boleh ditandai ulang di kartu alat"],
+    ["function (p) { pasangIstilah(p, sudah); catat(p); }", "function (p) { pasangIstilah(p, sudah); }", "sekali di seluruh beranda"],
+    ["function (p) { pasangIstilah(p, sudah); catat(p); }", "function (p) { pasangIstilah(p); catat(p); }", "tidak boleh ditandai ulang di kartu alat"],
+    [".alat .panel > p:not([class]):not([style])", ".alat .panel > p", "berkelas/bergaya tidak boleh disentuh"],
+  ];
+  for (const [lama, baru, pesan] of rusakBeranda) {
+    const fb = fBeranda.replace(lama, baru);
+    ok(fb !== fBeranda && ujiBeranda(daftarKartu, blok, fb).some((s) => s.includes(pesan)), `uji balik beranda: "${pesan}" harus tertangkap`);
+  }
 }
 
 // Tegar & Arif (10 Nov 16.10): setiap fetch() di assets/*.js hanya ke alamat relatif situs sendiri
