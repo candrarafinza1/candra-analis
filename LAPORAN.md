@@ -1218,3 +1218,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Tegar: 13 commit sejak 10 Nov 07.00 dipindai, tanpa temuan. Yoga: tautan internal 10 halaman lolos, rilis lewat push.
 - Tugas baru: Nina + Arif (tes tombol istilah di kepala tabel kartu HP). Dewi + Kirana (Belajar & pelajaran mode gelap) tetap berikutnya.
 - `node tests/cek.mjs` lolos (10 halaman). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 11 Nov 2026, 08.15 WIB (Bima)
+- Nina & Arif: tes tabel kartu HP di `tests/cek.mjs` kini dijalankan dengan DOM tiruan dan layar tiruan: di HP tombol istilah di kepala tabel diberi tabindex -1, tombol di badan tabel tetap bisa difokus, tabindex dilepas saat layar melebar ke desktop dan dipasang lagi saat menyempit; 3 uji balik tertangkap. Tampilan tidak berubah.
+- Fajar: KLBF & BRIS dicari ulang. Belum ada laba 9 bulan 2026 KLBF; BRIS terbaru masih s.d. Agustus 2026 → tetap 23 dari 32.
+- Tugas baru: Nina + Arif (tes `pasangIstilahKepala` dengan DOM tiruan). Dewi + Kirana (Belajar & pelajaran mode gelap) tetap berikutnya.
+- `node tests/cek.mjs` lolos (10 halaman). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

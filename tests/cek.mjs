@@ -939,6 +939,65 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
     ok(b !== blok && daftarKey.length && ujiKeyboard(daftarKey, b, diBelajar).some((s) => s.includes(pesan)),
       `uji balik keyboard kotak istilah: "${pesan}" harus tertangkap`);
   }
+
+  // Nina & Arif (11 Nov 08.15): tabel kartu di HP (cek 2l kini dijalankan sungguhan). Di HP (max-width 600px) kepala
+  // tabel .tabel-kartu disembunyikan, jadi tombol istilah di <thead> diberi tabindex=-1 (keluar dari urutan Tab);
+  // tombol di <tbody> tetap bisa difokus. Saat layar melebar ke desktop (kejadian "change"), tabindex dilepas lagi.
+  const ujiKartu = (daftarIstilah, blokUji) => {
+    const { doc, semua } = buatDom();
+    // Pemilih keturunan sederhana ("a b.c"), cukup untuk ".tabel-kartu thead button.istilah".
+    const cocokPemilih = (n, sel) => {
+      const bagian = sel.trim().split(/\s+/);
+      if (!n.cocok(bagian[bagian.length - 1])) return false;
+      let k = bagian.length - 2;
+      for (let p = n.parentNode; p && p.nodeType === 1 && k >= 0; p = p.parentNode) if (p.cocok(bagian[k])) k--;
+      return k < 0;
+    };
+    const cari = (akar, sel) => semua(akar).filter((n) => n !== akar && n.nodeType === 1 && cocokPemilih(n, sel));
+    Object.getPrototypeOf(doc.body).querySelectorAll = function (sel) { return cari(this, sel); };
+    doc.querySelectorAll = (sel) => cari(doc.body, sel);
+    const layar = { matches: true, pendengar: [], addEventListener(j, f) { if (j === "change") this.pendengar.push(f); } };
+    const ctxI = {
+      document: doc, MODUL,
+      NodeFilter: { SHOW_TEXT: 4, FILTER_ACCEPT: 1, FILTER_REJECT: 2, FILTER_SKIP: 3 },
+      window: { ISTILAH: daftarIstilah, innerWidth: 390, innerHeight: 800, addEventListener() {},
+        matchMedia: (q) => (/max-width:\s*600px/.test(q) ? layar : { matches: false, addEventListener() {} }) },
+    };
+    vm.runInNewContext(ambilEl + "\n" + blokUji + "\n;globalThis.pasangIstilah = pasangIstilah;", ctxI);
+    const buat = (tag, kelas, anak) => { const e = doc.createElement(tag); if (kelas) e.className = kelas; (anak || []).forEach((c) => e.appendChild(c)); return e; };
+    const pola = daftarIstilah.map((t) => t.pola[0]);
+    const tabel = buat("table", "tabel-kartu", [
+      buat("thead", "", [buat("tr", "", [buat("th", "", [doc.createTextNode(pola[0])])])]),
+      buat("tbody", "", [buat("tr", "", [buat("td", "", [doc.createTextNode(pola[1])])])]),
+    ]);
+    doc.body.appendChild(tabel);
+    ctxI.pasangIstilah(tabel);
+    const tombol = semua(tabel).filter((n) => n.nodeType === 1 && n.cocok("button.istilah"));
+    const kepala = tombol.find((b) => b.closest("thead")), badan = tombol.find((b) => b.closest("tbody"));
+    if (!kepala || !badan) return ["tombol istilah di kepala dan badan tabel tidak terbentuk"];
+    const salah = [];
+    if (kepala.getAttribute("tabindex") !== "-1") salah.push("di HP tombol istilah di kepala tabel kartu harus tabindex -1");
+    if (badan.getAttribute("tabindex") === "-1") salah.push("tombol istilah di badan tabel harus tetap bisa difokus");
+    layar.matches = false;
+    layar.pendengar.forEach((f) => f({ matches: false }));
+    if (kepala.getAttribute("tabindex") !== null) salah.push("di desktop tombol di kepala tabel harus kembali bisa difokus");
+    layar.matches = true;
+    layar.pendengar.forEach((f) => f({ matches: true }));
+    if (kepala.getAttribute("tabindex") !== "-1") salah.push("kembali ke HP: tombol di kepala tabel harus tabindex -1 lagi");
+    return salah;
+  };
+  const daftarKartu = (ctx.window.ISTILAH || []).filter((t) => String(t.arti || "").trim() && t.pola && t.pola.length).slice(0, 2);
+  const sKartu = daftarKartu.length === 2 ? ujiKartu(daftarKartu, blok) : ["kurang dari 2 istilah"];
+  ok(sKartu.length === 0, `kotak istilah (tabel kartu HP): ${sKartu.join("; ")}`);
+  const rusakKartu = [
+    ['if (sembunyi) b.setAttribute("tabindex", "-1"); else b.removeAttribute("tabindex");', 'b.removeAttribute("tabindex");', "harus tabindex -1"],
+    ['if (KARTU_HP.addEventListener) KARTU_HP.addEventListener("change", gantiKartu);', "if (KARTU_HP.addEventListener) {}", "kembali bisa difokus"],
+    ['".tabel-kartu thead button.istilah"', '".tabel-kartu button.istilah"', "badan tabel harus tetap"],
+  ];
+  for (const [lama, baru, pesan] of rusakKartu) {
+    const b = blok.replace(lama, baru);
+    ok(b !== blok && ujiKartu(daftarKartu, b).some((s) => s.includes(pesan)), `uji balik tabel kartu: "${pesan}" harus tertangkap`);
+  }
 }
 
 // Tegar & Arif (10 Nov 16.10): setiap fetch() di assets/*.js hanya ke alamat relatif situs sendiri
