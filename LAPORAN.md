@@ -1267,3 +1267,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: KLBF & BRIS dicari ulang. Hasil teratas masih kuartal III 2025 (KLBF) dan kuartal II 2026 (BRIS) → tetap 23 dari 32.
 - Tugas baru: Nina + Arif (uji `renderLanjutkan()`: kotak Lanjutkan belajar di beranda). Dewi + Kirana (Belajar & pelajaran mode gelap) tetap berikutnya.
 - `node tests/cek.mjs` lolos (10 halaman). Tampilan tidak berubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### Rabu 11 Nov 2026, 18.17 WIB (Bima)
+- Nina & Arif: kotak "Lanjutkan belajar" di beranda `renderLanjutkan()` kini diuji dengan DOM tiruan di `tests/cek.mjs`: belum ada tanda → tetap tersembunyi & kosong; sebagian selesai (urutan simpanan acak + id usang) → "2 dari 4 pelajaran selesai." + tombol ke pelajaran pertama yang belum selesai ("Lanjutkan belajar: Pelajaran 2" + judul); semua selesai → kalimat tamat + tautan ke belajar.html tanpa tombol lanjut; penyimpanan diblokir → tersembunyi tanpa galat. 8 uji balik tertangkap.
+- Fajar: KLBF & BRIS dicari ulang. Hasil teratas masih kuartal III 2025 (KLBF) dan kuartal II 2026 (BRIS) → tetap 23 dari 32.
+- Tugas baru: Nina + Arif (uji `renderIstilahHari()`). Dewi + Kirana (Belajar & pelajaran mode gelap) tetap berikutnya.
+- `node tests/cek.mjs` lolos (10 halaman). Tampilan tidak berubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

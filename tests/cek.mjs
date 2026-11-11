@@ -1507,6 +1507,81 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
     const b = blokRender.replace(lama, baru);
     ok(b !== blokRender && ujiJalur(b).some((s) => s.includes(pesan)), `uji balik jalur belajar: "${pesan}" harus tertangkap`);
   }
+  // Nina & Arif (11 Nov 18.17): renderLanjutkan() (kotak "Lanjutkan belajar" di beranda) dengan DOM tiruan.
+  // Belum ada tanda → kotak tetap tersembunyi & kosong; sebagian selesai → "n dari N pelajaran selesai." + tautan
+  // ke pelajaran pertama yang belum selesai (bukan sekadar sesudah yang terakhir ditandai); semua selesai →
+  // kalimat tamat + tautan ke belajar.html, tanpa tombol lanjut; penyimpanan diblokir → tersembunyi tanpa galat.
+  const ujiLanjutkan = (blokFungsi) => {
+    const KUNCI = "candra-analis:pelajaran-selesai";
+    const jalankan = (simpan, tolakBaca) => {
+      const { doc, semua } = buatDom();
+      const kotak = doc.createElement("div"); kotak.setAttribute("id", "lanjutkan-belajar"); kotak.setAttribute("hidden", "");
+      doc.body.appendChild(kotak);
+      const ctxL = {
+        document: doc, URLSearchParams, location: { search: "" },
+        MODUL: ["a", "b", "c", "d"].map((id) => ({ id, judul: "Judul " + id, ringkas: "Ringkas " + id, isi: "kata" })),
+        localStorage: { getItem: (k) => { if (tolakBaca) throw new Error("SecurityError"); return k in simpan ? simpan[k] : null; }, setItem() {} },
+        NodeFilter: { SHOW_TEXT: 4, FILTER_ACCEPT: 1, FILTER_REJECT: 2, FILTER_SKIP: 3 },
+        window: { ISTILAH: [], innerWidth: 390, innerHeight: 800, addEventListener() {},
+          matchMedia: () => ({ matches: false, addEventListener() {} }) },
+      };
+      vm.runInNewContext(ambilEl + "\n" + blokFungsi + "\n;globalThis.renderLanjutkan = renderLanjutkan;", ctxL);
+      ctxL.renderLanjutkan();
+      const cari = (sel) => semua(kotak).filter((x) => x.nodeType === 1 && x !== kotak && x.cocok(sel));
+      return { kotak, cari };
+    };
+    const salah = [];
+    let r;
+    // 1. Belum ada tanda.
+    try { r = jalankan({}, false); } catch (e) { return ["renderLanjutkan() galat: " + e.message]; }
+    if (!r.kotak.hidden || r.kotak.anak.length) salah.push("belum ada tanda: kotak harus tetap tersembunyi dan kosong");
+    // 2. Sebagian: "c" dan "a" selesai (+ id usang) → 2 dari 4, lanjut ke pelajaran 2 ("b"), bukan "d".
+    try {
+      r = jalankan({ [KUNCI]: JSON.stringify(["c", "a", "usang"]) }, false);
+      if (r.kotak.hidden) salah.push("sebagian selesai: kotak harus tampil");
+      const info = r.cari("p.lanjutkan-info")[0];
+      if (!info || !info.textContent.startsWith("2 dari 4 pelajaran selesai.")) salah.push("sebagian selesai: harus menyebut 2 dari 4 pelajaran selesai (" + (info ? info.textContent : "tanpa kalimat") + ")");
+      const tombol = r.cari("a.tombol");
+      if (tombol.length !== 1) salah.push("sebagian selesai: harus ada tepat satu tombol lanjut");
+      else {
+        if (tombol[0].getAttribute("href") !== "pelajaran.html?m=b") salah.push("tombol lanjut harus ke pelajaran pertama yang belum selesai (pelajaran.html?m=b), dapat " + tombol[0].getAttribute("href"));
+        if (!tombol[0].textContent.startsWith("Lanjutkan belajar: Pelajaran 2") || !tombol[0].textContent.includes("Judul b")) salah.push('teks tombol harus "Lanjutkan belajar: Pelajaran 2" + judul (' + tombol[0].textContent + ")");
+      }
+      if (r.cari("p.lanjutkan-tamat").length) salah.push("sebagian selesai: kalimat tamat tidak boleh muncul");
+    } catch (e) { salah.push("sebagian selesai galat: " + e.message); }
+    // 3. Semua selesai.
+    try {
+      r = jalankan({ [KUNCI]: JSON.stringify(["a", "b", "c", "d"]) }, false);
+      if (r.kotak.hidden) salah.push("semua selesai: kotak harus tampil");
+      const tamat = r.cari("p.lanjutkan-tamat")[0];
+      if (!tamat || !tamat.textContent.startsWith("Semua 4 pelajaran selesai.")) salah.push("semua selesai: harus ada kalimat tamat");
+      else if (!r.cari("a").some((a) => a.getAttribute("href") === "belajar.html")) salah.push("kalimat tamat harus menaut ke belajar.html");
+      if (r.cari("a.tombol").length) salah.push("semua selesai: tidak boleh ada tombol lanjut");
+    } catch (e) { salah.push("semua selesai galat: " + e.message); }
+    // 4. Penyimpanan diblokir.
+    try {
+      r = jalankan({}, true);
+      if (!r.kotak.hidden) salah.push("penyimpanan diblokir: kotak harus tetap tersembunyi");
+    } catch (e) { salah.push("penyimpanan diblokir tidak boleh membuat galat: " + e.message); }
+    return salah;
+  };
+  const sLanjut = blokRender && /function renderLanjutkan\(/.test(blokRender) ? ujiLanjutkan(blokRender) : ["renderLanjutkan() tidak ditemukan"];
+  ok(sLanjut.length === 0, `Lanjutkan belajar (DOM tiruan): ${sLanjut.join("; ")}`);
+  const rusakLanjut = [
+    ["if (!selesai.length) return;", "", "tetap tersembunyi dan kosong"],
+    ["if (selesai.indexOf(MODUL[i].id) < 0) { idx = i; break; }", "if (selesai.indexOf(MODUL[i].id) < 0) { idx = i; }", "pelajaran pertama yang belum selesai"],
+    ['"Lanjutkan belajar: Pelajaran " + (idx + 1)', '"Lanjutkan belajar: Pelajaran " + idx', "Lanjutkan belajar: Pelajaran 2"],
+    ['el("strong", { text: n + " dari " + MODUL.length + " pelajaran selesai." })', 'el("strong", { text: (n + 1) + " dari " + MODUL.length + " pelajaran selesai." })', "2 dari 4"],
+    ["    kotak.hidden = false;\n  }", "  }", "kotak harus tampil"],
+    ['el("a", { href: "belajar.html", text: "membuka ulang pelajaran" })', '"membuka ulang pelajaran"', "belajar.html"],
+    ["if (idx >= 0) {\n      kotak.appendChild(info);", "if (true) {\n      kotak.appendChild(info);", "semua selesai"],
+    ["try { v = JSON.parse(localStorage.getItem(KUNCI_KEMAJUAN) || \"[]\"); } catch (e) { return []; }",
+     "v = JSON.parse(localStorage.getItem(KUNCI_KEMAJUAN) || \"[]\");", "galat"],
+  ];
+  for (const [lama, baru, pesan] of rusakLanjut) {
+    const b = blokRender.replace(lama, baru);
+    ok(b !== blokRender && ujiLanjutkan(b).some((s) => s.includes(pesan)), `uji balik Lanjutkan belajar: "${pesan}" harus tertangkap`);
+  }
 }
 
 // Tegar & Arif (10 Nov 16.10): setiap fetch() di assets/*.js hanya ke alamat relatif situs sendiri
