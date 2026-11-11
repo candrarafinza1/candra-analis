@@ -1261,3 +1261,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: KLBF & BRIS dicari ulang. Hasil teratas masih kuartal III 2025 / semester I 2026 (KLBF) dan kuartal II 2026 (BRIS) → tetap 23 dari 32.
 - Tugas baru: Nina + Arif (uji `renderJalur()`: tanda selesai di jalur belajar). Dewi + Kirana (Belajar & pelajaran mode gelap) tetap berikutnya.
 - `node tests/cek.mjs` lolos (10 halaman). Tampilan tidak berubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### Rabu 11 Nov 2026, 17.10 WIB (Bima)
+- Nina & Arif: jalur belajar `renderJalur()` kini diuji dengan DOM tiruan di `tests/cek.mjs`: mode lengkap → pelajaran tersimpan selesai bertanda data-no="✓", kelas "selesai", label "Selesai"; yang belum bernomor urut tanpa atribut class; waktu baca tiap pelajaran benar; "1 dari 3 pelajaran selesai" tepat di atas daftar (id usang dibuang). Mode ringkas (beranda) tidak membaca penyimpanan, tanpa waktu baca & kalimat kemajuan. Penyimpanan diblokir → 0 dari 3 tanpa galat. 8 uji balik tertangkap.
+- Fajar: KLBF & BRIS dicari ulang. Hasil teratas masih kuartal III 2025 (KLBF) dan kuartal II 2026 (BRIS) → tetap 23 dari 32.
+- Tugas baru: Nina + Arif (uji `renderLanjutkan()`: kotak Lanjutkan belajar di beranda). Dewi + Kirana (Belajar & pelajaran mode gelap) tetap berikutnya.
+- `node tests/cek.mjs` lolos (10 halaman). Tampilan tidak berubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

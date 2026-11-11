@@ -1418,6 +1418,95 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
     const b = blokRender.replace(lama, baru);
     ok(b !== blokRender && ujiTandai(b).some((s) => s.includes(pesan)), `uji balik Tandai selesai: "${pesan}" harus tertangkap`);
   }
+  // Nina & Arif (11 Nov 17.10): renderJalur() dijalankan dengan DOM tiruan. Mode lengkap (belajar.html): pelajaran
+  // yang tersimpan selesai → data-no="✓", kelas "selesai", label "Selesai"; yang belum → nomor urut tanpa atribut
+  // class; setiap baris punya waktu baca; kalimat "n dari N pelajaran selesai" di atas daftar. Mode ringkas
+  // (beranda): tidak membaca penyimpanan sama sekali, semua bernomor, tanpa waktu baca, tanpa kalimat kemajuan.
+  const ujiJalur = (blokFungsi) => {
+    const KUNCI = "candra-analis:pelajaran-selesai";
+    const jalankan = (lengkap, simpan, tolakBaca) => {
+      const { doc, semua } = buatDom();
+      // Seperti peramban: className disalin ke atribut class (null → "null"); removeAttribute("class") mengosongkannya.
+      const buatAsli = doc.createElement;
+      doc.createElement = (t) => {
+        const e = buatAsli(t);
+        Object.defineProperty(e, "className", { get() { return "class" in e.atribut ? e.atribut.class : ""; },
+          set(v) { e.atribut.class = String(v); } });
+        return e;
+      };
+      const ol = doc.createElement("ol"); ol.setAttribute("id", "jalur");
+      const induk = doc.createElement("section"); induk.appendChild(ol); doc.body.appendChild(induk);
+      let dibaca = 0;
+      const ctxI = {
+        document: doc, URLSearchParams, location: { search: "" },
+        MODUL: ["a", "b", "c"].map((id, i) => ({ id, judul: "Judul " + id, ringkas: "Ringkas " + id, isi: "kata ".repeat(250 * (i + 1)) })),
+        localStorage: { getItem: (k) => { dibaca++; if (tolakBaca) throw new Error("SecurityError"); return k in simpan ? simpan[k] : null; }, setItem() {} },
+        NodeFilter: { SHOW_TEXT: 4, FILTER_ACCEPT: 1, FILTER_REJECT: 2, FILTER_SKIP: 3 },
+        window: { ISTILAH: [], innerWidth: 390, innerHeight: 800, addEventListener() {},
+          matchMedia: () => ({ matches: false, addEventListener() {} }) },
+      };
+      vm.runInNewContext(ambilEl + "\n" + blokFungsi + "\n;globalThis.renderJalur = renderJalur;", ctxI);
+      ctxI.renderJalur("jalur", lengkap);
+      const li = ol.anak.filter((n) => n.nodeType === 1 && n.nodeName === "LI");
+      const cari = (n, sel) => semua(n).filter((x) => x.nodeType === 1 && x.cocok(sel));
+      return { li, cari, induk, ol, dibaca: () => dibaca };
+    };
+    const salah = [];
+    let r;
+    // 1. Lengkap: "b" tersimpan selesai (+ id usang yang harus diabaikan).
+    try { r = jalankan(true, { [KUNCI]: JSON.stringify(["b", "usang"]) }, false); } catch (e) { return ["renderJalur() galat: " + e.message]; }
+    if (r.li.length !== 3) return ["jalur harus berisi 3 pelajaran, ada " + r.li.length];
+    r.li.forEach((li, i) => {
+      const sudah = i === 1;
+      const no = li.getAttribute("data-no");
+      if (sudah && no !== "✓") salah.push('pelajaran selesai harus data-no="✓" (dapat ' + no + ")");
+      if (!sudah && no !== String(i + 1)) salah.push("pelajaran belum selesai harus bernomor urut " + (i + 1) + " (dapat " + no + ")");
+      if (sudah && li.getAttribute("class") !== "selesai") salah.push('pelajaran selesai harus berkelas "selesai"');
+      if (!sudah && li.getAttribute("class") !== null) salah.push("pelajaran belum selesai harus tanpa atribut class (dapat " + li.getAttribute("class") + ")");
+      const label = r.cari(li, "span.label-selesai");
+      if (sudah && !(label.length === 1 && label[0].textContent === "Selesai")) salah.push('pelajaran selesai harus berlabel "Selesai"');
+      if (!sudah && label.length) salah.push("pelajaran belum selesai tidak boleh berlabel Selesai");
+      const a = r.cari(li, "a")[0];
+      if (!a || a.getAttribute("href") !== "pelajaran.html?m=" + "abc"[i] || a.textContent !== "Judul " + "abc"[i]) salah.push("tautan pelajaran " + (i + 1) + " salah");
+      const durasi = r.cari(li, "span.durasi");
+      if (!(durasi.length === 1 && durasi[0].textContent === "Waktu baca ± " + [2, 3, 4][i] + " menit")) salah.push("mode lengkap: setiap pelajaran harus punya waktu baca yang benar");
+    });
+    const kemajuan = r.induk.anak.find((n) => n.nodeType === 1 && n.classList.contains("kemajuan"));
+    if (!kemajuan || r.induk.anak.indexOf(kemajuan) !== r.induk.anak.indexOf(r.ol) - 1) salah.push("mode lengkap: kalimat kemajuan harus tepat di atas daftar");
+    else if (!kemajuan.textContent.startsWith("1 dari 3 pelajaran selesai. Lanjutkan kapan saja.")) salah.push("kalimat kemajuan harus menyebut 1 dari 3 pelajaran selesai: " + kemajuan.textContent);
+    // 2. Ringkas (beranda): penyimpanan tidak dibaca walau ada tanda selesai.
+    try {
+      const r2 = jalankan(false, { [KUNCI]: JSON.stringify(["a", "b", "c"]) }, false);
+      if (r2.dibaca()) salah.push("mode ringkas tidak boleh membaca penyimpanan");
+      if (r2.li.map((l) => l.getAttribute("data-no")).join(",") !== "1,2,3") salah.push("mode ringkas: semua pelajaran harus bernomor urut");
+      if (r2.li.some((l) => l.getAttribute("class") !== null || r2.cari(l, "span.label-selesai").length)) salah.push("mode ringkas: tanpa kelas/label selesai");
+      if (r2.li.some((l) => r2.cari(l, "span.durasi").length)) salah.push("mode ringkas harus tanpa waktu baca");
+      if (r2.induk.anak.some((n) => n.nodeType === 1 && n.classList.contains("kemajuan"))) salah.push("mode ringkas tanpa kalimat kemajuan");
+    } catch (e) { salah.push("mode ringkas galat: " + e.message); }
+    // 3. Lengkap, penyimpanan diblokir: tidak galat, 0 dari 3.
+    try {
+      const r3 = jalankan(true, {}, true);
+      const k3 = r3.induk.anak.find((n) => n.nodeType === 1 && n.classList.contains("kemajuan"));
+      if (!k3 || !k3.textContent.startsWith("0 dari 3 pelajaran selesai")) salah.push("penyimpanan diblokir: harus 0 dari 3 pelajaran selesai");
+    } catch (e) { salah.push("penyimpanan diblokir tidak boleh membuat galat: " + e.message); }
+    return salah;
+  };
+  const sJalur = blokRender && /function renderJalur\(/.test(blokRender) ? ujiJalur(blokRender) : ["renderJalur() tidak ditemukan"];
+  ok(sJalur.length === 0, `jalur belajar (DOM tiruan): ${sJalur.join("; ")}`);
+  const rusakJalur = [
+    ["var selesai = lengkap ? bacaSelesai() : [];", "var selesai = bacaSelesai();", "tidak boleh membaca penyimpanan"],
+    ['"data-no": sudah ? "✓" : String(i + 1)', '"data-no": String(i + 1)', 'data-no="✓"'],
+    ['if (!sudah) li.removeAttribute("class");', "", "tanpa atribut class"],
+    ['class: sudah ? "selesai" : null', "class: null", 'berkelas "selesai"'],
+    ['sudah ? el("span", { class: "label-selesai", text: "Selesai" }) : null', "null", 'berlabel "Selesai"'],
+    ['lengkap ? el("span", { class: "durasi"', 'true ? el("span", { class: "durasi"', "tanpa waktu baca"],
+    ["if (lengkap) {\n      var n = selesai.length;", "if (false) {\n      var n = selesai.length;", "kalimat kemajuan"],
+    ['href: "pelajaran.html?m=" + m.id, text: m.judul', 'href: "pelajaran.html", text: m.judul', "tautan pelajaran"],
+  ];
+  for (const [lama, baru, pesan] of rusakJalur) {
+    const b = blokRender.replace(lama, baru);
+    ok(b !== blokRender && ujiJalur(b).some((s) => s.includes(pesan)), `uji balik jalur belajar: "${pesan}" harus tertangkap`);
+  }
 }
 
 // Tegar & Arif (10 Nov 16.10): setiap fetch() di assets/*.js hanya ke alamat relatif situs sendiri
