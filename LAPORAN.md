@@ -1224,3 +1224,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: KLBF & BRIS dicari ulang. Belum ada laba 9 bulan 2026 KLBF; BRIS terbaru masih s.d. Agustus 2026 → tetap 23 dari 32.
 - Tugas baru: Nina + Arif (tes `pasangIstilahKepala` dengan DOM tiruan). Dewi + Kirana (Belajar & pelajaran mode gelap) tetap berikutnya.
 - `node tests/cek.mjs` lolos (10 halaman). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 11 Nov 2026, 09.09 WIB (Bima)
+- Nina & Arif: tes baru di `tests/cek.mjs` menjalankan `pasangIstilahKepala()` dengan DOM tiruan: istilah yang sudah ditandai di isi halaman tidak ditandai ulang di kalimat pembuka kepala, istilah lain tetap ditandai, tombol yang sudah ada di dalam kepala tidak dihitung, teks tidak berubah; 3 uji balik tertangkap. Tampilan tidak berubah.
+- Fajar: KLBF & BRIS dicari ulang. KLBF hasil terbaru masih kuartal III 2025; BRIS masih s.d. Agustus 2026 → tetap 23 dari 32.
+- Tugas baru: Nina + Arif (tes `istilahBeranda()` dengan DOM tiruan). Dewi + Kirana (Belajar & pelajaran mode gelap) tetap berikutnya.
+- `node tests/cek.mjs` lolos (10 halaman). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

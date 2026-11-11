@@ -998,6 +998,60 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
     const b = blok.replace(lama, baru);
     ok(b !== blok && ujiKartu(daftarKartu, b).some((s) => s.includes(pesan)), `uji balik tabel kartu: "${pesan}" harus tertangkap`);
   }
+
+  // Nina & Arif (11 Nov 09.09): pasangIstilahKepala() dijalankan dengan DOM tiruan. Istilah yang sudah ditandai
+  // di <main> di luar kepala halaman tidak ditandai ulang di kalimat pembuka kepala; istilah lain tetap ditandai;
+  // tombol yang sudah ada di dalam kepala sendiri tidak dihitung "sudah".
+  const ujiKepala = (daftarIstilah, blokUji) => {
+    const { doc, semua } = buatDom();
+    const cocokPemilih = (n, sel) => {
+      const bagian = sel.replace(/>/g, " ").trim().split(/\s+/);
+      if (!n.cocok(bagian[bagian.length - 1])) return false;
+      let k = bagian.length - 2;
+      for (let p = n.parentNode; p && p.nodeType === 1 && k >= 0; p = p.parentNode) if (p.cocok(bagian[k])) k--;
+      return k < 0;
+    };
+    const cari = (akar, sel) => semua(akar).filter((n) => n !== akar && n.nodeType === 1 && cocokPemilih(n, sel));
+    Object.getPrototypeOf(doc.body).querySelectorAll = function (sel) { return cari(this, sel); };
+    doc.querySelectorAll = (sel) => cari(doc.body, sel);
+    doc.querySelector = (sel) => cari(doc.body, sel)[0] || null;
+    const ctxI = {
+      document: doc, MODUL,
+      NodeFilter: { SHOW_TEXT: 4, FILTER_ACCEPT: 1, FILTER_REJECT: 2, FILTER_SKIP: 3 },
+      window: { ISTILAH: daftarIstilah, innerWidth: 390, innerHeight: 800, addEventListener() {},
+        matchMedia: () => ({ matches: false, addEventListener() {} }) },
+    };
+    vm.runInNewContext(ambilEl + "\n" + blokUji + "\n;globalThis.pasangIstilah = pasangIstilah; globalThis.pasangIstilahKepala = pasangIstilahKepala;", ctxI);
+    const buat = (tag, kelas, anak) => { const e = doc.createElement(tag); if (kelas) e.className = kelas; (anak || []).forEach((c) => e.appendChild(c)); return e; };
+    const pola = daftarIstilah.map((t) => t.pola[0]);
+    // Tombol istilah 1 yang sudah ada di judul kepala: tidak boleh membuat istilah 1 dilewati di kalimat pembuka.
+    const tombolJudul = buat("button", "istilah", [doc.createTextNode(pola[1])]);
+    tombolJudul.dataset.istilah = "1";
+    const pembuka = buat("p", "", [doc.createTextNode("Pembuka: " + pola[0] + " dan " + pola[1] + " di laporan.")]);
+    const kepala = buat("section", "judul-halaman", [buat("div", "wadah", [buat("h1", "", [tombolJudul]), pembuka])]);
+    const isi = buat("p", "", [doc.createTextNode("Isi: " + pola[0] + " pada tabel.")]);
+    doc.body.appendChild(buat("main", "", [kepala, buat("section", "", [isi])]));
+    ctxI.pasangIstilah(isi);
+    ctxI.pasangIstilahKepala();
+    const tanda = semua(pembuka).filter((n) => n.nodeType === 1 && n.cocok("button.istilah")).map((b) => b.dataset.istilah);
+    const salah = [];
+    if (!semua(isi).some((n) => n.nodeType === 1 && n.cocok("button.istilah"))) salah.push("istilah di isi halaman tidak ditandai");
+    if (tanda.includes("0")) salah.push("istilah yang sudah ditandai di isi halaman tidak boleh ditandai ulang di kepala");
+    if (!tanda.includes("1")) salah.push("istilah lain di kalimat pembuka kepala harus tetap ditandai");
+    if (pembuka.textContent !== "Pembuka: " + pola[0] + " dan " + pola[1] + " di laporan.") salah.push("teks kalimat pembuka berubah");
+    return salah;
+  };
+  const sKepala = daftarKartu.length === 2 ? ujiKepala(daftarKartu, blok) : ["kurang dari 2 istilah"];
+  ok(sKepala.length === 0, `kotak istilah (kalimat pembuka kepala): ${sKepala.join("; ")}`);
+  const rusakKepala = [
+    ["pasangIstilah(p, sudah);", "pasangIstilah(p);", "tidak boleh ditandai ulang"],
+    ['if (!b.closest(".judul-halaman")) sudah[b.dataset.istilah] = true;', "sudah[b.dataset.istilah] = true;", "harus tetap ditandai"],
+    ["if (sudah) Object.keys(sudah).forEach(function (k) { dipakai[k] = true; });", "", "tidak boleh ditandai ulang"],
+  ];
+  for (const [lama, baru, pesan] of rusakKepala) {
+    const b = blok.replace(lama, baru);
+    ok(b !== blok && ujiKepala(daftarKartu, b).some((s) => s.includes(pesan)), `uji balik kalimat pembuka kepala: "${pesan}" harus tertangkap`);
+  }
 }
 
 // Tegar & Arif (10 Nov 16.10): setiap fetch() di assets/*.js hanya ke alamat relatif situs sendiri
