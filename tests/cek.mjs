@@ -1933,6 +1933,41 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
       if (s4.post().length) salah.push("Shift+Enter tidak boleh mengirim pertanyaan");
       (s4.area.pendengar.keydown || []).forEach((f) => f({ key: "Enter", shiftKey: false, preventDefault() {} }));
       if (s4.post().length !== 1) salah.push("Enter harus mengirim pertanyaan");
+      // 5. (Nina & Arif, 12 Nov 09.09) Tombol contoh pertanyaan (chip), label pesan, dan aria-live log.
+      const s5 = await skenario(() => Promise.resolve(balas(true, { aktif: true })));
+      if (!s5.log || s5.log.getAttribute("aria-live") !== "polite") salah.push('log percakapan harus punya aria-live="polite"');
+      if (!s5.log || !s5.log.getAttribute("aria-label")) salah.push("log percakapan harus punya aria-label");
+      const chipEl = s5.semua(s5.akar).filter((n) => n.nodeType === 1 && n.classList.contains("chip"));
+      if (chipEl.length !== 4) salah.push("harus ada 4 tombol contoh pertanyaan (dapat " + chipEl.length + ")");
+      if (chipEl.some((b) => b.nodeName !== "BUTTON" || b.getAttribute("type") !== "button"))
+        salah.push('tombol contoh harus <button type="button"> agar tidak mengirim form');
+      const pembungkus = chipEl[0] && chipEl[0].parentNode;
+      if (!pembungkus || !pembungkus.classList.contains("contoh-tanya") || s5.semua(s5.form).includes(chipEl[0]))
+        salah.push("tombol contoh harus di wadah .contoh-tanya, di luar form");
+      chipEl.forEach((b, i) => {
+        s5.doc.activeElement = null;
+        (b.pendengar.click || []).forEach((f) => f({}));
+        if (s5.area.value !== b.textContent) salah.push(`klik tombol contoh ${i + 1} harus mengisi kotak tanya persis dengan teks tombol`);
+        if (s5.hitung.textContent !== b.textContent.length + "/600") salah.push(`klik tombol contoh ${i + 1}: penghitung karakter harus ikut berubah (${b.textContent.length}/600)`);
+        if (s5.doc.activeElement !== s5.area) salah.push(`klik tombol contoh ${i + 1}: fokus harus pindah ke kotak tanya`);
+      });
+      if (s5.post().length) salah.push("klik tombol contoh tidak boleh langsung mengirim pertanyaan");
+      if (chipEl[1]) {
+        (chipEl[1].pendengar.click || []).forEach((f) => f({}));
+        (s5.form.pendengar.submit || []).forEach((f) => f({ preventDefault() {} }));
+        const kirim5 = s5.post()[0];
+        let b5 = {}; try { b5 = JSON.parse(kirim5.opsi.body); } catch (e) { /* dicek di bawah */ }
+        if (b5.pertanyaan !== chipEl[1].textContent) salah.push("pertanyaan dari tombol contoh harus terkirim persis");
+        const [mPengguna, mAsisten] = s5.pesan();
+        const labelDari = (m) => { const l = m && m.anak.find((n) => n.nodeType === 1 && n.classList.contains("pesan-label")); return l ? l.textContent : null; };
+        if (!mPengguna || !mPengguna.classList.contains("pesan-pengguna") || labelDari(mPengguna) !== "Anda")
+          salah.push('pesan pengguna harus .pesan-pengguna berlabel "Anda"');
+        if (!mAsisten || !mAsisten.classList.contains("pesan-asisten") || labelDari(mAsisten) !== "Asisten")
+          salah.push('pesan asisten (menunggu) harus .pesan-asisten berlabel "Asisten"');
+        if (kirim5) { kirim5.ya(balas(true, { jawaban: "Saham syariah tercatat di DES." })); await tungguMikro(); }
+        const akhir = s5.pesan().pop();
+        if (labelDari(akhir) !== "Asisten" || !akhir.classList.contains("pesan-asisten")) salah.push('jawaban harus .pesan-asisten berlabel "Asisten"');
+      }
     } catch (e) { salah.push("renderAsisten() galat: " + e.message); }
     return salah;
   };
@@ -1954,6 +1989,18 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
     ['var q = area.value.trim();', 'var q = area.value;', "tanpa spasi tepi"],
     ['if (e.key === "Enter" && !e.shiftKey)', 'if (e.key === "Enter")', "Shift+Enter"],
     ['tambahPesan("asisten", teksKeElemen(h.d.jawaban));', 'tambahPesan("asisten", el("p", { text: "ok" }));', "teksKeElemen()"],
+    // Nina & Arif (12 Nov 09.09): tombol contoh, label pesan, aria-live.
+    ["area.value = c; area.focus(); perbaruiHitung();", "area.value = c + \" \"; area.focus(); perbaruiHitung();", "mengisi kotak tanya persis"],
+    ["area.value = c; area.focus(); perbaruiHitung();", "area.value = c; area.focus();", "penghitung karakter harus ikut berubah"],
+    ["area.value = c; area.focus(); perbaruiHitung();", "area.value = c; perbaruiHitung();", "fokus harus pindah"],
+    ["area.value = c; area.focus(); perbaruiHitung();", "area.value = c; area.focus(); perbaruiHitung(); form.requestSubmit();", "tidak boleh langsung mengirim"],
+    ['el("button", { type: "button", class: "chip", text: c })', 'el("button", { class: "chip", text: c })', 'button type="button"'],
+    ['"aria-live": "polite", "aria-label": "Percakapan dengan asisten"', '"aria-label": "Percakapan dengan asisten"', 'aria-live="polite"'],
+    ['var label = peran === "pengguna" ? "Anda" : "Asisten";', 'var label = peran === "pengguna" ? "Pengguna" : "Asisten";', 'berlabel "Anda"'],
+    ['var label = peran === "pengguna" ? "Anda" : "Asisten";', 'var label = peran === "pengguna" ? "Anda" : "AI";', 'berlabel "Asisten"'],
+    ['var kelas = "pesan pesan-" + peran;', 'var kelas = "pesan";', ".pesan-pengguna"],
+    ["      chips.appendChild(b);\n", "      form.appendChild(b);\n", "di luar form"],
+    ['"Laba naik tapi harga saham turun, kenapa bisa begitu?",\n', "", "4 tombol contoh"],
   ];
   for (const [lama, baru, pesan] of rusakAsisten) {
     const b = blokAsisten.replace(lama, baru);
