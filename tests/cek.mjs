@@ -1857,6 +1857,28 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
       if (!s1.area.disabled || !s1.tombol.disabled) salah.push('status {"aktif":false}: kotak tanya & tombol harus nonaktif');
       s1.kirim("Apa itu ROE?");
       if (s1.post().length) salah.push('status {"aktif":false}: pertanyaan tidak boleh terkirim');
+      // Nina & Tegar (12 Nov 13.09): bentuk pita status & catatan peringatan.
+      if (!s1.pita || s1.pita.getAttribute("role") !== "status") salah.push('pita status harus memakai role="status"');
+      const kuat1 = s1.pita && s1.pita.anak.find((n) => n.nodeType === 1 && n.nodeName === "STRONG");
+      if (!kuat1 || kuat1.textContent.trim() !== "Asisten belum aktif.") salah.push('teks "Asisten belum aktif." harus di dalam <strong> pada pita');
+      if (s1.pita && s1.pita.textContent.split("Asisten belum aktif").length !== 2) salah.push("pita tidak boleh menumpuk teks (Asisten belum aktif muncul sekali)");
+      const catatan1 = cariEl(s1, (n) => n.nodeName === "P" && n.classList.contains("catatan-metode"));
+      if (!catatan1 || !catatan1.textContent.includes("bukan rekomendasi")) salah.push('catatan di bawah form harus memuat "bukan rekomendasi"');
+      if (!catatan1 || !catatan1.textContent.includes("data pribadi")) salah.push('catatan di bawah form harus melarang "data pribadi"');
+      if (catatan1 && s1.semua(s1.form).includes(catatan1)) salah.push("catatan peringatan harus di luar form");
+      // setAktif() langsung: belum aktif lalu aktif → pita tersembunyi lagi, kotak & tombol aktif.
+      const blokSet = (blokFungsi.match(/    function setAktif\(aktif, pesan\) \{[\s\S]*?\n    \}\n/) || [""])[0];
+      if (!blokSet) salah.push("setAktif() tidak ditemukan");
+      else {
+        const { doc: dS } = buatDom();
+        const stS = dS.createElement("div"); stS.hidden = true;
+        const ctxS = { document: dS, area: { disabled: false }, tombol: { disabled: false }, status: stS };
+        vm.runInNewContext(ambilEl + "\n" + blokSet + "\n;setAktif(false, 'Uji.'); setAktif(false, 'Uji.'); var t1 = status.textContent, h1 = status.hidden; setAktif(true);", ctxS);
+        if (ctxS.h1 !== false || !String(ctxS.t1).includes("Asisten belum aktif")) salah.push("setAktif(false, pesan) harus menampilkan pita");
+        if (String(ctxS.t1).split("Asisten belum aktif").length !== 2) salah.push("setAktif(false) dua kali tidak boleh menumpuk teks pita");
+        if (stS.hidden !== true) salah.push("pita tersembunyi lagi bila setAktif(true) dipanggil");
+        if (ctxS.area.disabled || ctxS.tombol.disabled) salah.push("setAktif(true): kotak tanya & tombol harus aktif lagi");
+      }
       // 2. Status gagal dihubungi → pita juga tampil.
       const s2 = await skenario(() => Promise.reject(new Error("jaringan")));
       if (!s2.pita || s2.pita.hidden || !s2.pita.textContent.includes("tidak bisa dihubungi"))
@@ -2001,6 +2023,14 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
     ['var kelas = "pesan pesan-" + peran;', 'var kelas = "pesan";', ".pesan-pengguna"],
     ["      chips.appendChild(b);\n", "      form.appendChild(b);\n", "di luar form"],
     ['"Laba naik tapi harga saham turun, kenapa bisa begitu?",\n', "", "4 tombol contoh"],
+    // Nina & Tegar (12 Nov 13.09): pita status & catatan peringatan.
+    ['class: "pita-demo", role: "status", hidden: "hidden"', 'class: "pita-demo", hidden: "hidden"', 'role="status"'],
+    ['status.appendChild(el("strong", { text: "Asisten belum aktif. " }));', 'status.appendChild(el("span", { text: "Asisten belum aktif. " }));', "di dalam <strong>"],
+    ['status.hidden = false; status.textContent = "";', "status.hidden = false;", "menumpuk teks"],
+    ["      else status.hidden = true;", "      else {}", "tersembunyi lagi"],
+    ["area.disabled = !aktif; tombol.disabled = !aktif;", "area.disabled = true; tombol.disabled = !aktif;", "aktif lagi"],
+    ["Jawaban asisten bukan rekomendasi membeli atau menjual efek. ", "", "bukan rekomendasi"],
+    ["Jangan menuliskan data pribadi seperti nomor KTP atau rekening.", "Jangan menuliskan hal sensitif.", "data pribadi"],
   ];
   for (const [lama, baru, pesan] of rusakAsisten) {
     const b = blokAsisten.replace(lama, baru);
