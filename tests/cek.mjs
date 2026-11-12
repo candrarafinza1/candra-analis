@@ -3384,6 +3384,78 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
     for (const [b, pesan] of rusakKabar)
       ok(b.join() !== kodeKabar.join() && ujiKabar(b).some((s) => s.includes(pesan)), `uji balik urutan judul Kabar: "${pesan}" harus tertangkap`);
   }
+  // Nina & Arif (12 Nov 21.12): Belajar. renderJalur (mode lengkap di belajar.html, mode ringkas di beranda) dan
+  // renderRujukan dijalankan dengan DOM tiruan; judul buatannya disisipkan di posisi wadahnya (#jalur-lengkap,
+  // #rujukan, #jalur-ringkas) di antara judul statis halaman. Keadaan: belum ada pelajaran selesai & satu selesai.
+  {
+    const ambilB = (awal) => { const i = app.indexOf("  " + awal); const j = app.indexOf("\n  }\n", i); return i < 0 || j < 0 ? "" : app.slice(i, j + 5); };
+    const kodeBelajar = [ambilB("function el("), ambilB("function renderJalur("), ambilB("function renderRujukan()")];
+    ok(kodeBelajar.every(Boolean), "app.js: el/renderJalur/renderRujukan harus bisa diambil untuk uji urutan judul");
+    const belajarHtml = readFileSync("belajar.html", "utf8"), berandaHtml = readFileSync("index.html", "utf8");
+    // Urutan judul satu halaman: judul statis di <main> dengan judul dinamis disisipkan di posisi wadah id-nya.
+    const sisip = (html, peta) => {
+      const main = (html.match(/<main[\s>][\s\S]*?<\/main>/) || [""])[0];
+      const titik = Object.keys(peta).map((id) => [main.indexOf(`id="${id}"`), id]).sort((a, b) => a[0] - b[0]);
+      const hilang = titik.filter(([i]) => i < 0).map(([, id]) => id);
+      if (hilang.length) return { hilang };
+      const lv = []; let dari = 0;
+      for (const [i, id] of titik) { lv.push(...judulMain("<main>" + main.slice(dari, i) + "</main>"), ...peta[id]); dari = i; }
+      lv.push(...judulMain("<main>" + main.slice(dari) + "</main>"));
+      return { lv, hilang };
+    };
+    const rujukanData = (() => { const c = { window: {} }; vm.runInNewContext(readFileSync("data/rujukan.js", "utf8"), c); return c.window.RUJUKAN || []; })();
+    const ujiBelajar = (blokApp) => {
+      const salah = [];
+      const simpul = (tag) => ({ tag, anak: [], atribut: {}, className: "", parentNode: null,
+        appendChild(c) { this.anak.push(c); c.parentNode = this; return c; },
+        insertBefore(c, ref) { const i = this.anak.indexOf(ref); this.anak.splice(i < 0 ? this.anak.length : i, 0, c); c.parentNode = this; return c; },
+        setAttribute(k, v) { this.atribut[k] = String(v); }, removeAttribute(k) { delete this.atribut[k]; },
+        set textContent(v) { this._teks = String(v); } });
+      const levels = (n, out = []) => { const m = /^h([1-6])$/.exec(n.tag || ""); if (m) out.push(+m[1]); (n.anak || []).forEach((c) => levels(c, out)); return out; };
+      const jalankan = (selesai) => {
+        const induk = simpul("div"), wadah = { "jalur-lengkap": simpul("ol"), "jalur-ringkas": simpul("ol"), rujukan: simpul("div") };
+        induk.appendChild(wadah["jalur-lengkap"]);
+        const document = { createElement: simpul, createTextNode: () => ({ tag: "#text", anak: [] }), getElementById: (id) => wadah[id] || null };
+        const ctxB = { document, MODUL: ["a", "b", "c"].map((id) => ({ id, judul: "Judul " + id, ringkas: "Ringkas" })),
+          bacaSelesai: () => selesai, teksWaktuBaca: () => "Waktu baca", window: { RUJUKAN: rujukanData } };
+        vm.runInNewContext(blokApp.join("\n") + "\n;globalThis.renderJalur = renderJalur; globalThis.renderRujukan = renderRujukan;", ctxB);
+        ctxB.renderJalur("jalur-ringkas", false); ctxB.renderJalur("jalur-lengkap", true); ctxB.renderRujukan();
+        // Kalimat kemajuan disisipkan sebelum daftar lengkap di induk yang sama: ikut dihitung.
+        return { lengkap: levels(induk), ringkas: levels(wadah["jalur-ringkas"]), rujukan: levels(wadah.rujukan) };
+      };
+      for (const [nama, selesai] of [["belum ada yang selesai", []], ["satu selesai", ["b"]]]) {
+        let d;
+        try { d = jalankan(selesai); } catch (err) { return [`renderJalur/renderRujukan galat: ${err.message}`]; }
+        if (!d.lengkap.length) salah.push(`Belajar ${nama}: renderJalur tidak membuat judul apa pun`);
+        if (!d.rujukan.length) salah.push(`Belajar ${nama}: renderRujukan tidak membuat judul apa pun`);
+        if (!d.ringkas.length) salah.push(`Beranda ${nama}: renderJalur ringkas tidak membuat judul apa pun`);
+        const b = sisip(belajarHtml, { "jalur-lengkap": d.lengkap, rujukan: d.rujukan });
+        const r = sisip(berandaHtml, { "jalur-ringkas": d.ringkas });
+        for (const id of [...b.hilang, ...r.hilang]) salah.push(`wadah #${id} tidak ditemukan di <main>`);
+        if (b.lv) for (const s of urutanJudul(b.lv)) salah.push(`Belajar ${nama}: ${s}`);
+        if (r.lv) for (const s of urutanJudul(r.lv)) salah.push(`Beranda ${nama}: ${s}`);
+      }
+      return salah;
+    };
+    const sBelajar = ujiBelajar(kodeBelajar);
+    ok(sBelajar.length === 0, `urutan judul Belajar & beranda jalur (DOM tiruan): ${sBelajar.join("; ")}`);
+    // Uji balik
+    const gantiB = (dari, ke) => kodeBelajar.map((k) => k.split(dari).join(ke));
+    const rusakBelajar = [
+      [gantiB('el("h3", null, [el("a", { href: "pelajaran.html?m="', 'el("h4", null, [el("a", { href: "pelajaran.html?m="'), "Belajar belum ada yang selesai: urutan judul melompat h2 → h4"],
+      [gantiB('el("div", { class: "rujukan-kelompok" }, [el("h3"', 'el("div", { class: "rujukan-kelompok" }, [el("h5"'), "Belajar satu selesai: urutan judul melompat h2 → h5"],
+      [gantiB('el("h3", null, [el("a", { href: "pelajaran.html?m="', 'el("h1", null, [el("a", { href: "pelajaran.html?m="'), "Beranda belum ada yang selesai: h1 di <main> ada"],
+      [gantiB('[el("h3", { text: k.kelompok }), ul]', "[ul]"), "renderRujukan tidak membuat judul apa pun"],
+    ];
+    for (const [b, pesan] of rusakBelajar)
+      ok(b.join() !== kodeBelajar.join() && ujiBelajar(b).some((s) => s.includes(pesan)), `uji balik urutan judul Belajar: "${pesan}" harus tertangkap`);
+    const rusakHtml = belajarHtml.replace('<div id="rujukan"></div>', '<div id="rujukan-lain"></div>');
+    ok(rusakHtml !== belajarHtml && sisip(rusakHtml, { rujukan: [3] }).hilang.includes("rujukan"),
+      "uji balik urutan judul Belajar: wadah #rujukan yang hilang dari <main> harus tertangkap");
+    const rusakHtml2 = belajarHtml.replace('<h2 class="khusus-pembaca-layar">Daftar pelajaran</h2>', "");
+    ok(rusakHtml2 !== belajarHtml && urutanJudul(sisip(rusakHtml2, { "jalur-lengkap": [3] }).lv).some((s) => s.includes("melompat h1 → h3")),
+      "uji balik urutan judul Belajar: h2 \"Daftar pelajaran\" dihapus harus tertangkap (h1 → h3)");
+  }
 
 }
 
