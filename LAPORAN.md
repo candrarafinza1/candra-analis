@@ -1335,3 +1335,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: KLBF dicari ulang; hasil pencarian masih data Januari–September 2025 → tetap 23 dari 32.
 - Tugas baru: Nina + Yoga (cek lang, viewport, charset, tautan lompat). Dewi + Kirana (audit kontras beranda/Belajar/pelajaran/404 + garis fokus) berikutnya.
 - `node tests/cek.mjs` lolos (10 halaman). Tampilan tidak diubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### Kamis 12 Nov 2026, 16.10 WIB (Bima)
+- Nina & Yoga: cek kepala dasar untuk semua 10 halaman di `tests/cek.mjs`: `<html lang="id">`, `<meta charset="utf-8">` sebagai isi pertama <head>, meta viewport width=device-width + initial-scale=1 tanpa mengunci zoom, tautan lompat `.lompat` sebagai tautan pertama <body> menuju id unik di <main>. Semua halaman sudah memenuhi; 13 uji balik tertangkap. Kode situs tidak diubah.
+- Fajar: KLBF & BRIS dicari ulang; hasil teratas masih Januari–September 2025 → tetap 23 dari 32.
+- Tugas baru: Nina + Tegar (alt gambar, nama tombol & kolom isian, id ganda). Dewi + Kirana (audit kontras + garis fokus) berikutnya.
+- `node tests/cek.mjs` lolos (10 halaman). Tampilan tidak diubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

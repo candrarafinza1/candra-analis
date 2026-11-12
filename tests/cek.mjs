@@ -3190,6 +3190,54 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
     ok(b !== readFileSync(f, "utf8") && ujiKerangka(f, b).some((s) => s.includes(pesan)), `uji balik kerangka ${f}: "${pesan}" harus tertangkap`);
 }
 
+// Nina & Yoga (12 Nov 16.10): dasar kepala halaman untuk SEMUA halaman. <html lang="id">, <meta charset="utf-8">
+// sebagai isi pertama <head>, meta viewport width=device-width + initial-scale=1 (tanpa user-scalable=no /
+// maximum-scale=1 agar pemula bisa memperbesar teks), dan tautan lompat .lompat sebagai tautan pertama di <body>
+// yang menuju id unik yang ada di <main>.
+{
+  const ujiKepalaDasar = (html) => {
+    const salah = [];
+    if (!/<html lang="id">/.test(html)) salah.push('harus <html lang="id">');
+    const head = (html.match(/<head>([\s\S]*?)<\/head>/) || [])[1];
+    if (head === undefined) salah.push("<head> tidak ditemukan");
+    else if (!/^\s*<meta charset="utf-8">/i.test(head)) salah.push('<meta charset="utf-8"> harus jadi isi pertama <head>');
+    const vp = (html.match(/<meta name="viewport" content="([^"]*)"/) || [])[1];
+    if (!vp || !/width=device-width/.test(vp) || !/initial-scale=1(?![\d.])/.test(vp)) salah.push("meta viewport harus width=device-width, initial-scale=1");
+    else if (/user-scalable\s*=\s*(no|0)|maximum-scale\s*=\s*1(?![\d.])/.test(vp)) salah.push("meta viewport tidak boleh mengunci zoom");
+    const body = (html.match(/<body[^>]*>([\s\S]*)<\/body>/) || [])[1] || "";
+    const pertama = body.match(/<a\s[^>]*>/);
+    const lompat = pertama && /class="lompat"/.test(pertama[0]) ? (pertama[0].match(/href="#([^"]+)"/) || [])[1] : undefined;
+    if (!lompat) salah.push("tautan lompat .lompat (href=\"#…\") harus jadi tautan pertama di <body>");
+    else {
+      const jml = (html.match(new RegExp(`id="${lompat}"`, "g")) || []).length;
+      if (jml !== 1) salah.push(`tautan lompat menuju #${lompat}, tetapi id itu ada ${jml}× (harus tepat 1)`);
+      else if (!new RegExp(`<main[^>]*id="${lompat}"`).test(html) && !new RegExp(`<main[\\s>][\\s\\S]*id="${lompat}"[\\s\\S]*</main>`).test(html))
+        salah.push(`tautan lompat menuju #${lompat}, tetapi id itu tidak berada di <main>`);
+    }
+    return salah;
+  };
+  for (const f of halaman) for (const pesan of ujiKepalaDasar(readFileSync(f, "utf8"))) ok(false, `${f}: ${pesan}`);
+  // Uji balik
+  const asli = readFileSync("radar.html", "utf8");
+  const rusak = [
+    [asli.replace('<html lang="id">', '<html lang="en">'), 'lang="id"'],
+    [asli.replace('<html lang="id">', "<html>"), 'lang="id"'],
+    [asli.replace(/<meta charset="utf-8">\s*/i, ""), "charset"],
+    [asli.replace(/(<head>\s*)(<meta charset="utf-8">)([\s\S]*?)(<\/head>)/i, "$1$3$2$4"), "isi pertama"],
+    [asli.replace(/<meta name="viewport"[^>]*>/, ""), "width=device-width"],
+    [asli.replace('initial-scale=1"', 'initial-scale=1.5"'), "width=device-width"],
+    [asli.replace('initial-scale=1"', 'initial-scale=1, user-scalable=no"'), "mengunci zoom"],
+    [asli.replace('initial-scale=1"', 'initial-scale=1, maximum-scale=1"'), "mengunci zoom"],
+    [asli.replace(/<a class="lompat"[^>]*>[^<]*<\/a>/, ""), "tautan pertama"],
+    [asli.replace('class="lompat" href="#isi"', 'class="lompat" href="#konten"'), "ada 0×"],
+    [asli.replace('<main id="isi">', '<main id="isi"><div id="isi"></div>'), "ada 2×"],
+    [asli.replace('<main id="isi">', "<main>").replace("</main>", '</main><div id="isi"></div>'), "tidak berada di <main>"],
+    [asli.replace(/(<body[^>]*>)/, '$1<a href="index.html">Beranda</a>'), "tautan pertama"],
+  ];
+  for (const [b, pesan] of rusak)
+    ok(b !== asli && ujiKepalaDasar(b).some((s) => s.includes(pesan)), `uji balik kepala dasar: "${pesan}" harus tertangkap`);
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);
 
