@@ -1726,6 +1726,82 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
     const b = blokRujukan.replace(lama, baru);
     ok(b !== blokRujukan && ujiRujukan(b).some((s) => s.includes(pesan)), `uji balik Rujukan belajar: "${pesan}" harus tertangkap`);
   }
+  // Nina, Arif & Tegar (12 Nov 07.10): teksKeElemen() (jawaban Asisten AI) dengan DOM tiruan.
+  // **tebal** → <strong>; baris berawalan "-", "*", "•", "1.", "2)" → daftar <ul>; paragraf memutus daftar;
+  // "## " di awal baris dibuang; baris kosong diabaikan; tag HTML dari server selalu tampil sebagai teks.
+  const blokJawaban = (app.match(/  function teksKeElemen\(teks\) \{[\s\S]*?\n  \}\n/) || [""])[0];
+  const pakaiHTML = (b) => /innerHTML|insertAdjacentHTML|outerHTML|document\.write/.test(b);
+  ok(blokJawaban && !pakaiHTML(blokJawaban),
+    "teksKeElemen() harus ada dan tidak boleh memakai innerHTML/insertAdjacentHTML/outerHTML/document.write");
+  const ujiJawaban = (blokFungsi) => {
+    const { doc, semua } = buatDom();
+    const ctxJ = { document: doc };
+    vm.runInNewContext(ambilEl + "\n" + blokFungsi + "\n;globalThis.teksKeElemen = teksKeElemen;", ctxJ);
+    const ubah = (t) => ctxJ.teksKeElemen(t);
+    const tag = (n) => (n.nodeType === 1 ? n.nodeName : "#text");
+    const salah = [];
+    try {
+      // 1. Huruf tebal di dalam paragraf.
+      const w1 = ubah("Halo **dunia** ini");
+      if (!w1.classList.contains("jawaban-isi")) salah.push('wadah jawaban harus div.jawaban-isi');
+      const p1 = w1.anak[0];
+      if (w1.anak.length !== 1 || !p1 || p1.nodeName !== "P") salah.push("satu baris biasa harus jadi satu <p>");
+      else {
+        const s = p1.anak.find((c) => c.nodeName === "STRONG");
+        if (!s || s.textContent !== "dunia") salah.push("**tebal** harus jadi <strong>dunia</strong> tanpa bintang");
+        if (p1.textContent !== "Halo dunia ini") salah.push('teks paragraf harus utuh "Halo dunia ini" (dapat "' + p1.textContent + '")');
+      }
+      // 2. Empat gaya poin → satu daftar berisi empat butir.
+      const w2 = ubah("- satu\n* dua\n• tiga\n1. empat\n2) lima");
+      const ul2 = w2.anak.filter((c) => c.nodeName === "UL");
+      const li2 = ul2[0] ? ul2[0].anak.filter((c) => c.nodeName === "LI").map((c) => c.textContent) : [];
+      if (w2.anak.length !== 1 || ul2.length !== 1 || li2.join("|") !== "satu|dua|tiga|empat|lima")
+        salah.push('poin "-", "*", "•", "1.", "2)" harus jadi satu <ul> berisi 5 butir (dapat ' + (li2.join("|") || w2.anak.map(tag).join(",")) + ")");
+      // 3. Paragraf memutus daftar → dua daftar terpisah.
+      const w3 = ubah("Pembuka\n- a\n- **b**\nTengah\n- c");
+      const urut = w3.anak.map(tag).join(",");
+      if (urut !== "P,UL,P,UL") salah.push("paragraf di antara poin harus memutus daftar: dua daftar terpisah (dapat " + urut + ")");
+      else {
+        if (w3.anak[1].anak.length !== 2 || w3.anak[3].anak.length !== 1) salah.push("isi dua daftar terpisah harus 2 dan 1 butir");
+        const sb = w3.anak[1].anak[1] && w3.anak[1].anak[1].anak.find((c) => c.nodeName === "STRONG");
+        if (!sb || sb.textContent !== "b") salah.push("**tebal** di dalam butir daftar harus jadi <strong>");
+      }
+      // 4. Judul markdown & baris kosong.
+      const w4 = ubah("## Judul\n\n   \n\nIsi");
+      if (w4.anak.length !== 2) salah.push("baris kosong harus diabaikan (dapat " + w4.anak.length + " elemen)");
+      if (!w4.anak[0] || w4.anak[0].textContent !== "Judul") salah.push('tanda "## " di awal baris harus dibuang');
+      if (ubah("\n\n  \n").anak.length) salah.push("jawaban kosong harus menghasilkan wadah kosong (baris kosong)");
+      // 5. HTML dari server tidak pernah jadi elemen.
+      const jahat = '<script>alert(1)</script>\n<b>x</b> **<img src=x onerror=alert(1)>**\n- <a href="javascript:alert(1)">klik</a>';
+      const w5 = ubah(jahat);
+      const elemen = semua(w5).filter((n) => n.nodeType === 1).map((n) => n.nodeName);
+      const asing = elemen.filter((t) => !["DIV", "P", "UL", "LI", "STRONG"].includes(t));
+      if (asing.length) salah.push("tag HTML dari server harus tampil sebagai teks, bukan elemen (muncul " + asing.join(",") + ")");
+      const t5 = w5.textContent;
+      for (const potong of ["<script>alert(1)</script>", "<b>x</b>", "<img src=x onerror=alert(1)>", '<a href="javascript:alert(1)">klik</a>'])
+        if (!t5.includes(potong)) salah.push('tag HTML dari server harus tampil sebagai teks: "' + potong + '" hilang');
+    } catch (e) { salah.push("teksKeElemen() galat: " + e.message); }
+    return salah;
+  };
+  const sJawaban = blokJawaban ? ujiJawaban(blokJawaban) : ["teksKeElemen() tidak ditemukan"];
+  ok(sJawaban.length === 0, `Jawaban Asisten AI (DOM tiruan): ${sJawaban.join("; ")}`);
+  const rusakJawaban = [
+    ['tujuan.appendChild(el("strong", { text: bag.slice(2, -2) }))', 'tujuan.appendChild(el("b", { text: bag.slice(2, -2) }))', "<strong>dunia</strong>"],
+    ["bag.slice(2, -2)", "bag", "tanpa bintang"],
+    ["else if (bag) tujuan.appendChild(document.createTextNode(bag));", "else if (bag) { var s = el(\"span\"); s.innerHTML = bag; tujuan.appendChild(s); }", "tampil sebagai teks"],
+    ["(?:[-*•]|\\d+[.)])", "(?:[-•]|\\d+[.)])", "satu <ul> berisi 5 butir"],
+    ["(?:[-*•]|\\d+[.)])", "(?:[-*•]|\\d+[.])", "satu <ul> berisi 5 butir"],
+    ["        daftar = null;\n", "", "dua daftar terpisah"],
+    ['baris.replace(/^#+\\s*/, "")', "baris", '"## "'],
+    ["      if (!baris) return;\n", "", "baris kosong"],
+    ['el("div", { class: "jawaban-isi" })', 'el("div")', "div.jawaban-isi"],
+    ["var p = el(\"p\"); sebaris(", "var p = el(\"p\"); p.innerHTML = baris; sebaris(", "innerHTML"],
+  ];
+  for (const [lama, baru, pesan] of rusakJawaban) {
+    const b = blokJawaban.replace(lama, baru);
+    const tertangkap = b !== blokJawaban && (pesan === "innerHTML" ? pakaiHTML(b) : ujiJawaban(b).some((s) => s.includes(pesan)));
+    ok(tertangkap, `uji balik Jawaban Asisten: "${pesan}" harus tertangkap`);
+  }
 }
 
 // Tegar & Arif (10 Nov 16.10): setiap fetch() di assets/*.js hanya ke alamat relatif situs sendiri
