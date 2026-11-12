@@ -1360,3 +1360,8 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: KLBF & BRIS dicari ulang; belum ada laba Januari–September 2026 → tetap 23 dari 32. Raka & Hana: tidak ada kabar baru bersumber.
 - Tugas baru: Nina + Arif (urutan judul dengan DOM tiruan untuk Kabar, Belajar, profil).
 - `node tests/cek.mjs` lolos. Tampilan tidak diubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 12 Nov 2026, 20.13 WIB (Bima)
+- Nina & Arif: cek urutan judul dengan DOM tiruan untuk Kabar (`renderKabar`: 10 kabar pertama, setelah "Tampilkan 10 kabar lagi", saringan jenis Dividen) dan "Kabar terbaru" di beranda (`renderKabarBeranda`), disambung judul statis kabar.html & index.html; semua lolos, 4 uji balik tertangkap. Kode situs tidak diubah. Sisa: Belajar & profil emiten.
+- Fajar: KLBF & BRIS dicari ulang; belum ada laba Januari–September 2026 → tetap 23 dari 32. Raka & Hana: tidak ada kabar baru bersumber.
+- `node tests/cek.mjs` lolos. Tampilan tidak diubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

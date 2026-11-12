@@ -3327,6 +3327,64 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
   ];
   for (const [b, pesan] of rusakRadar)
     ok(b.join() !== kodeRadar.join() && ujiRadar(b).some((s) => s.includes(pesan)), `uji balik urutan judul Radar: "${pesan}" harus tertangkap`);
+  // Nina & Arif (12 Nov 20.13): Kabar (renderKabar di kabar.html) dan "Kabar terbaru" di beranda (renderKabarBeranda)
+  // dijalankan dengan DOM tiruan; judul buatan app.js disambung dengan judul statis sebelum wadahnya. Keadaan Kabar:
+  // 10 kabar pertama, setelah "Tampilkan 10 kabar lagi", dan setelah saringan jenis diganti.
+  {
+    const ambilK = (awal) => { const i = app.indexOf("  " + awal); const j = app.indexOf("\n  }\n", i); return i < 0 || j < 0 ? "" : app.slice(i, j + 5); };
+    const iB = app.indexOf("  var BULAN = ["), jB = app.indexOf("];", iB);
+    const kodeKabar = [ambilK("function el("), iB < 0 ? "" : app.slice(iB, jB + 2), ambilK("function tanggalId("), ambilK("function daftarKabar("),
+      ambilK("function kabarBaru("), ambilK("function kartuKabar("), ambilK("function renderKabar()"), ambilK("function renderKabarBeranda()")];
+    ok(kodeKabar.every(Boolean), "app.js: el/BULAN/tanggalId/daftarKabar/kabarBaru/kartuKabar/renderKabar/renderKabarBeranda harus bisa diambil untuk uji urutan judul");
+    const kabarHtml = readFileSync("kabar.html", "utf8"), indexHtml = readFileSync("index.html", "utf8");
+    ok(/<main[\s>][\s\S]*id="kabar"[\s\S]*<\/main>/.test(kabarHtml), "kabar.html: wadah #kabar harus berada di <main>");
+    ok(/<main[\s>][\s\S]*id="kabar-beranda"[\s\S]*<\/main>/.test(indexHtml), "index.html: wadah #kabar-beranda harus berada di <main>");
+    const sesudah = (html, id) => { const main = (html.match(/<main[\s>][\s\S]*?<\/main>/) || [""])[0]; const i = main.indexOf(`id="${id}"`); return i < 0 ? [] : judulMain("<main>" + main.slice(i)); };
+    const statis = { kabar: [judulMain(kabarHtml, 'id="kabar"'), sesudah(kabarHtml, "kabar")], beranda: [judulMain(indexHtml, 'id="kabar-beranda"'), sesudah(indexHtml, "kabar-beranda")] };
+    const ujiKabar = (blokApp) => {
+      const salah = [];
+      const simpul = (tag) => ({ tag, anak: [], atribut: {}, className: "", value: "", hidden: false, _dengar: {},
+        get children() { return this.anak.filter((c) => c.tag !== "#text"); },
+        appendChild(c) { this.anak.push(c); return c; }, setAttribute(k, v) { this.atribut[k] = String(v); }, focus() {},
+        addEventListener(n, f) { this._dengar[n] = f; }, set innerHTML(v) { this.anak = []; }, set textContent(v) { this.anak = []; this._teks = String(v); } });
+      const wadah = { kabar: simpul("div"), "kabar-beranda": simpul("section") };
+      const document = { createElement: simpul, createTextNode: () => ({ tag: "#text", anak: [] }), getElementById: (id) => wadah[id] || null };
+      const EMITEN = [{ kode: "AAAA", nama: "Contoh A" }, { kode: "BBBB", nama: "Contoh B" }];
+      const KABAR = Array.from({ length: 14 }, (_, i) => ({ kode: i % 2 ? "BBBB" : "AAAA", tanggal: `2026-10-${String(10 + i).padStart(2, "0")}`,
+        jenis: i < 12 ? "Laporan keuangan" : "Dividen", ringkas: "Isi kabar", sumber: { url: "https://contoh.id", judul: "Sumber" } }));
+      const ctxK = { document, EMITEN, window: { KABAR, KABAR_JENIS: ["Laporan keuangan", "Dividen"] }, pasangIstilah() {}, tutupIstilah() {}, Date };
+      try { vm.runInNewContext(blokApp.join("\n") + "\n;globalThis.renderKabar = renderKabar; globalThis.renderKabarBeranda = renderKabarBeranda;", ctxK); ctxK.renderKabar(); ctxK.renderKabarBeranda(); }
+      catch (err) { return [`renderKabar/renderKabarBeranda galat: ${err.message}`]; }
+      const levels = (n, out = []) => { const m = /^h([1-6])$/.exec(n.tag || ""); if (m) out.push(+m[1]); (n.anak || []).forEach((c) => levels(c, out)); return out; };
+      const cari = (n, f) => { if (f(n)) return n; for (const c of n.anak || []) { const r = cari(c, f); if (r) return r; } return null; };
+      const cek = (nama, [awal, akhir], akar) => {
+        const dinamis = levels(akar);
+        if (!dinamis.length) salah.push(`${nama}: app.js tidak membuat judul apa pun`);
+        for (const s of urutanJudul([...awal, ...dinamis, ...akhir])) salah.push(`${nama}: ${s}`);
+      };
+      const pilih = cari(wadah.kabar, (n) => n.tag === "select"), lagi = cari(wadah.kabar, (n) => n.tag === "button");
+      cek("Kabar 10 pertama", statis.kabar, wadah.kabar);
+      if (!lagi || !lagi._dengar.click) salah.push("Kabar: tombol \"Tampilkan lagi\" tidak bisa ditekan");
+      else { lagi._dengar.click(); cek("Kabar setelah Tampilkan lagi", statis.kabar, wadah.kabar); }
+      if (!pilih || !pilih._dengar.change) salah.push("Kabar: saringan jenis tidak bisa diganti");
+      else { pilih.value = "Dividen"; pilih._dengar.change(); cek("Kabar jenis Dividen", statis.kabar, wadah.kabar); }
+      cek("Beranda Kabar terbaru", statis.beranda, wadah["kabar-beranda"]);
+      return salah;
+    };
+    const sKabar = ujiKabar(kodeKabar);
+    ok(sKabar.length === 0, `urutan judul Kabar & beranda (DOM tiruan): ${sKabar.join("; ")}`);
+    // Uji balik
+    const gantiK = (dari, ke) => kodeKabar.map((k) => k.split(dari).join(ke));
+    const rusakKabar = [
+      [gantiK('el("h3", { class: "kabar-judul" }', 'el("h4", { class: "kabar-judul" }'), "Kabar 10 pertama: urutan judul melompat h2 → h4"],
+      [gantiK('el("h2", { id: "judul-kabar-beranda"', 'el("h5", { id: "judul-kabar-beranda"'), "Beranda Kabar terbaru: urutan judul melompat h3 → h5"],
+      [gantiK('el("h3", { class: "kabar-judul" }', 'el("h1", { class: "kabar-judul" }'), "h1 di <main> ada"],
+      [gantiK('denganKode ? el("h3"', 'false ? el("h3"'), "app.js tidak membuat judul apa pun"],
+    ];
+    for (const [b, pesan] of rusakKabar)
+      ok(b.join() !== kodeKabar.join() && ujiKabar(b).some((s) => s.includes(pesan)), `uji balik urutan judul Kabar: "${pesan}" harus tertangkap`);
+  }
+
 }
 
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
