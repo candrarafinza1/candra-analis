@@ -3247,6 +3247,88 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
     ok(b !== asli && ujiKepalaDasar(b).some((s) => s.includes(pesan)), `uji balik kepala dasar: "${pesan}" harus tertangkap`);
 }
 
+// Nina & Arif (12 Nov 19.12): urutan judul. (a) HTML statis semua halaman: judul pertama di <main> adalah h1,
+// tepat satu h1 di <main>, dan tidak ada lompatan turun (mis. h2 langsung ke h4). (b) Judul yang dibuat app.js di
+// Radar Risiko dijalankan dengan DOM tiruan (panduan sebelum memilih, hasil dengan dan tanpa batang) dan disambung
+// dengan judul statis radar.html sebelum #radar. Melengkapi tools/audit-aksesibel.js (peramban sungguhan).
+{
+  const urutanJudul = (levels) => {
+    const salah = [];
+    if (!levels.length) return ["tidak ada judul di <main>"];
+    if (levels[0] !== 1) salah.push(`judul pertama di <main> h${levels[0]}, harus h1`);
+    if (levels.filter((l) => l === 1).length !== 1) salah.push(`h1 di <main> ada ${levels.filter((l) => l === 1).length}× (harus tepat 1)`);
+    for (let i = 1; i < levels.length; i++)
+      if (levels[i] > levels[i - 1] + 1) salah.push(`urutan judul melompat h${levels[i - 1]} → h${levels[i]} (judul ke-${i + 1})`);
+    return salah;
+  };
+  const judulMain = (html, sampai) => {
+    let main = (html.match(/<main[\s>][\s\S]*?<\/main>/) || [""])[0];
+    if (sampai) main = main.slice(0, Math.max(0, main.indexOf(sampai)));
+    return [...main.replace(/<!--[\s\S]*?-->/g, "").matchAll(/<h([1-6])[\s>]/g)].map((m) => +m[1]);
+  };
+  for (const f of halaman) for (const pesan of urutanJudul(judulMain(readFileSync(f, "utf8")))) ok(false, `${f}: ${pesan}`);
+  // Uji balik statis
+  const met = readFileSync("metodologi.html", "utf8");
+  const rusakStatis = [
+    [met.replace(/<h3 id="sekali-waktu"([^>]*)>([\s\S]*?)<\/h3>/, '<h4 id="sekali-waktu"$1>$2</h4>'), "melompat h2 → h4"],
+    [met.replace(/<h1([^>]*)>([\s\S]*?)<\/h1>/, "<h2$1>$2</h2>"), "judul pertama"],
+    [met.replace(/<h2 id="batasan"([^>]*)>([\s\S]*?)<\/h2>/, '<h1 id="batasan"$1>$2</h1>'), "h1 di <main> ada 2×"],
+    [met.replace(/(<main[^>]*>)/, "$1<h3>Sisipan</h3>"), "judul pertama"],
+  ];
+  for (const [b, pesan] of rusakStatis)
+    ok(b !== met && urutanJudul(judulMain(b)).some((s) => s.includes(pesan)), `uji balik urutan judul statis: "${pesan}" harus tertangkap`);
+
+  // (b) Radar dengan DOM tiruan
+  const app = readFileSync("assets/app.js", "utf8");
+  const ambil = (awal) => { const i = app.indexOf("  " + awal); const j = app.indexOf("\n  }\n", i); return i < 0 || j < 0 ? "" : app.slice(i, j + 5); };
+  const iP = app.indexOf("  var PANDUAN_RADAR = ["), jP = app.indexOf("];", iP);
+  const kodeRadar = [ambil("function el("), iP < 0 ? "" : app.slice(iP, jP + 2), ambil("function panduanRadar()"), ambil("function renderRadar()")];
+  ok(kodeRadar.every(Boolean), "app.js: el/PANDUAN_RADAR/panduanRadar/renderRadar harus bisa diambil untuk uji urutan judul");
+  const radarHtml = readFileSync("radar.html", "utf8");
+  ok(/<main[\s>][\s\S]*id="radar"[\s\S]*<\/main>/.test(radarHtml), "radar.html: wadah #radar harus berada di <main>");
+  const judulStatisRadar = judulMain(radarHtml, 'id="radar"');
+  const ujiRadar = (blokApp) => {
+    const salah = [];
+    const simpul = (tag) => ({ tag, anak: [], atribut: {}, className: "", value: "", _dengar: {},
+      appendChild(c) { this.anak.push(c); return c; }, setAttribute(k, v) { this.atribut[k] = String(v); },
+      addEventListener(n, f) { this._dengar[n] = f; }, set innerHTML(v) { this.anak = []; }, set textContent(v) { this._teks = String(v); } });
+    const akar = simpul("div");
+    const document = { createElement: simpul, createTextNode: (t) => ({ tag: "#text", anak: [] }), getElementById: (id) => (id === "radar" ? akar : simpul("div")) };
+    const EMITEN = [
+      { kode: "AAAA", nama: "Contoh A", desBaris: 1, labaTahun: { 2024: 1, 2025: 2 }, sumber: [{ url: "https://contoh.id", judul: "Sumber" }] },
+      { kode: "BBBB", nama: "Contoh B", desBaris: 2, sumber: [] },
+    ];
+    const ctxR = { document, EMITEN, DES_LABEL: "DES", URLSearchParams, location: { search: "" },
+      pitaSumber() {}, musimLaporan() {}, pasangIstilah() {}, tutupIstilah() {}, usd: () => false, uang: () => String,
+      periksa: () => [{ tingkat: "sedang", judul: "Tanda", isi: "Isi", bukti: "Bukti" }, { tingkat: "info", judul: "Tanda 2", isi: "Isi", bukti: "Bukti" }],
+      batangTahun: (j, D) => (D[2024] > 0 && D[2025] > 0 ? simpul("div") : null) };
+    try { vm.runInNewContext(blokApp.join("\n") + "\n;globalThis.renderRadar = renderRadar;", ctxR); ctxR.renderRadar(); }
+    catch (err) { return [`renderRadar galat: ${err.message}`]; }
+    const levels = (n, out = []) => { const m = /^h([1-6])$/.exec(n.tag || ""); if (m) out.push(+m[1]); (n.anak || []).forEach((c) => levels(c, out)); return out; };
+    const pilih = (function cari(n) { if (n.tag === "select") return n; for (const c of n.anak || []) { const r = cari(c); if (r) return r; } return null; })(akar);
+    const keadaan = [["sebelum memilih", ""], ["AAAA (dengan batang)", "AAAA"], ["BBBB (tanpa batang)", "BBBB"]];
+    for (const [nama, kode] of keadaan) {
+      if (kode) { if (!pilih || !pilih._dengar.change) { salah.push("pilihan saham tidak bisa diganti"); break; } pilih.value = kode; pilih._dengar.change(); }
+      const lv = [...judulStatisRadar, ...levels(akar)];
+      if (lv.length === judulStatisRadar.length) salah.push(`Radar ${nama}: app.js tidak membuat judul apa pun`);
+      for (const s of urutanJudul(lv)) salah.push(`Radar ${nama}: ${s}`);
+    }
+    return salah;
+  };
+  const sRadar = ujiRadar(kodeRadar);
+  ok(sRadar.length === 0, `urutan judul Radar (DOM tiruan): ${sRadar.join("; ")}`);
+  // Uji balik dinamis
+  const ganti = (dari, ke) => kodeRadar.map((k) => k.replace(dari, ke));
+  const rusakRadar = [
+    [ganti('el("h2", { class: "panduan-judul"', 'el("h3", { class: "panduan-judul"'), "sebelum memilih: urutan judul melompat h1 → h3"],
+    [ganti('el("h3", { class: "sinyal-judul"', 'el("h4", { class: "sinyal-judul"'), "AAAA (dengan batang): urutan judul melompat h2 → h4"],
+    [ganti('hasil.appendChild(el("h2", { style: "font-size:1.35rem"', 'hasil.appendChild(el("h1", { style: "font-size:1.35rem"'), "h1 di <main> ada 2×"],
+    [ganti('el("h3", { style: "margin-top:20px;font-size:1.05rem", text: "Sumber data" })', 'el("h5", { style: "margin-top:20px;font-size:1.05rem", text: "Sumber data" })'), "BBBB (tanpa batang): urutan judul melompat h3 → h5"],
+  ];
+  for (const [b, pesan] of rusakRadar)
+    ok(b.join() !== kodeRadar.join() && ujiRadar(b).some((s) => s.includes(pesan)), `uji balik urutan judul Radar: "${pesan}" harus tertangkap`);
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);
 

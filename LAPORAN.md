@@ -1354,3 +1354,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: KLBF & BRIS dicari ulang; belum ada laba Januari–September 2026 yang jelas tahunnya → tetap 23 dari 32.
 - Tugas baru: Nina + Arif (cek urutan judul masuk tests/cek.mjs).
 - `node tests/cek.mjs` lolos. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 12 Nov 2026, 19.12 WIB (Bima)
+- Nina & Arif: cek urutan judul masuk `tests/cek.mjs`. (a) HTML statis 10 halaman: judul pertama di <main> h1, tepat satu h1, tanpa lompatan; semua lolos. (b) Radar dijalankan dengan DOM tiruan (sebelum memilih, hasil dengan & tanpa batang) disambung judul statis radar.html; lolos. 4 + 4 uji balik tertangkap. Kode situs tidak diubah.
+- Fajar: KLBF & BRIS dicari ulang; belum ada laba Januari–September 2026 → tetap 23 dari 32. Raka & Hana: tidak ada kabar baru bersumber.
+- Tugas baru: Nina + Arif (urutan judul dengan DOM tiruan untuk Kabar, Belajar, profil).
+- `node tests/cek.mjs` lolos. Tampilan tidak diubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
