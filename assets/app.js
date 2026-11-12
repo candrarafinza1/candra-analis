@@ -1162,6 +1162,7 @@
     if (!aktif) return;
     var b = aktif; aktif = null;
     b.setAttribute("aria-expanded", "false");
+    b.removeAttribute("aria-controls");
     kotak.hidden = true;
     if (kembalikanFokus) b.focus();
   }
@@ -1198,6 +1199,9 @@
     kotak.hidden = false;
     aktif = b;
     b.setAttribute("aria-expanded", "true");
+    // Nina & Tegar (12 Nov 17.09): aria-controls hanya dipasang saat kotak ada & terbuka,
+    // agar tidak menunjuk id yang belum ada (audit tools/audit-aksesibel.js).
+    b.setAttribute("aria-controls", "kotak-istilah");
     letakkan();
   }
 
@@ -1247,7 +1251,7 @@
         dipakai[terbaik.i] = true;
         var sisa = n.splitText(terbaik.mulai);
         var lanjut = sisa.splitText(terbaik.teks.length);
-        var b = el("button", { type: "button", class: "istilah", "aria-expanded": "false", "aria-controls": "kotak-istilah",
+        var b = el("button", { type: "button", class: "istilah", "aria-expanded": "false",
           title: "Apa itu " + ISTILAH[terbaik.i].istilah + "?", text: terbaik.teks });
         b.dataset.istilah = String(terbaik.i);
         sisa.parentNode.replaceChild(b, sisa);

@@ -719,6 +719,7 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
       // Seperti peramban: atribut hidden ikut mengatur sifat .hidden (dipakai kuis: umpan & tombol Ulangi).
       setAttribute(k, v) { this.atribut[k] = String(v); if (k === "id") this.id = String(v); if (k === "hidden") this.hidden = true; }
       getAttribute(k) { return k in this.atribut ? this.atribut[k] : null; }
+      hasAttribute(k) { return k in this.atribut; }
       removeAttribute(k) { delete this.atribut[k]; if (k === "hidden") this.hidden = false; }
       set innerHTML(v) { this.anak.forEach((c) => { c.parentNode = null; }); this.anak = []; }
       set textContent(v) { this.innerHTML = ""; this.appendChild(new Teks(v)); }
@@ -776,6 +777,7 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
       for (const b of tombol) {
         const t = daftarIstilah[+b.dataset.istilah];
         if (!t || !String(t.arti || "").trim()) { salah.push(`tombol "${b.textContent}" tanpa penjelasan`); continue; }
+        if (b.hasAttribute("aria-controls")) salah.push(`"${b.textContent}": aria-controls tidak boleh ada sebelum kotak dibuka (id belum ada)`);
         doc.kirim("click", { target: b });
         const kotak = doc.getElementById("kotak-istilah");
         if (!kotak || kotak.hidden) { salah.push(`"${b.textContent}": kotak tidak terbuka`); continue; }
@@ -788,6 +790,7 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
         doc.kirim("keydown", { key: "Escape" });
         if (!kotak.hidden) salah.push(`"${b.textContent}": Esc tidak menutup kotak`);
         if (b.getAttribute("aria-expanded") !== "false") salah.push(`"${b.textContent}": aria-expanded harus kembali "false" setelah Esc`);
+        if (b.hasAttribute("aria-controls")) salah.push(`"${b.textContent}": aria-controls harus dilepas setelah kotak ditutup`);
         if (doc.activeElement !== b) salah.push(`"${b.textContent}": fokus harus kembali ke tombol setelah Esc`);
       }
     }
@@ -806,6 +809,12 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
   const tanpaAria = blok.replace('b.setAttribute("aria-expanded", "true");', "");
   ok(tanpaAria !== blok && jalankan(ctx.window.ISTILAH || [], tanpaAria).salah.some((s) => s.includes('aria-expanded harus "true"')),
     "uji balik: tes kotak istilah harus gagal bila aria-expanded tidak diatur");
+  const ctrlAwal = blok.replace('class: "istilah", "aria-expanded": "false",', 'class: "istilah", "aria-expanded": "false", "aria-controls": "kotak-istilah",');
+  ok(ctrlAwal !== blok && jalankan(ctx.window.ISTILAH || [], ctrlAwal).salah.some((s) => s.includes("sebelum kotak dibuka")),
+    "uji balik: tes kotak istilah harus gagal bila aria-controls dipasang sebelum kotak ada");
+  const ctrlTetap = blok.replace('b.removeAttribute("aria-controls");', "");
+  ok(ctrlTetap !== blok && jalankan(ctx.window.ISTILAH || [], ctrlTetap).salah.some((s) => s.includes("dilepas setelah")),
+    "uji balik: tes kotak istilah harus gagal bila aria-controls tidak dilepas saat ditutup");
   const tanpaFokus = blok.replace("if (kembalikanFokus) b.focus();", "");
   ok(tanpaFokus !== blok && jalankan(ctx.window.ISTILAH || [], tanpaFokus).salah.some((s) => s.includes("fokus harus kembali")),
     "uji balik: tes kotak istilah harus gagal bila fokus tidak kembali ke tombol");

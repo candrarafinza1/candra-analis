@@ -1341,3 +1341,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: KLBF & BRIS dicari ulang; hasil teratas masih Januari–September 2025 → tetap 23 dari 32.
 - Tugas baru: Nina + Tegar (alt gambar, nama tombol & kolom isian, id ganda). Dewi + Kirana (audit kontras + garis fokus) berikutnya.
 - `node tests/cek.mjs` lolos (10 halaman). Tampilan tidak diubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 12 Nov 2026, 17.09 WIB (Bima)
+- Nina & Tegar: audit aksesibilitas DOM terender lewat `tools/audit-aksesibel.js` (10 halaman, 14 keadaan): alt gambar, nama tombol, label isian, rujukan aria/for, id ganda. Temuan: tombol istilah menunjuk `aria-controls="kotak-istilah"` sebelum kotak ada. Perbaikan kecil di app.js: aria-controls dipasang saat kotak terbuka, dilepas saat tertutup. cek.mjs +2 pemeriksaan, +2 uji balik. Audit kini 0 temuan (UJI tetap 4).
+- Fajar: KLBF & BRIS dicari ulang; belum ada laba Januari–September 2026 → tetap 23 dari 32.
+- Tugas baru: Nina + Arif (nama tautan, tab baru, urutan judul).
+- `node tests/cek.mjs` lolos (10 halaman). Tampilan tidak berubah (hanya atribut ARIA). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
