@@ -600,7 +600,7 @@
       var ul = el("ul", { class: "sinyal-daftar" });
       s.forEach(function (x) {
         ul.appendChild(el("li", { class: "sinyal sinyal-" + x.tingkat }, [
-          el("h4", { text: x.judul }), el("p", { text: x.isi }), el("p", { class: "bukti", text: x.bukti })
+          el("h3", { class: "sinyal-judul", text: x.judul }), el("p", { text: x.isi }), el("p", { class: "bukti", text: x.bukti })
         ]));
       });
       hasil.appendChild(ul);

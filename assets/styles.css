@@ -486,7 +486,7 @@ input::placeholder, textarea::placeholder { color: var(--tinta-2); opacity: 1; }
 .musim-beranda { margin: 12px 0 0; font-size: .9rem; color: var(--tinta-2); overflow-wrap: anywhere; }
 .musim-laporan summary:focus-visible { outline: 3px solid var(--aksen); outline-offset: 2px; border-radius: 4px; }
 .sinyal-info { border-left-color: var(--aksen); }
-.sinyal-info h4 { color: var(--aksen); }
+.sinyal-info h4, .sinyal-info .sinyal-judul { color: var(--aksen); }
 .daftar-sumber { padding-left: 1.2em; margin: 0; font-size: .95rem; }
 .daftar-sumber li { margin-bottom: 6px; }
 
@@ -736,3 +736,6 @@ button.istilah:hover, button.istilah[aria-expanded="true"] { color: var(--aksen)
   .kaki { display: block !important; border-top: 1px solid #999; margin-top: 12px; padding: 10px 0 0; color: #222 !important; break-inside: avoid; }
   .kaki strong { color: #000 !important; }
 }
+
+/* Judul khusus pembaca layar (Nina & Arif, 12 Nov): menjaga urutan h1→h2→h3 tanpa mengubah tampilan */
+.khusus-pembaca-layar { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }

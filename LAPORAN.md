@@ -1347,3 +1347,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: KLBF & BRIS dicari ulang; belum ada laba Januari–September 2026 → tetap 23 dari 32.
 - Tugas baru: Nina + Arif (nama tautan, tab baru, urutan judul).
 - `node tests/cek.mjs` lolos (10 halaman). Tampilan tidak berubah (hanya atribut ARIA). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 12 Nov 2026, 18.12 WIB (Bima)
+- Nina & Arif: `tools/audit-aksesibel.js` diperluas (nama tautan, tab baru wajib rel noopener + "tab baru", urutan judul di <main>). Temuan nyata 3, semua diperbaiki: Belajar & Kabar lompat h1→h3 (ditambah h2 khusus pembaca layar), Radar lompat h2→h4 (judul tanda kini h3, tampilan sama). Audit: halaman asli 0 temuan, UJI 8 (uji balik).
+- Dewi: Belajar, Kabar, Radar UNTR dicek 1280px & 390px, tanpa scroll horizontal; ukuran & warna judul tanda Radar tidak berubah.
+- Fajar: KLBF & BRIS dicari ulang; belum ada laba Januari–September 2026 yang jelas tahunnya → tetap 23 dari 32.
+- Tugas baru: Nina + Arif (cek urutan judul masuk tests/cek.mjs).
+- `node tests/cek.mjs` lolos. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

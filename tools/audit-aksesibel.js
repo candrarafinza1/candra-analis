@@ -3,7 +3,10 @@
 // Diperiksa: setiap <img> punya atribut alt (boleh kosong untuk hiasan); setiap <button> punya nama
 // (teks, aria-label, aria-labelledby, atau title); setiap <input>/<textarea>/<select> yang terlihat punya <label>,
 // aria-label, atau aria-labelledby; aria-labelledby/aria-describedby/for menunjuk id yang ada; tidak ada id ganda.
-// Halaman "UJI" sengaja memasang 4 pelanggaran; audit wajib menangkapnya (uji balik), jadi hasil sehat = tepat 4 temuan UJI.
+// Nina & Arif (12 Nov 18.12) menambah: setiap <a href> yang terlihat punya nama (teks, alt gambar, aria-label/labelledby, title);
+// setiap target="_blank" memakai rel berisi noopener dan menyebut "tab baru" di teks/aria-label/title; urutan judul h1→h6
+// di dalam <main> tidak melompat turun (mis. h2 langsung ke h4) dan judul pertama di <main> adalah h1.
+// Halaman "UJI" sengaja memasang 8 pelanggaran; audit wajib menangkapnya (uji balik), jadi hasil sehat = tepat 8 temuan UJI.
 // Cara pakai: python3 -m http.server 8765 (di akar repo), lalu: node tools/audit-aksesibel.js
 // Butuh Playwright + Chromium (sudah ada di lingkungan kerja tim); tidak dijalankan oleh tests/cek.mjs.
 const { chromium } = require('playwright');
@@ -18,7 +21,8 @@ const halaman = ['index.html', 'belajar.html', 'pelajaran.html', 'pelajaran.html
     const [jalur, pagar] = h.split('#');
     await p.goto('http://localhost:8765/' + (jalur === 'UJI' ? 'peringkat.html' : jalur)); await p.waitForTimeout(400);
     if (jalur === 'UJI') await p.evaluate(() => document.querySelector('main').insertAdjacentHTML('beforeend',
-      '<img src="x.png"><button></button><input type="text"><p id="isi">ganda</p>'));
+      '<img src="x.png"><button></button><input type="text"><p id="isi">ganda</p>' +
+      '<a href="#"></a><a href="https://example.com" target="_blank">luar</a><h4>lompat</h4>'));
     if (jalur === 'radar.html' && pagar) { await p.selectOption('#pilih-saham', pagar); await p.waitForTimeout(300); }
     if (pagar === 'kuis') { const r = await p.$$('main input[type=radio]'); if (r[0]) { await r[0].check(); const t = await p.$('main form button, main button[type=submit]'); if (t) await t.click(); await p.waitForTimeout(200); } }
     if (pagar === 'istilah') { const t = await p.$('main button.istilah:visible'); if (t) { await t.click(); await p.waitForTimeout(200); } else console.log('tombol istilah tidak ketemu'); }
@@ -50,16 +54,38 @@ const halaman = ['index.html', 'belajar.html', 'pelajaran.html', 'pelajaran.html
           v.split(/\s+/).forEach((i) => { if (i && !document.getElementById(i)) out.push(`${ket(el)} ${a}="${i}" menunjuk id yang tidak ada`); });
         });
       });
+      document.querySelectorAll('a[href]').forEach((el) => {
+        if (!terlihat(el)) return;
+        const teks = (el.textContent || '').trim() || [...el.querySelectorAll('img[alt]')].map((i) => i.alt).join('').trim();
+        if (!teks && !nama(el)) out.push(`${ket(el)} tautan tanpa nama (teks/aria-label)`);
+        if (el.getAttribute('target') === '_blank') {
+          const rel = (el.getAttribute('rel') || '').toLowerCase().split(/\s+/);
+          if (!rel.includes('noopener')) out.push(`${ket(el)} target="_blank" tanpa rel="noopener"`);
+          const label = [el.textContent, el.getAttribute('aria-label'), el.getAttribute('title')].join(' ').toLowerCase();
+          if (!label.includes('tab baru')) out.push(`${ket(el)} target="_blank" tidak menyebut "tab baru"`);
+        }
+      });
+      const main = document.querySelector('main');
+      if (main) {
+        let sebelum = 0;
+        main.querySelectorAll('h1, h2, h3, h4, h5, h6').forEach((el) => {
+          if (!terlihat(el)) return;
+          const lv = +el.tagName[1];
+          if (sebelum === 0 && lv !== 1) out.push(`judul pertama di <main> ${ket(el)} bukan h1`);
+          else if (sebelum && lv > sebelum + 1) out.push(`urutan judul melompat h${sebelum} → h${lv} di ${ket(el)} "${(el.textContent || '').trim().slice(0, 40)}"`);
+          sebelum = lv;
+        });
+      }
       const hit = {}; document.querySelectorAll('[id]').forEach((el) => { hit[el.id] = (hit[el.id] || 0) + 1; });
       Object.entries(hit).forEach(([i, n]) => { if (n > 1) out.push(`id="${i}" dipakai ${n}×`); });
-      return { out, n: { img: document.querySelectorAll('img').length, button: document.querySelectorAll('button').length, isian: document.querySelectorAll('input, textarea, select').length } };
+      return { out, n: { a: document.querySelectorAll('a[href]').length, img: document.querySelectorAll('img').length, button: document.querySelectorAll('button').length, isian: document.querySelectorAll('input, textarea, select').length } };
     });
-    console.log(`${h}: ${temuan.out.length} temuan (img ${temuan.n.img}, button ${temuan.n.button}, isian ${temuan.n.isian})`);
+    console.log(`${h}: ${temuan.out.length} temuan (a ${temuan.n.a}, img ${temuan.n.img}, button ${temuan.n.button}, isian ${temuan.n.isian})`);
     temuan.out.forEach((t) => console.log('  - ' + t));
     if (jalur === 'UJI') totalUji = temuan.out.length; else total += temuan.out.length;
   }
   if (galat.length) console.log('Galat JS:', galat);
-  console.log(`\nTotal temuan halaman asli: ${total}. Temuan UJI: ${totalUji} (harus 4).`);
+  console.log(`\nTotal temuan halaman asli: ${total}. Temuan UJI: ${totalUji} (harus 8).`);
   await b.close();
-  process.exit(total === 0 && totalUji === 4 && !galat.length ? 0 : 1);
+  process.exit(total === 0 && totalUji === 8 && !galat.length ? 0 : 1);
 })();
