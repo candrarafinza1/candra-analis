@@ -3085,6 +3085,60 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
     "styles.css: placeholder semua input & textarea harus berwarna var(--tinta-2)");
 }
 
+// Nina & Tegar (12 Nov 14.10): halaman asisten.html itu sendiri. Judul & deskripsi meta terisi, tepat satu <h1>,
+// wadah #asisten di dalam <main>, Belajar di menu & Metodologi di kaki halaman, hanya skrip lokal (app.js terakhir,
+// data yang dipakai app.js ikut dimuat), kalimat pembuka & kaki menegaskan bukan ajakan beli/jual, tanpa kalimat ajakan.
+{
+  const ujiHalamanAsisten = (html) => {
+    const salah = [];
+    const judul = (html.match(/<title>([^<]*)<\/title>/) || [])[1] || "";
+    if (!/Asisten AI/.test(judul) || !/Candra Analis/.test(judul)) salah.push("judul halaman harus memuat \"Asisten AI\" dan \"Candra Analis\"");
+    const desk = (html.match(/<meta name="description" content="([^"]*)"/) || [])[1] || "";
+    if (desk.length < 50 || desk.length > 160) salah.push(`deskripsi meta harus 50–160 karakter (kini ${desk.length})`);
+    const h1 = html.match(/<h1[\s>]/g) || [];
+    if (h1.length !== 1) salah.push(`halaman harus punya tepat satu <h1> (kini ${h1.length})`);
+    const main = (html.match(/<main[^>]*>([\s\S]*?)<\/main>/) || [])[1] || "";
+    if (!/<div id="asisten"><\/div>/.test(main)) salah.push("wadah #asisten harus ada di dalam <main>");
+    const nav = (html.match(/<nav[^>]*>([\s\S]*?)<\/nav>/) || [])[1] || "";
+    if (!/href="belajar\.html"/.test(nav)) salah.push("menu utama harus menaut ke belajar.html");
+    if (!/href="asisten\.html"/.test(nav)) salah.push("menu utama harus menaut ke asisten.html");
+    const kaki = (html.match(/<footer[^>]*>([\s\S]*?)<\/footer>/) || [])[1] || "";
+    if (!/href="metodologi\.html"/.test(kaki)) salah.push("kaki halaman harus menaut ke metodologi.html");
+    if (!/bukan penasihat investasi/.test(kaki)) salah.push("kaki halaman harus menyebut \"bukan penasihat investasi\"");
+    if (!/bukan menyuruh membeli atau menjual/.test(main)) salah.push("kalimat pembuka harus menegaskan asisten bukan menyuruh membeli atau menjual");
+    const skrip = [...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/g)];
+    const src = skrip.map((m) => (m[1].match(/src="([^"]*)"/) || [])[1] || "");
+    if (skrip.some((m) => m[2].trim() !== "")) salah.push("tidak boleh ada skrip sebaris");
+    if (src.some((s) => !s || /^(https?:)?\/\//.test(s))) salah.push("hanya skrip lokal yang boleh dimuat (tanpa skrip eksternal)");
+    if (src[src.length - 1] !== "assets/app.js") salah.push("assets/app.js harus dimuat paling akhir");
+    for (const d of ["data/modul.js", "data/emiten-asli.js", "data/istilah.js"])
+      if (!src.includes(d)) salah.push(`${d} harus dimuat sebelum app.js (dipakai menu & kotak istilah)`);
+    if (/\b(wajib beli|pasti naik|buruan (beli|jual)|dijamin untung|rekomendasi beli|target harga|saatnya (beli|jual))\b/i.test(html))
+      salah.push("halaman memuat kalimat ajakan beli/jual");
+    return salah;
+  };
+  const asli = readFileSync("asisten.html", "utf8");
+  for (const pesan of ujiHalamanAsisten(asli)) ok(false, `asisten.html: ${pesan}`);
+  // Uji balik: setiap kerusakan harus tertangkap
+  const rusak = [
+    [asli.replace(/<title>[^<]*<\/title>/, "<title>Halaman</title>"), "judul halaman"],
+    [asli.replace(/(<meta name="description" content=")[^"]*"/, '$1Tanya."'), "deskripsi meta"],
+    [asli.replace("<h1>Asisten AI</h1>", "<h1>Asisten AI</h1><h1>Lagi</h1>"), "tepat satu <h1>"],
+    [asli.replace('<div id="asisten"></div>', ""), "wadah #asisten"],
+    [asli.replace('<a href="belajar.html">Belajar</a>', ""), "belajar.html"],
+    [asli.replace(/(<footer[\s\S]*?)<a href="metodologi\.html">[^<]*<\/a>/, "$1"), "metodologi.html"],
+    [asli.replace("bukan penasihat investasi", "penyaji data"), "bukan penasihat investasi"],
+    [asli.replace("bukan menyuruh membeli atau menjual", "siap membantu"), "bukan menyuruh membeli"],
+    [asli.replace("</body>", '<script src="https://cdn.contoh.com/x.js"></script></body>'), "skrip lokal"],
+    [asli.replace("</body>", "<script>alert(1)</script></body>"), "skrip sebaris"],
+    [asli.replace('<script src="data/istilah.js"></script>', ""), "data/istilah.js"],
+    [asli.replace('<script src="assets/app.js"></script>', '<script src="assets/app.js"></script><script src="data/rujukan.js"></script>'), "paling akhir"],
+    [asli.replace("</main>", "<p>Saham ini pasti naik.</p></main>"), "ajakan"],
+  ];
+  for (const [b, pesan] of rusak)
+    ok(b !== asli && ujiHalamanAsisten(b).some((s) => s.includes(pesan)), `uji balik halaman Asisten: "${pesan}" harus tertangkap`);
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);
 
