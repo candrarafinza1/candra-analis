@@ -472,3 +472,8 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Temuan 2: teks contoh "Contoh: dividen" di kolom cari istilah Belajar 3,64:1 (abu bawaan browser). Aturan placeholder `--tinta-2` kini berlaku untuk semua input & textarea.
 - Sesudah perbaikan: 0 temuan di kedua mode dan kedua lebar; cincin fokus kuning 3px pada tautan, tombol kuis, dan Tandai selesai; tanpa scroll horizontal; tanpa galat JS.
 - Catatan: tinjauan Metodologi (10 Nov) hanya mengukur `main`, sehingga tautan "Langsung ke isi" terlewat. Audit berikutnya mengukur seluruh halaman.
+
+### Audit kontras halaman lain (Dewi & Kirana, 12 Nov 10.08)
+- Peringkat, Radar (hasil UNTR, INTP, TPIA, HEAL), profil ANTM & TPIA (dengan Bandingkan), Kabar, Metodologi, Asisten (pita "belum aktif", contoh jawaban, pesan galat); semua `<details>` dan kotak istilah terbuka; mode gelap & terang; 390px & 1280px.
+- Hasil: 0 teks di bawah 4,5:1 (3:1 untuk teks besar), teks contoh kolom aman, tanpa scroll horizontal, tanpa galat JS. Uji balik tertangkap.
+- Skrip bisa dipakai ulang: `tools/audit-kontras.js`. Berikutnya: beranda, Belajar, pelajaran, 404, dan garis fokus keyboard.
