@@ -3139,6 +3139,57 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
     ok(b !== asli && ujiHalamanAsisten(b).some((s) => s.includes(pesan)), `uji balik halaman Asisten: "${pesan}" harus tertangkap`);
 }
 
+// Nina & Yoga (12 Nov 15.10): kerangka yang sama untuk SEMUA halaman. Judul berakhiran "· Candra Analis"
+// (beranda boleh diawali "Candra Analis ·"), deskripsi meta 50–160 karakter (404 dikecualikan karena noindex),
+// tepat satu <h1>, menu utama (nav aria-label="Menu utama") berisi 4 tautan yang sama dan berurutan,
+// kaki halaman memuat "bukan penasihat investasi" + tautan Metodologi.
+{
+  const MENU = [["belajar.html", "Belajar"], ["peringkat.html", "Peringkat"], ["radar.html", "Radar Risiko"], ["asisten.html", "Asisten AI"]];
+  const ujiKerangka = (nama, html) => {
+    const salah = [];
+    const judul = (html.match(/<title>([^<]*)<\/title>/) || [])[1] || "";
+    const judulOk = nama === "index.html" ? /^Candra Analis · \S/.test(judul) : /\S · Candra Analis$/.test(judul);
+    if (!judulOk) salah.push(`judul harus ${nama === "index.html" ? "diawali" : "berakhiran"} "· Candra Analis" (kini "${judul}")`);
+    const noindex = /<meta name="robots" content="noindex">/.test(html);
+    const desk = (html.match(/<meta name="description" content="([^"]*)"/) || [])[1];
+    if (!(noindex && desk === undefined) && (!desk || desk.length < 50 || desk.length > 160))
+      salah.push(`deskripsi meta harus 50–160 karakter (kini ${desk ? desk.length : 0})`);
+    const h1 = html.match(/<h1[\s>]/g) || [];
+    if (h1.length !== 1) salah.push(`harus tepat satu <h1> (kini ${h1.length})`);
+    const nav = (html.match(/<nav class="nav" aria-label="Menu utama">([\s\S]*?)<\/nav>/) || [])[1];
+    if (nav === undefined) salah.push("menu utama (nav aria-label=\"Menu utama\") tidak ditemukan");
+    else {
+      const tautan = [...nav.matchAll(/<a href="\/?([^"]*)"[^>]*>([^<]*)<\/a>/g)].map((m) => [m[1], m[2].trim()]);
+      if (JSON.stringify(tautan) !== JSON.stringify(MENU))
+        salah.push(`menu utama harus 4 tautan sama: ${MENU.map((m) => m[1]).join(", ")} (kini ${tautan.map((t) => t[1]).join(", ") || "kosong"})`);
+    }
+    const kaki = (html.match(/<footer[^>]*>([\s\S]*?)<\/footer>/) || [])[1] || "";
+    if (!/bukan penasihat investasi/.test(kaki)) salah.push("kaki halaman harus menyebut \"bukan penasihat investasi\"");
+    if (!/href="\/?metodologi\.html"/.test(kaki)) salah.push("kaki halaman harus menaut ke metodologi.html");
+    return salah;
+  };
+  for (const f of halaman) for (const pesan of ujiKerangka(f, readFileSync(f, "utf8"))) ok(false, `${f}: ${pesan}`);
+  ok(halaman.length === 10 && halaman.includes("404.html") && halaman.includes("index.html"), "cek kerangka harus mencakup 10 halaman termasuk index & 404");
+  // Uji balik
+  const per = readFileSync("peringkat.html", "utf8"), idx = readFileSync("index.html", "utf8"), e404 = readFileSync("404.html", "utf8");
+  const rusak = [
+    ["peringkat.html", per.replace(/<title>[^<]*<\/title>/, "<title>Peringkat saham syariah</title>"), "berakhiran"],
+    ["index.html", idx.replace(/<title>[^<]*<\/title>/, "<title>Beranda</title>"), "diawali"],
+    ["peringkat.html", per.replace(/(<meta name="description" content=")[^"]*"/, '$1Peringkat."'), "deskripsi meta"],
+    ["peringkat.html", per.replace(/<meta name="description"[^>]*>/, ""), "deskripsi meta"],
+    ["404.html", e404.replace('<meta name="robots" content="noindex">', ""), "deskripsi meta"],
+    ["peringkat.html", per.replace(/<\/h1>/, "</h1><h1>Lagi</h1>"), "tepat satu <h1>"],
+    ["peringkat.html", per.replace('<a href="radar.html">Radar Risiko</a>', ""), "menu utama harus 4"],
+    ["peringkat.html", per.replace('<a href="radar.html">Radar Risiko</a>\n        <a href="asisten.html">Asisten AI</a>', '<a href="asisten.html">Asisten AI</a>\n        <a href="radar.html">Radar Risiko</a>'), "menu utama harus 4"],
+    ["peringkat.html", per.replace('>Asisten AI</a>\n      </nav>', ">Tanya AI</a>\n      </nav>"), "menu utama harus 4"],
+    ["peringkat.html", per.replace('aria-label="Menu utama"', 'aria-label="Menu"'), "tidak ditemukan"],
+    ["peringkat.html", per.replace(/(<footer[\s\S]*?)bukan penasihat investasi/, "$1penyaji data"), "bukan penasihat investasi"],
+    ["peringkat.html", per.replace(/(<footer[\s\S]*?)<a href="\/?metodologi\.html">[^<]*<\/a>/, "$1"), "metodologi.html"],
+  ];
+  for (const [f, b, pesan] of rusak)
+    ok(b !== readFileSync(f, "utf8") && ujiKerangka(f, b).some((s) => s.includes(pesan)), `uji balik kerangka ${f}: "${pesan}" harus tertangkap`);
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);
 

@@ -1329,3 +1329,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Nina & Tegar: cek baru untuk halaman `asisten.html` (judul & deskripsi meta, satu <h1>, wadah #asisten di <main>, menu & kaki, kalimat "bukan menyuruh membeli atau menjual", hanya skrip lokal, app.js terakhir, tanpa kalimat ajakan), 13 uji balik tertangkap. Tampilan tidak diubah.
 - Tugas baru: Nina + Yoga (cek yang sama untuk semua 10 halaman). Dewi + Kirana (audit kontras beranda/Belajar/pelajaran/404 + garis fokus) berikutnya.
 - `node tests/cek.mjs` lolos (10 halaman). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### Kamis 12 Nov 2026, 15.10 WIB (Bima)
+- Nina & Yoga: cek kerangka untuk semua 10 halaman di `tests/cek.mjs`: judul berakhiran "· Candra Analis" (beranda boleh diawali "Candra Analis ·"), deskripsi meta 50–160 karakter (404 dikecualikan karena noindex), tepat satu <h1>, menu utama 4 tautan sama & berurutan (Belajar, Peringkat, Radar Risiko, Asisten AI), kaki dengan "bukan penasihat investasi" + tautan Metodologi. Semua halaman sudah memenuhi; 12 uji balik tertangkap. Kode situs tidak diubah.
+- Fajar: KLBF dicari ulang; hasil pencarian masih data Januari–September 2025 → tetap 23 dari 32.
+- Tugas baru: Nina + Yoga (cek lang, viewport, charset, tautan lompat). Dewi + Kirana (audit kontras beranda/Belajar/pelajaran/404 + garis fokus) berikutnya.
+- `node tests/cek.mjs` lolos (10 halaman). Tampilan tidak diubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
