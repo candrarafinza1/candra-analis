@@ -1802,6 +1802,163 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
     const tertangkap = b !== blokJawaban && (pesan === "innerHTML" ? pakaiHTML(b) : ujiJawaban(b).some((s) => s.includes(pesan)));
     ok(tertangkap, `uji balik Jawaban Asisten: "${pesan}" harus tertangkap`);
   }
+
+  // Nina & Tegar (12 Nov 08.15): alur kirim pertanyaan di renderAsisten() dengan DOM tiruan & fetch tiruan.
+  // Aturan: status {"aktif":false} atau gagal terhubung → pita "belum aktif" & form nonaktif; pertanyaan kosong tidak dikirim;
+  // batas 600 karakter; tombol nonaktif selama menunggu (tidak bisa kirim dua kali); jawaban & galat server tampil sebagai teks;
+  // respons bukan JSON → pesan ramah bawaan; jaringan putus → pesan ramah; riwayat ikut terkirim; Enter mengirim, Shift+Enter tidak.
+  const blokAsisten = (app.match(/  function renderAsisten\(\) \{[\s\S]*?\n  \}\n/) || [""])[0];
+  ok(blokAsisten && !pakaiHTML(blokAsisten), "renderAsisten() harus ada dan tidak boleh memakai innerHTML/insertAdjacentHTML/outerHTML/document.write");
+  const tungguMikro = () => new Promise((r) => setTimeout(r, 0));
+  const ujiAsisten = async (blokFungsi) => {
+    const salah = [];
+    const cariEl = (c, f) => c.semua(c.akar).find((n) => n.nodeType === 1 && f(n));
+    const balas = (ok, d, bukanJson) => ({ ok, json: () => (bukanJson ? Promise.reject(new Error("bukan JSON")) : Promise.resolve(d)) });
+    try {
+      // Konteks vm terpisah per skenario: renderAsisten dipanggil di dalam konteksnya sendiri.
+      const skenario = async (statusGet) => {
+        const { doc, semua } = buatDom();
+        const buatAsli = doc.createElement;
+        doc.createElement = (t) => {
+          const e = buatAsli(t);
+          e.value = ""; e.disabled = false;
+          e.remove = () => { if (e.parentNode) e.parentNode.lepas(e); };
+          e.scrollIntoView = () => {};
+          e.requestSubmit = () => ((e.pendengar && e.pendengar.submit) || []).forEach((f) => f({ preventDefault() {} }));
+          return e;
+        };
+        const akar = doc.createElement("div"); akar.setAttribute("id", "asisten"); doc.body.appendChild(akar);
+        const panggilan = [];
+        const fetchTiruan = (url, opsi) => {
+          const p = { url, opsi: opsi || {} };
+          panggilan.push(p);
+          if (p.opsi.method === "GET") return statusGet();
+          return new Promise((ya, tidak) => { p.ya = ya; p.tidak = tidak; });
+        };
+        const ctxV = { document: doc, fetch: fetchTiruan, JSON };
+        vm.runInNewContext(ambilEl + "\n" + blokJawaban + "\n" + blokFungsi + "\n;renderAsisten();", ctxV);
+        await tungguMikro();
+        const c = { doc, semua, akar, panggilan };
+        c.area = cariEl(c, (n) => n.nodeName === "TEXTAREA");
+        c.tombol = cariEl(c, (n) => n.nodeName === "BUTTON" && n.getAttribute("type") === "submit");
+        c.form = cariEl(c, (n) => n.nodeName === "FORM");
+        c.pita = cariEl(c, (n) => n.classList.contains("pita-demo"));
+        c.log = cariEl(c, (n) => n.classList.contains("obrolan"));
+        c.hitung = cariEl(c, (n) => n.classList.contains("hitung-karakter"));
+        c.kirim = (teks) => { c.area.value = teks; (c.form.pendengar.submit || []).forEach((f) => f({ preventDefault() {} })); };
+        c.post = () => panggilan.filter((p) => p.opsi.method === "POST");
+        c.pesan = () => c.log.anak.filter((n) => n.nodeType === 1);
+        return c;
+      };
+      // 1. Status {"aktif":false} → pita belum aktif, form nonaktif.
+      const s1 = await skenario(() => Promise.resolve(balas(true, { aktif: false })));
+      if (!s1.pita || s1.pita.hidden || !s1.pita.textContent.includes("Asisten belum aktif"))
+        salah.push('status {"aktif":false} harus menampilkan pita "Asisten belum aktif"');
+      if (!s1.area.disabled || !s1.tombol.disabled) salah.push('status {"aktif":false}: kotak tanya & tombol harus nonaktif');
+      s1.kirim("Apa itu ROE?");
+      if (s1.post().length) salah.push('status {"aktif":false}: pertanyaan tidak boleh terkirim');
+      // 2. Status gagal dihubungi → pita juga tampil.
+      const s2 = await skenario(() => Promise.reject(new Error("jaringan")));
+      if (!s2.pita || s2.pita.hidden || !s2.pita.textContent.includes("tidak bisa dihubungi"))
+        salah.push('gagal menghubungi /api/tanya harus menampilkan pita "tidak bisa dihubungi"');
+      // 3. Aktif: alur kirim lengkap.
+      const s3 = await skenario(() => Promise.resolve(balas(true, { aktif: true })));
+      if (!s3.pita.hidden) salah.push('status {"aktif":true}: pita "belum aktif" harus tersembunyi');
+      if (s3.area.disabled || s3.tombol.disabled) salah.push('status {"aktif":true}: kotak tanya & tombol harus aktif');
+      if (s3.area.getAttribute("maxlength") !== "600") salah.push("kotak tanya harus dibatasi 600 karakter (maxlength)");
+      if (!s3.hitung || s3.hitung.textContent !== "0/600") salah.push('penghitung karakter awal harus "0/600"');
+      s3.area.value = "Halo ROE"; (s3.area.pendengar.input || []).forEach((f) => f({}));
+      if (s3.hitung.textContent !== "8/600") salah.push('penghitung karakter harus mengikuti ketikan ("8/600")');
+      s3.kirim("   \n  ");
+      if (s3.post().length || s3.pesan().length) salah.push("pertanyaan kosong (spasi saja) tidak boleh dikirim");
+      s3.kirim("  Apa itu ROE?  ");
+      const p1 = s3.post()[0];
+      if (!p1) salah.push("pertanyaan berisi harus dikirim lewat POST");
+      else {
+        if (p1.url !== "api/tanya") salah.push("pertanyaan harus dikirim ke api/tanya");
+        let badan = {}; try { badan = JSON.parse(p1.opsi.body); } catch (e) { /* dicek di bawah */ }
+        if (badan.pertanyaan !== "Apa itu ROE?") salah.push("pertanyaan harus dikirim tanpa spasi tepi");
+        if (!Array.isArray(badan.riwayat) || badan.riwayat.length) salah.push("pertanyaan pertama harus membawa riwayat kosong");
+        if (!s3.tombol.disabled || s3.tombol.textContent !== "Menunggu jawaban") salah.push('tombol harus nonaktif selama menunggu ("Menunggu jawaban")');
+        if (s3.area.value !== "" || s3.hitung.textContent !== "0/600") salah.push("kotak tanya harus dikosongkan setelah kirim");
+        s3.kirim("Pertanyaan kedua saat menunggu");
+        if (s3.post().length !== 1) salah.push("tidak boleh bisa mengirim dua kali selama menunggu jawaban");
+        const dimengetik = s3.semua(s3.log).some((n) => n.nodeType === 1 && n.classList.contains("mengetik"));
+        if (!dimengetik) salah.push('harus ada pesan "Sedang menyusun jawaban" selama menunggu');
+        p1.ya(balas(true, { jawaban: "ROE adalah **laba** dibagi ekuitas." }));
+        await tungguMikro();
+        if (s3.semua(s3.log).some((n) => n.nodeType === 1 && n.classList.contains("mengetik"))) salah.push("pesan menunggu harus hilang setelah jawaban datang");
+        const isi = s3.semua(s3.log).find((n) => n.nodeType === 1 && n.classList.contains("jawaban-isi"));
+        if (!isi || !isi.textContent.includes("ROE adalah laba dibagi ekuitas.")) salah.push("jawaban server harus tampil lewat teksKeElemen()");
+        if (s3.tombol.disabled || s3.tombol.textContent !== "Kirim pertanyaan") salah.push('tombol harus aktif lagi ("Kirim pertanyaan") setelah jawaban datang');
+      }
+      // 3b. Pertanyaan kedua membawa riwayat; galat server tampil sebagai teks.
+      s3.kirim("Contoh angkanya?");
+      const p2 = s3.post()[1];
+      if (!p2) salah.push("pertanyaan kedua harus terkirim setelah jawaban pertama");
+      else {
+        const r = JSON.parse(p2.opsi.body).riwayat || [];
+        if (r.length !== 2 || r[0].teks !== "Apa itu ROE?" || r[1].peran !== "asisten") salah.push("pertanyaan kedua harus membawa riwayat tanya-jawab sebelumnya");
+        p2.ya(balas(false, { galat: "<b>Batas</b> 6 pertanyaan per menit." }));
+        await tungguMikro();
+        const g = s3.pesan().pop();
+        const pg = g && s3.semua(g).find((n) => n.nodeType === 1 && n.classList.contains("pesan-galat"));
+        if (!pg || pg.textContent !== "<b>Batas</b> 6 pertanyaan per menit.") salah.push("pesan galat dari server harus tampil utuh sebagai teks");
+        if (g && s3.semua(g).some((n) => n.nodeName === "B")) salah.push("pesan galat dari server tidak boleh jadi elemen HTML");
+      }
+      // 3c. Respons bukan JSON → pesan ramah bawaan.
+      s3.kirim("Tanya lagi");
+      const p3 = s3.post()[2];
+      if (p3) {
+        p3.ya(balas(false, null, true));
+        await tungguMikro();
+        const g = s3.pesan().pop();
+        if (!g || !g.textContent.includes("Asisten tidak bisa menjawab saat ini")) salah.push("respons bukan JSON harus menampilkan pesan ramah bawaan");
+      } else salah.push("pertanyaan ketiga harus terkirim");
+      // 3d. Jaringan putus → pesan ramah, tombol aktif lagi.
+      s3.kirim("Tanya sekali lagi");
+      const p4 = s3.post()[3];
+      if (p4) {
+        p4.tidak(new Error("putus"));
+        await tungguMikro();
+        const g = s3.pesan().pop();
+        if (!g || !g.textContent.includes("Koneksi terputus")) salah.push('jaringan putus harus menampilkan pesan "Koneksi terputus"');
+        if (s3.semua(s3.log).some((n) => n.nodeType === 1 && n.classList.contains("mengetik"))) salah.push("pesan menunggu harus hilang setelah jaringan putus");
+        if (s3.tombol.disabled) salah.push("tombol harus aktif lagi setelah jaringan putus");
+      } else salah.push("pertanyaan keempat harus terkirim");
+      // 4. Enter mengirim, Shift+Enter tidak.
+      const s4 = await skenario(() => Promise.resolve(balas(true, { aktif: true })));
+      s4.area.value = "Baris satu";
+      (s4.area.pendengar.keydown || []).forEach((f) => f({ key: "Enter", shiftKey: true, preventDefault() {} }));
+      if (s4.post().length) salah.push("Shift+Enter tidak boleh mengirim pertanyaan");
+      (s4.area.pendengar.keydown || []).forEach((f) => f({ key: "Enter", shiftKey: false, preventDefault() {} }));
+      if (s4.post().length !== 1) salah.push("Enter harus mengirim pertanyaan");
+    } catch (e) { salah.push("renderAsisten() galat: " + e.message); }
+    return salah;
+  };
+  const sAsisten = blokAsisten ? await ujiAsisten(blokAsisten) : ["renderAsisten() tidak ditemukan"];
+  ok(sAsisten.length === 0, `Alur kirim Asisten AI (DOM & fetch tiruan): ${sAsisten.join("; ")}`);
+  const rusakAsisten = [
+    ["if (!q || tombol.disabled) return;", "if (tombol.disabled) return;", "pertanyaan kosong"],
+    ["if (!q || tombol.disabled) return;", "if (!q) return;", "dua kali selama menunggu"],
+    ['tombol.disabled = true; tombol.textContent = "Menunggu jawaban";', 'tombol.textContent = "Menunggu jawaban";', "nonaktif selama menunggu"],
+    ['maxlength: "600"', 'maxlength: "6000"', "600 karakter"],
+    ["if (!d.aktif) setAktif(false,", "if (d.aktif === 0) setAktif(false,", "Asisten belum aktif"],
+    ['.catch(function () { setAktif(false, "Layanan asisten tidak bisa dihubungi dari halaman ini."); });', ".catch(function () {});", "tidak bisa dihubungi"],
+    ["riwayat: riwayat", "riwayat: []", "riwayat tanya-jawab"],
+    ["h.d.galat || ", "", "pesan galat dari server"],
+    ["return r.json().catch(function () { return {}; }).then(", "return r.json().then(", "bukan JSON"],
+    ["        .catch(function () {\n          tunggu.remove();", "        .catch(function () {", "hilang setelah jaringan putus"],
+    ['text: "Koneksi terputus. Periksa', 'text: "Galat. Periksa', "Koneksi terputus"],
+    [".then(function () { tombol.disabled = false;", ".then(function () { tombol.disabled = true;", "aktif lagi"],
+    ['var q = area.value.trim();', 'var q = area.value;', "tanpa spasi tepi"],
+    ['if (e.key === "Enter" && !e.shiftKey)', 'if (e.key === "Enter")', "Shift+Enter"],
+    ['tambahPesan("asisten", teksKeElemen(h.d.jawaban));', 'tambahPesan("asisten", el("p", { text: "ok" }));', "teksKeElemen()"],
+  ];
+  for (const [lama, baru, pesan] of rusakAsisten) {
+    const b = blokAsisten.replace(lama, baru);
+    ok(b !== blokAsisten && (await ujiAsisten(b)).some((s) => s.includes(pesan)), `uji balik Alur kirim Asisten: "${pesan}" harus tertangkap`);
+  }
 }
 
 // Tegar & Arif (10 Nov 16.10): setiap fetch() di assets/*.js hanya ke alamat relatif situs sendiri

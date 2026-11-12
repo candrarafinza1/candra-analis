@@ -1298,3 +1298,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: KLBF & BRIS dicari ulang; belum ada laba Januari–September 2026 bersumber jelas → tetap 23 dari 32.
 - Tugas baru: Nina + Tegar (uji alur kirim pertanyaan di halaman Asisten). Dewi + Kirana (audit kontras halaman lain) tetap berikutnya.
 - `node tests/cek.mjs` lolos (10 halaman). Tampilan tidak diubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### Kamis 12 Nov 2026, 08.15 WIB (Bima)
+- Nina & Tegar: alur kirim pertanyaan di halaman Asisten kini diuji dengan DOM tiruan dan fetch tiruan (`ujiAsisten()` di `tests/cek.mjs`): status {"aktif":false} dan gagal terhubung menampilkan pita "belum aktif" dan menonaktifkan form; pertanyaan kosong tidak dikirim; batas 600 karakter & penghitung; tombol nonaktif selama menunggu (tidak bisa kirim dua kali); pertanyaan dikirim tanpa spasi tepi beserta riwayat; jawaban lewat teksKeElemen(); galat server tampil sebagai teks (bukan HTML); respons bukan JSON dan jaringan putus menampilkan pesan ramah; Enter mengirim, Shift+Enter tidak. 15 uji balik semuanya tertangkap. Kode situs tidak diubah.
+- Fajar: KLBF & BRIS dicari ulang; belum ada laba Januari–September 2026 bersumber jelas → tetap 23 dari 32.
+- Tugas baru: Nina + Arif (uji tombol contoh pertanyaan & label pesan di Asisten). Dewi + Kirana (audit kontras halaman lain) tetap berikutnya.
+- `node tests/cek.mjs` lolos (10 halaman). Tampilan tidak diubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
