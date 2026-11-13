@@ -7,9 +7,65 @@
 // setiap target="_blank" memakai rel berisi noopener dan menyebut "tab baru" di teks/aria-label/title; urutan judul h1→h6
 // di dalam <main> tidak melompat turun (mis. h2 langsung ke h4) dan judul pertama di <main> adalah h1.
 // Halaman "UJI" sengaja memasang 8 pelanggaran; audit wajib menangkapnya (uji balik), jadi hasil sehat = tepat 8 temuan UJI.
+// Nina & Tegar (13 Nov 16.10) menambah skenario interaksi Peringkat (lihat skenarioPeringkat di atas).
 // Cara pakai: python3 -m http.server 8765 (di akar repo), lalu: node tools/audit-aksesibel.js
 // Butuh Playwright + Chromium (sudah ada di lingkungan kerja tim); tidak dijalankan oleh tests/cek.mjs.
 const { chromium } = require('playwright');
+
+// Nina & Tegar (13 Nov 16.10): skenario interaksi Peringkat di DOM sungguhan. Setiap tab diklik; satu tombol istilah
+// di panel dibuka; Escape menutupnya (fokus harus kembali ke tombol istilah); istilah dibuka lagi lalu tab berikutnya diklik.
+// Sesudah tiap langkah: id unik, aria-controls/aria-labelledby menunjuk tepat satu elemen, tepat satu tab terpilih,
+// dan fokus tidak hilang (bukan <body>, masih di dokumen). Mode "sabot" sengaja merusak 3 hal (uji balik): id ganda,
+// aria-controls ke id yang tidak ada, fokus dilepas ke <body>. Hasil sehat: skenario asli 0 temuan, sabot tepat 3 jenis.
+async function skenarioPeringkat(p, sabot) {
+  await p.goto('http://localhost:8765/peringkat.html'); await p.waitForTimeout(400);
+  const temuan = [];
+  const cek = async (langkah) => {
+    const out = await p.evaluate(() => {
+      const o = [];
+      const hit = {}; document.querySelectorAll('[id]').forEach((el) => { hit[el.id] = (hit[el.id] || 0) + 1; });
+      Object.entries(hit).forEach(([i, n]) => { if (n > 1) o.push(`id ganda: id="${i}" dipakai ${n}×`); });
+      document.querySelectorAll('[aria-controls], [aria-labelledby]').forEach((el) => {
+        ['aria-controls', 'aria-labelledby'].forEach((a) => {
+          (el.getAttribute(a) || '').split(/\s+/).filter(Boolean).forEach((i) => {
+            const n = document.querySelectorAll('[id="' + i + '"]').length;
+            if (n !== 1) o.push(`rujukan: <${el.tagName.toLowerCase()}${el.id ? ' id="' + el.id + '"' : ''}> ${a}="${i}" menunjuk ${n} elemen`);
+          });
+        });
+      });
+      const dipilih = document.querySelectorAll('[role=tab][aria-selected=true]').length;
+      if (dipilih !== 1) o.push(`tab terpilih: ${dipilih} (harus 1)`);
+      const a = document.activeElement;
+      if (!a || a === document.body || !a.isConnected) o.push('fokus hilang ke <body>');
+      return o;
+    });
+    out.forEach((t) => temuan.push(`${langkah}: ${t}`));
+  };
+  const tab = await p.$$('[role=tab]');
+  if (!tab.length) { temuan.push('tab Peringkat tidak ketemu'); return temuan; }
+  for (let i = 0; i < tab.length; i++) {
+    const nama = (await tab[i].textContent()).trim();
+    await tab[i].click(); await p.waitForTimeout(150);
+    await cek(`klik tab "${nama}"`);
+    const ist = await p.$('#panel-peringkat button.istilah:visible');
+    if (!ist) { temuan.push(`tab "${nama}": tombol istilah di panel tidak ketemu`); continue; }
+    await ist.click(); await p.waitForTimeout(150);
+    if (sabot && i === 0) await p.evaluate(() => { const k = document.getElementById('kotak-istilah'); k.insertAdjacentHTML('afterend', '<p id="kotak-istilah">salinan</p>'); });
+    await cek(`tab "${nama}" + istilah terbuka`);
+    if (sabot && i === 0) await p.evaluate(() => document.querySelectorAll('p#kotak-istilah').forEach((x) => x.remove()));
+    await p.keyboard.press('Escape'); await p.waitForTimeout(100);
+    const kembali = await ist.evaluate((b) => document.activeElement === b);
+    if (!kembali) temuan.push(`tab "${nama}": sesudah Escape fokus tidak kembali ke tombol istilah`);
+    await ist.click(); await p.waitForTimeout(100);
+    const lanjut = tab[(i + 1) % tab.length];
+    await lanjut.click(); await p.waitForTimeout(150);
+    if (sabot && i === 1) await p.evaluate(() => document.querySelector('[role=tab]').setAttribute('aria-controls', 'tidak-ada'));
+    if (sabot && i === 2) await p.evaluate(() => document.activeElement.blur());
+    await cek(`tab "${nama}" + istilah terbuka → klik tab "${(await lanjut.textContent()).trim()}"`);
+    if (sabot && i === 1) await p.evaluate(() => document.querySelector('[role=tab]').setAttribute('aria-controls', 'panel-peringkat'));
+  }
+  return temuan;
+}
 const halaman = ['index.html', 'belajar.html', 'pelajaran.html', 'pelajaran.html#kuis', 'peringkat.html', 'peringkat.html#istilah', 'radar.html',
   'radar.html#UNTR', 'emiten.html', 'emiten.html?kode=ANTM', 'kabar.html', 'metodologi.html', 'asisten.html', '404.html', 'UJI'];
 (async () => {
@@ -84,8 +140,16 @@ const halaman = ['index.html', 'belajar.html', 'pelajaran.html', 'pelajaran.html
     temuan.out.forEach((t) => console.log('  - ' + t));
     if (jalur === 'UJI') totalUji = temuan.out.length; else total += temuan.out.length;
   }
+  const sk = await skenarioPeringkat(p, false);
+  console.log(`\nSkenario Peringkat (klik tiap tab, buka istilah, Escape, pindah tab): ${sk.length} temuan`);
+  sk.forEach((t) => console.log('  - ' + t));
+  const skSabot = await skenarioPeringkat(p, true);
+  const jenis = new Set(skSabot.map((t) => t.split(': ')[1]));
+  console.log(`Skenario UJI (sabot): ${skSabot.length} temuan, ${jenis.size} jenis (harus 3: id ganda, rujukan, fokus hilang)`);
+  skSabot.forEach((t) => console.log('  - ' + t));
   if (galat.length) console.log('Galat JS:', galat);
   console.log(`\nTotal temuan halaman asli: ${total}. Temuan UJI: ${totalUji} (harus 8).`);
   await b.close();
-  process.exit(total === 0 && totalUji === 8 && !galat.length ? 0 : 1);
+  const sabotOk = jenis.size === 3 && ['id ganda', 'rujukan', 'fokus hilang'].every((j) => [...jenis].some((x) => x.startsWith(j)));
+  process.exit(total === 0 && totalUji === 8 && sk.length === 0 && sabotOk && !galat.length ? 0 : 1);
 })();

@@ -1415,3 +1415,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: KLBF & BRIS dicari ulang; belum ada laba Januari–September 2026 bersumber → tetap 23 dari 32.
 - Tugas baru: Nina + Tegar (uji yang sama di DOM sungguhan lewat `tools/audit-aksesibel.js`).
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Tampilan tidak diubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 13 Nov 2026, 16.10 WIB (sesi sore, Bima)
+- Nina & Tegar: `tools/audit-aksesibel.js` kini punya skenario interaksi Peringkat di DOM sungguhan (Chromium). Keempat tab diklik; di tiap tab satu tombol istilah dibuka, ditutup dengan Escape (fokus harus kembali ke tombol istilah), dibuka lagi, lalu tab berikutnya diklik. Sesudah tiap langkah dicek: id unik, aria-controls/aria-labelledby menunjuk tepat satu elemen, satu tab terpilih, fokus tidak hilang. Hasil: 0 temuan. Uji balik (sabot) menangkap 3 jenis: id ganda, rujukan salah, fokus hilang. Audit 10 halaman tetap 0 temuan, UJI tetap 8. Kode situs tidak diubah.
+- Fajar: KLBF & BRIS dicari ulang; belum ada laba Januari–September 2026 bersumber → tetap 23 dari 32.
+- Tugas baru: Nina + Tegar (skenario panah kiri/kanan di tab Peringkat dan ganti emiten di Radar).
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Tampilan tidak diubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
