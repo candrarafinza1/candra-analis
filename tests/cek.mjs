@@ -3456,6 +3456,78 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
     ok(rusakHtml2 !== belajarHtml && urutanJudul(sisip(rusakHtml2, { "jalur-lengkap": [3] }).lv).some((s) => s.includes("melompat h1 → h3")),
       "uji balik urutan judul Belajar: h2 \"Daftar pelajaran\" dihapus harus tertangkap (h1 → h3)");
   }
+  // Nina & Arif (13 Nov 07.10): profil emiten. renderProfil (dengan bagianBanding, kartuKabar) dijalankan dengan
+  // DOM tiruan; judul buatannya disisipkan di posisi #profil di antara judul statis emiten.html. Keadaan: tanpa kode,
+  // kode salah, emiten lengkap (usaha, kabar, dividen, batang 9 bulan, Bandingkan dipilih) dan emiten minimal.
+  {
+    const ambilP = (awal) => { const i = app.indexOf("  " + awal); const j = app.indexOf("\n  }\n", i); return i < 0 || j < 0 ? "" : app.slice(i, j + 5); };
+    const iU = app.indexOf("  var angka = new Intl"), jU = app.indexOf("  function selKode(");
+    const iB = app.indexOf("  var BULAN = ["), jB = app.indexOf("];", iB);
+    const kodeProfil = [iU < 0 || jU < iU ? "" : app.slice(iU, jU), iB < 0 ? "" : app.slice(iB, jB + 2), ambilP("function tanggalId("),
+      ambilP("function daftarKabar("), ambilP("function kabarBaru("), ambilP("function kartuKabar("), ambilP("function bagianBanding("),
+      ambilP("function dividenTampil("), ambilP("function renderProfil()")];
+    ok(kodeProfil.every(Boolean), "app.js: utilitas/BULAN/tanggalId/daftarKabar/kabarBaru/kartuKabar/bagianBanding/dividenTampil/renderProfil harus bisa diambil untuk uji urutan judul");
+    const emitenHtml = readFileSync("emiten.html", "utf8");
+    const mainE = (emitenHtml.match(/<main[\s>][\s\S]*?<\/main>/) || [""])[0], iProfil = mainE.indexOf('id="profil"');
+    ok(iProfil >= 0, "emiten.html: wadah #profil harus berada di <main>");
+    const statisP = [judulMain("<main>" + mainE.slice(0, Math.max(0, iProfil)) + "</main>"), iProfil < 0 ? [] : judulMain("<main>" + mainE.slice(iProfil))];
+    const ujiProfil = (blokApp) => {
+      const salah = [];
+      const simpul = (tag) => ({ tag, anak: [], atribut: {}, className: "", value: "", style: {}, _dengar: {},
+        get firstChild() { return this.anak[0] || null; },
+        appendChild(c) { this.anak.push(c); return c; },
+        insertBefore(c, ref) { const i = this.anak.indexOf(ref); this.anak.splice(i < 0 ? this.anak.length : i, 0, c); return c; },
+        setAttribute(k, v) { this.atribut[k] = String(v); }, addEventListener(n, f) { this._dengar[n] = f; },
+        querySelector(sel) { const id = sel.slice(1); const cari = (n) => { for (const c of n.anak || []) { if (c.atribut && c.atribut.id === id) return c; const r = cari(c); if (r) return r; } return null; }; return cari(this); },
+        set textContent(v) { this.anak = []; this._teks = String(v); } });
+      const levels = (n, out = []) => { const m = /^h([1-6])$/.exec(n.tag || ""); if (m) out.push(+m[1]); (n.anak || []).forEach((c) => levels(c, out)); return out; };
+      const cari = (n, f) => { if (f(n)) return n; for (const c of n.anak || []) { const r = cari(c, f); if (r) return r; } return null; };
+      const sumber = [{ url: "https://contoh.id", judul: "Sumber" }];
+      const EMITEN = [
+        { kode: "AAAA", nama: "Contoh A", sektor: "Energi", desBaris: 1, labaTahun: { 2024: 100, 2025: 120 }, pendapatan: { 2024: 900, 2025: 1000 },
+          liabilitas2025: 300, ekuitas2025: 600, laba9b: { 2025: 80, 2026: 90 }, dps: 25, dpsSumber: sumber[0],
+          usaha: { teks: "Usaha contoh.", sumber: sumber[0] }, sumber },
+        { kode: "BBBB", nama: "Contoh B", sektor: "Keuangan", desBaris: 2, sumber: [] },
+      ];
+      const KABAR = [{ kode: "AAAA", tanggal: "2026-10-30", jenis: "Laporan keuangan", ringkas: "Isi", sumber: sumber[0] }];
+      const keadaan = [["tanpa kode", ""], ["kode salah", "ZZZZ"], ["AAAA lengkap", "AAAA"], ["BBBB minimal", "BBBB"]];
+      for (const [nama, kode] of keadaan) {
+        const wadah = { profil: simpul("div"), "judul-profil": simpul("h1"), "sub-profil": simpul("p") };
+        const document = { title: "", createElement: simpul, createTextNode: () => ({ tag: "#text", anak: [] }), getElementById: (id) => wadah[id] || null };
+        const ctxP = { document, EMITEN, window: { KABAR }, location: { search: kode ? "?kode=" + kode : "" }, URLSearchParams, Date, Intl, Math,
+          DES_LABEL: "DES", KRITERIA: { tumbuhLaba: { nilai: () => null, tampil: String }, roe: { nilai: () => null, tampil: String } },
+          peserta: () => [], sekaliWaktu9b: () => null, pasangIstilah() {}, tutupIstilah() {},
+          periksa: () => [{ tingkat: "sedang", judul: "Tanda", isi: "Isi", bukti: "Bukti" }] };
+        try { vm.runInNewContext(blokApp.join("\n") + "\n;globalThis.renderProfil = renderProfil;", ctxP); ctxP.renderProfil(); }
+        catch (err) { salah.push(`renderProfil ${nama} galat: ${err.message}`); continue; }
+        const urut = (sub) => {
+          const dinamis = levels(wadah.profil);
+          if (!dinamis.length) salah.push(`Profil ${sub}: app.js tidak membuat judul apa pun`);
+          for (const s of urutanJudul([...statisP[0], ...dinamis, ...statisP[1]])) salah.push(`Profil ${sub}: ${s}`);
+        };
+        urut(nama);
+        if (kode === "AAAA") {
+          const pilih = cari(wadah.profil, (n) => n.tag === "select");
+          if (!pilih || !pilih._dengar.change) salah.push("Profil AAAA: pilihan Bandingkan tidak bisa diganti");
+          else { pilih.value = "BBBB"; pilih._dengar.change(); urut("AAAA setelah Bandingkan"); }
+        }
+      }
+      return salah;
+    };
+    const sProfil = ujiProfil(kodeProfil);
+    ok(sProfil.length === 0, `urutan judul profil emiten (DOM tiruan): ${sProfil.join("; ")}`);
+    // Uji balik
+    const gantiP = (dari, ke) => kodeProfil.map((k) => k.split(dari).join(ke));
+    const rusakProfil = [
+      [gantiP('el("h2", { class: "judul-profil-bagian", id: "angka-utama"', 'el("h4", { class: "judul-profil-bagian", id: "angka-utama"'), "Profil BBBB minimal: urutan judul melompat h1 → h4"],
+      [gantiP('el("h3", { class: "sinyal-judul"', 'el("h4", { class: "sinyal-judul"'), "Profil AAAA lengkap: urutan judul melompat h2 → h4"],
+      [gantiP('el("h2", { class: "judul-profil-bagian", text: EMITEN.length', 'el("h3", { class: "judul-profil-bagian", text: EMITEN.length'), "Profil tanpa kode: urutan judul melompat h1 → h3"],
+      [gantiP('el("h2", { class: "judul-profil-bagian", id: "judul-banding"', 'el("h1", { class: "judul-profil-bagian", id: "judul-banding"'), "h1 di <main> ada 2×"],
+      [gantiP('el("h2", { class: "judul-profil-bagian", text: EMITEN.length + " emiten dalam data kami" })', 'el("p", { text: EMITEN.length + " emiten dalam data kami" })'), "Profil kode salah: app.js tidak membuat judul apa pun"],
+    ];
+    for (const [b, pesan] of rusakProfil)
+      ok(b.join() !== kodeProfil.join() && ujiProfil(b).some((s) => s.includes(pesan)), `uji balik urutan judul profil: "${pesan}" harus tertangkap`);
+  }
 
 }
 

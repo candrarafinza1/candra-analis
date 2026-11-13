@@ -1370,3 +1370,11 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Nina & Arif: cek urutan judul dengan DOM tiruan untuk Belajar: `renderJalur` mode lengkap (belajar.html) dan ringkas (beranda), keadaan belum ada & satu pelajaran selesai, plus `renderRujukan`; judul buatan app.js disisipkan di posisi wadahnya (#jalur-lengkap, #rujukan, #jalur-ringkas) di antara judul statis. Semua lolos; 6 uji balik tertangkap. Kode situs tidak diubah. Sisa: profil emiten (sesi berikutnya).
 - Fajar: KLBF & BRIS dicari ulang; belum ada laba Januari–September 2026 yang jelas tahunnya → tetap 23 dari 32. Raka & Hana: tidak ada kabar baru bersumber.
 - `node tests/cek.mjs` lolos. Tampilan tidak diubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 13 Nov 2026, 07.10 WIB (Bima)
+- Email "Masuk kerja pagi 13 November 2026" terkirim ke Rafinza (12 karyawan, tugas masing-masing, status cek.mjs).
+- Nina & Arif: cek urutan judul profil emiten (`renderProfil` + Bandingkan + kartu kabar) dengan DOM tiruan di `tests/cek.mjs`: tanpa kode, kode salah, emiten lengkap (lalu Bandingkan dipilih), emiten minimal; lolos, 5 uji balik tertangkap. Tugas urutan judul dinamis (Radar, Kabar, Belajar, profil) kini tuntas. Kode situs tidak diubah.
+- Fajar: KLBF & BRIS dicari ulang; belum ada laba Januari–September 2026 → tetap 23 dari 32.
+- Tegar: 13 commit sejak 12 Nov 07.00 dipindai, tanpa rahasia/.env. Yoga: rilis lewat push, tautan internal lolos.
+- Tugas baru: Nina + Arif (urutan judul halaman pelajaran).
+- `node tests/cek.mjs` lolos (10 halaman). Tampilan tidak diubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
