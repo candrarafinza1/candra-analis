@@ -9,6 +9,7 @@
 // Halaman "UJI" sengaja memasang 8 pelanggaran; audit wajib menangkapnya (uji balik), jadi hasil sehat = tepat 8 temuan UJI.
 // Nina & Tegar (13 Nov 16.10) menambah skenario interaksi Peringkat (lihat skenarioPeringkat di atas).
 // Nina & Tegar (13 Nov 17.10) menambah skenario kedua: panah kiri/kanan di tab Peringkat dan ganti emiten di Radar.
+// Nina & Tegar (13 Nov 18.11) menambah skenario ketiga: kuis dengan keyboard saja dan saringan sektor Peringkat.
 // Cara pakai: python3 -m http.server 8765 (di akar repo), lalu: node tools/audit-aksesibel.js
 // Butuh Playwright + Chromium (sudah ada di lingkungan kerja tim); tidak dijalankan oleh tests/cek.mjs.
 const { chromium } = require('playwright');
@@ -146,6 +147,94 @@ async function skenarioRadar(p, sabot) {
   return temuan;
 }
 
+// Nina & Tegar (13 Nov 18.11): skenario interaksi ketiga.
+// (a) Kuis pelajaran pertama dengan keyboard saja. Putaran 1: tiap soal dimasuki dengan Tab, Spasi memilih pilihan
+// pertama, panah bawah memindah ke jawaban SALAH; Tab ke "Periksa jawaban", Enter. Lalu Tab ke "Ulangi kuis", Enter
+// (fokus harus kembali ke pilihan pertama). Putaran 2: sama, tetapi ke jawaban BENAR. Sesudah tiap Enter: pesan hasil
+// ada di elemen aria-live/role=status dan berbunyi "0 dari N benar" lalu "N dari N benar", umpan tiap soal terlihat,
+// fokus tidak hilang, id unik. Sabot: aria-live & role dicabut dari pesan hasil (putaran 1) dan fokus dilepas ke <body>
+// (putaran 2). Hasil sabot harus memuat jenis "aria-live" dan "fokus hilang".
+async function skenarioKuis(p, sabot) {
+  await p.goto('http://localhost:8765/pelajaran.html'); await p.waitForTimeout(400);
+  const temuan = [];
+  const kunci = await p.evaluate(() => {
+    const id = new URLSearchParams(location.search).get('m');
+    const m = window.MODUL.find((x) => x.id === id) || window.MODUL[0];
+    return m.kuis.map((q) => ({ benar: q.benar, n: q.pilihan.length }));
+  });
+  if (!kunci.length) return ['kuis tidak ada di pelajaran pertama'];
+  const fokusInfo = () => p.evaluate(() => { const a = document.activeElement; return { tag: a && a.tagName, name: a && a.name, id: a && a.id, teks: a && (a.textContent || '').trim() }; });
+  await p.focus('#kuis-0-0');
+  for (const putaran of ['salah', 'benar']) {
+    for (let i = 0; i < kunci.length; i++) {
+      if (i > 0) await p.keyboard.press('Tab');
+      const f = await fokusInfo();
+      if (f.name !== 'soal-' + i) temuan.push(`putaran ${putaran}: Tab tidak masuk ke soal ${i + 1} (fokus di <${(f.tag || '').toLowerCase()} id="${f.id}">)`);
+      await p.keyboard.press('Space');
+      const tuju = putaran === 'benar' ? kunci[i].benar : (kunci[i].benar + 1) % kunci[i].n;
+      for (let j = 0; j < tuju; j++) await p.keyboard.press('ArrowDown');
+      const dipilih = await p.evaluate((i) => { const r = document.querySelector('input[name="soal-' + i + '"]:checked'); return r ? +r.value : -1; }, i);
+      if (dipilih !== tuju) temuan.push(`putaran ${putaran}: soal ${i + 1} terpilih pilihan ${dipilih + 1}, seharusnya ${tuju + 1}`);
+    }
+    await p.keyboard.press('Tab');
+    const fk = await fokusInfo();
+    if (fk.teks !== 'Periksa jawaban') temuan.push(`putaran ${putaran}: Tab tidak sampai ke "Periksa jawaban" (fokus di "${fk.teks}")`);
+    if (sabot && putaran === 'salah') await p.evaluate(() => { const h = document.querySelector('.kuis-hasil'); h.removeAttribute('aria-live'); h.removeAttribute('role'); });
+    await p.keyboard.press('Enter'); await p.waitForTimeout(150);
+    if (sabot && putaran === 'benar') await p.evaluate(() => document.activeElement.blur());
+    const harap = `${putaran === 'benar' ? kunci.length : 0} dari ${kunci.length} benar`;
+    const st = await p.evaluate(() => {
+      const h = document.querySelector('.kuis-hasil');
+      return { teks: h ? h.textContent : '', live: !!h && (['polite', 'assertive'].includes(h.getAttribute('aria-live')) || h.getAttribute('role') === 'status'),
+        umpan: [...document.querySelectorAll('.kuis-umpan')].filter((u) => !u.hidden && u.textContent.trim()).length };
+    });
+    if (!st.live) temuan.push(`putaran ${putaran}: aria-live/role=status tidak ada pada pesan hasil`);
+    if (!st.teks.startsWith(harap)) temuan.push(`putaran ${putaran}: pesan hasil "${st.teks}" (harus diawali "${harap}")`);
+    if (st.umpan !== kunci.length) temuan.push(`putaran ${putaran}: umpan terlihat ${st.umpan} dari ${kunci.length} soal`);
+    (await cekDom(p)).forEach((t) => temuan.push(`putaran ${putaran} sesudah Enter: ${t}`));
+    if (putaran === 'salah') {
+      await p.keyboard.press('Tab');
+      const fu = await fokusInfo();
+      if (fu.teks !== 'Ulangi kuis') temuan.push(`Tab tidak sampai ke "Ulangi kuis" (fokus di "${fu.teks}")`);
+      await p.keyboard.press('Enter'); await p.waitForTimeout(100);
+      const fr = await fokusInfo();
+      if (fr.id !== 'kuis-0-0') temuan.push(`sesudah "Ulangi kuis" fokus tidak ke pilihan pertama (fokus di <${(fr.tag || '').toLowerCase()} id="${fr.id}">)`);
+    }
+  }
+  return temuan;
+}
+
+// (b) Peringkat: pilih tab kedua, lalu saringan sektor diganti 2× (sektor pertama & terakhir di daftar) dan kembali ke
+// "Semua sektor". Sesudah tiap ganti: #ket-sektor menyebut sektor & jumlah baris tabel (kosong untuk "Semua sektor"),
+// tab terpilih tetap tab kedua, id unik, rujukan aria tepat, fokus tidak hilang. Sabot: #ket-sektor dibuat basi (ganti
+// ke-2), tab lain ikut dipilih (ganti ke-2), dan id ganda (kembali ke semua). Hasil sabot harus memuat jenis
+// "ket-sektor", "tab terpilih", "id ganda".
+async function skenarioSektor(p, sabot) {
+  await p.goto('http://localhost:8765/peringkat.html'); await p.waitForTimeout(400);
+  const temuan = [];
+  const tab = await p.$$('[role=tab]');
+  if (tab.length < 2 || !(await p.$('#pilih-sektor'))) return ['tab Peringkat atau #pilih-sektor tidak ketemu'];
+  await tab[1].click(); await p.waitForTimeout(120);
+  const tabId = await tab[1].getAttribute('id');
+  const opsi = await p.$$eval('#pilih-sektor option', (o) => o.map((x) => x.value).filter(Boolean));
+  if (opsi.length < 2) return ['sektor di saringan kurang dari 2'];
+  const urutan = [opsi[0], opsi[opsi.length - 1], ''];
+  for (let s = 0; s < urutan.length; s++) {
+    const v = urutan[s];
+    await p.selectOption('#pilih-sektor', v); await p.focus('#pilih-sektor'); await p.waitForTimeout(150);
+    const nama = v ? `sektor "${v}"` : 'Semua sektor';
+    if (sabot && s === 1) await p.evaluate(() => { document.getElementById('ket-sektor').textContent = 'basi'; document.querySelectorAll('[role=tab]')[0].setAttribute('aria-selected', 'true'); });
+    if (sabot && s === 2) await p.evaluate(() => document.querySelector('main').insertAdjacentHTML('beforeend', '<p id="ket-sektor">salinan</p>'));
+    const st = await p.evaluate(() => ({ ket: (document.querySelector('#ket-sektor') || {}).textContent || '', baris: document.querySelectorAll('#panel-peringkat tbody tr').length,
+      pilih: [...document.querySelectorAll('[role=tab]')].filter((t) => t.getAttribute('aria-selected') === 'true').map((t) => t.id) }));
+    if (v ? !(st.ket.includes(v.toLowerCase()) && st.ket.startsWith(st.baris + ' emiten')) : st.ket !== '') temuan.push(`${nama}: ket-sektor tidak sesuai ("${st.ket}", ${st.baris} baris)`);
+    if (st.pilih.length !== 1 || st.pilih[0] !== tabId) temuan.push(`${nama}: tab terpilih berubah (${st.pilih.join(', ')}; harus ${tabId})`);
+    (await cekDom(p)).forEach((t) => temuan.push(`${nama}: ${t}`));
+    if (sabot && s === 2) await p.evaluate(() => document.querySelectorAll('main > p#ket-sektor').forEach((x) => x.remove()));
+  }
+  return temuan;
+}
+
 const halaman = ['index.html', 'belajar.html', 'pelajaran.html', 'pelajaran.html#kuis', 'peringkat.html', 'peringkat.html#istilah', 'radar.html',
   'radar.html#UNTR', 'emiten.html', 'emiten.html?kode=ANTM', 'kabar.html', 'metodologi.html', 'asisten.html', '404.html', 'UJI'];
 (async () => {
@@ -234,9 +323,16 @@ const halaman = ['index.html', 'belajar.html', 'pelajaran.html', 'pelajaran.html
   const jenis2 = ['tabindex', 'fokus hilang', 'id ganda', 'rujukan'].filter((j) => sab2.some((t) => t.split(': ')[1].startsWith(j)));
   console.log(`Skenario kedua UJI (sabot): ${sab2.length} temuan, jenis tertangkap: ${jenis2.join(', ')} (harus 4)`);
   sab2.forEach((t) => console.log('  - ' + t));
+  const sk3 = [...(await skenarioKuis(p, false)), ...(await skenarioSektor(p, false))];
+  console.log(`\nSkenario ketiga (kuis dengan keyboard saja: salah lalu benar; saringan sektor 2× lalu Semua sektor): ${sk3.length} temuan`);
+  sk3.forEach((t) => console.log('  - ' + t));
+  const sab3 = [...(await skenarioKuis(p, true)), ...(await skenarioSektor(p, true))];
+  const jenis3 = ['aria-live', 'fokus hilang', 'ket-sektor', 'tab terpilih', 'id ganda'].filter((j) => sab3.some((t) => (t.split(': ')[1] || '').startsWith(j)));
+  console.log(`Skenario ketiga UJI (sabot): ${sab3.length} temuan, jenis tertangkap: ${jenis3.join(', ')} (harus 5)`);
+  sab3.forEach((t) => console.log('  - ' + t));
   if (galat.length) console.log('Galat JS:', galat);
   console.log(`\nTotal temuan halaman asli: ${total}. Temuan UJI: ${totalUji} (harus 8).`);
   await b.close();
   const sabotOk = jenis.size === 3 && ['id ganda', 'rujukan', 'fokus hilang'].every((j) => [...jenis].some((x) => x.startsWith(j)));
-  process.exit(total === 0 && totalUji === 8 && sk.length === 0 && sabotOk && sk2.length === 0 && jenis2.length === 4 && !galat.length ? 0 : 1);
+  process.exit(total === 0 && totalUji === 8 && sk.length === 0 && sabotOk && sk2.length === 0 && jenis2.length === 4 && sk3.length === 0 && jenis3.length === 5 && !galat.length ? 0 : 1);
 })();

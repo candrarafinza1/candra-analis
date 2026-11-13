@@ -1427,3 +1427,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: KLBF & BRIS dicari ulang; belum ada laba Januari–September 2026 bersumber → tetap 23 dari 32.
 - Tugas baru: Nina + Tegar (skenario ketiga: kuis dengan keyboard saja dan saringan sektor Peringkat).
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Tampilan tidak diubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 13 Nov 2026, 18.11 WIB (sesi malam, Bima)
+- Nina & Tegar: `tools/audit-aksesibel.js` kini punya skenario interaksi ketiga di DOM sungguhan. (a) Kuis pelajaran dengan keyboard saja: Tab masuk tiap soal, Spasi + panah bawah memilih jawaban salah, Tab ke "Periksa jawaban", Enter; lalu "Ulangi kuis" (fokus harus kembali ke pilihan pertama) dan ulangi dengan jawaban benar. Dicek: pesan hasil di elemen aria-live berbunyi "0 dari 3 benar" lalu "3 dari 3 benar", umpan tiap soal terlihat, fokus tidak hilang, id unik. (b) Peringkat: tab kedua dipilih, saringan sektor diganti 2× lalu "Semua sektor": #ket-sektor menyebut sektor dan jumlah baris yang benar, tab terpilih tetap, id unik. Hasil: 0 temuan. Uji balik menangkap 5 jenis (aria-live, fokus hilang, ket-sektor, tab terpilih, id ganda). Audit 10 halaman tetap 0, UJI tetap 8. Kode situs tidak diubah.
+- Fajar: KLBF & BRIS dicari ulang; belum ada laba Januari–September 2026 bersumber → tetap 23 dari 32.
+- Tugas baru: Nina + Tegar (skenario keempat: saringan Kabar + "Tampilkan lagi" dan pencarian kamus istilah).
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Tampilan tidak diubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
