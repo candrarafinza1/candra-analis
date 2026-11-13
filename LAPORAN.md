@@ -1403,3 +1403,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: KLBF & BRIS dicari ulang; belum ada laba Januari–September 2026 yang jelas tahunnya → tetap 23 dari 32.
 - Tugas baru: Nina + Arif (cek id unik di DOM tiruan per halaman).
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Tampilan tidak diubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 13 Nov 2026, 14.11 WIB (sesi siang, Bima)
+- Nina & Arif: cek id unik di `tests/cek.mjs`. Di 10 halaman dan semua keadaan (beranda × kemajuan × istilah hari ini, tiap pelajaran, tiap profil emiten), id statis halaman digabung dengan id buatan app.js; setiap id hanya boleh muncul sekali, dan setiap rujukan (for, aria-labelledby, aria-describedby, aria-controls) harus menunjuk tepat satu elemen. Lolos; 4 uji balik tertangkap. Kode situs tidak diubah.
+- Fajar: KLBF & BRIS dicari ulang; hasil teratas masih kuartal III 2025 atau kuartal II 2026 → tetap 23 dari 32.
+- Tugas baru: Nina + Tegar (cek aria-controls setelah kotak istilah/tab dibuka).
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Tampilan tidak diubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

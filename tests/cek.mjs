@@ -3894,7 +3894,7 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
       const lv = []; let dari = 0;
       for (const [i, id] of titik) { lv.push(...judulMain("<main>" + main.slice(dari, i) + "</main>"), ...levels(wadah[id].induk)); dari = i; }
       lv.push(...judulMain("<main>" + main.slice(dari) + "</main>"));
-      return { lv, wadah, title: document.title };
+      return { lv, wadah, title: document.title, body: document.body };
     };
     const KUNCI = "candra-analis:pelajaran-selesai";
     const keadaanHal = (f, H) => {
@@ -3947,6 +3947,60 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
     ];
     for (const [js, H, pesan] of rusakCakupan)
       ok(cekCakupan(js, H).some((s) => s.includes(pesan)), `uji balik cakupan wadah: "${pesan}" harus tertangkap`);
+
+    // Nina & Arif (13 Nov 14.11): id unik. Untuk setiap halaman dan keadaan di atas, id statis halaman (seluruh berkas)
+    // digabung dengan id buatan app.js (atribut id elemen buatan dan id="…" di innerHTML). Setiap id hanya boleh
+    // muncul satu kali, dan setiap rujukan (for, aria-labelledby, aria-describedby, aria-controls) baik di halaman
+    // maupun buatan app.js harus menunjuk tepat satu elemen. Bila tidak, pembaca layar membacakan label yang salah.
+    const RUJUK = ["for", "aria-labelledby", "aria-describedby", "aria-controls"];
+    const cekIdHal = (r, html) => {
+      const salah = [], hitung = {}, rujukan = [];
+      const tambah = (id) => { hitung[id] = (hitung[id] || 0) + 1; };
+      const bersih = html.replace(/<!--[\s\S]*?-->/g, "").replace(/<script[\s\S]*?<\/script>/g, "");
+      const dariHtml = (h, asal) => {
+        for (const m of h.matchAll(/<[a-z][^>]*>/gi)) {
+          const tag = m[0], idM = /\sid="([^"]+)"/.exec(tag);
+          if (idM) tambah(idM[1]);
+          for (const a of RUJUK) { const am = new RegExp(`\\s${a}="([^"]*)"`).exec(tag); if (am) am[1].split(/\s+/).filter(Boolean).forEach((v) => rujukan.push([a, v, asal])); }
+        }
+      };
+      dariHtml(bersih, "halaman");
+      const statisW = new Set(Object.values(r.wadah).map((x) => x.w));
+      const jelajah = (n) => {
+        if (!n || typeof n !== "object") return;
+        if (n.atribut && !statisW.has(n)) {
+          if (n.atribut.id) tambah(n.atribut.id);
+          for (const a of RUJUK) if (n.atribut[a]) n.atribut[a].split(/\s+/).filter(Boolean).forEach((v) => rujukan.push([a, v, "app.js"]));
+        }
+        if (n._html) dariHtml(n._html.replace(/<!--[\s\S]*?-->/g, ""), "app.js");
+        (n.anak || []).forEach(jelajah);
+      };
+      Object.values(r.wadah).forEach((x) => jelajah(x.induk));
+      jelajah(r.body);
+      for (const [id, n] of Object.entries(hitung)) if (n > 1) salah.push(`id #${id} muncul ${n}×`);
+      for (const [a, v, asal] of rujukan) if ((hitung[v] || 0) !== 1) salah.push(`${a}="${v}" (${asal}) menunjuk ${hitung[v] || 0} elemen, harus tepat 1`);
+      return [...new Set(salah)];
+    };
+    const ujiId = (js, H = htmlHal, hanya) => {
+      const salah = [];
+      for (const f of hanya || Object.keys(H)) for (const [nama, opsi] of keadaanHal(f, H)) {
+        let r;
+        try { r = jalankan(js, H[f], { ...opsi, berkas: f }); } catch (err) { salah.push(`${f} (${nama}): app.js galat: ${err.message}`); continue; }
+        for (const s of cekIdHal(r, H[f])) salah.push(`${f} (${nama}): ${s}`);
+      }
+      return [...new Set(salah)];
+    };
+    const sId = ujiId(app);
+    ok(sId.length === 0, `id unik & rujukan label per halaman (DOM tiruan): ${sId.slice(0, 8).join("; ")}`);
+    // Uji balik id unik
+    const rusakId = [
+      [gantiA('el("label", { for: "pilih-sektor"', 'el("label", { for: "pilih-sektor-x"'), htmlHal, ["peringkat.html"], 'for="pilih-sektor-x" (app.js) menunjuk 0 elemen'],
+      [gantiA('"aria-labelledby": "judul-banding"', '"aria-labelledby": "judul-hilang"'), htmlHal, ["emiten.html"], 'aria-labelledby="judul-hilang" (app.js) menunjuk 0 elemen'],
+      [gantiA('el("h2", { id: "judul-istilah-hari"', 'el("h2", { id: "lanjutkan-belajar"'), htmlHal, ["index.html"], "id #lanjutkan-belajar muncul 2×"],
+      [app, { ...htmlHal, "radar.html": htmlHal["radar.html"].replace("</main>", '<p id="pita">ganda</p></main>') }, ["radar.html"], "id #pita muncul 2×"],
+    ];
+    for (const [js, H, hanya, pesan] of rusakId)
+      ok(ujiId(js, H, hanya).some((s) => s.includes(pesan)), `uji balik id unik: "${pesan}" harus tertangkap`);
   }
 }
 
