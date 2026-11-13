@@ -3528,6 +3528,76 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
     for (const [b, pesan] of rusakProfil)
       ok(b.join() !== kodeProfil.join() && ujiProfil(b).some((s) => s.includes(pesan)), `uji balik urutan judul profil: "${pesan}" harus tertangkap`);
   }
+  // Nina & Arif (13 Nov 08.09): halaman pelajaran. renderPelajaran (isi kurikulum asli data/modul.js + kuis buatKuis
+  // + Tandai selesai) dijalankan dengan DOM tiruan; judul isi (dari HTML kurikulum) dan judul kuis disisipkan di
+  // posisi #isi-pelajaran di antara judul statis pelajaran.html. Keadaan: tiap pelajaran, tanpa ?m=, id salah,
+  // serta kuis sesudah "Periksa jawaban" dan sesudah "Ulangi kuis". Kuis wajib punya judul id="judul-kuis".
+  {
+    const iR = app.indexOf("  var KUNCI_KEMAJUAN"), jR = app.indexOf("  /* ---------- Peringkat (tim Galih)");
+    const iE = app.indexOf("  function el("), jE = app.indexOf("\n  }\n", iE);
+    const kodePel = [iE < 0 || jE < 0 ? "" : app.slice(iE, jE + 5), iR < 0 || jR < iR ? "" : app.slice(iR, jR)];
+    ok(kodePel.every(Boolean) && /function renderPelajaran\(\)/.test(kodePel[1]) && /function buatKuis\(/.test(kodePel[1]),
+      "app.js: el/renderPelajaran/buatKuis harus bisa diambil untuk uji urutan judul");
+    const pelHtml = readFileSync("pelajaran.html", "utf8");
+    const mainPel = (pelHtml.match(/<main[\s>][\s\S]*?<\/main>/) || [""])[0], iIsi = mainPel.indexOf('id="isi-pelajaran"');
+    ok(iIsi >= 0, "pelajaran.html: wadah #isi-pelajaran harus berada di <main>");
+    const statisPel = [judulMain("<main>" + mainPel.slice(0, Math.max(0, iIsi)) + "</main>"), iIsi < 0 ? [] : judulMain("<main>" + mainPel.slice(iIsi))];
+    const ujiPel = (blokApp, modul) => {
+      const salah = [];
+      const simpul = (tag) => ({ tag, anak: [], atribut: {}, className: "", value: "", hidden: false, _dengar: {},
+        appendChild(c) { this.anak.push(c); return c; }, setAttribute(k, v) { this.atribut[k] = String(v); },
+        getAttribute(k) { return k in this.atribut ? this.atribut[k] : null; },
+        addEventListener(n, f) { this._dengar[n] = f; }, querySelector() { return null; }, reset() {}, focus() {},
+        // innerHTML tiruan: hanya judul (h1–h6) dari HTML kurikulum yang dijadikan simpul, urut seperti aslinya.
+        set innerHTML(v) { this.anak = [...String(v).replace(/<!--[\s\S]*?-->/g, "").matchAll(/<h([1-6])[\s>]/g)].map((m) => simpul("h" + m[1])); },
+        set textContent(v) { this.anak = []; this._teks = String(v); } });
+      const levels = (n, out = []) => { const m = /^h([1-6])$/.exec(n.tag || ""); if (m) out.push(+m[1]); (n.anak || []).forEach((c) => levels(c, out)); return out; };
+      const cari = (n, f) => { if (f(n)) return n; for (const c of n.anak || []) { const r = cari(c, f); if (r) return r; } return null; };
+      const keadaan = [["tanpa ?m=", ""], ["id salah", "?m=tidak-ada"], ...modul.map((m) => [m.id, "?m=" + m.id])];
+      for (const [nama, cariUrl] of keadaan) {
+        const wadah = { "isi-pelajaran": simpul("article"), "judul-pelajaran": simpul("h1"), "sub-pelajaran": simpul("p") };
+        const document = { title: "", createElement: simpul, createTextNode: () => ({ tag: "#text", anak: [] }), getElementById: (id) => wadah[id] || null };
+        const ctxPel = { document, MODUL: modul, URLSearchParams, location: { search: cariUrl }, localStorage: { getItem: () => null, setItem() {} },
+          pasangIstilah() {}, tutupIstilah() {} };
+        try { vm.runInNewContext(blokApp.join("\n") + "\n;globalThis.renderPelajaran = renderPelajaran;", ctxPel); ctxPel.renderPelajaran(); }
+        catch (err) { salah.push(`renderPelajaran ${nama} galat: ${err.message}`); continue; }
+        const isi = wadah["isi-pelajaran"];
+        const urut = (sub) => {
+          const dinamis = levels(isi);
+          if (!dinamis.length) salah.push(`Pelajaran ${sub}: app.js tidak membuat judul apa pun`);
+          for (const s of urutanJudul([...statisPel[0], ...dinamis, ...statisPel[1]])) salah.push(`Pelajaran ${sub}: ${s}`);
+        };
+        urut(nama);
+        const form = cari(isi, (n) => n.tag === "form");
+        if (!form) { salah.push(`Pelajaran ${nama}: kuis tidak ditambahkan`); continue; }
+        if (!cari(form, (n) => /^h[2-6]$/.test(n.tag) && n.atribut.id === "judul-kuis"))
+          salah.push(`Pelajaran ${nama}: kuis harus punya judul id="judul-kuis" (dirujuk aria-labelledby)`);
+        if (nama === modul[0].id) {
+          const ulang = cari(form, (n) => n.tag === "button" && /kuis-ulang/.test(n.className));
+          if (!form._dengar.submit || !ulang || !ulang._dengar.click) { salah.push("kuis: Periksa jawaban / Ulangi kuis tidak bisa dijalankan"); continue; }
+          form._dengar.submit({ preventDefault() {} }); urut(`${nama} sesudah Periksa jawaban`);
+          ulang._dengar.click(); urut(`${nama} sesudah Ulangi kuis`);
+        }
+      }
+      return salah;
+    };
+    const sPel = ujiPel(kodePel, MODUL);
+    ok(sPel.length === 0, `urutan judul halaman pelajaran (DOM tiruan, ${MODUL.length} pelajaran): ${sPel.join("; ")}`);
+    // Uji balik
+    const gantiPel = (dari, ke) => kodePel.map((k) => k.split(dari).join(ke));
+    const kuisH2 = 'el("h2", { id: "judul-kuis", text: "Cek pemahaman" })';
+    const modulRusak = (i, dari, ke) => MODUL.map((m, j) => (j === i ? { ...m, isi: m.isi.replace(dari, ke) } : m));
+    const rusakPel = [
+      [gantiPel(kuisH2, kuisH2.replace('"h2"', '"h5"')), MODUL, "urutan judul melompat h2 → h5"],
+      [gantiPel(kuisH2, kuisH2.replace('"h2"', '"h1"')), MODUL, "h1 di <main> ada 2×"],
+      [gantiPel(kuisH2, 'el("p", { text: "Cek pemahaman" })'), MODUL, 'kuis harus punya judul id="judul-kuis"'],
+      [gantiPel("if (idx < 0) idx = 0;", "if (idx < 0) return;"), MODUL, "Pelajaran id salah: app.js tidak membuat judul apa pun"],
+      [kodePel, modulRusak(MODUL.length - 1, /<h2([\s>])/, "<h4$1"), `Pelajaran ${MODUL[MODUL.length - 1].id}: urutan judul melompat h1 → h4`],
+      [kodePel, modulRusak(0, /<h2([\s>])/, "<h1$1"), `Pelajaran ${MODUL[0].id} sesudah Ulangi kuis: h1 di <main> ada 2×`],
+    ];
+    for (const [b, mod, pesan] of rusakPel)
+      ok((b.join() !== kodePel.join() || mod !== MODUL) && ujiPel(b, mod).some((s) => s.includes(pesan)), `uji balik urutan judul pelajaran: "${pesan}" harus tertangkap`);
+  }
 
 }
 

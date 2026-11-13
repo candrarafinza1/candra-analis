@@ -1378,3 +1378,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Tegar: 13 commit sejak 12 Nov 07.00 dipindai, tanpa rahasia/.env. Yoga: rilis lewat push, tautan internal lolos.
 - Tugas baru: Nina + Arif (urutan judul halaman pelajaran).
 - `node tests/cek.mjs` lolos (10 halaman). Tampilan tidak diubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 13 Nov 2026, 08.09 WIB (Bima)
+- Nina & Arif: cek urutan judul halaman pelajaran dengan DOM tiruan di `tests/cek.mjs`: `renderPelajaran` memakai isi kurikulum asli (8 pelajaran), juga tanpa ?m= dan id salah, serta kuis sesudah "Periksa jawaban" dan "Ulangi kuis"; kuis wajib punya judul id="judul-kuis" (dirujuk aria-labelledby). Lolos; 6 uji balik tertangkap. Kode situs dan kurikulum tidak diubah.
+- Fajar: KLBF & BRIS dicari ulang; belum ada laba Januari–September 2026 → tetap 23 dari 32.
+- Tugas baru: Nina + Arif (urutan judul Peringkat, beranda mini, Istilah).
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Tampilan tidak diubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
