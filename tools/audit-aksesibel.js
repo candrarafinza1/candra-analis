@@ -10,6 +10,7 @@
 // Nina & Tegar (13 Nov 16.10) menambah skenario interaksi Peringkat (lihat skenarioPeringkat di atas).
 // Nina & Tegar (13 Nov 17.10) menambah skenario kedua: panah kiri/kanan di tab Peringkat dan ganti emiten di Radar.
 // Nina & Tegar (13 Nov 18.11) menambah skenario ketiga: kuis dengan keyboard saja dan saringan sektor Peringkat.
+// Nina & Tegar (13 Nov 19.12) menambah skenario keempat: saringan jenis + "Tampilkan lagi" di Kabar dan pencarian kamus istilah.
 // Cara pakai: python3 -m http.server 8765 (di akar repo), lalu: node tools/audit-aksesibel.js
 // Butuh Playwright + Chromium (sudah ada di lingkungan kerja tim); tidak dijalankan oleh tests/cek.mjs.
 const { chromium } = require('playwright');
@@ -235,6 +236,105 @@ async function skenarioSektor(p, sabot) {
   return temuan;
 }
 
+// Nina & Tegar (13 Nov 19.12): skenario interaksi keempat.
+// (a) Kabar: saringan jenis diganti 2× dengan keyboard (fokus di #pilih-jenis, panah bawah sampai jenis yang dituju:
+// jenis dengan kabar paling sedikit, lalu jenis dengan kabar paling banyak), lalu "Tampilkan lagi" ditekan Enter sampai
+// habis. Sesudah tiap langkah: #ket-jenis tetap aria-live dan isinya cocok dengan jumlah kartu yang tampil & total jenis itu,
+// tombol "Tampilkan lagi" tersembunyi bila tidak ada sisa, fokus pindah ke kartu pertama yang baru tampil, id unik,
+// rujukan aria tepat. Sabot: aria-live dicabut dan #ket-jenis dibuat basi (ganti ke-2), fokus dilepas ke <body>
+// (Tampilkan lagi pertama). Hasil sabot harus memuat jenis "aria-live", "ket-jenis", "fokus".
+async function skenarioKabar(p, sabot) {
+  await p.goto('http://localhost:8765/kabar.html'); await p.waitForTimeout(400);
+  const temuan = [];
+  if (!(await p.$('#pilih-jenis'))) return ['#pilih-jenis tidak ketemu'];
+  const hitung = await p.evaluate(() => {
+    const opsi = [...document.querySelectorAll('#pilih-jenis option')].map((o) => o.value);
+    const n = {}; (window.KABAR || []).forEach((k) => { n[k.jenis] = (n[k.jenis] || 0) + 1; });
+    return { opsi, n };
+  });
+  const jenis = hitung.opsi.filter(Boolean).sort((a, b) => hitung.n[a] - hitung.n[b]);
+  if (jenis.length < 2) return ['jenis kabar di saringan kurang dari 2'];
+  const total = (j) => (j ? hitung.n[j] : Object.values(hitung.n).reduce((a, b) => a + b, 0));
+  const keadaan = (j) => p.evaluate(() => ({
+    ket: (document.getElementById('ket-jenis') || {}).textContent || '', live: (document.getElementById('ket-jenis') || { getAttribute: () => null }).getAttribute('aria-live'),
+    kartu: document.querySelectorAll('#kabar ul.kabar-daftar > li').length, lagi: !document.getElementById('kabar-lagi').hidden }));
+  const cekKet = (nama, j, st) => {
+    const n = total(j), sisa = n - st.kartu;
+    const harap = (sisa > 0 ? `Menampilkan ${st.kartu} dari ` : '') + `${n} kabar` + (j ? ` jenis ${j}` : '');
+    if (!['polite', 'assertive'].includes(st.live)) temuan.push(`${nama}: aria-live hilang dari #ket-jenis`);
+    if (!st.ket.startsWith(harap)) temuan.push(`${nama}: ket-jenis tidak sesuai ("${st.ket}", harus diawali "${harap}")`);
+    if (st.kartu > n) temuan.push(`${nama}: kartu tampil ${st.kartu} melebihi ${n}`);
+    if (st.lagi !== sisa > 0) temuan.push(`${nama}: tombol "Tampilkan lagi" ${st.lagi ? 'terlihat' : 'tersembunyi'} padahal sisa ${sisa}`);
+  };
+  const urutan = [jenis[0], jenis[jenis.length - 1]];
+  for (let s = 0; s < urutan.length; s++) {
+    const j = urutan[s];
+    await p.focus('#pilih-jenis');
+    const kini = await p.$eval('#pilih-jenis', (x) => x.selectedIndex);
+    const tuju = hitung.opsi.indexOf(j);
+    for (let k = kini; k !== tuju; k += tuju > kini ? 1 : -1) await p.keyboard.press(tuju > kini ? 'ArrowDown' : 'ArrowUp');
+    await p.waitForTimeout(150);
+    if ((await p.$eval('#pilih-jenis', (x) => x.value)) !== j) { temuan.push(`ganti ke-${s + 1}: panah tidak memilih "${j}"`); await p.selectOption('#pilih-jenis', j); await p.waitForTimeout(150); }
+    if (sabot && s === 1) await p.evaluate(() => { const k = document.getElementById('ket-jenis'); k.removeAttribute('aria-live'); k.textContent = 'basi'; });
+    const nama = `ganti ke-${s + 1} "${j}"`;
+    cekKet(nama, j, await keadaan(j));
+    (await cekDom(p)).forEach((t) => temuan.push(`${nama}: ${t}`));
+    if (sabot && s === 1) await p.evaluate(() => document.getElementById('ket-jenis').setAttribute('aria-live', 'polite'));
+  }
+  const j = urutan[1];
+  for (let ke = 1; ke <= 5 && (await keadaan(j)).lagi; ke++) {
+    const awal = (await keadaan(j)).kartu;
+    await p.focus('#kabar-lagi'); await p.keyboard.press('Enter'); await p.waitForTimeout(150);
+    if (sabot && ke === 1) await p.evaluate(() => document.activeElement.blur());
+    const nama = `Tampilkan lagi ke-${ke}`;
+    const st = await keadaan(j);
+    if (st.kartu <= awal) temuan.push(`${nama}: kartu tidak bertambah (${awal} → ${st.kartu})`);
+    cekKet(nama, j, st);
+    const f = await p.evaluate((i) => { const li = document.querySelectorAll('#kabar ul.kabar-daftar > li')[i]; return { ok: !!li && document.activeElement === li, body: document.activeElement === document.body }; }, awal);
+    if (f.body) temuan.push(`${nama}: fokus hilang ke <body>`);
+    else if (!f.ok) temuan.push(`${nama}: fokus tidak pindah ke kabar ke-${awal + 1} (kabar pertama yang baru tampil)`);
+    (await cekDom(p)).filter((t) => !(f.body && t.startsWith('fokus hilang'))).forEach((t) => temuan.push(`${nama}: ${t}`));
+  }
+  return temuan;
+}
+
+// (b) Belajar, kamus istilah: ketik kata yang ada ("dividen"), ketik kata yang tidak ada, lalu hapus isinya (Ctrl+A,
+// Backspace). Sesudah tiap langkah: .info-kamus tetap role=status/aria-live dan menyebut "n dari N istilah cocok"
+// (atau "N istilah" bila kosong) dengan n = jumlah istilah yang terlihat; pesan "Tidak ada istilah yang cocok" hanya
+// terlihat bila n = 0; fokus tetap di kotak cari. Sabot: role & aria-live dicabut (langkah 1) dan isi .info-kamus dibuat
+// basi (langkah 3). Hasil sabot harus memuat jenis "info-kamus status" dan "info-kamus jumlah".
+async function skenarioKamus(p, sabot) {
+  await p.goto('http://localhost:8765/belajar.html'); await p.waitForTimeout(400);
+  const temuan = [];
+  if (!(await p.$('#cari-istilah'))) return ['#cari-istilah tidak ketemu'];
+  await p.focus('#cari-istilah');
+  const langkah = [['ketik "dividen"', 'dividen'], ['ketik kata yang tidak ada', 'zzqx'], ['hapus isi', '']];
+  for (let s = 0; s < langkah.length; s++) {
+    const [nama, kata] = langkah[s];
+    await p.keyboard.press('Control+A'); await p.keyboard.press('Backspace');
+    if (kata) await p.keyboard.type(kata, { delay: 20 });
+    await p.waitForTimeout(150);
+    if (sabot && s === 0) await p.evaluate(() => { const i = document.querySelector('.info-kamus'); i.removeAttribute('role'); i.removeAttribute('aria-live'); });
+    if (sabot && s === 2) await p.evaluate(() => { document.querySelector('.info-kamus').textContent = '3 dari 40 istilah cocok'; });
+    const st = await p.evaluate(() => {
+      const i = document.querySelector('.info-kamus');
+      const dt = [...document.querySelectorAll('.daftar-kamus dt')];
+      return { teks: i ? i.textContent : '', status: !!i && (i.getAttribute('role') === 'status' || ['polite', 'assertive'].includes(i.getAttribute('aria-live'))),
+        n: dt.filter((d) => !d.hidden).length, N: dt.length, kosong: !document.querySelector('.kosong-kamus').hidden,
+        fokus: document.activeElement && document.activeElement.id };
+    });
+    const harap = kata ? `${st.n} dari ${st.N} istilah cocok` : `${st.N} istilah`;
+    if (!st.status) temuan.push(`${nama}: info-kamus status hilang (role=status/aria-live)`);
+    if (st.teks !== harap) temuan.push(`${nama}: info-kamus jumlah tidak sesuai ("${st.teks}", harus "${harap}")`);
+    if (kata === 'dividen' && st.n === 0) temuan.push(`${nama}: tidak ada istilah yang cocok untuk kata yang ada`);
+    if (kata === 'zzqx' && st.n !== 0) temuan.push(`${nama}: ${st.n} istilah cocok untuk kata yang tidak ada`);
+    if (st.kosong !== (st.n === 0)) temuan.push(`${nama}: pesan "Tidak ada istilah yang cocok" ${st.kosong ? 'terlihat' : 'tersembunyi'} padahal ${st.n} cocok`);
+    if (st.fokus !== 'cari-istilah') temuan.push(`${nama}: fokus pindah dari kotak cari (ke id="${st.fokus}")`);
+    (await cekDom(p)).forEach((t) => temuan.push(`${nama}: ${t}`));
+  }
+  return temuan;
+}
+
 const halaman = ['index.html', 'belajar.html', 'pelajaran.html', 'pelajaran.html#kuis', 'peringkat.html', 'peringkat.html#istilah', 'radar.html',
   'radar.html#UNTR', 'emiten.html', 'emiten.html?kode=ANTM', 'kabar.html', 'metodologi.html', 'asisten.html', '404.html', 'UJI'];
 (async () => {
@@ -330,9 +430,16 @@ const halaman = ['index.html', 'belajar.html', 'pelajaran.html', 'pelajaran.html
   const jenis3 = ['aria-live', 'fokus hilang', 'ket-sektor', 'tab terpilih', 'id ganda'].filter((j) => sab3.some((t) => (t.split(': ')[1] || '').startsWith(j)));
   console.log(`Skenario ketiga UJI (sabot): ${sab3.length} temuan, jenis tertangkap: ${jenis3.join(', ')} (harus 5)`);
   sab3.forEach((t) => console.log('  - ' + t));
+  const sk4 = [...(await skenarioKabar(p, false)), ...(await skenarioKamus(p, false))];
+  console.log(`\nSkenario keempat (saringan Kabar 2× dengan panah + "Tampilkan lagi" sampai habis; cari di kamus istilah lalu hapus): ${sk4.length} temuan`);
+  sk4.forEach((t) => console.log('  - ' + t));
+  const sab4 = [...(await skenarioKabar(p, true)), ...(await skenarioKamus(p, true))];
+  const jenis4 = ['aria-live', 'ket-jenis', 'fokus hilang', 'info-kamus status', 'info-kamus jumlah'].filter((j) => sab4.some((t) => (t.split(': ')[1] || '').startsWith(j)));
+  console.log(`Skenario keempat UJI (sabot): ${sab4.length} temuan, jenis tertangkap: ${jenis4.join(', ')} (harus 5)`);
+  sab4.forEach((t) => console.log('  - ' + t));
   if (galat.length) console.log('Galat JS:', galat);
   console.log(`\nTotal temuan halaman asli: ${total}. Temuan UJI: ${totalUji} (harus 8).`);
   await b.close();
   const sabotOk = jenis.size === 3 && ['id ganda', 'rujukan', 'fokus hilang'].every((j) => [...jenis].some((x) => x.startsWith(j)));
-  process.exit(total === 0 && totalUji === 8 && sk.length === 0 && sabotOk && sk2.length === 0 && jenis2.length === 4 && sk3.length === 0 && jenis3.length === 5 && !galat.length ? 0 : 1);
+  process.exit(total === 0 && totalUji === 8 && sk.length === 0 && sabotOk && sk2.length === 0 && jenis2.length === 4 && sk3.length === 0 && jenis3.length === 5 && sk4.length === 0 && jenis4.length === 5 && !galat.length ? 0 : 1);
 })();
