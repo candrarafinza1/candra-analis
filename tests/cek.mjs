@@ -3685,6 +3685,140 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
     for (const [b, H, pesan] of rusakPr)
       ok((b.join() !== kodePr.join() || H !== htmlPr) && ujiPr(b, H).some((s) => s.includes(pesan)), `uji balik urutan judul Peringkat/beranda/kamus: "${pesan}" harus tertangkap`);
   }
+  // Nina & Arif (13 Nov 10.08): Asisten AI dan Metodologi. (a) renderAsisten (dengan teksKeElemen) dijalankan dengan
+  // DOM tiruan & fetch tiruan; judul buatannya disisipkan di posisi #asisten di antara judul statis asisten.html.
+  // Keadaan: sebelum bertanya (aktif), belum aktif, tidak bisa dihubungi, sesudah jawaban (jawaban memuat "# …" dan
+  // "## …" ala Markdown yang TIDAK boleh menjadi judul), galat server, dan koneksi putus. Obrolan tidak boleh
+  // membuat judul apa pun (h1–h6), agar judul halaman tetap satu h1 berapa pun jawabannya.
+  // (b) renderIsiHalaman (daftar isi Metodologi) dijalankan dengan DOM tiruan & IntersectionObserver tiruan:
+  // tiap tautan menuju h2 di <main>, urutan tautan = urutan h2, tiap h2 punya tautan, semua tujuan diamati, dan
+  // aria-current menandai tepat satu bagian yang sedang dibaca (tidak ada sebelum menggulir).
+  {
+    const iE = app.indexOf("  function el("), jE = app.indexOf("\n  }\n", iE);
+    const kodeAs = [iE < 0 || jE < 0 ? "" : app.slice(iE, jE + 5), (app.match(/  function teksKeElemen\(teks\) \{[\s\S]*?\n  \}\n/) || [""])[0],
+      (app.match(/  function renderAsisten\(\) \{[\s\S]*?\n  \}\n/) || [""])[0]];
+    ok(kodeAs.every(Boolean), "app.js: el/teksKeElemen/renderAsisten harus bisa diambil untuk uji urutan judul");
+    const asHtml = readFileSync("asisten.html", "utf8");
+    const mainA = (asHtml.match(/<main[\s>][\s\S]*?<\/main>/) || [""])[0], iAs = mainA.indexOf('id="asisten"');
+    ok(iAs >= 0, "asisten.html: wadah #asisten harus berada di <main>");
+    const statisA = [judulMain("<main>" + mainA.slice(0, Math.max(0, iAs)) + "</main>"), iAs < 0 ? [] : judulMain("<main>" + mainA.slice(iAs))];
+    const jawabanMd = "# Judul besar\nROE adalah **laba** dibagi ekuitas.\n## Contoh\n- Laba Rp10 M\n- Ekuitas Rp100 M\n### Kesimpulan\nROE 10%.";
+    const ujiAs = async (blokApp) => {
+      const salah = [];
+      const simpul = (tag) => ({ tag, anak: [], atribut: {}, className: "", value: "", hidden: false, disabled: false, _dengar: {}, parent: null,
+        appendChild(c) { c.parent = this; this.anak.push(c); return c; }, setAttribute(k, v) { this.atribut[k] = String(v); },
+        addEventListener(n, f) { this._dengar[n] = f; }, focus() {}, scrollIntoView() {},
+        remove() { if (this.parent) this.parent.anak.splice(this.parent.anak.indexOf(this), 1); this.parent = null; },
+        requestSubmit() { if (this._dengar.submit) this._dengar.submit({ preventDefault() {} }); },
+        set textContent(v) { this.anak = []; this._teks = String(v); } });
+      const levels = (n, out = []) => { const m = /^h([1-6])$/.exec(n.tag || ""); if (m) out.push(+m[1]); (n.anak || []).forEach((c) => levels(c, out)); return out; };
+      const cari = (n, f) => { if (f(n)) return n; for (const c of n.anak || []) { const r = cari(c, f); if (r) return r; } return null; };
+      const tunggu = () => new Promise((r) => setTimeout(r, 0));
+      const balas = (ok, d) => Promise.resolve({ ok, json: () => Promise.resolve(d) });
+      const keadaan = [
+        ["sebelum bertanya", () => balas(true, { aktif: true }), null],
+        ["belum aktif", () => balas(true, { aktif: false }), null],
+        ["tidak bisa dihubungi", () => Promise.reject(new Error("putus")), null],
+        ["sesudah jawaban", () => balas(true, { aktif: true }), () => balas(true, { jawaban: jawabanMd })],
+        ["galat server", () => balas(true, { aktif: true }), () => balas(false, { galat: "Terlalu banyak pertanyaan." })],
+        ["koneksi putus", () => balas(true, { aktif: true }), () => Promise.reject(new Error("putus"))],
+      ];
+      for (const [nama, get, post] of keadaan) {
+        const akar = simpul("div");
+        const document = { createElement: simpul, createTextNode: () => ({ tag: "#text", anak: [] }), getElementById: (id) => (id === "asisten" ? akar : null) };
+        const fetch = (url, opsi) => ((opsi || {}).method === "POST" ? post() : get());
+        const ctxA = { document, fetch, JSON };
+        try { vm.runInNewContext(blokApp.join("\n") + "\n;globalThis.renderAsisten = renderAsisten;", ctxA); ctxA.renderAsisten(); await tunggu(); }
+        catch (err) { salah.push(`renderAsisten ${nama} galat: ${err.message}`); continue; }
+        if (post) {
+          const area = cari(akar, (n) => n.tag === "textarea"), form = cari(akar, (n) => n.tag === "form");
+          if (!area || !form || !form._dengar.submit) { salah.push(`Asisten ${nama}: form tanya tidak bisa dijalankan`); continue; }
+          area.value = "Apa itu ROE?"; form._dengar.submit({ preventDefault() {} });
+          for (let i = 0; i < 5; i++) await tunggu();
+          const log = cari(akar, (n) => /obrolan/.test(n.className));
+          const jml = log ? log.anak.length : 0;
+          if (jml !== 2) salah.push(`Asisten ${nama}: obrolan harus berisi 2 pesan (dapat ${jml})`);
+          if (log && levels(log).length) salah.push(`Asisten ${nama}: obrolan tidak boleh membuat judul (dapat h${levels(log).join(", h")})`);
+        }
+        for (const s of urutanJudul([...statisA[0], ...levels(akar), ...statisA[1]])) salah.push(`Asisten ${nama}: ${s}`);
+      }
+      return salah;
+    };
+    const sAs = await ujiAs(kodeAs);
+    ok(sAs.length === 0, `urutan judul Asisten AI (DOM tiruan): ${sAs.join("; ")}`);
+    const gantiAs = (dari, ke) => kodeAs.map((k) => k.split(dari).join(ke));
+    const rusakAs = [
+      [gantiAs('var p = el("p"); sebaris(baris.replace(/^#+\\s*/, ""), p);',
+        'var hm = baris.match(/^(#+)\\s*/); var p = el(hm ? "h" + hm[1].length : "p"); sebaris(baris.replace(/^#+\\s*/, ""), p);'),
+        "Asisten sesudah jawaban: obrolan tidak boleh membuat judul"],
+      [gantiAs('el("p", { class: "label-tanya", text: "Coba tanyakan:" })', 'el("h3", { class: "label-tanya", text: "Coba tanyakan:" })'), "Asisten sebelum bertanya: urutan judul melompat h1 → h3"],
+      [gantiAs('el("strong", { text: "Asisten belum aktif. " })', 'el("h1", { text: "Asisten belum aktif. " })'), "Asisten belum aktif: h1 di <main> ada 2×"],
+      [gantiAs('el("p", { class: "pesan-galat", text: "Koneksi terputus.', 'el("h4", { class: "pesan-galat", text: "Koneksi terputus.'), "Asisten koneksi putus: obrolan tidak boleh membuat judul"],
+      [gantiAs("tunggu.remove();\n          if (h.ok", "if (h.ok"), "Asisten sesudah jawaban: obrolan harus berisi 2 pesan"],
+    ];
+    for (const [b, pesan] of rusakAs)
+      ok(b.join() !== kodeAs.join() && (await ujiAs(b)).some((s) => s.includes(pesan)), `uji balik urutan judul Asisten: "${pesan}" harus tertangkap`);
+
+    // (b) Metodologi: daftar isi
+    const kodeIsi = (app.match(/  function renderIsiHalaman\(\) \{[\s\S]*?\n  \}\n/) || [""])[0];
+    ok(kodeIsi, "app.js: renderIsiHalaman harus bisa diambil untuk uji daftar isi");
+    const metHtml = readFileSync("metodologi.html", "utf8");
+    const ujiIsi = (kode, html) => {
+      const salah = [];
+      const mainM = (html.match(/<main[\s>][\s\S]*?<\/main>/) || [""])[0].replace(/<!--[\s\S]*?-->/g, "");
+      const navM = (mainM.match(/<nav[^>]*id="isi-halaman"[\s\S]*?<\/nav>/) || [""])[0];
+      if (!navM) return ["nav#isi-halaman tidak ada di <main>"];
+      const judulM = [...mainM.matchAll(/<h([1-6])([^>]*)>/g)].map((m) => ({ lv: +m[1], id: (/\bid="([^"]+)"/.exec(m[2]) || [])[1] }));
+      const h2 = judulM.filter((j) => j.lv === 2);
+      const hrefs = [...navM.matchAll(/<a[^>]*href="(#[^"]*)"/g)].map((m) => m[1]);
+      for (const h of hrefs) {
+        const j = judulM.find((x) => x.id === h.slice(1));
+        if (!j) salah.push(`daftar isi: tautan ${h} tidak menuju judul di <main>`);
+        else if (j.lv !== 2) salah.push(`daftar isi: tautan ${h} harus menuju h2 (dapat h${j.lv})`);
+      }
+      for (const j of h2) if (!j.id || !hrefs.includes("#" + j.id)) salah.push(`daftar isi: h2 #${j.id || "(tanpa id)"} tidak ada di daftar isi`);
+      const urutH2 = h2.map((j) => "#" + j.id).filter((h) => hrefs.includes(h)), urutNav = hrefs.filter((h) => urutH2.includes(h));
+      if (urutH2.join() !== urutNav.join()) salah.push(`daftar isi: urutan tautan (${urutNav.join(" ")}) tidak sama dengan urutan h2 (${urutH2.join(" ")})`);
+      if (/<h[1-6][\s>]/.test(navM)) salah.push("daftar isi: judul kotak \"Isi halaman\" bukan judul bagian (jangan h1–h6)");
+      // Jalankan renderIsiHalaman
+      const tautan = hrefs.map((h) => { const a = { atribut: { href: h }, getAttribute(k) { return k in this.atribut ? this.atribut[k] : null; },
+        setAttribute(k, v) { this.atribut[k] = String(v); }, removeAttribute(k) { delete this.atribut[k]; } }; return a; });
+      let gulir = 0;
+      const elJudul = Object.fromEntries(judulM.filter((j) => j.id).map((j, i) => [j.id, { id: j.id, getBoundingClientRect: () => ({ top: 400 + i * 600 - gulir }) }]));
+      const diamati = [];
+      const nav = { querySelectorAll: (sel) => (sel === 'a[href^="#"]' ? tautan.filter((a) => a.atribut.href.startsWith("#")) : []) };
+      const document = { getElementById: (id) => (id === "isi-halaman" ? nav : elJudul[id] || null) };
+      let ioCb = null;
+      const window = { innerHeight: 900, IntersectionObserver: 1, _d: {}, addEventListener(n, f) { this._d[n] = f; } };
+      class IntersectionObserver { constructor(cb) { ioCb = cb; } observe(h) { diamati.push(h.id); } }
+      try { vm.runInNewContext(kode + "\n;renderIsiHalaman();", { document, window, IntersectionObserver }); }
+      catch (err) { return [...salah, `renderIsiHalaman galat: ${err.message}`]; }
+      const tujuan = hrefs.map((h) => h.slice(1)).filter((id) => elJudul[id]);
+      for (const id of tujuan) if (!diamati.includes(id)) salah.push(`daftar isi: judul #${id} tidak diamati IntersectionObserver`);
+      const ditandai = () => tautan.filter((a) => a.atribut["aria-current"] === "true").map((a) => a.atribut.href);
+      if (ditandai().length) salah.push(`daftar isi: sebelum menggulir tidak boleh ada bagian ditandai (dapat ${ditandai().join(" ")})`);
+      if (!ioCb) salah.push("daftar isi: IntersectionObserver tidak dipasang");
+      else tujuan.forEach((id, k) => {
+        const h = judulM.filter((j) => j.id).findIndex((j) => j.id === id);
+        gulir = 400 + h * 600 - 100; ioCb([]);
+        const t = ditandai();
+        if (t.length !== 1 || t[0] !== "#" + id) salah.push(`daftar isi: saat membaca #${id} yang ditandai harus tepat #${id} (dapat ${t.join(" ") || "tidak ada"})`);
+      });
+      return salah;
+    };
+    const sIsi = ujiIsi(kodeIsi, metHtml);
+    ok(sIsi.length === 0, `daftar isi Metodologi (DOM tiruan): ${sIsi.join("; ")}`);
+    const rusakIsi = [
+      [kodeIsi, metHtml.replace(/\s*<li><a href="#jadwal">[^<]*<\/a><\/li>/, ""), "h2 #jadwal tidak ada di daftar isi"],
+      [kodeIsi, metHtml.replace('href="#sumber"', 'href="#tmp-s"').replace('href="#hitung"', 'href="#sumber"').replace('href="#tmp-s"', 'href="#hitung"'), "urutan tautan"],
+      [kodeIsi, metHtml.replace('href="#batasan"', 'href="#sekali-waktu"'), "tautan #sekali-waktu harus menuju h2"],
+      [kodeIsi, metHtml.replace('<p class="isi-halaman-judul">Isi halaman</p>', '<h2 class="isi-halaman-judul">Isi halaman</h2>'), "bukan judul bagian"],
+      [kodeIsi.replace('if (a.getAttribute("href") === "#" + id) a.setAttribute', 'if (true) a.setAttribute'), metHtml, "yang ditandai harus tepat"],
+      [kodeIsi.replace("judul.forEach(function (h) { io.observe(h); });", ""), metHtml, "tidak diamati IntersectionObserver"],
+    ];
+    for (const [k, h, pesan] of rusakIsi)
+      ok((k !== kodeIsi || h !== metHtml) && ujiIsi(k, h).some((s) => s.includes(pesan)), `uji balik daftar isi Metodologi: "${pesan}" harus tertangkap`);
+  }
 }
 
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }

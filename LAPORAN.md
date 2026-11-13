@@ -1390,3 +1390,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: KLBF & BRIS dicari ulang; hasil teratas masih Januari–September 2025 dan semester I 2026 → tetap 23 dari 32.
 - Tugas baru: Nina + Arif (urutan judul Asisten AI & Metodologi).
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Tampilan tidak diubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 13 Nov 2026, 10.08 WIB (Bima)
+- Nina & Arif: cek urutan judul Asisten AI dengan DOM tiruan & fetch tiruan di `tests/cek.mjs`: sebelum bertanya, belum aktif, tidak bisa dihubungi, sesudah jawaban (jawaban berisi "#"/"##" ala Markdown tidak boleh jadi judul), galat server, koneksi putus; obrolan wajib 2 pesan dan tanpa judul. Daftar isi Metodologi (`renderIsiHalaman`): tiap tautan menuju h2, urutan sama, tiap h2 punya tautan, semua judul diamati, aria-current tepat satu saat membaca. Lolos; 11 uji balik tertangkap. Kode situs tidak diubah. Uji urutan judul kini mencakup semua halaman.
+- Fajar: KLBF & BRIS dicari ulang; belum ada laba Januari–September 2026 → tetap 23 dari 32.
+- Tugas baru: Nina + Arif (pastikan semua wadah app.js tercakup uji urutan judul).
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Tampilan tidak diubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
