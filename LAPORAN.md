@@ -1384,3 +1384,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: KLBF & BRIS dicari ulang; belum ada laba Januari–September 2026 → tetap 23 dari 32.
 - Tugas baru: Nina + Arif (urutan judul Peringkat, beranda mini, Istilah).
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Tampilan tidak diubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 13 Nov 2026, 09.09 WIB (Bima)
+- Nina & Arif: cek urutan judul Peringkat, mini peringkat di beranda, dan kamus istilah dengan DOM tiruan di `tests/cek.mjs` (data asli 32 emiten & kamus asli): tiap dasar peringkat × semua sektor, tiap sektor, dan sektor tanpa emiten; mini peringkat wajib 3 baris; kamus tanpa kata cari, cari cocok, dan tidak cocok. Lolos; 6 uji balik tertangkap. Kode situs tidak diubah.
+- Fajar: KLBF & BRIS dicari ulang; hasil teratas masih Januari–September 2025 dan semester I 2026 → tetap 23 dari 32.
+- Tugas baru: Nina + Arif (urutan judul Asisten AI & Metodologi).
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Tampilan tidak diubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

@@ -3599,6 +3599,92 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
       ok((b.join() !== kodePel.join() || mod !== MODUL) && ujiPel(b, mod).some((s) => s.includes(pesan)), `uji balik urutan judul pelajaran: "${pesan}" harus tertangkap`);
   }
 
+  // Nina & Arif (13 Nov 09.09): Peringkat, mini peringkat di beranda, dan kamus istilah. renderPeringkat (dengan
+  // pitaSumber & musimLaporan asli), renderMini, dan renderKamus dijalankan dengan DOM tiruan memakai data asli;
+  // judul buatannya disisipkan di posisi wadahnya (#pita, #peringkat, #mini-peringkat, #kamus-istilah) di antara
+  // judul statis halaman. Keadaan Peringkat: tiap dasar peringkat (tab diklik) × semua sektor, tiap sektor, dan sektor
+  // tanpa emiten. Kamus: tanpa kata cari, cari yang cocok, dan cari yang tidak cocok.
+  {
+    const iU = app.indexOf("  var angka = new Intl"), jU = app.indexOf("  /* ---------- Penanda kemajuan belajar");
+    const iK = app.indexOf("  /* ---------- Peringkat (tim Galih)"), jK = app.indexOf("  // Fajar & Galih (30 Okt): aturan laba sekali-waktu");
+    const iKm = app.indexOf("  function renderKamus()"), jKm = app.indexOf("\n  }\n", iKm);
+    const kodePr = [iU < 0 || jU < iU ? "" : app.slice(iU, jU), iK < 0 || jK < iK ? "" : app.slice(iK, jK), iKm < 0 || jKm < 0 ? "" : app.slice(iKm, jKm + 5)];
+    ok(kodePr.every(Boolean) && /function renderPeringkat\(\)/.test(kodePr[1]) && /function renderMini\(\)/.test(kodePr[1]) && /function pitaSumber\(/.test(kodePr[0]),
+      "app.js: utilitas/pitaSumber/musimLaporan/renderPeringkat/renderMini/renderKamus harus bisa diambil untuk uji urutan judul");
+    const sisipPr = (html, peta) => {
+      const main = (html.match(/<main[\s>][\s\S]*?<\/main>/) || [""])[0];
+      const titik = Object.keys(peta).map((id) => [main.indexOf(`id="${id}"`), id]).sort((a, b) => a[0] - b[0]);
+      const hilang = titik.filter(([i]) => i < 0).map(([, id]) => id);
+      if (hilang.length) return { hilang };
+      const lv = []; let dari = 0;
+      for (const [i, id] of titik) { lv.push(...judulMain("<main>" + main.slice(dari, i) + "</main>"), ...peta[id]); dari = i; }
+      lv.push(...judulMain("<main>" + main.slice(dari) + "</main>"));
+      return { lv, hilang };
+    };
+    const htmlPr = { peringkat: readFileSync("peringkat.html", "utf8"), beranda: readFileSync("index.html", "utf8"), belajar: readFileSync("belajar.html", "utf8") };
+    const ujiPr = (blokApp, H = htmlPr) => {
+      const salah = [];
+      const simpul = (tag) => ({ tag, anak: [], atribut: {}, className: "", value: "", hidden: false, tabIndex: 0, style: {}, dataset: {}, _dengar: {}, _teks: "",
+        get children() { return this.anak; }, get lastChild() { return this.anak[this.anak.length - 1] || null; },
+        appendChild(c) { this.anak.push(c); return c; },
+        insertBefore(c, ref) { const i = this.anak.indexOf(ref); this.anak.splice(i < 0 ? this.anak.length : i, 0, c); return c; },
+        setAttribute(k, v) { this.atribut[k] = String(v); }, addEventListener(n, f) { this._dengar[n] = f; }, focus() {},
+        set innerHTML(v) { this.anak = []; }, set textContent(v) { this.anak = []; this._teks = String(v); } });
+      const levels = (n, out = []) => { const m = /^h([1-6])$/.exec(n.tag || ""); if (m) out.push(+m[1]); (n.anak || []).forEach((c) => levels(c, out)); return out; };
+      const cari = (n, f, out = []) => { if (f(n)) out.push(n); (n.anak || []).forEach((c) => cari(c, f, out)); return out; };
+      const wadah = { pita: simpul("div"), peringkat: simpul("div"), "mini-peringkat": simpul("tbody"), "kamus-istilah": simpul("div") };
+      const document = { title: "", createElement: simpul, createTextNode: () => ({ tag: "#text", anak: [] }),
+        getElementById: (id) => wadah[id] || Object.values(wadah).map((w) => cari(w, (n) => n.atribut && n.atribut.id === id)[0]).find(Boolean) || null };
+      const JUDUL_MODUL = Object.fromEntries(MODUL.map((m) => [m.id, m.judul]));
+      const ctxPr = { document, EMITEN: ASLI, ISTILAH, MODUL, JUDUL_MODUL, DES_LABEL: "DES", Intl, Math, pasangIstilah() {}, tutupIstilah() {} };
+      try {
+        vm.runInNewContext(blokApp.join("\n") + "\n;globalThis.renderPeringkat = renderPeringkat; globalThis.renderMini = renderMini; globalThis.renderKamus = renderKamus;", ctxPr);
+        ctxPr.renderPeringkat(); ctxPr.renderMini(); ctxPr.renderKamus();
+      } catch (err) { return [`renderPeringkat/renderMini/renderKamus galat: ${err.message}`]; }
+      const cekHal = (html, peta, nama) => {
+        const r = sisipPr(html, peta);
+        for (const id of r.hilang) salah.push(`wadah #${id} tidak ditemukan di <main>`);
+        if (r.lv) for (const s of urutanJudul(r.lv)) salah.push(`${nama}: ${s}`);
+      };
+      // Peringkat: tiap tab × saring sektor
+      const tabs = cari(wadah.peringkat, (n) => n.tag === "button" && n.atribut.role === "tab");
+      const pilih = cari(wadah.peringkat, (n) => n.tag === "select" && n.atribut.id === "pilih-sektor")[0];
+      if (tabs.length !== 4 || !pilih || !pilih._dengar.change || tabs.some((t) => !t._dengar.click)) salah.push("Peringkat: tab dasar peringkat atau saring sektor tidak bisa dijalankan");
+      else {
+        const sektor = pilih.anak.map((o) => o.atribut.value).filter((v) => v !== undefined);
+        for (const t of tabs) for (const s of [...sektor, "Sektor tanpa emiten"]) {
+          t._dengar.click(); pilih.value = s; pilih._dengar.change();
+          cekHal(H.peringkat, { pita: levels(wadah.pita), peringkat: levels(wadah.peringkat) }, `Peringkat ${t.atribut.id} sektor "${s || "semua"}"`);
+        }
+      }
+      // Beranda: mini peringkat
+      const baris = wadah["mini-peringkat"].anak.filter((n) => n.tag === "tr").length;
+      if (baris !== 3) salah.push(`Beranda: mini peringkat harus 3 baris (dapat ${baris})`);
+      cekHal(H.beranda, { "mini-peringkat": levels(wadah["mini-peringkat"]) }, "Beranda mini peringkat");
+      // Belajar: kamus istilah
+      const kotak = cari(wadah["kamus-istilah"], (n) => n.tag === "input" && n.atribut.id === "cari-istilah")[0];
+      if (!kotak || !kotak._dengar.input) salah.push("Kamus: kotak cari tidak bisa dijalankan");
+      for (const q of ["", ISTILAH.length ? ISTILAH[0].istilah : "", "zzzz-tidak-ada"]) {
+        if (kotak && kotak._dengar.input) { kotak.value = q; kotak._dengar.input(); }
+        cekHal(H.belajar, { "kamus-istilah": levels(wadah["kamus-istilah"]) }, `Kamus cari "${q}"`);
+      }
+      return salah;
+    };
+    const sPr = ujiPr(kodePr);
+    ok(sPr.length === 0, `urutan judul Peringkat, mini peringkat & kamus (DOM tiruan, ${ASLI.length} emiten, ${ISTILAH.length} istilah): ${sPr.join("; ")}`);
+    // Uji balik
+    const gantiPr = (dari, ke) => kodePr.map((k) => k.split(dari).join(ke));
+    const rusakPr = [
+      [gantiPr('el("p", { class: "saring-ket", id: "ket-sektor"', 'el("h3", { class: "saring-ket", id: "ket-sektor"'), htmlPr, "Peringkat tab-laba sektor \"semua\": urutan judul melompat h1 → h3"],
+      [gantiPr('el("caption", { class: "keterangan-tabel"', 'el("h1", { class: "keterangan-tabel"'), htmlPr, "h1 di <main> ada 2×"],
+      [gantiPr('el("td", { class: "angka", text: rupiahMiliar(laba25(e)) })', 'el("h5", { class: "angka", text: rupiahMiliar(laba25(e)) })'), htmlPr, "Beranda mini peringkat: urutan judul melompat h3 → h5"],
+      [gantiPr('urutkan("laba").slice(0, 3)', 'urutkan("laba").slice(0, 0)'), htmlPr, "mini peringkat harus 3 baris"],
+      [gantiPr('var dt = el("dt"', 'var dt = el("h4"'), htmlPr, "Kamus cari \"\": urutan judul melompat h2 → h4"],
+      [kodePr, { ...htmlPr, belajar: htmlPr.belajar.replace('id="kamus-istilah"', 'id="kamus-lain"') }, "wadah #kamus-istilah tidak ditemukan"],
+    ];
+    for (const [b, H, pesan] of rusakPr)
+      ok((b.join() !== kodePr.join() || H !== htmlPr) && ujiPr(b, H).some((s) => s.includes(pesan)), `uji balik urutan judul Peringkat/beranda/kamus: "${pesan}" harus tertangkap`);
+  }
 }
 
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
