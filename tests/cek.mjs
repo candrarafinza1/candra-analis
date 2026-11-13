@@ -3857,8 +3857,9 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
         const n = { tag, nodeName: String(tag).toUpperCase(), anak: [], atribut: {}, className: "", value: "", hidden: false, style: {}, dataset: {}, _dengar: {}, parentNode: null, _html: "",
           classList: { add() {}, remove() {}, toggle() {}, contains: () => false },
           get children() { return this.anak; }, get childNodes() { return this.anak; }, get firstChild() { return this.anak[0] || null; }, get lastChild() { return this.anak[this.anak.length - 1] || null; },
-          appendChild(c) { if (c && typeof c === "object") { c.parentNode = this; this.anak.push(c); } return c; },
-          insertBefore(c, ref) { c.parentNode = this; const i = this.anak.indexOf(ref); this.anak.splice(i < 0 ? this.anak.length : i, 0, c); return c; },
+          // Seperti DOM sungguhan: simpul yang dipindah dilepas dulu dari induk lamanya (kotak istilah berpindah tombol).
+          appendChild(c) { if (c && typeof c === "object") { if (c.parentNode && c.parentNode.removeChild) c.parentNode.removeChild(c); c.parentNode = this; this.anak.push(c); } return c; },
+          insertBefore(c, ref) { if (c.parentNode && c.parentNode.removeChild) c.parentNode.removeChild(c); c.parentNode = this; const i = this.anak.indexOf(ref); this.anak.splice(i < 0 ? this.anak.length : i, 0, c); return c; },
           removeChild(c) { const i = this.anak.indexOf(c); if (i >= 0) this.anak.splice(i, 1); return c; },
           remove() { if (this.parentNode) this.parentNode.removeChild(this); },
           setAttribute(k, v) { this.atribut[k] = String(v); }, getAttribute(k) { return k in this.atribut ? this.atribut[k] : null; },
@@ -3876,7 +3877,8 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
       const document = { title: "", body: simpul("body"), documentElement: simpul("html"), activeElement: null,
         createElement: simpul, createTextNode: (t) => ({ tag: "#text", nodeName: "#text", nodeValue: String(t), anak: [] }),
         getElementById: (id) => (wadah[id] ? wadah[id].w : Object.values(wadah).map((x) => cariId(x.induk, id)).find(Boolean) || null),
-        querySelector: () => null, querySelectorAll: () => [], addEventListener() {},
+        querySelector: () => null, querySelectorAll: () => [], _dengar: {},
+        addEventListener(e, f) { (this._dengar[e] = this._dengar[e] || []).push(f); },
         createTreeWalker: () => ({ nextNode: () => false, currentNode: null }) };
       const win = { ...dataHal(html), addEventListener() {}, innerHeight: 844, innerWidth: 390, matchMedia: () => ({ matches: false, addEventListener() {}, addListener() {} }) };
       const simpan = { ...(opsi.simpan || {}) };
@@ -3894,7 +3896,7 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
       const lv = []; let dari = 0;
       for (const [i, id] of titik) { lv.push(...judulMain("<main>" + main.slice(dari, i) + "</main>"), ...levels(wadah[id].induk)); dari = i; }
       lv.push(...judulMain("<main>" + main.slice(dari) + "</main>"));
-      return { lv, wadah, title: document.title, body: document.body };
+      return { lv, wadah, title: document.title, body: document.body, document };
     };
     const KUNCI = "candra-analis:pelajaran-selesai";
     const keadaanHal = (f, H) => {
@@ -4001,6 +4003,77 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
     ];
     for (const [js, H, hanya, pesan] of rusakId)
       ok(ujiId(js, H, hanya).some((s) => s.includes(pesan)), `uji balik id unik: "${pesan}" harus tertangkap`);
+
+    // Nina & Tegar (13 Nov 15.10): id unik SESUDAH interaksi. Di DOM tiruan per halaman: (a) setiap tab Peringkat
+    // diklik bergantian; sesudah tiap klik cek id unik diulang, tepat satu tab aria-selected="true" (tab yang diklik)
+    // dan panel aria-labelledby menunjuk tab itu. (b) Tombol istilah: DOM tiruan tidak menelusuri teks, jadi dua
+    // tombol .istilah dipasang di dua wadah pertama <main>, lalu diklik lewat pendengar klik dokumen milik app.js:
+    // buka A → buka B (kotak pindah) → tutup B; bila halaman punya tab, buka A lalu klik tab. Sesudah tiap langkah:
+    // cek id unik, kotak #kotak-istilah paling banyak satu, dan aria-controls="kotak-istilah" hanya pada tombol yang
+    // sedang terbuka (aria-expanded="true") dengan kotak tidak tersembunyi.
+    const ujiKlik = (js, H = htmlHal, hanya) => {
+      const salah = [];
+      const semua = (n, f, out = []) => { if (n && typeof n === "object") { if (n.atribut && f(n)) out.push(n); (n.anak || []).forEach((c) => semua(c, f, out)); } return out; };
+      for (const f of hanya || Object.keys(H)) {
+        const [nama, opsi] = keadaanHal(f, H)[0];
+        let r;
+        try { r = jalankan(js, H[f], { ...opsi, berkas: f }); } catch (err) { salah.push(`${f} (${nama}): app.js galat: ${err.message}`); continue; }
+        const akar = () => [...Object.values(r.wadah).map((x) => x.induk), r.body];
+        const cari = (fn) => akar().flatMap((a) => semua(a, fn));
+        const cek = (langkah) => {
+          for (const s of cekIdHal(r, H[f])) salah.push(`${f} (${langkah}): ${s}`);
+          const kotak = cari((n) => n.atribut.id === "kotak-istilah");
+          if (kotak.length > 1) salah.push(`${f} (${langkah}): kotak istilah ada ${kotak.length}×`);
+          for (const b of cari((n) => n.atribut["aria-controls"] === "kotak-istilah"))
+            if (b.atribut["aria-expanded"] !== "true" || !kotak.length || kotak[0].hidden)
+              salah.push(`${f} (${langkah}): aria-controls="kotak-istilah" tertinggal pada tombol yang tidak sedang membuka kotak`);
+        };
+        const klikDok = (target) => ((r.document._dengar.click || []).forEach((fn) => fn({ target, preventDefault() {} })));
+        const tabs = cari((n) => n.atribut.role === "tab");
+        const klikTab = (t, langkah) => {
+          if (!t._dengar.click) { salah.push(`${f}: tab #${t.atribut.id} tidak bisa diklik`); return; }
+          t._dengar.click({ target: t, preventDefault() {} });
+          cek(langkah);
+          const pilih = tabs.filter((x) => x.atribut["aria-selected"] === "true");
+          if (pilih.length !== 1 || pilih[0] !== t) salah.push(`${f} (${langkah}): harus tepat satu tab aria-selected="true", yaitu tab yang diklik`);
+          const panel = cari((n) => n.atribut.role === "tabpanel");
+          for (const p of panel) if (p.atribut["aria-labelledby"] !== t.atribut.id) salah.push(`${f} (${langkah}): panel aria-labelledby="${p.atribut["aria-labelledby"]}", harus "${t.atribut.id}"`);
+        };
+        for (const t of tabs) klikTab(t, `tab #${t.atribut.id} diklik`);
+        if (!(dataHal(H[f]).ISTILAH || []).length) continue;
+        const wd = Object.values(r.wadah).map((x) => x.w);
+        if (!wd.length) continue;
+        const tombol = [wd[0], wd[1] || wd[0]].map((w, i) => {
+          const b = r.document.createElement("button");
+          b.className = "istilah"; b.setAttribute("type", "button"); b.setAttribute("aria-expanded", "false"); b.dataset.istilah = String(i);
+          b.closest = (s) => (s === "button.istilah" ? b : null);
+          w.appendChild(b); return b;
+        });
+        const [A, B] = tombol;
+        klikDok(A); cek("istilah A dibuka");
+        if (A.atribut["aria-controls"] !== "kotak-istilah") salah.push(`${f} (istilah A dibuka): tombol harus aria-controls="kotak-istilah"`);
+        klikDok(B); cek("istilah B dibuka sesudah A");
+        klikDok(B); cek("istilah B ditutup");
+        if (tabs.length > 1) { klikDok(A); klikTab(tabs[1], "istilah terbuka lalu tab diklik"); klikTab(tabs[0], "tab pertama diklik lagi"); }
+      }
+      return [...new Set(salah)];
+    };
+    const sKlik = ujiKlik(app);
+    ok(sKlik.length === 0, `id unik & rujukan sesudah klik tab/istilah (DOM tiruan): ${sKlik.slice(0, 8).join("; ")}`);
+    {
+      // pastikan uji benar-benar mengklik: Peringkat punya ≥2 tab
+      const rp = jalankan(app, htmlHal["peringkat.html"], { berkas: "peringkat.html" });
+      const n = Object.values(rp.wadah).flatMap((x) => { const o = []; const s = (m) => { if (m && m.atribut) { if (m.atribut.role === "tab") o.push(m); (m.anak || []).forEach(s); } }; s(x.induk); return o; }).length;
+      ok(n >= 2, `peringkat.html (DOM tiruan): harus ada ≥2 tab untuk diklik, ada ${n}`);
+    }
+    const rusakKlik = [
+      [gantiA('b.removeAttribute("aria-controls");', ""), ["index.html"], 'aria-controls="kotak-istilah" tertinggal'],
+      [gantiA("if (!kotak) {", "if (true) {"), ["index.html"], "id #kotak-istilah muncul 2×"],
+      [gantiA('t.setAttribute("aria-selected", String(t.dataset.k === kunci));', 't.setAttribute("aria-selected", String(t.dataset.k === "laba"));'), ["peringkat.html"], 'tepat satu tab aria-selected="true"'],
+      [gantiA('panel.setAttribute("aria-labelledby", "tab-" + kunci);', 'if (!panel.hasAttribute("aria-labelledby")) panel.setAttribute("aria-labelledby", "tab-" + kunci);'), ["peringkat.html"], "panel aria-labelledby=\"tab-laba\", harus"],
+    ];
+    for (const [js, hanya, pesan] of rusakKlik)
+      ok(ujiKlik(js, htmlHal, hanya).some((s) => s.includes(pesan)), `uji balik klik tab/istilah: "${pesan}" harus tertangkap`);
   }
 }
 
