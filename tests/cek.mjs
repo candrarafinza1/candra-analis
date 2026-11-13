@@ -3819,6 +3819,135 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
     for (const [k, h, pesan] of rusakIsi)
       ok((k !== kodeIsi || h !== metHtml) && ujiIsi(k, h).some((s) => s.includes(pesan)), `uji balik daftar isi Metodologi: "${pesan}" harus tertangkap`);
   }
+  // Nina & Arif (13 Nov 13.10): cakupan wadah. (a) Setiap id yang dicari app.js (getElementById("…") dan
+  // renderJalur("…")) wajib berada di <main> salah satu halaman, atau dibuat app.js sendiri (id: "…"); bila tidak,
+  // judul buatannya tidak ikut diuji urutan judul. (b) SELURUH app.js dijalankan per halaman dengan DOM tiruan:
+  // tiap id di <main> halaman itu menjadi wadah, data diambil dari <script src="data/…"> halaman itu sendiri, dan
+  // judul buatan app.js disisipkan di posisi wadahnya. Dengan begitu wadah yang belum punya uji khusus (beranda:
+  // #lanjutkan-belajar, #istilah-hari, #musim-beranda; #pita di Radar) ikut tercakup, juga wadah baru nanti.
+  // Keadaan beranda: belum ada / satu / semua pelajaran selesai × setiap "Istilah hari ini"; pelajaran: tiap ?m=;
+  // profil: tanpa kode dan tiap kode emiten.
+  {
+    const mainDari = (h) => (h.match(/<main[\s>][\s\S]*?<\/main>/) || [""])[0].replace(/<!--[\s\S]*?-->/g, "");
+    const htmlHal = Object.fromEntries(halaman.map((f) => [f, readFileSync(f, "utf8")]));
+    const idDicari = (js) => [...new Set([...js.matchAll(/getElementById\("([^"]+)"\)/g), ...js.matchAll(/renderJalur\("([^"]+)"/g)].map((m) => m[1]))];
+    const cekCakupan = (js, H) => {
+      const salah = [];
+      for (const id of idDicari(js)) {
+        const re = new RegExp(`\\bid="${id}"`);
+        const diMain = Object.keys(H).filter((f) => re.test(mainDari(H[f])));
+        const diLuar = Object.keys(H).filter((f) => re.test(H[f].replace(/<!--[\s\S]*?-->/g, "")) && !diMain.includes(f));
+        for (const f of diLuar) salah.push(`${f}: wadah #${id} berada di luar <main> (judulnya tidak ikut uji urutan judul)`);
+        if (!diMain.length && !diLuar.length && !new RegExp(`\\bid: "${id}"`).test(js))
+          salah.push(`app.js mencari #${id}, tetapi wadah itu tidak ada di <main> halaman mana pun dan tidak dibuat app.js: belum tercakup uji urutan judul`);
+      }
+      return salah;
+    };
+    for (const s of cekCakupan(app, htmlHal)) ok(false, `cakupan wadah: ${s}`);
+
+    const RealDate = Date;
+    const dataHal = (html) => {
+      const c = { window: {} }; vm.createContext(c);
+      for (const [, src] of html.matchAll(/<script src="(data\/[^"]+\.js)"><\/script>/g)) vm.runInContext(readFileSync(src, "utf8"), c);
+      return c.window;
+    };
+    const jalankan = (js, html, opsi = {}) => {
+      const main = mainDari(html);
+      const simpul = (tag) => {
+        const n = { tag, nodeName: String(tag).toUpperCase(), anak: [], atribut: {}, className: "", value: "", hidden: false, style: {}, dataset: {}, _dengar: {}, parentNode: null, _html: "",
+          classList: { add() {}, remove() {}, toggle() {}, contains: () => false },
+          get children() { return this.anak; }, get childNodes() { return this.anak; }, get firstChild() { return this.anak[0] || null; }, get lastChild() { return this.anak[this.anak.length - 1] || null; },
+          appendChild(c) { if (c && typeof c === "object") { c.parentNode = this; this.anak.push(c); } return c; },
+          insertBefore(c, ref) { c.parentNode = this; const i = this.anak.indexOf(ref); this.anak.splice(i < 0 ? this.anak.length : i, 0, c); return c; },
+          removeChild(c) { const i = this.anak.indexOf(c); if (i >= 0) this.anak.splice(i, 1); return c; },
+          remove() { if (this.parentNode) this.parentNode.removeChild(this); },
+          setAttribute(k, v) { this.atribut[k] = String(v); }, getAttribute(k) { return k in this.atribut ? this.atribut[k] : null; },
+          removeAttribute(k) { delete this.atribut[k]; }, hasAttribute(k) { return k in this.atribut; },
+          addEventListener(e, f) { this._dengar[e] = f; }, focus() {}, scrollIntoView() {}, reset() {}, contains: () => true,
+          querySelector: () => null, querySelectorAll: () => [], closest: () => null, getBoundingClientRect: () => ({ top: 0, left: 0, width: 0, height: 0 }),
+          set innerHTML(v) { this.anak = []; this._html = String(v); }, get innerHTML() { return this._html; },
+          set textContent(v) { this.anak = []; this._html = ""; this._teks = String(v); }, get textContent() { return this._teks || ""; } };
+        return n;
+      };
+      const ids = [...main.matchAll(/\bid="([^"]+)"/g)].map((m) => m[1]);
+      const wadah = {};
+      for (const id of ids) { const w = simpul("div"), induk = simpul("div"); w.atribut.id = id; induk.appendChild(w); wadah[id] = { w, induk }; }
+      const cariId = (n, id) => { if (n.atribut && n.atribut.id === id) return n; for (const c of n.anak || []) { const r = cariId(c, id); if (r) return r; } return null; };
+      const document = { title: "", body: simpul("body"), documentElement: simpul("html"), activeElement: null,
+        createElement: simpul, createTextNode: (t) => ({ tag: "#text", nodeName: "#text", nodeValue: String(t), anak: [] }),
+        getElementById: (id) => (wadah[id] ? wadah[id].w : Object.values(wadah).map((x) => cariId(x.induk, id)).find(Boolean) || null),
+        querySelector: () => null, querySelectorAll: () => [], addEventListener() {},
+        createTreeWalker: () => ({ nextNode: () => false, currentNode: null }) };
+      const win = { ...dataHal(html), addEventListener() {}, innerHeight: 844, innerWidth: 390, matchMedia: () => ({ matches: false, addEventListener() {}, addListener() {} }) };
+      const simpan = { ...(opsi.simpan || {}) };
+      const ctxH = { window: win, document, location: { pathname: "/" + opsi.berkas, search: opsi.search || "", hash: "" }, URLSearchParams, Intl, Math, JSON,
+        NodeFilter: { SHOW_TEXT: 4, FILTER_ACCEPT: 1, FILTER_REJECT: 2, FILTER_SKIP: 3 },
+        localStorage: { getItem: (k) => (k in simpan ? simpan[k] : null), setItem: (k, v) => { simpan[k] = String(v); }, removeItem: (k) => { delete simpan[k]; } },
+        fetch: () => new Promise(() => {}), setTimeout: () => 0, clearTimeout() {}, requestAnimationFrame: () => 0,
+        Date: opsi.hari === undefined ? RealDate : class extends RealDate { constructor(...a) { if (a.length) super(...a); else super(2026, 0, 1 + opsi.hari); } } };
+      vm.runInNewContext(js, ctxH);
+      const levels = (n, out = []) => { const m = /^h([1-6])$/.exec(n.tag || ""); if (m) out.push(+m[1]);
+        if (n._html) out.push(...[...n._html.replace(/<!--[\s\S]*?-->/g, "").matchAll(/<h([1-6])[\s>]/g)].map((x) => +x[1]));
+        (n.anak || []).forEach((c) => levels(c, out)); return out; };
+      // Judul statis + judul buatan app.js di posisi tiap wadah (posisi = letak id="…" di <main>)
+      const titik = ids.map((id) => [main.indexOf(`id="${id}"`), id]).sort((a, b) => a[0] - b[0]);
+      const lv = []; let dari = 0;
+      for (const [i, id] of titik) { lv.push(...judulMain("<main>" + main.slice(dari, i) + "</main>"), ...levels(wadah[id].induk)); dari = i; }
+      lv.push(...judulMain("<main>" + main.slice(dari) + "</main>"));
+      return { lv, wadah, title: document.title };
+    };
+    const KUNCI = "candra-analis:pelajaran-selesai";
+    const keadaanHal = (f, H) => {
+      const win = dataHal(H[f]), M = win.MODUL || [], E = win.EMITEN_ASLI || [], I = win.ISTILAH || [];
+      if (f === "index.html") {
+        const simpanan = [["belum ada pelajaran selesai", {}], ["satu pelajaran selesai", { [KUNCI]: JSON.stringify(M.slice(0, 1).map((m) => m.id)) }],
+          ["semua pelajaran selesai", { [KUNCI]: JSON.stringify(M.map((m) => m.id)) }]];
+        return simpanan.flatMap(([n, s]) => Array.from({ length: Math.max(1, I.length) }, (_, h) => [`${n}, istilah hari ke-${h + 1}`, { simpan: s, hari: h }]));
+      }
+      if (f === "pelajaran.html") return [["tanpa ?m=", {}], ...M.map((m) => [`?m=${m.id}`, { search: "?m=" + m.id }])];
+      if (f === "emiten.html") return [["tanpa ?kode=", {}], ...E.map((e) => [`?kode=${e.kode}`, { search: "?kode=" + e.kode }])];
+      return [["halaman dibuka", {}]];
+    };
+    const ujiHalaman = (js, H = htmlHal, hanya) => {
+      const salah = [];
+      for (const f of hanya || Object.keys(H)) for (const [nama, opsi] of keadaanHal(f, H)) {
+        let r;
+        try { r = jalankan(js, H[f], { ...opsi, berkas: f }); } catch (err) { salah.push(`${f} (${nama}): app.js galat: ${err.message}`); continue; }
+        for (const s of urutanJudul(r.lv)) salah.push(`${f} (${nama}): ${s}`);
+      }
+      return [...new Set(salah)];
+    };
+    const sHal = ujiHalaman(app);
+    ok(sHal.length === 0, `urutan judul seluruh app.js per halaman (DOM tiruan, ${halaman.length} halaman): ${sHal.slice(0, 8).join("; ")}`);
+    // Pastikan wadah beranda benar-benar terisi (bukan lolos karena kosong)
+    {
+      const H = htmlHal["index.html"], M = dataHal(H).MODUL || [];
+      const r = jalankan(app, H, { berkas: "index.html", simpan: { [KUNCI]: JSON.stringify(M.slice(0, 1).map((m) => m.id)) }, hari: 0 });
+      for (const id of ["lanjutkan-belajar", "istilah-hari", "musim-beranda", "mini-peringkat", "kabar-beranda", "jalur-ringkas"])
+        ok(r.wadah[id] && r.wadah[id].w.anak.length > 0, `beranda (DOM tiruan): wadah #${id} harus diisi app.js`);
+      const rr = jalankan(app, htmlHal["radar.html"], { berkas: "radar.html" });
+      ok(rr.wadah.pita && rr.wadah.pita.w.anak.length >= 2, "radar.html (DOM tiruan): wadah #pita harus diisi pita sumber & musim laporan");
+    }
+    // Uji balik
+    const gantiA = (dari, ke) => { ok(app.includes(dari), `uji balik cakupan: teks "${dari.slice(0, 50)}" tidak ada di app.js`); return app.split(dari).join(ke); };
+    const rusakHal = [
+      [gantiA('el("h2", { id: "judul-istilah-hari"', 'el("h4", { id: "judul-istilah-hari"'), ["index.html"], "index.html (belum ada pelajaran selesai, istilah hari ke-1): urutan judul melompat h1 → h4"],
+      [gantiA('el("p", { class: "lanjutkan-info" }', 'el("h3", { class: "lanjutkan-info" }'), ["index.html"], "index.html (satu pelajaran selesai, istilah hari ke-1): urutan judul melompat h1 → h3"],
+      [gantiA('el("p", { class: "lanjutkan-tamat" }', 'el("h1", { class: "lanjutkan-tamat" }'), ["index.html"], "index.html (semua pelajaran selesai, istilah hari ke-1): h1 di <main> ada 2×"],
+      [gantiA('wadah.appendChild(el("strong", { text: n + " dari " + total + " emiten" }));', 'wadah.appendChild(el("h5", { text: n + " dari " + total + " emiten" }));'), ["index.html"], "urutan judul melompat h3 → h5"],
+      [gantiA('el("p", { class: "musim-teks" }', 'el("h4", { class: "musim-teks" }'), ["radar.html"], "radar.html (halaman dibuka): urutan judul melompat h1 → h4"],
+      [gantiA("function musimBeranda() {", "function musimBeranda() { undefinedFungsi();"), ["index.html"], "app.js galat"],
+    ];
+    for (const [b, hanya, pesan] of rusakHal)
+      ok(b !== app && ujiHalaman(b, htmlHal, hanya).some((s) => s.includes(pesan)), `uji balik urutan judul per halaman: "${pesan}" harus tertangkap`);
+    const rusakCakupan = [
+      [app + '\n;document.getElementById("wadah-baru");', htmlHal, "app.js mencari #wadah-baru"],
+      [app + '\n;renderJalur("jalur-lain", false);', htmlHal, "app.js mencari #jalur-lain"],
+      [app, { ...htmlHal, "index.html": htmlHal["index.html"].replace(/<div[^>]*id="istilah-hari"[^>]*><\/div>|<section[^>]*id="istilah-hari"[^>]*><\/section>/, "").replace("</main>", "</main>\n<div id=\"istilah-hari\" hidden></div>") }, "index.html: wadah #istilah-hari berada di luar <main>"],
+    ];
+    for (const [js, H, pesan] of rusakCakupan)
+      ok(cekCakupan(js, H).some((s) => s.includes(pesan)), `uji balik cakupan wadah: "${pesan}" harus tertangkap`);
+  }
 }
 
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
