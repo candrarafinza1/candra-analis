@@ -8,6 +8,7 @@
 // di dalam <main> tidak melompat turun (mis. h2 langsung ke h4) dan judul pertama di <main> adalah h1.
 // Halaman "UJI" sengaja memasang 8 pelanggaran; audit wajib menangkapnya (uji balik), jadi hasil sehat = tepat 8 temuan UJI.
 // Nina & Tegar (13 Nov 16.10) menambah skenario interaksi Peringkat (lihat skenarioPeringkat di atas).
+// Nina & Tegar (13 Nov 17.10) menambah skenario kedua: panah kiri/kanan di tab Peringkat dan ganti emiten di Radar.
 // Cara pakai: python3 -m http.server 8765 (di akar repo), lalu: node tools/audit-aksesibel.js
 // Butuh Playwright + Chromium (sudah ada di lingkungan kerja tim); tidak dijalankan oleh tests/cek.mjs.
 const { chromium } = require('playwright');
@@ -66,6 +67,85 @@ async function skenarioPeringkat(p, sabot) {
   }
   return temuan;
 }
+// Nina & Tegar (13 Nov 17.10): skenario interaksi kedua. Pemeriksaan bersama sesudah tiap langkah: id unik,
+// aria-controls/aria-labelledby/aria-describedby/label[for] menunjuk tepat satu elemen, fokus tidak hilang, dan bila ada tab:
+// tepat satu tab terpilih dan tabindex 0 hanya pada tab terpilih.
+async function cekDom(p) {
+  return p.evaluate(() => {
+    const o = [];
+    const hit = {}; document.querySelectorAll('[id]').forEach((el) => { hit[el.id] = (hit[el.id] || 0) + 1; });
+    Object.entries(hit).forEach(([i, n]) => { if (n > 1) o.push(`id ganda: id="${i}" dipakai ${n}×`); });
+    document.querySelectorAll('[aria-controls], [aria-labelledby], [aria-describedby], label[for]').forEach((el) => {
+      ['aria-controls', 'aria-labelledby', 'aria-describedby', 'for'].forEach((a) => {
+        (el.getAttribute(a) || '').split(/\s+/).filter(Boolean).forEach((i) => {
+          const n = document.querySelectorAll('[id="' + i + '"]').length;
+          if (n !== 1) o.push(`rujukan: <${el.tagName.toLowerCase()}${el.id ? ' id="' + el.id + '"' : ''}> ${a}="${i}" menunjuk ${n} elemen`);
+        });
+      });
+    });
+    const tab = [...document.querySelectorAll('[role=tab]')];
+    if (tab.length) {
+      const dipilih = tab.filter((t) => t.getAttribute('aria-selected') === 'true');
+      if (dipilih.length !== 1) o.push(`tab terpilih: ${dipilih.length} (harus 1)`);
+      tab.forEach((t) => { if ((t.tabIndex === 0) !== (t.getAttribute('aria-selected') === 'true')) o.push(`tabindex: tab "${t.textContent.trim()}" tabindex=${t.tabIndex}, aria-selected=${t.getAttribute('aria-selected')}`); });
+    }
+    const a = document.activeElement;
+    if (!a || a === document.body || !a.isConnected) o.push('fokus hilang ke <body>');
+    return o;
+  });
+}
+
+// (a) Peringkat: fokus tab pertama, panah kanan 4× lalu panah kiri 1×. Fokus dan aria-selected harus ikut pindah ke tab
+// yang diharapkan (berputar di ujung). Sabot: tabindex 0 dipasang di tab yang tidak terpilih (langkah kanan ke-2)
+// dan fokus dilepas ke <body> (langkah kiri). Hasil sabot harus memuat jenis "tabindex" dan "fokus".
+async function skenarioPanah(p, sabot) {
+  await p.goto('http://localhost:8765/peringkat.html'); await p.waitForTimeout(400);
+  const temuan = [];
+  const tab = await p.$$('[role=tab]');
+  if (tab.length < 2) return ['tab Peringkat kurang dari 2'];
+  await tab[0].focus();
+  let harap = 0;
+  const langkah = ['ArrowRight', 'ArrowRight', 'ArrowRight', 'ArrowRight', 'ArrowLeft'];
+  for (let s = 0; s < langkah.length; s++) {
+    const k = langkah[s];
+    await p.keyboard.press(k); await p.waitForTimeout(120);
+    harap = (harap + (k === 'ArrowRight' ? 1 : -1) + tab.length) % tab.length;
+    const nama = `${k === 'ArrowRight' ? 'kanan' : 'kiri'} ke-${s < 4 ? s + 1 : 1}`;
+    if (sabot && s === 1) await p.evaluate((h) => { const t = document.querySelectorAll('[role=tab]'); t[(h + 1) % t.length].tabIndex = 0; }, harap);
+    if (sabot && s === 4) await p.evaluate(() => document.activeElement.blur());
+    (await cekDom(p)).forEach((t) => temuan.push(`${nama}: ${t}`));
+    const st = await p.evaluate((h) => { const t = document.querySelectorAll('[role=tab]')[h]; return { fokus: document.activeElement === t, pilih: t.getAttribute('aria-selected') === 'true' }; }, harap);
+    if (!st.pilih) temuan.push(`${nama}: aria-selected tidak pindah ke tab ke-${harap + 1}`);
+    if (!st.fokus && !(sabot && s === 4)) temuan.push(`${nama}: fokus tidak pindah ke tab ke-${harap + 1}`);
+  }
+  return temuan;
+}
+
+// (b) Radar: ganti emiten 3× (UNTR, ANTM, TLKM), buka satu istilah di hasil, lalu Escape (fokus kembali ke tombol istilah).
+// Sabot: id ganda di hasil (sesudah ganti ke ANTM) dan aria-describedby ke id yang tidak ada (sesudah istilah dibuka).
+// Hasil sabot harus memuat jenis "id ganda" dan "rujukan".
+async function skenarioRadar(p, sabot) {
+  await p.goto('http://localhost:8765/radar.html'); await p.waitForTimeout(400);
+  const temuan = [];
+  if (!(await p.$('#pilih-saham'))) return ['#pilih-saham tidak ketemu'];
+  for (const kode of ['UNTR', 'ANTM', 'TLKM']) {
+    await p.selectOption('#pilih-saham', kode); await p.focus('#pilih-saham'); await p.waitForTimeout(250);
+    if (sabot && kode === 'ANTM') await p.evaluate(() => document.getElementById('hasil-radar').insertAdjacentHTML('beforeend', '<p id="pilih-saham">salinan</p>'));
+    (await cekDom(p)).forEach((t) => temuan.push(`pilih ${kode}: ${t}`));
+    if (sabot && kode === 'ANTM') await p.evaluate(() => document.querySelectorAll('p#pilih-saham').forEach((x) => x.remove()));
+  }
+  const ist = await p.$('#hasil-radar button.istilah:visible');
+  if (!ist) { temuan.push('tombol istilah di hasil Radar tidak ketemu'); return temuan; }
+  await ist.click(); await p.waitForTimeout(150);
+  if (sabot) await p.evaluate(() => document.querySelector('#hasil-radar').setAttribute('aria-describedby', 'tidak-ada'));
+  (await cekDom(p)).forEach((t) => temuan.push(`TLKM + istilah terbuka: ${t}`));
+  if (sabot) await p.evaluate(() => document.querySelector('#hasil-radar').removeAttribute('aria-describedby'));
+  await p.keyboard.press('Escape'); await p.waitForTimeout(100);
+  (await cekDom(p)).forEach((t) => temuan.push(`TLKM + Escape: ${t}`));
+  if (!(await ist.evaluate((b) => b.isConnected && document.activeElement === b))) temuan.push('sesudah Escape fokus tidak kembali ke tombol istilah');
+  return temuan;
+}
+
 const halaman = ['index.html', 'belajar.html', 'pelajaran.html', 'pelajaran.html#kuis', 'peringkat.html', 'peringkat.html#istilah', 'radar.html',
   'radar.html#UNTR', 'emiten.html', 'emiten.html?kode=ANTM', 'kabar.html', 'metodologi.html', 'asisten.html', '404.html', 'UJI'];
 (async () => {
@@ -147,9 +227,16 @@ const halaman = ['index.html', 'belajar.html', 'pelajaran.html', 'pelajaran.html
   const jenis = new Set(skSabot.map((t) => t.split(': ')[1]));
   console.log(`Skenario UJI (sabot): ${skSabot.length} temuan, ${jenis.size} jenis (harus 3: id ganda, rujukan, fokus hilang)`);
   skSabot.forEach((t) => console.log('  - ' + t));
+  const sk2 = [...(await skenarioPanah(p, false)), ...(await skenarioRadar(p, false))];
+  console.log(`\nSkenario kedua (panah kanan 4× & kiri 1× di tab Peringkat; ganti emiten 3× + istilah + Escape di Radar): ${sk2.length} temuan`);
+  sk2.forEach((t) => console.log('  - ' + t));
+  const sab2 = [...(await skenarioPanah(p, true)), ...(await skenarioRadar(p, true))];
+  const jenis2 = ['tabindex', 'fokus hilang', 'id ganda', 'rujukan'].filter((j) => sab2.some((t) => t.split(': ')[1].startsWith(j)));
+  console.log(`Skenario kedua UJI (sabot): ${sab2.length} temuan, jenis tertangkap: ${jenis2.join(', ')} (harus 4)`);
+  sab2.forEach((t) => console.log('  - ' + t));
   if (galat.length) console.log('Galat JS:', galat);
   console.log(`\nTotal temuan halaman asli: ${total}. Temuan UJI: ${totalUji} (harus 8).`);
   await b.close();
   const sabotOk = jenis.size === 3 && ['id ganda', 'rujukan', 'fokus hilang'].every((j) => [...jenis].some((x) => x.startsWith(j)));
-  process.exit(total === 0 && totalUji === 8 && sk.length === 0 && sabotOk && !galat.length ? 0 : 1);
+  process.exit(total === 0 && totalUji === 8 && sk.length === 0 && sabotOk && sk2.length === 0 && jenis2.length === 4 && !galat.length ? 0 : 1);
 })();
