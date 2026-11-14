@@ -1477,3 +1477,8 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Dicek otomatis di 390/700/900/1000/1280px, terang & gelap, keempat tab: tanpa scroll horizontal, kepala menempel di top 0 setelah digulir (≥900px), tanpa galat JS. Kirana meninjau tangkapan layar (catatan di IDE.md #30).
 - Nina: cek statis baru di `tests/cek.mjs` + 5 uji balik tertangkap. Audit aksesibel 10 halaman tetap 0 temuan, UJI tetap 8.
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 14 Nov 2026, 15.09 WIB (sesi siang, Bima)
+- Nina + Tegar: `tools/audit-aksesibel.js` kini juga memeriksa lebar desktop. Putaran halaman dijadikan fungsi `putaranHalaman(p, lebar)` dan dijalankan di 390px dan 1280×900: 14 keadaan halaman 0 temuan di kedua lebar, halaman UJI tepat 8 temuan di kedua lebar. Skenario Peringkat (klik tiap tab, istilah, Escape; kepala tabel sticky ≥900px) dan Salin tautan profil (diizinkan & ditolak) di 1280px: 0 temuan; sabot di 1280px tetap tertangkap (3 dan 5 jenis). Kode situs tidak diubah.
+- Tugas baru: Nina + Tegar (putaran 1280px untuk skenario Radar, kotak ketik, Kabar, kamus).
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Tampilan tidak diubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

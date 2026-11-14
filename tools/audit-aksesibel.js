@@ -14,6 +14,7 @@
 // Nina & Tegar (14 Nov 07.10) menambah skenario kelima: pindah profil emiten (judul & document.title) dan tautan kembali di 404.
 // Nina & Tegar (14 Nov 08.10) menambah skenario keenam: kotak ketik kode emiten di Radar & Bandingkan (IDE.md #28).
 // Nina & Tegar (14 Nov 13.09) menambah skenario ketujuh: tombol "Salin tautan profil" (papan klip diizinkan & ditolak, IDE.md #29).
+// Nina & Tegar (14 Nov 15.09) menambah putaran 1280×900: semua halaman (+ UJI) dan skenario Peringkat & Salin.
 // Cara pakai: python3 -m http.server 8765 (di akar repo), lalu: node tools/audit-aksesibel.js
 // Butuh Playwright + Chromium (sudah ada di lingkungan kerja tim); tidak dijalankan oleh tests/cek.mjs.
 const { chromium } = require('playwright');
@@ -456,9 +457,9 @@ async function skenarioKetik(p, sabot) {
 // Sesudah tiap langkah: cekDom (id unik, rujukan aria, fokus tidak hilang). Sabot: status kehilangan role/aria-live (a),
 // writeText "berhasil" tanpa menulis (a), tombol tabindex=-1 (b), fokus dilepas (b), id ganda #salin-alamat (b).
 // Hasil sabot harus memuat jenis "status", "isi papan klip", "Tab", "fokus hilang", "id ganda".
-async function skenarioSalin(b, sabot) {
+async function skenarioSalin(b, sabot, lebar = 390) {
   const temuan = [];
-  const ctx = await b.newContext({ viewport: { width: 390, height: 900 } });
+  const ctx = await b.newContext({ viewport: { width: lebar, height: 900 } });
   await ctx.grantPermissions(['clipboard-read', 'clipboard-write'], { origin: 'http://localhost:8765' });
   const p = await ctx.newPage();
   const galat = []; p.on('pageerror', (e) => galat.push(e.message));
@@ -514,12 +515,9 @@ async function skenarioSalin(b, sabot) {
   return temuan;
 }
 
-const halaman = ['index.html', 'belajar.html', 'pelajaran.html', 'pelajaran.html#kuis', 'peringkat.html', 'peringkat.html#istilah', 'radar.html',
-  'radar.html#UNTR', 'emiten.html', 'emiten.html?kode=ANTM', 'kabar.html', 'metodologi.html', 'asisten.html', '404.html', 'UJI'];
-(async () => {
-  const b = await chromium.launch();
-  const p = await (await b.newContext({ viewport: { width: 390, height: 900 } })).newPage();
-  const galat = []; p.on('pageerror', (e) => { galat.push(e.message); if (process.env.JEJAK) console.log('[galat di ' + p.url() + ']', e.message); });
+// Nina & Tegar (14 Nov 15.09): putaran halaman dijadikan fungsi agar bisa dijalankan di dua lebar (390px HP dan 1280px desktop).
+async function putaranHalaman(p, lebar) {
+  await p.setViewportSize({ width: lebar, height: 900 });
   let total = 0, totalUji = 0;
   for (const h of halaman) {
     const [jalur, pagar] = h.split('#');
@@ -584,10 +582,23 @@ const halaman = ['index.html', 'belajar.html', 'pelajaran.html', 'pelajaran.html
       Object.entries(hit).forEach(([i, n]) => { if (n > 1) out.push(`id="${i}" dipakai ${n}×`); });
       return { out, n: { a: document.querySelectorAll('a[href]').length, img: document.querySelectorAll('img').length, button: document.querySelectorAll('button').length, isian: document.querySelectorAll('input, textarea, select').length } };
     });
-    console.log(`${h}: ${temuan.out.length} temuan (a ${temuan.n.a}, img ${temuan.n.img}, button ${temuan.n.button}, isian ${temuan.n.isian})`);
+    console.log(`[${lebar}px] ${h}: ${temuan.out.length} temuan (a ${temuan.n.a}, img ${temuan.n.img}, button ${temuan.n.button}, isian ${temuan.n.isian})`);
     temuan.out.forEach((t) => console.log('  - ' + t));
     if (jalur === 'UJI') totalUji = temuan.out.length; else total += temuan.out.length;
   }
+  return { total, totalUji };
+}
+
+const halaman = ['index.html', 'belajar.html', 'pelajaran.html', 'pelajaran.html#kuis', 'peringkat.html', 'peringkat.html#istilah', 'radar.html',
+  'radar.html#UNTR', 'emiten.html', 'emiten.html?kode=ANTM', 'kabar.html', 'metodologi.html', 'asisten.html', '404.html', 'UJI'];
+(async () => {
+  const b = await chromium.launch();
+  const p = await (await b.newContext({ viewport: { width: 390, height: 900 } })).newPage();
+  const galat = []; p.on('pageerror', (e) => { galat.push(e.message); if (process.env.JEJAK) console.log('[galat di ' + p.url() + ']', e.message); });
+  const r390 = await putaranHalaman(p, 390);
+  const r1280 = await putaranHalaman(p, 1280);
+  await p.setViewportSize({ width: 390, height: 900 });
+  const total = r390.total + r1280.total, totalUji = r390.totalUji;
   const sk = await skenarioPeringkat(p, false);
   console.log(`\nSkenario Peringkat (klik tiap tab, buka istilah, Escape, pindah tab): ${sk.length} temuan`);
   sk.forEach((t) => console.log('  - ' + t));
@@ -637,9 +648,19 @@ const halaman = ['index.html', 'belajar.html', 'pelajaran.html', 'pelajaran.html
   const jenis7 = ['status', 'isi papan klip', 'Tab', 'fokus hilang', 'id ganda'].filter((j) => sab7.some((t) => (t.split(': ')[1] || '').startsWith(j)));
   console.log(`Skenario ketujuh UJI (sabot): ${sab7.length} temuan, jenis tertangkap: ${jenis7.join(', ')} (harus 5)`);
   sab7.forEach((t) => console.log('  - ' + t));
+  // Nina & Tegar (14 Nov 15.09): putaran kedua di 1280×900 untuk Peringkat (kepala tabel sticky ≥900px) dan Salin.
+  await p.setViewportSize({ width: 1280, height: 900 });
+  const sk8 = [...(await skenarioPeringkat(p, false)), ...(await skenarioSalin(b, false, 1280))];
+  console.log(`\nSkenario 1280px (Peringkat: klik tiap tab + istilah + Escape; Salin: diizinkan lalu ditolak): ${sk8.length} temuan`);
+  sk8.forEach((t) => console.log('  - ' + t));
+  const sab8p = await skenarioPeringkat(p, true), sab8s = await skenarioSalin(b, true, 1280);
+  const jenis8p = new Set(sab8p.map((t) => t.split(': ')[1]));
+  const jenis8s = ['status', 'isi papan klip', 'Tab', 'fokus hilang', 'id ganda'].filter((j) => sab8s.some((t) => (t.split(': ')[1] || '').startsWith(j)));
+  const sabot8Ok = jenis8p.size === 3 && jenis8s.length === 5;
+  console.log(`Skenario 1280px UJI (sabot): Peringkat ${jenis8p.size} jenis (harus 3), Salin ${jenis8s.length} jenis (harus 5)`);
   if (galat.length) console.log('Galat JS:', galat);
-  console.log(`\nTotal temuan halaman asli: ${total}. Temuan UJI: ${totalUji} (harus 8).`);
+  console.log(`\nTotal temuan halaman asli: ${total} (390px ${r390.total}, 1280px ${r1280.total}). Temuan UJI: 390px ${r390.totalUji}, 1280px ${r1280.totalUji} (masing-masing harus 8).`);
   await b.close();
   const sabotOk = jenis.size === 3 && ['id ganda', 'rujukan', 'fokus hilang'].every((j) => [...jenis].some((x) => x.startsWith(j)));
-  process.exit(total === 0 && totalUji === 8 && sk.length === 0 && sabotOk && sk2.length === 0 && jenis2.length === 4 && sk3.length === 0 && jenis3.length === 5 && sk4.length === 0 && jenis4.length === 5 && sk5.length === 0 && jenis5.length === 5 && sk6.length === 0 && jenis6.length === 4 && sk7.length === 0 && jenis7.length === 5 && !galat.length ? 0 : 1);
+  process.exit(total === 0 && totalUji === 8 && r1280.totalUji === 8 && sk8.length === 0 && sabot8Ok && sk.length === 0 && sabotOk && sk2.length === 0 && jenis2.length === 4 && sk3.length === 0 && jenis3.length === 5 && sk4.length === 0 && jenis4.length === 5 && sk5.length === 0 && jenis5.length === 5 && sk6.length === 0 && jenis6.length === 4 && sk7.length === 0 && jenis7.length === 5 && !galat.length ? 0 : 1);
 })();
