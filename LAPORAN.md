@@ -1512,3 +1512,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: KLBF & BRIS dicari ulang; belum ada laba Januari–September 2026 bersumber (KLBF teratas semester I 2026, BRIS kuartal II 2026) → tetap 23 dari 32.
 - Tugas baru: Nina + Tegar (cek yang sama untuk putaran sabot/UJI).
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Tampilan tidak diubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 14 Nov 2026, 21.10 WIB (sesi malam, Bima)
+- Nina + Tegar: cek tiga lebar di `tests/cek.mjs` kini juga mewajibkan putaran sabot (UJI) di 390, 768, dan 1280px untuk 11 skenario. Uji balik 5 cara rusak tertangkap; percobaan hapus sabot Radar di 768px membuat cek gagal. Kode situs tidak diubah.
+- Fajar: KLBF & BRIS dicari ulang; belum ada laba Januari–September 2026 bersumber → tetap 23 dari 32.
+- Tugas baru: Nina + Tegar (setiap hasil skenario wajib ikut syarat keluar audit).
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Tampilan tidak diubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

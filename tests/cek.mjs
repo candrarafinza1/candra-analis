@@ -4248,8 +4248,8 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
     ok((c !== cssT || j !== jsT) && cekTempel(c, j).some((x) => x.includes(pesan)), `uji balik kepala tabel menempel: "${pesan}" harus tertangkap`);
 }
 
-// Nina & Tegar (14 Nov 20.10): tools/audit-aksesibel.js harus tetap menjalankan putaran halaman dan setiap skenario
-// (tanpa sabot) di tiga lebar: 390px (HP), 768px (tablet), 1280px (desktop), agar putaran tidak terhapus tanpa sengaja.
+// Nina & Tegar (14 Nov 20.10; 21.10 + putaran sabot): tools/audit-aksesibel.js harus tetap menjalankan putaran halaman dan setiap skenario
+// (tanpa sabot dan dengan sabot/UJI) di tiga lebar: 390px (HP), 768px (tablet), 1280px (desktop), agar putaran tidak terhapus tanpa sengaja.
 // Lebar dilacak berurutan dari setViewportSize/putaranHalaman; skenarioSalin memakai argumen lebarnya sendiri (bawaan 390).
 {
   const LEBAR = [390, 768, 1280];
@@ -4261,15 +4261,18 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
     const utama = src.slice(i);
     const ada = new Set(), halamanLebar = new Set();
     let kini = 390;
-    const re = /setViewportSize\(\{ width: (\d+)|putaranHalaman\(p, (\d+)|skenario(\w+)\((?:p|b), false(?:, (\d+))?\)/g;
+    const re = /setViewportSize\(\{ width: (\d+)|putaranHalaman\(p, (\d+)|skenario(\w+)\((?:p|b), (false|true)(?:, (\d+))?\)/g;
     for (const m of utama.matchAll(re)) {
       if (m[1]) kini = +m[1];
       else if (m[2]) { kini = +m[2]; halamanLebar.add(kini); }
-      else ada.add(`${m[3]}@${m[3] === "Salin" ? +(m[4] || 390) : kini}`);
+      else ada.add(`${m[3]}@${m[3] === "Salin" ? +(m[5] || 390) : kini}@${m[4]}`);
     }
     for (const w of LEBAR) if (!halamanLebar.has(w)) salah.push(`putaran halaman ${w}px tidak dijalankan`);
-    for (const s of SKENARIO) for (const w of LEBAR)
-      if (!ada.has(`${s}@${w}`)) salah.push(`skenario${s} tidak dijalankan di ${w}px`);
+    for (const s of SKENARIO) for (const w of LEBAR) {
+      if (!ada.has(`${s}@${w}@false`)) salah.push(`skenario${s} tidak dijalankan di ${w}px`);
+      // Nina & Tegar (14 Nov 21.10): putaran sabot (UJI) juga wajib di tiga lebar, agar uji balik tidak hilang diam-diam.
+      if (!ada.has(`${s}@${w}@true`)) salah.push(`skenario${s} UJI (sabot) tidak dijalankan di ${w}px`);
+    }
     return salah;
   };
   const srcA = readFileSync("tools/audit-aksesibel.js", "utf8");
@@ -4281,6 +4284,11 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
     [srcA.replace("const sk12 = [...(await skenarioRadar(p, false)), ...(await skenarioKuis(p, false)),", "const sk12 = [...(await skenarioRadar(p, false)),"), "skenarioKuis tidak dijalankan di 768px"],
     [srcA.replace("...(await skenarioSalin(b, false, 1280))", "...[]"), "skenarioSalin tidak dijalankan di 1280px"],
     [srcA.replace("const sk = await skenarioPeringkat(p, false);", "const sk = [];"), "skenarioPeringkat tidak dijalankan di 390px"],
+    [srcA.replace("const sab2 = [...(await skenarioPanah(p, true)), ...(await skenarioRadar(p, true))];", "const sab2 = [...(await skenarioPanah(p, true))];"), "skenarioRadar UJI (sabot) tidak dijalankan di 390px"],
+    [srcA.replace("const sab12s = await skenarioSalin(b, true, 768);", "const sab12s = [];"), "skenarioSalin UJI (sabot) tidak dijalankan di 768px"],
+    [srcA.replace("const sab8p = await skenarioPeringkat(p, true),", "const sab8p = [],"), "skenarioPeringkat UJI (sabot) tidak dijalankan di 1280px"],
+    [srcA.replace("const sab11a = await skenarioPanah(p, true)", "const sab11a = []").replace(", sab11a = await skenarioPanah(p, true)", ", sab11a = []"), "skenarioPanah UJI (sabot) tidak dijalankan di 768px"],
+    [srcA.replace("...(await skenarioKamus(p, true))];\n", "];\n"), "skenarioKamus UJI (sabot) tidak dijalankan di 390px"],
   ];
   for (const [s, pesan] of rusakA)
     ok(s !== srcA && cekPutaran(s).some((x) => x.includes(pesan)), `uji balik audit tiga lebar: "${pesan}" harus tertangkap`);
