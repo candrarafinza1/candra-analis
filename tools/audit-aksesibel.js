@@ -13,6 +13,7 @@
 // Nina & Tegar (13 Nov 19.12) menambah skenario keempat: saringan jenis + "Tampilkan lagi" di Kabar dan pencarian kamus istilah.
 // Nina & Tegar (14 Nov 07.10) menambah skenario kelima: pindah profil emiten (judul & document.title) dan tautan kembali di 404.
 // Nina & Tegar (14 Nov 08.10) menambah skenario keenam: kotak ketik kode emiten di Radar & Bandingkan (IDE.md #28).
+// Nina & Tegar (14 Nov 13.09) menambah skenario ketujuh: tombol "Salin tautan profil" (papan klip diizinkan & ditolak, IDE.md #29).
 // Cara pakai: python3 -m http.server 8765 (di akar repo), lalu: node tools/audit-aksesibel.js
 // Butuh Playwright + Chromium (sudah ada di lingkungan kerja tim); tidak dijalankan oleh tests/cek.mjs.
 const { chromium } = require('playwright');
@@ -447,6 +448,72 @@ async function skenarioKetik(p, sabot) {
   return temuan;
 }
 
+// Nina & Tegar (14 Nov 13.09, IDE.md #29): skenario ketujuh, tombol "Salin tautan profil" di profil TLKM dengan keyboard.
+// Konteks sendiri (localhost = konteks aman). (a) Papan klip diizinkan: Tab dari awal sampai tombol, Enter → pesan
+// "Tautan disalin." di role=status + aria-live=polite, isi papan klip = alamat profil TLKM, kotak alamat tetap tersembunyi,
+// fokus tetap di tombol, lalu pesan hilang sendiri setelah 4 detik. (b) Papan klip ditolak (writeText menolak): Tab + Enter →
+// kotak #salin-alamat tampil, berisi alamat TLKM, terfokus dan seluruh teksnya terpilih, pesan cadangan di role=status.
+// Sesudah tiap langkah: cekDom (id unik, rujukan aria, fokus tidak hilang). Sabot: status kehilangan role/aria-live (a),
+// writeText "berhasil" tanpa menulis (a), tombol tabindex=-1 (b), fokus dilepas (b), id ganda #salin-alamat (b).
+// Hasil sabot harus memuat jenis "status", "isi papan klip", "Tab", "fokus hilang", "id ganda".
+async function skenarioSalin(b, sabot) {
+  const temuan = [];
+  const ctx = await b.newContext({ viewport: { width: 390, height: 900 } });
+  await ctx.grantPermissions(['clipboard-read', 'clipboard-write'], { origin: 'http://localhost:8765' });
+  const p = await ctx.newPage();
+  const galat = []; p.on('pageerror', (e) => galat.push(e.message));
+  const alamat = 'http://localhost:8765/emiten.html?kode=TLKM';
+  const tabKeTombol = async (lbl) => {
+    for (let ke = 1; ke <= 40; ke++) {
+      await p.keyboard.press('Tab');
+      if (await p.evaluate(() => document.activeElement && document.activeElement.classList.contains('tombol-salin'))) return true;
+    }
+    temuan.push(`${lbl}: Tab tidak mencapai tombol "Salin tautan profil" dalam 40 langkah`);
+    await p.focus('.tombol-salin');
+    return false;
+  };
+  const baca = () => p.evaluate(() => {
+    const i = document.getElementById('salin-info'), k = document.getElementById('salin-alamat'), a = document.activeElement;
+    return { role: i && i.getAttribute('role'), live: i && i.getAttribute('aria-live'), teks: i ? i.textContent : null,
+      kotakTampil: !!k && !k.hidden && getComputedStyle(k).display !== 'none', nilai: k ? k.value : '',
+      pilih: k ? [k.selectionStart, k.selectionEnd] : [0, 0], fokus: a ? (a.id || a.className) : '' };
+  });
+  // (a) diizinkan
+  await p.goto(alamat); await p.waitForTimeout(400);
+  if (!(await p.$('.tombol-salin'))) { await ctx.close(); return ['Salin: tombol "Salin tautan profil" tidak ketemu']; }
+  await p.evaluate(() => navigator.clipboard.writeText('kosong'));
+  if (sabot) await p.evaluate(() => { const i = document.getElementById('salin-info'); i.removeAttribute('role'); i.removeAttribute('aria-live'); navigator.clipboard.writeText = () => Promise.resolve(); });
+  await tabKeTombol('Salin a');
+  await p.keyboard.press('Enter'); await p.waitForTimeout(300);
+  let st = await baca();
+  const isi = await p.evaluate(() => navigator.clipboard.readText());
+  if (st.role !== 'status' || st.live !== 'polite') temuan.push('Salin a: status: pesan harus role=status + aria-live=polite');
+  else if (st.teks !== 'Tautan disalin.') temuan.push(`Salin a: status: pesan "${st.teks}" harus "Tautan disalin."`);
+  if (isi !== alamat) temuan.push(`Salin a: isi papan klip "${isi}" bukan alamat profil TLKM`);
+  if (st.kotakTampil) temuan.push('Salin a: kotak alamat cadangan tampil padahal penyalinan berhasil');
+  if (st.fokus !== 'tombol tombol-salin') temuan.push(`Salin a: fokus hilang dari tombol (kini "${st.fokus}")`);
+  (await cekDom(p)).forEach((t) => temuan.push(`Salin a: ${t}`));
+  await p.waitForTimeout(4200);
+  st = await baca();
+  if (!sabot && st.teks !== '') temuan.push(`Salin a: status: pesan "${st.teks}" tidak hilang setelah 4 detik`);
+  // (b) ditolak
+  await p.goto(alamat); await p.waitForTimeout(400);
+  await p.evaluate(() => { navigator.clipboard.writeText = () => Promise.reject(new Error('ditolak')); });
+  if (sabot) await p.evaluate(() => { document.querySelector('.tombol-salin').tabIndex = -1; });
+  await tabKeTombol('Salin b');
+  await p.keyboard.press('Enter'); await p.waitForTimeout(300);
+  if (sabot) await p.evaluate(() => { document.activeElement.blur(); document.querySelector('main').insertAdjacentHTML('beforeend', '<p id="salin-alamat">salinan</p>'); });
+  st = await baca();
+  if (!st.kotakTampil) temuan.push('Salin b: kotak alamat cadangan tidak tampil saat papan klip ditolak');
+  if (st.nilai !== alamat) temuan.push(`Salin b: kotak alamat berisi "${st.nilai}", bukan alamat profil TLKM`);
+  if (!sabot && (st.fokus !== 'salin-alamat' || st.pilih[0] !== 0 || st.pilih[1] !== alamat.length)) temuan.push(`Salin b: fokus hilang atau teks tidak terpilih (fokus "${st.fokus}", pilihan ${st.pilih.join('–')})`);
+  if (st.role !== 'status' || !/belum bisa disalin otomatis/.test(st.teks || '')) temuan.push(`Salin b: status: pesan cadangan "${st.teks}" harus di role=status`);
+  (await cekDom(p)).forEach((t) => temuan.push(`Salin b: ${t}`));
+  galat.forEach((g) => temuan.push(`Salin: galat JS: ${g}`));
+  await ctx.close();
+  return temuan;
+}
+
 const halaman = ['index.html', 'belajar.html', 'pelajaran.html', 'pelajaran.html#kuis', 'peringkat.html', 'peringkat.html#istilah', 'radar.html',
   'radar.html#UNTR', 'emiten.html', 'emiten.html?kode=ANTM', 'kabar.html', 'metodologi.html', 'asisten.html', '404.html', 'UJI'];
 (async () => {
@@ -563,9 +630,16 @@ const halaman = ['index.html', 'belajar.html', 'pelajaran.html', 'pelajaran.html
   const jenis6 = ['status', 'fokus hilang', 'id ganda', 'pilihan tidak ikut'].filter((j) => sab6.some((t) => (t.split(': ')[1] || '').startsWith(j)));
   console.log(`Skenario keenam UJI (sabot): ${sab6.length} temuan, jenis tertangkap: ${jenis6.join(', ')} (harus 4)`);
   sab6.forEach((t) => console.log('  - ' + t));
+  const sk7 = await skenarioSalin(b, false);
+  console.log(`\nSkenario ketujuh (profil TLKM: Tab ke "Salin tautan profil" + Enter, papan klip diizinkan lalu ditolak): ${sk7.length} temuan`);
+  sk7.forEach((t) => console.log('  - ' + t));
+  const sab7 = await skenarioSalin(b, true);
+  const jenis7 = ['status', 'isi papan klip', 'Tab', 'fokus hilang', 'id ganda'].filter((j) => sab7.some((t) => (t.split(': ')[1] || '').startsWith(j)));
+  console.log(`Skenario ketujuh UJI (sabot): ${sab7.length} temuan, jenis tertangkap: ${jenis7.join(', ')} (harus 5)`);
+  sab7.forEach((t) => console.log('  - ' + t));
   if (galat.length) console.log('Galat JS:', galat);
   console.log(`\nTotal temuan halaman asli: ${total}. Temuan UJI: ${totalUji} (harus 8).`);
   await b.close();
   const sabotOk = jenis.size === 3 && ['id ganda', 'rujukan', 'fokus hilang'].every((j) => [...jenis].some((x) => x.startsWith(j)));
-  process.exit(total === 0 && totalUji === 8 && sk.length === 0 && sabotOk && sk2.length === 0 && jenis2.length === 4 && sk3.length === 0 && jenis3.length === 5 && sk4.length === 0 && jenis4.length === 5 && sk5.length === 0 && jenis5.length === 5 && sk6.length === 0 && jenis6.length === 4 && !galat.length ? 0 : 1);
+  process.exit(total === 0 && totalUji === 8 && sk.length === 0 && sabotOk && sk2.length === 0 && jenis2.length === 4 && sk3.length === 0 && jenis3.length === 5 && sk4.length === 0 && jenis4.length === 5 && sk5.length === 0 && jenis5.length === 5 && sk6.length === 0 && jenis6.length === 4 && sk7.length === 0 && jenis7.length === 5 && !galat.length ? 0 : 1);
 })();

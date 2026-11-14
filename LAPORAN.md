@@ -1464,3 +1464,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Nina: tes DOM tiruan baru di `tests/cek.mjs` (berhasil, tanpa Clipboard API, ditolak peramban) + 5 uji balik tertangkap; uji urutan judul profil kini ikut memuat tombolSalin. Audit aksesibel 10 halaman tetap 0, UJI tetap 8.
 - Kirana meninjau lewat tangkapan layar (catatan di IDE.md #29). Tugas baru: Nina + Tegar (skenario ketujuh audit: tombol salin), Kirana (cek di HP sungguhan bila situs terjangkau).
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 14 Nov 2026, 13.09 WIB (sesi siang, Bima)
+- Email masuk kerja siang terkirim ke Rafinza (12 karyawan, tugas tiap karyawan, cek.mjs lolos).
+- Nina & Tegar: `tools/audit-aksesibel.js` kini punya skenario interaksi ketujuh (`skenarioSalin`, konteks peramban sendiri). (a) Papan klip diizinkan: di profil TLKM, Tab dari awal sampai "Salin tautan profil", Enter. Dicek: pesan "Tautan disalin." di role=status + aria-live=polite, isi papan klip = alamat profil TLKM, kotak cadangan tetap tersembunyi, fokus tetap di tombol, pesan hilang setelah 4 detik. (b) Papan klip ditolak: kotak alamat tampil, berisi alamat TLKM, terfokus dan seluruh teksnya terpilih, pesan cadangan di role=status. Hasil: 0 temuan, tanpa galat JS. Uji balik menangkap 5 jenis (status, isi papan klip, Tab, fokus hilang, id ganda). Audit 10 halaman tetap 0, UJI tetap 8. Kode situs tidak diubah.
+- Bima memilih IDE.md #30 (kepala tabel Peringkat tetap terlihat) untuk Dewi + Nina; catatan teknis: wadah tabel `overflow-x: auto` membuat sticky tidak menempel di layar. Tugas baru juga: Nina + Tegar (audit aksesibel di 1280px).
+- Fajar: KLBF & BRIS dicari ulang; belum ada laba Januari–September 2026 bersumber → tetap 23 dari 32.
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Tampilan tidak diubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

@@ -478,7 +478,7 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Dampak bagi pemula: label kolom (Laba, ROE, DER, sumber) selalu terlihat.
 - Batasan: CSS saja, tanpa animasi; cek 1280px dan 390px tanpa scroll horizontal; kontras ≥4,5:1.
 - Usaha: kecil (Dewi).
-- Status: diusulkan Kirana 14 Nov 07.10.
+- Status: diusulkan Kirana 14 Nov 07.10; dipilih Bima 14 Nov 13.09 untuk Dewi + Nina, masuk BACKLOG.md (catatan: wadah tabel kini `overflow-x: auto`, sticky perlu penyesuaian).
 
 ### Tinjauan Kirana, 9 Nov 10.09: hero & kartu beranda setelah teks diubah
 - 390px: kalimat hero 5 baris, rata-rata ±37 huruf per baris (nyaman dibaca di HP); istilah bergaris tetap terbaca, tombol "Mulai belajar" & "Lihat peringkat saham" masih di layar pertama 390×844.
