@@ -330,7 +330,7 @@ tbody tr:hover { background: var(--hover-baris); }
 .radar-form label { width: 100%; font-weight: 700; }
 .radar-form select {
   font: inherit; min-height: 48px; padding: 0 14px; border-radius: var(--radius-kecil);
-  border: 2px solid var(--garis); background: var(--putih); color: var(--tinta); min-width: 240px; flex: 1 1 240px; max-width: 420px;
+  border: 2px solid var(--garis); background: var(--putih); color: var(--tinta); min-width: 0; flex: 1 1 240px; max-width: 420px;
 }
 .sinyal-daftar { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
 .sinyal {
@@ -577,6 +577,15 @@ button.istilah:hover, button.istilah[aria-expanded="true"] { color: var(--aksen)
 @media (max-width: 600px) { .tabel-profil th, .tabel-profil td { padding: 8px 6px; } }
 /* Bandingkan dua emiten (Arif & Dewi, IDE.md #14): di HP sel boleh turun baris agar tabel muat tanpa geser */
 .kontrol-banding { margin-top: 4px; }
+/* Ketik kode atau nama emiten (Dewi, IDE.md #28): kotak isian di atas pilihan lama */
+.kotak-ketik { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin: 0 0 12px; width: 100%; }
+.kotak-ketik label { width: 100%; font-weight: 700; }
+.kotak-ketik input {
+  font: inherit; min-height: 48px; padding: 0 14px; border-radius: var(--radius-kecil);
+  border: 2px solid var(--garis); background: var(--putih); color: var(--tinta); flex: 1 1 240px; max-width: 420px; min-width: 0;
+}
+.info-ketik { width: 100%; margin: 0; font-size: .9rem; color: var(--tinta-2); }
+.info-ketik:empty { display: none; }
 .tabel-banding td.angka { white-space: normal; overflow-wrap: anywhere; }
 @media (max-width: 600px) {
   .tabel-banding { table-layout: fixed; font-size: .9rem; }

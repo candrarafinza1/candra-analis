@@ -3282,7 +3282,7 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
   const app = readFileSync("assets/app.js", "utf8");
   const ambil = (awal) => { const i = app.indexOf("  " + awal); const j = app.indexOf("\n  }\n", i); return i < 0 || j < 0 ? "" : app.slice(i, j + 5); };
   const iP = app.indexOf("  var PANDUAN_RADAR = ["), jP = app.indexOf("];", iP);
-  const kodeRadar = [ambil("function el("), iP < 0 ? "" : app.slice(iP, jP + 2), ambil("function panduanRadar()"), ambil("function renderRadar()")];
+  const kodeRadar = [ambil("function el("), iP < 0 ? "" : app.slice(iP, jP + 2), ambil("function panduanRadar()"), ambil("function cocokEmiten("), ambil("function kotakKetik("), ambil("function renderRadar()")];
   ok(kodeRadar.every(Boolean), "app.js: el/PANDUAN_RADAR/panduanRadar/renderRadar harus bisa diambil untuk uji urutan judul");
   const radarHtml = readFileSync("radar.html", "utf8");
   ok(/<main[\s>][\s\S]*id="radar"[\s\S]*<\/main>/.test(radarHtml), "radar.html: wadah #radar harus berada di <main>");
@@ -3464,7 +3464,7 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
     const iU = app.indexOf("  var angka = new Intl"), jU = app.indexOf("  function selKode(");
     const iB = app.indexOf("  var BULAN = ["), jB = app.indexOf("];", iB);
     const kodeProfil = [iU < 0 || jU < iU ? "" : app.slice(iU, jU), iB < 0 ? "" : app.slice(iB, jB + 2), ambilP("function tanggalId("),
-      ambilP("function daftarKabar("), ambilP("function kabarBaru("), ambilP("function kartuKabar("), ambilP("function bagianBanding("),
+      ambilP("function daftarKabar("), ambilP("function kabarBaru("), ambilP("function kartuKabar("), ambilP("function cocokEmiten("), ambilP("function kotakKetik("), ambilP("function bagianBanding("),
       ambilP("function dividenTampil("), ambilP("function renderProfil()")];
     ok(kodeProfil.every(Boolean), "app.js: utilitas/BULAN/tanggalId/daftarKabar/kabarBaru/kartuKabar/bagianBanding/dividenTampil/renderProfil harus bisa diambil untuk uji urutan judul");
     const emitenHtml = readFileSync("emiten.html", "utf8");
@@ -4075,6 +4075,75 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
     for (const [js, hanya, pesan] of rusakKlik)
       ok(ujiKlik(js, htmlHal, hanya).some((s) => s.includes(pesan)), `uji balik klik tab/istilah: "${pesan}" harus tertangkap`);
   }
+}
+
+// Nina & Arif (14 Nov, IDE.md #28): kotak "Ketik kode atau nama emiten" di Radar & Bandingkan.
+// cocokEmiten + kotakKetik dijalankan dengan DOM tiruan; <select> harus ikut berganti hanya bila tepat satu emiten cocok,
+// pesan di role=status, <select> lama tetap ada, dan pilihan langsung di <select> mengosongkan isian. Disertai uji balik.
+{
+  const appK = readFileSync("assets/app.js", "utf8");
+  const ambilK = (js, awal) => { const i = js.indexOf("  " + awal); const j = js.indexOf("\n  }\n", i); return i < 0 || j < 0 ? "" : js.slice(i, j + 5); };
+  const ujiKetik = (js) => {
+    const salah = [];
+    const kode = [ambilK(js, "function el("), ambilK(js, "function cocokEmiten("), ambilK(js, "function kotakKetik(")];
+    if (!kode.every(Boolean)) return ["fungsi el/cocokEmiten/kotakKetik tidak ketemu"];
+    const simpul = (tag) => ({ tag, anak: [], atribut: {}, className: "", value: "", textContent: "", _d: {},
+      appendChild(c) { this.anak.push(c); return c; }, setAttribute(k, v) { this.atribut[k] = String(v); },
+      addEventListener(n, f) { (this._d[n] = this._d[n] || []).push(f); },
+      dispatchEvent(ev) { (this._d[ev.type] || []).forEach((f) => f(ev)); return true; } });
+    const document = { createElement: simpul, createTextNode: (t) => ({ tag: "#text", teks: t }) };
+    class Event { constructor(type) { this.type = type; } }
+    const daftar = [{ kode: "ANTM", nama: "Aneka Tambang Tbk" }, { kode: "BRIS", nama: "Bank Syariah Indonesia Tbk" },
+      { kode: "BRPT", nama: "Barito Pacific Tbk" }, { kode: "TLKM", nama: "Telkom Indonesia (Persero) Tbk" }];
+    let kotakKetik;
+    try { kotakKetik = new Function("document", "Event", kode.join("\n") + "\nreturn kotakKetik;")(document, Event); }
+    catch (e) { return ["kode galat: " + e.message]; }
+    const pilih = simpul("select"); let berganti = 0;
+    pilih.addEventListener("change", () => { berganti++; });
+    const w = kotakKetik("uji", pilih, daftar);
+    const cari = (m, f) => (f(m) ? m : (m.anak || []).map((c) => cari(c, f)).find(Boolean));
+    const isi = cari(w, (m) => m.tag === "input"), label = cari(w, (m) => m.tag === "label"), dl = cari(w, (m) => m.tag === "datalist");
+    const info = cari(w, (m) => m.atribut && m.atribut.role === "status");
+    if (!isi || !label || !dl || !info) return ["input/label/datalist/role=status harus ada"];
+    if (label.atribut.for !== isi.atribut.id) salah.push("label harus menunjuk ke kotak isian");
+    if (label.textContent !== "Ketik kode atau nama emiten") salah.push("teks label harus \"Ketik kode atau nama emiten\"");
+    if (isi.atribut.list !== dl.atribut.id) salah.push("kotak isian harus memakai datalist");
+    if (isi.atribut["aria-describedby"] !== info.atribut.id) salah.push("kotak isian harus aria-describedby ke pesan status");
+    if (dl.anak.length !== daftar.length) salah.push("datalist harus berisi semua emiten pilihan");
+    const ketik = (t) => { isi.value = t; isi._d.input.forEach((f) => f({ type: "input" })); };
+    ketik("tlkm");
+    if (pilih.value !== "TLKM" || berganti !== 1) salah.push("ketik \"tlkm\" harus memilih TLKM dan mengirim change sekali");
+    if (!/Dipilih: TLKM/.test(info.textContent)) salah.push("pesan status harus menyebut emiten terpilih");
+    if (isi.value !== "tlkm") salah.push("isian tidak boleh ditimpa saat dipilih lewat ketikan");
+    ketik("ANTM · Aneka Tambang Tbk");
+    if (pilih.value !== "ANTM") salah.push("pilihan dari datalist (\"KODE · Nama\") harus memilih kodenya");
+    ketik("barito");
+    if (pilih.value !== "BRPT") salah.push("ketik nama \"barito\" harus memilih BRPT");
+    const n0 = berganti; ketik("br");
+    if (pilih.value !== "BRPT" || berganti !== n0) salah.push("ketik \"br\" (2 cocok) tidak boleh mengganti pilihan");
+    if (!/2 emiten cocok/.test(info.textContent)) salah.push("2 cocok: pesan harus menyebut jumlahnya");
+    ketik("zzzz");
+    if (!/Tidak ada emiten yang cocok/.test(info.textContent)) salah.push("tidak cocok: pesan \"Tidak ada emiten yang cocok\" harus muncul");
+    if (/beli|jual/i.test(info.textContent)) salah.push("pesan tidak boleh memakai kata beli/jual");
+    ketik("");
+    if (info.textContent !== "") salah.push("isian kosong: pesan harus kosong");
+    ketik("antm"); pilih.value = "BRIS"; pilih.dispatchEvent(new Event("change"));
+    if (isi.value !== "" || info.textContent !== "") salah.push("ganti langsung di <select> harus mengosongkan isian & pesan");
+    return salah;
+  };
+  const sK = ujiKetik(appK);
+  ok(sK.length === 0, `kotak ketik emiten (DOM tiruan): ${sK.join("; ")}`);
+  ok(/kotakKetik\("radar", pilih,/.test(appK) && /kotakKetik\("banding", pilih,/.test(appK), "kotak ketik emiten harus dipasang di Radar dan Bandingkan");
+  ok(/id: "pilih-saham"/.test(appK) && /id: "pilih-banding"/.test(appK), "pilihan lama (<select>) Radar & Bandingkan harus tetap ada sebagai cadangan");
+  const rusakK = [
+    [appK.replace("if (c.hasil.length === 1) {", "if (c.hasil.length >= 1) {"), "tidak boleh mengganti pilihan"],
+    [appK.replace('role: "status", "aria-live": "polite" });\n    var dariKetik', '"aria-live": "polite" });\n    var dariKetik'), "role=status harus ada"],
+    [appK.replace("isi.value = \"\"; info.textContent = \"\";", ""), "harus mengosongkan isian"],
+    [appK.replace('if (dariKetik) return;', ""), "tidak boleh ditimpa"],
+    [appK.replace('.split("·")[0]', ""), "\"KODE · Nama\""],
+  ];
+  for (const [js, pesan] of rusakK)
+    ok(js !== appK && ujiKetik(js).some((x) => x.includes(pesan)), `uji balik kotak ketik emiten: "${pesan}" harus tertangkap`);
 }
 
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }

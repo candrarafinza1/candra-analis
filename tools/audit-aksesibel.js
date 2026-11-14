@@ -12,6 +12,7 @@
 // Nina & Tegar (13 Nov 18.11) menambah skenario ketiga: kuis dengan keyboard saja dan saringan sektor Peringkat.
 // Nina & Tegar (13 Nov 19.12) menambah skenario keempat: saringan jenis + "Tampilkan lagi" di Kabar dan pencarian kamus istilah.
 // Nina & Tegar (14 Nov 07.10) menambah skenario kelima: pindah profil emiten (judul & document.title) dan tautan kembali di 404.
+// Nina & Tegar (14 Nov 08.10) menambah skenario keenam: kotak ketik kode emiten di Radar & Bandingkan (IDE.md #28).
 // Cara pakai: python3 -m http.server 8765 (di akar repo), lalu: node tools/audit-aksesibel.js
 // Butuh Playwright + Chromium (sudah ada di lingkungan kerja tim); tidak dijalankan oleh tests/cek.mjs.
 const { chromium } = require('playwright');
@@ -399,6 +400,53 @@ async function skenario404(p, sabot) {
   return temuan;
 }
 
+// Nina & Tegar (14 Nov, IDE.md #28): skenario keenam, kotak "Ketik kode atau nama emiten".
+// (a) Radar: fokus #radar-ketik, ketik "untr" dengan keyboard → <select> ikut UNTR, h2 hasil diawali UNTR, pesan status
+// menyebut UNTR, fokus tetap di kotak isian. Lalu hapus isian dan ketik "zzzz" → pesan "Tidak ada emiten yang cocok",
+// pilihan tetap UNTR. (b) Profil ANTM: ketik "tlkm" di #banding-ketik → #pilih-banding TLKM, tabel Bandingkan memuat TLKM.
+// Sabot: pesan status kehilangan role/aria-live (langkah a1), fokus dilepas (a2), id ganda (a2), kotak isian Bandingkan
+// diganti salinan tanpa pendengar sehingga pilihan tidak ikut (b). Hasil sabot harus memuat jenis "status", "fokus hilang",
+// "id ganda", "pilihan tidak ikut".
+async function skenarioKetik(p, sabot) {
+  const temuan = [];
+  const ketik = async (sel, teks) => {
+    await p.focus(sel); await p.keyboard.press('Control+A'); await p.keyboard.press('Backspace');
+    await p.keyboard.type(teks, { delay: 30 }); await p.waitForTimeout(250);
+  };
+  const cekStatus = (sel) => p.evaluate((s) => { const i = document.querySelector(s); return i ? { role: i.getAttribute('role'), live: i.getAttribute('aria-live'), teks: i.textContent } : null; }, sel);
+  await p.goto('http://localhost:8765/radar.html'); await p.waitForTimeout(400);
+  if (!(await p.$('#radar-ketik')) || !(await p.$('#pilih-saham'))) return ['Radar: #radar-ketik atau #pilih-saham tidak ketemu'];
+  await ketik('#radar-ketik', 'untr');
+  if (sabot) await p.evaluate(() => { const i = document.getElementById('radar-info'); i.removeAttribute('role'); i.removeAttribute('aria-live'); });
+  let st = await p.evaluate(() => ({ v: document.getElementById('pilih-saham').value, h2: (document.querySelector('#hasil-radar h2') || {}).textContent || '', fokus: document.activeElement && document.activeElement.id }));
+  let inf = await cekStatus('#radar-info');
+  if (st.v !== 'UNTR') temuan.push(`Radar a1: pilihan tidak ikut UNTR (${st.v || 'kosong'})`);
+  if (!st.h2.startsWith('UNTR')) temuan.push(`Radar a1: hasil tidak menampilkan UNTR ("${st.h2}")`);
+  if (!inf || inf.role !== 'status' || inf.live !== 'polite') temuan.push('Radar a1: status: pesan harus role=status + aria-live=polite');
+  else if (!/Dipilih: UNTR/.test(inf.teks)) temuan.push(`Radar a1: status: pesan "${inf.teks}" harus menyebut UNTR`);
+  if (st.fokus !== 'radar-ketik' && !sabot) temuan.push('Radar a1: fokus hilang dari kotak isian');
+  (await cekDom(p)).forEach((t) => temuan.push(`Radar a1: ${t}`));
+  await ketik('#radar-ketik', 'zzzz');
+  if (sabot) await p.evaluate(() => { document.activeElement.blur(); document.querySelector('main').insertAdjacentHTML('beforeend', '<p id="radar-ketik">salinan</p>'); });
+  st = await p.evaluate(() => ({ v: document.getElementById('pilih-saham').value }));
+  inf = await cekStatus('#radar-info');
+  if (st.v !== 'UNTR') temuan.push(`Radar a2: pilihan berubah padahal tidak ada yang cocok (${st.v})`);
+  if (!inf || !/Tidak ada emiten yang cocok/.test(inf.teks)) temuan.push(`Radar a2: status: pesan tidak cocok tidak muncul ("${inf && inf.teks}")`);
+  (await cekDom(p)).forEach((t) => temuan.push(`Radar a2: ${t}`));
+  if (sabot) await p.evaluate(() => document.querySelectorAll('p#radar-ketik').forEach((x) => x.remove()));
+  await p.goto('http://localhost:8765/emiten.html?kode=ANTM'); await p.waitForTimeout(400);
+  if (!(await p.$('#banding-ketik'))) { temuan.push('Bandingkan: #banding-ketik tidak ketemu'); return temuan; }
+  if (sabot) await p.evaluate(() => { const i = document.getElementById('banding-ketik'); i.replaceWith(i.cloneNode(true)); });
+  await ketik('#banding-ketik', 'tlkm');
+  st = await p.evaluate(() => ({ v: document.getElementById('pilih-banding').value, cap: (document.querySelector('#hasil-banding caption') || {}).textContent || '', fokus: document.activeElement && document.activeElement.id }));
+  if (st.v !== 'TLKM' || !st.cap.includes('TLKM')) temuan.push(`Bandingkan b: pilihan tidak ikut TLKM (pilihan "${st.v}", tabel "${st.cap.slice(0, 30)}")`);
+  if (st.fokus !== 'banding-ketik') temuan.push('Bandingkan b: fokus hilang dari kotak isian');
+  inf = await cekStatus('#banding-info');
+  if (!sabot && (!inf || inf.role !== 'status' || !/Dipilih: TLKM/.test(inf.teks))) temuan.push(`Bandingkan b: status: pesan "${inf && inf.teks}" harus menyebut TLKM di role=status`);
+  (await cekDom(p)).forEach((t) => temuan.push(`Bandingkan b: ${t}`));
+  return temuan;
+}
+
 const halaman = ['index.html', 'belajar.html', 'pelajaran.html', 'pelajaran.html#kuis', 'peringkat.html', 'peringkat.html#istilah', 'radar.html',
   'radar.html#UNTR', 'emiten.html', 'emiten.html?kode=ANTM', 'kabar.html', 'metodologi.html', 'asisten.html', '404.html', 'UJI'];
 (async () => {
@@ -508,9 +556,16 @@ const halaman = ['index.html', 'belajar.html', 'pelajaran.html', 'pelajaran.html
   const jenis5 = ['judul h1', 'document.title', 'id ganda', 'Tab', 'kembali'].filter((j) => sab5.some((t) => (t.split(': ')[1] || '').startsWith(j)));
   console.log(`Skenario kelima UJI (sabot): ${sab5.length} temuan, jenis tertangkap: ${jenis5.join(', ')} (harus 5)`);
   sab5.forEach((t) => console.log('  - ' + t));
+  const sk6 = await skenarioKetik(p, false);
+  console.log(`\nSkenario keenam (ketik kode di Radar: "untr" lalu "zzzz"; ketik "tlkm" di Bandingkan profil ANTM): ${sk6.length} temuan`);
+  sk6.forEach((t) => console.log('  - ' + t));
+  const sab6 = await skenarioKetik(p, true);
+  const jenis6 = ['status', 'fokus hilang', 'id ganda', 'pilihan tidak ikut'].filter((j) => sab6.some((t) => (t.split(': ')[1] || '').startsWith(j)));
+  console.log(`Skenario keenam UJI (sabot): ${sab6.length} temuan, jenis tertangkap: ${jenis6.join(', ')} (harus 4)`);
+  sab6.forEach((t) => console.log('  - ' + t));
   if (galat.length) console.log('Galat JS:', galat);
   console.log(`\nTotal temuan halaman asli: ${total}. Temuan UJI: ${totalUji} (harus 8).`);
   await b.close();
   const sabotOk = jenis.size === 3 && ['id ganda', 'rujukan', 'fokus hilang'].every((j) => [...jenis].some((x) => x.startsWith(j)));
-  process.exit(total === 0 && totalUji === 8 && sk.length === 0 && sabotOk && sk2.length === 0 && jenis2.length === 4 && sk3.length === 0 && jenis3.length === 5 && sk4.length === 0 && jenis4.length === 5 && sk5.length === 0 && jenis5.length === 5 && !galat.length ? 0 : 1);
+  process.exit(total === 0 && totalUji === 8 && sk.length === 0 && sabotOk && sk2.length === 0 && jenis2.length === 4 && sk3.length === 0 && jenis3.length === 5 && sk4.length === 0 && jenis4.length === 5 && sk5.length === 0 && jenis5.length === 5 && sk6.length === 0 && jenis6.length === 4 && !galat.length ? 0 : 1);
 })();

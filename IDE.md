@@ -456,7 +456,7 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Dampak bagi pemula: memilih emiten dalam 2–3 ketukan, tanpa menggulir daftar panjang.
 - Batasan: elemen bawaan HTML, tanpa pustaka, tanpa simpanan; dapat dipakai keyboard; label jelas; tanpa kata ajakan.
 - Usaha: kecil–sedang (Arif, Dewi merapikan tampilan 390px). Nina & Tegar menambah skenario di audit-aksesibel.
-- Status: diusulkan Kirana 14 Nov 07.10; dipilih Bima 14 Nov 07.10 untuk Arif + Dewi, masuk BACKLOG.md.
+- Status: diusulkan Kirana 14 Nov 07.10; dipilih Bima 14 Nov 07.10 untuk Arif + Dewi, masuk BACKLOG.md; **selesai 14 Nov 08.10** (Arif + Dewi). Tinjauan Kirana: di 390px kotak isian selebar layar (358px, tinggi 48px), pesan status tepat di bawah isian, pilihan lama tetap di bawahnya dengan label "Atau pilih …"; mode gelap terbaca (teks pesan abu terang di latar gelap). Belum dicek di HP sungguhan (datalist tampil berbeda di tiap peramban).
 
 ### 29. Profil emiten: tombol "Salin tautan profil"
 - **Berbagi tanpa ribet** — fitur, usaha kecil

@@ -1451,3 +1451,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Tegar: 11 commit sejak 13 Nov dipindai, tidak ada rahasia.
 - Fajar: KLBF & BRIS dicari ulang; belum ada laba Januari–September 2026 bersumber → tetap 23 dari 32.
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Tampilan tidak diubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 14 Nov 2026, 08.10 WIB (sesi pagi, Bima)
+- Arif + Dewi (IDE.md #28 ★): kotak "Ketik kode atau nama emiten" dengan `<datalist>` kini ada di Radar Risiko dan Bandingkan (profil emiten). Bila isian cocok dengan tepat satu emiten (kode, awal kode, atau nama), pilihan ikut berganti dan hasil tampil; bila banyak/tidak ada yang cocok, pesan singkat di role=status. Pilihan lama tetap ada sebagai cadangan. Dicek 390px & 1280px, terang & gelap: tanpa scroll horizontal, tanpa galat JS.
+- Nina: tes DOM tiruan baru di `tests/cek.mjs` (kode, nama, pilihan datalist, 2 cocok, tidak cocok, isian kosong, ganti langsung di pilihan) + 5 uji balik tertangkap; uji urutan judul Radar & profil disesuaikan dengan fungsi baru.
+- Nina + Tegar: skenario keenam di `tools/audit-aksesibel.js` (ketik "untr" lalu "zzzz" di Radar, "tlkm" di Bandingkan ANTM): 0 temuan; sabot menangkap 4 jenis (status, fokus hilang, id ganda, pilihan tidak ikut). Audit 10 halaman tetap 0, UJI tetap 8.
+- Kirana meninjau lewat tangkapan layar (catatan di IDE.md #28). Tugas baru: Arif + Dewi (IDE.md #29 salin tautan profil), Kirana (cek kotak ketik di HP sungguhan bila situs terjangkau).
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

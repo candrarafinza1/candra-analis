@@ -563,6 +563,54 @@
     ]);
   }
 
+  /* ---------- Ketik kode atau nama emiten (Arif + Dewi, IDE.md #28, 14 Nov) ----------
+     Kotak isian + <datalist> bawaan peramban di atas <select> yang lama (cadangan bila datalist tidak didukung).
+     Bila isian cocok dengan tepat satu emiten, <select> ikut berganti lalu event change dikirim. Tanpa simpanan. */
+  function cocokEmiten(teks, daftar) {
+    var q = String(teks || "").split("·")[0].trim().toLowerCase();
+    if (!q) return { q: "", hasil: [] };
+    var persis = daftar.filter(function (x) { return x.kode.toLowerCase() === q; });
+    if (persis.length) return { q: q, hasil: persis };
+    return { q: q, hasil: daftar.filter(function (x) {
+      return x.kode.toLowerCase().indexOf(q) === 0 || (q.length >= 2 && String(x.nama || "").toLowerCase().indexOf(q) !== -1);
+    }) };
+  }
+  function kotakKetik(idDasar, pilih, daftar) {
+    var idIsi = idDasar + "-ketik", idDaftar = idDasar + "-daftar", idInfo = idDasar + "-info";
+    var dl = el("datalist", { id: idDaftar });
+    daftar.forEach(function (x) { dl.appendChild(el("option", { value: x.kode + " · " + x.nama })); });
+    var isi = el("input", { type: "text", id: idIsi, list: idDaftar, autocomplete: "off", spellcheck: "false",
+      inputmode: "search", "aria-describedby": idInfo });
+    var info = el("p", { id: idInfo, class: "info-ketik", role: "status", "aria-live": "polite" });
+    var dariKetik = false;
+    isi.addEventListener("input", function () {
+      var c = cocokEmiten(isi.value, daftar);
+      if (!c.q) { info.textContent = ""; return; }
+      if (c.hasil.length === 1) {
+        var x = c.hasil[0];
+        info.textContent = "Dipilih: " + x.kode + " · " + x.nama + ".";
+        if (pilih.value !== x.kode) {
+          pilih.value = x.kode;
+          dariKetik = true;
+          pilih.dispatchEvent(new Event("change", { bubbles: true }));
+          dariKetik = false;
+        }
+      } else if (c.hasil.length > 1) {
+        info.textContent = c.hasil.length + " emiten cocok. Ketik lebih lengkap, atau pilih dari daftar.";
+      } else {
+        info.textContent = "Tidak ada emiten yang cocok dengan \u201c" + isi.value.trim() + "\u201d di data kami. Coba kode empat huruf, atau pilih dari daftar di bawah.";
+      }
+    });
+    // Bila <select> diganti langsung, isian dikosongkan agar keduanya tidak bertentangan.
+    pilih.addEventListener("change", function () {
+      if (dariKetik) return;
+      isi.value = ""; info.textContent = "";
+    });
+    return el("div", { class: "kotak-ketik" }, [
+      el("label", { for: idIsi, text: "Ketik kode atau nama emiten" }), isi, dl, info
+    ]);
+  }
+
   function renderRadar() {
     var akar = document.getElementById("radar");
     if (!akar) return;
@@ -574,8 +622,10 @@
     EMITEN.slice().sort(function (a, b) { return a.kode.localeCompare(b.kode); }).forEach(function (e) {
       pilih.appendChild(el("option", { value: e.kode, text: e.kode + " · " + e.nama }));
     });
+    var urutRadar = EMITEN.slice().sort(function (a, b) { return a.kode.localeCompare(b.kode); });
     var form = el("div", { class: "radar-form" }, [
-      el("label", { for: "pilih-saham", text: "Saham yang Anda pegang" }), pilih
+      kotakKetik("radar", pilih, urutRadar),
+      el("label", { for: "pilih-saham", text: "Atau pilih saham yang Anda pegang" }), pilih
     ]);
     var hasil = el("div", { id: "hasil-radar", "aria-live": "polite" });
     akar.appendChild(form);
@@ -639,6 +689,8 @@
     pilih.appendChild(el("option", { value: "", text: "Pilih emiten…" }));
     EMITEN.filter(function (x) { return x.kode !== e.kode; }).sort(function (a, b) { return a.kode.localeCompare(b.kode); })
       .forEach(function (x) { pilih.appendChild(el("option", { value: x.kode, text: x.kode + " · " + x.nama })); });
+    var urutBanding = EMITEN.filter(function (x) { return x.kode !== e.kode; }).sort(function (a, b) { return a.kode.localeCompare(b.kode); });
+    wadah.appendChild(kotakKetik("banding", pilih, urutBanding));
     wadah.appendChild(el("div", { class: "saring-sektor kontrol-banding" }, [el("label", { for: "pilih-banding", text: "Bandingkan " + e.kode + " dengan" }), pilih]));
     var hasil = el("div", { id: "hasil-banding", "aria-live": "polite" });
     wadah.appendChild(hasil);
