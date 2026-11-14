@@ -15,6 +15,7 @@
 // Nina & Tegar (14 Nov 08.10) menambah skenario keenam: kotak ketik kode emiten di Radar & Bandingkan (IDE.md #28).
 // Nina & Tegar (14 Nov 13.09) menambah skenario ketujuh: tombol "Salin tautan profil" (papan klip diizinkan & ditolak, IDE.md #29).
 // Nina & Tegar (14 Nov 15.09) menambah putaran 1280×900: semua halaman (+ UJI) dan skenario Peringkat & Salin.
+// Nina & Tegar (14 Nov 16.08) menambah putaran 1280×900 untuk Radar, kotak ketik, Kabar, dan kamus istilah.
 // Cara pakai: python3 -m http.server 8765 (di akar repo), lalu: node tools/audit-aksesibel.js
 // Butuh Playwright + Chromium (sudah ada di lingkungan kerja tim); tidak dijalankan oleh tests/cek.mjs.
 const { chromium } = require('playwright');
@@ -658,9 +659,21 @@ const halaman = ['index.html', 'belajar.html', 'pelajaran.html', 'pelajaran.html
   const jenis8s = ['status', 'isi papan klip', 'Tab', 'fokus hilang', 'id ganda'].filter((j) => sab8s.some((t) => (t.split(': ')[1] || '').startsWith(j)));
   const sabot8Ok = jenis8p.size === 3 && jenis8s.length === 5;
   console.log(`Skenario 1280px UJI (sabot): Peringkat ${jenis8p.size} jenis (harus 3), Salin ${jenis8s.length} jenis (harus 5)`);
+  // Nina & Tegar (14 Nov 16.08): putaran 1280×900 juga untuk Radar (ganti emiten + istilah), kotak ketik kode
+  // (Radar & Bandingkan), Kabar ("Tampilkan lagi") dan kamus istilah. Hasil sehat 0 temuan; sabot tetap tertangkap.
+  const sk9 = [...(await skenarioRadar(p, false)), ...(await skenarioKetik(p, false)), ...(await skenarioKabar(p, false)), ...(await skenarioKamus(p, false))];
+  console.log(`\nSkenario 1280px kedua (Radar ganti emiten + istilah; kotak ketik Radar & Bandingkan; Kabar + "Tampilkan lagi"; kamus istilah): ${sk9.length} temuan`);
+  sk9.forEach((t) => console.log('  - ' + t));
+  const sab9r = await skenarioRadar(p, true), sab9k = await skenarioKetik(p, true);
+  const sab9kk = [...(await skenarioKabar(p, true)), ...(await skenarioKamus(p, true))];
+  const jenisDari = (daftar, arr) => daftar.filter((j) => arr.some((t) => (t.split(': ')[1] || '').startsWith(j)));
+  const jenis9r = jenisDari(['id ganda', 'rujukan'], sab9r), jenis9k = jenisDari(['status', 'fokus hilang', 'id ganda', 'pilihan tidak ikut'], sab9k);
+  const jenis9kk = jenisDari(['aria-live', 'ket-jenis', 'fokus hilang', 'info-kamus status', 'info-kamus jumlah'], sab9kk);
+  const sabot9Ok = jenis9r.length === 2 && jenis9k.length === 4 && jenis9kk.length === 5;
+  console.log(`Skenario 1280px kedua UJI (sabot): Radar ${jenis9r.length} jenis (harus 2), kotak ketik ${jenis9k.length} jenis (harus 4), Kabar + kamus ${jenis9kk.length} jenis (harus 5)`);
   if (galat.length) console.log('Galat JS:', galat);
   console.log(`\nTotal temuan halaman asli: ${total} (390px ${r390.total}, 1280px ${r1280.total}). Temuan UJI: 390px ${r390.totalUji}, 1280px ${r1280.totalUji} (masing-masing harus 8).`);
   await b.close();
   const sabotOk = jenis.size === 3 && ['id ganda', 'rujukan', 'fokus hilang'].every((j) => [...jenis].some((x) => x.startsWith(j)));
-  process.exit(total === 0 && totalUji === 8 && r1280.totalUji === 8 && sk8.length === 0 && sabot8Ok && sk.length === 0 && sabotOk && sk2.length === 0 && jenis2.length === 4 && sk3.length === 0 && jenis3.length === 5 && sk4.length === 0 && jenis4.length === 5 && sk5.length === 0 && jenis5.length === 5 && sk6.length === 0 && jenis6.length === 4 && sk7.length === 0 && jenis7.length === 5 && !galat.length ? 0 : 1);
+  process.exit(total === 0 && totalUji === 8 && r1280.totalUji === 8 && sk8.length === 0 && sabot8Ok && sk9.length === 0 && sabot9Ok && sk.length === 0 && sabotOk && sk2.length === 0 && jenis2.length === 4 && sk3.length === 0 && jenis3.length === 5 && sk4.length === 0 && jenis4.length === 5 && sk5.length === 0 && jenis5.length === 5 && sk6.length === 0 && jenis6.length === 4 && sk7.length === 0 && jenis7.length === 5 && !galat.length ? 0 : 1);
 })();
