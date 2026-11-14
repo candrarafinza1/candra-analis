@@ -445,6 +445,41 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Usaha: kecil (Arif). Nina menambah cek.
 - Status: diusulkan Kirana 9 Nov 07.09; masuk BACKLOG.md, menunggu Hana memastikan tanggal berlaku dari sumber resmi.
 
+### 28. Radar & Bandingkan: ketik kode untuk memilih emiten ★ paling berdampak
+- **Pilihan emiten yang cepat di HP** — fitur, usaha kecil–sedang
+- Masalah: pilihan emiten di Radar Risiko dan Bandingkan adalah daftar panjang (32 emiten). Di HP pemula harus
+  menggulir daftar untuk mencari satu kode, padahal biasanya mereka sudah tahu kodenya (mis. dari berita).
+- Ide: tambahkan kotak isian berlabel "Ketik kode atau nama emiten" dengan `<datalist>` bawaan peramban di atas pilihan
+  yang ada. Saat isian cocok dengan satu kode, pilihan ikut berganti dan hasil tampil seperti biasa. Pilihan lama tetap ada
+  (cadangan untuk peramban yang belum mendukung datalist). Bila tidak ada yang cocok: pesan singkat di elemen role=status.
+- Acuan tren: kolom cari kode saham di aplikasi investasi dan pencarian ketik-langsung (search-as-you-type) di aplikasi belajar.
+- Dampak bagi pemula: memilih emiten dalam 2–3 ketukan, tanpa menggulir daftar panjang.
+- Batasan: elemen bawaan HTML, tanpa pustaka, tanpa simpanan; dapat dipakai keyboard; label jelas; tanpa kata ajakan.
+- Usaha: kecil–sedang (Arif, Dewi merapikan tampilan 390px). Nina & Tegar menambah skenario di audit-aksesibel.
+- Status: diusulkan Kirana 14 Nov 07.10; dipilih Bima 14 Nov 07.10 untuk Arif + Dewi, masuk BACKLOG.md.
+
+### 29. Profil emiten: tombol "Salin tautan profil"
+- **Berbagi tanpa ribet** — fitur, usaha kecil
+- Masalah: pemula sering ingin mengirim profil satu emiten ke teman/grup belajar, tetapi di HP bilah alamat tersembunyi.
+- Ide: tombol kecil di bawah judul profil: "Salin tautan profil". Memakai `navigator.clipboard` bila ada; bila tidak, alamat
+  ditampilkan di kotak teks yang sudah terpilih. Pesan "Tautan disalin" di elemen role=status, hilang sendiri.
+- Acuan tren: tombol salin/bagikan di halaman produk dan aplikasi edukasi.
+- Dampak bagi pemula: mudah berbagi bahan belajar; yang dibagikan profil berisi sumber, bukan ajakan.
+- Batasan: tanpa layanan pihak ketiga, tanpa simpanan; teks tombol tidak memuat ajakan beli/jual.
+- Usaha: kecil (Arif). Nina menambah cek.
+- Status: diusulkan Kirana 14 Nov 07.10.
+
+### 30. Peringkat (desktop): kepala tabel tetap terlihat saat digulir
+- **Tabel panjang tetap terbaca** — tampilan, usaha kecil
+- Masalah: di layar lebar tabel Peringkat memuat banyak baris; setelah digulir, pemula lupa kolom mana yang sedang dibaca.
+- Ide: `position: sticky` pada kepala tabel di lebar ≥600px (di HP tabel sudah menjadi kartu berlabel, jadi tidak berubah).
+  Latar kepala memakai token warna agar tetap kontras di mode gelap.
+- Acuan tren: tabel data di dasbor dan situs pasar modal.
+- Dampak bagi pemula: label kolom (Laba, ROE, DER, sumber) selalu terlihat.
+- Batasan: CSS saja, tanpa animasi; cek 1280px dan 390px tanpa scroll horizontal; kontras ≥4,5:1.
+- Usaha: kecil (Dewi).
+- Status: diusulkan Kirana 14 Nov 07.10.
+
 ### Tinjauan Kirana, 9 Nov 10.09: hero & kartu beranda setelah teks diubah
 - 390px: kalimat hero 5 baris, rata-rata ±37 huruf per baris (nyaman dibaca di HP); istilah bergaris tetap terbaca, tombol "Mulai belajar" & "Lihat peringkat saham" masih di layar pertama 390×844.
 - 1280px: 4 baris, ±47 huruf per baris. Tanpa scroll horizontal di kedua lebar (juga Radar, Peringkat, profil ANTM).

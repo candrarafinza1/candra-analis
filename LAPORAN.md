@@ -1443,3 +1443,11 @@ Satu entri per sesi kerja. Terbaru di bawah.
 ## 13 Nov 2026, 21.54 WIB (sesi malam, Bima)
 - Sesi terjadwal 20.08 baru berjalan pukul 21.53 (terlambat dari penjadwal). Sisa jam kerja tinggal 6 menit, jadi tugas teratas (Nina + Tegar: skenario kelima audit, profil emiten dan halaman 404) tidak dimulai agar tidak setengah jadi; dilanjutkan sesi pagi.
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Kode situs tidak diubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 14 Nov 2026, 07.10 WIB (sesi pagi, Bima)
+- Email masuk kerja pagi terkirim ke Rafinza (12 karyawan, tugas tiap karyawan, cek.mjs lolos).
+- Nina & Tegar: `tools/audit-aksesibel.js` kini punya skenario interaksi kelima di DOM sungguhan. (a) Profil emiten: dari daftar emiten, tautan ANTM difokuskan lalu Enter; di profil ANTM pilih TLKM di Bandingkan, lalu tautan "profil TLKM" dengan Enter. Dicek: alamat, h1 = kode, document.title = "KODE · Nama · Candra Analis", Tab pertama mendarat di "Langsung ke isi", id unik, rujukan aria tepat. (b) 404: Tab dari awal mencapai tautan "Beranda", Enter membuka beranda. Hasil: 0 temuan. Uji balik menangkap 5 jenis (judul h1, document.title, id ganda, Tab, kembali). Masalah ringan: uji balik pertama mengarah ke alamat tak ada sehingga muncul galat ViewTransition dari halaman galat server lokal; sabot diarahkan ke belajar.html. Audit 10 halaman tetap 0, UJI tetap 8. Kode situs tidak diubah.
+- Kirana: 3 usulan baru minggu ini di IDE.md (#28 ketik kode emiten di Radar & Bandingkan ★, #29 salin tautan profil, #30 kepala tabel Peringkat tetap terlihat di desktop). Bima memilih #28 untuk Arif + Dewi (masuk BACKLOG.md).
+- Tegar: 11 commit sejak 13 Nov dipindai, tidak ada rahasia.
+- Fajar: KLBF & BRIS dicari ulang; belum ada laba Januari–September 2026 bersumber → tetap 23 dari 32.
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Tampilan tidak diubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

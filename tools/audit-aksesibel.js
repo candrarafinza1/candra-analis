@@ -11,6 +11,7 @@
 // Nina & Tegar (13 Nov 17.10) menambah skenario kedua: panah kiri/kanan di tab Peringkat dan ganti emiten di Radar.
 // Nina & Tegar (13 Nov 18.11) menambah skenario ketiga: kuis dengan keyboard saja dan saringan sektor Peringkat.
 // Nina & Tegar (13 Nov 19.12) menambah skenario keempat: saringan jenis + "Tampilkan lagi" di Kabar dan pencarian kamus istilah.
+// Nina & Tegar (14 Nov 07.10) menambah skenario kelima: pindah profil emiten (judul & document.title) dan tautan kembali di 404.
 // Cara pakai: python3 -m http.server 8765 (di akar repo), lalu: node tools/audit-aksesibel.js
 // Butuh Playwright + Chromium (sudah ada di lingkungan kerja tim); tidak dijalankan oleh tests/cek.mjs.
 const { chromium } = require('playwright');
@@ -335,12 +336,75 @@ async function skenarioKamus(p, sabot) {
   return temuan;
 }
 
+// Nina & Tegar (14 Nov 07.10): skenario interaksi kelima.
+// (a) Profil emiten: dari emiten.html (daftar semua emiten) tautan ANTM difokuskan lalu Enter; di profil ANTM pilih TLKM
+// di "Bandingkan", lalu tautan "profil TLKM" di hasil difokuskan dan Enter. Sesudah tiap pindah emiten: h1 = kode,
+// document.title = "KODE · Nama · Candra Analis" (nama dari data), Tab pertama mendarat di tautan "Langsung ke isi"
+// (fokus tidak hilang setelah halaman baru dimuat), id unik, rujukan aria tepat. Sabot: h1 dibuat basi (pindah ke-1),
+// document.title basi + id ganda (pindah ke-2). Hasil sabot harus memuat jenis "judul h1", "document.title", "id ganda".
+async function skenarioProfil(p, sabot) {
+  await p.goto('http://localhost:8765/emiten.html'); await p.waitForTimeout(400);
+  const temuan = [];
+  const langkah = [
+    ['ANTM', 'pindah ke-1 (daftar → ANTM)', async () => '#profil a[href="emiten.html?kode=ANTM"]'],
+    ['TLKM', 'pindah ke-2 (Bandingkan → TLKM)', async () => {
+      if (!(await p.$('#pilih-banding'))) return null;
+      await p.selectOption('#pilih-banding', 'TLKM'); await p.waitForTimeout(150);
+      return '#hasil-banding a[href="emiten.html?kode=TLKM"]';
+    }]];
+  for (let s = 0; s < langkah.length; s++) {
+    const [kode, nama, cari] = langkah[s];
+    const sel = await cari();
+    if (!sel || !(await p.$(sel))) { temuan.push(`${nama}: tautan ke profil ${kode} tidak ketemu`); return temuan; }
+    await p.focus(sel);
+    await Promise.all([p.waitForNavigation(), p.keyboard.press('Enter')]); await p.waitForTimeout(400);
+    if (sabot && s === 0) await p.evaluate(() => { document.getElementById('judul-profil').textContent = 'Profil emiten'; });
+    if (sabot && s === 1) await p.evaluate(() => { document.title = 'Profil emiten · Candra Analis'; document.querySelector('main').insertAdjacentHTML('beforeend', '<p id="judul-profil">salinan</p>'); });
+    const st = await p.evaluate((k) => {
+      const e = (window.EMITEN_ASLI || []).find((x) => x.kode === k);
+      return { h1: (document.querySelector('main h1') || {}).textContent || '', title: document.title, harapTitle: e ? `${k} · ${e.nama} · Candra Analis` : null, url: location.search };
+    }, kode);
+    if (st.url !== '?kode=' + kode) temuan.push(`${nama}: alamat tidak pindah ke ?kode=${kode} (${st.url})`);
+    if (st.h1.trim() !== kode) temuan.push(`${nama}: judul h1 "${st.h1.trim()}", harus "${kode}"`);
+    if (!st.harapTitle || st.title !== st.harapTitle) temuan.push(`${nama}: document.title "${st.title}", harus "${st.harapTitle}"`);
+    await p.keyboard.press('Tab'); await p.waitForTimeout(80);
+    if (!(await p.evaluate(() => document.activeElement && document.activeElement.matches('a.lompat')))) temuan.push(`${nama}: Tab pertama tidak mendarat di "Langsung ke isi"`);
+    (await cekDom(p)).forEach((t) => temuan.push(`${nama}: ${t}`));
+    if (sabot && s === 1) await p.evaluate(() => document.querySelectorAll('main > p#judul-profil').forEach((x) => x.remove()));
+  }
+  return temuan;
+}
+
+// (b) 404: Tab dari awal halaman (maks. 40×) harus mencapai tautan "Beranda" di daftar 404 (tautan kembali), lalu Enter
+// harus membuka beranda (/index.html dengan h1 dan judul Candra Analis). Sabot: tautan diberi tabindex=-1 (tidak
+// tercapai Tab) dan href diarahkan ke halaman lain (belajar.html), bukan beranda. Hasil sabot harus memuat jenis "Tab" dan "kembali".
+async function skenario404(p, sabot) {
+  await p.goto('http://localhost:8765/404.html'); await p.waitForTimeout(300);
+  const temuan = [];
+  const sel = 'main .daftar-404 a[href="/index.html"]';
+  if (!(await p.$(sel))) return ['404: tautan kembali ke Beranda tidak ketemu'];
+  if (sabot) await p.evaluate((s) => { const a = document.querySelector(s); a.tabIndex = -1; a.setAttribute('href', '/belajar.html'); a.setAttribute('data-uji', '1'); }, sel);
+  const target = sabot ? 'main .daftar-404 a[data-uji]' : sel;
+  let ke = 0, sampai = false;
+  for (ke = 1; ke <= 40; ke++) {
+    await p.keyboard.press('Tab');
+    if (await p.evaluate((s) => document.activeElement === document.querySelector(s), target)) { sampai = true; break; }
+  }
+  if (!sampai) temuan.push('404: Tab tidak mencapai tautan kembali "Beranda" dalam 40 langkah');
+  else (await cekDom(p)).forEach((t) => temuan.push(`404 (Tab ke-${ke}): ${t}`));
+  await p.focus(target);
+  await Promise.all([p.waitForNavigation().catch(() => null), p.keyboard.press('Enter')]); await p.waitForTimeout(300);
+  const st = await p.evaluate(() => ({ path: location.pathname, h1: !!document.querySelector('main h1'), title: document.title }));
+  if (st.path !== '/index.html' || !st.h1 || !st.title.includes('Candra Analis')) temuan.push(`404: kembali tidak berfungsi (Enter membuka ${st.path}, h1 ${st.h1 ? 'ada' : 'tidak ada'}, judul "${st.title}")`);
+  return temuan;
+}
+
 const halaman = ['index.html', 'belajar.html', 'pelajaran.html', 'pelajaran.html#kuis', 'peringkat.html', 'peringkat.html#istilah', 'radar.html',
   'radar.html#UNTR', 'emiten.html', 'emiten.html?kode=ANTM', 'kabar.html', 'metodologi.html', 'asisten.html', '404.html', 'UJI'];
 (async () => {
   const b = await chromium.launch();
   const p = await (await b.newContext({ viewport: { width: 390, height: 900 } })).newPage();
-  const galat = []; p.on('pageerror', (e) => galat.push(e.message));
+  const galat = []; p.on('pageerror', (e) => { galat.push(e.message); if (process.env.JEJAK) console.log('[galat di ' + p.url() + ']', e.message); });
   let total = 0, totalUji = 0;
   for (const h of halaman) {
     const [jalur, pagar] = h.split('#');
@@ -437,9 +501,16 @@ const halaman = ['index.html', 'belajar.html', 'pelajaran.html', 'pelajaran.html
   const jenis4 = ['aria-live', 'ket-jenis', 'fokus hilang', 'info-kamus status', 'info-kamus jumlah'].filter((j) => sab4.some((t) => (t.split(': ')[1] || '').startsWith(j)));
   console.log(`Skenario keempat UJI (sabot): ${sab4.length} temuan, jenis tertangkap: ${jenis4.join(', ')} (harus 5)`);
   sab4.forEach((t) => console.log('  - ' + t));
+  const sk5 = [...(await skenarioProfil(p, false)), ...(await skenario404(p, false))];
+  console.log(`\nSkenario kelima (profil emiten: daftar → ANTM → TLKM lewat Bandingkan; 404: Tab ke tautan kembali + Enter): ${sk5.length} temuan`);
+  sk5.forEach((t) => console.log('  - ' + t));
+  const sab5 = [...(await skenarioProfil(p, true)), ...(await skenario404(p, true))];
+  const jenis5 = ['judul h1', 'document.title', 'id ganda', 'Tab', 'kembali'].filter((j) => sab5.some((t) => (t.split(': ')[1] || '').startsWith(j)));
+  console.log(`Skenario kelima UJI (sabot): ${sab5.length} temuan, jenis tertangkap: ${jenis5.join(', ')} (harus 5)`);
+  sab5.forEach((t) => console.log('  - ' + t));
   if (galat.length) console.log('Galat JS:', galat);
   console.log(`\nTotal temuan halaman asli: ${total}. Temuan UJI: ${totalUji} (harus 8).`);
   await b.close();
   const sabotOk = jenis.size === 3 && ['id ganda', 'rujukan', 'fokus hilang'].every((j) => [...jenis].some((x) => x.startsWith(j)));
-  process.exit(total === 0 && totalUji === 8 && sk.length === 0 && sabotOk && sk2.length === 0 && jenis2.length === 4 && sk3.length === 0 && jenis3.length === 5 && sk4.length === 0 && jenis4.length === 5 && !galat.length ? 0 : 1);
+  process.exit(total === 0 && totalUji === 8 && sk.length === 0 && sabotOk && sk2.length === 0 && jenis2.length === 4 && sk3.length === 0 && jenis3.length === 5 && sk4.length === 0 && jenis4.length === 5 && sk5.length === 0 && jenis5.length === 5 && !galat.length ? 0 : 1);
 })();
