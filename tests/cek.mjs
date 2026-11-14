@@ -4248,6 +4248,44 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
     ok((c !== cssT || j !== jsT) && cekTempel(c, j).some((x) => x.includes(pesan)), `uji balik kepala tabel menempel: "${pesan}" harus tertangkap`);
 }
 
+// Nina & Tegar (14 Nov 20.10): tools/audit-aksesibel.js harus tetap menjalankan putaran halaman dan setiap skenario
+// (tanpa sabot) di tiga lebar: 390px (HP), 768px (tablet), 1280px (desktop), agar putaran tidak terhapus tanpa sengaja.
+// Lebar dilacak berurutan dari setViewportSize/putaranHalaman; skenarioSalin memakai argumen lebarnya sendiri (bawaan 390).
+{
+  const LEBAR = [390, 768, 1280];
+  const SKENARIO = ["Peringkat", "Panah", "Radar", "Kuis", "Sektor", "Kabar", "Kamus", "Profil", "404", "Ketik", "Salin"];
+  const cekPutaran = (src) => {
+    const salah = [];
+    const i = src.indexOf("(async () => {");
+    if (i < 0) return ["tools/audit-aksesibel.js: bagian utama (async () => {) tidak ditemukan"];
+    const utama = src.slice(i);
+    const ada = new Set(), halamanLebar = new Set();
+    let kini = 390;
+    const re = /setViewportSize\(\{ width: (\d+)|putaranHalaman\(p, (\d+)|skenario(\w+)\((?:p|b), false(?:, (\d+))?\)/g;
+    for (const m of utama.matchAll(re)) {
+      if (m[1]) kini = +m[1];
+      else if (m[2]) { kini = +m[2]; halamanLebar.add(kini); }
+      else ada.add(`${m[3]}@${m[3] === "Salin" ? +(m[4] || 390) : kini}`);
+    }
+    for (const w of LEBAR) if (!halamanLebar.has(w)) salah.push(`putaran halaman ${w}px tidak dijalankan`);
+    for (const s of SKENARIO) for (const w of LEBAR)
+      if (!ada.has(`${s}@${w}`)) salah.push(`skenario${s} tidak dijalankan di ${w}px`);
+    return salah;
+  };
+  const srcA = readFileSync("tools/audit-aksesibel.js", "utf8");
+  const sA = cekPutaran(srcA);
+  ok(sA.length === 0, `audit-aksesibel tiga lebar: ${sA.join("; ")}`);
+  const rusakA = [
+    [srcA.replace("const r768 = await putaranHalaman(p, 768, 1024);", "const r768 = { total: 0, totalUji: 8 };"), "putaran halaman 768px"],
+    [srcA.replace("const r1280 = await putaranHalaman(p, 1280);", "const r1280 = { total: 0, totalUji: 8 };"), "putaran halaman 1280px"],
+    [srcA.replace("const sk12 = [...(await skenarioRadar(p, false)), ...(await skenarioKuis(p, false)),", "const sk12 = [...(await skenarioRadar(p, false)),"), "skenarioKuis tidak dijalankan di 768px"],
+    [srcA.replace("...(await skenarioSalin(b, false, 1280))", "...[]"), "skenarioSalin tidak dijalankan di 1280px"],
+    [srcA.replace("const sk = await skenarioPeringkat(p, false);", "const sk = [];"), "skenarioPeringkat tidak dijalankan di 390px"],
+  ];
+  for (const [s, pesan] of rusakA)
+    ok(s !== srcA && cekPutaran(s).some((x) => x.includes(pesan)), `uji balik audit tiga lebar: "${pesan}" harus tertangkap`);
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);
 
