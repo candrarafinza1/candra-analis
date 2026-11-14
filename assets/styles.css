@@ -520,6 +520,18 @@ input::placeholder, textarea::placeholder { color: var(--tinta-2); opacity: 1; }
   .tabel-kartu td.sel-sumber::before { display: none; }
 }
 
+/* Kepala tabel Peringkat tetap terlihat saat digulir (tim Dewi, usulan Kirana #30).
+   Di >=900px wadah tidak lagi menggulir ke samping (sticky butuh itu), jadi nama emiten & sektor boleh turun baris
+   agar tabel tetap muat. Di 601-899px wadah tetap bisa digeser; di HP tabel tampil sebagai kartu. */
+@media (min-width: 900px) {
+  .tabel-wadah.tabel-wadah-kartu { overflow-x: visible; }
+  .tabel-kartu td:nth-child(2), .tabel-kartu td.sel-sektor { white-space: normal; }
+  .tabel-kartu thead th {
+    position: sticky; top: 0; z-index: 1;
+    background: var(--putih); box-shadow: inset 0 -1px 0 var(--garis);
+  }
+}
+
 /* Kamus istilah di tempat (tim Arif & Dewi, usulan Kirana #3) */
 button.istilah {
   font: inherit; color: inherit; background: none; border: 0; padding: 0; margin: 0;

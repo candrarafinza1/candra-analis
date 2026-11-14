@@ -405,7 +405,8 @@
         // Arif + Dewi (8 Nov 07.09): "emiten" & "sektor" disebut di sini agar tetap bisa diketuk di HP,
         // karena kepala tabel disembunyikan saat Peringkat tampil sebagai kartu. Kartu tidak ditambah apa pun.
         ["Bingung istilahnya? Ketuk: emiten, sektor, ROE, DER, YoY, laba bersih, pendapatan, ekuitas."]));
-      panel.appendChild(el("div", { class: "tabel-wadah" }, [
+      // Dewi (14 Nov, IDE.md #30): kelas tabel-wadah-kartu agar kepala tabel bisa menempel di layar lebar (lihat styles.css).
+      panel.appendChild(el("div", { class: "tabel-wadah tabel-wadah-kartu" }, [
         el("table", { class: "tabel-kartu" }, [
           el("caption", { class: "keterangan-tabel", text: (daftar.length < 10 ? daftar.length : "Sepuluh") + " saham syariah teratas" + (sektor ? " di sektor " + sektor.toLowerCase() : "") + ": " + k.label.toLowerCase() }),
           el("thead", null, [el("tr", null, [

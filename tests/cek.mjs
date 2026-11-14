@@ -4219,6 +4219,35 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
     ok(js !== appS && (await ujiSalin(js)).some((x) => x.includes(pesan)), `uji balik salin tautan profil: "${pesan}" harus tertangkap`);
 }
 
+// Nina (14 Nov, IDE.md #30): kepala tabel Peringkat tetap terlihat saat digulir di >=900px.
+{
+  const cekTempel = (css, js) => {
+    const salah = [];
+    const m = css.match(/@media \(min-width: 900px\) \{\s*\.tabel-wadah\.tabel-wadah-kartu \{([^}]*)\}([\s\S]*?)\n\}/);
+    if (!m) { salah.push("styles.css: blok @media (min-width: 900px) untuk .tabel-wadah-kartu harus ada"); return salah; }
+    if (!/overflow-x:\s*visible/.test(m[1])) salah.push("wadah tabel Peringkat harus overflow-x: visible di >=900px agar sticky menempel di layar");
+    const th = m[2].match(/\.tabel-kartu thead th \{([^}]*)\}/);
+    if (!th || !/position:\s*sticky/.test(th[1]) || !/top:\s*0/.test(th[1])) salah.push("kepala tabel Peringkat harus position: sticky; top: 0");
+    if (!th || !/background:\s*var\(--putih\)/.test(th[1])) salah.push("latar kepala tabel harus var(--putih) agar baris di bawahnya tidak tembus (terang & gelap)");
+    if (!/\.tabel-kartu td:nth-child\(2\), \.tabel-kartu td\.sel-sektor \{ white-space: normal; \}/.test(m[2])) salah.push("nama emiten & sektor harus boleh turun baris agar tabel muat tanpa scroll horizontal");
+    if (/@media \(max-width: 600px\)[^@]*\.tabel-kartu thead th \{[^}]*sticky/.test(css)) salah.push("di HP (kartu) kepala tabel tidak boleh sticky");
+    if (!/el\("div", \{ class: "tabel-wadah tabel-wadah-kartu" \}, \[\s*el\("table", \{ class: "tabel-kartu" \}/.test(js)) salah.push("app.js: wadah tabel Peringkat harus berkelas tabel-wadah-kartu");
+    return salah;
+  };
+  const cssT = readFileSync("assets/styles.css", "utf8"), jsT = readFileSync("assets/app.js", "utf8");
+  const sT = cekTempel(cssT, jsT);
+  ok(sT.length === 0, `kepala tabel Peringkat menempel: ${sT.join("; ")}`);
+  const rusakT = [
+    [cssT.replace(".tabel-wadah.tabel-wadah-kartu { overflow-x: visible; }", ".tabel-wadah.tabel-wadah-kartu { overflow-x: auto; }"), jsT, "overflow-x: visible"],
+    [cssT.replace("position: sticky; top: 0; z-index: 1;", "z-index: 1;"), jsT, "position: sticky"],
+    [cssT.replace("background: var(--putih); box-shadow: inset 0 -1px 0 var(--garis);", "box-shadow: inset 0 -1px 0 var(--garis);"), jsT, "var(--putih)"],
+    [cssT.replace(".tabel-kartu td:nth-child(2), .tabel-kartu td.sel-sektor { white-space: normal; }", ""), jsT, "turun baris"],
+    [cssT, jsT.replace('class: "tabel-wadah tabel-wadah-kartu"', 'class: "tabel-wadah"'), "tabel-wadah-kartu"],
+  ];
+  for (const [c, j, pesan] of rusakT)
+    ok((c !== cssT || j !== jsT) && cekTempel(c, j).some((x) => x.includes(pesan)), `uji balik kepala tabel menempel: "${pesan}" harus tertangkap`);
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);
 

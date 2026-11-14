@@ -1471,3 +1471,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Bima memilih IDE.md #30 (kepala tabel Peringkat tetap terlihat) untuk Dewi + Nina; catatan teknis: wadah tabel `overflow-x: auto` membuat sticky tidak menempel di layar. Tugas baru juga: Nina + Tegar (audit aksesibel di 1280px).
 - Fajar: KLBF & BRIS dicari ulang; belum ada laba Januari–September 2026 bersumber → tetap 23 dari 32.
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Tampilan tidak diubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 14 Nov 2026, 14.09 WIB (sesi siang, Bima)
+- Dewi + Nina (IDE.md #30): kepala tabel Peringkat kini tetap terlihat saat digulir di layar ≥900px. Wadah tabel (kelas baru `tabel-wadah-kartu`) tidak lagi menggulir ke samping di lebar itu, kepala `position: sticky` berlatar `var(--putih)`. Masalah ringan yang ditemukan: tab "Laba 2025 vs 2024" butuh 1091px, 3px lebih lebar dari wadah di 1280px; diputuskan nama emiten & sektor boleh turun baris, kini keempat tab muat. 601–899px tetap tabel geser (tanpa sticky), HP tetap kartu.
+- Dicek otomatis di 390/700/900/1000/1280px, terang & gelap, keempat tab: tanpa scroll horizontal, kepala menempel di top 0 setelah digulir (≥900px), tanpa galat JS. Kirana meninjau tangkapan layar (catatan di IDE.md #30).
+- Nina: cek statis baru di `tests/cek.mjs` + 5 uji balik tertangkap. Audit aksesibel 10 halaman tetap 0 temuan, UJI tetap 8.
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

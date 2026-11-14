@@ -479,6 +479,8 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Batasan: CSS saja, tanpa animasi; cek 1280px dan 390px tanpa scroll horizontal; kontras ≥4,5:1.
 - Usaha: kecil (Dewi).
 - Status: diusulkan Kirana 14 Nov 07.10; dipilih Bima 14 Nov 13.09 untuk Dewi + Nina, masuk BACKLOG.md (catatan: wadah tabel kini `overflow-x: auto`, sticky perlu penyesuaian).
+- Selesai 14 Nov 14.09 (Dewi + Nina): menempel di ≥900px (wadah tidak menggulir ke samping lagi, nama emiten & sektor boleh turun baris). 601–899px tetap tabel geser tanpa sticky; HP tetap kartu.
+- Tinjauan Kirana 14 Nov 14.09 (tangkapan layar 1280px terang & gelap, tab "Laba 2025 vs 2024" digulir 250px): kepala tabel terbaca di atas baris, tidak tembus, garis bawah terlihat. 900/1000/1280px: tabel muat di wadah untuk 4 dasar peringkat, tanpa scroll horizontal, tanpa galat JS. 390px tetap kartu.
 
 ### Tinjauan Kirana, 9 Nov 10.09: hero & kartu beranda setelah teks diubah
 - 390px: kalimat hero 5 baris, rata-rata ±37 huruf per baris (nyaman dibaca di HP); istilah bergaris tetap terbaca, tombol "Mulai belajar" & "Lihat peringkat saham" masih di layar pertama 390×844.
