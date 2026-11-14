@@ -18,6 +18,7 @@
 // Nina & Tegar (14 Nov 16.08) menambah putaran 1280×900 untuk Radar, kotak ketik, Kabar, dan kamus istilah.
 // Nina & Tegar (14 Nov 17.08) menambah putaran 1280×900 untuk skenario sisa: panah tab, kuis, sektor, profil, 404 (semua skenario kini di dua lebar).
 // Nina & Tegar (14 Nov 18.09) menambah putaran tablet 768×1024: semua halaman (+ UJI), Peringkat (tabel geser tanpa kepala sticky), panah tab, kotak ketik.
+// Nina & Tegar (14 Nov 19.10) menambah putaran 768×1024 untuk skenario sisa: Radar, kuis, sektor, Kabar, kamus, profil, 404, Salin.
 // Cara pakai: python3 -m http.server 8765 (di akar repo), lalu: node tools/audit-aksesibel.js
 // Butuh Playwright + Chromium (sudah ada di lingkungan kerja tim); tidak dijalankan oleh tests/cek.mjs.
 const { chromium } = require('playwright');
@@ -634,7 +635,13 @@ const halaman = ['index.html', 'belajar.html', 'pelajaran.html', 'pelajaran.html
 (async () => {
   const b = await chromium.launch();
   const p = await (await b.newContext({ viewport: { width: 390, height: 900 } })).newPage();
-  const galat = []; p.on('pageerror', (e) => { galat.push(e.message); if (process.env.JEJAK) console.log('[galat di ' + p.url() + ']', e.message); });
+  // Nina & Tegar (14 Nov 19.10): "Transition was aborted ... ViewTransition" muncul acak saat audit berpindah halaman sangat cepat
+  // (transisi lintas halaman @view-transition dibatalkan peramban). Bukan galat kode situs → dihitung terpisah, tidak menggagalkan audit.
+  const galat = [], transisiBatal = [];
+  p.on('pageerror', (e) => {
+    if (/^Transition was aborted because of invalid state/.test(e.message)) { transisiBatal.push(p.url()); return; }
+    galat.push(e.message); if (process.env.JEJAK) console.log('[galat di ' + p.url() + ']', e.message);
+  });
   const r390 = await putaranHalaman(p, 390);
   const r1280 = await putaranHalaman(p, 1280);
   await p.setViewportSize({ width: 390, height: 900 });
@@ -736,9 +743,29 @@ const halaman = ['index.html', 'belajar.html', 'pelajaran.html', 'pelajaran.html
   const jenis11a = jenisDari(['tabindex', 'fokus hilang'], sab11a), jenis11k = jenisDari(['status', 'fokus hilang', 'id ganda', 'pilihan tidak ikut'], sab11k);
   const sabot11Ok = jenis11t.length === 2 && jenis11p.size === 3 && jenis11a.length === 2 && jenis11k.length === 4;
   console.log(`Skenario 768px UJI (sabot): tata letak ${jenis11t.length} jenis (harus 2: ${jenis11t.join(', ')}), Peringkat ${jenis11p.size} jenis (harus 3), panah ${jenis11a.length} jenis (harus 2), kotak ketik ${jenis11k.length} jenis (harus 4)`);
+  // Nina & Tegar (14 Nov 19.10): putaran 768×1024 untuk skenario sisa (Radar, kuis, sektor, Kabar, kamus, profil, 404, Salin).
+  // Kini semua skenario diperiksa di 390px, 768px, dan 1280px.
+  const sk12 = [...(await skenarioRadar(p, false)), ...(await skenarioKuis(p, false)), ...(await skenarioSektor(p, false)),
+    ...(await skenarioKabar(p, false)), ...(await skenarioKamus(p, false)), ...(await skenarioProfil(p, false)),
+    ...(await skenario404(p, false)), ...(await skenarioSalin(b, false, 768))];
+  console.log(`\nSkenario 768px kedua (Radar; kuis; sektor; Kabar; kamus; profil; 404; Salin): ${sk12.length} temuan`);
+  sk12.forEach((t) => console.log('  - ' + t));
+  const sab12r = await skenarioRadar(p, true);
+  const sab12b = [...(await skenarioKuis(p, true)), ...(await skenarioSektor(p, true))];
+  const sab12kk = [...(await skenarioKabar(p, true)), ...(await skenarioKamus(p, true))];
+  const sab12c = [...(await skenarioProfil(p, true)), ...(await skenario404(p, true))];
+  const sab12s = await skenarioSalin(b, true, 768);
+  const jenis12r = jenisDari(['id ganda', 'rujukan'], sab12r);
+  const jenis12b = jenisDari(['aria-live', 'fokus hilang', 'ket-sektor', 'tab terpilih', 'id ganda'], sab12b);
+  const jenis12kk = jenisDari(['aria-live', 'ket-jenis', 'fokus hilang', 'info-kamus status', 'info-kamus jumlah'], sab12kk);
+  const jenis12c = jenisDari(['judul h1', 'document.title', 'id ganda', 'Tab', 'kembali'], sab12c);
+  const jenis12s = jenisDari(['status', 'isi papan klip', 'Tab', 'fokus hilang', 'id ganda'], sab12s);
+  const sabot12Ok = jenis12r.length === 2 && jenis12b.length === 5 && jenis12kk.length === 5 && jenis12c.length === 5 && jenis12s.length === 5;
+  console.log(`Skenario 768px kedua UJI (sabot): Radar ${jenis12r.length} (harus 2), kuis + sektor ${jenis12b.length} (harus 5), Kabar + kamus ${jenis12kk.length} (harus 5), profil + 404 ${jenis12c.length} (harus 5), Salin ${jenis12s.length} (harus 5)`);
   if (galat.length) console.log('Galat JS:', galat);
+  if (transisiBatal.length) console.log(`Transisi halaman dibatalkan peramban (diabaikan): ${transisiBatal.length}×`);
   console.log(`\nTotal temuan halaman asli: ${total + r768.total} (390px ${r390.total}, 768px ${r768.total}, 1280px ${r1280.total}). Temuan UJI: 390px ${r390.totalUji}, 768px ${r768.totalUji}, 1280px ${r1280.totalUji} (masing-masing harus 8).`);
   await b.close();
   const sabotOk = jenis.size === 3 && ['id ganda', 'rujukan', 'fokus hilang'].every((j) => [...jenis].some((x) => x.startsWith(j)));
-  process.exit(total === 0 && totalUji === 8 && r768.total === 0 && r768.totalUji === 8 && sk11.length === 0 && sabot11Ok && r1280.totalUji === 8 && sk8.length === 0 && sabot8Ok && sk9.length === 0 && sabot9Ok && sk10.length === 0 && sabot10Ok && sk.length === 0 && sabotOk && sk2.length === 0 && jenis2.length === 4 && sk3.length === 0 && jenis3.length === 5 && sk4.length === 0 && jenis4.length === 5 && sk5.length === 0 && jenis5.length === 5 && sk6.length === 0 && jenis6.length === 4 && sk7.length === 0 && jenis7.length === 5 && !galat.length ? 0 : 1);
+  process.exit(total === 0 && totalUji === 8 && sk12.length === 0 && sabot12Ok && r768.total === 0 && r768.totalUji === 8 && sk11.length === 0 && sabot11Ok && r1280.totalUji === 8 && sk8.length === 0 && sabot8Ok && sk9.length === 0 && sabot9Ok && sk10.length === 0 && sabot10Ok && sk.length === 0 && sabotOk && sk2.length === 0 && jenis2.length === 4 && sk3.length === 0 && jenis3.length === 5 && sk4.length === 0 && jenis4.length === 5 && sk5.length === 0 && jenis5.length === 5 && sk6.length === 0 && jenis6.length === 4 && sk7.length === 0 && jenis7.length === 5 && !galat.length ? 0 : 1);
 })();

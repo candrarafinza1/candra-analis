@@ -1499,3 +1499,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: KLBF & BRIS dicari ulang; belum ada laba Januari–September 2026 bersumber → tetap 23 dari 32.
 - Tugas baru: Nina + Tegar (putaran 768px untuk skenario sisa).
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Tampilan tidak diubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 14 Nov 2026, 19.10 WIB (sesi malam, Bima)
+- Nina + Tegar: `tools/audit-aksesibel.js` kini menjalankan skenario sisa di 768×1024 (Radar, kuis, sektor, Kabar, kamus, profil, 404, Salin). Hasil: 0 temuan; sabot tertangkap (Radar 2, kuis + sektor 5, Kabar + kamus 5, profil + 404 5, Salin 5 jenis). Semua skenario kini diperiksa di 390, 768, dan 1280px. Kode situs tidak diubah.
+- Masalah ringan (diputuskan Bima): satu putaran audit menampilkan galat acak "Transition was aborted … ViewTransition" (transisi lintas halaman dibatalkan peramban karena audit berpindah halaman sangat cepat; diulang 2× tidak muncul). Bukan galat kode situs → kini dihitung terpisah dan tidak menggagalkan audit; galat JS lain tetap menggagalkan.
+- Fajar: KLBF & BRIS dicari ulang; belum ada laba Januari–September 2026 bersumber (BRIS teratas: laba hingga Agustus 2026) → tetap 23 dari 32.
+- Tugas baru: Nina + Tegar (cek di `tests/cek.mjs` agar putaran tiga lebar tidak terhapus).
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Tampilan tidak diubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
