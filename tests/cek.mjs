@@ -3465,7 +3465,7 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
     const iB = app.indexOf("  var BULAN = ["), jB = app.indexOf("];", iB);
     const kodeProfil = [iU < 0 || jU < iU ? "" : app.slice(iU, jU), iB < 0 ? "" : app.slice(iB, jB + 2), ambilP("function tanggalId("),
       ambilP("function daftarKabar("), ambilP("function kabarBaru("), ambilP("function kartuKabar("), ambilP("function cocokEmiten("), ambilP("function kotakKetik("), ambilP("function bagianBanding("),
-      ambilP("function dividenTampil("), ambilP("function renderProfil()")];
+      ambilP("function dividenTampil("), ambilP("function tombolSalin("), ambilP("function renderProfil()")];
     ok(kodeProfil.every(Boolean), "app.js: utilitas/BULAN/tanggalId/daftarKabar/kabarBaru/kartuKabar/bagianBanding/dividenTampil/renderProfil harus bisa diambil untuk uji urutan judul");
     const emitenHtml = readFileSync("emiten.html", "utf8");
     const mainE = (emitenHtml.match(/<main[\s>][\s\S]*?<\/main>/) || [""])[0], iProfil = mainE.indexOf('id="profil"');
@@ -4144,6 +4144,79 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
   ];
   for (const [js, pesan] of rusakK)
     ok(js !== appK && ujiKetik(js).some((x) => x.includes(pesan)), `uji balik kotak ketik emiten: "${pesan}" harus tertangkap`);
+}
+
+// Nina & Arif (14 Nov, IDE.md #29): tombol "Salin tautan profil" di profil emiten. tombolSalin() dijalankan dengan
+// DOM tiruan dan papan klip tiruan: berhasil → "Tautan disalin." di role=status lalu hilang sendiri; tanpa Clipboard API
+// atau ditolak → kotak alamat (readonly) tampil, difokus & terpilih, pesan petunjuk tetap. Tanpa kata beli/jual. Disertai uji balik.
+{
+  const appS = readFileSync("assets/app.js", "utf8");
+  const ambilS = (js, awal) => { const i = js.indexOf("  " + awal); const j = js.indexOf("\n  }\n", i); return i < 0 || j < 0 ? "" : js.slice(i, j + 5); };
+  const ujiSalin = async (js) => {
+    const salah = [];
+    const kode = [ambilS(js, "function el("), ambilS(js, "function tombolSalin(")];
+    if (!kode.every(Boolean)) return ["fungsi el/tombolSalin tidak ketemu"];
+    const simpul = (tag) => ({ tag, anak: [], atribut: {}, className: "", value: "", textContent: "", hidden: false, _d: {}, _fokus: 0, _pilih: 0,
+      appendChild(c) { this.anak.push(c); return c; }, setAttribute(k, v) { this.atribut[k] = String(v); if (k === "hidden") this.hidden = true; },
+      addEventListener(n, f) { (this._d[n] = this._d[n] || []).push(f); }, focus() { this._fokus++; }, select() { this._pilih++; } });
+    const document = { createElement: simpul, createTextNode: (t) => ({ tag: "#text", teks: t }) };
+    let buat;
+    try { buat = new Function("document", kode.join("\n") + "\nreturn tombolSalin;")(document); }
+    catch (e) { return ["kode galat: " + e.message]; }
+    const cari = (m, f) => (f(m) ? m : (m.anak || []).map((c) => cari(c, f)).find(Boolean));
+    const alamat = "https://candra-analis.vercel.app/emiten.html?kode=TLKM";
+    const siapkan = (papan) => {
+      const timer = [];
+      const w = buat(alamat, papan, (f, ms) => { timer.push([f, ms]); return timer.length; });
+      return { w, timer, tombol: cari(w, (m) => m.tag === "button"), kotak: cari(w, (m) => m.tag === "input"),
+        info: cari(w, (m) => m.atribut && m.atribut.role === "status") };
+    };
+    const tunggu = () => new Promise((r) => setTimeout(r, 0));
+    // (a) berhasil
+    let disalin = null;
+    const a = siapkan({ writeText: (t) => { disalin = t; return Promise.resolve(); } });
+    if (!a.tombol || !a.kotak || !a.info) return ["button/input/role=status harus ada"];
+    if (a.tombol.atribut.type !== "button") salah.push("tombol harus type=button");
+    if (a.tombol.textContent !== "Salin tautan profil") salah.push("teks tombol harus \"Salin tautan profil\"");
+    if (!("readonly" in a.kotak.atribut)) salah.push("kotak alamat harus readonly");
+    if (!a.kotak.hidden) salah.push("kotak alamat harus tersembunyi sebelum dibutuhkan");
+    if (!a.kotak.atribut["aria-label"]) salah.push("kotak alamat harus punya aria-label");
+    if (a.kotak.value !== alamat) salah.push("kotak alamat harus berisi alamat profil");
+    if (a.info.atribut["aria-live"] !== "polite") salah.push("pesan status harus aria-live=polite");
+    a.tombol._d.click.forEach((f) => f({ type: "click" })); await tunggu();
+    if (disalin !== alamat) salah.push("berhasil: alamat profil yang disalin harus persis");
+    if (a.info.textContent !== "Tautan disalin.") salah.push("berhasil: pesan \"Tautan disalin.\" harus muncul");
+    if (!a.kotak.hidden) salah.push("berhasil: kotak alamat tetap tersembunyi");
+    if (a.timer.length !== 1) salah.push("berhasil: pesan harus dijadwalkan hilang sendiri");
+    else { a.timer[0][0](); if (a.info.textContent !== "") salah.push("berhasil: pesan harus hilang setelah waktunya"); }
+    // (b) tanpa Clipboard API
+    const b = siapkan(null);
+    b.tombol._d.click.forEach((f) => f({ type: "click" })); await tunggu();
+    if (b.kotak.hidden) salah.push("tanpa Clipboard API: kotak alamat harus tampil");
+    if (!b.kotak._fokus || !b.kotak._pilih) salah.push("tanpa Clipboard API: kotak alamat harus difokus dan terpilih");
+    if (!/belum bisa disalin otomatis/.test(b.info.textContent)) salah.push("tanpa Clipboard API: pesan petunjuk harus muncul");
+    if (b.timer.length) salah.push("tanpa Clipboard API: pesan petunjuk tidak boleh hilang sendiri");
+    // (c) ditolak peramban
+    const c = siapkan({ writeText: () => Promise.reject(new Error("ditolak")) });
+    c.tombol._d.click.forEach((f) => f({ type: "click" })); await tunggu(); await tunggu();
+    if (c.kotak.hidden || !c.kotak._pilih) salah.push("ditolak: kotak alamat harus tampil dan terpilih");
+    if (/disalin\.$/.test(c.info.textContent)) salah.push("ditolak: tidak boleh menulis \"Tautan disalin.\"");
+    for (const x of [a, b, c]) if (/beli|jual/i.test(x.tombol.textContent + " " + x.info.textContent)) salah.push("teks tombol/pesan tidak boleh memakai kata beli/jual");
+    return salah;
+  };
+  const sS = await ujiSalin(appS);
+  ok(sS.length === 0, `salin tautan profil (DOM tiruan): ${sS.join("; ")}`);
+  ok(/akar\.appendChild\(tombolSalin\(dasarAlamat \+ "\?kode=" \+ e\.kode, papanKlip\)\)/.test(appS), "tombol salin tautan harus dipasang di profil emiten dengan alamat ?kode=KODE");
+  ok(/window\.isSecureContext/.test(appS), "Clipboard API hanya dipakai di konteks aman (isSecureContext)");
+  const rusakS = [
+    [appS.replace('pesan("Tautan disalin.", true);', 'pesan("Tautan disalin.", false);'), "hilang sendiri"],
+    [appS.replace('class: "info-salin", role: "status", ', 'class: "info-salin", '), "button/input/role=status harus ada"],
+    [appS.replace("      kotak.select();\n", ""), "difokus dan terpilih"],
+    [appS.replace("      }, cadangan);", "      }, function () {});"), "ditolak: kotak alamat"],
+    [appS.replace('readonly: "", hidden: "",', 'hidden: "",'), "harus readonly"],
+  ];
+  for (const [js, pesan] of rusakS)
+    ok(js !== appS && (await ujiSalin(js)).some((x) => x.includes(pesan)), `uji balik salin tautan profil: "${pesan}" harus tertangkap`);
 }
 
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }

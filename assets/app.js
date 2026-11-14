@@ -750,6 +750,39 @@
     return "Rp" + new Intl.NumberFormat("id-ID", { maximumFractionDigits: 2 }).format(e.dps);
   }
 
+  // Arif & Dewi (14 Nov, IDE.md #29): tombol "Salin tautan profil". Memakai Clipboard API bawaan peramban bila ada;
+  // bila tidak ada atau ditolak, alamat ditampilkan di kotak teks yang sudah terpilih agar bisa disalin manual.
+  // Tanpa simpanan, tanpa layanan luar. Pesan di role=status; "Tautan disalin" hilang sendiri.
+  function tombolSalin(alamat, papan, tunda) {
+    var info = el("p", { id: "salin-info", class: "info-salin", role: "status", "aria-live": "polite" });
+    var tombol = el("button", { type: "button", class: "tombol tombol-salin", text: "Salin tautan profil" });
+    var kotak = el("input", { type: "text", id: "salin-alamat", class: "alamat-salin", readonly: "", hidden: "",
+      "aria-label": "Alamat profil ini" });
+    kotak.value = alamat;
+    var waktu = null;
+    function pesan(t, hilang) {
+      info.textContent = t;
+      if (waktu) clearTimeout(waktu);
+      waktu = hilang ? (tunda || setTimeout)(function () { info.textContent = ""; waktu = null; }, 4000) : null;
+    }
+    function cadangan() {
+      kotak.hidden = false;
+      kotak.focus();
+      kotak.select();
+      pesan("Tautan belum bisa disalin otomatis. Alamatnya sudah dipilih di kotak ini: salin dengan Ctrl+C, atau tekan lama lalu Salin.", false);
+    }
+    tombol.addEventListener("click", function () {
+      if (!papan || typeof papan.writeText !== "function") { cadangan(); return; }
+      var janji;
+      try { janji = papan.writeText(alamat); } catch (err) { cadangan(); return; }
+      Promise.resolve(janji).then(function () {
+        kotak.hidden = true;
+        pesan("Tautan disalin.", true);
+      }, cadangan);
+    });
+    return el("div", { class: "salin-profil" }, [tombol, kotak, info]);
+  }
+
   function renderProfil() {
     var akar = document.getElementById("profil");
     if (!akar) return;
@@ -783,6 +816,9 @@
     document.title = e.kode + " · " + e.nama + " · Candra Analis";
     document.getElementById("judul-profil").textContent = e.kode;
     document.getElementById("sub-profil").textContent = e.nama + " · Sektor " + e.sektor.toLowerCase();
+    var dasarAlamat = String(location.href || "").split(/[?#]/)[0] || "emiten.html";
+    var papanKlip = typeof window !== "undefined" && window.isSecureContext && typeof navigator !== "undefined" && navigator.clipboard ? navigator.clipboard : null;
+    akar.appendChild(tombolSalin(dasarAlamat + "?kode=" + e.kode, papanKlip));
 
     // Status syariah
     akar.appendChild(el("div", { class: "status-syariah " + (syariahAktif(e) ? "status-ya" : "status-tidak"), role: "note" }, [

@@ -1458,3 +1458,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Nina + Tegar: skenario keenam di `tools/audit-aksesibel.js` (ketik "untr" lalu "zzzz" di Radar, "tlkm" di Bandingkan ANTM): 0 temuan; sabot menangkap 4 jenis (status, fokus hilang, id ganda, pilihan tidak ikut). Audit 10 halaman tetap 0, UJI tetap 8.
 - Kirana meninjau lewat tangkapan layar (catatan di IDE.md #28). Tugas baru: Arif + Dewi (IDE.md #29 salin tautan profil), Kirana (cek kotak ketik di HP sungguhan bila situs terjangkau).
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 14 Nov 2026, 09.09 WIB (sesi pagi, Bima)
+- Arif + Dewi (IDE.md #29): tombol "Salin tautan profil" kini ada di profil emiten, di atas kotak status syariah. Memakai Clipboard API bawaan peramban (hanya di konteks aman); bila tidak ada atau ditolak, alamat tampil di kotak teks readonly yang langsung difokus dan terpilih, dengan petunjuk menyalin. Pesan "Tautan disalin." di role=status dan hilang sendiri setelah 4 detik. Tanpa simpanan, tanpa layanan luar. Dicek 390px & 1280px, terang & gelap, juga keadaan cadangan: tanpa scroll horizontal, tanpa galat JS.
+- Nina: tes DOM tiruan baru di `tests/cek.mjs` (berhasil, tanpa Clipboard API, ditolak peramban) + 5 uji balik tertangkap; uji urutan judul profil kini ikut memuat tombolSalin. Audit aksesibel 10 halaman tetap 0, UJI tetap 8.
+- Kirana meninjau lewat tangkapan layar (catatan di IDE.md #29). Tugas baru: Nina + Tegar (skenario ketujuh audit: tombol salin), Kirana (cek di HP sungguhan bila situs terjangkau).
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

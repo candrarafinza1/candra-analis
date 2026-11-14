@@ -467,7 +467,7 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Dampak bagi pemula: mudah berbagi bahan belajar; yang dibagikan profil berisi sumber, bukan ajakan.
 - Batasan: tanpa layanan pihak ketiga, tanpa simpanan; teks tombol tidak memuat ajakan beli/jual.
 - Usaha: kecil (Arif). Nina menambah cek.
-- Status: diusulkan Kirana 14 Nov 07.10.
+- Status: diusulkan Kirana 14 Nov 07.10. Dipilih Bima 08.10; **selesai 14 Nov 09.09** (Arif & Dewi). Tinjauan Kirana lewat tangkapan layar 390px & 1280px (terang/gelap, juga keadaan cadangan): tombol garis tepi tidak bersaing dengan judul, kotak alamat muat di 390px. Cek di HP sungguhan menunggu situs bisa dijangkau.
 
 ### 30. Peringkat (desktop): kepala tabel tetap terlihat saat digulir
 - **Tabel panjang tetap terbaca** — tampilan, usaha kecil

@@ -586,6 +586,15 @@ button.istilah:hover, button.istilah[aria-expanded="true"] { color: var(--aksen)
 }
 .info-ketik { width: 100%; margin: 0; font-size: .9rem; color: var(--tinta-2); }
 .info-ketik:empty { display: none; }
+/* Salin tautan profil (Arif & Dewi, IDE.md #29) */
+.salin-profil { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin: 0 0 16px; }
+.tombol-salin { background: transparent; color: var(--aksen); border-color: var(--aksen); max-width: 100%; white-space: normal; }
+.tombol-salin:hover { background: var(--hover-baris); }
+.alamat-salin { flex: 1 1 16rem; min-width: 0; max-width: 100%; min-height: 44px; padding: 0 12px; font: inherit; font-size: .95rem;
+  color: var(--tinta); background: var(--putih); border: 1px solid var(--garis); border-radius: var(--radius-kecil); }
+.alamat-salin[hidden] { display: none; }
+.info-salin { width: 100%; margin: 0; font-size: .9rem; color: var(--tinta-2); }
+.info-salin:empty { display: none; }
 .tabel-banding td.angka { white-space: normal; overflow-wrap: anywhere; }
 @media (max-width: 600px) {
   .tabel-banding { table-layout: fixed; font-size: .9rem; }
