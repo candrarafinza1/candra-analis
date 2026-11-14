@@ -1493,3 +1493,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: KLBF & BRIS dicari ulang; belum ada laba Januari–September 2026 bersumber → tetap 23 dari 32.
 - Tugas baru: Nina + Tegar (putaran lebar tablet 768px).
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Tampilan tidak diubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 14 Nov 2026, 18.09 WIB (sesi malam, Bima)
+- Nina + Tegar: `tools/audit-aksesibel.js` kini punya putaran ketiga di lebar tablet 768×1024. Semua halaman 0 temuan, UJI tetap 8 (kini di 390, 768, 1280px). Skenario baru `skenarioTablet` untuk Peringkat tiap tab: tabel tampil sebagai tabel (bukan kartu), wadah boleh digeser, kepala tabel tidak sticky di bawah 900px, halaman tanpa scroll horizontal, dan tabel yang lebih lebar dari wadah (886–1091px di wadah 704px) tetap terjangkau keyboard lewat tautan Sumber. Ditambah skenario Peringkat, panah tab, kotak ketik di 768px: 0 temuan, tanpa galat JS; sabot tertangkap (tata letak 2, Peringkat 3, panah 2, kotak ketik 4 jenis). Kode situs tidak diubah.
+- Fajar: KLBF & BRIS dicari ulang; belum ada laba Januari–September 2026 bersumber → tetap 23 dari 32.
+- Tugas baru: Nina + Tegar (putaran 768px untuk skenario sisa).
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Tampilan tidak diubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

@@ -17,6 +17,7 @@
 // Nina & Tegar (14 Nov 15.09) menambah putaran 1280×900: semua halaman (+ UJI) dan skenario Peringkat & Salin.
 // Nina & Tegar (14 Nov 16.08) menambah putaran 1280×900 untuk Radar, kotak ketik, Kabar, dan kamus istilah.
 // Nina & Tegar (14 Nov 17.08) menambah putaran 1280×900 untuk skenario sisa: panah tab, kuis, sektor, profil, 404 (semua skenario kini di dua lebar).
+// Nina & Tegar (14 Nov 18.09) menambah putaran tablet 768×1024: semua halaman (+ UJI), Peringkat (tabel geser tanpa kepala sticky), panah tab, kotak ketik.
 // Cara pakai: python3 -m http.server 8765 (di akar repo), lalu: node tools/audit-aksesibel.js
 // Butuh Playwright + Chromium (sudah ada di lingkungan kerja tim); tidak dijalankan oleh tests/cek.mjs.
 const { chromium } = require('playwright');
@@ -517,9 +518,46 @@ async function skenarioSalin(b, sabot, lebar = 390) {
   return temuan;
 }
 
+// Nina & Tegar (14 Nov 18.09): tata letak Peringkat di lebar tablet (601–899px). Tiap tab: tabel tampil sebagai tabel
+// (kepala terlihat, bukan kartu), wadah .tabel-wadah-kartu boleh digeser (overflow-x auto/scroll), kepala tabel TIDAK sticky,
+// halaman tanpa scroll horizontal, dan bila tabel lebih lebar dari wadah, wadah bisa dijangkau keyboard (ada elemen fokus
+// di dalamnya). Sabot: kepala tabel dibuat sticky (tab 1) dan elemen 2000px disisipkan di <main> (tab 2).
+// Hasil sabot harus memuat jenis "sticky" dan "scroll halaman".
+async function skenarioTablet(p, sabot) {
+  await p.goto('http://localhost:8765/peringkat.html'); await p.waitForTimeout(400);
+  const temuan = [];
+  const tab = await p.$$('[role=tab]');
+  if (!tab.length) return ['tablet: tab Peringkat tidak ketemu'];
+  for (let i = 0; i < tab.length; i++) {
+    const nama = (await tab[i].textContent()).trim();
+    await tab[i].click(); await p.waitForTimeout(150);
+    if (sabot && i === 0) await p.evaluate(() => document.querySelectorAll('.tabel-kartu thead th').forEach((th) => { th.style.position = 'sticky'; th.style.top = '0'; }));
+    if (sabot && i === 1) await p.evaluate(() => document.querySelector('main').insertAdjacentHTML('beforeend', '<div class="sabot-lebar" style="width:2000px;height:1px"></div>'));
+    const st = await p.evaluate(() => {
+      const w = document.querySelector('#panel-peringkat .tabel-wadah-kartu'), th = document.querySelector('#panel-peringkat .tabel-kartu thead th');
+      if (!w || !th) return null;
+      const ox = getComputedStyle(w).overflowX, thead = getComputedStyle(document.querySelector('#panel-peringkat .tabel-kartu thead'));
+      const lebih = w.scrollWidth > w.clientWidth + 1;
+      const fokusDalam = !!w.querySelector('a[href], button, [tabindex]:not([tabindex="-1"])') || w.tabIndex >= 0;
+      return { ox, pos: getComputedStyle(th).position, theadTampil: thead.display !== 'none' && th.getBoundingClientRect().height > 0,
+        lebih, fokusDalam, halamanLebar: document.documentElement.scrollWidth > document.documentElement.clientWidth };
+    });
+    if (sabot && i === 1) await p.evaluate(() => document.querySelectorAll('.sabot-lebar').forEach((x) => x.remove()));
+    if (!st) { temuan.push(`tab "${nama}": wadah atau kepala tabel tidak ketemu`); continue; }
+    if (!st.theadTampil) temuan.push(`tab "${nama}": kartu: kepala tabel tersembunyi (harus tabel di 601–899px)`);
+    if (!['auto', 'scroll'].includes(st.ox)) temuan.push(`tab "${nama}": geser: overflow-x wadah "${st.ox}" (harus auto)`);
+    if (st.pos === 'sticky') temuan.push(`tab "${nama}": sticky: kepala tabel menempel padahal lebar < 900px`);
+    if (st.lebih && !st.fokusDalam) temuan.push(`tab "${nama}": keyboard: tabel lebih lebar dari wadah tetapi wadah tidak bisa dijangkau keyboard`);
+    if (st.halamanLebar) temuan.push(`tab "${nama}": scroll halaman: halaman punya scroll horizontal`);
+    (await cekDom(p)).forEach((t) => temuan.push(`tab "${nama}": ${t}`));
+    if (sabot && i === 0) await p.evaluate(() => document.querySelectorAll('.tabel-kartu thead th').forEach((th) => { th.style.position = ''; th.style.top = ''; }));
+  }
+  return temuan;
+}
+
 // Nina & Tegar (14 Nov 15.09): putaran halaman dijadikan fungsi agar bisa dijalankan di dua lebar (390px HP dan 1280px desktop).
-async function putaranHalaman(p, lebar) {
-  await p.setViewportSize({ width: lebar, height: 900 });
+async function putaranHalaman(p, lebar, tinggi = 900) {
+  await p.setViewportSize({ width: lebar, height: tinggi });
   let total = 0, totalUji = 0;
   for (const h of halaman) {
     const [jalur, pagar] = h.split('#');
@@ -686,9 +724,21 @@ const halaman = ['index.html', 'belajar.html', 'pelajaran.html', 'pelajaran.html
   const jenis10c = jenisDari(['judul h1', 'document.title', 'id ganda', 'Tab', 'kembali'], sab10c);
   const sabot10Ok = jenis10a.length === 2 && jenis10b.length === 5 && jenis10c.length === 5;
   console.log(`Skenario 1280px ketiga UJI (sabot): panah ${jenis10a.length} jenis (harus 2: ${jenis10a.join(', ')}), kuis + sektor ${jenis10b.length} jenis (harus 5), profil + 404 ${jenis10c.length} jenis (harus 5)`);
+  // Nina & Tegar (14 Nov 18.09): putaran ketiga di lebar tablet 768×1024 (Peringkat memakai tabel geser tanpa kepala sticky).
+  console.log('');
+  const r768 = await putaranHalaman(p, 768, 1024);
+  const sk11 = [...(await skenarioTablet(p, false)), ...(await skenarioPeringkat(p, false)), ...(await skenarioPanah(p, false)), ...(await skenarioKetik(p, false))];
+  console.log(`\nSkenario 768px (tata letak Peringkat tiap tab; klik tab + istilah + Escape; panah tab; kotak ketik Radar & Bandingkan): ${sk11.length} temuan`);
+  sk11.forEach((t) => console.log('  - ' + t));
+  const sab11t = await skenarioTablet(p, true), sab11p = await skenarioPeringkat(p, true), sab11a = await skenarioPanah(p, true), sab11k = await skenarioKetik(p, true);
+  const jenis11t = jenisDari(['sticky', 'scroll halaman'], sab11t.map((t) => t.replace(/^tab "[^"]*": /, 'x: ')));
+  const jenis11p = new Set(sab11p.map((t) => t.split(': ')[1]));
+  const jenis11a = jenisDari(['tabindex', 'fokus hilang'], sab11a), jenis11k = jenisDari(['status', 'fokus hilang', 'id ganda', 'pilihan tidak ikut'], sab11k);
+  const sabot11Ok = jenis11t.length === 2 && jenis11p.size === 3 && jenis11a.length === 2 && jenis11k.length === 4;
+  console.log(`Skenario 768px UJI (sabot): tata letak ${jenis11t.length} jenis (harus 2: ${jenis11t.join(', ')}), Peringkat ${jenis11p.size} jenis (harus 3), panah ${jenis11a.length} jenis (harus 2), kotak ketik ${jenis11k.length} jenis (harus 4)`);
   if (galat.length) console.log('Galat JS:', galat);
-  console.log(`\nTotal temuan halaman asli: ${total} (390px ${r390.total}, 1280px ${r1280.total}). Temuan UJI: 390px ${r390.totalUji}, 1280px ${r1280.totalUji} (masing-masing harus 8).`);
+  console.log(`\nTotal temuan halaman asli: ${total + r768.total} (390px ${r390.total}, 768px ${r768.total}, 1280px ${r1280.total}). Temuan UJI: 390px ${r390.totalUji}, 768px ${r768.totalUji}, 1280px ${r1280.totalUji} (masing-masing harus 8).`);
   await b.close();
   const sabotOk = jenis.size === 3 && ['id ganda', 'rujukan', 'fokus hilang'].every((j) => [...jenis].some((x) => x.startsWith(j)));
-  process.exit(total === 0 && totalUji === 8 && r1280.totalUji === 8 && sk8.length === 0 && sabot8Ok && sk9.length === 0 && sabot9Ok && sk10.length === 0 && sabot10Ok && sk.length === 0 && sabotOk && sk2.length === 0 && jenis2.length === 4 && sk3.length === 0 && jenis3.length === 5 && sk4.length === 0 && jenis4.length === 5 && sk5.length === 0 && jenis5.length === 5 && sk6.length === 0 && jenis6.length === 4 && sk7.length === 0 && jenis7.length === 5 && !galat.length ? 0 : 1);
+  process.exit(total === 0 && totalUji === 8 && r768.total === 0 && r768.totalUji === 8 && sk11.length === 0 && sabot11Ok && r1280.totalUji === 8 && sk8.length === 0 && sabot8Ok && sk9.length === 0 && sabot9Ok && sk10.length === 0 && sabot10Ok && sk.length === 0 && sabotOk && sk2.length === 0 && jenis2.length === 4 && sk3.length === 0 && jenis3.length === 5 && sk4.length === 0 && jenis4.length === 5 && sk5.length === 0 && jenis5.length === 5 && sk6.length === 0 && jenis6.length === 4 && sk7.length === 0 && jenis7.length === 5 && !galat.length ? 0 : 1);
 })();
