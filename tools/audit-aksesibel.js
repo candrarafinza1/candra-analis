@@ -16,6 +16,7 @@
 // Nina & Tegar (14 Nov 13.09) menambah skenario ketujuh: tombol "Salin tautan profil" (papan klip diizinkan & ditolak, IDE.md #29).
 // Nina & Tegar (14 Nov 15.09) menambah putaran 1280×900: semua halaman (+ UJI) dan skenario Peringkat & Salin.
 // Nina & Tegar (14 Nov 16.08) menambah putaran 1280×900 untuk Radar, kotak ketik, Kabar, dan kamus istilah.
+// Nina & Tegar (14 Nov 17.08) menambah putaran 1280×900 untuk skenario sisa: panah tab, kuis, sektor, profil, 404 (semua skenario kini di dua lebar).
 // Cara pakai: python3 -m http.server 8765 (di akar repo), lalu: node tools/audit-aksesibel.js
 // Butuh Playwright + Chromium (sudah ada di lingkungan kerja tim); tidak dijalankan oleh tests/cek.mjs.
 const { chromium } = require('playwright');
@@ -671,9 +672,23 @@ const halaman = ['index.html', 'belajar.html', 'pelajaran.html', 'pelajaran.html
   const jenis9kk = jenisDari(['aria-live', 'ket-jenis', 'fokus hilang', 'info-kamus status', 'info-kamus jumlah'], sab9kk);
   const sabot9Ok = jenis9r.length === 2 && jenis9k.length === 4 && jenis9kk.length === 5;
   console.log(`Skenario 1280px kedua UJI (sabot): Radar ${jenis9r.length} jenis (harus 2), kotak ketik ${jenis9k.length} jenis (harus 4), Kabar + kamus ${jenis9kk.length} jenis (harus 5)`);
+  // Nina & Tegar (14 Nov 17.08): putaran 1280×900 untuk skenario sisa (panah tab Peringkat, kuis keyboard,
+  // saringan sektor, pindah profil emiten, 404). Kini semua skenario diperiksa di 390px dan 1280px.
+  const sk10 = [...(await skenarioPanah(p, false)), ...(await skenarioKuis(p, false)), ...(await skenarioSektor(p, false)),
+    ...(await skenarioProfil(p, false)), ...(await skenario404(p, false))];
+  console.log(`\nSkenario 1280px ketiga (panah tab Peringkat; kuis keyboard; saringan sektor; profil emiten; 404): ${sk10.length} temuan`);
+  sk10.forEach((t) => console.log('  - ' + t));
+  const sab10a = await skenarioPanah(p, true);
+  const sab10b = [...(await skenarioKuis(p, true)), ...(await skenarioSektor(p, true))];
+  const sab10c = [...(await skenarioProfil(p, true)), ...(await skenario404(p, true))];
+  const jenis10a = jenisDari(['tabindex', 'fokus hilang'], sab10a);
+  const jenis10b = jenisDari(['aria-live', 'fokus hilang', 'ket-sektor', 'tab terpilih', 'id ganda'], sab10b);
+  const jenis10c = jenisDari(['judul h1', 'document.title', 'id ganda', 'Tab', 'kembali'], sab10c);
+  const sabot10Ok = jenis10a.length === 2 && jenis10b.length === 5 && jenis10c.length === 5;
+  console.log(`Skenario 1280px ketiga UJI (sabot): panah ${jenis10a.length} jenis (harus 2: ${jenis10a.join(', ')}), kuis + sektor ${jenis10b.length} jenis (harus 5), profil + 404 ${jenis10c.length} jenis (harus 5)`);
   if (galat.length) console.log('Galat JS:', galat);
   console.log(`\nTotal temuan halaman asli: ${total} (390px ${r390.total}, 1280px ${r1280.total}). Temuan UJI: 390px ${r390.totalUji}, 1280px ${r1280.totalUji} (masing-masing harus 8).`);
   await b.close();
   const sabotOk = jenis.size === 3 && ['id ganda', 'rujukan', 'fokus hilang'].every((j) => [...jenis].some((x) => x.startsWith(j)));
-  process.exit(total === 0 && totalUji === 8 && r1280.totalUji === 8 && sk8.length === 0 && sabot8Ok && sk9.length === 0 && sabot9Ok && sk.length === 0 && sabotOk && sk2.length === 0 && jenis2.length === 4 && sk3.length === 0 && jenis3.length === 5 && sk4.length === 0 && jenis4.length === 5 && sk5.length === 0 && jenis5.length === 5 && sk6.length === 0 && jenis6.length === 4 && sk7.length === 0 && jenis7.length === 5 && !galat.length ? 0 : 1);
+  process.exit(total === 0 && totalUji === 8 && r1280.totalUji === 8 && sk8.length === 0 && sabot8Ok && sk9.length === 0 && sabot9Ok && sk10.length === 0 && sabot10Ok && sk.length === 0 && sabotOk && sk2.length === 0 && jenis2.length === 4 && sk3.length === 0 && jenis3.length === 5 && sk4.length === 0 && jenis4.length === 5 && sk5.length === 0 && jenis5.length === 5 && sk6.length === 0 && jenis6.length === 4 && sk7.length === 0 && jenis7.length === 5 && !galat.length ? 0 : 1);
 })();

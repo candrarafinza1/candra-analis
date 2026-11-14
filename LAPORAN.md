@@ -1487,3 +1487,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Nina + Tegar: `tools/audit-aksesibel.js` kini juga menjalankan skenario Radar (ganti emiten + istilah + Escape), kotak ketik kode (Radar & Bandingkan), Kabar (saringan + "Tampilkan lagi") dan kamus istilah di 1280×900. Hasil: 0 temuan, tanpa galat JS; sabot di 1280px tetap tertangkap (Radar 2, kotak ketik 4, Kabar + kamus 5 jenis). Halaman 390px & 1280px tetap 0 temuan, UJI tetap 8 di kedua lebar. Kode situs tidak diubah.
 - Tugas baru: Nina + Tegar (putaran 1280px untuk skenario sisa: panah tab, kuis, sektor, profil, 404).
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Tampilan tidak diubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 14 Nov 2026, 17.08 WIB (sesi siang, Bima)
+- Nina + Tegar: `tools/audit-aksesibel.js` kini juga menjalankan skenario sisa di 1280×900: panah tab Peringkat, kuis dengan keyboard, saringan sektor, pindah profil emiten, dan 404. Hasil: 0 temuan, tanpa galat JS; sabot di 1280px tetap tertangkap (panah 2, kuis + sektor 5, profil + 404 5 jenis). Semua skenario kini diperiksa di 390px dan 1280px. Halaman tetap 0 temuan, UJI tetap 8 di kedua lebar. Kode situs tidak diubah.
+- Fajar: KLBF & BRIS dicari ulang; belum ada laba Januari–September 2026 bersumber → tetap 23 dari 32.
+- Tugas baru: Nina + Tegar (putaran lebar tablet 768px).
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Tampilan tidak diubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
