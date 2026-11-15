@@ -11,6 +11,10 @@
 window.KABAR_JENIS = ["Laporan keuangan", "Pembelian kembali saham", "Dividen", "Rapat umum pemegang saham", "Aksi korporasi lain"];
 
 window.KABAR = [
+  // Laporan 9 bulan ITMG — Fortune IDN, 11 Nov 2026 (Raka, ditinjau Hana)
+  { kode: "ITMG", tanggal: "2026-11-11", jenis: "Laporan keuangan",
+    ringkas: "Indo Tambangraya Megah merilis laporan Januari–September 2026: laba bersih US$162,93 juta, naik dari US$130,59 juta pada periode yang sama 2025. IDX Channel menulis pendapatan US$1,60 miliar, naik 17%.",
+    sumber: { judul: "Fortune IDN, 11 Nov 2026: Produksi dan harga batu bara dongkrak laba ITMG 24,7% hingga Q3 2026", url: "https://www.fortuneidn.com/market/produksi-dan-harga-batu-bara-dongkrak-laba-itmg-24-7-hingga-q3-2026-00-3dhnm-h3zhhy" } },
   // Laporan 9 bulan AADI — depok24jam, 2 Nov 2026
   { kode: "AADI", tanggal: "2026-11-02", jenis: "Laporan keuangan",
     ringkas: "Adaro Andalan Indonesia merilis laporan 9 bulan 2026: laba yang diatribusikan kepada pemilik entitas induk US$683,34 juta, naik dari US$587,32 juta. Pendapatan usaha US$3,96 miliar, naik 9,70%.",

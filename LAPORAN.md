@@ -1531,3 +1531,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: KLBF & BRIS dicari ulang; KLBF teratas masih kuartal III 2025, BRIS baru Agustus 2026 (laporan bulanan) → tetap 23 dari 32.
 - Tugas baru: Nina + Tegar (daftar jenis sabot sama di tiga lebar).
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### Minggu, 15 November 2026 — sesi 09.08 WIB (Bima)
+- Fajar: laba 9 bulan ITMG masuk: US$162,93 juta (Jan–Sep 2026) vs US$130,59 juta (Jan–Sep 2025), laba atribusi, +24,8% (Fortune IDN 11 Nov 2026; IDX Channel 12 Nov 2026 menulis US$163 juta vs US$130 juta). Judul IDX Channel "USD138 juta" tidak cocok dengan isinya → tidak dipakai. Kini 24 dari 32.
+- Raka + Hana: kabar "Laporan keuangan" ITMG 11 Nov 2026 ditambah, bahasa netral.
+- Galih: profil ITMG dicek 390px & 1280px: tanda "Laba 9 bulan 2026 naik" dan angka runtut, tanpa scroll horizontal, tanpa galat JS.
+- HRUM, EXCL, BSSR, MDKA dicari: belum ada laba Jan–Sep 2026 bersumber. Catatan Bima: sesi-sesi terakhir hanya mencari KLBF & BRIS; mulai sekarang Fajar bergilir ke 8 emiten sisa.
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
