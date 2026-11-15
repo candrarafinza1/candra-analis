@@ -4592,6 +4592,7 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
 
   // Nina & Tegar (15 Nov 18.09): kepala tests/cek.mjs menautkan README bagian "Cara menguji", dan alur CI
   // .github/workflows/periksa.yml hanya menjalankan cek sintaks + node tests/cek.mjs (audit peramban tidak di CI).
+  const PY_SINTAKS = "python3 -m py_compile tools/*.py";
   const cekAlurCI = (srcCek, readme, yml) => {
     const salah = [];
     const kepala = [];
@@ -4602,7 +4603,7 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
     if (!run.includes("node tests/cek.mjs")) salah.push("alur CI tidak menjalankan node tests/cek.mjs");
     for (const r of run) {
       if (/audit-aksesibel|audit-kontras|playwright|http\.server|chromium/i.test(r)) salah.push(`alur CI menjalankan audit peramban: ${r}`);
-      else if (r !== "node tests/cek.mjs" && !/^for f in .+; do node --check "\$f"; done$/.test(r)) salah.push(`alur CI menjalankan perintah lain: ${r}`);
+      else if (r !== "node tests/cek.mjs" && r !== PY_SINTAKS && !/^for f in .+; do node --check "\$f"; done$/.test(r)) salah.push(`alur CI menjalankan perintah lain: ${r}`);
     }
     if (/^\s*run:\s*[|>]/m.test(yml)) salah.push("alur CI memakai run berbaris banyak (tidak bisa diperiksa)");
     const iB = readme.indexOf("## Cara menguji\n");
@@ -4660,6 +4661,37 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
   ];
   for (const [r, y, pesan] of rusakNS)
     ok((r !== readmeT || y !== ymlT) && cekNodeSintaksCI(r, y).some((x) => x.includes(pesan)), `uji balik Node & sintaks CI: "${pesan}" harus tertangkap`);
+  // Nina & Tegar (15 Nov 20.10): skrip modul PDF (Python) ikut dicek sintaks di CI dengan perintah yang sama
+  // dengan README "Cara menguji"; README juga menyebut cara membuat ulang modul PDF.
+  const cekPythonSintaksCI = (readme, yml) => {
+    const salah = [];
+    const run = [...yml.matchAll(/^\s*(?:- )?run:\s*(.+)$/gm)].map((m) => m[1].trim());
+    const n = run.filter((r) => r === PY_SINTAKS).length;
+    if (n !== 1) salah.push(`alur CI harus menjalankan ${PY_SINTAKS} tepat sekali (ada ${n})`);
+    const iQA = run.indexOf("node tests/cek.mjs");
+    if (n === 1 && iQA >= 0 && run.indexOf(PY_SINTAKS) > iQA) salah.push("cek sintaks Python harus sebelum node tests/cek.mjs");
+    const iB = readme.indexOf("## Cara menguji\n");
+    const bagian = iB < 0 ? "" : readme.slice(iB).split(/\n## /)[0];
+    if (!bagian.includes("`" + PY_SINTAKS + "`")) salah.push("README Cara menguji tidak menyebut cek sintaks Python");
+    if (!bagian.includes("`python3 tools/buat-modul-pdf.py`")) salah.push("README Cara menguji tidak menyebut cara membuat ulang modul PDF");
+    return salah;
+  };
+  const sPy = cekPythonSintaksCI(readmeT, ymlT);
+  ok(sPy.length === 0, `cek sintaks Python CI: ${sPy.join("; ")}`);
+  ok(readdirSync("tools").some((f) => f.endsWith(".py")), "pola tools/*.py harus mengenai minimal satu berkas");
+  const blokPy = "      - name: Cek sintaks Python (skrip modul PDF)\n        run: python3 -m py_compile tools/*.py\n";
+  const rusakPy = [
+    [readmeT, ymlT.replace(blokPy, ""), "tepat sekali (ada 0)"],
+    [readmeT, ymlT + blokPy, "tepat sekali (ada 2)"],
+    [readmeT, ymlT.replace(blokPy, "") + blokPy, "harus sebelum node tests/cek.mjs"],
+    [readmeT, ymlT.replace("py_compile tools/*.py", "py_compile tools/buat-modul-pdf.py"), "tepat sekali (ada 0)"],
+    [readmeT.replace("`python3 -m py_compile tools/*.py`", "py_compile"), ymlT, "tidak menyebut cek sintaks Python"],
+    [readmeT.replace("`python3 tools/buat-modul-pdf.py`", "skrip PDF"), ymlT, "cara membuat ulang modul PDF"],
+  ];
+  for (const [r, y, pesan] of rusakPy)
+    ok((r !== readmeT || y !== ymlT) && cekPythonSintaksCI(r, y).some((x) => x.includes(pesan)), `uji balik sintaks Python CI: "${pesan}" harus tertangkap`);
+  // Perintah Python di CI tetap lolos cekAlurCI, perintah Python lain tidak.
+  ok(cekAlurCI(srcCekT, readmeT, ymlT + "      - name: Lain\n        run: python3 tools/buat-modul-pdf.py\n").some((x) => x.includes("perintah lain: python3 tools/buat-modul-pdf.py")), 'uji balik alur CI: "python3 tools/buat-modul-pdf.py" harus tertangkap');
 }
 
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }

@@ -1590,3 +1590,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Nina + Tegar: cek sintaks CI (`periksa.yml`) kini mencakup `tests/*.mjs` dan `tools/*.js` (semua lolos `node --check`). README "Cara menguji" menyebut Node 22 dan daftar pola cek sintaks. `tests/cek.mjs` menambah `cekNodeSintaksCI` (tepat satu node-version, sama dengan README; pola wajib ada di CI dan README; tiap pola mengenai berkas); 7 uji balik tertangkap, uji sabot (Node 20, tools dihapus) gagal sesuai harapan. Kode situs & tampilan tidak diubah.
 - Tugas baru: Nina + Tegar (cek sintaks skrip PDF Python).
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 15 Nov 2026, 20.10 WIB — sesi kerja (Bima)
+- Fajar: giliran MBMA & KLBF dicari; belum ada laba Januari–September 2026 bersumber (MBMA teratas masih kuartal III 2025 dan produksi kuartal III 2026; KLBF teratas masih kuartal III 2025) → tetap 25 dari 32. Berikutnya BRIS & EXCL. Raka/Hana: tidak ada kabar baru.
+- Nina + Tegar: CI (`periksa.yml`) kini juga cek sintaks Python `python3 -m py_compile tools/*.py` sebelum cek.mjs; README "Cara menguji" menyebut perintah itu dan cara membuat ulang modul PDF (tidak di CI). `.gitignore` memuat `__pycache__/`. `tests/cek.mjs` menambah `cekPythonSintaksCI` (tepat sekali, urutan, README selaras) dan `cekAlurCI` mengizinkan perintah itu saja; 7 uji balik tertangkap, uji sabot gagal sesuai harapan. Kode situs & tampilan tidak diubah.
+- Tugas baru: Nina + Tegar (cek modul PDF selaras dengan kurikulum).
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
