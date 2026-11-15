@@ -4544,6 +4544,50 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
   ];
   for (const [s, pesan] of rusakS)
     ok(s !== srcA && cekSatuLebar(s).some((x) => x.includes(pesan)), `uji balik mode satu lebar: "${pesan}" harus tertangkap`);
+
+  // Nina & Tegar (15 Nov 17.08): bagian "Cara menguji" di README harus memuat perintah yang sama persis dengan komentar
+  // "Cara pakai" di tools/audit-aksesibel.js (server 8765, audit penuh, HANYA, HANYA + SKENARIO), di dalam satu blok kode,
+  // dan menyebut bahwa audit penuh wajib sebelum rilis.
+  const cekCaraMenguji = (srcAudit, readme) => {
+    const salah = [];
+    const perintahAudit = [];
+    const awal = srcAudit.indexOf("// Cara pakai:");
+    if (awal < 0) return ["tools/audit-aksesibel.js: komentar \"Cara pakai\" tidak ditemukan"];
+    const komentar = [];
+    for (const b of srcAudit.slice(awal).split("\n")) { if (!b.startsWith("//")) break; komentar.push(b); }
+    const teks = komentar.join("\n");
+    const mServer = teks.match(/python3 -m http\.server \d+/);
+    if (mServer) perintahAudit.push(mServer[0]); else salah.push("Cara pakai tidak menyebut perintah server lokal");
+    for (const m of teks.matchAll(/((?:[A-Z]+=\S+ )*node tools\/audit-aksesibel\.js)/g)) perintahAudit.push(m[1]);
+    for (const w of ["node tools/audit-aksesibel.js", "HANYA=", "SKENARIO="])
+      if (!perintahAudit.some((c) => c.includes(w))) salah.push(`Cara pakai tidak memuat perintah lengkap dengan ${w}`);
+    const iB = readme.indexOf("## Cara menguji\n");
+    if (iB < 0) return [...salah, "README tidak punya bagian ## Cara menguji"];
+    const bagian = readme.slice(iB).split(/\n## /)[0];
+    const blok = bagian.match(/```\n([\s\S]*?)\n```/);
+    if (!blok) return [...salah, "bagian Cara menguji tidak punya blok perintah"];
+    const barisReadme = blok[1].split("\n").map((b) => b.trim()).filter(Boolean);
+    for (const c of perintahAudit) if (!barisReadme.includes(c)) salah.push(`README Cara menguji tidak memuat perintah: ${c}`);
+    for (const b of barisReadme) if (!perintahAudit.includes(b)) salah.push(`README Cara menguji memuat perintah yang tidak ada di Cara pakai: ${b}`);
+    if (!/[Ww]ajib[^\n]*sebelum rilis/.test(bagian)) salah.push("README Cara menguji tidak menyebut audit penuh wajib sebelum rilis");
+    if (!/Bukan pengganti audit penuh/.test(bagian)) salah.push("README Cara menguji tidak menyebut mode satu lebar bukan pengganti audit penuh");
+    return salah;
+  };
+  const readmeT = readFileSync("README.md", "utf8");
+  const sC = cekCaraMenguji(srcA, readmeT);
+  ok(sC.length === 0, `README Cara menguji: ${sC.join("; ")}`);
+  const rusakC = [
+    [srcA, readmeT.replace("python3 -m http.server 8765\n", "python3 -m http.server 8000\n"), "tidak memuat perintah: python3 -m http.server 8765"],
+    [srcA, readmeT.replace("HANYA=390 SKENARIO=Peringkat,Radar node tools/audit-aksesibel.js\n", ""), "tidak memuat perintah: HANYA=390 SKENARIO"],
+    [srcA.replace("// Cara pakai: python3 -m http.server 8765", "// Cara pakai: python3 -m http.server 9000"), readmeT, "tidak ada di Cara pakai: python3 -m http.server 8765"],
+    [srcA, readmeT.replace("node tools/audit-aksesibel.js\nHANYA=390 node", "node tools/audit-aksesibel.js --cepat\nHANYA=390 node"), "tidak ada di Cara pakai: node tools/audit-aksesibel.js --cepat"],
+    [srcA, readmeT.replace("## Cara menguji\n", "## Menguji\n"), "tidak punya bagian ## Cara menguji"],
+    [srcA, readmeT.replace("sebelum rilis yang mengubah", "saat rilis yang mengubah"), "wajib sebelum rilis"],
+    [srcA, readmeT.replace("Bukan pengganti audit penuh.", "Cukup untuk rilis."), "bukan pengganti audit penuh"],
+    [srcA.replace("// atau HANYA=390 SKENARIO=Peringkat,Radar node tools/audit-aksesibel.js", "// Tambah SKENARIO=Peringkat,Radar"), readmeT, "perintah lengkap dengan SKENARIO="],
+  ];
+  for (const [a, r, pesan] of rusakC)
+    ok((a !== srcA || r !== readmeT) && cekCaraMenguji(a, r).some((x) => x.includes(pesan)), `uji balik README Cara menguji: "${pesan}" harus tertangkap`);
 }
 
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }

@@ -38,6 +38,23 @@ python3 tools/buat-modul-pdf.py   # setiap kali kurikulum berubah
 node tests/cek.mjs
 ```
 
+## Cara menguji
+
+Pemeriksaan wajib setiap perubahan: `node tests/cek.mjs` (tanpa server, beberapa detik).
+
+Audit aksesibilitas di peramban (`tools/audit-aksesibel.js`, butuh Playwright + Chromium) memakai server lokal di port 8765. Jalankan server di akar repo, lalu salah satu perintah audit:
+
+```
+python3 -m http.server 8765
+node tools/audit-aksesibel.js
+HANYA=390 node tools/audit-aksesibel.js
+HANYA=390 SKENARIO=Peringkat,Radar node tools/audit-aksesibel.js
+```
+
+- **Audit penuh** (tanpa `HANYA`): semua halaman dan skenario di tiga lebar (390, 768, 1280px). **Wajib** dijalankan dan harus keluar dengan kode 0 sebelum rilis yang mengubah tampilan, halaman, atau `tools/audit-aksesibel.js`.
+- **Satu lebar** (`HANYA=390`, `768`, atau `1280`): cepat, untuk memeriksa perubahan kecil di tengah kerja. Bukan pengganti audit penuh.
+- **Beberapa skenario** (`SKENARIO=…`, hanya bersama `HANYA`): menjalankan kelompok skenario itu saja secara utuh. Nama salah ketik membuat audit keluar dengan kode 1.
+
 ## Tim
 
 Perusahaan ini dijalankan tim AI dengan CEO **Bima**. Karyawan melapor ke Bima; Bima menyelesaikan masalah teknis dan hanya membawa keputusan penting ke pemilik.

@@ -21,7 +21,7 @@
 // Nina & Tegar (14 Nov 19.10) menambah putaran 768×1024 untuk skenario sisa: Radar, kuis, sektor, Kabar, kamus, profil, 404, Salin.
 // Cara pakai: python3 -m http.server 8765 (di akar repo), lalu: node tools/audit-aksesibel.js (audit penuh, tiga lebar)
 // atau HANYA=390 node tools/audit-aksesibel.js untuk satu lebar saja (cepat, untuk perubahan kecil; bukan pengganti audit penuh).
-// Tambah SKENARIO=Peringkat,Radar (hanya bersama HANYA) untuk menjalankan kelompok skenario itu saja.
+// atau HANYA=390 SKENARIO=Peringkat,Radar node tools/audit-aksesibel.js untuk kelompok skenario itu saja (SKENARIO hanya bersama HANYA).
 // Butuh Playwright + Chromium (sudah ada di lingkungan kerja tim); tidak dijalankan oleh tests/cek.mjs.
 const { chromium } = require('playwright');
 

@@ -1572,3 +1572,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Nina + Tegar: mode satu lebar audit kini menerima `SKENARIO=Peringkat,Radar` (hanya bersama HANYA). Kelompok skenario berjalan utuh agar uji sabot tetap lengkap; nama salah ketik/kosong dan "tidak ada kelompok berjalan" keluar 1. Diuji: 390px Peringkat,Radar exit 0 (±23 detik), 768px Kuis,Tablet exit 0, 1280px tanpa SKENARIO exit 0 (8 kelompok). `tests/cek.mjs` +5 cek, 6 uji balik tertangkap. Audit penuh tidak diubah; kode situs & tampilan tidak diubah.
 - Tugas baru: Nina + Tegar (bagian "Cara menguji" di README).
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 15 Nov 2026, 17.08 WIB — sesi kerja (Bima)
+- Fajar: giliran KLBF & BRIS dicari; belum ada laba Januari–September 2026 bersumber (hasil teratas masih kuartal III 2025; BRIS terbaru kuartal II 2026) → tetap 25 dari 32. Berikutnya EXCL & BSSR. Raka/Hana: tidak ada kabar baru.
+- Nina + Tegar: README punya bagian "Cara menguji" (server lokal 8765, audit penuh vs `HANYA`/`SKENARIO`, audit penuh wajib sebelum rilis yang mengubah tampilan). Komentar "Cara pakai" di `tools/audit-aksesibel.js` kini memuat perintah SKENARIO lengkap. `tests/cek.mjs` menambah `cekCaraMenguji` (perintah README = perintah Cara pakai, dua arah); 8 uji balik tertangkap. Diuji: `HANYA=390 SKENARIO=Peringkat,Radar` sehat, audit penuh exit 0 (temuan 0, UJI 8/8/8). Kode situs & tampilan tidak diubah.
+- Tugas baru: Nina + Tegar (tautan README dari cek.mjs + CI tetap hanya cek.mjs).
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
