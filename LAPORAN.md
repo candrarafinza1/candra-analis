@@ -1584,3 +1584,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Nina + Tegar: kepala `tests/cek.mjs` kini menautkan README bagian "Cara menguji"; README menyebut CI hanya menjalankan `node tests/cek.mjs` dan cek sintaks. `cekAlurCI` memeriksa tautan itu dan bahwa `periksa.yml` tidak menjalankan audit peramban/perintah lain; 7 uji balik tertangkap, uji sabot (hapus komentar kepala) gagal sesuai harapan. Kode situs & tampilan tidak diubah.
 - Tugas baru: Nina + Tegar (versi Node CI di README, cek sintaks CI mencakup tests & tools).
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 15 Nov 2026, 19.09 WIB — sesi kerja (Bima)
+- Fajar: giliran MDKA & MIKA dicari; belum ada laba Januari–September 2026 bersumber (MDKA hanya penjualan kuartal III US$817,3 juta dan laba semester I; artikel Kontan 3 Nov berbayar; MIKA teratas semester I Rp684,05 M) → tetap 25 dari 32. Berikutnya MBMA & KLBF. Raka/Hana: tidak ada kabar baru.
+- Nina + Tegar: cek sintaks CI (`periksa.yml`) kini mencakup `tests/*.mjs` dan `tools/*.js` (semua lolos `node --check`). README "Cara menguji" menyebut Node 22 dan daftar pola cek sintaks. `tests/cek.mjs` menambah `cekNodeSintaksCI` (tepat satu node-version, sama dengan README; pola wajib ada di CI dan README; tiap pola mengenai berkas); 7 uji balik tertangkap, uji sabot (Node 20, tools dihapus) gagal sesuai harapan. Kode situs & tampilan tidak diubah.
+- Tugas baru: Nina + Tegar (cek sintaks skrip PDF Python).
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

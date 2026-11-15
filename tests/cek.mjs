@@ -4625,6 +4625,41 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
   ];
   for (const [c, r, y, pesan] of rusakCI)
     ok((c !== srcCekT || r !== readmeT || y !== ymlT) && cekAlurCI(c, r, y).some((x) => x.includes(pesan)), `uji balik alur CI: "${pesan}" harus tertangkap`);
+
+  // Nina & Tegar (15 Nov 19.09): versi Node CI tercatat di README "Cara menguji", dan cek sintaks CI
+  // mencakup semua folder kode (assets, data, api, tests, tools); daftar di README sama dengan di periksa.yml.
+  const POLA_WAJIB = ["assets/*.js", "data/*.js", "api/*.mjs", "tests/*.mjs", "tools/*.js"];
+  const cekNodeSintaksCI = (readme, yml) => {
+    const salah = [];
+    const v = [...yml.matchAll(/^\s*node-version:\s*["']?(\d+)["']?\s*$/gm)].map((m) => m[1]);
+    if (v.length !== 1) salah.push(`alur CI harus punya tepat satu node-version (ada ${v.length})`);
+    const iB = readme.indexOf("## Cara menguji\n");
+    const bagian = iB < 0 ? "" : readme.slice(iB).split(/\n## /)[0];
+    if (v.length === 1 && !new RegExp(`CI \\(GitHub Actions, [^)\\n]*Node ${v[0]}\\)`).test(bagian)) salah.push(`README Cara menguji tidak menyebut versi Node CI (Node ${v[0]})`);
+    const baris = yml.split("\n").find((b) => /run:\s*for f in .+node --check/.test(b)) || "";
+    const pola = (baris.match(/for f in (.+?); do/) || [, ""])[1].split(/\s+/).filter(Boolean);
+    for (const p of POLA_WAJIB) if (!pola.includes(p)) salah.push(`cek sintaks CI tidak mencakup ${p}`);
+    for (const p of POLA_WAJIB) if (!bagian.includes("`" + p + "`")) salah.push(`README Cara menguji tidak menyebut cek sintaks ${p}`);
+    for (const p of pola) if (!POLA_WAJIB.includes(p)) salah.push(`cek sintaks CI memuat pola yang tidak dikenal: ${p}`);
+    return salah;
+  };
+  const sNS = cekNodeSintaksCI(readmeT, ymlT);
+  ok(sNS.length === 0, `versi Node & cek sintaks CI: ${sNS.join("; ")}`);
+  for (const f of POLA_WAJIB) {
+    const [dir, akhir] = f.split("/*");
+    ok(readdirSync(dir).some((n) => n.endsWith(akhir)), `pola cek sintaks ${f} harus mengenai minimal satu berkas`);
+  }
+  const rusakNS = [
+    [readmeT, ymlT.replace("node-version: 22", "node-version: 20"), "tidak menyebut versi Node CI (Node 20)"],
+    [readmeT.replace("periksa.yml`, Node 22)", "periksa.yml`)"), ymlT, "tidak menyebut versi Node CI (Node 22)"],
+    [readmeT, ymlT.replace("          node-version: 22\n", ""), "tepat satu node-version (ada 0)"],
+    [readmeT, ymlT.replace(" tests/*.mjs", ""), "tidak mencakup tests/*.mjs"],
+    [readmeT, ymlT.replace(" tools/*.js", ""), "tidak mencakup tools/*.js"],
+    [readmeT.replace("`tools/*.js`)", "dll.)"), ymlT, "README Cara menguji tidak menyebut cek sintaks tools/*.js"],
+    [readmeT, ymlT.replace(" tools/*.js;", " tools/*.js lain/*.js;"), "pola yang tidak dikenal: lain/*.js"],
+  ];
+  for (const [r, y, pesan] of rusakNS)
+    ok((r !== readmeT || y !== ymlT) && cekNodeSintaksCI(r, y).some((x) => x.includes(pesan)), `uji balik Node & sintaks CI: "${pesan}" harus tertangkap`);
 }
 
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
