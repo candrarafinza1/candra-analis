@@ -4292,6 +4292,54 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
   ];
   for (const [s, pesan] of rusakA)
     ok(s !== srcA && cekPutaran(s).some((x) => x.includes(pesan)), `uji balik audit tiga lebar: "${pesan}" harus tertangkap`);
+
+  // Nina & Tegar (15 Nov 07.10): setiap hasil yang dihitung audit wajib ikut menentukan syarat keluar (process.exit),
+  // agar tidak ada hasil yang dihitung lalu diabaikan. Rantainya: sk… → process.exit; sab…/skSabot → dipakai di jenis…;
+  // jenis… → dibandingkan (=== angka) di process.exit atau di sabot…Ok; sabot…Ok → process.exit. Putaran halaman 390/768/1280 juga wajib.
+  const cekKeluar = (src) => {
+    const salah = [];
+    const i = src.indexOf("(async () => {");
+    if (i < 0) return ["tools/audit-aksesibel.js: bagian utama (async () => {) tidak ditemukan"];
+    const utama = src.slice(i);
+    const m = utama.match(/process\.exit\(([\s\S]*?) \? 0 : 1\);/);
+    if (!m) return ["process.exit(… ? 0 : 1) tidak ditemukan di akhir audit"];
+    const ekspr = m[1];
+    if (ekspr.includes("||")) salah.push("syarat process.exit memakai || (semua syarat harus digabung dengan &&)");
+    const syarat = new Set(ekspr.split("&&").map((t) => t.trim()));
+    const nama = (re) => [...new Set([...utama.matchAll(re)].map((x) => x[1]))];
+    const baris = utama.split("\n");
+    const barisJenis = baris.filter((b) => /\bjenis\w*\s*=\s*(?!=)/.test(b) && !/const jenisDari =/.test(b)).join("\n");
+    const barisSabotOk = baris.filter((b) => /\bsabot\d*Ok\s*=\s*(?!=)/.test(b)).join("\n");
+    const pakai = ekspr + "\n" + barisSabotOk;
+    for (const s of nama(/\b(sk\d*)\s*=\s*(?!=)/g))
+      if (!syarat.has(`${s}.length === 0`)) salah.push(`${s} tidak ikut syarat process.exit (${s}.length === 0)`);
+    for (const s of nama(/\b(sabot\d*Ok)\s*=\s*(?!=)/g))
+      if (!syarat.has(s)) salah.push(`${s} tidak ikut syarat process.exit`);
+    for (const s of nama(/\b(jenis\w*)\s*=\s*(?!=)/g).filter((x) => x !== "jenisDari"))
+      if (!new RegExp(`\\b${s}\\.(length|size) === \\d+`).test(pakai)) salah.push(`${s} tidak dibandingkan di process.exit atau sabot…Ok`);
+    for (const s of nama(/\b(sab\w*|skSabot)\s*=\s*(?!=)/g).filter((x) => !/Ok$/.test(x)))
+      if (!new RegExp(`\\b${s}\\b`).test(barisJenis)) salah.push(`${s} (hasil sabot) tidak dipakai di jenis…`);
+    for (const t of ["total === 0", "totalUji === 8", "r768.total === 0", "r768.totalUji === 8", "r1280.totalUji === 8", "!galat.length"])
+      if (!syarat.has(t)) salah.push(`syarat "${t}" hilang dari process.exit`);
+    const bT = baris.find((b) => /const total = /.test(b)) || "";
+    if (!/r390\.total\b/.test(bT) || !/r1280\.total\b/.test(bT) || !/totalUji = r390\.totalUji/.test(bT)) salah.push("total tidak lagi menjumlah r390.total + r1280.total (totalUji = r390.totalUji)");
+    return salah;
+  };
+  const sK = cekKeluar(srcA);
+  ok(sK.length === 0, `audit-aksesibel syarat keluar: ${sK.join("; ")}`);
+  const rusakK = [
+    [srcA.replace("sk12.length === 0 && ", ""), "sk12 tidak ikut"],
+    [srcA.replace("&& sabot12Ok ", ""), "sabot12Ok tidak ikut"],
+    [srcA.replace("&& jenis7.length === 5 ", ""), "jenis7 tidak dibandingkan"],
+    [srcA.replace(" && jenis11k.length === 4;", ";"), "jenis11k tidak dibandingkan"],
+    [srcA.replace("jenisDari(['id ganda', 'rujukan'], sab9r)", "jenisDari(['id ganda', 'rujukan'], [])"), "sab9r (hasil sabot) tidak dipakai"],
+    [srcA.replace("r768.totalUji === 8 && ", ""), "r768.totalUji === 8"],
+    [srcA.replace(" && !galat.length ?", " ?"), "!galat.length"],
+    [srcA.replace("&& sk9.length === 0 &&", "&& (sk9.length === 0 || true) &&"), "memakai ||"],
+    [srcA.replace("const total = r390.total + r1280.total", "const total = r390.total"), "total tidak lagi menjumlah"],
+  ];
+  for (const [s, pesan] of rusakK)
+    ok(s !== srcA && cekKeluar(s).some((x) => x.includes(pesan)), `uji balik syarat keluar audit: "${pesan}" harus tertangkap`);
 }
 
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
