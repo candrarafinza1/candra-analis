@@ -4495,7 +4495,15 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
     if (f < 0) return [...salah, "fungsi auditSatuLebar tidak ditemukan sebelum bagian utama"];
     const isiF = depan.slice(f);
     if (!/if \(!\[390, 768, 1280\]\.includes\(lebar\)\) \{[^\n]*process\.exit\(1\); \}/.test(isiF)) salah.push("auditSatuLebar tidak menolak (exit 1) nilai HANYA selain 390/768/1280");
-    if (!/process\.exit\(r\.total === 0 && r\.totalUji === 8 && asli === 0 && gagalSabot === 0 && galat\.length === 0 \? 0 : 1\)/.test(isiF)) salah.push("syarat keluar auditSatuLebar berubah");
+    if (!/process\.exit\(r\.total === 0 && r\.totalUji === 8 && asli === 0 && gagalSabot === 0 && galat\.length === 0 && jalanKelompok > 0 \? 0 : 1\)/.test(isiF)) salah.push("syarat keluar auditSatuLebar berubah");
+    // Nina & Tegar (15 Nov 16.08): SKENARIO hanya berlaku di mode satu lebar; audit penuh tidak boleh membacanya.
+    if (/SKENARIO/.test(utama)) salah.push("SKENARIO dipakai di bagian utama (audit penuh bisa berubah)");
+    const akhirF = isiF.indexOf("\n}\n");
+    const tubuhF = akhirF < 0 ? isiF : isiF.slice(0, akhirF);
+    if ((depan.slice(0, f).match(/process\.env\.SKENARIO/g) || []).length) salah.push("SKENARIO dibaca di luar auditSatuLebar");
+    if (!/if \(pilih && \(!pilih\.length \|\| asing\.length\)\) \{[^\n]*process\.exit\(1\); \}/.test(tubuhF)) salah.push("auditSatuLebar tidak menolak (exit 1) nama SKENARIO tak dikenal");
+    if (!/const dikenal = JENIS_SATU\.flatMap\(\(\[d\]\) => d\);/.test(tubuhF)) salah.push("nama SKENARIO tidak diambil dari JENIS_SATU");
+    if (!/if \(pilih && !daftar\.some\(\(n\) => pilih\.includes\(n\)\)\) continue;/.test(tubuhF)) salah.push("saringan SKENARIO tidak menjalankan kelompok utuh");
     const blok = depan.match(/const JENIS_SATU = \[([\s\S]*?)\n\];/);
     if (!blok) return [...salah, "JENIS_SATU tidak ditemukan"];
     const entri = [...blok[1].matchAll(/\[\[([^\]]*)\], \[([^\]]*)\]\]/g)].map((m) => ({
@@ -4526,6 +4534,12 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
     [srcA.replace("  [['Ketik'], ['status', 'fokus hilang', 'id ganda', 'pilihan tidak ikut']],", "  [['Ketik'], ['status', 'fokus hilang', 'id ganda']],"), "JENIS_SATU Ketik beda dengan audit penuh"],
     [srcA.replace("  [['Radar'], ['id ganda', 'rujukan']],\n", ""), "JENIS_SATU tidak memuat skenario Radar"],
     [srcA.replace("asli === 0 && gagalSabot === 0", "gagalSabot === 0"), "syarat keluar auditSatuLebar berubah"],
+    [srcA.replace("&& jalanKelompok > 0 ? 0 : 1", "? 0 : 1"), "syarat keluar auditSatuLebar berubah"],
+    [srcA.replace("  const r390 = await putaranHalaman(p, 390);", "  if (process.env.SKENARIO) console.log('x');\n  const r390 = await putaranHalaman(p, 390);"), "SKENARIO dipakai di bagian utama"],
+    [srcA.replace("const halaman = ['index.html',", "const sk0 = process.env.SKENARIO;\nconst halaman = ['index.html',"), "SKENARIO dibaca di luar auditSatuLebar"],
+    [srcA.replace("if (pilih && (!pilih.length || asing.length)) {", "if (false) {"), "nama SKENARIO tak dikenal"],
+    [srcA.replace("const dikenal = JENIS_SATU.flatMap(([d]) => d);", "const dikenal = ['Peringkat', 'Radar'];"), "tidak diambil dari JENIS_SATU"],
+    [srcA.replace("if (pilih && !daftar.some((n) => pilih.includes(n))) continue;", "if (pilih && !daftar.every((n) => pilih.includes(n))) continue;"), "kelompok utuh"],
     [srcA.replace("  [['Salin'], ['status', 'isi papan klip', 'Tab', 'fokus hilang', 'id ganda']],", "  [['Salin'], ['status', 'isi papan klip', 'Tab', 'fokus hilang', 'id ganda', 'aria-live']],"), "lebih aria-live"],
   ];
   for (const [s, pesan] of rusakS)

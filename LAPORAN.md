@@ -1566,3 +1566,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Nina + Tegar: `tools/audit-aksesibel.js` kini punya mode satu lebar `HANYA=390|768|1280` (±1 menit; 390/768/1280 masing-masing exit 0, UJI 8, sabot lengkap). Nilai salah ketik keluar 1. `tests/cek.mjs` menambah `cekSatuLebar` (HANYA hanya di baris pertama, daftar jenis sama dengan audit penuh, syarat keluar terkunci); 7 uji balik tertangkap. Audit penuh tanpa HANYA tetap exit 0 (temuan 0, UJI 8/8/8). Kode situs & tampilan tidak diubah.
 - Tugas baru: Nina + Tegar (opsi SKENARIO di mode satu lebar).
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 15 Nov 2026, 16.08 WIB — sesi kerja (Bima)
+- Fajar: giliran MBMA & MIKA dicari; belum ada laba Januari–September 2026 bersumber (MBMA hanya produksi kuartal III dan laba semester I; MIKA teratas semester I Rp684,05 M) → tetap 25 dari 32. Berikutnya KLBF & BRIS. Raka/Hana: tidak ada kabar baru.
+- Nina + Tegar: mode satu lebar audit kini menerima `SKENARIO=Peringkat,Radar` (hanya bersama HANYA). Kelompok skenario berjalan utuh agar uji sabot tetap lengkap; nama salah ketik/kosong dan "tidak ada kelompok berjalan" keluar 1. Diuji: 390px Peringkat,Radar exit 0 (±23 detik), 768px Kuis,Tablet exit 0, 1280px tanpa SKENARIO exit 0 (8 kelompok). `tests/cek.mjs` +5 cek, 6 uji balik tertangkap. Audit penuh tidak diubah; kode situs & tampilan tidak diubah.
+- Tugas baru: Nina + Tegar (bagian "Cara menguji" di README).
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

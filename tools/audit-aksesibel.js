@@ -21,6 +21,7 @@
 // Nina & Tegar (14 Nov 19.10) menambah putaran 768×1024 untuk skenario sisa: Radar, kuis, sektor, Kabar, kamus, profil, 404, Salin.
 // Cara pakai: python3 -m http.server 8765 (di akar repo), lalu: node tools/audit-aksesibel.js (audit penuh, tiga lebar)
 // atau HANYA=390 node tools/audit-aksesibel.js untuk satu lebar saja (cepat, untuk perubahan kecil; bukan pengganti audit penuh).
+// Tambah SKENARIO=Peringkat,Radar (hanya bersama HANYA) untuk menjalankan kelompok skenario itu saja.
 // Butuh Playwright + Chromium (sudah ada di lingkungan kerja tim); tidak dijalankan oleh tests/cek.mjs.
 const { chromium } = require('playwright');
 
@@ -660,10 +661,19 @@ async function auditSatuLebar(nilai) {
   const fungsi = { Peringkat: skenarioPeringkat, Panah: skenarioPanah, Radar: skenarioRadar, Kuis: skenarioKuis, Sektor: skenarioSektor,
     Kabar: skenarioKabar, Kamus: skenarioKamus, Profil: skenarioProfil, 404: skenario404, Ketik: skenarioKetik, Tablet: skenarioTablet };
   const jalan = (nama, sabot) => (nama === 'Salin' ? skenarioSalin(b, sabot, lebar) : fungsi[nama](p, sabot));
+  // Nina & Tegar (15 Nov 16.08): SKENARIO=Peringkat,Radar → hanya kelompok JENIS_SATU yang memuat nama itu (satu kelompok berjalan utuh,
+  // mis. Kuis ikut Sektor, agar uji sabot tetap lengkap) + putaran halaman. Hanya berlaku di mode satu lebar; audit penuh tidak membacanya.
+  // Nama tak dikenal → keluar 1. Tidak ada kelompok yang berjalan (mis. SKENARIO=Tablet di 390px) → keluar 1.
+  const dikenal = JENIS_SATU.flatMap(([d]) => d);
+  const pilih = process.env.SKENARIO ? process.env.SKENARIO.split(',').map((x) => x.trim()).filter(Boolean) : null;
+  const asing = (pilih || []).filter((n) => !dikenal.includes(n));
+  if (pilih && (!pilih.length || asing.length)) { console.log(`SKENARIO="${process.env.SKENARIO}" tidak dikenal: ${asing.join(', ') || '(kosong)'} (pilih dari ${dikenal.join(', ')}).`); await b.close(); process.exit(1); }
   const r = await putaranHalaman(p, lebar, tinggi);
-  let asli = 0, gagalSabot = 0;
+  let asli = 0, gagalSabot = 0, jalanKelompok = 0;
   for (const [daftar, jenis] of JENIS_SATU) {
     if (daftar.includes('Tablet') && lebar !== 768) continue; // tata letak tabel geser hanya berlaku di lebar tablet
+    if (pilih && !daftar.some((n) => pilih.includes(n))) continue;
+    jalanKelompok++;
     let sk = [], sab = [];
     for (const n of daftar) sk = sk.concat(await jalan(n, false));
     for (const n of daftar) sab = sab.concat(await jalan(n, true));
@@ -676,9 +686,10 @@ async function auditSatuLebar(nilai) {
     sk.forEach((t) => console.log('  - ' + t));
   }
   if (galat.length) console.log('Galat JS:', galat);
-  console.log(`\nMode satu lebar ${lebar}px (bukan audit penuh): halaman asli ${r.total} temuan, UJI ${r.totalUji} (harus 8), skenario asli ${asli} temuan, sabot gagal ${gagalSabot}.`);
+  console.log(`\nMode satu lebar ${lebar}px (bukan audit penuh)${pilih ? ', SKENARIO ' + pilih.join(',') : ''}: halaman asli ${r.total} temuan, UJI ${r.totalUji} (harus 8), kelompok skenario ${jalanKelompok}, skenario asli ${asli} temuan, sabot gagal ${gagalSabot}.`);
+  if (!jalanKelompok) console.log('Tidak ada kelompok skenario yang berjalan di lebar ini (Tablet hanya 768px).');
   await b.close();
-  process.exit(r.total === 0 && r.totalUji === 8 && asli === 0 && gagalSabot === 0 && galat.length === 0 ? 0 : 1);
+  process.exit(r.total === 0 && r.totalUji === 8 && asli === 0 && gagalSabot === 0 && galat.length === 0 && jalanKelompok > 0 ? 0 : 1);
 }
 
 (async () => {
