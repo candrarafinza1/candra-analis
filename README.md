@@ -40,7 +40,7 @@ node tests/cek.mjs
 
 ## Cara menguji
 
-Pemeriksaan wajib setiap perubahan: `node tests/cek.mjs` (tanpa server, beberapa detik).
+Pemeriksaan wajib setiap perubahan: `node tests/cek.mjs` (tanpa server, beberapa detik). CI (GitHub Actions, `.github/workflows/periksa.yml`) hanya menjalankan `node tests/cek.mjs` dan cek sintaks; audit peramban di bawah dijalankan sendiri oleh tim.
 
 Audit aksesibilitas di peramban (`tools/audit-aksesibel.js`, butuh Playwright + Chromium) memakai server lokal di port 8765. Jalankan server di akar repo, lalu salah satu perintah audit:
 

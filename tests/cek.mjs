@@ -1,5 +1,6 @@
 // Pemeriksaan otomatis (tim Nina, QA). Jalankan: node tests/cek.mjs
 // Tanpa dependensi. Gagal = exit code 1, dan rilis dihentikan.
+// Cara menguji lengkap (termasuk audit peramban): lihat README.md bagian "Cara menguji".
 import { readFileSync, existsSync, readdirSync } from "node:fs";
 import vm from "node:vm";
 
@@ -4588,6 +4589,42 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
   ];
   for (const [a, r, pesan] of rusakC)
     ok((a !== srcA || r !== readmeT) && cekCaraMenguji(a, r).some((x) => x.includes(pesan)), `uji balik README Cara menguji: "${pesan}" harus tertangkap`);
+
+  // Nina & Tegar (15 Nov 18.09): kepala tests/cek.mjs menautkan README bagian "Cara menguji", dan alur CI
+  // .github/workflows/periksa.yml hanya menjalankan cek sintaks + node tests/cek.mjs (audit peramban tidak di CI).
+  const cekAlurCI = (srcCek, readme, yml) => {
+    const salah = [];
+    const kepala = [];
+    for (const b of srcCek.split("\n")) { if (!b.startsWith("//")) break; kepala.push(b); }
+    if (!kepala.some((b) => b.includes("README.md") && b.includes('"Cara menguji"'))) salah.push("kepala cek.mjs tidak menautkan README.md bagian \"Cara menguji\"");
+    if (!readme.includes("## Cara menguji\n")) salah.push("README tidak punya bagian ## Cara menguji untuk ditautkan");
+    const run = [...yml.matchAll(/^\s*(?:- )?run:\s*(.+)$/gm)].map((m) => m[1].trim());
+    if (!run.includes("node tests/cek.mjs")) salah.push("alur CI tidak menjalankan node tests/cek.mjs");
+    for (const r of run) {
+      if (/audit-aksesibel|audit-kontras|playwright|http\.server|chromium/i.test(r)) salah.push(`alur CI menjalankan audit peramban: ${r}`);
+      else if (r !== "node tests/cek.mjs" && !/^for f in .+; do node --check "\$f"; done$/.test(r)) salah.push(`alur CI menjalankan perintah lain: ${r}`);
+    }
+    if (/^\s*run:\s*[|>]/m.test(yml)) salah.push("alur CI memakai run berbaris banyak (tidak bisa diperiksa)");
+    const iB = readme.indexOf("## Cara menguji\n");
+    const bagian = iB < 0 ? "" : readme.slice(iB).split(/\n## /)[0];
+    if (!/CI[^\n]*hanya menjalankan `node tests\/cek\.mjs`/.test(bagian)) salah.push("README Cara menguji tidak menyebut CI hanya menjalankan node tests/cek.mjs");
+    return salah;
+  };
+  const srcCekT = readFileSync("tests/cek.mjs", "utf8");
+  const ymlT = readFileSync(".github/workflows/periksa.yml", "utf8");
+  const sCI = cekAlurCI(srcCekT, readmeT, ymlT);
+  ok(sCI.length === 0, `alur CI & tautan README: ${sCI.join("; ")}`);
+  const rusakCI = [
+    [srcCekT.replace('lihat README.md bagian "Cara menguji"', "lihat README"), readmeT, ymlT, "tidak menautkan README.md"],
+    [srcCekT, readmeT, ymlT.replace("run: node tests/cek.mjs", "run: node tests/cek.mjs || true"), "tidak menjalankan node tests/cek.mjs"],
+    [srcCekT, readmeT, ymlT + "      - name: Audit\n        run: node tools/audit-aksesibel.js\n", "menjalankan audit peramban"],
+    [srcCekT, readmeT, ymlT + "      - name: Server\n        run: python3 -m http.server 8765 &\n", "menjalankan audit peramban"],
+    [srcCekT, readmeT, ymlT + "      - name: Lain\n        run: npm test\n", "perintah lain: npm test"],
+    [srcCekT, readmeT, ymlT + "      - name: Banyak\n        run: |\n          node tools/audit-kontras.js\n", "berbaris banyak"],
+    [srcCekT, readmeT.replace("hanya menjalankan `node tests/cek.mjs`", "menjalankan semua audit"), ymlT, "CI hanya menjalankan"],
+  ];
+  for (const [c, r, y, pesan] of rusakCI)
+    ok((c !== srcCekT || r !== readmeT || y !== ymlT) && cekAlurCI(c, r, y).some((x) => x.includes(pesan)), `uji balik alur CI: "${pesan}" harus tertangkap`);
 }
 
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }

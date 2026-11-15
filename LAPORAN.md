@@ -1578,3 +1578,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Nina + Tegar: README punya bagian "Cara menguji" (server lokal 8765, audit penuh vs `HANYA`/`SKENARIO`, audit penuh wajib sebelum rilis yang mengubah tampilan). Komentar "Cara pakai" di `tools/audit-aksesibel.js` kini memuat perintah SKENARIO lengkap. `tests/cek.mjs` menambah `cekCaraMenguji` (perintah README = perintah Cara pakai, dua arah); 8 uji balik tertangkap. Diuji: `HANYA=390 SKENARIO=Peringkat,Radar` sehat, audit penuh exit 0 (temuan 0, UJI 8/8/8). Kode situs & tampilan tidak diubah.
 - Tugas baru: Nina + Tegar (tautan README dari cek.mjs + CI tetap hanya cek.mjs).
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 15 Nov 2026, 18.09 WIB — sesi kerja (Bima)
+- Fajar: giliran EXCL & BSSR dicari; belum ada laba Januari–September 2026 bersumber (EXCL teratas masih kuartal III 2025; BSSR masih semester I 2026) → tetap 25 dari 32. Berikutnya MDKA & MIKA. Raka/Hana: tidak ada kabar baru.
+- Nina + Tegar: kepala `tests/cek.mjs` kini menautkan README bagian "Cara menguji"; README menyebut CI hanya menjalankan `node tests/cek.mjs` dan cek sintaks. `cekAlurCI` memeriksa tautan itu dan bahwa `periksa.yml` tidak menjalankan audit peramban/perintah lain; 7 uji balik tertangkap, uji sabot (hapus komentar kepala) gagal sesuai harapan. Kode situs & tampilan tidak diubah.
+- Tugas baru: Nina + Tegar (versi Node CI di README, cek sintaks CI mencakup tests & tools).
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
