@@ -1596,3 +1596,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Nina + Tegar: CI (`periksa.yml`) kini juga cek sintaks Python `python3 -m py_compile tools/*.py` sebelum cek.mjs; README "Cara menguji" menyebut perintah itu dan cara membuat ulang modul PDF (tidak di CI). `.gitignore` memuat `__pycache__/`. `tests/cek.mjs` menambah `cekPythonSintaksCI` (tepat sekali, urutan, README selaras) dan `cekAlurCI` mengizinkan perintah itu saja; 7 uji balik tertangkap, uji sabot gagal sesuai harapan. Kode situs & tampilan tidak diubah.
 - Tugas baru: Nina + Tegar (cek modul PDF selaras dengan kurikulum).
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 15 Nov 2026, 21.09 WIB — sesi kerja (Bima)
+- Fajar: giliran BRIS & EXCL dicari; belum ada laba Januari–September 2026 bersumber (BRIS teratas masih kuartal III 2025; judul Kontan Insight Rp5,69 T cocok dengan 2024; EXCL teratas masih kuartal III 2025) → tetap 25 dari 32. Berikutnya BSSR & MIKA. Raka/Hana: tidak ada kabar baru.
+- Nina + Tegar: modul PDF kini membawa sidik data (16 huruf SHA-256 dari `data/modul.js` + `data/rujukan.js`) di Keywords; `tests/cek.mjs` (`cekModulPdf`) menghitung ulang dan gagal bila PDF lupa dibuat ulang. PDF dibuat ulang (isi tidak berubah), README "Cara menguji" menjelaskan. 7 uji balik tertangkap; uji sabot (ubah modul.js tanpa buat ulang PDF) gagal sesuai harapan. Kode situs & tampilan tidak diubah.
+- Tugas baru: Nina + Tegar (jumlah halaman modul PDF vs jumlah pelajaran).
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

@@ -3,6 +3,7 @@
 // Cara menguji lengkap (termasuk audit peramban): lihat README.md bagian "Cara menguji".
 import { readFileSync, existsSync, readdirSync } from "node:fs";
 import vm from "node:vm";
+import { createHash } from "node:crypto";
 
 let gagal = 0;
 const ok = (kondisi, pesan) => { if (!kondisi) { gagal++; console.error("GAGAL:", pesan); } };
@@ -4692,6 +4693,38 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
     ok((r !== readmeT || y !== ymlT) && cekPythonSintaksCI(r, y).some((x) => x.includes(pesan)), `uji balik sintaks Python CI: "${pesan}" harus tertangkap`);
   // Perintah Python di CI tetap lolos cekAlurCI, perintah Python lain tidak.
   ok(cekAlurCI(srcCekT, readmeT, ymlT + "      - name: Lain\n        run: python3 tools/buat-modul-pdf.py\n").some((x) => x.includes("perintah lain: python3 tools/buat-modul-pdf.py")), 'uji balik alur CI: "python3 tools/buat-modul-pdf.py" harus tertangkap');
+  // Nina & Tegar (15 Nov 21.09): modul PDF selaras dengan kurikulum. tools/buat-modul-pdf.py menulis
+  // "sidik-data <16 huruf SHA-256 dari data/modul.js + \n + data/rujukan.js>" di Keywords PDF;
+  // di sini dihitung ulang. Beda = kurikulum/rujukan berubah tetapi PDF belum dibuat ulang.
+  const sidikData = (modulB, rujukanB) => createHash("sha256").update(Buffer.concat([modulB, Buffer.from("\n"), rujukanB])).digest("hex").slice(0, 16);
+  const cekModulPdf = (pdf, modulB, rujukanB, skripPy, readme) => {
+    const salah = [];
+    const kw = pdf.toString("latin1").match(/\/Keywords \(sidik-data ([0-9a-f]{16})\)/g) || [];
+    if (kw.length !== 1) salah.push(`modul PDF harus memuat tepat satu sidik data di Keywords (ada ${kw.length})`);
+    else if (kw[0].slice(-17, -1) !== sidikData(modulB, rujukanB)) salah.push("modul PDF belum dibuat ulang setelah data/modul.js atau data/rujukan.js berubah: jalankan python3 tools/buat-modul-pdf.py");
+    if (!/keywords=f"sidik-data \{sidik_data\(\)\}"/.test(skripPy)) salah.push("tools/buat-modul-pdf.py tidak menulis sidik data ke Keywords PDF");
+    const iB = readme.indexOf("## Cara menguji\n");
+    const bagian = iB < 0 ? "" : readme.slice(iB).split(/\n## /)[0];
+    if (!bagian.includes("sidik data")) salah.push("README Cara menguji tidak menjelaskan sidik data modul PDF");
+    return salah;
+  };
+  const pdfB = readFileSync("assets/modul/modul-candra-analis.pdf");
+  const modulB = readFileSync("data/modul.js"), rujukanB = readFileSync("data/rujukan.js");
+  const skripPyT = readFileSync("tools/buat-modul-pdf.py", "utf8");
+  const sPdf = cekModulPdf(pdfB, modulB, rujukanB, skripPyT, readmeT);
+  ok(sPdf.length === 0, `modul PDF selaras kurikulum: ${sPdf.join("; ")}`);
+  const pdfL = pdfB.toString("latin1");
+  const rusakPdf = [
+    [pdfB, Buffer.concat([modulB, Buffer.from(" ")]), rujukanB, skripPyT, readmeT, "belum dibuat ulang"],
+    [pdfB, modulB, Buffer.from(rujukanB.toString("utf8").replace("judul", "judul ")), skripPyT, readmeT, "belum dibuat ulang"],
+    [Buffer.from(pdfL.replace(/\/Keywords \(sidik-data [0-9a-f]{16}\)/, "/Keywords ()"), "latin1"), modulB, rujukanB, skripPyT, readmeT, "tepat satu sidik data di Keywords (ada 0)"],
+    [Buffer.from(pdfL.replace(/sidik-data [0-9a-f]{16}/, "sidik-data 0000000000000000"), "latin1"), modulB, rujukanB, skripPyT, readmeT, "belum dibuat ulang"],
+    [Buffer.from(pdfL + "\n/Keywords (sidik-data 0000000000000000)", "latin1"), modulB, rujukanB, skripPyT, readmeT, "(ada 2)"],
+    [pdfB, modulB, rujukanB, skripPyT.replace('keywords=f"sidik-data {sidik_data()}",', ""), readmeT, "tidak menulis sidik data"],
+    [pdfB, modulB, rujukanB, skripPyT, readmeT.replace(/sidik data/g, "cap"), "tidak menjelaskan sidik data"],
+  ];
+  for (const [p, m, r, py, rd, pesan] of rusakPdf)
+    ok(cekModulPdf(p, m, r, py, rd).some((x) => x.includes(pesan)), `uji balik modul PDF: "${pesan}" harus tertangkap`);
 }
 
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }

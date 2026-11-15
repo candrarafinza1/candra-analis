@@ -6,6 +6,7 @@ Tim Laras (Guru & Kurator Belajar). Jalankan dari akar repo:
 Hasil: assets/modul/modul-candra-analis.pdf
 Butuh: node (untuk membaca file data) dan reportlab.
 """
+import hashlib
 import json
 import os
 import subprocess
@@ -196,6 +197,19 @@ def kaki_halaman(c, doc):
     c.restoreState()
 
 
+def sidik_data():
+    """Sidik data kurikulum: 16 huruf awal SHA-256 dari isi data/modul.js + baris baru + data/rujukan.js.
+    Ditulis di Keywords PDF ("sidik-data …"); tests/cek.mjs menghitung ulang dengan cara yang sama,
+    sehingga lupa membuat ulang PDF setelah kurikulum berubah tertangkap (Nina & Tegar)."""
+    h = hashlib.sha256()
+    with open(os.path.join(AKAR, "data", "modul.js"), "rb") as f:
+        h.update(f.read())
+    h.update(b"\n")
+    with open(os.path.join(AKAR, "data", "rujukan.js"), "rb") as f:
+        h.update(f.read())
+    return h.hexdigest()[:16]
+
+
 def menit_baca(m):
     """Sama dengan menitBaca() di assets/app.js: kata isi (tanpa kuis), 200 kata/menit, dibulatkan ke atas, min. 1."""
     import math, re
@@ -214,6 +228,7 @@ def main():
         leftMargin=22 * mm, rightMargin=22 * mm, topMargin=22 * mm, bottomMargin=24 * mm,
         title="Belajar Saham Syariah dari Nol", author="Candra Analis",
         subject="Modul belajar saham syariah untuk pemula",
+        keywords=f"sidik-data {sidik_data()}",
     )
     bingkai = Frame(doc.leftMargin, doc.bottomMargin, doc.width, doc.height, id="isi")
     doc.addPageTemplates([
