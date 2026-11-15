@@ -649,10 +649,14 @@ const halaman = ['index.html', 'belajar.html', 'pelajaran.html', 'pelajaran.html
   const sk = await skenarioPeringkat(p, false);
   console.log(`\nSkenario Peringkat (klik tiap tab, buka istilah, Escape, pindah tab): ${sk.length} temuan`);
   sk.forEach((t) => console.log('  - ' + t));
-  const skSabot = await skenarioPeringkat(p, true);
-  const jenis = new Set(skSabot.map((t) => t.split(': ')[1]));
-  console.log(`Skenario UJI (sabot): ${skSabot.length} temuan, ${jenis.size} jenis (harus 3: id ganda, rujukan, fokus hilang)`);
-  skSabot.forEach((t) => console.log('  - ' + t));
+  // Nina & Tegar (15 Nov 14.09): Peringkat 390px memakai pola yang sama dengan 768px & 1280px (sab1p → jenis1p menurut nama,
+  // jenis1pSemua tanpa jenis lain) agar ikut perbandingan daftar jenis antarlebar di tests/cek.mjs.
+  const sab1p = await skenarioPeringkat(p, true);
+  const jenis1p = ['id ganda', 'rujukan', 'fokus hilang'].filter((j) => sab1p.some((t) => (t.split(': ')[1] || '').startsWith(j)));
+  const jenis1pSemua = new Set(sab1p.map((t) => t.split(': ')[1]));
+  const sabotOk = jenis1p.length === 3 && jenis1pSemua.size === 3;
+  console.log(`Skenario UJI (sabot): ${sab1p.length} temuan, Peringkat ${jenis1p.length} jenis (harus 3: ${jenis1p.join(', ')})`);
+  sab1p.forEach((t) => console.log('  - ' + t));
   const sk2 = [...(await skenarioPanah(p, false)), ...(await skenarioRadar(p, false))];
   console.log(`\nSkenario kedua (panah kanan 4× & kiri 1× di tab Peringkat; ganti emiten 3× + istilah + Escape di Radar): ${sk2.length} temuan`);
   sk2.forEach((t) => console.log('  - ' + t));
@@ -769,6 +773,5 @@ const halaman = ['index.html', 'belajar.html', 'pelajaran.html', 'pelajaran.html
   if (transisiBatal.length) console.log(`Transisi halaman dibatalkan peramban (diabaikan): ${transisiBatal.length}×`);
   console.log(`\nTotal temuan halaman asli: ${total + r768.total} (390px ${r390.total}, 768px ${r768.total}, 1280px ${r1280.total}). Temuan UJI: 390px ${r390.totalUji}, 768px ${r768.totalUji}, 1280px ${r1280.totalUji} (masing-masing harus 8).`);
   await b.close();
-  const sabotOk = jenis.size === 3 && ['id ganda', 'rujukan', 'fokus hilang'].every((j) => [...jenis].some((x) => x.startsWith(j)));
   process.exit(total === 0 && totalUji === 8 && sk12.length === 0 && sabot12Ok && r768.total === 0 && r768.totalUji === 8 && sk11.length === 0 && sabot11Ok && r1280.totalUji === 8 && sk8.length === 0 && sabot8Ok && sk9.length === 0 && sabot9Ok && sk10.length === 0 && sabot10Ok && sk.length === 0 && sabotOk && sk2.length === 0 && jenis2.length === 4 && sk3.length === 0 && jenis3.length === 5 && sk4.length === 0 && jenis4.length === 5 && sk5.length === 0 && jenis5.length === 5 && sk6.length === 0 && jenis6.length === 4 && sk7.length === 0 && jenis7.length === 5 && !galat.length ? 0 : 1);
 })();

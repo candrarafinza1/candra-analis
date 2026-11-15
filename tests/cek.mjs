@@ -4294,7 +4294,7 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
     ok(s !== srcA && cekPutaran(s).some((x) => x.includes(pesan)), `uji balik audit tiga lebar: "${pesan}" harus tertangkap`);
 
   // Nina & Tegar (15 Nov 07.10): setiap hasil yang dihitung audit wajib ikut menentukan syarat keluar (process.exit),
-  // agar tidak ada hasil yang dihitung lalu diabaikan. Rantainya: sk… → process.exit; sab…/skSabot → dipakai di jenis…;
+  // agar tidak ada hasil yang dihitung lalu diabaikan. Rantainya: sk… → process.exit; sab… → dipakai di jenis…;
   // jenis… → dibandingkan (=== angka) di process.exit atau di sabot…Ok; sabot…Ok → process.exit. Putaran halaman 390/768/1280 juga wajib.
   const cekKeluar = (src) => {
     const salah = [];
@@ -4317,7 +4317,7 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
       if (!syarat.has(s)) salah.push(`${s} tidak ikut syarat process.exit`);
     for (const s of nama(/\b(jenis\w*)\s*=\s*(?!=)/g).filter((x) => x !== "jenisDari"))
       if (!new RegExp(`\\b${s}\\.(length|size) === \\d+`).test(pakai)) salah.push(`${s} tidak dibandingkan di process.exit atau sabot…Ok`);
-    for (const s of nama(/\b(sab\w*|skSabot)\s*=\s*(?!=)/g).filter((x) => !/Ok$/.test(x)))
+    for (const s of nama(/\b(sab\w*)\s*=\s*(?!=)/g).filter((x) => !/Ok$/.test(x)))
       if (!new RegExp(`\\b${s}\\b`).test(barisJenis)) salah.push(`${s} (hasil sabot) tidak dipakai di jenis…`);
     for (const t of ["total === 0", "totalUji === 8", "r768.total === 0", "r768.totalUji === 8", "r1280.totalUji === 8", "!galat.length"])
       if (!syarat.has(t)) salah.push(`syarat "${t}" hilang dari process.exit`);
@@ -4382,7 +4382,7 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
     [srcA.replace("&& jenis7.length === 5 ", "&& jenis7.length === 4 "), "jenis7.length (harus 5)"],
     [srcA.replace("jenis8p.length === 3 &&", "jenis8p.length === 2 &&"), "jenis8p.length (harus 3)"],
     [srcA.replace("jenis11p.length === 3 &&", "jenis11p.length === 4 &&"), "jenis11p.length (harus 3)"],
-    [srcA.replace("const sabotOk = jenis.size === 3", "const sabotOk = jenis.size === 2"), "jenis.size (harus 3)"],
+    [srcA.replace("const sabotOk = jenis1p.length === 3", "const sabotOk = jenis1p.length === 2"), "jenis1p.length (harus 3)"],
     [srcA.replace("Radar ${jenis9r.length} jenis (harus 2)", "Radar ${jenis9r.length} jenis (harus 3)"), "jenis9r.length (harus 3)"],
     [srcA.replace("&& r1280.totalUji === 8 &&", "&& r1280.totalUji === 7 &&"), "r1280.totalUji harus 8"],
     [srcA.replace("&& totalUji === 8 &&", "&& totalUji === 9 &&"), "r390.totalUji harus 8"],
@@ -4440,6 +4440,8 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
     [srcA.replace("jenis11k = jenisDari(['status', 'fokus hilang', 'id ganda', 'pilihan tidak ikut'], sab11k)", "jenis11k = jenisDari(['status', 'fokus hilang', 'id ganda', 'pilihan tidak ikut', 'aria-live'], sab11k)"), "lebih aria-live"],
     [srcA.replace("const sab12r = await skenarioRadar(p, true);", "const sab12r = [];"), "sab12r dipakai di daftar jenis tetapi skenarionya tidak ditemukan"],
     [srcA.replace("const jenis8p = ['id ganda', 'rujukan', 'fokus hilang']", "const jenis8p = ['id ganda', 'fokus hilang']"), "sab8p (Peringkat, 1280px) beda dengan 768px: kurang rujukan"],
+    [srcA.replace("const jenis1p = ['id ganda', 'rujukan', 'fokus hilang']", "const jenis1p = ['id ganda', 'rujukan']"), "sab1p (Peringkat, 390px) beda dengan 1280px: kurang fokus hilang"],
+    [srcA.replace("const jenis1p = ['id ganda', 'rujukan', 'fokus hilang']", "const jenis1p = ['id ganda', 'rujukan', 'fokus hilang', 'tabindex']"), "sab1p (Peringkat, 390px) beda dengan 768px: lebih tabindex"],
   ];
   for (const [s, pesan] of rusakJ)
     ok(s !== srcA && cekJenisLebar(s).salah.some((x) => x.includes(pesan)), `uji balik daftar jenis antarlebar: "${pesan}" harus tertangkap`);
@@ -4449,10 +4451,9 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
   const cekPeringkatNama = (src) => {
     const salah = [];
     const wajib = ["id ganda", "rujukan", "fokus hilang"];
-    const b390 = src.match(/const sabotOk = jenis\.size === 3 && \[([^\]]*)\]\.every/);
-    const n390 = b390 ? [...b390[1].matchAll(/'([^']*)'/g)].map((x) => x[1]) : [];
-    if (wajib.some((j) => !n390.includes(j))) salah.push(`Peringkat 390px (sabotOk) tidak memuat semua nama: ${wajib.join(", ")}`);
-    for (const v of ["jenis8p", "jenis11p"]) {
+    // 15 Nov 14.09: 390px kini memakai pola yang sama (sab1p → jenis1p); nama lama skSabot/jenis.size tidak boleh kembali.
+    if (/\bskSabot\b|\bjenis\.size\b/.test(src)) salah.push("Peringkat 390px masih memakai skSabot/jenis.size (harus sab1p → jenis1p)");
+    for (const v of ["jenis1p", "jenis8p", "jenis11p"]) {
       const m = src.match(new RegExp(`\\b${v} = (?:jenisDari\\()?\\[([^\\]]*)\\]`));
       if (!m) { salah.push(`${v} bukan daftar nama jenis (masih dicek jumlah saja?)`); continue; }
       const n = [...m[1].matchAll(/'([^']*)'/g)].map((x) => x[1]);
@@ -4470,7 +4471,9 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
     [srcA.replace("const jenis8p = ['id ganda', 'rujukan', 'fokus hilang'].filter((j) => sab8p.some((t) => (t.split(': ')[1] || '').startsWith(j)));", "const jenis8p = new Set(sab8p.map((t) => t.split(': ')[1]));"), "jenis8p bukan daftar nama jenis"],
     [srcA.replace("jenis8p.length === 3 &&", "jenis8p.length >= 2 &&"), "jenis8p.length === 3 tidak dibandingkan"],
     [srcA.replace(" && jenis11pSemua.size === 3", ""), "jenis11pSemua.size === 3 (tanpa jenis lain) tidak dibandingkan"],
-    [srcA.replace("['id ganda', 'rujukan', 'fokus hilang'].every", "['id ganda', 'fokus hilang'].every"), "Peringkat 390px (sabotOk) tidak memuat semua nama"],
+    [srcA.replace("const jenis1p = ['id ganda', 'rujukan', 'fokus hilang']", "const jenis1p = ['id ganda', 'fokus hilang']"), "jenis1p kurang nama jenis: rujukan"],
+    [srcA.replace(" && jenis1pSemua.size === 3", ""), "jenis1pSemua.size === 3 (tanpa jenis lain) tidak dibandingkan"],
+    [srcA.replace("const sab1p = await skenarioPeringkat(p, true);", "const skSabot = await skenarioPeringkat(p, true); const sab1p = skSabot;"), "masih memakai skSabot"],
   ];
   for (const [s, pesan] of rusakN)
     ok(s !== srcA && cekPeringkatNama(s).some((x) => x.includes(pesan)), `uji balik sabot Peringkat menurut nama: "${pesan}" harus tertangkap`);

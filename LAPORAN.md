@@ -1552,3 +1552,11 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: giliran KLBF & BRIS dicari; belum ada laba Januari–September 2026 bersumber → tetap 24 dari 32. Raka/Hana/Galih: tidak ada laba 9 bulan baru → tidak ada kabar baru.
 - Tugas baru: Nina + Tegar (Peringkat 390px ikut perbandingan antarlebar).
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Kode situs & tampilan tidak diubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### Minggu, 15 November 2026 — sesi 14.09 WIB (Bima)
+- Fajar: laba 9 bulan HRUM masuk: US$70,74 juta (Jan–Sep 2026) vs US$37,31 juta (Jan–Sep 2025), laba atribusi, +89,6% (Kontan Insight 6 Nov 2026; Investor Daily 4 Nov 2026 menulis pembanding US$37,30 juta). Pembanding cocok dengan Receh.in (3 Nov 2025, US$37 juta). Kini 25 dari 32. EXCL dicari: teratas masih semester I 2026. Catatan: angka HRUM terlewat di pencarian sesi sebelumnya; kata kunci diperbaiki.
+- Raka + Hana: kabar "Laporan keuangan" HRUM 6 Nov 2026 ditambah, angka persis Kontan, bahasa netral.
+- Galih: profil HRUM dicek 390px & 1280px: tanda "Laba 9 bulan 2026 naik" runtut, Radar 25 dari 32, tanpa galat JS, tanpa scroll horizontal.
+- Nina + Tegar: Peringkat 390px di audit kini `sab1p` → `jenis1p` (nama) seperti 768/1280px, ikut perbandingan antarlebar; cek.mjs menolak nama lama, 5 uji balik baru tertangkap. Audit penuh exit 0 (temuan halaman asli 0, UJI 8/8/8).
+- Tugas baru: Nina + Tegar (opsi audit satu lebar). Berikutnya Fajar: BSSR & MDKA.
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
