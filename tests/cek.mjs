@@ -4386,6 +4386,59 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
   ];
   for (const [s, pesan] of rusakP)
     ok(s !== srcA && cekPesan(s).some((x) => x.includes(pesan)), `uji balik pesan audit: "${pesan}" harus tertangkap`);
+
+  // Nina & Tegar (15 Nov 10.10): daftar jenis sabot untuk skenario yang sama wajib sama di 390, 768, dan 1280px,
+  // agar satu lebar tidak diam-diam memeriksa lebih sedikit jenis. Daftar gabungan (mis. panah + Radar di 390px)
+  // dibandingkan dengan gabungan daftar terpisah di lebar lain (panah ∪ Radar di 1280px).
+  const cekJenisLebar = (src) => {
+    const salah = [];
+    const i = src.indexOf("(async () => {");
+    if (i < 0) return { salah: ["tools/audit-aksesibel.js: bagian utama (async () => {) tidak ditemukan"], banding: 0 };
+    const utama = src.slice(i);
+    const i1280 = utama.indexOf("setViewportSize({ width: 1280"), i768 = utama.indexOf("putaranHalaman(p, 768");
+    if (i1280 < 0 || i768 < 0 || i768 < i1280) return { salah: ["penanda lebar 1280px/768px tidak ditemukan di audit"], banding: 0 };
+    const lebarDi = (pos) => (pos < i1280 ? 390 : pos < i768 ? 1280 : 768);
+    // sab… → skenario yang dijalankan
+    const isiSab = {};
+    const defs = [...utama.matchAll(/\b(sab\d+\w*)\s*=\s*(?!=)/g)].filter((d) => !/Ok$/.test(d[1]));
+    defs.forEach((d, k) => {
+      const akhir = Math.min(...[utama.indexOf(";", d.index), k + 1 < defs.length ? defs[k + 1].index : Infinity].filter((x) => x >= 0));
+      isiSab[d[1]] = [...new Set([...utama.slice(d.index, akhir).matchAll(/skenario(\w+)\(/g)].map((x) => x[1]))].sort();
+    });
+    const daftar = [];
+    for (const re of [/jenisDari\(\[([^\]]*)\],\s*(\w+)/g, /\[([^\]]*)\]\.filter\(\(j\) => (\w+)\.some/g])
+      for (const m of utama.matchAll(re)) {
+        const sab = m[2];
+        if (!isiSab[sab]?.length) { salah.push(`${sab} dipakai di daftar jenis tetapi skenarionya tidak ditemukan`); continue; }
+        daftar.push({ lebar: lebarDi(m.index), sk: isiSab[sab], jenis: [...m[1].matchAll(/'([^']*)'/g)].map((x) => x[1]), sab });
+      }
+    let banding = 0;
+    for (const a of daftar)
+      for (const w of [390, 768, 1280]) {
+        if (w === a.lebar) continue;
+        const bagian = daftar.filter((d) => d.lebar === w && d.sk.every((s) => a.sk.includes(s)));
+        const tercakup = [...new Set(bagian.flatMap((d) => d.sk))].sort();
+        if (tercakup.join() !== a.sk.join()) continue;
+        banding++;
+        const gab = new Set(bagian.flatMap((d) => d.jenis));
+        const kurang = [...gab].filter((j) => !a.jenis.includes(j)), lebih = a.jenis.filter((j) => !gab.has(j));
+        if (kurang.length || lebih.length)
+          salah.push(`${a.sab} (${a.sk.join(" + ")}, ${a.lebar}px) beda dengan ${w}px: ${kurang.length ? `kurang ${kurang.join(", ")}` : ""}${kurang.length && lebih.length ? "; " : ""}${lebih.length ? `lebih ${lebih.join(", ")}` : ""}`);
+      }
+    if (banding < 20) salah.push(`hanya ${banding} perbandingan daftar jenis antarlebar (harus ≥20); daftar terhapus?`);
+    return { salah, banding };
+  };
+  const sJ = cekJenisLebar(srcA);
+  ok(sJ.salah.length === 0, `audit-aksesibel daftar jenis antarlebar: ${sJ.salah.join("; ")}`);
+  const rusakJ = [
+    [srcA.replace("const jenis10b = jenisDari(['aria-live', 'fokus hilang', 'ket-sektor', 'tab terpilih', 'id ganda']", "const jenis10b = jenisDari(['aria-live', 'fokus hilang', 'tab terpilih', 'id ganda']"), "sab10b (Kuis + Sektor, 1280px) beda dengan 390px: kurang ket-sektor"],
+    [srcA.replace("const jenis2 = ['tabindex', 'fokus hilang', 'id ganda', 'rujukan']", "const jenis2 = ['tabindex', 'fokus hilang', 'id ganda']"), "sab2 (Panah + Radar, 390px) beda dengan 1280px: kurang rujukan"],
+    [srcA.replace("const jenis12s = jenisDari(['status', 'isi papan klip', 'Tab', 'fokus hilang', 'id ganda']", "const jenis12s = jenisDari(['status', 'isi papan klip', 'Tab', 'fokus hilang']"), "sab12s (Salin, 768px) beda dengan"],
+    [srcA.replace("jenis11k = jenisDari(['status', 'fokus hilang', 'id ganda', 'pilihan tidak ikut'], sab11k)", "jenis11k = jenisDari(['status', 'fokus hilang', 'id ganda', 'pilihan tidak ikut', 'aria-live'], sab11k)"), "lebih aria-live"],
+    [srcA.replace("const sab12r = await skenarioRadar(p, true);", "const sab12r = [];"), "sab12r dipakai di daftar jenis tetapi skenarionya tidak ditemukan"],
+  ];
+  for (const [s, pesan] of rusakJ)
+    ok(s !== srcA && cekJenisLebar(s).salah.some((x) => x.includes(pesan)), `uji balik daftar jenis antarlebar: "${pesan}" harus tertangkap`);
 }
 
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }

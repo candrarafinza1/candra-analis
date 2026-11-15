@@ -1538,3 +1538,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Galih: profil ITMG dicek 390px & 1280px: tanda "Laba 9 bulan 2026 naik" dan angka runtut, tanpa scroll horizontal, tanpa galat JS.
 - HRUM, EXCL, BSSR, MDKA dicari: belum ada laba Jan–Sep 2026 bersumber. Catatan Bima: sesi-sesi terakhir hanya mencari KLBF & BRIS; mulai sekarang Fajar bergilir ke 8 emiten sisa.
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### Minggu, 15 November 2026 — sesi 10.10 WIB (Bima)
+- Nina + Tegar: `tests/cek.mjs` kini memastikan daftar jenis sabot untuk skenario yang sama sama persis di 390, 768, dan 1280px (`cekJenisLebar`, 36 pasang dibandingkan; daftar gabungan seperti panah + Radar di 390px dibandingkan dengan gabungan daftar terpisah di 1280px). Uji balik 5 cara rusak tertangkap; dicoba manual hapus 'Tab' dari jenis5 → cek gagal. Kode situs tidak diubah.
+- Fajar: giliran MBMA & MIKA dicari; belum ada laba Januari–September 2026 bersumber (MBMA baru angka produksi kuartal III, MIKA teratas semester I 2026) → tetap 24 dari 32.
+- Tugas baru: Nina + Tegar (sabot Peringkat 1280/768px dicek menurut nama jenis, bukan hanya jumlah).
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Tampilan tidak diubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
