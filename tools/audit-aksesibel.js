@@ -701,10 +701,13 @@ const halaman = ['index.html', 'belajar.html', 'pelajaran.html', 'pelajaran.html
   console.log(`\nSkenario 1280px (Peringkat: klik tiap tab + istilah + Escape; Salin: diizinkan lalu ditolak): ${sk8.length} temuan`);
   sk8.forEach((t) => console.log('  - ' + t));
   const sab8p = await skenarioPeringkat(p, true), sab8s = await skenarioSalin(b, true, 1280);
-  const jenis8p = new Set(sab8p.map((t) => t.split(': ')[1]));
+  // Nina & Tegar (15 Nov 13.09): Peringkat di 1280px dicek menurut nama jenis (sama dengan 390px), bukan hanya jumlah;
+  // jenis8pSemua tetap memastikan tidak ada jenis lain yang ikut muncul.
+  const jenis8p = ['id ganda', 'rujukan', 'fokus hilang'].filter((j) => sab8p.some((t) => (t.split(': ')[1] || '').startsWith(j)));
+  const jenis8pSemua = new Set(sab8p.map((t) => t.split(': ')[1]));
   const jenis8s = ['status', 'isi papan klip', 'Tab', 'fokus hilang', 'id ganda'].filter((j) => sab8s.some((t) => (t.split(': ')[1] || '').startsWith(j)));
-  const sabot8Ok = jenis8p.size === 3 && jenis8s.length === 5;
-  console.log(`Skenario 1280px UJI (sabot): Peringkat ${jenis8p.size} jenis (harus 3), Salin ${jenis8s.length} jenis (harus 5)`);
+  const sabot8Ok = jenis8p.length === 3 && jenis8pSemua.size === 3 && jenis8s.length === 5;
+  console.log(`Skenario 1280px UJI (sabot): Peringkat ${jenis8p.length} jenis (harus 3: ${jenis8p.join(', ')}), Salin ${jenis8s.length} jenis (harus 5)`);
   // Nina & Tegar (14 Nov 16.08): putaran 1280×900 juga untuk Radar (ganti emiten + istilah), kotak ketik kode
   // (Radar & Bandingkan), Kabar ("Tampilkan lagi") dan kamus istilah. Hasil sehat 0 temuan; sabot tetap tertangkap.
   const sk9 = [...(await skenarioRadar(p, false)), ...(await skenarioKetik(p, false)), ...(await skenarioKabar(p, false)), ...(await skenarioKamus(p, false))];
@@ -739,10 +742,10 @@ const halaman = ['index.html', 'belajar.html', 'pelajaran.html', 'pelajaran.html
   sk11.forEach((t) => console.log('  - ' + t));
   const sab11t = await skenarioTablet(p, true), sab11p = await skenarioPeringkat(p, true), sab11a = await skenarioPanah(p, true), sab11k = await skenarioKetik(p, true);
   const jenis11t = jenisDari(['sticky', 'scroll halaman'], sab11t.map((t) => t.replace(/^tab "[^"]*": /, 'x: ')));
-  const jenis11p = new Set(sab11p.map((t) => t.split(': ')[1]));
+  const jenis11p = jenisDari(['id ganda', 'rujukan', 'fokus hilang'], sab11p), jenis11pSemua = new Set(sab11p.map((t) => t.split(': ')[1]));
   const jenis11a = jenisDari(['tabindex', 'fokus hilang'], sab11a), jenis11k = jenisDari(['status', 'fokus hilang', 'id ganda', 'pilihan tidak ikut'], sab11k);
-  const sabot11Ok = jenis11t.length === 2 && jenis11p.size === 3 && jenis11a.length === 2 && jenis11k.length === 4;
-  console.log(`Skenario 768px UJI (sabot): tata letak ${jenis11t.length} jenis (harus 2: ${jenis11t.join(', ')}), Peringkat ${jenis11p.size} jenis (harus 3), panah ${jenis11a.length} jenis (harus 2), kotak ketik ${jenis11k.length} jenis (harus 4)`);
+  const sabot11Ok = jenis11t.length === 2 && jenis11p.length === 3 && jenis11pSemua.size === 3 && jenis11a.length === 2 && jenis11k.length === 4;
+  console.log(`Skenario 768px UJI (sabot): tata letak ${jenis11t.length} jenis (harus 2: ${jenis11t.join(', ')}), Peringkat ${jenis11p.length} jenis (harus 3), panah ${jenis11a.length} jenis (harus 2), kotak ketik ${jenis11k.length} jenis (harus 4)`);
   // Nina & Tegar (14 Nov 19.10): putaran 768×1024 untuk skenario sisa (Radar, kuis, sektor, Kabar, kamus, profil, 404, Salin).
   // Kini semua skenario diperiksa di 390px, 768px, dan 1280px.
   const sk12 = [...(await skenarioRadar(p, false)), ...(await skenarioKuis(p, false)), ...(await skenarioSektor(p, false)),

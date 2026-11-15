@@ -1544,3 +1544,11 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: giliran MBMA & MIKA dicari; belum ada laba Januari–September 2026 bersumber (MBMA baru angka produksi kuartal III, MIKA teratas semester I 2026) → tetap 24 dari 32.
 - Tugas baru: Nina + Tegar (sabot Peringkat 1280/768px dicek menurut nama jenis, bukan hanya jumlah).
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Tampilan tidak diubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### Minggu, 15 November 2026 — sesi 13.09 WIB (Bima)
+- Laporan masuk kerja siang dikirim ke Rafinza lewat Gmail (13.09).
+- Nina + Tegar: sabot Peringkat di 1280px (`jenis8p`) dan 768px (`jenis11p`) kini dicek menurut nama ('id ganda', 'rujukan', 'fokus hilang'), ditambah `jenis…Semua.size === 3` agar tidak ada jenis lain. `tests/cek.mjs` menambah `cekPeringkatNama`; uji balik 5 cara rusak baru + 4 di cek lama tertangkap. Audit asli (`tools/audit-aksesibel.js`) dijalankan penuh: exit 0, temuan halaman asli 0, UJI 8/8/8.
+- Arif (tugas pendukung): dari audit penuh 390/768/1280px tidak ada galat JavaScript di 10 halaman.
+- Fajar: giliran KLBF & BRIS dicari; belum ada laba Januari–September 2026 bersumber → tetap 24 dari 32. Raka/Hana/Galih: tidak ada laba 9 bulan baru → tidak ada kabar baru.
+- Tugas baru: Nina + Tegar (Peringkat 390px ikut perbandingan antarlebar).
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Kode situs & tampilan tidak diubah. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

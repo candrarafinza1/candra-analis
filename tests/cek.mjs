@@ -4332,6 +4332,8 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
     [srcA.replace("&& sabot12Ok ", ""), "sabot12Ok tidak ikut"],
     [srcA.replace("&& jenis7.length === 5 ", ""), "jenis7 tidak dibandingkan"],
     [srcA.replace(" && jenis11k.length === 4;", ";"), "jenis11k tidak dibandingkan"],
+    [srcA.replace(" && jenis8pSemua.size === 3", ""), "jenis8pSemua tidak dibandingkan"],
+    [srcA.replace(" && jenis11pSemua.size === 3", ""), "jenis11pSemua tidak dibandingkan"],
     [srcA.replace("jenisDari(['id ganda', 'rujukan'], sab9r)", "jenisDari(['id ganda', 'rujukan'], [])"), "sab9r (hasil sabot) tidak dipakai"],
     [srcA.replace("r768.totalUji === 8 && ", ""), "r768.totalUji === 8"],
     [srcA.replace(" && !galat.length ?", " ?"), "!galat.length"],
@@ -4378,7 +4380,8 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
   const rusakP = [
     [srcA.replace("jenis12s.length === 5;", "jenis12s.length === 4;"), "jenis12s.length (harus 5)"],
     [srcA.replace("&& jenis7.length === 5 ", "&& jenis7.length === 4 "), "jenis7.length (harus 5)"],
-    [srcA.replace("jenis8p.size === 3 &&", "jenis8p.size === 2 &&"), "jenis8p.size (harus 3)"],
+    [srcA.replace("jenis8p.length === 3 &&", "jenis8p.length === 2 &&"), "jenis8p.length (harus 3)"],
+    [srcA.replace("jenis11p.length === 3 &&", "jenis11p.length === 4 &&"), "jenis11p.length (harus 3)"],
     [srcA.replace("const sabotOk = jenis.size === 3", "const sabotOk = jenis.size === 2"), "jenis.size (harus 3)"],
     [srcA.replace("Radar ${jenis9r.length} jenis (harus 2)", "Radar ${jenis9r.length} jenis (harus 3)"), "jenis9r.length (harus 3)"],
     [srcA.replace("&& r1280.totalUji === 8 &&", "&& r1280.totalUji === 7 &&"), "r1280.totalUji harus 8"],
@@ -4436,9 +4439,41 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
     [srcA.replace("const jenis12s = jenisDari(['status', 'isi papan klip', 'Tab', 'fokus hilang', 'id ganda']", "const jenis12s = jenisDari(['status', 'isi papan klip', 'Tab', 'fokus hilang']"), "sab12s (Salin, 768px) beda dengan"],
     [srcA.replace("jenis11k = jenisDari(['status', 'fokus hilang', 'id ganda', 'pilihan tidak ikut'], sab11k)", "jenis11k = jenisDari(['status', 'fokus hilang', 'id ganda', 'pilihan tidak ikut', 'aria-live'], sab11k)"), "lebih aria-live"],
     [srcA.replace("const sab12r = await skenarioRadar(p, true);", "const sab12r = [];"), "sab12r dipakai di daftar jenis tetapi skenarionya tidak ditemukan"],
+    [srcA.replace("const jenis8p = ['id ganda', 'rujukan', 'fokus hilang']", "const jenis8p = ['id ganda', 'fokus hilang']"), "sab8p (Peringkat, 1280px) beda dengan 768px: kurang rujukan"],
   ];
   for (const [s, pesan] of rusakJ)
     ok(s !== srcA && cekJenisLebar(s).salah.some((x) => x.includes(pesan)), `uji balik daftar jenis antarlebar: "${pesan}" harus tertangkap`);
+
+  // Nina & Tegar (15 Nov 13.09): sabot Peringkat di 1280px (jenis8p) dan 768px (jenis11p) wajib dicek menurut nama,
+  // sama dengan 390px: 'id ganda', 'rujukan', 'fokus hilang' (bukan hanya jumlah 3), dan dibandingkan === 3.
+  const cekPeringkatNama = (src) => {
+    const salah = [];
+    const wajib = ["id ganda", "rujukan", "fokus hilang"];
+    const b390 = src.match(/const sabotOk = jenis\.size === 3 && \[([^\]]*)\]\.every/);
+    const n390 = b390 ? [...b390[1].matchAll(/'([^']*)'/g)].map((x) => x[1]) : [];
+    if (wajib.some((j) => !n390.includes(j))) salah.push(`Peringkat 390px (sabotOk) tidak memuat semua nama: ${wajib.join(", ")}`);
+    for (const v of ["jenis8p", "jenis11p"]) {
+      const m = src.match(new RegExp(`\\b${v} = (?:jenisDari\\()?\\[([^\\]]*)\\]`));
+      if (!m) { salah.push(`${v} bukan daftar nama jenis (masih dicek jumlah saja?)`); continue; }
+      const n = [...m[1].matchAll(/'([^']*)'/g)].map((x) => x[1]);
+      const kurang = wajib.filter((j) => !n.includes(j));
+      if (kurang.length) salah.push(`${v} kurang nama jenis: ${kurang.join(", ")}`);
+      if (!new RegExp(`\\b${v}\\.length === 3\\b`).test(src)) salah.push(`${v}.length === 3 tidak dibandingkan`);
+      if (!new RegExp(`\\b${v}Semua\\.size === 3\\b`).test(src)) salah.push(`${v}Semua.size === 3 (tanpa jenis lain) tidak dibandingkan`);
+    }
+    return salah;
+  };
+  const sN = cekPeringkatNama(srcA);
+  ok(sN.length === 0, `audit-aksesibel sabot Peringkat menurut nama: ${sN.join("; ")}`);
+  const rusakN = [
+    [srcA.replace("const jenis11p = jenisDari(['id ganda', 'rujukan', 'fokus hilang'], sab11p)", "const jenis11p = jenisDari(['id ganda', 'fokus hilang', 'tabindex'], sab11p)"), "jenis11p kurang nama jenis: rujukan"],
+    [srcA.replace("const jenis8p = ['id ganda', 'rujukan', 'fokus hilang'].filter((j) => sab8p.some((t) => (t.split(': ')[1] || '').startsWith(j)));", "const jenis8p = new Set(sab8p.map((t) => t.split(': ')[1]));"), "jenis8p bukan daftar nama jenis"],
+    [srcA.replace("jenis8p.length === 3 &&", "jenis8p.length >= 2 &&"), "jenis8p.length === 3 tidak dibandingkan"],
+    [srcA.replace(" && jenis11pSemua.size === 3", ""), "jenis11pSemua.size === 3 (tanpa jenis lain) tidak dibandingkan"],
+    [srcA.replace("['id ganda', 'rujukan', 'fokus hilang'].every", "['id ganda', 'fokus hilang'].every"), "Peringkat 390px (sabotOk) tidak memuat semua nama"],
+  ];
+  for (const [s, pesan] of rusakN)
+    ok(s !== srcA && cekPeringkatNama(s).some((x) => x.includes(pesan)), `uji balik sabot Peringkat menurut nama: "${pesan}" harus tertangkap`);
 }
 
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
