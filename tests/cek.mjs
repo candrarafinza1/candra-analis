@@ -4340,6 +4340,52 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
   ];
   for (const [s, pesan] of rusakK)
     ok(s !== srcA && cekKeluar(s).some((x) => x.includes(pesan)), `uji balik syarat keluar audit: "${pesan}" harus tertangkap`);
+
+  // Nina & Tegar (15 Nov 08.10): angka "(harus N)" di pesan console.log audit wajib sama dengan angka yang benar-benar
+  // dibandingkan di process.exit atau sabot…Ok (mis. "Salin ${jenis12s.length} (harus 5)" ↔ jenis12s.length === 5),
+  // agar pesan audit tidak menyesatkan. "masing-masing harus 8" diperiksa untuk tiap ${r….totalUji} (r390 → totalUji).
+  const cekPesan = (src) => {
+    const salah = [];
+    const i = src.indexOf("(async () => {");
+    if (i < 0) return ["tools/audit-aksesibel.js: bagian utama (async () => {) tidak ditemukan"];
+    const utama = src.slice(i);
+    const m = utama.match(/process\.exit\(([\s\S]*?) \? 0 : 1\);/);
+    if (!m) return ["process.exit(… ? 0 : 1) tidak ditemukan di akhir audit"];
+    const baris = utama.split("\n");
+    const pakai = m[1] + "\n" + baris.filter((b) => /\bsabot\d*Ok\s*=\s*(?!=)/.test(b)).join("\n");
+    let jumlah = 0;
+    for (const b of baris.filter((x) => /console\.log\(/.test(x))) {
+      for (const h of b.matchAll(/\(harus (\d+)/g)) {
+        const sebelum = b.slice(0, h.index);
+        const ex = [...sebelum.matchAll(/\$\{([^}]+)\}/g)].pop();
+        if (!ex) { salah.push(`pesan "(harus ${h[1]})" tanpa angka hasil di depannya`); continue; }
+        const v = ex[1].trim().replace(/\.join\([^)]*\)$/, ".length");
+        jumlah++;
+        if (!pakai.includes(`${v} === ${h[1]}`)) salah.push(`pesan menulis "${v} (harus ${h[1]})" tetapi syarat tidak membandingkan ${v} === ${h[1]}`);
+      }
+      const mm = b.match(/masing-masing harus (\d+)/);
+      if (mm) for (const t of b.matchAll(/\$\{(r\d+)\.totalUji\}/g)) {
+        const v = t[1] === "r390" ? "totalUji" : `${t[1]}.totalUji`;
+        jumlah++;
+        if (!new RegExp(`(^|[^.\\w])${v.replace(".", "\\.")} === ${mm[1]}\\b`).test(pakai)) salah.push(`pesan menulis "${t[1]}.totalUji harus ${mm[1]}" tetapi syarat tidak membandingkan ${v} === ${mm[1]}`);
+      }
+    }
+    if (jumlah < 25) salah.push(`hanya ${jumlah} angka "harus N" ditemukan di pesan audit (harus ≥25); pesan terhapus?`);
+    return salah;
+  };
+  const sP = cekPesan(srcA);
+  ok(sP.length === 0, `audit-aksesibel pesan "harus N": ${sP.join("; ")}`);
+  const rusakP = [
+    [srcA.replace("jenis12s.length === 5;", "jenis12s.length === 4;"), "jenis12s.length (harus 5)"],
+    [srcA.replace("&& jenis7.length === 5 ", "&& jenis7.length === 4 "), "jenis7.length (harus 5)"],
+    [srcA.replace("jenis8p.size === 3 &&", "jenis8p.size === 2 &&"), "jenis8p.size (harus 3)"],
+    [srcA.replace("const sabotOk = jenis.size === 3", "const sabotOk = jenis.size === 2"), "jenis.size (harus 3)"],
+    [srcA.replace("Radar ${jenis9r.length} jenis (harus 2)", "Radar ${jenis9r.length} jenis (harus 3)"), "jenis9r.length (harus 3)"],
+    [srcA.replace("&& r1280.totalUji === 8 &&", "&& r1280.totalUji === 7 &&"), "r1280.totalUji harus 8"],
+    [srcA.replace("&& totalUji === 8 &&", "&& totalUji === 9 &&"), "r390.totalUji harus 8"],
+  ];
+  for (const [s, pesan] of rusakP)
+    ok(s !== srcA && cekPesan(s).some((x) => x.includes(pesan)), `uji balik pesan audit: "${pesan}" harus tertangkap`);
 }
 
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
