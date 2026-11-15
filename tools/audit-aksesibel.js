@@ -19,7 +19,8 @@
 // Nina & Tegar (14 Nov 17.08) menambah putaran 1280×900 untuk skenario sisa: panah tab, kuis, sektor, profil, 404 (semua skenario kini di dua lebar).
 // Nina & Tegar (14 Nov 18.09) menambah putaran tablet 768×1024: semua halaman (+ UJI), Peringkat (tabel geser tanpa kepala sticky), panah tab, kotak ketik.
 // Nina & Tegar (14 Nov 19.10) menambah putaran 768×1024 untuk skenario sisa: Radar, kuis, sektor, Kabar, kamus, profil, 404, Salin.
-// Cara pakai: python3 -m http.server 8765 (di akar repo), lalu: node tools/audit-aksesibel.js
+// Cara pakai: python3 -m http.server 8765 (di akar repo), lalu: node tools/audit-aksesibel.js (audit penuh, tiga lebar)
+// atau HANYA=390 node tools/audit-aksesibel.js untuk satu lebar saja (cepat, untuk perubahan kecil; bukan pengganti audit penuh).
 // Butuh Playwright + Chromium (sudah ada di lingkungan kerja tim); tidak dijalankan oleh tests/cek.mjs.
 const { chromium } = require('playwright');
 
@@ -632,7 +633,56 @@ async function putaranHalaman(p, lebar, tinggi = 900) {
 
 const halaman = ['index.html', 'belajar.html', 'pelajaran.html', 'pelajaran.html#kuis', 'peringkat.html', 'peringkat.html#istilah', 'radar.html',
   'radar.html#UNTR', 'emiten.html', 'emiten.html?kode=ANTM', 'kabar.html', 'metodologi.html', 'asisten.html', '404.html', 'UJI'];
+
+// Nina & Tegar (15 Nov 15.09): mode satu lebar untuk menguji perubahan kecil dengan cepat: HANYA=390|768|1280 node tools/audit-aksesibel.js
+// Menjalankan putaran halaman + semua skenario (asli & sabot) hanya di lebar itu. Ini BUKAN audit penuh: sebelum rilis tetap
+// jalankan tanpa HANYA (tiga lebar). Daftar jenis sabot di JENIS_SATU wajib sama dengan audit penuh (dicek tests/cek.mjs).
+// Nilai HANYA selain 390/768/1280 → keluar 1 (salah ketik tidak boleh diam-diam lolos).
+const JENIS_SATU = [
+  [['Peringkat'], ['id ganda', 'rujukan', 'fokus hilang']],
+  [['Panah'], ['tabindex', 'fokus hilang']],
+  [['Radar'], ['id ganda', 'rujukan']],
+  [['Kuis', 'Sektor'], ['aria-live', 'fokus hilang', 'ket-sektor', 'tab terpilih', 'id ganda']],
+  [['Kabar', 'Kamus'], ['aria-live', 'ket-jenis', 'fokus hilang', 'info-kamus status', 'info-kamus jumlah']],
+  [['Profil', '404'], ['judul h1', 'document.title', 'id ganda', 'Tab', 'kembali']],
+  [['Ketik'], ['status', 'fokus hilang', 'id ganda', 'pilihan tidak ikut']],
+  [['Salin'], ['status', 'isi papan klip', 'Tab', 'fokus hilang', 'id ganda']],
+  [['Tablet'], ['sticky', 'scroll halaman']],
+];
+async function auditSatuLebar(nilai) {
+  const lebar = Number(nilai);
+  if (![390, 768, 1280].includes(lebar)) { console.log(`HANYA="${nilai}" tidak dikenal (pilih 390, 768, atau 1280).`); process.exit(1); }
+  const tinggi = lebar === 768 ? 1024 : 900;
+  const b = await chromium.launch();
+  const p = await (await b.newContext({ viewport: { width: lebar, height: tinggi } })).newPage();
+  const galat = [];
+  p.on('pageerror', (e) => { if (!/^Transition was aborted because of invalid state/.test(e.message)) galat.push(e.message); });
+  const fungsi = { Peringkat: skenarioPeringkat, Panah: skenarioPanah, Radar: skenarioRadar, Kuis: skenarioKuis, Sektor: skenarioSektor,
+    Kabar: skenarioKabar, Kamus: skenarioKamus, Profil: skenarioProfil, 404: skenario404, Ketik: skenarioKetik, Tablet: skenarioTablet };
+  const jalan = (nama, sabot) => (nama === 'Salin' ? skenarioSalin(b, sabot, lebar) : fungsi[nama](p, sabot));
+  const r = await putaranHalaman(p, lebar, tinggi);
+  let asli = 0, gagalSabot = 0;
+  for (const [daftar, jenis] of JENIS_SATU) {
+    if (daftar.includes('Tablet') && lebar !== 768) continue; // tata letak tabel geser hanya berlaku di lebar tablet
+    let sk = [], sab = [];
+    for (const n of daftar) sk = sk.concat(await jalan(n, false));
+    for (const n of daftar) sab = sab.concat(await jalan(n, true));
+    if (daftar.includes('Tablet')) sab = sab.map((t) => t.replace(/^tab "[^"]*": /, 'x: '));
+    const kena = jenis.filter((j) => sab.some((t) => (t.split(': ')[1] || '').startsWith(j)));
+    const semua = new Set(sab.map((t) => t.split(': ')[1]));
+    const okSabot = kena.length === jenis.length && (!daftar.includes('Peringkat') || semua.size === jenis.length);
+    asli += sk.length; if (!okSabot) gagalSabot++;
+    console.log(`[${lebar}px] ${daftar.join(' + ')}: ${sk.length} temuan; UJI ${kena.length}/${jenis.length} jenis${okSabot ? '' : ' (GAGAL: ' + jenis.filter((j) => !kena.includes(j)).join(', ') + ')'}`);
+    sk.forEach((t) => console.log('  - ' + t));
+  }
+  if (galat.length) console.log('Galat JS:', galat);
+  console.log(`\nMode satu lebar ${lebar}px (bukan audit penuh): halaman asli ${r.total} temuan, UJI ${r.totalUji} (harus 8), skenario asli ${asli} temuan, sabot gagal ${gagalSabot}.`);
+  await b.close();
+  process.exit(r.total === 0 && r.totalUji === 8 && asli === 0 && gagalSabot === 0 && galat.length === 0 ? 0 : 1);
+}
+
 (async () => {
+  if (process.env.HANYA) return auditSatuLebar(process.env.HANYA);
   const b = await chromium.launch();
   const p = await (await b.newContext({ viewport: { width: 390, height: 900 } })).newPage();
   // Nina & Tegar (14 Nov 19.10): "Transition was aborted ... ViewTransition" muncul acak saat audit berpindah halaman sangat cepat

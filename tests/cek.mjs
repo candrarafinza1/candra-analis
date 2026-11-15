@@ -4399,7 +4399,7 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
     if (i < 0) return { salah: ["tools/audit-aksesibel.js: bagian utama (async () => {) tidak ditemukan"], banding: 0 };
     const utama = src.slice(i);
     const i1280 = utama.indexOf("setViewportSize({ width: 1280"), i768 = utama.indexOf("putaranHalaman(p, 768");
-    if (i1280 < 0 || i768 < 0 || i768 < i1280) return { salah: ["penanda lebar 1280px/768px tidak ditemukan di audit"], banding: 0 };
+    if (i1280 < 0 || i768 < 0 || i768 < i1280) return { salah: ["penanda lebar 1280px/768px tidak ditemukan di audit"], banding: 0, daftar: [] };
     const lebarDi = (pos) => (pos < i1280 ? 390 : pos < i768 ? 1280 : 768);
     // sab… → skenario yang dijalankan
     const isiSab = {};
@@ -4429,7 +4429,7 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
           salah.push(`${a.sab} (${a.sk.join(" + ")}, ${a.lebar}px) beda dengan ${w}px: ${kurang.length ? `kurang ${kurang.join(", ")}` : ""}${kurang.length && lebih.length ? "; " : ""}${lebih.length ? `lebih ${lebih.join(", ")}` : ""}`);
       }
     if (banding < 20) salah.push(`hanya ${banding} perbandingan daftar jenis antarlebar (harus ≥20); daftar terhapus?`);
-    return { salah, banding };
+    return { salah, banding, daftar };
   };
   const sJ = cekJenisLebar(srcA);
   ok(sJ.salah.length === 0, `audit-aksesibel daftar jenis antarlebar: ${sJ.salah.join("; ")}`);
@@ -4477,6 +4477,59 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
   ];
   for (const [s, pesan] of rusakN)
     ok(s !== srcA && cekPeringkatNama(s).some((x) => x.includes(pesan)), `uji balik sabot Peringkat menurut nama: "${pesan}" harus tertangkap`);
+
+  // Nina & Tegar (15 Nov 15.09): mode satu lebar (HANYA=390|768|1280) hanya untuk uji cepat. Dipastikan: (1) audit tanpa HANYA
+  // tetap audit penuh tiga lebar: HANYA hanya dipakai di baris pertama bagian utama (langsung return ke auditSatuLebar), tidak
+  // ada di tempat lain di bagian utama, dan cek tiga lebar/syarat keluar di atas tetap berlaku; (2) nilai selain 390/768/1280
+  // keluar 1; (3) daftar jenis sabot JENIS_SATU sama persis dengan daftar jenis audit penuh untuk skenario yang sama.
+  const cekSatuLebar = (src) => {
+    const salah = [];
+    const i = src.indexOf("(async () => {");
+    if (i < 0) return ["tools/audit-aksesibel.js: bagian utama (async () => {) tidak ditemukan"];
+    const utama = src.slice(i), depan = src.slice(0, i);
+    const baris1 = utama.split("\n")[1] || "";
+    if (baris1.trim() !== "if (process.env.HANYA) return auditSatuLebar(process.env.HANYA);")
+      salah.push("baris pertama bagian utama bukan `if (process.env.HANYA) return auditSatuLebar(process.env.HANYA);`");
+    if ((utama.match(/HANYA/g) || []).length !== 2) salah.push("HANYA dipakai di tempat lain di bagian utama (audit penuh bisa berubah)");
+    const f = depan.indexOf("async function auditSatuLebar(");
+    if (f < 0) return [...salah, "fungsi auditSatuLebar tidak ditemukan sebelum bagian utama"];
+    const isiF = depan.slice(f);
+    if (!/if \(!\[390, 768, 1280\]\.includes\(lebar\)\) \{[^\n]*process\.exit\(1\); \}/.test(isiF)) salah.push("auditSatuLebar tidak menolak (exit 1) nilai HANYA selain 390/768/1280");
+    if (!/process\.exit\(r\.total === 0 && r\.totalUji === 8 && asli === 0 && gagalSabot === 0 && galat\.length === 0 \? 0 : 1\)/.test(isiF)) salah.push("syarat keluar auditSatuLebar berubah");
+    const blok = depan.match(/const JENIS_SATU = \[([\s\S]*?)\n\];/);
+    if (!blok) return [...salah, "JENIS_SATU tidak ditemukan"];
+    const entri = [...blok[1].matchAll(/\[\[([^\]]*)\], \[([^\]]*)\]\]/g)].map((m) => ({
+      sk: [...m[1].matchAll(/'([^']*)'/g)].map((x) => x[1]).sort(), jenis: [...m[2].matchAll(/'([^']*)'/g)].map((x) => x[1]) }));
+    const { daftar } = cekJenisLebar(src);
+    const semuaSk = new Set(entri.flatMap((e) => e.sk));
+    for (const s of [...SKENARIO, "Tablet"]) if (!semuaSk.has(s)) salah.push(`JENIS_SATU tidak memuat skenario ${s}`);
+    for (const e of entri) {
+      let banding = 0;
+      for (const w of [390, 768, 1280]) {
+        const bagian = daftar.filter((d) => d.lebar === w && d.sk.every((s) => e.sk.includes(s)));
+        if ([...new Set(bagian.flatMap((d) => d.sk))].sort().join() !== e.sk.join()) continue;
+        banding++;
+        const gab = new Set(bagian.flatMap((d) => d.jenis));
+        const kurang = [...gab].filter((j) => !e.jenis.includes(j)), lebih = e.jenis.filter((j) => !gab.has(j));
+        if (kurang.length || lebih.length) salah.push(`JENIS_SATU ${e.sk.join(" + ")} beda dengan audit penuh ${w}px: ${kurang.length ? "kurang " + kurang.join(", ") : ""}${lebih.length ? " lebih " + lebih.join(", ") : ""}`);
+      }
+      if (!banding) salah.push(`JENIS_SATU ${e.sk.join(" + ")} tidak punya pasangan di audit penuh`);
+    }
+    return salah;
+  };
+  const sS = cekSatuLebar(srcA);
+  ok(sS.length === 0, `audit-aksesibel mode satu lebar: ${sS.join("; ")}`);
+  const rusakS = [
+    [srcA.replace("  if (process.env.HANYA) return auditSatuLebar(process.env.HANYA);\n", ""), "baris pertama bagian utama"],
+    [srcA.replace("const r1280 = await putaranHalaman(p, 1280);", "const r1280 = process.env.HANYA ? { total: 0, totalUji: 8 } : await putaranHalaman(p, 1280);"), "HANYA dipakai di tempat lain"],
+    [srcA.replace("if (![390, 768, 1280].includes(lebar)) { console.log(`HANYA=\"${nilai}\" tidak dikenal (pilih 390, 768, atau 1280).`); process.exit(1); }", ""), "tidak menolak (exit 1)"],
+    [srcA.replace("  [['Ketik'], ['status', 'fokus hilang', 'id ganda', 'pilihan tidak ikut']],", "  [['Ketik'], ['status', 'fokus hilang', 'id ganda']],"), "JENIS_SATU Ketik beda dengan audit penuh"],
+    [srcA.replace("  [['Radar'], ['id ganda', 'rujukan']],\n", ""), "JENIS_SATU tidak memuat skenario Radar"],
+    [srcA.replace("asli === 0 && gagalSabot === 0", "gagalSabot === 0"), "syarat keluar auditSatuLebar berubah"],
+    [srcA.replace("  [['Salin'], ['status', 'isi papan klip', 'Tab', 'fokus hilang', 'id ganda']],", "  [['Salin'], ['status', 'isi papan klip', 'Tab', 'fokus hilang', 'id ganda', 'aria-live']],"), "lebih aria-live"],
+  ];
+  for (const [s, pesan] of rusakS)
+    ok(s !== srcA && cekSatuLebar(s).some((x) => x.includes(pesan)), `uji balik mode satu lebar: "${pesan}" harus tertangkap`);
 }
 
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }

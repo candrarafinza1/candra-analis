@@ -1560,3 +1560,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Nina + Tegar: Peringkat 390px di audit kini `sab1p` → `jenis1p` (nama) seperti 768/1280px, ikut perbandingan antarlebar; cek.mjs menolak nama lama, 5 uji balik baru tertangkap. Audit penuh exit 0 (temuan halaman asli 0, UJI 8/8/8).
 - Tugas baru: Nina + Tegar (opsi audit satu lebar). Berikutnya Fajar: BSSR & MDKA.
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### Minggu, 15 November 2026 — sesi 15.09 WIB (Bima)
+- Fajar: giliran BSSR & MDKA dicari; belum ada laba Januari–September 2026 bersumber (BSSR teratas semester I 2026; MDKA baru laba semester I US$102 juta dan penjualan kuartal III US$817,3 juta) → tetap 25 dari 32. Berikutnya MBMA & MIKA. Raka/Hana: tidak ada kabar baru.
+- Nina + Tegar: `tools/audit-aksesibel.js` kini punya mode satu lebar `HANYA=390|768|1280` (±1 menit; 390/768/1280 masing-masing exit 0, UJI 8, sabot lengkap). Nilai salah ketik keluar 1. `tests/cek.mjs` menambah `cekSatuLebar` (HANYA hanya di baris pertama, daftar jenis sama dengan audit penuh, syarat keluar terkunci); 7 uji balik tertangkap. Audit penuh tanpa HANYA tetap exit 0 (temuan 0, UJI 8/8/8). Kode situs & tampilan tidak diubah.
+- Tugas baru: Nina + Tegar (opsi SKENARIO di mode satu lebar).
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
