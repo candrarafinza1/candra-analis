@@ -4988,6 +4988,52 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
   ];
   for (const [d, py, pesan] of rusakRJ)
     ok((d !== RUJ || py !== skripPyT) && cekRujukanModulPdf(d, py).some((x) => x.includes(pesan)), `uji balik rujukan modul PDF: "${pesan}" harus tertangkap`);
+  // Nina & Tegar (16 Nov 16.10): sampul & metadata modul PDF. gambar_sampul menulis judul (dua baris digabung =
+  // "Belajar Saham Syariah dari Nol"), nama Candra Analis, dan kalimat "bukan ajakan membeli atau menjual";
+  // metadata title/author di skrip dan /Title, /Author di PDF sama dengan judul sampul dan Candra Analis;
+  // halaman pertama memakai templat "sampul" (templat pertama, onPage=gambar_sampul), lalu isi pindah ke "biasa".
+  const JUDUL_MODUL = "Belajar Saham Syariah dari Nol";
+  const cekSampulModulPdf = (skripPy, pdf) => {
+    const salah = [];
+    const iS = skripPy.indexOf("def gambar_sampul(c, doc):");
+    if (iS < 0) return ["modul PDF: fungsi gambar_sampul tidak ditemukan"];
+    const jS = skripPy.indexOf("\n\n\ndef ", iS);
+    const blokS = skripPy.slice(iS, jS < 0 ? undefined : jS);
+    const teks = [...blokS.matchAll(/^\s*c\.drawString\([^,\n]+,\s*[^,\n]+,\s*"([^"\n]*)"\)\s*$/gm)].map((m) => m[1]);
+    if (teks.length < 2 || `${teks[0]} ${teks[1]}` !== JUDUL_MODUL) salah.push(`modul PDF: dua baris pertama sampul harus berbunyi "${JUDUL_MODUL}" (kini "${teks.slice(0, 2).join(" ")}")`);
+    if (!teks.some((t) => t.includes("Candra Analis"))) salah.push("modul PDF: sampul harus menulis nama Candra Analis");
+    if (!teks.some((t) => /bukan ajakan membeli atau menjual/.test(t))) salah.push('modul PDF: sampul harus menulis "bukan ajakan membeli atau menjual"');
+    if (/^\s*(if|elif|return)\b/m.test(blokS)) salah.push("modul PDF: teks sampul tidak boleh bersyarat (if/return di gambar_sampul)");
+    const t = skripPy.match(/^\s*title="([^"]*)", author="([^"]*)",\s*$/m);
+    if (!t) salah.push("modul PDF: metadata title/author tidak ditemukan di BaseDocTemplate");
+    else {
+      if (t[1] !== JUDUL_MODUL) salah.push(`modul PDF: metadata title harus "${JUDUL_MODUL}" sama dengan judul sampul (kini "${t[1]}")`);
+      if (t[2] !== "Candra Analis") salah.push(`modul PDF: metadata author harus "Candra Analis" (kini "${t[2]}")`);
+    }
+    if (!/doc\.addPageTemplates\(\[\n\s+PageTemplate\(id="sampul", frames=\[bingkai\], onPage=gambar_sampul\),\n/.test(skripPy)) salah.push('modul PDF: templat pertama harus "sampul" dengan onPage=gambar_sampul');
+    if (!/\n\s+isi = \[NextPageTemplate\("biasa"\), PageBreak\(\)\]\n/.test(skripPy)) salah.push('modul PDF: isi harus dimulai NextPageTemplate("biasa"), PageBreak() agar halaman 1 hanya sampul');
+    const pL = pdf.toString("latin1");
+    const tPdf = pL.match(/\/Title \(([^)]*)\)/g) || [], aPdf = pL.match(/\/Author \(([^)]*)\)/g) || [];
+    if (tPdf.length !== 1 || tPdf[0] !== `/Title (${JUDUL_MODUL})`) salah.push(`modul PDF: /Title di PDF harus tepat satu "${JUDUL_MODUL}" (jalankan python3 tools/buat-modul-pdf.py)`);
+    if (aPdf.length !== 1 || aPdf[0] !== "/Author (Candra Analis)") salah.push('modul PDF: /Author di PDF harus tepat satu "Candra Analis"');
+    return salah;
+  };
+  const sSP = cekSampulModulPdf(skripPyT, pdfB);
+  ok(sSP.length === 0, `sampul modul PDF: ${sSP.join("; ")}`);
+  const rusakSP = [
+    [skripPyT.replace('c.drawString(28 * mm, 344, "dari Nol")', 'c.drawString(28 * mm, 344, "untuk Pemula")'), pdfB, "dua baris pertama sampul"],
+    [skripPyT.replace('"Modul lengkap Candra Analis untuk investor pemula"', '"Modul lengkap untuk investor pemula"'), pdfB, "nama Candra Analis"],
+    [skripPyT.replace('    c.drawString(28 * mm, 274, "Bahan belajar, bukan ajakan membeli atau menjual saham.")\n', ""), pdfB, "bukan ajakan membeli"],
+    [skripPyT.replace('    c.drawString(28 * mm, 274, "Bahan', '    if doc.page > 1:\n        c.drawString(28 * mm, 274, "Bahan'), pdfB, "tidak boleh bersyarat"],
+    [skripPyT.replace('title="Belajar Saham Syariah dari Nol"', 'title="Modul Saham"'), pdfB, "metadata title"],
+    [skripPyT.replace('author="Candra Analis"', 'author="Tim"'), pdfB, "metadata author"],
+    [skripPyT.replace('PageTemplate(id="sampul", frames=[bingkai], onPage=gambar_sampul),\n        PageTemplate(id="biasa", frames=[bingkai], onPage=kaki_halaman),', 'PageTemplate(id="biasa", frames=[bingkai], onPage=kaki_halaman),\n        PageTemplate(id="sampul", frames=[bingkai], onPage=gambar_sampul),'), pdfB, 'templat pertama harus "sampul"'],
+    [skripPyT.replace('isi = [NextPageTemplate("biasa"), PageBreak()]', 'isi = [NextPageTemplate("biasa")]'), pdfB, "halaman 1 hanya sampul"],
+    [skripPyT, Buffer.from(pdfB.toString("latin1").replace(`/Title (${JUDUL_MODUL})`, "/Title (untitled)"), "latin1"), "/Title di PDF"],
+    [skripPyT, Buffer.from(pdfB.toString("latin1").replace("/Author (Candra Analis)", "/Author (anonymous)"), "latin1"), "/Author di PDF"],
+  ];
+  for (const [py, p, pesan] of rusakSP)
+    ok((py !== skripPyT || p !== pdfB) && cekSampulModulPdf(py, p).some((x) => x.includes(pesan)), `uji balik sampul modul PDF: "${pesan}" harus tertangkap`);
 }
 
 // Nina & Arif (16 Nov, IDE.md #33): baris kesegaran data di profil. kesegaran9b() dijalankan untuk semua emiten:

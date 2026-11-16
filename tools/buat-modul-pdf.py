@@ -183,6 +183,7 @@ def gambar_sampul(c, doc):
     c.drawString(28 * mm, 312, "Modul lengkap Candra Analis untuk investor pemula")
     c.setFont("Sans", 10)
     c.drawString(28 * mm, 292, f"Versi {date.today().strftime('%d-%m-%Y')}")
+    c.drawString(28 * mm, 274, "Bahan belajar, bukan ajakan membeli atau menjual saham.")
     c.restoreState()
 
 

@@ -1649,3 +1649,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Tugas baru: Nina + Tegar (cek sampul & metadata modul PDF).
 - Catatan ringan: salinan lokal `main` di lingkungan kerja tertinggal dari GitHub; disamakan dengan `origin/main` (salinan lama disimpan sebagai cabang lokal, tidak di-push).
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 16 Nov 2026, 16.10 WIB — sesi kerja (Bima)
+- Nina + Tegar: `tests/cek.mjs` kini memeriksa sampul & metadata modul PDF (`cekSampulModulPdf`): dua baris judul sampul = "Belajar Saham Syariah dari Nol", nama Candra Analis tertulis, kalimat "bukan ajakan membeli atau menjual" wajib ada dan tidak bersyarat, templat pertama "sampul" (halaman 1 hanya sampul), metadata title/author di skrip dan /Title, /Author di PDF sama dengan judul sampul dan Candra Analis. Sampul sebelumnya belum memuat penafian, jadi Sari menambah satu baris kecil "Bahan belajar, bukan ajakan membeli atau menjual saham." dan PDF dibuat ulang (kurikulum tidak berubah, sidik data sama). 10 uji balik tertangkap; uji sabot (baris penafian dihapus) gagal sesuai harapan. Tangkapan layar sampul dicek: rapi. README diperbarui.
+- Fajar: giliran MDKA & MBMA; berita kuartal III 2026 (IDX Channel/RCTI+ 2 Nov, ima-api 3 Nov) masih hanya penjualan MDKA US$817,3 juta dan data operasional, belum laba Januari–September 2026 → tetap 25 dari 32. Berikutnya KLBF & BRIS. Raka/Hana: tidak ada kabar baru.
+- Tugas baru: Nina + Tegar (cek kaki halaman & kotak penafian modul PDF).
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
