@@ -4895,6 +4895,45 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
   ];
   for (const [py, pesan] of rusakDI)
     ok(py !== skripPyT && cekDaftarIsiModulPdf(py).some((x) => x.includes(pesan)), `uji balik daftar isi modul PDF: "${pesan}" harus tertangkap`);
+  // Nina & Tegar (16 Nov 14.12): kunci jawaban modul PDF. Skrip menulis pilihan dengan zip("abc", …) dan kunci dengan
+  // 'abc'[q['benar']], jadi data wajib: tepat 3 pilihan, `benar` bilangan bulat 0–2. Skrip wajib mengulang semua
+  // pelajaran yang punya kuis (urutan data, tanpa saring lain) dan semua soalnya, dengan huruf dari indeks `benar`.
+  const cekKunciModulPdf = (daftar, skripPy) => {
+    const salah = [];
+    daftar.forEach((m, i) => (m.kuis || []).forEach((q, n) => {
+      if (!Array.isArray(q.pilihan) || q.pilihan.length !== 3) salah.push(`modul PDF: pelajaran ${i + 1} soal ${n + 1} harus punya tepat 3 pilihan (skrip memakai a/b/c)`);
+      if (!Number.isInteger(q.benar) || q.benar < 0 || q.benar > 2) salah.push(`modul PDF: pelajaran ${i + 1} soal ${n + 1}: \`benar\` harus 0–2 (huruf a/b/c)`);
+      if (!q.jelas || !String(q.jelas).trim()) salah.push(`modul PDF: pelajaran ${i + 1} soal ${n + 1}: penjelasan kunci kosong`);
+    }));
+    if ((skripPy.match(/zip\("abc", q\["pilihan"\]\)/g) || []).length !== 1) salah.push('modul PDF: pilihan soal harus ditulis dengan zip("abc", q["pilihan"]) tepat sekali');
+    const iK = skripPy.indexOf('Paragraph("Kunci jawaban Cek pemahaman"');
+    if (iK < 0) { salah.push('modul PDF: judul "Kunci jawaban Cek pemahaman" tidak ditemukan'); return salah; }
+    const blokK = skripPy.slice(iK, skripPy.indexOf("\n\n", iK) < 0 ? undefined : skripPy.indexOf("\n\n", iK));
+    if (!/\n\s+for i, m in enumerate\(modul, 1\):\n\s+if not m\.get\("kuis"\):\n\s+continue\n/.test(blokK)) salah.push("modul PDF: kunci jawaban harus mengulang semua pelajaran (enumerate(modul, 1)) dan hanya melewati pelajaran tanpa kuis");
+    if (!/\n\s+for n, q in enumerate\(m\["kuis"\], 1\):\n\s+isi\.append\(Paragraph\(f"<b>\{n\}\. \{'abc'\[q\['benar'\]\]\}\.<\/b> \{q\['jelas'\]\}"/.test(blokK)) salah.push("modul PDF: kunci jawaban harus menulis setiap soal dengan nomor, huruf 'abc'[q['benar']], dan penjelasan");
+    if (/\b(break|return)\b|m\["kuis"\]\s*\[|q\['benar'\]\s*[+\-]/.test(blokK)) salah.push("modul PDF: kunci jawaban dipotong atau hurufnya digeser");
+    if (!/f"Pelajaran \{i\}: \{m\['judul'\]\}"/.test(blokK)) salah.push("modul PDF: kunci jawaban harus menyebut nomor dan judul pelajaran");
+    return salah;
+  };
+  const sKJ = cekKunciModulPdf(MODUL, skripPyT);
+  ok(sKJ.length === 0, `kunci jawaban modul PDF: ${sKJ.join("; ")}`);
+  ok(MODUL.reduce((a, m) => a + (m.kuis || []).length, 0) === MODUL.filter((m) => m.kuis && m.kuis.length).length * 3, "kunci jawaban modul PDF: setiap pelajaran berkuis punya 3 soal");
+  const modulRusak = (ubah) => { const d = JSON.parse(JSON.stringify(MODUL)); ubah(d[0].kuis[0]); return d; };
+  const rusakKJ = [
+    [modulRusak((q) => { q.benar = 3; }), skripPyT, "harus 0–2"],
+    [modulRusak((q) => { q.benar = 1.5; }), skripPyT, "harus 0–2"],
+    [modulRusak((q) => { q.pilihan.push("Pilihan keempat"); }), skripPyT, "tepat 3 pilihan"],
+    [modulRusak((q) => { q.pilihan.pop(); }), skripPyT, "tepat 3 pilihan"],
+    [modulRusak((q) => { q.jelas = " "; }), skripPyT, "penjelasan kunci kosong"],
+    [MODUL, skripPyT.replace("{'abc'[q['benar']]}", "{'abc'[q['benar'] + 1]}"), "huruf 'abc'"],
+    [MODUL, skripPyT.replace("{'abc'[q['benar']]}", "{'abcd'[q['benar']]}"), "huruf 'abc'"],
+    [MODUL, skripPyT.replace('for n, q in enumerate(m["kuis"], 1):\n                isi.append(Paragraph(f"<b>', 'for n, q in enumerate(m["kuis"][:2], 1):\n                isi.append(Paragraph(f"<b>'), "huruf 'abc'"],
+    [MODUL, skripPyT.replace('            if not m.get("kuis"):\n                continue\n            isi.append(Paragraph(f"Pelajaran {i}', '            if not m.get("kuis") or i > 5:\n                continue\n            isi.append(Paragraph(f"Pelajaran {i}'), "hanya melewati pelajaran tanpa kuis"],
+    [MODUL, skripPyT.replace('zip("abc", q["pilihan"])', 'zip("abcd", q["pilihan"])'), 'zip("abc"'],
+    [MODUL, skripPyT.replace('Paragraph("Kunci jawaban Cek pemahaman"', 'Paragraph("Kunci"'), "tidak ditemukan"],
+  ];
+  for (const [d, py, pesan] of rusakKJ)
+    ok((d !== MODUL || py !== skripPyT) && cekKunciModulPdf(d, py).some((x) => x.includes(pesan)), `uji balik kunci jawaban modul PDF: "${pesan}" harus tertangkap`);
 }
 
 // Nina & Arif (16 Nov, IDE.md #33): baris kesegaran data di profil. kesegaran9b() dijalankan untuk semua emiten:

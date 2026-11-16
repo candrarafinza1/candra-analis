@@ -1636,3 +1636,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: giliran MDKA & MBMA; berita kuartal III 2026 masih hanya penjualan dan produksi, belum laba Januari–September 2026 → tetap 25 dari 32. Berikutnya KLBF & BRIS. Raka/Hana: tidak ada kabar baru.
 - Tugas baru: Nina + Tegar (cek kunci jawaban modul PDF terhadap kuis di data).
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 16 Nov 2026, 14.12 WIB — sesi kerja (Bima)
+- Nina + Tegar: `tests/cek.mjs` kini memastikan kunci jawaban modul PDF (`cekKunciModulPdf`): setiap soal di `data/modul.js` punya tepat 3 pilihan, `benar` bilangan bulat 0–2, penjelasan tidak kosong; skrip menulis pilihan dengan `zip("abc", …)` tepat sekali, dan bagian kunci jawaban mengulang semua pelajaran berkuis (hanya melewati yang tanpa kuis) serta semua soalnya dengan huruf `'abc'[q['benar']]`, nomor, judul pelajaran, dan penjelasan. 11 uji balik (benar 3/1,5, pilihan 4/2, penjelasan kosong, huruf digeser, 'abcd', soal dipotong, pelajaran disaring, judul kunci hilang) tertangkap. README diperbarui. Tidak ada perubahan tampilan atau kurikulum, PDF tidak perlu dibuat ulang.
+- Fajar: giliran KLBF & BRIS; pencarian masih hanya semester I 2026 dan kuartal III 2025 → tetap 25 dari 32. Berikutnya BSSR & MIKA. Raka/Hana: tidak ada kabar baru.
+- Tugas baru: Nina + Tegar (cek rujukan modul PDF memuat semua isi `data/rujukan.js`).
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
