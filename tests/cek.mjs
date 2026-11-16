@@ -4866,6 +4866,35 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
   ];
   for (const [p, n, k, py, pesan] of rusakHal)
     ok(cekHalamanModulPdf(p, n, k, py).some((x) => x.includes(pesan)), `uji balik halaman modul PDF: "${pesan}" harus tertangkap`);
+  // Nina & Tegar (16 Nov 13.10): daftar isi modul PDF memuat semua judul pelajaran dalam urutan data/modul.js.
+  // Teks PDF terkompresi, jadi yang dicek skripnya: daftar isi dan halaman pelajaran sama-sama mengulang
+  // daftar `modul` (dimuat sekali dari data/modul.js, tidak diurut ulang/disaring/dipotong) dan menulis m['judul'].
+  // Sidik data di atas menjamin PDF dibuat dari data/modul.js terbaru.
+  const cekDaftarIsiModulPdf = (skripPy) => {
+    const salah = [];
+    const muat = skripPy.match(/^\s*modul\s*=.*$/gm) || [];
+    if (muat.length !== 1 || !/modul\s*=\s*baca_data\("data\/modul\.js", "MODUL"\)/.test(muat[0])) salah.push(`modul PDF: daftar \`modul\` harus dimuat tepat sekali dari data/modul.js (ada ${muat.length} penetapan)`);
+    if (/sorted\(\s*modul|reversed\(\s*modul|modul\s*\.\s*(sort|reverse|pop|remove|insert|append|extend|clear)\s*\(|modul\s*\[[^\]]*:|filter\([^)]*modul|del\s+modul|modul\s*[+\-*]=/.test(skripPy)) salah.push("modul PDF: daftar `modul` diurut ulang, disaring, atau dipotong; daftar isi bisa tidak sama dengan data/modul.js");
+    const iD = skripPy.indexOf('Paragraph("Daftar isi"');
+    const blokD = iD < 0 ? "" : skripPy.slice(iD, iD + 400);
+    if (iD < 0) salah.push("modul PDF: judul \"Daftar isi\" tidak ditemukan di tools/buat-modul-pdf.py");
+    else if (!/\n\s+for i, m in enumerate\(modul, 1\):\n\s+isi\.append\(Paragraph\(f"<b>\{i\}\.<\/b>\s+\{m\['judul'\]\}/.test(blokD)) salah.push("modul PDF: daftar isi tidak menulis nomor dan judul setiap pelajaran dari daftar `modul`");
+    if (!/for i, m in enumerate\(modul, 1\):\n\s+isi\.append\(PageBreak\(\)\)\n(\s+.*\n){0,2}?\s+isi\.append\(Paragraph\(m\["judul"\], GAYA\["h1"\]\)\)/.test(skripPy)) salah.push("modul PDF: halaman pelajaran tidak memakai judul dari daftar `modul` yang sama dengan daftar isi");
+    return salah;
+  };
+  const sDI = cekDaftarIsiModulPdf(skripPyT);
+  ok(sDI.length === 0, `daftar isi modul PDF: ${sDI.join("; ")}`);
+  const rusakDI = [
+    [skripPyT.replace('modul = baca_data("data/modul.js", "MODUL")', 'modul = baca_data("data/modul.js", "MODUL")\n    modul = modul[1:]'), "dimuat tepat sekali"],
+    [skripPyT.replace('isi.append(Paragraph("Daftar isi", GAYA["h2"]))\n    for i, m in enumerate(modul, 1):', 'isi.append(Paragraph("Daftar isi", GAYA["h2"]))\n    for i, m in enumerate(sorted(modul, key=lambda x: x["judul"]), 1):'), "diurut ulang"],
+    [skripPyT.replace('isi.append(Paragraph("Daftar isi", GAYA["h2"]))\n    for i, m in enumerate(modul, 1):', 'isi.append(Paragraph("Daftar isi", GAYA["h2"]))\n    for i, m in enumerate(modul[:5], 1):'), "dipotong"],
+    [skripPyT.replace("{m['judul']}  <font", "{m['ringkas']}  <font"), "daftar isi tidak menulis nomor dan judul"],
+    [skripPyT.replace('Paragraph("Daftar isi"', 'Paragraph("Isi"'), "\"Daftar isi\" tidak ditemukan"],
+    [skripPyT.replace('isi.append(Paragraph(m["judul"], GAYA["h1"]))', 'isi.append(Paragraph(m["ringkas"], GAYA["h1"]))'), "halaman pelajaran tidak memakai judul"],
+    [skripPyT.replace("modul = baca_data(", "modul.reverse()\n    modul = baca_data("), "diurut ulang"],
+  ];
+  for (const [py, pesan] of rusakDI)
+    ok(py !== skripPyT && cekDaftarIsiModulPdf(py).some((x) => x.includes(pesan)), `uji balik daftar isi modul PDF: "${pesan}" harus tertangkap`);
 }
 
 // Nina & Arif (16 Nov, IDE.md #33): baris kesegaran data di profil. kesegaran9b() dijalankan untuk semua emiten:
