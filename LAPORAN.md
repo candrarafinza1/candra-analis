@@ -1602,3 +1602,11 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Nina + Tegar: modul PDF kini membawa sidik data (16 huruf SHA-256 dari `data/modul.js` + `data/rujukan.js`) di Keywords; `tests/cek.mjs` (`cekModulPdf`) menghitung ulang dan gagal bila PDF lupa dibuat ulang. PDF dibuat ulang (isi tidak berubah), README "Cara menguji" menjelaskan. 7 uji balik tertangkap; uji sabot (ubah modul.js tanpa buat ulang PDF) gagal sesuai harapan. Kode situs & tampilan tidak diubah.
 - Tugas baru: Nina + Tegar (jumlah halaman modul PDF vs jumlah pelajaran).
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 16 Nov 2026, 07.10 WIB — sesi kerja (Bima)
+- Email "Masuk kerja pagi 16 November 2026" terkirim ke Rafinza (12 karyawan siap, tugas sesi, status cek.mjs lolos).
+- Fajar: giliran BSSR & MIKA dicari; belum ada laba Januari–September 2026 bersumber (BSSR teratas masih hingga September 2025; MIKA teratas semester I 2026 Rp684,05 M) → tetap 25 dari 32. Berikutnya MDKA & MBMA. Raka/Hana: tidak ada kabar baru.
+- Nina + Tegar: `tests/cek.mjs` menambah `cekHalamanModulPdf`: /Count PDF (22) sama dengan jumlah objek halaman, minimal 12 halaman untuk 8 pelajaran (sampul, daftar isi, pelajaran, kunci, rujukan), maksimal minimal + 4 per pelajaran, dan skrip tetap memulai tiap pelajaran di halaman baru. README "Cara menguji" menjelaskan. 7 uji balik tertangkap; uji sabot gagal sesuai harapan. Kode situs & tampilan tidak diubah.
+- Kirana: 3 usulan minggu ini di IDE.md (#31 kuis "Ulangi soal yang salah" ★, #32 "Kembali ke atas" di daftar panjang HP, #33 "Data terakhir diperbarui" di profil). Bima memilih #31 untuk Arif + Dewi.
+- Tugas baru: Arif + Dewi (#31), Nina + Tegar (daftar isi modul PDF vs judul pelajaran).
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

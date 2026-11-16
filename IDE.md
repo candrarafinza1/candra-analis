@@ -482,6 +482,43 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Selesai 14 Nov 14.09 (Dewi + Nina): menempel di ≥900px (wadah tidak menggulir ke samping lagi, nama emiten & sektor boleh turun baris). 601–899px tetap tabel geser tanpa sticky; HP tetap kartu.
 - Tinjauan Kirana 14 Nov 14.09 (tangkapan layar 1280px terang & gelap, tab "Laba 2025 vs 2024" digulir 250px): kepala tabel terbaca di atas baris, tidak tembus, garis bawah terlihat. 900/1000/1280px: tabel muat di wadah untuk 4 dasar peringkat, tanpa scroll horizontal, tanpa galat JS. 390px tetap kartu.
 
+### 31. Kuis: "Ulangi soal yang salah saja" ★ paling berdampak
+- **Belajar dari kesalahan** — fitur, usaha kecil
+- Masalah: setelah "Periksa jawaban", tombol "Ulangi kuis" mengosongkan semua soal. Pemula yang salah 1 dari 3 soal harus
+  menjawab ulang soal yang sudah benar, lalu cepat bosan.
+- Ide: bila ada jawaban salah, tampilkan tombol kedua "Ulangi soal yang salah". Soal yang sudah benar dilipat dengan tanda
+  "Sudah benar", hanya soal yang salah dibuka kembali tanpa pilihan terpilih. Fokus keyboard pindah ke soal salah pertama.
+  Hasil diumumkan di elemen role=status yang sudah ada.
+- Acuan tren: tinjauan kesalahan di aplikasi belajar bahasa dan kuis latihan (latihan ulang hanya pada bagian yang belum dikuasai).
+- Dampak bagi pemula: fokus pada konsep yang belum paham (mis. beda laba bersih dan laba diatribusikan), kuis terasa ringan.
+- Batasan: tanpa simpanan, tanpa animasi; tombol asli "Ulangi kuis" tetap ada; dapat dipakai keyboard; tanpa kata ajakan.
+- Usaha: kecil (Arif, Dewi merapikan tombol di 390px). Nina menambah keadaan baru di DOM tiruan dan audit-aksesibel.
+- Status: diusulkan Kirana 16 Nov 07.10; dipilih Bima 16 Nov 07.10 untuk Arif + Dewi, masuk BACKLOG.md.
+
+### 32. Peringkat & Kabar di HP: tautan "Kembali ke atas"
+- **Daftar panjang tidak melelahkan** — tampilan, usaha kecil
+- Masalah: di 390px Peringkat tampil sebagai 32 kartu dan Kabar memuat banyak kabar; untuk mengganti tab atau menu,
+  pemula harus menggulir jauh ke atas.
+- Ide: tautan biasa `<a href="#isi">Kembali ke atas</a>` di akhir daftar (bukan tombol melayang). Gulir halus hanya bila
+  `prefers-reduced-motion` tidak meminta gerak dikurangi.
+- Acuan tren: tautan "ke atas" di akhir daftar panjang pada situs berita dan dokumentasi.
+- Dampak bagi pemula: kembali ke tab dan menu dalam satu ketukan.
+- Batasan: HTML/CSS saja, tanpa JavaScript baru; tidak menutupi isi; target sentuh ≥48px; fokus keyboard ikut pindah ke #isi.
+- Usaha: kecil (Dewi). Nina menambah cek tautan menuju id yang ada.
+- Status: diusulkan Kirana 16 Nov 07.10.
+
+### 33. Profil emiten: baris "Data terakhir diperbarui"
+- **Pemula tahu seberapa baru angkanya** — fitur, usaha kecil
+- Masalah: profil memuat angka tahunan dan 9 bulan dari sumber bertanggal berbeda; pemula tidak tahu apakah angka
+  9 bulan 2026 sudah masuk atau belum.
+- Ide: satu baris kecil di bawah judul profil: "Angka terbaru: laporan Januari–September 2026 (sumber bertanggal …)" atau
+  "Laporan Januari–September 2026 belum masuk data". Tanggal diambil dari sumber yang sudah tercatat di data, bukan tanggal buatan.
+- Acuan tren: penanda kesegaran data (data freshness) di dasbor dan aplikasi pasar.
+- Dampak bagi pemula: tidak salah membaca angka lama sebagai angka baru.
+- Batasan: tanpa tanggal karangan (bila sumber tidak bertanggal, baris tidak tampil); tanpa kata ajakan; Hana meninjau kalimat.
+- Usaha: kecil (Arif). Nina menambah cek bahwa tanggal yang tampil ada di data sumber.
+- Status: diusulkan Kirana 16 Nov 07.10.
+
 ### Tinjauan Kirana, 9 Nov 10.09: hero & kartu beranda setelah teks diubah
 - 390px: kalimat hero 5 baris, rata-rata ±37 huruf per baris (nyaman dibaca di HP); istilah bergaris tetap terbaca, tombol "Mulai belajar" & "Lihat peringkat saham" masih di layar pertama 390×844.
 - 1280px: 4 baris, ±47 huruf per baris. Tanpa scroll horizontal di kedua lebar (juga Radar, Peringkat, profil ANTM).

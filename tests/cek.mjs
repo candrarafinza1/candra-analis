@@ -4725,6 +4725,43 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
   ];
   for (const [p, m, r, py, rd, pesan] of rusakPdf)
     ok(cekModulPdf(p, m, r, py, rd).some((x) => x.includes(pesan)), `uji balik modul PDF: "${pesan}" harus tertangkap`);
+  // Nina & Tegar (16 Nov 07.10): jumlah halaman modul PDF masuk akal terhadap kurikulum.
+  // Minimal = sampul + pengantar/daftar isi + 1 halaman per pelajaran + kunci jawaban (bila ada kuis) + rujukan.
+  // Maksimal = minimal + 4 halaman lanjutan per pelajaran (lebih dari itu tanda isi berulang/rusak).
+  // /Count di objek /Type /Pages harus sama dengan jumlah objek /Type /Page.
+  const cekHalamanModulPdf = (pdf, jumlahPelajaran, adaKuis, skripPy) => {
+    const salah = [];
+    const teks = pdf.toString("latin1");
+    const akar = teks.split("endobj").filter((o) => /\/Type\s*\/Pages\b/.test(o));
+    if (akar.length !== 1) { salah.push(`modul PDF harus punya tepat satu objek /Type /Pages (ada ${akar.length})`); return salah; }
+    const cocok = akar[0].match(/\/Count\s+(\d+)/);
+    if (!cocok) { salah.push("objek /Type /Pages modul PDF tidak memuat /Count"); return salah; }
+    const jumlah = Number(cocok[1]);
+    const objHalaman = (teks.match(/\/Type\s*\/Page\b(?!s)/g) || []).length;
+    if (objHalaman !== jumlah) salah.push(`/Count modul PDF (${jumlah}) tidak sama dengan jumlah objek halaman (${objHalaman})`);
+    const minimal = 1 + 1 + jumlahPelajaran + (adaKuis ? 1 : 0) + 1;
+    const maksimal = minimal + 4 * jumlahPelajaran;
+    if (jumlah < minimal) salah.push(`modul PDF terlalu sedikit halaman: ${jumlah} < minimal ${minimal} untuk ${jumlahPelajaran} pelajaran`);
+    if (jumlah > maksimal) salah.push(`modul PDF terlalu banyak halaman: ${jumlah} > maksimal ${maksimal} untuk ${jumlahPelajaran} pelajaran`);
+    if (!/for i, m in enumerate\(modul, 1\):\n\s+isi\.append\(PageBreak\(\)\)/.test(skripPy)) salah.push("tools/buat-modul-pdf.py tidak lagi memulai tiap pelajaran di halaman baru (PageBreak)");
+    return salah;
+  };
+  const adaKuisM = MODUL.some((m) => Array.isArray(m.kuis) && m.kuis.length > 0);
+  const sHal = cekHalamanModulPdf(pdfB, MODUL.length, adaKuisM, skripPyT);
+  ok(sHal.length === 0, `jumlah halaman modul PDF: ${sHal.join("; ")}`);
+  const nHal = Number(pdfL.split("endobj").find((o) => /\/Type\s*\/Pages\b/.test(o)).match(/\/Count\s+(\d+)/)[1]);
+  const gantiCount = (n) => Buffer.from(pdfL.replace(/(\/Count\s+)\d+(?=[^]*?\/Type\s*\/Pages\b)|(\/Type\s*\/Pages\b[^]*?\/Count\s+)\d+/, (_, a, b) => (a || b) + n), "latin1");
+  const rusakHal = [
+    [pdfB, MODUL.length + 30, adaKuisM, skripPyT, "terlalu sedikit halaman"],
+    [pdfB, 1, adaKuisM, skripPyT, "terlalu banyak halaman"],
+    [gantiCount(nHal + 1), MODUL.length, adaKuisM, skripPyT, "tidak sama dengan jumlah objek halaman"],
+    [Buffer.from(pdfL.replace(/\/Type\s*\/Pages\b/, "/Type /Bukan"), "latin1"), MODUL.length, adaKuisM, skripPyT, "tepat satu objek /Type /Pages (ada 0)"],
+    [Buffer.from(pdfL + "\n9999 0 obj << /Type /Pages /Count 1 >> endobj", "latin1"), MODUL.length, adaKuisM, skripPyT, "(ada 2)"],
+    [Buffer.from(pdfL.replace(/(\/Type\s*\/Pages\b[^]*?)\/Count\s+\d+|\/Count\s+\d+(?=[^]*?\/Type\s*\/Pages\b)/, (_, a) => (a || "") + "/Jumlah 0"), "latin1"), MODUL.length, adaKuisM, skripPyT, "tidak memuat /Count"],
+    [pdfB, MODUL.length, adaKuisM, skripPyT.replace(/(for i, m in enumerate\(modul, 1\):\n\s+)isi\.append\(PageBreak\(\)\)/, "$1pass"), "PageBreak"],
+  ];
+  for (const [p, n, k, py, pesan] of rusakHal)
+    ok(cekHalamanModulPdf(p, n, k, py).some((x) => x.includes(pesan)), `uji balik halaman modul PDF: "${pesan}" harus tertangkap`);
 }
 
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
