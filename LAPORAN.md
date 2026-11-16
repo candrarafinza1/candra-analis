@@ -1655,3 +1655,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: giliran MDKA & MBMA; berita kuartal III 2026 (IDX Channel/RCTI+ 2 Nov, ima-api 3 Nov) masih hanya penjualan MDKA US$817,3 juta dan data operasional, belum laba Januari–September 2026 → tetap 25 dari 32. Berikutnya KLBF & BRIS. Raka/Hana: tidak ada kabar baru.
 - Tugas baru: Nina + Tegar (cek kaki halaman & kotak penafian modul PDF).
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 16 Nov 2026, 17.09 WIB — sesi kerja (Bima)
+- Nina + Tegar: `tests/cek.mjs` kini memeriksa kaki halaman & kotak penafian modul PDF (`cekKakiModulPdf`): `kaki_halaman` wajib menulis "Candra Analis" dan `Halaman {doc.page}` tanpa syarat, templat "biasa" tepat satu dengan onPage=kaki_halaman, tidak ada templat/NextPageTemplate lain (semua halaman selain sampul berkaki), kotak pengantar memuat "bukan penasihat investasi" dan "tidak mengajak membeli atau menjual", PDF lebih dari satu halaman. 10 uji balik tertangkap. Skrip & PDF tidak berubah (keduanya sudah memenuhi).
+- Fajar: giliran KLBF & BRIS; teratas masih semester I 2026 dan kuartal III 2025. Judul KabarBursa "KLBF sembilan bulan" dicek: terbit 15 Nov 2024 (Januari–September 2024), bukan 2026 → tidak dipakai. Tetap 25 dari 32. Berikutnya BSSR & MIKA. Raka/Hana: tidak ada kabar baru.
+- Tugas baru: Nina + Tegar (cek baris meta pelajaran & waktu baca modul PDF).
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

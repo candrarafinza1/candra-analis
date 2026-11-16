@@ -5034,6 +5034,54 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
   ];
   for (const [py, p, pesan] of rusakSP)
     ok((py !== skripPyT || p !== pdfB) && cekSampulModulPdf(py, p).some((x) => x.includes(pesan)), `uji balik sampul modul PDF: "${pesan}" harus tertangkap`);
+  // Nina & Tegar (16 Nov 17.09): kaki halaman & kotak penafian pengantar modul PDF. kaki_halaman menulis
+  // "Candra Analis" dan "Halaman {doc.page}" tanpa syarat, dipakai templat "biasa" (semua halaman selain sampul);
+  // kotak pertama di pengantar (sebelum bagian Pelajaran) memuat "bukan penasihat investasi" dan
+  // "tidak mengajak membeli atau menjual". PDF punya lebih dari satu halaman (ada halaman berkaki).
+  const cekKakiModulPdf = (skripPy, pdf) => {
+    const salah = [];
+    const iK = skripPy.indexOf("def kaki_halaman(c, doc):");
+    if (iK < 0) return ["modul PDF: fungsi kaki_halaman tidak ditemukan"];
+    const jK = skripPy.indexOf("\n\n\ndef ", iK);
+    const blokK = skripPy.slice(iK, jK < 0 ? undefined : jK);
+    const tulis = [...blokK.matchAll(/^\s*c\.draw(?:Right)?String\([^\n]*\)\s*$/gm)].map((m) => m[0]);
+    if (!tulis.some((t) => /"[^"]*Candra Analis[^"]*"/.test(t))) salah.push('modul PDF: kaki halaman harus menulis "Candra Analis"');
+    if (!tulis.some((t) => /f"Halaman \{doc\.page\}"/.test(t))) salah.push('modul PDF: kaki halaman harus menulis nomor halaman (f"Halaman {doc.page}")');
+    if (/^\s*(if|elif|return)\b/m.test(blokK)) salah.push("modul PDF: kaki halaman tidak boleh bersyarat (if/return di kaki_halaman)");
+    const tpl = [...skripPy.matchAll(/PageTemplate\(id="([^"]+)", frames=\[bingkai\], onPage=(\w+)\)/g)].map((m) => [m[1], m[2]]);
+    const biasa = tpl.filter(([id]) => id === "biasa");
+    if (biasa.length !== 1 || biasa[0][1] !== "kaki_halaman") salah.push('modul PDF: templat "biasa" harus tepat satu dengan onPage=kaki_halaman');
+    if (tpl.some(([id]) => id !== "sampul" && id !== "biasa")) salah.push('modul PDF: hanya boleh templat "sampul" dan "biasa" (halaman lain tanpa kaki)');
+    if (/NextPageTemplate\("(?!biasa")[^"]*"\)/.test(skripPy)) salah.push('modul PDF: NextPageTemplate selain "biasa" membuat halaman tanpa kaki');
+    const iP = skripPy.indexOf("# Pengantar & daftar isi"), jP = skripPy.indexOf("# Pelajaran", iP);
+    const blokP = iP < 0 || jP < 0 ? "" : skripPy.slice(iP, jP);
+    const mK = blokP.match(/isi \+= kotak\(\n((?:\s*"[^"\n]*"\n?)+),\s*\w+, "kotak"\)/);
+    const teksK = mK ? [...mK[1].matchAll(/"([^"\n]*)"/g)].map((m) => m[1]).join("") : "";
+    if (!teksK) salah.push("modul PDF: kotak penafian di pengantar tidak ditemukan");
+    else {
+      if (!teksK.includes("bukan penasihat investasi")) salah.push('modul PDF: kotak penafian pengantar harus memuat "bukan penasihat investasi"');
+      if (!teksK.includes("tidak mengajak membeli atau menjual")) salah.push('modul PDF: kotak penafian pengantar harus memuat "tidak mengajak membeli atau menjual"');
+    }
+    const hal = (pdf.toString("latin1").match(/\/Type\s*\/Page(?![s\w])/g) || []).length;
+    if (hal < 2) salah.push(`modul PDF: PDF hanya ${hal} halaman, harus ada halaman isi berkaki (jalankan python3 tools/buat-modul-pdf.py)`);
+    return salah;
+  };
+  const sKM = cekKakiModulPdf(skripPyT, pdfB);
+  ok(sKM.length === 0, `kaki & penafian modul PDF: ${sKM.join("; ")}`);
+  const rusakKM = [
+    [skripPyT.replace('"Candra Analis · Modul Belajar Saham Syariah"', '"Modul Belajar Saham Syariah"'), pdfB, 'kaki halaman harus menulis "Candra Analis"'],
+    [skripPyT.replace('f"Halaman {doc.page}"', '"Halaman"'), pdfB, "nomor halaman"],
+    [skripPyT.replace('    c.drawRightString(A4[0] - 20 * mm, 12 * mm, f"Halaman', '    if doc.page > 2:\n        c.drawRightString(A4[0] - 20 * mm, 12 * mm, f"Halaman'), pdfB, "kaki halaman tidak boleh bersyarat"],
+    [skripPyT.replace('PageTemplate(id="biasa", frames=[bingkai], onPage=kaki_halaman)', 'PageTemplate(id="biasa", frames=[bingkai], onPage=gambar_sampul)'), pdfB, 'templat "biasa" harus tepat satu'],
+    [skripPyT.replace('        PageTemplate(id="biasa", frames=[bingkai], onPage=kaki_halaman),\n', '        PageTemplate(id="biasa", frames=[bingkai], onPage=kaki_halaman),\n        PageTemplate(id="polos", frames=[bingkai], onPage=gambar_sampul),\n'), pdfB, 'hanya boleh templat'],
+    [skripPyT.replace('isi = [NextPageTemplate("biasa"), PageBreak()]', 'isi = [NextPageTemplate("sampul"), PageBreak()]'), pdfB, 'NextPageTemplate selain "biasa"'],
+    [skripPyT.replace("Kami bukan penasihat investasi dan ", "Kami platform data dan "), pdfB, '"bukan penasihat investasi"'],
+    [skripPyT.replace('"tidak mengajak membeli atau menjual saham tertentu. ', '"tidak memberi saran saham tertentu. '), pdfB, '"tidak mengajak membeli atau menjual"'],
+    [skripPyT.replace("isi += kotak(\n        \"Candra Analis adalah", "isi.append(Paragraph(\n        \"Candra Analis adalah"), pdfB, "kotak penafian di pengantar tidak ditemukan"],
+    [skripPyT, Buffer.from(pdfB.toString("latin1").replace(/\/Type\s*\/Page(?![s\w])/g, "/Type /Pagx"), "latin1"), "harus ada halaman isi berkaki"],
+  ];
+  for (const [py, p, pesan] of rusakKM)
+    ok((py !== skripPyT || p !== pdfB) && cekKakiModulPdf(py, p).some((x) => x.includes(pesan)), `uji balik kaki modul PDF: "${pesan}" harus tertangkap`);
 }
 
 // Nina & Arif (16 Nov, IDE.md #33): baris kesegaran data di profil. kesegaran9b() dijalankan untuk semua emiten:
