@@ -4934,6 +4934,60 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
   ];
   for (const [d, py, pesan] of rusakKJ)
     ok((d !== MODUL || py !== skripPyT) && cekKunciModulPdf(d, py).some((x) => x.includes(pesan)), `uji balik kunci jawaban modul PDF: "${pesan}" harus tertangkap`);
+  // Nina & Tegar (16 Nov 15.13): bagian "Belajar lebih lanjut dari sumber resmi" di modul PDF memuat semua isi
+  // data/rujukan.js. Skrip: `rujukan` dimuat tepat sekali dari data/rujukan.js, tidak diurut ulang/disaring/dipotong,
+  // tiap kelompok ditulis judulnya, tiap item ditulis judul, keterangan, dan alamat (href = teks tautan = r['url']).
+  // Data: judul/ket/url tidak kosong, alamat https, dan tanpa karakter yang merusak markup ReportLab (< > & ' ").
+  const cekRujukanModulPdf = (daftar, skripPy) => {
+    const salah = [];
+    daftar.forEach((k, i) => {
+      if (!k.kelompok || !String(k.kelompok).trim()) salah.push(`modul PDF: kelompok rujukan ${i + 1} tanpa nama`);
+      if (!Array.isArray(k.item) || !k.item.length) { salah.push(`modul PDF: kelompok rujukan "${k.kelompok}" kosong`); return; }
+      k.item.forEach((r, n) => {
+        for (const f of ["judul", "ket", "url"]) if (!r[f] || !String(r[f]).trim()) salah.push(`modul PDF: rujukan ${i + 1}.${n + 1}: ${f} kosong`);
+        if (r.url && !/^https:\/\//.test(r.url)) salah.push(`modul PDF: rujukan "${r.judul}": alamat harus https`);
+        for (const f of ["kelompok", "judul", "ket", "url"]) {
+          const v = f === "kelompok" ? k.kelompok : r[f];
+          if (/[<>&'"]/.test(String(v || ""))) salah.push(`modul PDF: rujukan "${r.judul}": ${f} memuat karakter < > & ' " yang merusak markup PDF`);
+        }
+      });
+    });
+    const muat = skripPy.match(/^\s*rujukan\s*=.*$/gm) || [];
+    if (muat.length !== 1 || !/rujukan\s*=\s*baca_data\("data\/rujukan\.js", "RUJUKAN"\)/.test(muat[0])) salah.push(`modul PDF: daftar \`rujukan\` harus dimuat tepat sekali dari data/rujukan.js (ada ${muat.length} penetapan)`);
+    if (/sorted\(\s*(rujukan|k\["item"\])|reversed\(\s*(rujukan|k\["item"\])|rujukan\s*\.\s*(sort|reverse|pop|remove|insert|append|extend|clear)\s*\(|rujukan\s*\[[^\]]*:|k\["item"\]\s*\[|filter\([^)]*(rujukan|k\["item"\])|del\s+rujukan/.test(skripPy)) salah.push("modul PDF: rujukan diurut ulang, disaring, atau dipotong");
+    const iR = skripPy.indexOf('Paragraph("Belajar lebih lanjut dari sumber resmi"');
+    if (iR < 0) { salah.push('modul PDF: judul "Belajar lebih lanjut dari sumber resmi" tidak ditemukan'); return salah; }
+    const blokR = skripPy.slice(iR, skripPy.indexOf("\n\n", iR) < 0 ? undefined : skripPy.indexOf("\n\n", iR));
+    if (!/\n\s+for k in rujukan:\n\s+isi\.append\(Paragraph\(k\["kelompok"\], GAYA\["h2"\]\)\)\n\s+for r in k\["item"\]:\n/.test(blokR)) salah.push("modul PDF: rujukan harus mengulang semua kelompok (for k in rujukan) dengan judulnya, lalu semua item (for r in k[\"item\"])");
+    if (/\b(if|break|continue|return)\b/.test(blokR)) salah.push("modul PDF: rujukan tidak boleh disaring atau dipotong (if/break/continue/return)");
+    if (!/Paragraph\(f"<b>\{r\['judul'\]\}<\/b>"/.test(blokR)) salah.push("modul PDF: judul setiap rujukan harus ditulis");
+    if (!/Paragraph\(r\["ket"\], GAYA\["kecil"\]\)/.test(blokR)) salah.push("modul PDF: keterangan setiap rujukan harus ditulis");
+    if (!/<link href='\{r\['url'\]\}'[^>]*>\{r\['url'\]\}<\/link>/.test(blokR)) salah.push("modul PDF: alamat setiap rujukan harus ditulis sebagai tautan (href dan teks = r['url'])");
+    return salah;
+  };
+  const RUJ = (() => { const c = { window: {} }; vm.runInNewContext(readFileSync("data/rujukan.js", "utf8"), c); return c.window.RUJUKAN || []; })();
+  const sRJ = cekRujukanModulPdf(RUJ, skripPyT);
+  ok(sRJ.length === 0, `rujukan modul PDF: ${sRJ.join("; ")}`);
+  const rujRusak = (ubah) => { const d = JSON.parse(JSON.stringify(RUJ)); ubah(d); return d; };
+  const awalR = 'for k in rujukan:\n        isi.append(Paragraph(k["kelompok"], GAYA["h2"]))\n        for r in k["item"]:';
+  const rusakRJ = [
+    [rujRusak((d) => { d[0].item[0].ket = " "; }), skripPyT, "ket kosong"],
+    [rujRusak((d) => { d[0].item[0].url = "http://contoh.go.id"; }), skripPyT, "alamat harus https"],
+    [rujRusak((d) => { d[0].item[0].judul = "BEI & OJK"; }), skripPyT, "merusak markup"],
+    [rujRusak((d) => { d[0].item[0].url += "?a='b'"; }), skripPyT, "merusak markup"],
+    [rujRusak((d) => { d[1].item = []; }), skripPyT, "kosong"],
+    [RUJ, skripPyT.replace('rujukan = baca_data("data/rujukan.js", "RUJUKAN")', 'rujukan = baca_data("data/rujukan.js", "RUJUKAN")\n    rujukan = rujukan[:2]'), "dimuat tepat sekali"],
+    [RUJ, skripPyT.replace(awalR, awalR.replace('for r in k["item"]:', 'for r in k["item"][:2]:')), "diurut ulang, disaring, atau dipotong"],
+    [RUJ, skripPyT.replace(awalR, awalR.replace("for k in rujukan:", "for k in sorted(rujukan, key=lambda x: x[\"kelompok\"]):")), "diurut ulang"],
+    [RUJ, skripPyT.replace(awalR, awalR.replace('for r in k["item"]:', 'for r in k["item"]:\n            if "youtube" in r["url"]:\n                continue')), "if/break/continue/return"],
+    [RUJ, skripPyT.replace("Paragraph(f\"<b>{r['judul']}</b>\", GAYA[\"isi\"]),", ""), "judul setiap rujukan"],
+    [RUJ, skripPyT.replace('Paragraph(r["ket"], GAYA["kecil"]),', ""), "keterangan setiap rujukan"],
+    [RUJ, skripPyT.replace("color='#262b63'>{r['url']}</link>", "color='#262b63'>tautan</link>"), "alamat setiap rujukan"],
+    [RUJ, skripPyT.replace('isi.append(Paragraph(k["kelompok"], GAYA["h2"]))\n', ""), "mengulang semua kelompok"],
+    [RUJ, skripPyT.replace('Paragraph("Belajar lebih lanjut dari sumber resmi"', 'Paragraph("Rujukan"'), "tidak ditemukan"],
+  ];
+  for (const [d, py, pesan] of rusakRJ)
+    ok((d !== RUJ || py !== skripPyT) && cekRujukanModulPdf(d, py).some((x) => x.includes(pesan)), `uji balik rujukan modul PDF: "${pesan}" harus tertangkap`);
 }
 
 // Nina & Arif (16 Nov, IDE.md #33): baris kesegaran data di profil. kesegaran9b() dijalankan untuk semua emiten:

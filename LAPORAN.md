@@ -1642,3 +1642,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: giliran KLBF & BRIS; pencarian masih hanya semester I 2026 dan kuartal III 2025 → tetap 25 dari 32. Berikutnya BSSR & MIKA. Raka/Hana: tidak ada kabar baru.
 - Tugas baru: Nina + Tegar (cek rujukan modul PDF memuat semua isi `data/rujukan.js`).
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 16 Nov 2026, 15.13 WIB — sesi kerja (Bima)
+- Nina + Tegar: `tests/cek.mjs` kini memastikan bagian "Belajar lebih lanjut dari sumber resmi" di modul PDF memuat semua isi `data/rujukan.js` (`cekRujukanModulPdf`): `rujukan` dimuat tepat sekali, tidak diurut ulang/disaring/dipotong, tiap kelompok ditulis judulnya, tiap item ditulis judul, keterangan, dan alamat (href = teks tautan). Cek data: judul/ket/alamat tidak kosong, alamat https, tanpa karakter < > & ' " yang merusak markup PDF (9 rujukan sekarang bersih). 14 uji balik tertangkap. README diperbarui. Tidak ada perubahan tampilan atau kurikulum, PDF tidak perlu dibuat ulang.
+- Fajar: giliran BSSR & MIKA; teratas masih penjualan Januari–Juni 2026 (BSSR) dan laba semester I 2026 (MIKA) → tetap 25 dari 32. Berikutnya MDKA & MBMA. Raka/Hana: tidak ada kabar baru.
+- Tugas baru: Nina + Tegar (cek sampul & metadata modul PDF).
+- Catatan ringan: salinan lokal `main` di lingkungan kerja tertinggal dari GitHub; disamakan dengan `origin/main` (salinan lama disimpan sebagai cabang lokal, tidak di-push).
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
