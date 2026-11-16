@@ -386,7 +386,11 @@ tbody tr:hover { background: var(--hover-baris); }
 .kuis-salah { background: var(--turun-muda); border-left: 4px solid var(--turun); }
 .kuis-kosong { background: var(--waspada-muda); border-left: 4px solid var(--waspada); }
 .kuis-aksi { display: flex; gap: 12px; flex-wrap: wrap; }
-.kuis-ulang { background: transparent; border-color: var(--aksen); color: var(--aksen); }
+.kuis-ulang, .kuis-ulang-salah { background: transparent; border-color: var(--aksen); color: var(--aksen); }
+.kuis-ulang[hidden], .kuis-ulang-salah[hidden] { display: none; }
+.kuis-pilihan[hidden] { display: none; }
+.kuis-dilipat legend { margin-bottom: 0; }
+.kuis-dilipat .kuis-umpan { margin-top: 6px; }
 .kuis-hasil { font-weight: 700; margin: 14px 0 0; }
 .kuis-hasil:empty { display: none; }
 @media (min-width: 720px) { .kuis { padding: 24px 28px; } }

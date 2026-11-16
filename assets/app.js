@@ -226,51 +226,83 @@
     var form = el("form", { class: "kuis", "aria-labelledby": "judul-kuis", novalidate: "" });
     form.appendChild(el("h2", { id: "judul-kuis", text: "Cek pemahaman" }));
     form.appendChild(el("p", { class: "kuis-pengantar", text: "Tiga soal singkat dari pelajaran ini. Pilih satu jawaban di tiap soal, lalu periksa. Tidak dinilai dan tidak disimpan." }));
-    var umpan = [];
+    var umpan = [], soalFs = [], wadahPilihan = [], masukan = [], dilipat = [], salahTerakhir = [], tepatTerakhir = [];
     m.kuis.forEach(function (q, i) {
       var fs = el("fieldset", { class: "kuis-soal" });
       fs.appendChild(el("legend", { text: (i + 1) + ". " + q.soal }));
+      wadahPilihan[i] = []; masukan[i] = []; dilipat[i] = false;
       q.pilihan.forEach(function (p, j) {
         var idIn = "kuis-" + i + "-" + j;
-        fs.appendChild(el("div", { class: "kuis-pilihan" }, [
-          el("input", { type: "radio", name: "soal-" + i, id: idIn, value: String(j) }),
-          el("label", { for: idIn, text: p })
-        ]));
+        var inp = el("input", { type: "radio", name: "soal-" + i, id: idIn, value: String(j) });
+        var w = el("div", { class: "kuis-pilihan" }, [inp, el("label", { for: idIn, text: p })]);
+        wadahPilihan[i].push(w); masukan[i].push(inp);
+        fs.appendChild(w);
       });
       var u = el("p", { class: "kuis-umpan", hidden: "" });
-      umpan.push(u); fs.appendChild(u);
+      umpan.push(u); soalFs.push(fs); fs.appendChild(u);
       form.appendChild(fs);
     });
     var hasil = el("p", { class: "kuis-hasil", role: "status", "aria-live": "polite" });
     var ulang = el("button", { type: "button", class: "tombol kuis-ulang", text: "Ulangi kuis", hidden: "" });
+    // Arif & Dewi (16 Nov, IDE.md #31): ulangi hanya soal yang belum tepat; soal yang sudah benar dilipat.
+    var ulangSalah = el("button", { type: "button", class: "tombol kuis-ulang-salah", text: "Ulangi soal yang salah", hidden: "" });
     form.appendChild(el("div", { class: "kuis-aksi" }, [
-      el("button", { type: "submit", class: "tombol tombol-gelap", text: "Periksa jawaban" }), ulang
+      el("button", { type: "submit", class: "tombol tombol-gelap", text: "Periksa jawaban" }), ulang, ulangSalah
     ]));
     form.appendChild(hasil);
+
+    function lipat(i, ya) {
+      dilipat[i] = ya;
+      soalFs[i].className = ya ? "kuis-soal kuis-dilipat" : "kuis-soal";
+      wadahPilihan[i].forEach(function (w) { w.hidden = ya; });
+    }
 
     form.addEventListener("submit", function (ev) {
       ev.preventDefault();
       var benar = 0, kosong = 0;
+      salahTerakhir = []; tepatTerakhir = [];
       m.kuis.forEach(function (q, i) {
+        if (dilipat[i]) { benar++; return; }
         var pilih = form.querySelector('input[name="soal-' + i + '"]:checked');
         var u = umpan[i];
         u.hidden = false;
         if (!pilih) { kosong++; u.className = "kuis-umpan kuis-kosong"; u.textContent = "Belum dijawab."; return; }
         var tepat = Number(pilih.value) === q.benar;
-        if (tepat) benar++;
+        if (tepat) { benar++; tepatTerakhir.push(i); } else salahTerakhir.push(i);
         u.className = "kuis-umpan " + (tepat ? "kuis-tepat" : "kuis-salah");
         u.textContent = (tepat ? "✓ Benar. " : "✗ Belum tepat. Jawaban: " + q.pilihan[q.benar] + ". ") + q.jelas;
       });
       hasil.textContent = benar + " dari " + m.kuis.length + " benar" +
         (kosong ? " (" + kosong + " soal belum dijawab)." : benar === m.kuis.length ? ". Bagus, Anda siap ke pelajaran berikutnya." : ". Baca lagi bagian yang belum tepat, lalu coba ulangi.");
       ulang.hidden = false;
+      ulangSalah.hidden = salahTerakhir.length === 0;
     });
     ulang.addEventListener("click", function () {
       form.reset();
+      m.kuis.forEach(function (q, i) { lipat(i, false); });
       umpan.forEach(function (u) { u.hidden = true; u.textContent = ""; });
-      hasil.textContent = ""; ulang.hidden = true;
+      hasil.textContent = ""; ulang.hidden = true; ulangSalah.hidden = true;
       var pertama = form.querySelector("input");
       if (pertama) pertama.focus();
+    });
+    ulangSalah.addEventListener("click", function () {
+      var buka = salahTerakhir.slice();
+      if (!buka.length) return;
+      m.kuis.forEach(function (q, i) {
+        var u = umpan[i];
+        if (buka.indexOf(i) >= 0) {
+          masukan[i].forEach(function (inp) { inp.checked = false; });
+          lipat(i, false);
+          u.hidden = true; u.textContent = "";
+        } else if (!dilipat[i] && tepatTerakhir.indexOf(i) >= 0) {
+          lipat(i, true);
+          u.hidden = false; u.className = "kuis-umpan kuis-tepat"; u.textContent = "✓ Sudah benar.";
+        }
+      });
+      salahTerakhir = []; tepatTerakhir = [];
+      ulangSalah.hidden = true;
+      hasil.textContent = "Ulangi " + buka.length + " soal yang belum tepat. Soal yang sudah benar dilipat.";
+      masukan[buka[0]][0].focus();
     });
     return form;
   }

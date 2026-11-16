@@ -1322,6 +1322,42 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
     if (hasil.textContent !== "" || !ulang.hidden) salah.push("Ulangi kuis harus mengosongkan skor dan menyembunyikan tombolnya");
     if (radio.some((r) => r.checked)) salah.push("Ulangi kuis harus mengosongkan pilihan");
     if (doc.activeElement !== radio[0]) salah.push("Ulangi kuis harus memindah fokus ke pilihan pertama");
+    // Nina & Arif (16 Nov 08.09, IDE.md #31): "Ulangi soal yang salah". Muncul hanya bila ada jawaban salah;
+    // soal benar dilipat ("✓ Sudah benar.", pilihan disembunyikan, tetap dihitung benar), soal salah dibuka ulang tanpa
+    // pilihan, fokus ke pilihan pertama soal salah pertama, pesan di role=status; soal kosong tidak ikut dilipat;
+    // "Ulangi kuis" membuka semua lipatan.
+    const ulangSalah = el("BUTTON").find((n) => n.classList.contains("kuis-ulang-salah"));
+    if (!ulangSalah) { salah.push('tombol "Ulangi soal yang salah" (kelas kuis-ulang-salah) tidak ada'); return salah; }
+    const fs = el("FIELDSET"), pilihanDiv = (i) => semua(fs[i]).filter((n) => n.nodeType === 1 && n.classList.contains("kuis-pilihan"));
+    const klik = (b) => (b.pendengar.click || []).forEach((f) => f({ target: b }));
+    if (!ulangSalah.hidden) salah.push("Ulangi soal yang salah harus tersembunyi sebelum diperiksa");
+    if (ulangSalah.textContent !== "Ulangi soal yang salah") salah.push('teks tombol harus "Ulangi soal yang salah"');
+    pilih(0, 1); pilih(1, 0); kirim();
+    if (!ulangSalah.hidden) salah.push("Ulangi soal yang salah harus tersembunyi bila semua benar");
+    klik(ulang);
+    pilih(0, 1); kirim();
+    if (!ulangSalah.hidden) salah.push("Ulangi soal yang salah harus tersembunyi bila tidak ada jawaban salah (hanya kosong)");
+    pilih(0, 1); pilih(1, 1); kirim();
+    if (ulangSalah.hidden) salah.push("Ulangi soal yang salah harus muncul bila ada jawaban salah");
+    doc.activeElement = null;
+    klik(ulangSalah);
+    if (!fs[0].classList.contains("kuis-dilipat") || !pilihanDiv(0).every((d) => d.hidden)) salah.push("soal yang sudah benar harus dilipat (kelas kuis-dilipat, pilihan tersembunyi)");
+    if (umpan[0].hidden || umpan[0].textContent !== "✓ Sudah benar." || !umpan[0].classList.contains("kuis-tepat")) salah.push('soal yang dilipat harus bertanda "✓ Sudah benar."');
+    if (fs[1].classList.contains("kuis-dilipat") || pilihanDiv(1).some((d) => d.hidden)) salah.push("soal yang salah harus dibuka ulang");
+    if (radio.some((r) => r.getAttribute("name") === "soal-1" && r.checked)) salah.push("soal yang salah harus dibuka tanpa pilihan terpilih");
+    if (!umpan[1].hidden) salah.push("umpan balik soal yang salah harus disembunyikan saat diulang");
+    if (doc.activeElement !== radio.find((r) => r.getAttribute("name") === "soal-1")) salah.push("fokus harus pindah ke soal salah pertama");
+    if (!hasil.textContent.startsWith("Ulangi 1 soal yang belum tepat")) salah.push("pesan Ulangi soal yang salah harus di role=status: " + hasil.textContent);
+    if (!ulangSalah.hidden) salah.push("Ulangi soal yang salah harus tersembunyi setelah diklik");
+    pilih(1, 0); kirim();
+    if (!hasil.textContent.startsWith("2 dari 2 benar. Bagus")) salah.push("soal yang dilipat harus tetap dihitung benar: " + hasil.textContent);
+    if (!fs[0].classList.contains("kuis-dilipat") || umpan[0].textContent !== "✓ Sudah benar.") salah.push("soal yang dilipat harus tetap dilipat saat diperiksa lagi");
+    klik(ulang);
+    pilih(1, 1); kirim(); klik(ulangSalah);
+    if (fs[0].classList.contains("kuis-dilipat")) salah.push("soal kosong tidak boleh dilipat sebagai sudah benar");
+    klik(ulang);
+    if (fs.some((f) => f.classList.contains("kuis-dilipat")) || fs.some((_, i) => pilihanDiv(i).some((d) => d.hidden))) salah.push("Ulangi kuis harus membuka semua soal yang dilipat");
+    if (!ulangSalah.hidden) salah.push("Ulangi kuis harus menyembunyikan Ulangi soal yang salah");
     return salah;
   };
   const sKuis = blokRender ? ujiKuis(blokRender) : ["buatKuis() tidak ditemukan"];
@@ -1337,6 +1373,12 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
     ['umpan.forEach(function (u) { u.hidden = true; u.textContent = ""; });', "", "mengosongkan & menyembunyikan umpan balik"],
     ["if (pertama) pertama.focus();", "", "fokus ke pilihan pertama"],
     ["form.reset();", "", "mengosongkan pilihan"],
+    ["ulangSalah.hidden = salahTerakhir.length === 0;", "ulangSalah.hidden = false;", "tersembunyi bila semua benar"],
+    ["else if (!dilipat[i] && tepatTerakhir.indexOf(i) >= 0) {", "else if (!dilipat[i]) {", "soal kosong tidak boleh dilipat"],
+    ["if (dilipat[i]) { benar++; return; }", "", "tetap dilipat saat diperiksa lagi"],
+    ["masukan[i].forEach(function (inp) { inp.checked = false; });", "", "tanpa pilihan terpilih"],
+    ["masukan[buka[0]][0].focus();", "", "soal salah pertama"],
+    ["m.kuis.forEach(function (q, i) { lipat(i, false); });", "", "membuka semua soal yang dilipat"],
   ];
   for (const [lama, baru, pesan] of rusakKuis) {
     const b = blokRender.replace(lama, baru);

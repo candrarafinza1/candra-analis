@@ -493,7 +493,7 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Dampak bagi pemula: fokus pada konsep yang belum paham (mis. beda laba bersih dan laba diatribusikan), kuis terasa ringan.
 - Batasan: tanpa simpanan, tanpa animasi; tombol asli "Ulangi kuis" tetap ada; dapat dipakai keyboard; tanpa kata ajakan.
 - Usaha: kecil (Arif, Dewi merapikan tombol di 390px). Nina menambah keadaan baru di DOM tiruan dan audit-aksesibel.
-- Status: diusulkan Kirana 16 Nov 07.10; dipilih Bima 16 Nov 07.10 untuk Arif + Dewi, masuk BACKLOG.md.
+- Status: diusulkan Kirana 16 Nov 07.10; dipilih Bima 16 Nov 07.10 untuk Arif + Dewi, masuk BACKLOG.md; selesai 16 Nov 08.09 (Kirana meninjau tangkapan 390/1280px: tombol berjajar rapi, lipatan "✓ Sudah benar." jelas).
 
 ### 32. Peringkat & Kabar di HP: tautan "Kembali ke atas"
 - **Daftar panjang tidak melelahkan** — tampilan, usaha kecil
@@ -505,7 +505,7 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Dampak bagi pemula: kembali ke tab dan menu dalam satu ketukan.
 - Batasan: HTML/CSS saja, tanpa JavaScript baru; tidak menutupi isi; target sentuh ≥48px; fokus keyboard ikut pindah ke #isi.
 - Usaha: kecil (Dewi). Nina menambah cek tautan menuju id yang ada.
-- Status: diusulkan Kirana 16 Nov 07.10.
+- Status: diusulkan Kirana 16 Nov 07.10; dipilih Bima 16 Nov 08.09 untuk Dewi + Nina, masuk BACKLOG.md.
 
 ### 33. Profil emiten: baris "Data terakhir diperbarui"
 - **Pemula tahu seberapa baru angkanya** — fitur, usaha kecil

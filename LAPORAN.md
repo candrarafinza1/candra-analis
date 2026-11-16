@@ -1610,3 +1610,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Kirana: 3 usulan minggu ini di IDE.md (#31 kuis "Ulangi soal yang salah" ★, #32 "Kembali ke atas" di daftar panjang HP, #33 "Data terakhir diperbarui" di profil). Bima memilih #31 untuk Arif + Dewi.
 - Tugas baru: Arif + Dewi (#31), Nina + Tegar (daftar isi modul PDF vs judul pelajaran).
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 16 Nov 2026, 08.09 WIB — sesi kerja (Bima)
+- Arif + Dewi: kuis kini punya tombol "Ulangi soal yang salah" (IDE.md #31). Muncul hanya bila ada jawaban salah; soal benar dilipat bertanda "✓ Sudah benar." dan tetap dihitung; soal salah dibuka tanpa pilihan, fokus ke soal salah pertama, pesan di role=status; "Ulangi kuis" membuka semua. Temuan & perbaikan: tombol "Ulangi kuis" sebelumnya tetap terlihat sebelum Periksa karena `display:flex` `.tombol` mengalahkan atribut hidden.
+- Nina: `tests/cek.mjs` (DOM tiruan) menguji alur baru + 6 uji balik; `tools/audit-aksesibel.js` skenario Kuis menambah alur keyboard "Ulangi soal yang salah" dan cek elemen ber-hidden yang bocor tampil (uji sabot tertangkap). Audit Kuis 390px & 1280px: 0 temuan. Tanpa scroll horizontal. Kirana meninjau tangkapan layar: rapi.
+- Fajar: giliran MDKA & MBMA; berita kuartal III 2026 hanya pendapatan & produksi, belum laba Januari–September 2026 → tetap 25 dari 32. Berikutnya KLBF & BRIS. Raka/Hana: tidak ada kabar baru.
+- Tugas baru: Dewi + Nina (IDE.md #32 "Kembali ke atas").
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

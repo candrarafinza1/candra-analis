@@ -174,6 +174,10 @@ async function skenarioKuis(p, sabot) {
     return m.kuis.map((q) => ({ benar: q.benar, n: q.pilihan.length }));
   });
   if (!kunci.length) return ['kuis tidak ada di pelajaran pertama'];
+  // Nina & Dewi (16 Nov 08.09): elemen kuis ber-atribut hidden (Ulangi kuis, Ulangi soal yang salah, umpan) tidak boleh
+  // tampil karena aturan display di CSS (temuan: tombol Ulangi kuis sempat terlihat sebelum Periksa).
+  const bocor = await p.evaluate(() => [...document.querySelectorAll('.kuis [hidden]')].filter((n) => getComputedStyle(n).display !== 'none').map((n) => (n.textContent || n.className).trim().slice(0, 30)));
+  bocor.forEach((t) => temuan.push(`elemen kuis ber-hidden tetap tampil: "${t}"`));
   const fokusInfo = () => p.evaluate(() => { const a = document.activeElement; return { tag: a && a.tagName, name: a && a.name, id: a && a.id, teks: a && (a.textContent || '').trim() }; });
   await p.focus('#kuis-0-0');
   for (const putaran of ['salah', 'benar']) {
@@ -211,6 +215,34 @@ async function skenarioKuis(p, sabot) {
       const fr = await fokusInfo();
       if (fr.id !== 'kuis-0-0') temuan.push(`sesudah "Ulangi kuis" fokus tidak ke pilihan pertama (fokus di <${(fr.tag || '').toLowerCase()} id="${fr.id}">)`);
     }
+  }
+  // Nina & Arif (16 Nov 08.09, IDE.md #31): "Ulangi soal yang salah" dengan keyboard. Soal 1 benar, sisanya salah →
+  // Periksa (Enter) → Tab 2× ke "Ulangi soal yang salah" → Enter: fokus ke soal salah pertama, soal 1 dilipat
+  // (pilihan tak terlihat, "✓ Sudah benar."), pesan di role=status; lalu jawab benar → "N dari N benar". Tidak dijalankan saat sabot.
+  if (!sabot && kunci.length > 1) {
+    await p.click('.kuis-ulang'); await p.waitForTimeout(100);
+    for (let i = 0; i < kunci.length; i++) await p.check(`#kuis-${i}-${i === 0 ? kunci[i].benar : (kunci[i].benar + 1) % kunci[i].n}`);
+    await p.focus('.kuis button[type=submit]'); await p.keyboard.press('Enter'); await p.waitForTimeout(100);
+    await p.keyboard.press('Tab'); await p.keyboard.press('Tab');
+    const fs = await fokusInfo();
+    if (fs.teks !== 'Ulangi soal yang salah') temuan.push(`Tab tidak sampai ke "Ulangi soal yang salah" (fokus di "${fs.teks}")`);
+    await p.keyboard.press('Enter'); await p.waitForTimeout(100);
+    const ff = await fokusInfo();
+    if (ff.id !== 'kuis-1-0') temuan.push(`sesudah "Ulangi soal yang salah" fokus tidak ke soal salah pertama (fokus di <${(ff.tag || '').toLowerCase()} id="${ff.id}">)`);
+    const sl = await p.evaluate(() => {
+      const f = document.querySelectorAll('.kuis-soal');
+      return { lipat: f[0].classList.contains('kuis-dilipat'), terlihat: [...f[0].querySelectorAll('input')].some((r) => r.offsetParent !== null),
+        tanda: (f[0].querySelector('.kuis-umpan') || {}).textContent, buka: [...f].slice(1).every((x) => !x.classList.contains('kuis-dilipat')),
+        hasil: document.querySelector('.kuis-hasil[role=status]') ? document.querySelector('.kuis-hasil').textContent : '' };
+    });
+    if (!sl.lipat || sl.terlihat || sl.tanda !== '✓ Sudah benar.') temuan.push('soal yang sudah benar tidak dilipat bertanda "✓ Sudah benar."');
+    if (!sl.buka) temuan.push('soal yang salah tidak dibuka ulang');
+    if (!sl.hasil.startsWith(`Ulangi ${kunci.length - 1} soal`)) temuan.push(`pesan Ulangi soal yang salah "${sl.hasil}" tidak di role=status`);
+    (await cekDom(p)).forEach((t) => temuan.push(`sesudah Ulangi soal yang salah: ${t}`));
+    for (let i = 1; i < kunci.length; i++) await p.check(`#kuis-${i}-${kunci[i].benar}`);
+    await p.click('.kuis button[type=submit]'); await p.waitForTimeout(100);
+    const ak = await p.evaluate(() => document.querySelector('.kuis-hasil').textContent);
+    if (!ak.startsWith(`${kunci.length} dari ${kunci.length} benar`)) temuan.push(`sesudah soal salah dijawab ulang: "${ak}"`);
   }
   return temuan;
 }
