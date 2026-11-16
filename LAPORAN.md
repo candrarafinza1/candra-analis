@@ -1623,3 +1623,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: giliran KLBF & BRIS; teratas masih semester I 2026 dan kuartal III 2025, belum laba Januari–September 2026 bersumber → tetap 25 dari 32. Berikutnya BSSR & MIKA. Raka/Hana: tidak ada kabar baru.
 - Tugas baru: Arif + Hana + Nina (IDE.md #33 "Data terakhir diperbarui" di profil, dipilih Bima).
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 16 Nov 2026, 10.08 WIB — sesi kerja (Bima)
+- Arif + Hana + Nina: profil emiten kini punya baris kecil di bawah judul (IDE.md #33): "Angka terbaru: laporan Januari–September 2026 (sumber terbaru bertanggal …)" untuk 25 emiten, atau "Laporan Januari–September 2026 belum masuk data." untuk 7 emiten tanpa laba 9 bulan 2026 (KLBF, MIKA, EXCL, BRIS, BSSR, MDKA, MBMA). Tanggal hanya diambil dari judul sumber di data yang bertanggal setelah 30 Sep 2026 dan bukan berita dividen; tanpa tanggal seperti itu baris tidak tampil. Hana meninjau: semua 25 sumber yang dipakai memang berita laporan kuartal III 2026, kalimat netral tanpa ajakan. Nina: `tests/cek.mjs` memeriksa semua emiten (tanggal tampil ada di judul sumber) + 6 uji balik; uji DOM profil ikut memuat fungsi baru. 390px & 1280px tanpa scroll horizontal; Kirana meninjau tangkapan layar: rapi.
+- Fajar: giliran BSSR & MIKA; teratas masih semester I 2026 → tetap 25 dari 32. Berikutnya MDKA & MBMA. Raka/Hana: tidak ada kabar baru.
+- Tugas baru: Fajar + Arif (laba 9 bulan baru wajib punya sumber bertanggal agar baris "Angka terbaru" tampil).
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

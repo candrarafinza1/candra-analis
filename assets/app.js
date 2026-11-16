@@ -816,6 +816,25 @@
     return el("div", { class: "salin-profil" }, [tombol, kotak, info]);
   }
 
+  // Arif & Hana (16 Nov, IDE.md #33): baris kesegaran data di bawah judul profil. Tanggal HANYA diambil dari judul
+  // sumber di data berformat "Media, 2 Nov 2026: …", bertanggal setelah 30 Sep 2026 (laporan Januari–September 2026
+  // paling cepat terbit Oktober) dan bukan berita dividen. Tanpa tanggal seperti itu → baris tidak tampil (null).
+  function kesegaran9b(e) {
+    var N = e.laba9b || {};
+    if (!ada(N[2026])) return { teks: "Laporan Januari–September 2026 belum masuk data.", tanggal: null };
+    var BLN_PENDEK = { Jan: 1, Feb: 2, Mar: 3, Apr: 4, Mei: 5, Jun: 6, Jul: 7, Agu: 8, Sep: 9, Okt: 10, Nov: 11, Des: 12 };
+    var terbaru = 0, label = null;
+    (e.sumber || []).forEach(function (s) {
+      var judul = String((s && s.judul) || "");
+      var m = /^[^:]*?,\s*(\d{1,2}) (Jan|Feb|Mar|Apr|Mei|Jun|Jul|Agu|Sep|Okt|Nov|Des) (20\d\d)\b[^:]*:/.exec(judul);
+      if (!m || /dividen/i.test(judul)) return;
+      var nilai = Number(m[3]) * 10000 + BLN_PENDEK[m[2]] * 100 + Number(m[1]);
+      if (nilai > 20260930 && nilai > terbaru) { terbaru = nilai; label = m[1] + " " + m[2] + " " + m[3]; }
+    });
+    if (!label) return null;
+    return { teks: "Angka terbaru: laporan Januari–September 2026 (sumber terbaru bertanggal " + label + ").", tanggal: label };
+  }
+
   function renderProfil() {
     var akar = document.getElementById("profil");
     if (!akar) return;
@@ -851,6 +870,8 @@
     document.getElementById("sub-profil").textContent = e.nama + " · Sektor " + e.sektor.toLowerCase();
     var dasarAlamat = String(location.href || "").split(/[?#]/)[0] || "emiten.html";
     var papanKlip = typeof window !== "undefined" && window.isSecureContext && typeof navigator !== "undefined" && navigator.clipboard ? navigator.clipboard : null;
+    var segar = kesegaran9b(e);
+    if (segar) akar.appendChild(el("p", { class: "kesegaran-data", id: "kesegaran-data", text: segar.teks }));
     akar.appendChild(tombolSalin(dasarAlamat + "?kode=" + e.kode, papanKlip));
 
     // Status syariah

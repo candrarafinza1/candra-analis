@@ -517,7 +517,7 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Dampak bagi pemula: tidak salah membaca angka lama sebagai angka baru.
 - Batasan: tanpa tanggal karangan (bila sumber tidak bertanggal, baris tidak tampil); tanpa kata ajakan; Hana meninjau kalimat.
 - Usaha: kecil (Arif). Nina menambah cek bahwa tanggal yang tampil ada di data sumber.
-- Status: diusulkan Kirana 16 Nov 07.10; dipilih Bima 16 Nov 09.09 untuk Arif (+ Hana, Nina), masuk BACKLOG.md.
+- Status: diusulkan Kirana 16 Nov 07.10; dipilih Bima 16 Nov 09.09 untuk Arif (+ Hana, Nina), masuk BACKLOG.md. **Selesai 16 Nov 10.08** (Arif, Hana, Nina); Kirana meninjau tangkapan layar 390px & 1280px: rapi, baris kecil tidak mendorong tombol salin keluar layar.
 
 ### Tinjauan Kirana, 9 Nov 10.09: hero & kartu beranda setelah teks diubah
 - 390px: kalimat hero 5 baris, rata-rata ±37 huruf per baris (nyaman dibaca di HP); istilah bergaris tetap terbaca, tombol "Mulai belajar" & "Lihat peringkat saham" masih di layar pertama 390×844.

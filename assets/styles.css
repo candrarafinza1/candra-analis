@@ -296,6 +296,8 @@ tbody tr:hover { background: var(--hover-baris); }
 @media (max-width: 359px) { .nav { flex-wrap: wrap; } }
 
 .catatan-metode { font-size: .92rem; color: var(--tinta-2); max-width: var(--lebar-teks); }
+/* Arif & Dewi (16 Nov, IDE.md #33): baris kesegaran data di bawah judul profil */
+.kesegaran-data { font-size: .92rem; color: var(--tinta-2); max-width: var(--lebar-teks); margin: 0 0 .75rem; overflow-wrap: anywhere; }
 
 /* Saring sektor di Peringkat (Arif, IDE.md #11) */
 .saring-sektor { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin: 0 0 12px; }

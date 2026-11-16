@@ -3571,7 +3571,7 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
     const iB = app.indexOf("  var BULAN = ["), jB = app.indexOf("];", iB);
     const kodeProfil = [iU < 0 || jU < iU ? "" : app.slice(iU, jU), iB < 0 ? "" : app.slice(iB, jB + 2), ambilP("function tanggalId("),
       ambilP("function daftarKabar("), ambilP("function kabarBaru("), ambilP("function kartuKabar("), ambilP("function cocokEmiten("), ambilP("function kotakKetik("), ambilP("function bagianBanding("),
-      ambilP("function dividenTampil("), ambilP("function tombolSalin("), ambilP("function renderProfil()")];
+      ambilP("function dividenTampil("), ambilP("function tombolSalin("), ambilP("function kesegaran9b("), ambilP("function renderProfil()")];
     ok(kodeProfil.every(Boolean), "app.js: utilitas/BULAN/tanggalId/daftarKabar/kabarBaru/kartuKabar/bagianBanding/dividenTampil/renderProfil harus bisa diambil untuk uji urutan judul");
     const emitenHtml = readFileSync("emiten.html", "utf8");
     const mainE = (emitenHtml.match(/<main[\s>][\s\S]*?<\/main>/) || [""])[0], iProfil = mainE.indexOf('id="profil"');
@@ -4866,6 +4866,53 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
   ];
   for (const [p, n, k, py, pesan] of rusakHal)
     ok(cekHalamanModulPdf(p, n, k, py).some((x) => x.includes(pesan)), `uji balik halaman modul PDF: "${pesan}" harus tertangkap`);
+}
+
+// Nina & Arif (16 Nov, IDE.md #33): baris kesegaran data di profil. kesegaran9b() dijalankan untuk semua emiten:
+// laba 9 bulan 2026 kosong → "belum masuk data"; ada → tanggal yang tampil WAJIB tertulis di judul salah satu sumber
+// emiten itu, bertanggal setelah 30 Sep 2026, bukan berita dividen. Tanpa sumber bertanggal → null (baris tidak tampil).
+{
+  const appK = readFileSync("assets/app.js", "utf8");
+  const ambilK = (js, awal) => { const i = js.indexOf("  " + awal); const j = js.indexOf("\n  }\n", i); return i < 0 || j < 0 ? "" : js.slice(i, j + 5); };
+  const buatK = (js) => {
+    const i = js.indexOf("  function ada("), j = js.indexOf("\n", i);
+    const f = ambilK(js, "function kesegaran9b(");
+    if (i < 0 || !f) return null;
+    try { return new Function(js.slice(i, j) + "\n" + f + "\nreturn kesegaran9b;")(); } catch { return null; }
+  };
+  const BLN = { Jan: 1, Feb: 2, Mar: 3, Apr: 4, Mei: 5, Jun: 6, Jul: 7, Agu: 8, Sep: 9, Okt: 10, Nov: 11, Des: 12 };
+  const cekKesegaran = (fn, daftar, js) => {
+    const salah = [];
+    if (!fn) return ["fungsi kesegaran9b tidak ketemu atau galat"];
+    if (!/var segar = kesegaran9b\(e\);\s*\n\s*if \(segar\) akar\.appendChild\(el\("p", \{ class: "kesegaran-data"/.test(js)) salah.push("renderProfil harus menampilkan kesegaran9b hanya bila tidak null");
+    for (const e of daftar) {
+      const r = fn(e), ada9 = e.laba9b && typeof e.laba9b[2026] === "number";
+      if (!ada9) { if (!r || r.teks !== "Laporan Januari–September 2026 belum masuk data." || r.tanggal !== null) salah.push(`${e.kode}: tanpa laba 9 bulan 2026 harus "belum masuk data"`); continue; }
+      if (r === null) continue;
+      const m = /^(\d{1,2}) (Jan|Feb|Mar|Apr|Mei|Jun|Jul|Agu|Sep|Okt|Nov|Des) (20\d\d)$/.exec(r.tanggal || "");
+      if (!m) { salah.push(`${e.kode}: tanggal "${r.tanggal}" tidak berformat "2 Nov 2026"`); continue; }
+      if (Number(m[3]) * 10000 + BLN[m[2]] * 100 + Number(m[1]) <= 20260930) salah.push(`${e.kode}: tanggal ${r.tanggal} tidak setelah 30 Sep 2026`);
+      const asal = (e.sumber || []).filter((s) => new RegExp("^[^:]*?,\\s*" + r.tanggal + "\\b[^:]*:").test(s.judul || "") && !/dividen/i.test(s.judul));
+      if (!asal.length) salah.push(`${e.kode}: tanggal ${r.tanggal} tidak ada di judul sumber (non-dividen) di data`);
+      if (!r.teks.includes("(sumber terbaru bertanggal " + r.tanggal + ")")) salah.push(`${e.kode}: teks harus menyebut tanggal sumber yang sama`);
+      if (/\b(beli|jual|pasti|buruan)\b/i.test(r.teks)) salah.push(`${e.kode}: kalimat kesegaran memuat kata ajakan`);
+    }
+    return salah;
+  };
+  const fnK = buatK(appK);
+  const sK = cekKesegaran(fnK, ASLI, appK);
+  ok(sK.length === 0, `baris kesegaran data profil: ${sK.join("; ")}`);
+  if (fnK) {
+    const contoh = (sumber) => ({ kode: "UJI", laba9b: { 2025: 1, 2026: 2 }, sumber });
+    ok(fnK(contoh([{ judul: "Kontan, 5 Nov 2026: Dividen interim UJI Rp10 per saham" }])) === null, "uji balik kesegaran: berita dividen tidak boleh dipakai");
+    ok(fnK(contoh([{ judul: "Kontan, 30 Sep 2026: Laba UJI" }, { judul: "Kontan, 3 Nov 2025: Laba UJI" }])) === null, "uji balik kesegaran: tanggal ≤30 Sep 2026 tidak boleh dipakai");
+    ok(fnK(contoh([{ judul: "StockAnalysis: laba UJI 2026 (dibaca 5 Nov 2026)" }])) === null, "uji balik kesegaran: sumber tanpa tanggal terbit tidak boleh dipakai");
+    const r2 = fnK(contoh([{ judul: "Kontan, 1 Nov 2026: Laba UJI" }, { judul: "IDX Channel, 12 Nov 2026: Laba UJI" }]));
+    ok(r2 && r2.tanggal === "12 Nov 2026", "uji balik kesegaran: tanggal sumber terbaru yang dipakai");
+    const rusak = buatK(appK.replace("if (!m || /dividen/i.test(judul)) return;", "if (!m) return;"));
+    ok(cekKesegaran(rusak, [contoh([{ judul: "Kontan, 5 Nov 2026: Dividen interim UJI Rp10 per saham" }])], appK).some((x) => x.includes("tidak ada di judul sumber")), "uji balik kesegaran: pemeriksa harus menangkap tanggal dari berita dividen");
+    ok(cekKesegaran(fnK, ASLI, appK.replace("if (segar) akar", "akar")).some((x) => x.includes("hanya bila tidak null")), "uji balik kesegaran: baris yang tampil tanpa syarat harus tertangkap");
+  }
 }
 
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
