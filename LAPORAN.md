@@ -1674,3 +1674,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: giliran MDKA & MBMA; MDKA baru merilis penjualan produk kuartal III 2026 (US$817,3 juta, IDX Channel & EmitenNews 2 Nov 2026) tanpa laba Januari–September; MBMA teratas masih semester I 2026 → tetap 25 dari 32. Berikutnya KLBF & BRIS. Raka/Hana: tidak ada kabar baru.
 - Tugas baru: Nina + Tegar (cek teks judul/ringkas/kuis aman untuk markah PDF).
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 16 Nov 2026, 20.15 WIB — sesi kerja (Bima)
+- Nina + Tegar: `tests/cek.mjs` kini memeriksa teks yang masuk mentah ke `Paragraph` di modul PDF (judul, ringkas, kuis soal/pilihan/jelas). Statis: tidak boleh memuat < > & mentah, dan bentuk 7 pembungkus Paragraph di `main()` dikunci. Dinamis: Paragraph reportlab sungguhan dijalankan python3 untuk semua teks itu: tanpa galat dan teks muncul utuh. Temuan uji: reportlab diam-diam mengubah "R&D" menjadi "R&D;" dan membuang "<baru>" tanpa galat, jadi cek ini berguna. Data sekarang aman; skrip & PDF tidak diubah. 13 uji balik tertangkap.
+- Fajar: giliran KLBF & BRIS; teratas masih kuartal III 2025 dan semester I 2026 → tetap 25 dari 32. Berikutnya BSSR & MIKA. Raka/Hana: tidak ada kabar baru.
+- Tugas baru: Nina + Tegar (cek teks Rujukan di modul PDF).
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

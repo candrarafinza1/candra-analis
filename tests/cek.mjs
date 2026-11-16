@@ -5231,6 +5231,75 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
   ];
   for (const [py, md, pesan] of rusakTM)
     ok((py !== skripPyT || md !== MODUL) && cekTagModulPdf(py, md).some((x) => x.includes(pesan)), `uji balik tag modul PDF: "${pesan}" harus tertangkap`);
+  // Nina & Tegar (16 Nov 20.15): teks yang dimasukkan mentah ke Paragraph di modul PDF (judul, ringkas, kuis soal/pilihan/jelas).
+  // reportlab membaca teks Paragraph sebagai markah: "R&D" diam-diam menjadi "R&D;", "<baru>" hilang tanpa galat, "<b>" tak
+  // tertutup membuat galat. Statis: field itu tidak boleh memuat < > & mentah, dan bentuk f-string di main() masih seperti yang
+  // diuji. Dinamis: Paragraph reportlab sungguhan dijalankan python3 untuk tiap teks dengan pembungkus yang sama; harus tanpa
+  // galat dan teks field WAJIB muncul utuh di hasil (frags).
+  const BENTUK_TEKS_PDF = [
+    ["judul daftar isi", `isi.append(Paragraph(f"<b>{i}.</b>  {m['judul']}  <font color='#4a5266' size='9'>(waktu baca ± {menit_baca(m)} menit)</font>", GAYA["daftar"]))`],
+    ["judul pelajaran", `isi.append(Paragraph(m["judul"], GAYA["h1"]))`],
+    ["ringkas", `isi.append(Paragraph(m["ringkas"], GAYA["meta"]))`],
+    ["soal kuis", `baris = [Paragraph(f"<b>{n}. {q['soal']}</b>", GAYA["isi"])]`],
+    ["pilihan kuis", `baris.append(Paragraph(f"{h}. {pil}", GAYA["kecil"]))`],
+    ["judul kunci jawaban", `isi.append(Paragraph(f"Pelajaran {i}: {m['judul']}", GAYA["h2"]))`],
+    ["penjelasan kuis", `isi.append(Paragraph(f"<b>{n}. {'abc'[q['benar']]}.</b> {q['jelas']}", GAYA["kecil"]))`],
+  ];
+  const teksMentahPdf = (m) => [["judul", m.judul], ["ringkas", m.ringkas],
+    ...(m.kuis || []).flatMap((q, n) => [[`soal ${n + 1}`, q.soal], ...(q.pilihan || []).map((p, h) => [`pilihan ${n + 1}${"abc"[h]}`, p]), [`jelas ${n + 1}`, q.jelas]])];
+  const cekTeksPdfStatis = (skripPy, modul) => {
+    const salah = [];
+    for (const [nama, baris] of BENTUK_TEKS_PDF)
+      if (!skripPy.includes(baris)) salah.push(`modul PDF: bentuk Paragraph untuk ${nama} berubah di main(); perbarui cekTeksPdf agar tetap menguji pembungkus yang dipakai`);
+    for (const m of modul)
+      for (const [f, t] of teksMentahPdf(m)) {
+        if (typeof t !== "string") { salah.push(`pelajaran "${m.judul}": ${f} bukan teks`); continue; }
+        if (/[<>&]/.test(t)) salah.push(`pelajaran "${m.judul}": ${f} memuat < > atau & mentah yang merusak markah modul PDF ("${t.slice(0, 40)}")`);
+      }
+    return salah;
+  };
+  const cekTeksPdfDinamis = (modul) => {
+    const masuk = modul.map((m, k) => {
+      const i = k + 1, j = m.judul;
+      const d = [["judul daftar isi", `<b>${i}.</b>  ${j}  <font color='#4a5266' size='9'>(waktu baca ± 1 menit)</font>`, j], ["judul", j, j], ["judul kunci jawaban", `Pelajaran ${i}: ${j}`, j], ["ringkas", m.ringkas, m.ringkas]];
+      (m.kuis || []).forEach((q, n) => {
+        d.push([`soal ${n + 1}`, `<b>${n + 1}. ${q.soal}</b>`, q.soal]);
+        (q.pilihan || []).forEach((p, h) => d.push([`pilihan ${n + 1}${"abc"[h]}`, `${"abc"[h]}. ${p}`, p]));
+        d.push([`jelas ${n + 1}`, `<b>${n + 1}. ${"abc"[q.benar] || "a"}.</b> ${q.jelas}`, q.jelas]);
+      });
+      return { judul: j, daftar: d.map(([a, b, c]) => [a, String(b), String(c)]) };
+    });
+    const kode = "import json, sys\nfrom reportlab.platypus import Paragraph\nfrom reportlab.lib.styles import ParagraphStyle\ngaya = ParagraphStyle('uji')\nhasil = []\n" +
+      "for m in json.load(sys.stdin):\n    for nama, markah, harap in m['daftar']:\n        try:\n            p = Paragraph(markah, gaya)\n            teks = ' '.join(''.join(getattr(f, 'text', '') for f in p.frags).split())\n" +
+      "            if ' '.join(harap.split()) not in teks: hasil.append(f'pelajaran \"{m[\"judul\"]}\": {nama} berubah di Paragraph modul PDF (hasil: \"{teks[:50]}\")')\n" +
+      "        except Exception as e:\n            hasil.append(f'pelajaran \"{m[\"judul\"]}\": {nama} membuat galat Paragraph modul PDF ({type(e).__name__})')\nprint(json.dumps(hasil))\n";
+    const r = spawnSync("python3", ["-I", "-c", kode], { input: JSON.stringify(masuk), encoding: "utf8" });
+    try { if (r.status === 0) return JSON.parse(r.stdout); } catch { /* lanjut */ }
+    return [`modul PDF: Paragraph reportlab tidak bisa dijalankan python3 (${(r.stderr || "").trim().split("\n").pop()})`];
+  };
+  const sTP = [...cekTeksPdfStatis(skripPyT, MODUL), ...cekTeksPdfDinamis(MODUL)];
+  ok(sTP.length === 0, `teks mentah modul PDF aman untuk markah: ${sTP.join("; ")}`);
+  const ubahM = (k, f) => MODUL.map((m, i) => (i === k ? f(m) : m));
+  const ubahQ = (k, f) => ubahM(k, (m) => ({ ...m, kuis: m.kuis.map((q, n) => (n === 0 ? f(q) : q)) }));
+  const rusakTP = [
+    ["statis", skripPyT, ubahM(0, (m) => ({ ...m, judul: m.judul + " <baru>" })), "judul memuat < > atau &"],
+    ["statis", skripPyT, ubahM(1, (m) => ({ ...m, ringkas: m.ringkas + " R&D" })), "ringkas memuat < > atau &"],
+    ["statis", skripPyT, ubahQ(2, (q) => ({ ...q, soal: q.soal + " (1 < 2)" })), "soal 1 memuat < > atau &"],
+    ["statis", skripPyT, ubahQ(3, (q) => ({ ...q, pilihan: [q.pilihan[0] + " > 5%", ...q.pilihan.slice(1)] })), "pilihan 1a memuat < > atau &"],
+    ["statis", skripPyT, ubahQ(4, (q) => ({ ...q, jelas: q.jelas + " <b>tebal" })), "jelas 1 memuat < > atau &"],
+    ["statis", skripPyT, ubahQ(0, (q) => ({ ...q, soal: 7 })), "soal 1 bukan teks"],
+    ["statis", skripPyT.replace(`Paragraph(m["ringkas"], GAYA["meta"])`, `Paragraph(m["ringkas"][:80], GAYA["meta"])`), MODUL, "bentuk Paragraph untuk ringkas berubah"],
+    ["statis", skripPyT.replace(`{q['jelas']}"`, `{q['jelas'][:60]}"`), MODUL, "bentuk Paragraph untuk penjelasan kuis berubah"],
+    ["dinamis", null, ubahM(0, (m) => ({ ...m, judul: m.judul + " <baru>" })), "judul berubah di Paragraph"],
+    ["dinamis", null, ubahM(1, (m) => ({ ...m, ringkas: m.ringkas + " R&D naik" })), "ringkas berubah di Paragraph"],
+    ["dinamis", null, ubahQ(4, (q) => ({ ...q, jelas: q.jelas + " <b>tebal" })), "jelas 1 membuat galat Paragraph"],
+    ["dinamis", null, ubahQ(2, (q) => ({ ...q, soal: q.soal + " <i>miring" })), "soal 1 membuat galat Paragraph"],
+    ["dinamis", null, ubahQ(3, (q) => ({ ...q, pilihan: [q.pilihan[0], q.pilihan[1] + " <font>", q.pilihan[2]] })), "pilihan 1b"],
+  ];
+  for (const [jenis, py, md, pesan] of rusakTP) {
+    const h = jenis === "statis" ? cekTeksPdfStatis(py, md) : cekTeksPdfDinamis(md);
+    ok(h.some((x) => x.includes(pesan)), `uji balik teks mentah modul PDF (${jenis}): "${pesan}" harus tertangkap`);
+  }
 }
 
 // Nina & Arif (16 Nov, IDE.md #33): baris kesegaran data di profil. kesegaran9b() dijalankan untuk semua emiten:
