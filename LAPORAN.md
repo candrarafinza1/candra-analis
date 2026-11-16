@@ -1661,3 +1661,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: giliran KLBF & BRIS; teratas masih semester I 2026 dan kuartal III 2025. Judul KabarBursa "KLBF sembilan bulan" dicek: terbit 15 Nov 2024 (Januari–September 2024), bukan 2026 → tidak dipakai. Tetap 25 dari 32. Berikutnya BSSR & MIKA. Raka/Hana: tidak ada kabar baru.
 - Tugas baru: Nina + Tegar (cek baris meta pelajaran & waktu baca modul PDF).
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 16 Nov 2026, 18.10 WIB — sesi kerja (Bima)
+- Nina + Tegar: `tests/cek.mjs` kini memeriksa baris meta tiap pelajaran di modul PDF (`cekMetaModulPdf`): baris pertama tiap pelajaran = "Pelajaran {i} dari {len(modul)} · waktu baca ± {menit_baca(m)} menit" di dalam `for i, m in enumerate(modul, 1)`, ditulis tepat sekali; daftar isi juga memakai `menit_baca(m)`; `menit_baca()` di skrip dijalankan dengan python3 dan hasilnya dibandingkan dengan `menitBaca()` di `assets/app.js` untuk 8 pelajaran + 12 contoh teks sulit (tag menempel, entitas huruf besar, spasi khusus, batas 200/201 kata). Rumus keduanya ternyata sudah sama, jadi tidak ada yang diubah. 12 uji balik tertangkap. README diperbarui. Tidak ada perubahan tampilan atau kurikulum, PDF tidak perlu dibuat ulang.
+- Fajar: giliran BSSR & MIKA; teratas masih laba semester I 2026 (MIKA) dan kuartal III 2025, belum laba Januari–September 2026 → tetap 25 dari 32. Berikutnya MDKA & MBMA. Raka/Hana: tidak ada kabar baru.
+- Tugas baru: Nina + Tegar (cek semua tag HTML isi pelajaran ditangani pengubah PDF).
+- Catatan ringan: commit pertama sesi ini hanya membawa tes & README (skrip pembaru backlog gagal), backlog & laporan menyusul di commit kedua.
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
