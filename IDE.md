@@ -505,7 +505,7 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Dampak bagi pemula: kembali ke tab dan menu dalam satu ketukan.
 - Batasan: HTML/CSS saja, tanpa JavaScript baru; tidak menutupi isi; target sentuh ≥48px; fokus keyboard ikut pindah ke #isi.
 - Usaha: kecil (Dewi). Nina menambah cek tautan menuju id yang ada.
-- Status: diusulkan Kirana 16 Nov 07.10; dipilih Bima 16 Nov 08.09 untuk Dewi + Nina, masuk BACKLOG.md.
+- Status: diusulkan Kirana 16 Nov 07.10; dipilih Bima 16 Nov 08.09 untuk Dewi + Nina, masuk BACKLOG.md; selesai 16 Nov 09.09 (Kirana meninjau tangkapan 390px: tautan di tengah, panah ↑ tidak dibacakan, tidak menutupi isi).
 
 ### 33. Profil emiten: baris "Data terakhir diperbarui"
 - **Pemula tahu seberapa baru angkanya** — fitur, usaha kecil
@@ -517,7 +517,7 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Dampak bagi pemula: tidak salah membaca angka lama sebagai angka baru.
 - Batasan: tanpa tanggal karangan (bila sumber tidak bertanggal, baris tidak tampil); tanpa kata ajakan; Hana meninjau kalimat.
 - Usaha: kecil (Arif). Nina menambah cek bahwa tanggal yang tampil ada di data sumber.
-- Status: diusulkan Kirana 16 Nov 07.10.
+- Status: diusulkan Kirana 16 Nov 07.10; dipilih Bima 16 Nov 09.09 untuk Arif (+ Hana, Nina), masuk BACKLOG.md.
 
 ### Tinjauan Kirana, 9 Nov 10.09: hero & kartu beranda setelah teks diubah
 - 390px: kalimat hero 5 baris, rata-rata ±37 huruf per baris (nyaman dibaca di HP); istilah bergaris tetap terbaca, tombol "Mulai belajar" & "Lihat peringkat saham" masih di layar pertama 390×844.

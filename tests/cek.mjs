@@ -3291,6 +3291,68 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
     ok(b !== asli && ujiKepalaDasar(b).some((s) => s.includes(pesan)), `uji balik kepala dasar: "${pesan}" harus tertangkap`);
 }
 
+// Nina & Dewi (16 Nov 09.09, IDE.md #32): tautan "Kembali ke atas" di akhir daftar Peringkat & Kabar. Tepat satu
+// <a class="ke-atas" href="#isi">Kembali ke atas</a> di <main>, sesudah wadah daftar (#peringkat / #kabar), menuju id
+// yang ada tepat sekali. Untuk semua halaman: setiap tautan href="#…" di HTML statis menuju id yang ada.
+// CSS: .ke-atas min-height ≥48px, dan scroll-behavior: smooth hanya di dalam prefers-reduced-motion: no-preference.
+{
+  const ujiKeAtas = (html, daftarId) => {
+    const salah = [];
+    const main = (html.match(/<main[\s>][\s\S]*?<\/main>/) || [""])[0];
+    const tautan = [...main.matchAll(/<a class="ke-atas" href="#([^"]+)">([^<]*)<\/a>/g)];
+    if (tautan.length !== 1) return [`tautan .ke-atas di <main> ada ${tautan.length}× (harus tepat 1)`];
+    const [t, id, teks] = tautan[0];
+    if (id !== "isi") salah.push(`tautan .ke-atas harus menuju #isi, bukan #${id}`);
+    if (teks.trim() !== "Kembali ke atas") salah.push(`teks tautan .ke-atas harus "Kembali ke atas"`);
+    const jml = (html.match(new RegExp(`id="${id}"`, "g")) || []).length;
+    if (jml !== 1) salah.push(`tautan .ke-atas menuju #${id}, tetapi id itu ada ${jml}×`);
+    const posDaftar = main.indexOf(`id="${daftarId}"`);
+    if (posDaftar < 0 || main.indexOf(t) < posDaftar) salah.push(`tautan .ke-atas harus sesudah #${daftarId}`);
+    return salah;
+  };
+  const ujiTautanHash = (html) => {
+    const salah = [];
+    for (const [, id] of html.matchAll(/href="#([^"]+)"/g))
+      if ((html.match(new RegExp(`id="${id.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}"`, "g")) || []).length !== 1)
+        salah.push(`tautan #${id} tidak menuju id yang ada tepat sekali`);
+    return salah;
+  };
+  const ujiCssKeAtas = (css) => {
+    const salah = [];
+    const aturan = (css.match(/\.ke-atas\s*\{([^}]*)\}/) || [])[1];
+    const mh = aturan && aturan.match(/min-height:\s*(\d+)px/);
+    if (!mh || Number(mh[1]) < 48) salah.push(".ke-atas harus min-height ≥48px");
+    const luar = css.replace(/@media \(prefers-reduced-motion: no-preference\)\s*\{(?:[^{}]*\{[^}]*\})*\s*\}/g, "");
+    if (/scroll-behavior:\s*smooth/.test(luar)) salah.push("scroll-behavior: smooth hanya boleh di dalam prefers-reduced-motion: no-preference");
+    if (!/@media \(prefers-reduced-motion: no-preference\)\s*\{\s*html:has\(\.ke-atas\)\s*\{\s*scroll-behavior:\s*smooth;?\s*\}/.test(css))
+      salah.push("gulir halus .ke-atas harus di dalam prefers-reduced-motion: no-preference");
+    return salah;
+  };
+  const pasangan = [["peringkat.html", "peringkat"], ["kabar.html", "kabar"]];
+  for (const [f, d] of pasangan) for (const p of ujiKeAtas(readFileSync(f, "utf8"), d)) ok(false, `${f}: ${p}`);
+  for (const f of halaman) for (const p of ujiTautanHash(readFileSync(f, "utf8"))) ok(false, `${f}: ${p}`);
+  const cssAsli = readFileSync("assets/styles.css", "utf8");
+  for (const p of ujiCssKeAtas(cssAsli)) ok(false, `styles.css: ${p}`);
+  ok(true, "tautan Kembali ke atas di Peringkat & Kabar");
+  // Uji balik
+  const asli = readFileSync("kabar.html", "utf8");
+  const rusak = [
+    [asli.replace(/\s*<p class="ke-atas-baris">[\s\S]*?<\/p>/, ""), "ada 0×"],
+    [asli.replace('href="#isi">Kembali', 'href="#atas">Kembali'), "harus menuju #isi"],
+    [asli.replace(">Kembali ke atas<", ">Ke atas<"), "teks tautan"],
+    [asli.replace('<main id="isi">', '<main id="isi"><span id="isi"></span>'), "ada 2×"],
+    [asli.replace(/(\s*<p class="ke-atas-baris">[\s\S]*?<\/p>)/, "").replace('<div id="kabar"></div>', '<p class="ke-atas-baris"><a class="ke-atas" href="#isi">Kembali ke atas</a></p><div id="kabar"></div>'), "sesudah #kabar"],
+  ];
+  for (const [b, p] of rusak) ok(b !== asli && ujiKeAtas(b, "kabar").some((s) => s.includes(p)), `uji balik ke-atas: "${p}" harus tertangkap`);
+  ok(ujiTautanHash(asli.replace('class="lompat" href="#isi"', 'class="lompat" href="#hilang"')).length > 0, "uji balik tautan #…: id hilang harus tertangkap");
+  const rusakCss = [
+    [cssAsli.replace(/(\.ke-atas \{[^}]*)min-height: 48px/, "$1min-height: 40px"), "min-height"],
+    [cssAsli + "\nhtml { scroll-behavior: smooth; }\n", "hanya boleh"],
+    [cssAsli.replace(/@media \(prefers-reduced-motion: no-preference\) \{\s*html:has\(\.ke-atas\)[^}]*\}\s*\}/, "html:has(.ke-atas) { scroll-behavior: smooth; }"), "hanya boleh"],
+  ];
+  for (const [b, p] of rusakCss) ok(b !== cssAsli && ujiCssKeAtas(b).some((s) => s.includes(p)), `uji balik css ke-atas: "${p}" harus tertangkap`);
+}
+
 // Nina & Arif (12 Nov 19.12): urutan judul. (a) HTML statis semua halaman: judul pertama di <main> adalah h1,
 // tepat satu h1 di <main>, dan tidak ada lompatan turun (mis. h2 langsung ke h4). (b) Judul yang dibuat app.js di
 // Radar Risiko dijalankan dengan DOM tiruan (panduan sebelum memilih, hasil dengan dan tanpa batang) dan disambung

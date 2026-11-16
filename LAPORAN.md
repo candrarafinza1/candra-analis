@@ -1617,3 +1617,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: giliran MDKA & MBMA; berita kuartal III 2026 hanya pendapatan & produksi, belum laba Januari–September 2026 → tetap 25 dari 32. Berikutnya KLBF & BRIS. Raka/Hana: tidak ada kabar baru.
 - Tugas baru: Dewi + Nina (IDE.md #32 "Kembali ke atas").
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 16 Nov 2026, 09.09 WIB — sesi kerja (Bima)
+- Dewi + Nina: tautan "Kembali ke atas" (IDE.md #32) di akhir daftar Peringkat dan Kabar. Tautan biasa ke `#isi` tanpa JavaScript baru, tinggi 48px, panah ↑ tidak dibacakan pembaca layar, gulir halus hanya bila gerak tidak dikurangi; Enter memindah fokus ke awal isi. `tests/cek.mjs` menambah cek tautan ke-atas, cek semua tautan `#…` di HTML menuju id yang ada, dan cek CSS (48px, gulir halus hanya di `prefers-reduced-motion: no-preference`) + 9 uji balik; uji sabot tertangkap. 390px & 1280px tanpa scroll horizontal; audit-kontras tanpa temuan baru. Kirana meninjau tangkapan layar: rapi.
+- Fajar: giliran KLBF & BRIS; teratas masih semester I 2026 dan kuartal III 2025, belum laba Januari–September 2026 bersumber → tetap 25 dari 32. Berikutnya BSSR & MIKA. Raka/Hana: tidak ada kabar baru.
+- Tugas baru: Arif + Hana + Nina (IDE.md #33 "Data terakhir diperbarui" di profil, dipilih Bima).
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

@@ -773,3 +773,12 @@ button.istilah:hover, button.istilah[aria-expanded="true"] { color: var(--aksen)
 
 /* Judul khusus pembaca layar (Nina & Arif, 12 Nov): menjaga urutan h1→h2→h3 tanpa mengubah tampilan */
 .khusus-pembaca-layar { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+/* Tautan "Kembali ke atas" di akhir daftar Peringkat & Kabar (Dewi, IDE.md #32). Tautan biasa tanpa JavaScript,
+   target sentuh ≥48px, gulir halus hanya bila gerak tidak dikurangi. */
+.ke-atas-baris { margin: 24px 0 0; text-align: center; }
+.ke-atas { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; min-width: 48px; padding: 0 16px; font-weight: 600; }
+.ke-atas::before { content: "↑"; content: "↑" / ""; margin-right: 6px; }
+@media (prefers-reduced-motion: no-preference) {
+  html:has(.ke-atas) { scroll-behavior: smooth; }
+}
