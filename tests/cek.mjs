@@ -3,6 +3,7 @@
 // Cara menguji lengkap (termasuk audit peramban): lihat README.md bagian "Cara menguji".
 import { readFileSync, existsSync, readdirSync } from "node:fs";
 import vm from "node:vm";
+import { spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
 
 let gagal = 0;
@@ -5082,6 +5083,76 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
   ];
   for (const [py, p, pesan] of rusakKM)
     ok((py !== skripPyT || p !== pdfB) && cekKakiModulPdf(py, p).some((x) => x.includes(pesan)), `uji balik kaki modul PDF: "${pesan}" harus tertangkap`);
+  // Nina & Tegar (16 Nov 18.10): baris meta pelajaran & waktu baca modul PDF. Di bagian Pelajaran, baris pertama
+  // tiap pelajaran = f"Pelajaran {i} dari {len(modul)} · waktu baca ± {menit_baca(m)} menit" di dalam
+  // `for i, m in enumerate(modul, 1):` (N = jumlah modul di data/modul.js); daftar isi juga memakai menit_baca(m).
+  // menit_baca() di skrip dijalankan dengan python3 dan hasilnya WAJIB sama dengan menitBaca() di assets/app.js
+  // untuk semua pelajaran di data dan untuk contoh teks sulit (tag, entitas, spasi khusus, tanda baca saja, kosong).
+  const appJsM = readFileSync("assets/app.js", "utf8");
+  const CONTOH_MENIT = [
+    { isi: "" }, { isi: "<p></p>" }, { isi: "satu" }, { isi: "<p>a&amp;b — – · ±</p>" },
+    { isi: Array(200).fill("kata").join(" ") }, { isi: Array(201).fill("kata").join(" ") },
+    { isi: Array(401).fill("<b>Rp1.000</b>,").join("\n\t") }, { isi: Array(250).fill("é").join(" ") },
+    { isi: Array(300).fill("<a href=\"x\">tautan</a>&nbsp;").join("") }, { isi: Array(199).fill("x").join(" ") + " &#8212; ... ✓ 2026" },
+    { isi: Array(201).fill("kata<br>kata").join(" ") }, { isi: Array(200).fill("kata").join(" ") + " &AMP; &Nbsp;" },
+  ];
+  const menitJs = (js, daftar) => {
+    const i = js.indexOf("  var KATA_PER_MENIT"), j = js.indexOf("\n  }\n", js.indexOf("  function menitBaca(m)"));
+    if (i < 0 || j < 0) return null;
+    try { const f = new Function(js.slice(i, j + 5) + "\nreturn menitBaca;")(); return daftar.map((m) => f(m)); } catch { return null; }
+  };
+  const menitPy = (py, daftar) => {
+    const i = py.indexOf("def menit_baca(m):"), j = py.indexOf("\n\n\ndef ", i);
+    if (i < 0) return null;
+    const kode = py.slice(i, j < 0 ? undefined : j) + "\nimport json, sys\nprint(json.dumps([menit_baca(m) for m in json.load(sys.stdin)]))\n";
+    const r = spawnSync("python3", ["-I", "-c", kode], { input: JSON.stringify(daftar), encoding: "utf8" });
+    if (r.status !== 0) return null;
+    try { return JSON.parse(r.stdout); } catch { return null; }
+  };
+  const cekMetaModulPdf = (skripPy, js, modul) => {
+    const salah = [];
+    const iP = skripPy.indexOf("    # Pelajaran\n");
+    const blokP = iP < 0 ? "" : skripPy.slice(iP, skripPy.indexOf("\n    # ", iP + 10) < 0 ? undefined : skripPy.indexOf("\n    # ", iP + 10));
+    const baris = blokP.split("\n");
+    const iFor = baris.findIndex((b) => /^\s+for i, m in enumerate\(modul, 1\):\s*$/.test(b));
+    if (iFor < 0) salah.push("modul PDF: bagian Pelajaran harus diulang dengan `for i, m in enumerate(modul, 1):`");
+    else {
+      const isiFor = baris.slice(iFor + 1).filter((b) => b.trim() && !/^\s*isi\.append\(PageBreak\(\)\)\s*$/.test(b));
+      const meta = 'isi.append(Paragraph(f"Pelajaran {i} dari {len(modul)} · waktu baca ± {menit_baca(m)} menit", GAYA["meta"]))';
+      if (!isiFor.length || isiFor[0].trim() !== meta) salah.push(`modul PDF: baris pertama tiap pelajaran harus ${meta}`);
+    }
+    if ((skripPy.match(/Pelajaran \{i\} dari /g) || []).length !== 1) salah.push('modul PDF: baris "Pelajaran i dari N" harus ditulis tepat sekali');
+    if (!/^\s+for i, m in enumerate\(modul, 1\):\n\s+isi\.append\(Paragraph\(f"<b>\{i\}\.<\/b>  \{m\['judul'\]\}  <font[^>]*>\(waktu baca ± \{menit_baca\(m\)\} menit\)<\/font>"/m.test(skripPy)) salah.push("modul PDF: daftar isi harus menulis waktu baca dengan menit_baca(m)");
+    if (/waktu baca ± \{(?!menit_baca\(m\)\})[^}]*\}/.test(skripPy)) salah.push("modul PDF: waktu baca hanya boleh dari menit_baca(m), bukan angka/rumus lain");
+    const contoh = [...modul, ...CONTOH_MENIT];
+    const a = menitJs(js, contoh), b = menitPy(skripPy, contoh);
+    if (!a) salah.push("assets/app.js: menitBaca() tidak ketemu atau galat");
+    if (!b) salah.push("modul PDF: menit_baca() tidak ketemu atau galat saat dijalankan python3");
+    if (a && b) {
+      const beda = contoh.map((m, k) => [k, a[k], b[k]]).filter(([, x, y]) => x !== y);
+      for (const [k, x, y] of beda.slice(0, 4)) salah.push(`waktu baca ${k < modul.length ? `pelajaran "${modul[k].judul}"` : `contoh uji ${k - modul.length + 1}`}: halaman Belajar ${x} menit, modul PDF ${y} menit (samakan menit_baca dengan menitBaca)`);
+      if (a.some((x) => !Number.isInteger(x) || x < 1)) salah.push("waktu baca harus bilangan bulat minimal 1");
+    }
+    return salah;
+  };
+  const sMM = cekMetaModulPdf(skripPyT, appJsM, MODUL);
+  ok(sMM.length === 0, `baris meta & waktu baca modul PDF: ${sMM.join("; ")}`);
+  const rusakMM = [
+    [skripPyT.replace("Pelajaran {i} dari {len(modul)}", "Pelajaran {i} dari 8"), appJsM, "baris pertama tiap pelajaran"],
+    [skripPyT.replace("Pelajaran {i} dari {len(modul)} · waktu baca ± {menit_baca(m)} menit", "Pelajaran {i} dari {len(modul)} · waktu baca ± 5 menit"), appJsM, "baris pertama tiap pelajaran"],
+    [skripPyT.replace('        isi.append(Paragraph(f"Pelajaran {i} dari {len(modul)}', '        isi.append(Paragraph(m["judul"], GAYA["h1"]))\n        isi.append(Paragraph(f"Pelajaran {i} dari {len(modul)}'), appJsM, "baris pertama tiap pelajaran"],
+    [skripPyT.replace("    # Pelajaran\n    for i, m in enumerate(modul, 1):", "    # Pelajaran\n    for i, m in enumerate(modul[:-1], 1):"), appJsM, "enumerate(modul, 1)"],
+    [skripPyT.replace("(waktu baca ± {menit_baca(m)} menit)</font>", "(waktu baca ± {len(m['isi']) // 1000} menit)</font>"), appJsM, "daftar isi harus menulis waktu baca"],
+    [skripPyT.replace("len(kata) / 200", "len(kata) / 180"), appJsM, "samakan menit_baca"],
+    [skripPyT.replace("max(1, math.ceil(", "max(1, round("), appJsM, "samakan menit_baca"],
+    [skripPyT.replace('re.sub(r"<[^>]+>", " ", m.get("isi", ""))', 're.sub(r"<[^>]+>", "", m.get("isi", ""))'), appJsM, "samakan menit_baca"],
+    [skripPyT.replace('flags=re.I)', 'flags=0)'), appJsM, "samakan menit_baca"],
+    [skripPyT, appJsM.replace("var KATA_PER_MENIT = 200;", "var KATA_PER_MENIT = 250;"), "samakan menit_baca"],
+    [skripPyT, appJsM.replace("return /[0-9A-Za-z\\u00C0-\\u024F]/.test(w);", "return /[A-Za-z]/.test(w);"), "samakan menit_baca"],
+    [skripPyT.replace("def menit_baca(m):", "def menit_baca_lama(m):"), appJsM, "menit_baca() tidak ketemu"],
+  ];
+  for (const [py, js, pesan] of rusakMM)
+    ok((py !== skripPyT || js !== appJsM) && cekMetaModulPdf(py, js, MODUL).some((x) => x.includes(pesan)), `uji balik meta modul PDF: "${pesan}" harus tertangkap`);
 }
 
 // Nina & Arif (16 Nov, IDE.md #33): baris kesegaran data di profil. kesegaran9b() dijalankan untuk semua emiten:
