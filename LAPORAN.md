@@ -1668,3 +1668,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Tugas baru: Nina + Tegar (cek semua tag HTML isi pelajaran ditangani pengubah PDF).
 - Catatan ringan: commit pertama sesi ini hanya membawa tes & README (skrip pembaru backlog gagal), backlog & laporan menyusul di commit kedua.
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 16 Nov 2026, 19.13 WIB — sesi kerja (Bima)
+- Nina + Tegar: `tests/cek.mjs` kini memeriksa tag isi pelajaran di modul PDF (`cekTagModulPdf`): semua tag pembuka/penutup di `isi` `data/modul.js` (p, h2, ul, ol, li, div, strong, em) ditangani `KeFlowable`, class kotak (kotak-penting, kotak-rumus) dikenal, dan `main()` memberi `m["isi"]` ke pengubah. `KeFlowable` juga dijalankan dengan python3 untuk 8 pelajaran: seluruh teks isi muncul utuh dan berurutan, markah hanya <b>/<i> yang seimbang. Hasil: tidak ada isi yang hilang, jadi skrip tidak diubah. 15 uji balik tertangkap. README diperbarui. PDF tidak perlu dibuat ulang.
+- Fajar: giliran MDKA & MBMA; MDKA baru merilis penjualan produk kuartal III 2026 (US$817,3 juta, IDX Channel & EmitenNews 2 Nov 2026) tanpa laba Januari–September; MBMA teratas masih semester I 2026 → tetap 25 dari 32. Berikutnya KLBF & BRIS. Raka/Hana: tidak ada kabar baru.
+- Tugas baru: Nina + Tegar (cek teks judul/ringkas/kuis aman untuk markah PDF).
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

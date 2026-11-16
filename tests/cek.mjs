@@ -5153,6 +5153,84 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
   ];
   for (const [py, js, pesan] of rusakMM)
     ok((py !== skripPyT || js !== appJsM) && cekMetaModulPdf(py, js, MODUL).some((x) => x.includes(pesan)), `uji balik meta modul PDF: "${pesan}" harus tertangkap`);
+  // Nina & Tegar (16 Nov 19.13): semua tag HTML di `isi` data/modul.js ditangani pengubah HTML→PDF (KeFlowable).
+  // Statis: tiap tag pembuka/penutup di data ada di handle_starttag/handle_endtag, tiap class div dikenal _flush,
+  // main() memberi m["isi"] ke KeFlowable. Dinamis: KeFlowable dijalankan dengan python3 (Paragraph/kotak/Spacer
+  // diganti tiruan) untuk tiap pelajaran; seluruh teks isi (tanpa spasi) WAJIB muncul utuh & berurutan di hasil,
+  // dan markah hasil hanya <b>/<i> yang seimbang. Jadi tidak ada isi pelajaran yang hilang diam-diam di PDF.
+  const cekTagModulPdf = (skripPy, modul) => {
+    const salah = [];
+    const iC = skripPy.indexOf("class KeFlowable(HTMLParser):");
+    if (iC < 0) return ["modul PDF: kelas KeFlowable tidak ditemukan"];
+    const jC = skripPy.indexOf("\n\n\ndef ", iC);
+    const blokC = skripPy.slice(iC, jC < 0 ? undefined : jC);
+    const metode = (nama) => { const i = blokC.indexOf(`    def ${nama}(`); if (i < 0) return ""; const j = blokC.indexOf("\n    def ", i + 5); return blokC.slice(i, j < 0 ? undefined : j); };
+    const tagDi = (blok) => {
+      const s = new Set();
+      for (const m of blok.matchAll(/tag in \(([^)]*)\)/g)) for (const t of m[1].matchAll(/"([a-z0-9]+)"/g)) s.add(t[1]);
+      for (const m of blok.matchAll(/tag == "([a-z0-9]+)"/g)) s.add(m[1]);
+      return s;
+    };
+    const buka = tagDi(metode("handle_starttag")), tutup = tagDi(metode("handle_endtag"));
+    const kelasKenal = new Set([...metode("_flush").matchAll(/self\.kelas == "([^"]+)"/g)].map((m) => m[1]));
+    const KOSONG = new Set(["br", "hr", "img", "wbr"]);
+    for (const m of modul) {
+      const isi = m.isi || "";
+      for (const [, akhir, tag] of isi.matchAll(/<(\/?)([a-zA-Z][a-zA-Z0-9]*)/g)) {
+        const t = tag.toLowerCase();
+        if (!akhir && !buka.has(t)) salah.push(`pelajaran "${m.judul}": tag <${t}> tidak ditangani handle_starttag di modul PDF`);
+        if ((akhir || !KOSONG.has(t)) && !tutup.has(t)) salah.push(`pelajaran "${m.judul}": tag </${t}> tidak ditangani handle_endtag di modul PDF`);
+      }
+      for (const [, k] of isi.matchAll(/<div\b[^>]*\bclass="([^"]*)"/g))
+        if (!kelasKenal.has(k)) salah.push(`pelajaran "${m.judul}": kotak class="${k}" tidak dikenal _flush di modul PDF`);
+    }
+    if (!/\n\s+p = KeFlowable\(\)\n\s+p\.feed\(m\["isi"\]\)\n\s+isi \+= p\.selesai\(\)\n/.test(skripPy)) salah.push('modul PDF: main() harus memberi m["isi"] ke KeFlowable lalu menambah p.selesai() ke isi');
+    const kode = "from html.parser import HTMLParser\nimport html, json, re, sys\nGAYA = {k: k for k in ('isi','h2','li','kotak','rumus')}\nNAIK_MUDA = KERTAS = None\n" +
+      "def Paragraph(teks, gaya, bulletText=None): return ('p', teks)\ndef Spacer(*a): return ('s', '')\ndef kotak(teks, latar, gaya): return [('k', teks)]\n" +
+      blokC + "\nkeluar = []\nfor isi in json.load(sys.stdin):\n    p = KeFlowable(); p.feed(isi); h = p.selesai()\n    keluar.append([t for j, t in h if j != 's'])\nprint(json.dumps(keluar))\n";
+    const r = spawnSync("python3", ["-I", "-c", kode], { input: JSON.stringify(modul.map((m) => m.isi || "")), encoding: "utf8" });
+    let hasil = null;
+    try { if (r.status === 0) hasil = JSON.parse(r.stdout); } catch { hasil = null; }
+    if (!hasil) return [...salah, `modul PDF: KeFlowable galat saat dijalankan python3 (${(r.stderr || "").trim().split("\n").pop()})`];
+    const ENT = { amp: "&", lt: "<", gt: ">", quot: '"', apos: "'", nbsp: " " };
+    const polos = (s) => s.replace(/<[^>]+>/g, " ").replace(/&(#x[0-9a-f]+|#\d+|[a-z]+);/gi, (x, e) => e[0] === "#" ? String.fromCodePoint(e[1].toLowerCase() === "x" ? parseInt(e.slice(2), 16) : +e.slice(1)) : ENT[e.toLowerCase()] ?? x).replace(/\s+/g, "");
+    modul.forEach((m, k) => {
+      const harap = polos(m.isi || ""), dapat = polos(hasil[k].join(" "));
+      if (harap !== dapat) {
+        let n = 0; while (n < harap.length && harap[n] === dapat[n]) n++;
+        salah.push(`pelajaran "${m.judul}": isi di modul PDF beda dari data mulai "${harap.slice(n, n + 30)}" (PDF: "${dapat.slice(n, n + 30)}")`);
+      }
+      for (const t of hasil[k]) {
+        const tg = [...t.matchAll(/<(\/?)([a-z]+)[^>]*>/g)];
+        if (tg.some((x) => !["b", "i"].includes(x[2]))) { salah.push(`pelajaran "${m.judul}": markah selain <b>/<i> di modul PDF`); break; }
+        let d = 0, rusak = false; for (const x of tg) { d += x[1] ? -1 : 1; if (d < 0) rusak = true; }
+        if (rusak || d !== 0) { salah.push(`pelajaran "${m.judul}": <b>/<i> tidak seimbang di modul PDF`); break; }
+      }
+    });
+    return salah;
+  };
+  const sTM = cekTagModulPdf(skripPyT, MODUL);
+  ok(sTM.length === 0, `tag isi pelajaran di modul PDF: ${sTM.join("; ")}`);
+  const ubahIsi = (k, f) => MODUL.map((m, i) => (i === k ? { ...m, isi: f(m.isi) } : m));
+  const rusakTM = [
+    [skripPyT, ubahIsi(0, (s) => s + '<p>Baca <a href="belajar.html">pelajaran</a> lain.</p>'), "tag <a> tidak ditangani"],
+    [skripPyT, ubahIsi(1, (s) => s + "<h3>Subjudul</h3>"), "tag <h3> tidak ditangani"],
+    [skripPyT, ubahIsi(2, (s) => s + '<div class="kotak-baru">Catatan</div>'), 'class="kotak-baru" tidak dikenal'],
+    [skripPyT, ubahIsi(0, (s) => s + "<p>Satu<br>dua</p>"), "tag <br> tidak ditangani"],
+    [skripPyT.replace('        elif tag == "em":\n            self.buf += "<i>"', ""), MODUL, "tag <em> tidak ditangani handle_starttag"],
+    [skripPyT.replace('        if tag in ("p", "h2", "li"):\n            self._flush(); self.blok = None', '        if tag in ("p", "h2"):\n            self._flush(); self.blok = None'), MODUL, "tag </li> tidak ditangani handle_endtag"],
+    [skripPyT.replace('        elif self.kelas == "kotak-rumus":', '        elif self.kelas == "kotak-rumus-lama":'), MODUL, 'class="kotak-rumus" tidak dikenal'],
+    [skripPyT.replace('self.hasil.append(Paragraph(teks, GAYA["li"], bulletText=tanda))', "pass"), MODUL, "isi di modul PDF beda dari data"],
+    [skripPyT.replace('teks = " ".join(self.buf.split())', 'teks = " ".join(self.buf.split())[:120]'), MODUL, "isi di modul PDF beda dari data"],
+    [skripPyT.replace('    def handle_data(self, data):\n        self.buf +=', '    def handle_data(self, data):\n        if self.blok: self.buf +='), ubahIsi(3, (s) => s + "<div class=\"kotak-penting\">Teks langsung di kotak.</div>"), "isi di modul PDF beda dari data"],
+    [skripPyT.replace('            self.buf += "</b>"', '            pass'), MODUL, "tidak seimbang"],
+    [skripPyT.replace('            self.buf += "<i>"', '            self.buf += "<u>"'), MODUL, "markah selain <b>/<i>"],
+    [skripPyT.replace('p.feed(m["isi"])', 'p.feed(m["ringkas"])'), MODUL, 'harus memberi m["isi"] ke KeFlowable'],
+    [skripPyT.replace("class KeFlowable(HTMLParser):", "class UbahHtml(HTMLParser):"), MODUL, "KeFlowable tidak ditemukan"],
+    [skripPyT.replace("    def selesai(self):", "    def selesai_lama(self):"), MODUL, "KeFlowable galat"],
+  ];
+  for (const [py, md, pesan] of rusakTM)
+    ok((py !== skripPyT || md !== MODUL) && cekTagModulPdf(py, md).some((x) => x.includes(pesan)), `uji balik tag modul PDF: "${pesan}" harus tertangkap`);
 }
 
 // Nina & Arif (16 Nov, IDE.md #33): baris kesegaran data di profil. kesegaran9b() dijalankan untuk semua emiten:
