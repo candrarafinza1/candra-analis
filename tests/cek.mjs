@@ -5300,6 +5300,76 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
     const h = jenis === "statis" ? cekTeksPdfStatis(py, md) : cekTeksPdfDinamis(md);
     ok(h.some((x) => x.includes(pesan)), `uji balik teks mentah modul PDF (${jenis}): "${pesan}" harus tertangkap`);
   }
+  // Nina & Tegar (16 Nov 21.14): bagian Rujukan modul PDF (data/rujukan.js). kelompok, judul, ket, dan url juga masuk mentah ke
+  // Paragraph; url sekaligus menjadi href='...' dalam <link>. Statis: kelompok/judul/ket tanpa < > & mentah; url harus https://
+  // tanpa spasi, < > & " atau kutip tunggal (kutip tunggal memutus href, & diam-diam diubah reportlab); bentuk 4 Paragraph di
+  // main() dikunci. Dinamis: Paragraph reportlab sungguhan dijalankan python3: tanpa galat, teks utuh, dan href tautan = url.
+  const BENTUK_RUJ_PDF = [
+    ["kelompok", `isi.append(Paragraph(k["kelompok"], GAYA["h2"]))`],
+    ["judul", `Paragraph(f"<b>{r['judul']}</b>", GAYA["isi"]),`],
+    ["ket", `Paragraph(r["ket"], GAYA["kecil"]),`],
+    ["url", `Paragraph(f"<link href='{r['url']}' color='#262b63'>{r['url']}</link>", GAYA["kecil"]),`],
+  ];
+  const cekRujPdfStatis = (skripPy, rujukan) => {
+    const salah = [];
+    for (const [nama, baris] of BENTUK_RUJ_PDF)
+      if (!skripPy.includes(baris)) salah.push(`modul PDF: bentuk Paragraph rujukan untuk ${nama} berubah di main(); perbarui cekRujPdf agar tetap menguji pembungkus yang dipakai`);
+    for (const k of rujukan) {
+      if (typeof k.kelompok !== "string") salah.push(`rujukan: kelompok bukan teks`);
+      else if (/[<>&]/.test(k.kelompok)) salah.push(`rujukan: kelompok "${k.kelompok.slice(0, 40)}" memuat < > atau & mentah yang merusak markah modul PDF`);
+      for (const r of k.item || []) {
+        for (const f of ["judul", "ket"]) {
+          if (typeof r[f] !== "string") { salah.push(`rujukan "${r.judul}": ${f} bukan teks`); continue; }
+          if (/[<>&]/.test(r[f])) salah.push(`rujukan "${r.judul}": ${f} memuat < > atau & mentah yang merusak markah modul PDF ("${r[f].slice(0, 40)}")`);
+        }
+        if (typeof r.url !== "string" || !/^https:\/\/[^\s<>&"']+$/.test(r.url)) salah.push(`rujukan "${r.judul}": url harus https:// tanpa spasi, < > & " atau kutip tunggal agar href modul PDF utuh ("${String(r.url).slice(0, 50)}")`);
+      }
+    }
+    return salah;
+  };
+  const cekRujPdfDinamis = (rujukan) => {
+    const daftar = [];
+    for (const k of rujukan) {
+      daftar.push(["kelompok", String(k.kelompok), String(k.kelompok), ""]);
+      for (const r of k.item || []) {
+        daftar.push([`judul "${r.judul}"`, `<b>${r.judul}</b>`, String(r.judul), ""]);
+        daftar.push([`ket "${r.judul}"`, String(r.ket), String(r.ket), ""]);
+        daftar.push([`url "${r.judul}"`, `<link href='${r.url}' color='#262b63'>${r.url}</link>`, String(r.url), String(r.url)]);
+      }
+    }
+    const kode = "import json, sys\nfrom reportlab.platypus import Paragraph\nfrom reportlab.lib.styles import ParagraphStyle\ngaya = ParagraphStyle('uji')\nhasil = []\n" +
+      "for nama, markah, harap, href in json.load(sys.stdin):\n    try:\n        p = Paragraph(markah, gaya)\n        teks = ' '.join(''.join(getattr(f, 'text', '') for f in p.frags).split())\n" +
+      "        if ' '.join(harap.split()) not in teks: hasil.append(f'rujukan: {nama} berubah di Paragraph modul PDF (hasil: \"{teks[:50]}\")')\n" +
+      "        if href:\n            tautan = [l[1] for f in p.frags for l in (getattr(f, 'link', None) or []) if isinstance(l, (list, tuple)) and len(l) > 1]\n" +
+      "            if not tautan or any(t != href for t in tautan): hasil.append(f'rujukan: {nama} href tautan modul PDF tidak sama dengan url ({tautan[:1]})')\n" +
+      "    except Exception as e:\n        hasil.append(f'rujukan: {nama} membuat galat Paragraph modul PDF ({type(e).__name__})')\nprint(json.dumps(hasil))\n";
+    const r = spawnSync("python3", ["-I", "-c", kode], { input: JSON.stringify(daftar), encoding: "utf8" });
+    try { if (r.status === 0) return JSON.parse(r.stdout); } catch { /* lanjut */ }
+    return [`modul PDF: Paragraph reportlab tidak bisa dijalankan python3 (${(r.stderr || "").trim().split("\n").pop()})`];
+  };
+  const sRP = [...cekRujPdfStatis(skripPyT, RUJUKAN), ...cekRujPdfDinamis(RUJUKAN)];
+  ok(sRP.length === 0, `teks rujukan modul PDF aman untuk markah: ${sRP.join("; ")}`);
+  const ubahR = (ki, ii, f) => RUJUKAN.map((k, a) => (a !== ki ? k : { ...k, item: k.item.map((r, b) => (b === ii ? f(r) : r)) }));
+  const rusakRP = [
+    ["statis", skripPyT, RUJUKAN.map((k, a) => (a === 0 ? { ...k, kelompok: k.kelompok + " & video" } : k)), "kelompok"],
+    ["statis", skripPyT, ubahR(0, 0, (r) => ({ ...r, judul: r.judul + " <baru>" })), "judul memuat < > atau &"],
+    ["statis", skripPyT, ubahR(1, 0, (r) => ({ ...r, ket: r.ket + " R&D" })), "ket memuat < > atau &"],
+    ["statis", skripPyT, ubahR(0, 1, (r) => ({ ...r, url: r.url + "&index=2" })), "url harus https://"],
+    ["statis", skripPyT, ubahR(0, 2, (r) => ({ ...r, url: r.url + "/a'b" })), "url harus https://"],
+    ["statis", skripPyT, ubahR(1, 1, (r) => ({ ...r, url: r.url.replace("https://", "http://") })), "url harus https://"],
+    ["statis", skripPyT, ubahR(0, 0, (r) => ({ ...r, ket: 5 })), "ket bukan teks"],
+    ["statis", skripPyT.replace(`Paragraph(r["ket"], GAYA["kecil"]),`, `Paragraph(r["ket"][:80], GAYA["kecil"]),`), RUJUKAN, "bentuk Paragraph rujukan untuk ket berubah"],
+    ["statis", skripPyT.replace(`<link href='{r['url']}' color='#262b63'>`, `<link href='{r['url'][:40]}' color='#262b63'>`), RUJUKAN, "bentuk Paragraph rujukan untuk url berubah"],
+    ["dinamis", null, ubahR(0, 0, (r) => ({ ...r, judul: r.judul + " <baru>" })), "judul \""],
+    ["dinamis", null, ubahR(1, 0, (r) => ({ ...r, ket: r.ket + " R&D naik" })), "berubah di Paragraph"],
+    ["dinamis", null, ubahR(0, 1, (r) => ({ ...r, ket: r.ket + " <i>miring" })), "membuat galat Paragraph"],
+    ["dinamis", null, ubahR(0, 1, (r) => ({ ...r, url: r.url + "&index=2" })), "url \""],
+    ["dinamis", null, ubahR(0, 2, (r) => ({ ...r, url: r.url + "/a'b" })), "url \""],
+  ];
+  for (const [jenis, py, rj, pesan] of rusakRP) {
+    const h = jenis === "statis" ? cekRujPdfStatis(py, rj) : cekRujPdfDinamis(rj);
+    ok(h.some((x) => x.includes(pesan)), `uji balik teks rujukan modul PDF (${jenis}): "${pesan}" harus tertangkap`);
+  }
 }
 
 // Nina & Arif (16 Nov, IDE.md #33): baris kesegaran data di profil. kesegaran9b() dijalankan untuk semua emiten:

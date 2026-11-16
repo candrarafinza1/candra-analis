@@ -1680,3 +1680,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: giliran KLBF & BRIS; teratas masih kuartal III 2025 dan semester I 2026 → tetap 25 dari 32. Berikutnya BSSR & MIKA. Raka/Hana: tidak ada kabar baru.
 - Tugas baru: Nina + Tegar (cek teks Rujukan di modul PDF).
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 16 Nov 2026, 21.14 WIB — sesi kerja (Bima)
+- Nina + Tegar: `tests/cek.mjs` kini memeriksa bagian Rujukan modul PDF (`data/rujukan.js`). Statis: kelompok/judul/ket tanpa < > & mentah; url wajib https:// tanpa spasi, < > & " atau kutip tunggal; bentuk 4 Paragraph rujukan di `main()` dikunci. Dinamis: Paragraph reportlab sungguhan dijalankan python3: tanpa galat, teks utuh, dan href tautan sama dengan url. Data sekarang aman (9 rujukan); skrip & PDF tidak diubah. 14 uji balik tertangkap.
+- Fajar: giliran BSSR & MIKA; teratas masih penjualan Januari–September 2025 (BSSR) dan laba semester I 2026 (MIKA) → tetap 25 dari 32. Berikutnya MDKA & MBMA. Raka/Hana: tidak ada kabar baru.
+- Tugas baru: Nina + Tegar (uji ujung-ke-ujung modul PDF: judul & tautan di PDF hasil).
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
