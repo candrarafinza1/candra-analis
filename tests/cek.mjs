@@ -5632,7 +5632,7 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
     for (const u of ["UJI-LEBAR", "UJI-TUTUP", "UJI-KETIK"]) if (!z.includes(`'${u}'`)) salah.push(`uji balik ${u} tidak ada di audit zoom`);
     if (!/await tabTutup\(p\)/.test(z)) salah.push("audit zoom tidak memakai langkah Tab bersama (tabTutup)");
     if (!/scrollWidth/.test(z)) salah.push("audit zoom tidak memeriksa scroll horizontal");
-    if (!/await auditZoom\(b\);\n(  await auditJarak\(b\);\n)?(  await auditOrientasi\(b\);\n)?  console\.log\('total temuan',total\)/.test(audit)) salah.push("audit penuh tidak menjalankan auditZoom");
+    if (!/await auditZoom\(b\);\n(  await auditJarak\(b\);\n)?(  await auditOrientasi\(b\);\n)?(  await auditSentuh\(b\);\n)?  console\.log\('total temuan',total\)/.test(audit)) salah.push("audit penuh tidak menjalankan auditZoom");
     return salah;
   };
   const auZ = readFileSync("tools/audit-kontras.js", "utf8");
@@ -5664,7 +5664,7 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
       for (const h of ["peringkat.html", "emiten.html", "radar.html", "pelajaran.html", "asisten.html"]) if (!j.includes(`'${h}`)) salah.push(`audit jarak teks tidak memeriksa ${h}`);
       if (!/scrollWidth/.test(j)) salah.push("audit jarak teks tidak memeriksa scroll horizontal");
     }
-    if (!/await auditJarak\(b\);\n(  await auditOrientasi\(b\);\n)?  console\.log\('total temuan',total\)/.test(audit)) salah.push("audit penuh tidak menjalankan auditJarak");
+    if (!/await auditJarak\(b\);\n(  await auditOrientasi\(b\);\n)?(  await auditSentuh\(b\);\n)?  console\.log\('total temuan',total\)/.test(audit)) salah.push("audit penuh tidak menjalankan auditJarak");
     const hp = /@media \(max-width: 600px\) \{([\s\S]*?)\n\}/.exec(css);
     if (hp && /\.nav \{[^}]*flex-wrap: nowrap/.test(hp[1])) salah.push("menu atas HP memakai flex-wrap: nowrap (meluber bila jarak huruf diperlebar)");
     return salah;
@@ -5694,7 +5694,7 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
       for (const h of ["peringkat.html", "emiten.html", "radar.html", "pelajaran.html", "asisten.html"]) if (!j.includes(`'${h}`)) salah.push(`audit orientasi tidak memeriksa ${h}`);
       if (!/scrollWidth/.test(j)) salah.push("audit orientasi tidak memeriksa scroll horizontal");
     }
-    if (!/await auditOrientasi\(b\);\n  console\.log\('total temuan',total\)/.test(audit)) salah.push("audit penuh tidak menjalankan auditOrientasi");
+    if (!/await auditOrientasi\(b\);\n(  await auditSentuh\(b\);\n)?  console\.log\('total temuan',total\)/.test(audit)) salah.push("audit penuh tidak menjalankan auditOrientasi");
     for (const [f, t] of sumber) if (/orientation\s*\.\s*lock\s*\(|"orientation"\s*:/.test(t)) salah.push(`${f} mengunci orientasi layar`);
     return salah;
   };
@@ -5706,6 +5706,37 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
   ok(cekOrientasi(auO.replaceAll("'UJI-KUNCI'", "'UJI-X'"), sumberO).some((x) => x.includes("UJI-KUNCI")), "uji balik: audit orientasi tanpa UJI-KUNCI harus tertangkap");
   ok(cekOrientasi(auO.replace("width:844,height:390", "width:390,height:844"), sumberO).some((x) => x.includes("844×390")), "uji balik: audit orientasi tanpa HP mendatar harus tertangkap");
   ok(cekOrientasi(auO.replace("  await auditOrientasi(b);\n", ""), sumberO).some((x) => x.includes("audit penuh")), "uji balik: audit penuh yang melewatkan auditOrientasi harus tertangkap");
+}
+
+// Dewi & Nina (17 Nov 17.xx): ukuran sasaran sentuh (WCAG 2.5.8). tools/audit-kontras.js wajib punya auditSentuh yang memeriksa
+// HP 390px gelap/terang (minimal 24×24px atau jarak lingkaran 24px), uji balik UJI-SENTUH, dan audit penuh menjalankannya.
+// Deretan tombol istilah & tautan di kotak istilah wajib punya padding agar tingginya ≥24px.
+{
+  const cekSentuh = (audit, css) => {
+    const salah = [];
+    const fn = /async function auditSentuh\(b\) \{([\s\S]*?)\n\}\n/.exec(audit);
+    if (!fn) salah.push("fungsi auditSentuh tidak ditemukan di audit");
+    else {
+      const j = fn[1];
+      if (!/width:390/.test(j)) salah.push("audit sentuh tidak memeriksa lebar 390px");
+      if (!/\['dark','light'\]/.test(j)) salah.push("audit sentuh tidak memeriksa gelap & terang");
+      if (!/23\.5/.test(j) || !/<12/.test(j) || !/<24/.test(j)) salah.push("audit sentuh tidak memakai batas 24px / lingkaran 24px");
+      if (!j.includes("'UJI-SENTUH'")) salah.push("uji balik UJI-SENTUH tidak ada di audit sentuh");
+      for (const h of ["peringkat.html", "emiten.html", "radar.html", "pelajaran.html", "asisten.html", "index.html"]) if (!j.includes(`'${h}`)) salah.push(`audit sentuh tidak memeriksa ${h}`);
+    }
+    if (!/await auditSentuh\(b\);\n  console\.log\('total temuan',total\)/.test(audit)) salah.push("audit penuh tidak menjalankan auditSentuh");
+    if (!/\.baris-istilah button\.istilah \{[^}]*padding: 2px 0/.test(css)) salah.push("tombol di deretan istilah tanpa padding 2px (tinggi < 24px)");
+    if (!/\.kotak-istilah a \{[^}]*padding: 2px 0/.test(css)) salah.push("tautan di kotak istilah tanpa padding 2px (tinggi < 24px)");
+    return salah;
+  };
+  const auS = readFileSync("tools/audit-kontras.js", "utf8");
+  const cssS = readFileSync("assets/styles.css", "utf8");
+  const sS = cekSentuh(auS, cssS);
+  ok(sS.length === 0, `audit sasaran sentuh: ${sS.join("; ")}`);
+  ok(cekSentuh(auS.replaceAll("'UJI-SENTUH'", "'UJI-X'"), cssS).some((x) => x.includes("UJI-SENTUH")), "uji balik: audit sentuh tanpa UJI-SENTUH harus tertangkap");
+  ok(cekSentuh(auS.replace("  await auditSentuh(b);\n", ""), cssS).some((x) => x.includes("audit penuh")), "uji balik: audit penuh yang melewatkan auditSentuh harus tertangkap");
+  ok(cekSentuh(auS, cssS.replace(".baris-istilah button.istilah { padding: 2px 0; }", ".baris-istilah button.istilah { }")).some((x) => x.includes("deretan istilah")), "uji balik: tombol deretan istilah tanpa padding harus tertangkap");
+  ok(cekSentuh(auS, cssS.replace("font-size: .88rem; padding: 2px 0;", "font-size: .88rem;")).some((x) => x.includes("kotak istilah")), "uji balik: tautan kotak istilah tanpa padding harus tertangkap");
 }
 
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }

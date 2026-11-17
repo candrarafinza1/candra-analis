@@ -6,7 +6,7 @@
 // garis fokus terlihat (outline ≥2px, atau box-shadow/border berubah) dengan kontras ≥3:1 terhadap latar di sekitarnya.
 // Halaman "UJI-FOKUS" sengaja mematikan outline; audit wajib menangkapnya (uji balik).
 // 17 Nov 09.xx (Dewi & Tegar): Tab sampai habis, + keadaan istilah terbuka, hasil Radar UNTR, kuis terjawab; cek border kotak tanya Asisten.
-// Cara pakai: python3 -m http.server 8765 (di akar repo), lalu: node tools/audit-kontras.js (AUDIT=fokus: hanya garis fokus & fokus tertutup; AUDIT=zoom: hanya zoom 200% & layar pendek HP; AUDIT=jarak: hanya jarak teks WCAG 1.4.12; AUDIT=orientasi: hanya orientasi layar WCAG 1.3.4)
+// Cara pakai: python3 -m http.server 8765 (di akar repo), lalu: node tools/audit-kontras.js (AUDIT=fokus: hanya garis fokus & fokus tertutup; AUDIT=zoom: hanya zoom 200% & layar pendek HP; AUDIT=jarak: hanya jarak teks WCAG 1.4.12; AUDIT=orientasi: hanya orientasi layar WCAG 1.3.4; AUDIT=sentuh: hanya ukuran sasaran sentuh WCAG 2.5.8)
 // Butuh Playwright + Chromium (sudah ada di lingkungan kerja tim); tidak dijalankan oleh tests/cek.mjs.
 const { chromium } = require('playwright');
 // 17 Nov 14.xx (Dewi & Nina): langkah Tab maju & Shift+Tab mundur untuk cek fokus tertutup, dipakai bersama oleh
@@ -176,6 +176,68 @@ async function auditOrientasi(b) {
   }
   console.log('total temuan orientasi',total,'(uji balik UJI-KUNCI tertangkap:',ujiKunci,'dari 4; UJI-LENGKET tertangkap:',ujiLengket,'dari 4)');
 }
+// 17 Nov 17.xx (Dewi & Nina): ukuran sasaran sentuh (WCAG 2.5.8 Target Size Minimum) di HP 390px, gelap/terang.
+// Setiap tautan/tombol/isian yang bisa ditekan wajib minimal 24×24px, ATAU lingkaran berdiameter 24px di tengahnya tidak
+// menyentuh sasaran lain maupun lingkaran sasaran kecil lain (pengecualian jarak). Tautan di dalam kalimat dikecualikan.
+// Kotak centang/pilihan diukur bersama label-nya (label ikut bisa ditekan). Uji balik: UJI-SENTUH (dua tombol 12px berdempetan).
+async function auditSentuh(b) {
+  const halaman=['peringkat.html','peringkat.html#istilah','emiten.html?kode=ANTM','radar.html#UNTR','pelajaran.html?m=apa-itu-saham','pelajaran.html?m=apa-itu-saham#benar','asisten.html',
+    'index.html','kabar.html','belajar.html','metodologi.html','404.html','UJI-SENTUH'];
+  let total=0, ujiSentuh=0;
+  for (const scheme of ['dark','light']) {
+    const ctx=await b.newContext({ viewport:{width:390,height:844}, colorScheme:scheme, isMobile:true, hasTouch:true, deviceScaleFactor:1 });
+    const p=await ctx.newPage(); const errs=[]; p.on('pageerror',e=>errs.push(e.message));
+    for (const pg of halaman) {
+      const [path,hash]=pg.split('#'); const uji=path.startsWith('UJI-');
+      await p.goto('http://localhost:8765/'+(uji?'peringkat.html':path)); await p.waitForTimeout(300);
+      if (path==='UJI-SENTUH') await p.evaluate(()=>{ document.querySelector('main').insertAdjacentHTML('afterbegin','<p><button style="all:unset;display:inline-block;width:12px;height:12px;background:#888">a</button><button style="all:unset;display:inline-block;width:12px;height:12px;background:#888">b</button></p>'); });
+      if (path==='radar.html'&&hash){ await p.selectOption('#pilih-saham',hash); await p.waitForTimeout(300); }
+      if (path==='asisten.html') await p.evaluate(()=>{ document.querySelectorAll('.form-tanya textarea, .form-tanya button').forEach(e=>e.disabled=false); });
+      if (hash==='benar'){ const id=new URL('http://x/'+path).searchParams.get('m');
+        await p.evaluate((id)=>{ const m=window.MODUL.find(x=>x.id===id); m.kuis.forEach((q,i)=>{ document.querySelector('input[name="soal-'+i+'"][value="'+q.benar+'"]').checked=true; }); },id);
+        await p.click('.kuis button[type="submit"]'); await p.waitForTimeout(200); }
+      if (hash==='istilah'){ const t=await p.$('.istilah, [data-istilah], button.istilah'); if(t){await t.click(); await p.waitForTimeout(200);} }
+      await p.$$eval('details', d=>d.forEach(x=>x.open=true));
+      const r=await p.evaluate(()=>{
+        const sel='a[href],button,input:not([type=hidden]),select,textarea,summary,[role=button],[role=link],[tabindex]:not([tabindex="-1"])';
+        const blok=e=>{ for(let x=e.parentElement;x;x=x.parentElement){ const d=getComputedStyle(x).display; if(!d.startsWith('inline')&&d!=='contents') return x; } return document.body; };
+        const dalamKalimat=e=>{ if(!getComputedStyle(e).display.startsWith('inline')||getComputedStyle(e).display==='inline-block') return false;
+          const bk=blok(e); let t=bk.innerText; for (const a of bk.querySelectorAll(sel)) t=t.split(a.innerText).join(' '); return /[A-Za-z0-9]{3,}/.test(t); };
+        const sasaran=[]; let kecuali=0;
+        for (const e of document.querySelectorAll(sel)) {
+          if (e.disabled||!e.checkVisibility({visibilityProperty:true,opacityProperty:true})) continue;
+          let el=e; if (e.matches('input[type=checkbox],input[type=radio]')) { const l=e.closest('label')||(e.id&&document.querySelector('label[for="'+e.id+'"]')); if(l) el=l; }
+          if (e.matches('input,textarea,select')===false && e.closest('label')&&e.closest('label')!==e) {}
+          const rc=el.getBoundingClientRect(); if (rc.width<2||rc.height<2) continue;
+          const cs=getComputedStyle(e); if (cs.position==='absolute'&&(cs.clip.startsWith('rect(0')||cs.clipPath.includes('inset(50%'))) continue;
+          if (dalamKalimat(e)) { kecuali++; continue; }
+          if (sasaran.some(s=>s.el===el)) continue;
+          sasaran.push({el, rc, nama:(e.tagName.toLowerCase()+(e.className&&typeof e.className==='string'?'.'+e.className.split(' ')[0]:'')+' "'+(e.innerText||e.value||e.getAttribute('aria-label')||'').trim().slice(0,30)+'"')});
+        }
+        const temuan=[]; let kecil=0;
+        const pusat=s=>[s.rc.left+s.rc.width/2, s.rc.top+s.rc.height/2];
+        const jarakKeKotak=([x,y],r)=>Math.hypot(Math.max(r.left-x,0,x-r.right),Math.max(r.top-y,0,y-r.bottom));
+        for (const s of sasaran) {
+          if (s.rc.width>=23.5&&s.rc.height>=23.5) continue; kecil++;
+          const c=pusat(s); let tabrak=null;
+          for (const o of sasaran) { if (o===s||o.el.contains(s.el)||s.el.contains(o.el)) continue;
+            const kecilO=!(o.rc.width>=23.5&&o.rc.height>=23.5);
+            if (jarakKeKotak(c,o.rc)<12 || (kecilO && Math.hypot(c[0]-pusat(o)[0],c[1]-pusat(o)[1])<24)) { tabrak=o; break; } }
+          if (tabrak) temuan.push(`${s.nama} ${Math.round(s.rc.width)}×${Math.round(s.rc.height)}px terlalu dekat dengan ${tabrak.nama}`);
+        }
+        return {temuan, n:sasaran.length, kecil, kecuali, sw:document.documentElement.scrollWidth};
+      });
+      const tag=`sentuh ${scheme} 390 ${pg}`;
+      r.temuan.forEach(t=>console.log(tag,'TEMUAN',t));
+      if (r.sw>390) { console.log(tag,'TEMUAN scroll horizontal',r.sw); r.temuan.push('scroll'); }
+      console.log(tag,'sasaran',r.n,'di bawah 24px',r.kecil,'tautan dalam kalimat',r.kecuali, r.temuan.length?'':'lolos');
+      if (path==='UJI-SENTUH') ujiSentuh+=r.temuan.length?1:0; else total+=r.temuan.length;
+    }
+    if (errs.length) { console.log('sentuh',scheme,'JS errors',errs); total+=errs.length; }
+    await ctx.close();
+  }
+  console.log('total temuan sasaran sentuh',total,'(uji balik UJI-SENTUH tertangkap:',ujiSentuh,'dari 2)');
+}
 async function auditJarak(b) {
   const halaman=['peringkat.html','peringkat.html#istilah','emiten.html?kode=ANTM','radar.html#UNTR','pelajaran.html?m=apa-itu-saham#benar','asisten.html','asisten.html#jawab',
     'index.html','kabar.html','belajar.html','metodologi.html','404.html','UJI-POTONG','UJI-TUMPUK'];
@@ -244,6 +306,8 @@ const halamanFokus = ['index.html','peringkat.html','peringkat.html#istilah','ra
   if (process.env.AUDIT==='jarak') { await auditJarak(b); await b.close(); return; }
   // AUDIT=orientasi node tools/audit-kontras.js → hanya orientasi layar (WCAG 1.3.4)
   if (process.env.AUDIT==='orientasi') { await auditOrientasi(b); await b.close(); return; }
+  // AUDIT=sentuh node tools/audit-kontras.js → hanya ukuran sasaran sentuh (WCAG 2.5.8)
+  if (process.env.AUDIT==='sentuh') { await auditSentuh(b); await b.close(); return; }
   let total = 0;
   // AUDIT=fokus node tools/audit-kontras.js → hanya cek garis fokus (lebih cepat)
   if (process.env.AUDIT!=='fokus') for (const scheme of ['dark','light']) for (const w of [390,1280]) {
@@ -424,5 +488,6 @@ const halamanFokus = ['index.html','peringkat.html','peringkat.html#istilah','ra
   await auditZoom(b);
   await auditJarak(b);
   await auditOrientasi(b);
+  await auditSentuh(b);
   console.log('total temuan',total); await b.close();
 })();

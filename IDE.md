@@ -602,3 +602,11 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Diperiksa: isi <main> yang terlihat saat mendatar ≥90% dari saat tegak (tidak terkunci orientasi), scroll horizontal, tinggi elemen lengket setelah digulir (maks separuh layar), fokus tertutup (Tab maju & mundur), kotak tanya Asisten tercapai Tab dan tampil utuh. Cek statis: tidak ada `screen.orientation.lock` / kunci orientasi.
 - Hasil: 0 temuan, tanpa galat JS. Panjang isi sama persis mendatar/tegak; kepala lengket paling tinggi 42px (tablet Peringkat). Uji balik UJI-KUNCI (isi disembunyikan saat mendatar) dan UJI-LENGKET (kepala lengket 60% layar) tertangkap 4/4.
 - Berikutnya: ukuran sasaran sentuh (WCAG 2.5.8) di 390px.
+
+### Audit ukuran sasaran sentuh (WCAG 2.5.8) — Dewi & Nina, 17 Nov 17.09
+- `AUDIT=sentuh node tools/audit-kontras.js`: HP 390×844 (sentuh), gelap & terang; Peringkat (+ kotak istilah terbuka), profil ANTM, Radar UNTR, pelajaran (sebelum & sesudah kuis), Asisten, beranda, Kabar, Belajar, Metodologi, 404.
+- Aturan: tiap tautan/tombol/isian/summary minimal 24×24px, atau lingkaran 24px di tengahnya tidak menyentuh sasaran lain (pengecualian jarak). Tautan di dalam kalimat dikecualikan; kotak pilihan kuis diukur bersama label-nya.
+- Temuan awal 14 (7 per mode): deretan "Bingung istilahnya? Ketuk: …" di Peringkat — tombol istilah tingginya 23px dan baris kedua menempel ke baris pertama; tautan "Pelajari lebih lanjut" di kotak istilah tingginya 21px tepat di bawah tombol pembukanya. Diperbaiki dengan padding 2px (kini 27px dan 25px), tampilan 390/1280px tetap rapi, tanpa scroll horizontal; audit jarak teks tetap 0 temuan.
+- Hasil akhir: 0 temuan, tanpa galat JS. Uji balik UJI-SENTUH (dua tombol 12px berdempetan) tertangkap 2/2.
+- Berikutnya: konten yang muncul saat diarahkan/difokus (WCAG 1.4.13) — kotak istilah.
+

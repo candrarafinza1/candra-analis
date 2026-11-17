@@ -1748,3 +1748,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: giliran KLBF & BRIS; belum ada laba Januari–September 2026 bersumber → tetap 25 dari 32. Raka/Hana: tidak ada kabar baru.
 - Tugas baru: Dewi + Nina (ukuran sasaran sentuh WCAG 2.5.8).
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 17 Nov 2026, 17.09 WIB (Bima)
+- Dewi + Nina: audit ukuran sasaran sentuh (WCAG 2.5.8) di `tools/audit-kontras.js` (`AUDIT=sentuh`, juga ikut audit penuh): 390px, 12 keadaan, gelap/terang. 14 temuan nyata diperbaiki: tombol di deretan istilah Peringkat (23px, berdempetan antarbaris) dan tautan "Pelajari lebih lanjut" di kotak istilah (21px) diberi padding 2px → 0 temuan. Uji balik UJI-SENTUH tertangkap 2/2. Nina: cek statis + 4 uji balik; cek urutan audit penuh disesuaikan.
+- Fajar: giliran BSSR & MIKA; belum ada laba Januari–September 2026 bersumber → tetap 25 dari 32. Raka/Hana: tidak ada kabar baru.
+- Tugas baru: Dewi + Nina (konten saat diarahkan/difokus, WCAG 1.4.13).
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
