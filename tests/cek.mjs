@@ -5514,6 +5514,40 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
   }
 }
 
+// Nina + Dewi (17 Nov 08.xx): garis fokus keyboard harus kontras ≥3:1 terhadap latar (WCAG 2.2, 1.4.11).
+// Terang: --fokus di atas --kertas & --putih; gelap: --fokus di atas --kertas & --putih gelap;
+// bagian biru malam (kepala, hero, judul halaman, panel gelap, tautan lompat) memakai --bulan di atas --malam.
+{
+  const cekFokus = (css) => {
+    const salah = [];
+    const blokVar = (teks) => { const v = {}; for (const m of teks.matchAll(/--([\w-]+):\s*([^;]+);/g)) v[m[1]] = m[2].trim(); return v; };
+    const akar = /:root\s*\{([^}]*)\}/.exec(css);
+    const gelapM = /@media \(prefers-color-scheme: dark\)\s*\{\s*:root\s*\{([^}]*)\}/.exec(css);
+    if (!akar || !gelapM) return ["blok :root atau mode gelap tidak ditemukan"];
+    const terang = blokVar(akar[1]); const gelap = { ...terang, ...blokVar(gelapM[1]) };
+    const hex = (v, nama) => { let x = v[nama]; for (let i = 0; i < 5 && x && x.startsWith("var("); i++) x = v[x.slice(6, -1)]; return /^#[0-9a-f]{6}$/i.test(x || "") ? x : null; };
+    const lum = (h) => { const c = [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16) / 255).map((u) => (u <= 0.03928 ? u / 12.92 : ((u + 0.055) / 1.055) ** 2.4)); return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]; };
+    const rasio = (a, b) => { const x = lum(a), y = lum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); };
+    if (!/(^|\n):focus-visible\s*\{[^}]*outline:\s*3px solid var\(--fokus\)/.test(css)) salah.push(":focus-visible harus memakai outline 3px solid var(--fokus)");
+    for (const [mode, v] of [["terang", terang], ["gelap", gelap]]) {
+      const f = hex(v, "fokus"); if (!f) { salah.push(`--fokus (${mode}) tidak terbaca sebagai warna`); continue; }
+      for (const latar of ["kertas", "putih"]) { const l = hex(v, latar); if (l && rasio(f, l) < 3) salah.push(`--fokus di atas --${latar} (${mode}) hanya ${rasio(f, l).toFixed(2)}:1`); }
+      const b = hex(v, "bulan"), mlm = hex(v, "malam"); if (b && mlm && rasio(b, mlm) < 3) salah.push(`--bulan di atas --malam (${mode}) di bawah 3:1`);
+    }
+    const aturGelap = /([^{}]*)\{\s*outline-color:\s*var\(--bulan\);?\s*\}/.exec(css);
+    for (const sel of [".kepala :focus-visible", ".hero :focus-visible", ".judul-halaman :focus-visible", ".panel-gelap :focus-visible", ".lompat:focus-visible"])
+      if (!aturGelap || !aturGelap[1].includes(sel)) salah.push(`garis fokus kuning bulan belum dipasang untuk ${sel}`);
+    return salah;
+  };
+  const cssF = readFileSync("assets/styles.css", "utf8");
+  const sF = cekFokus(cssF);
+  ok(sF.length === 0, `garis fokus keyboard: ${sF.join("; ")}`);
+  ok(cekFokus(cssF.replace("--fokus: var(--malam-2);", "--fokus: var(--bulan);")).some((x) => x.includes("terang")), "uji balik garis fokus: kuning di atas kertas terang harus tertangkap");
+  ok(cekFokus(cssF.replace("    --fokus: var(--bulan);\n", "")).some((x) => x.includes("gelap")), "uji balik garis fokus: --fokus gelap yang lupa diganti harus tertangkap");
+  ok(cekFokus(cssF.replace("outline: 3px solid var(--fokus);", "outline: 3px solid var(--bulan);")).length > 0, "uji balik garis fokus: :focus-visible tanpa --fokus harus tertangkap");
+  ok(cekFokus(cssF.replace(".hero :focus-visible, ", "")).some((x) => x.includes(".hero")), "uji balik garis fokus: hero tanpa garis kuning harus tertangkap");
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);
 

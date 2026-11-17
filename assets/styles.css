@@ -16,6 +16,7 @@
   --waspada: #8f5d12;
   --waspada-muda: #fbf0dc;
   --bulan: #e9c46a;      /* khusus logo bulan */
+  --fokus: var(--malam-2); /* garis fokus keyboard di atas kertas/kartu (Dewi, 17 Nov: kuning di atas putih hanya 1,55:1) */
   --aksen: var(--malam-2); /* tautan & aksen di atas kertas/kartu */
   --hover-baris: #f0f2ea;
   --sorot-istilah: #eef0fb;
@@ -48,6 +49,7 @@
     --waspada: #e5a84a;
     --waspada-muda: #31260f;
     --aksen: #a9b1ff;
+    --fokus: var(--bulan);
     --hover-baris: #232738;
     --sorot-istilah: #262b45;
     --demo-garis: #6b5320; --demo-teks: #f0d9a8; --demo-tebal: #fbe9c4;
@@ -79,7 +81,7 @@ a { color: var(--aksen); text-underline-offset: 3px; }
 a:hover { color: var(--naik); }
 
 :focus-visible {
-  outline: 3px solid var(--bulan);
+  outline: 3px solid var(--fokus);
   outline-offset: 2px;
   border-radius: 4px;
 }
@@ -98,6 +100,8 @@ p { margin: 0 0 1em; }
   background: var(--bulan); color: var(--malam); padding: 8px 12px; z-index: 10; /* --malam tetap gelap di mode gelap (Dewi, 11 Nov) */
 }
 .lompat:focus { left: 8px; }
+/* Di bagian biru malam (kepala, hero, judul halaman, panel gelap) garis fokus tetap kuning bulan (Dewi, 17 Nov). */
+.kepala :focus-visible, .hero :focus-visible, .judul-halaman :focus-visible, .panel-gelap :focus-visible, .lompat:focus-visible { outline-color: var(--bulan); }
 
 /* ---------- Header ---------- */
 .kepala {
@@ -122,6 +126,8 @@ p { margin: 0 0 1em; }
 }
 .nav a:hover { color: #fff; background: var(--malam-2); }
 .nav a[aria-current="page"] { color: var(--malam); background: #fff; }
+/* Garis fokus tidak menimpa tombol menu tetangga yang putih (jarak antartombol 4px; Dewi, 17 Nov) */
+.nav a:focus-visible { outline-offset: 0; }
 
 /* ---------- Hero (beranda) ---------- */
 .hero {
@@ -291,6 +297,9 @@ tbody tr:hover { background: var(--hover-baris); }
   .kepala .wadah { gap: 4px 16px; padding-top: 8px; padding-bottom: 8px; }
   .nav { gap: 2px; flex-wrap: nowrap; margin: 0 -8px; }
   .nav a { font-size: .86rem; padding: 8px 9px; white-space: nowrap; }
+  /* Jarak antartombol hanya 2px: garis fokus digambar di dalam tombol agar tidak menimpa tetangga (Dewi, 17 Nov) */
+  .nav a:focus-visible { outline-offset: -3px; }
+  .nav a[aria-current="page"]:focus-visible { outline-color: var(--malam); }
   .bagian { padding: 32px 0; }
 }
 @media (max-width: 359px) { .nav { flex-wrap: wrap; } }

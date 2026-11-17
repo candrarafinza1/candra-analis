@@ -1695,3 +1695,12 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Yoga + Nina: run #294 masih merah (pip tanpa sudo memasang ke ~/.local, diabaikan `python3 -I`); diperbaiki dengan sudo → run #295 hijau dan uji ujung-ke-ujung modul PDF berjalan penuh di CI.
 - Tugas baru: Yoga (cek run CI setiap sesi setelah push; bila merah, perbaiki dulu).
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 17 Nov 2026, 08.09 WIB — sesi kerja (Bima)
+- Catatan ringan: salinan repo di lingkungan kerja tertinggal (10 Nov); disamakan dengan `main` terbaru (salinan lama disimpan sebagai cabang lokal, tidak di-push).
+- Yoga: run CI #296 (commit sesi 07.10) hijau.
+- Dewi + Kirana: audit kontras diperluas ke beranda, Belajar, pelajaran (kuis benar & salah), 404 → 0 teks di bawah 4,5:1. Cek garis fokus keyboard baru menemukan masalah nyata: garis kuning di mode terang hanya 1,55:1. Diperbaiki dengan token `--fokus` (biru malam di kertas terang, kuning di bagian gelap) dan garis menu di HP digambar di dalam tombol. Hasil 0 temuan, uji balik tertangkap. Dicek 390px & 1280px.
+- Nina: cek statis garis fokus di `tests/cek.mjs` (kontras ≥3:1 terang & gelap, bagian biru malam tetap kuning), 4 uji balik.
+- Fajar: giliran KLBF & BRIS; belum ada laba Januari–September 2026 bersumber (BRIS baru sampai Agustus 2026) → tetap 25 dari 32. Raka/Hana: tidak ada kabar baru.
+- Tugas baru: Dewi + Tegar (cek fokus Tab sampai habis, kotak tanya Asisten, menu aktif).
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

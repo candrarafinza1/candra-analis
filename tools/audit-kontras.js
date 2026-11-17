@@ -1,11 +1,16 @@
 // Dewi & Kirana (12 Nov 10.08): audit kontras otomatis (WCAG AA: 4,5:1 teks biasa, 3:1 teks besar).
-// Memeriksa semua teks terlihat + teks contoh (placeholder) di 7 halaman, mode gelap & terang, lebar 390px & 1280px,
+// Memeriksa semua teks terlihat + teks contoh (placeholder) di 10 halaman (17 Nov: + beranda, Belajar, pelajaran dengan kuis terjawab benar & salah, 404), mode gelap & terang, lebar 390px & 1280px,
 // termasuk hasil Radar 4 emiten, kotak istilah terbuka, semua <details> terbuka, contoh pesan Asisten & pesan galat.
 // Halaman "UJI" sengaja memasang judul abu di atas abu; audit wajib menangkapnya (uji balik), jadi hasil sehat = tepat 4 temuan UJI.
+// 17 Nov 08.xx (Dewi & Kirana): juga cek garis fokus keyboard: Tab 10× per halaman; tiap elemen yang terfokus wajib punya
+// garis fokus terlihat (outline ≥2px, atau box-shadow/border berubah) dengan kontras ≥3:1 terhadap latar di sekitarnya.
+// Halaman "UJI-FOKUS" sengaja mematikan outline; audit wajib menangkapnya (uji balik).
 // Cara pakai: python3 -m http.server 8765 (di akar repo), lalu: node tools/audit-kontras.js
 // Butuh Playwright + Chromium (sudah ada di lingkungan kerja tim); tidak dijalankan oleh tests/cek.mjs.
 const { chromium } = require('playwright');
-const pages = ['radar.html#UNTR','radar.html#INTP','radar.html#TPIA','radar.html#HEAL','peringkat.html#istilah','asisten.html#jawab','UJI','peringkat.html','radar.html','emiten.html?kode=ANTM','emiten.html?kode=TPIA','kabar.html','metodologi.html','asisten.html'];
+const pages = ['radar.html#UNTR','radar.html#INTP','radar.html#TPIA','radar.html#HEAL','peringkat.html#istilah','asisten.html#jawab','UJI','peringkat.html','radar.html','emiten.html?kode=ANTM','emiten.html?kode=TPIA','kabar.html','metodologi.html','asisten.html',
+  'index.html','belajar.html','pelajaran.html?m=apa-itu-saham#benar','pelajaran.html?m=saham-syariah#salah','404.html'];
+const halamanFokus = ['index.html','peringkat.html','radar.html','emiten.html?kode=ANTM','kabar.html','belajar.html','pelajaran.html?m=apa-itu-saham','metodologi.html','asisten.html','404.html','UJI-FOKUS'];
 (async () => {
   const b = await chromium.launch();
   let total = 0;
@@ -16,6 +21,9 @@ const pages = ['radar.html#UNTR','radar.html#INTP','radar.html#TPIA','radar.html
       const [path,hash]=pg.split('#'); await p.goto('http://localhost:8765/'+(path==='UJI'?'peringkat.html':path)); await p.waitForTimeout(400);
       if (path==='UJI') await p.addStyleTag({content:'h1{color:#999!important;background:#aaa!important}'});
       if (path==='radar.html'&&hash){ await p.selectOption('#pilih-saham',hash); await p.waitForTimeout(300); console.log('radar',hash, await p.$eval('#hasil-radar h2',x=>x.textContent)); }
+      if (hash==='benar'||hash==='salah'){ const id=new URL('http://x/'+path).searchParams.get('m');
+        await p.evaluate(([id,mode])=>{ const m=window.MODUL.find(x=>x.id===id); m.kuis.forEach((q,i)=>{ const j=mode==='benar'?q.benar:(q.benar+1)%q.pilihan.length; document.getElementById(document.querySelector('input[name="soal-'+i+'"][value="'+j+'"]').id).checked=true; }); },[id,hash]);
+        await p.click('.kuis button[type="submit"]'); await p.waitForTimeout(200); console.log('kuis',hash, await p.$eval('.kuis-hasil',x=>x.textContent.trim().slice(0,60))); }
       if (hash==='istilah'){ const t=await p.$('.istilah, [data-istilah], button.istilah'); if(t){await t.click(); await p.waitForTimeout(200);} else console.log('tombol istilah tidak ketemu'); }
       if (hash==='jawab'){ await p.evaluate(()=>{const log=document.querySelector('[aria-live="polite"]'); if(log) log.insertAdjacentHTML('beforeend','<div class="pesan pesan-galat"><span class="pesan-label">Asisten</span><p>Maaf, server galat</p></div><div class="pesan pesan-asisten"><span class="pesan-label">Asisten</span><strong>Asisten</strong><p>Contoh jawaban <strong>tebal</strong></p><ul><li>poin</li></ul></div><div class="pesan pesan-anda"><strong>Anda</strong><p>tanya</p></div>');}); }
       // pilih emiten di radar agar temuan tampil
@@ -49,5 +57,47 @@ const pages = ['radar.html#UNTR','radar.html#INTP','radar.html#TPIA','radar.html
     if (errs.length) console.log(scheme,w,'JS errors',errs);
     await ctx.close();
   }
+  // Garis fokus keyboard (Tab 10×), mode gelap & terang, 390px & 1280px.
+  let totalFokus=0, ujiFokus=0;
+  for (const scheme of ['dark','light']) for (const w of [390,1280]) {
+    const ctx = await b.newContext({ viewport:{width:w,height:900}, colorScheme:scheme });
+    const p = await ctx.newPage();
+    for (const pg of halamanFokus) {
+      await p.goto('http://localhost:8765/'+(pg==='UJI-FOKUS'?'index.html':pg)); await p.waitForTimeout(300);
+      if (pg==='UJI-FOKUS') await p.addStyleTag({content:'*:focus,*:focus-visible{outline:none!important;box-shadow:none!important}'});
+      const temuan=[]; let dicek=0;
+      for (let t=0;t<10;t++) {
+        await p.keyboard.press('Tab'); await p.waitForTimeout(60);
+        const r = await p.evaluate(() => {
+          const el=document.activeElement; if(!el||el===document.body) return null;
+          const parse = c => { const m = c.match(/rgba?\(([^)]+)\)/); if(!m) return null; const a=m[1].split(/[ ,\/]+/).filter(Boolean).map(Number); return [a[0],a[1],a[2],a[3]===undefined?1:a[3]]; };
+          const lum = ([r,g,b]) => { const f=v=>{v/=255;return v<=.03928?v/12.92:((v+.055)/1.055)**2.4}; return .2126*f(r)+.7152*f(g)+.0722*f(b); };
+          const ratio=(a,b)=>{const x=lum(a),y=lum(b);return (Math.max(x,y)+.05)/(Math.min(x,y)+.05)};
+          const bgOf = e0 => { for(let e=e0;e;e=e.parentElement){ const c=parse(getComputedStyle(e).backgroundColor); if(c&&c[3]>=0.99) return c.slice(0,3);} return parse(getComputedStyle(document.body).backgroundColor).slice(0,3); };
+          const cs=getComputedStyle(el); const nama=el.tagName.toLowerCase()+(el.className&&typeof el.className==='string'?'.'+el.className.split(' ')[0]:'')+' "'+(el.textContent||el.getAttribute('aria-label')||'').trim().slice(0,30)+'"';
+          const ow=parseFloat(cs.outlineWidth)||0;
+          // latar di luar elemen (garis fokus digambar di luar dengan offset)
+          // latar tepat di luar elemen, diambil dari titik di samping kiri (atau kanan) garis fokus, bukan induk DOM
+          const rc=el.getBoundingClientRect(); const jarak=(ow||3)+(parseFloat(cs.outlineOffset)||0)+1;
+          let x=rc.left-jarak; if(x<0) x=rc.right+jarak; const y=Math.min(Math.max(rc.top+rc.height/2,0),innerHeight-1);
+          const di=document.elementsFromPoint(Math.min(x,innerWidth-1),y).find(e=>e!==el&&!el.contains(e));
+          const luar=bgOf(di||el.parentElement||el);
+          if (cs.outlineStyle!=='none' && ow>=2 && (parseFloat(cs.outlineOffset)||0)<=-ow) { const oc=parse(cs.outlineColor); return {nama, k:ratio(oc.slice(0,3),bgOf(el)), jenis:'outline dalam '+ow+'px'}; }
+          if (cs.outlineStyle!=='none' && ow>=2) { const oc=parse(cs.outlineColor); return {nama, k:ratio(oc.slice(0,3),luar), jenis:'outline '+ow+'px'}; }
+          if (cs.boxShadow && cs.boxShadow!=='none') { const sc=parse(cs.boxShadow); if (sc) return {nama, k:ratio(sc.slice(0,3),luar), jenis:'box-shadow'}; }
+          const bc=parse(cs.borderTopColor); const bw=parseFloat(cs.borderTopWidth)||0;
+          if (bw>=2 && bc) return {nama, k:ratio(bc.slice(0,3),bgOf(el)), jenis:'border '+bw+'px'};
+          return {nama, k:0, jenis:'tanpa garis fokus'};
+        });
+        if (!r) continue; dicek++;
+        if (r.k<3) temuan.push(`${r.jenis} ${r.k.toFixed(2)}:1 ${r.nama}`);
+      }
+      const tag=`fokus ${scheme} ${w} ${pg}`;
+      console.log(tag,'dicek',dicek); temuan.forEach(o=>console.log(tag,o));
+      if (pg==='UJI-FOKUS') ujiFokus+=temuan.length; else totalFokus+=temuan.length;
+    }
+    await ctx.close();
+  }
+  console.log('total temuan fokus',totalFokus,'(uji balik UJI-FOKUS tertangkap:',ujiFokus,')');
   console.log('total temuan',total); await b.close();
 })();

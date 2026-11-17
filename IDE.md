@@ -551,3 +551,9 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Peringkat, Radar (hasil UNTR, INTP, TPIA, HEAL), profil ANTM & TPIA (dengan Bandingkan), Kabar, Metodologi, Asisten (pita "belum aktif", contoh jawaban, pesan galat); semua `<details>` dan kotak istilah terbuka; mode gelap & terang; 390px & 1280px.
 - Hasil: 0 teks di bawah 4,5:1 (3:1 untuk teks besar), teks contoh kolom aman, tanpa scroll horizontal, tanpa galat JS. Uji balik tertangkap.
 - Skrip bisa dipakai ulang: `tools/audit-kontras.js`. Berikutnya: beranda, Belajar, pelajaran, 404, dan garis fokus keyboard.
+
+### Audit kontras lanjutan + garis fokus keyboard (Dewi & Kirana, 17 Nov 08.xx)
+- Ditambah ke `tools/audit-kontras.js`: beranda, Belajar, pelajaran dengan kuis terjawab benar (3/3) dan salah (0/3), 404. Hasil teks: 0 di bawah 4,5:1, tanpa scroll horizontal, tanpa galat JS.
+- Cek baru garis fokus: Tab 10× per halaman (10 halaman), latar diambil dari titik tepat di luar garis. Temuan: di mode terang garis kuning bulan di atas kertas hanya 1,55:1 (di kartu putih 1,67:1), sulit terlihat oleh pengguna keyboard.
+- Perbaikan Dewi: token `--fokus` (terang biru malam ≥10:1, gelap kuning bulan), garis kuning dipertahankan di bagian biru malam; menu atas di HP memakai garis di dalam tombol agar tidak menimpa tombol aktif yang putih. Kirana: tangkapan 390px & 1280px rapi, garis jelas tanpa menggeser tata letak.
+- Berikutnya: Tab sampai habis di halaman interaktif, kotak tanya Asisten, menu aktif.
