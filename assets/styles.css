@@ -229,7 +229,7 @@ p { margin: 0 0 1em; }
 .tombol-tandai { background: var(--malam); color: #fff; }
 .tombol-tandai[aria-pressed="true"] { background: var(--naik); border-color: var(--naik); color: var(--putih); }
 .tandai-info { margin: 10px 0 0; color: var(--tinta-2); font-size: .95rem; }
-.tandai-info:empty { display: none; }
+
 
 /* Tiga alat utama di beranda — sengaja tidak seragam */
 .alat {
@@ -320,7 +320,7 @@ tbody tr:hover { background: var(--hover-baris); }
   border: 2px solid var(--garis); background: var(--putih); color: var(--tinta); flex: 1 1 220px; max-width: 360px; min-width: 0;
 }
 .saring-ket { width: 100%; margin: 0; font-size: .9rem; color: var(--tinta-2); }
-.saring-ket:empty { display: none; }
+
 
 /* Kamus istilah di halaman Belajar (Arif + Dewi, IDE.md #22) */
 .kamus { max-width: var(--lebar-teks); }
@@ -407,7 +407,7 @@ tbody tr:hover { background: var(--hover-baris); }
 .kuis-dilipat legend { margin-bottom: 0; }
 .kuis-dilipat .kuis-umpan { margin-top: 6px; }
 .kuis-hasil { font-weight: 700; margin: 14px 0 0; }
-.kuis-hasil:empty { display: none; }
+
 @media (min-width: 720px) { .kuis { padding: 24px 28px; } }
 
 /* Judul halaman dalam */
@@ -448,7 +448,7 @@ tbody tr:hover { background: var(--hover-baris); }
 /* Asisten AI (tim Arif & Dewi) */
 #asisten { max-width: 46rem; }
 .obrolan { display: grid; gap: 14px; margin-bottom: 20px; }
-.obrolan:empty { display: none; }
+
 .pesan { padding: 14px 16px; border-radius: var(--radius); border: 1px solid var(--garis); background: var(--putih); }
 .pesan p { margin: 0 0 .6em; }
 .pesan p:last-child { margin-bottom: 0; }
@@ -621,7 +621,7 @@ button.istilah:hover, button.istilah[aria-expanded="true"] { color: var(--aksen)
   border: 2px solid var(--garis); background: var(--putih); color: var(--tinta); flex: 1 1 240px; max-width: 420px; min-width: 0;
 }
 .info-ketik { width: 100%; margin: 0; font-size: .9rem; color: var(--tinta-2); }
-.info-ketik:empty { display: none; }
+
 /* Salin tautan profil (Arif & Dewi, IDE.md #29) */
 .salin-profil { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin: 0 0 16px; }
 .tombol-salin { background: transparent; color: var(--aksen); border-color: var(--aksen); max-width: 100%; white-space: normal; }
@@ -630,7 +630,7 @@ button.istilah:hover, button.istilah[aria-expanded="true"] { color: var(--aksen)
   color: var(--tinta); background: var(--putih); border: 1px solid var(--garis); border-radius: var(--radius-kecil); }
 .alamat-salin[hidden] { display: none; }
 .info-salin { width: 100%; margin: 0; font-size: .9rem; color: var(--tinta-2); }
-.info-salin:empty { display: none; }
+
 .tabel-banding td.angka { white-space: normal; overflow-wrap: anywhere; }
 @media (max-width: 600px) {
   .tabel-banding { table-layout: fixed; font-size: .9rem; }
@@ -801,4 +801,13 @@ button.istilah:hover, button.istilah[aria-expanded="true"] { color: var(--aksen)
 .ke-atas::before { content: "↑"; content: "↑" / ""; margin-right: 6px; }
 @media (prefers-reduced-motion: no-preference) {
   html:has(.ke-atas) { scroll-behavior: smooth; }
+}
+
+/* Dewi & Nina (17 Nov 20.xx, audit pesan status WCAG 4.1.3): wilayah pesan (role="status"/aria-live) yang masih kosong
+   dulu disembunyikan dengan display:none. Itu mengeluarkannya dari pohon aksesibilitas, sehingga saat pesan masuk
+   wilayahnya ikut "lahir" bersamaan dan pembaca layar bisa tidak mengumumkan. Kini saat kosong hanya dikecilkan
+   keluar dari alur tata letak (tampilan sama seperti dulu), tetapi tetap ada untuk pembaca layar. */
+.tandai-info:empty, .saring-ket:empty, .kuis-hasil:empty, .obrolan:empty, .info-ketik:empty, .info-salin:empty {
+  position: absolute; width: 1px; height: 1px; margin: 0; padding: 0; border: 0;
+  overflow: hidden; clip-path: inset(50%); white-space: nowrap;
 }

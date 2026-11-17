@@ -625,3 +625,11 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Saran WCAG (nama sebaiknya diawali teks terlihat): 144 tautan kode emiten bernama "Profil ANTM" padahal yang terlihat "ANTM". Diperbaiki menjadi "ANTM, profil emiten" agar perintah suara "klik ANTM" langsung cocok. Tampilan tidak berubah. Saran kini 0.
 - Uji balik UJI-LABEL (tombol "Kirim" ber-aria-label "Tutup") tertangkap 4/4. Nina menambah cek statis di `tests/cek.mjs` (aria-label di app.js & HTML wajib memuat teksnya; tautan kode wajib diawali kode) + 5 uji balik.
 - Berikutnya: pesan status (WCAG 4.1.3).
+
+### 17 Nov 20.12 — Dewi & Nina: audit pesan status (WCAG 4.1.3)
+- `AUDIT=status node tools/audit-kontras.js` (juga ikut audit penuh): 19 skenario × gelap/terang × 390/1280px, 84 pesan dicek. Skenario: saring sektor Peringkat, cari Kamus (cocok & kosong), kuis (dijawab & kosong), Tandai selesai, Salin tautan (berhasil & cadangan), kotak ketik Radar (1 cocok, banyak, tidak ada) & Bandingkan, pilih Radar & Bandingkan, saring Kabar, Asisten (belum aktif, menunggu jawaban, galat server, koneksi putus; `api/tanya` ditiru).
+- Aturan: pesan wajib berada di wilayah role="status"/aria-live yang sudah ada DAN tampil sebelum aksi pengguna.
+- Temuan sebelum perbaikan: 56. Penyebab: (1) enam wilayah pesan (`.tandai-info`, `.saring-ket`, `.kuis-hasil`, `.obrolan`, `.info-ketik`, `.info-salin`) disembunyikan dengan `display:none` saat kosong, jadi wilayahnya baru masuk pohon aksesibilitas bersamaan dengan pesannya; (2) pita "Asisten belum aktif" sendiri ber-role status dan ber-hidden.
+- Perbaikan: saat kosong, wilayah hanya dikecilkan keluar dari alur (pola teks khusus pembaca layar, `clip-path: inset(50%)`); tampilan sama seperti dulu. Pita Asisten kini di dalam wadah role="status" yang selalu ada. Sesudah: 0 temuan. Zoom/layar pendek & sasaran sentuh dijalankan ulang: 0 temuan; tanpa scroll horizontal di 10 halaman (390 & 1280px).
+- Uji balik UJI-STATUS (pesan di `<p>` tanpa aria-live + wilayah status yang dibuat bersama pesannya) tertangkap 4/4. Nina menambah cek statis di `tests/cek.mjs` (wilayah status tidak boleh `:empty { display:none }` atau dibuat hidden; pita Asisten di wadah status) + uji balik.
+- Berikutnya: halaman berjudul jelas & urutan judul (WCAG 2.4.2 / 1.3.1, judul h1–h3 tidak melompat) di 10 halaman.

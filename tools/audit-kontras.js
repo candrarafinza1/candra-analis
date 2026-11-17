@@ -6,7 +6,7 @@
 // garis fokus terlihat (outline ≥2px, atau box-shadow/border berubah) dengan kontras ≥3:1 terhadap latar di sekitarnya.
 // Halaman "UJI-FOKUS" sengaja mematikan outline; audit wajib menangkapnya (uji balik).
 // 17 Nov 09.xx (Dewi & Tegar): Tab sampai habis, + keadaan istilah terbuka, hasil Radar UNTR, kuis terjawab; cek border kotak tanya Asisten.
-// Cara pakai: python3 -m http.server 8765 (di akar repo), lalu: node tools/audit-kontras.js (AUDIT=fokus: hanya garis fokus & fokus tertutup; AUDIT=zoom: hanya zoom 200% & layar pendek HP; AUDIT=jarak: hanya jarak teks WCAG 1.4.12; AUDIT=orientasi: hanya orientasi layar WCAG 1.3.4; AUDIT=sentuh: hanya ukuran sasaran sentuh WCAG 2.5.8; AUDIT=sorot: hanya konten saat diarahkan/difokus WCAG 1.4.13; AUDIT=label: hanya label dalam nama WCAG 2.5.3)
+// Cara pakai: python3 -m http.server 8765 (di akar repo), lalu: node tools/audit-kontras.js (AUDIT=fokus: hanya garis fokus & fokus tertutup; AUDIT=zoom: hanya zoom 200% & layar pendek HP; AUDIT=jarak: hanya jarak teks WCAG 1.4.12; AUDIT=orientasi: hanya orientasi layar WCAG 1.3.4; AUDIT=sentuh: hanya ukuran sasaran sentuh WCAG 2.5.8; AUDIT=sorot: hanya konten saat diarahkan/difokus WCAG 1.4.13; AUDIT=label: hanya label dalam nama WCAG 2.5.3; AUDIT=status: hanya pesan status WCAG 4.1.3)
 // Butuh Playwright + Chromium (sudah ada di lingkungan kerja tim); tidak dijalankan oleh tests/cek.mjs.
 const { chromium } = require('playwright');
 // 17 Nov 14.xx (Dewi & Nina): langkah Tab maju & Shift+Tab mundur untuk cek fokus tertutup, dipakai bersama oleh
@@ -470,6 +470,79 @@ async function auditLabel(b) {
   }
   console.log('total temuan label dalam nama',total,'(elemen dicek:',dicekSemua,'; saran urutan:',saran,'; uji balik UJI-LABEL tertangkap:',ujiLabel,'dari 4)');
 }
+// 17 Nov 20.xx (Dewi & Nina): audit pesan status (WCAG 4.1.3). Pesan yang muncul tanpa memindah fokus wajib berada di
+// wilayah role="status"/"alert"/"log" atau aria-live (bukan "off") yang SUDAH ADA dan tampil (bukan hidden/display:none)
+// sebelum aksi pengguna dilakukan. Wilayah yang baru dibuat/ditampilkan bersamaan dengan pesannya sering tidak diumumkan.
+// Skenario: saring sektor Peringkat, cari Kamus (cocok & kosong), kuis (jawab & kosong), Tandai selesai, Salin tautan
+// (berhasil & cadangan), kotak ketik Radar & Bandingkan (1 cocok, banyak, tidak ada), pilih Radar, saring Kabar,
+// Asisten (status belum aktif, menunggu jawaban, galat server, koneksi putus). Uji balik UJI-STATUS: pesan di <p> tanpa
+// aria-live dan wilayah status yang dibuat bersamaan dengan pesan; keduanya wajib tertangkap.
+async function auditStatus(b) {
+  const AKTIF=[['peringkat.html',async p=>{ const v=await p.$eval('#pilih-sektor',s=>s.options[1].value); await p.selectOption('#pilih-sektor',v); },'#ket-sektor','saring sektor'],
+    ['belajar.html',async p=>{ await p.fill('#cari-istilah','dividen'); },'.info-kamus','cari kamus cocok'],
+    ['belajar.html',async p=>{ await p.fill('#cari-istilah','zzzqqq'); },'.info-kamus','cari kamus kosong'],
+    ['pelajaran.html?m=apa-itu-saham',async p=>{ await p.evaluate(()=>{ const m=window.MODUL.find(x=>x.id==='apa-itu-saham'); m.kuis.forEach((q,i)=>{ document.querySelector('input[name="soal-'+i+'"][value="'+q.benar+'"]').checked=true; }); }); await p.click('.kuis button[type="submit"]'); },'.kuis-hasil','kuis dijawab'],
+    ['pelajaran.html?m=apa-itu-saham',async p=>{ await p.click('.kuis button[type="submit"]'); },'.kuis-hasil','kuis kosong'],
+    ['pelajaran.html?m=apa-itu-saham',async p=>{ await p.click('.tombol-tandai'); },'.tandai-info','tandai selesai'],
+    ['emiten.html?kode=ANTM',async p=>{ await p.click('.tombol-salin'); },'#salin-info','salin tautan berhasil'],
+    ['emiten.html?kode=ANTM#cadangan',async p=>{ await p.click('.tombol-salin'); },'#salin-info','salin tautan cadangan'],
+    ['radar.html',async p=>{ await p.fill('#radar-ketik','ANTM'); },'#radar-info','ketik Radar 1 cocok'],
+    ['radar.html',async p=>{ await p.fill('#radar-ketik','B'); },'#radar-info','ketik Radar banyak'],
+    ['radar.html',async p=>{ await p.fill('#radar-ketik','zzzz'); },'#radar-info','ketik Radar tidak ada'],
+    ['radar.html',async p=>{ await p.selectOption('#pilih-saham','UNTR'); },'#hasil-radar','pilih Radar'],
+    ['emiten.html?kode=ANTM',async p=>{ await p.fill('#banding-ketik','TLKM'); },'#banding-info','ketik Bandingkan'],
+    ['emiten.html?kode=ANTM',async p=>{ await p.selectOption('#pilih-banding','TLKM'); },'#hasil-banding','pilih Bandingkan'],
+    ['kabar.html',async p=>{ const v=await p.$eval('#pilih-jenis',s=>s.options[1].value); await p.selectOption('#pilih-jenis',v); },'#ket-jenis','saring kabar'],
+    ['asisten.html#mati',async p=>{ await p.waitForTimeout(900); },'.pita-demo','Asisten belum aktif'],
+    ['asisten.html#galat',async p=>{ await p.fill('#kotak-tanya','Apa itu ROE?'); await p.click('.form-tanya button[type="submit"]'); await p.waitForTimeout(150); },'.mengetik','Asisten menunggu'],
+    ['asisten.html#galat',async p=>{ await p.fill('#kotak-tanya','Apa itu ROE?'); await p.click('.form-tanya button[type="submit"]'); await p.waitForTimeout(1600); },'.pesan-galat','Asisten galat server'],
+    ['asisten.html#putus',async p=>{ await p.fill('#kotak-tanya','Apa itu ROE?'); await p.click('.form-tanya button[type="submit"]'); await p.waitForTimeout(1600); },'.pesan-galat','Asisten koneksi putus'],
+    ['UJI-STATUS',async p=>{ await p.evaluate(()=>{ document.getElementById('uji-tanpa').textContent='Tautan disalin.';
+      const r=document.createElement('p'); r.id='uji-baru'; r.setAttribute('role','status'); r.textContent='Hasil disaring.'; document.querySelector('main').appendChild(r); }); },'#uji-tanpa, #uji-baru','uji balik'],
+  ];
+  let total=0, ujiStatus=0, catatan=0, dicek=0;
+  for (const scheme of ['dark','light']) for (const w of [390,1280]) {
+    for (const [pg,aksi,selPesan,nama] of AKTIF) {
+      const [path,hash]=pg.split('#'); const uji=path==='UJI-STATUS';
+      const ctx=await b.newContext({ viewport:{width:w,height:844}, colorScheme:scheme, deviceScaleFactor:1,
+        permissions: hash==='cadangan'?[]:['clipboard-read','clipboard-write'] });
+      if (hash==='cadangan') await ctx.addInitScript(()=>{ Object.defineProperty(navigator,'clipboard',{ value:{ writeText:()=>Promise.reject(new Error('ditolak')) }, configurable:true }); });
+      if (path==='asisten.html') await ctx.route('**/api/tanya', async r=>{
+        const req=r.request();
+        if (req.method()==='GET') { await new Promise(x=>setTimeout(x,hash==='mati'?600:0)); return r.fulfill({ status:200, contentType:'application/json', body:JSON.stringify({aktif:hash!=='mati'}) }); }
+        await new Promise(x=>setTimeout(x,1200));
+        if (hash==='putus') return r.abort('failed');
+        return r.fulfill({ status:500, contentType:'application/json', body:JSON.stringify({galat:'Asisten tidak bisa menjawab saat ini. Coba lagi sebentar lagi.'}) }); });
+      const p=await ctx.newPage(); const errs=[]; p.on('pageerror',e=>errs.push(e.message));
+      await p.goto('http://localhost:8765/'+(uji?'peringkat.html':path)); await p.waitForTimeout(hash==='mati'?200:400);
+      if (uji) await p.evaluate(()=>{ const x=document.createElement('p'); x.id='uji-tanpa'; document.querySelector('main').appendChild(x); });
+      // Tandai semua wilayah hidup yang sudah ada & tampil SEBELUM aksi.
+      await p.evaluate(()=>{ document.querySelectorAll('[aria-live]:not([aria-live="off"]),[role=status],[role=alert],[role=log]').forEach(e=>{ if (e.checkVisibility()) e.dataset.auditSiap='1'; }); });
+      await aksi(p); await p.waitForTimeout(250);
+      const r=await p.evaluate((sel)=>{
+        const temuan=[], cat=[]; const els=[...document.querySelectorAll(sel)];
+        if (!els.length) cat.push('pesan '+sel+' tidak ditemukan');
+        for (const e of els) {
+          const t=(e.textContent||'').trim().replace(/\s+/g,' ');
+          if (!t) { cat.push('pesan '+sel+' kosong'); continue; }
+          if (!e.checkVisibility()) { cat.push('pesan '+sel+' tidak tampil'); continue; }
+          const w=e.closest('[aria-live]:not([aria-live="off"]),[role=status],[role=alert],[role=log]');
+          if (!w) temuan.push(`"${t.slice(0,45)}" tidak berada di wilayah role=status/aria-live`);
+          else if (w.dataset.auditSiap!=='1') temuan.push(`"${t.slice(0,45)}" berada di wilayah ${w.tagName.toLowerCase()}${w.className?'.'+w.className.split(' ')[0]:''} yang baru dibuat/ditampilkan bersama pesannya`);
+          else if (w.getAttribute('aria-live')==='off') temuan.push(`"${t.slice(0,45)}" di wilayah aria-live=off`);
+        }
+        return {temuan,cat,n:els.length};
+      },selPesan);
+      const tag=`status ${scheme} ${w} ${nama}`;
+      r.temuan.forEach(t=>console.log(tag,'TEMUAN',t)); r.cat.forEach(t=>console.log(tag,'catatan',t));
+      console.log(tag, r.temuan.length?'':'lolos'); dicek+=r.n; catatan+=r.cat.length;
+      if (uji) ujiStatus+=r.temuan.length===2?1:0; else total+=r.temuan.length;
+      if (errs.length) { console.log(tag,'JS errors',errs); total+=errs.length; }
+      await ctx.close();
+    }
+  }
+  console.log('total temuan pesan status',total,'(skenario:',AKTIF.length-1,'× 4 keadaan; pesan dicek:',dicek,'; catatan:',catatan,'; uji balik UJI-STATUS tertangkap:',ujiStatus,'dari 4)');
+}
 const pages = ['radar.html#UNTR','radar.html#INTP','radar.html#TPIA','radar.html#HEAL','peringkat.html#istilah','asisten.html#jawab','UJI','peringkat.html','radar.html','emiten.html?kode=ANTM','emiten.html?kode=TPIA','kabar.html','metodologi.html','asisten.html',
   'index.html','belajar.html','pelajaran.html?m=apa-itu-saham#benar','pelajaran.html?m=saham-syariah#salah','404.html'];
 const halamanFokus = ['index.html','peringkat.html','peringkat.html#istilah','radar.html','radar.html#UNTR','emiten.html?kode=ANTM','kabar.html','belajar.html','pelajaran.html?m=apa-itu-saham','pelajaran.html?m=apa-itu-saham#benar','metodologi.html','asisten.html','404.html','UJI-FOKUS','UJI-FOKUS-BORDER'];
@@ -487,6 +560,8 @@ const halamanFokus = ['index.html','peringkat.html','peringkat.html#istilah','ra
   if (process.env.AUDIT==='sorot') { await auditSorot(b); await b.close(); return; }
   // AUDIT=label node tools/audit-kontras.js → hanya label dalam nama (WCAG 2.5.3)
   if (process.env.AUDIT==='label') { await auditLabel(b); await b.close(); return; }
+  // AUDIT=status node tools/audit-kontras.js → hanya pesan status (WCAG 4.1.3)
+  if (process.env.AUDIT==='status') { await auditStatus(b); await b.close(); return; }
   let total = 0;
   // AUDIT=fokus node tools/audit-kontras.js → hanya cek garis fokus (lebih cepat)
   if (process.env.AUDIT!=='fokus') for (const scheme of ['dark','light']) for (const w of [390,1280]) {
@@ -670,5 +745,6 @@ const halamanFokus = ['index.html','peringkat.html','peringkat.html#istilah','ra
   await auditSentuh(b);
   await auditSorot(b);
   await auditLabel(b);
+  await auditStatus(b);
   console.log('total temuan',total); await b.close();
 })();

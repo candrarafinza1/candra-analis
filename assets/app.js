@@ -1202,7 +1202,11 @@
       "Apa yang perlu saya periksa sebelum membeli saham pertama?"
     ];
 
-    var status = el("div", { class: "pita-demo", role: "status", hidden: "hidden" });
+    // Dewi & Nina (17 Nov 20.xx, audit pesan status WCAG 4.1.3): wilayah role="status" selalu ada sejak halaman dimuat;
+    // pita di dalamnya yang disembunyikan/ditampilkan. Dulu pita sendiri ber-role status dan ber-hidden, sehingga
+    // wilayahnya baru masuk pohon aksesibilitas bersamaan dengan pesannya dan pembaca layar bisa tidak mengumumkan.
+    var status = el("div", { class: "pita-demo", hidden: "hidden" });
+    var wadahStatus = el("div", { class: "status-asisten", role: "status", "aria-live": "polite" }, [status]);
     var log = el("div", { class: "obrolan", "aria-live": "polite", "aria-label": "Percakapan dengan asisten" });
     var chips = el("div", { class: "contoh-tanya" });
     var area = el("textarea", { id: "kotak-tanya", rows: "3", maxlength: "600", placeholder: "Tulis pertanyaan Anda" });
@@ -1228,7 +1232,7 @@
       chips.appendChild(b);
     });
 
-    akar.appendChild(status);
+    akar.appendChild(wadahStatus);
     akar.appendChild(log);
     akar.appendChild(el("p", { class: "label-tanya", text: "Coba tanyakan:" }));
     akar.appendChild(chips);

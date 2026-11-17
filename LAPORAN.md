@@ -1769,3 +1769,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: giliran KLBF & BRIS; belum ada laba Januari–September 2026 bersumber (judul Kontan "Rp5,69 T, tumbuh 11,45%" ternyata angka 2024) → tetap 25 dari 32. Raka/Hana: tidak ada kabar baru.
 - Tugas baru: Dewi + Nina (pesan status, WCAG 4.1.3).
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 17 Nov 2026, 20.12 WIB (Bima)
+- Dewi + Nina: audit pesan status (WCAG 4.1.3) di `tools/audit-kontras.js` (`AUDIT=status`, juga ikut audit penuh): 19 skenario × gelap/terang × 390/1280px, 84 pesan. Sebelum: 56 temuan (wilayah pesan kosong disembunyikan `display:none`, pita "Asisten belum aktif" ber-hidden). Perbaikan: wilayah kosong hanya dikecilkan (tetap ada untuk pembaca layar), pita Asisten di wadah role="status" yang selalu ada → 0 temuan. Tampilan tidak berubah; zoom & sasaran sentuh tetap 0; tanpa scroll horizontal 390/1280px. Uji balik UJI-STATUS 4/4. Nina: cek statis + uji balik di `tests/cek.mjs`.
+- Fajar: giliran BSSR & MIKA; belum ada laba Januari–September 2026 bersumber → tetap 25 dari 32. Raka/Hana: tidak ada kabar baru.
+- Tugas baru: Dewi + Nina (judul halaman & urutan judul, WCAG 2.4.2/1.3.1).
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
