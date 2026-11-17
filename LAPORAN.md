@@ -1762,3 +1762,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: giliran MDKA & MBMA; hanya ada penjualan kuartal III MDKA, belum ada laba Januari–September 2026 bersumber → tetap 25 dari 32. Raka/Hana: tidak ada kabar baru.
 - Tugas baru: Dewi + Nina (label dalam nama, WCAG 2.5.3).
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 17 Nov 2026, 19.12 WIB (Bima)
+- Yoga: run CI #305 (commit sesi 18.10) hijau.
+- Dewi + Nina: audit label dalam nama (WCAG 2.5.3) di `tools/audit-kontras.js` (`AUDIT=label`, juga ikut audit penuh): 12 keadaan × gelap/terang × 390/1280px, 2.424 elemen. 0 temuan. 144 saran urutan diperbaiki: tautan kode emiten kini bernama "ANTM, profil emiten" (dulu "Profil ANTM"), tampilan tidak berubah → 0 saran. Uji balik UJI-LABEL 4/4. Nina: cek statis app.js & HTML + 5 uji balik; pola audit penuh di cek lama disesuaikan.
+- Fajar: giliran KLBF & BRIS; belum ada laba Januari–September 2026 bersumber (judul Kontan "Rp5,69 T, tumbuh 11,45%" ternyata angka 2024) → tetap 25 dari 32. Raka/Hana: tidak ada kabar baru.
+- Tugas baru: Dewi + Nina (pesan status, WCAG 4.1.3).
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

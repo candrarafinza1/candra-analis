@@ -618,3 +618,10 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Hasil akhir: 0 temuan, tanpa galat JS. Uji balik UJI-SOROT (kotak hilang saat mouseout/blur, tanpa Escape) tertangkap 4/4, UJI-HILANG (kotak hilang sendiri setelah 1 detik) tertangkap 4/4.
 - Catatan: tooltip bawaan peramban dari atribut `title` pada tombol istilah diatur peramban (di luar kendali situs), jadi tidak diaudit.
 - Berikutnya: label dalam nama (WCAG 2.5.3) — nama aksesibel tombol/tautan wajib memuat teks yang terlihat.
+
+### 17 Nov 19.12 — Dewi & Nina: audit label dalam nama (WCAG 2.5.3)
+- `AUDIT=label node tools/audit-kontras.js`: 12 keadaan (Peringkat, istilah terbuka, profil ANTM, Radar UNTR, pelajaran sebelum/sesudah kuis, Asisten, beranda, Kabar, Belajar, Metodologi, 404) × gelap/terang × 390/1280px. Setiap tautan/tombol/isian/ringkasan yang punya teks terlihat dibandingkan dengan nama aksesibelnya (aria-labelledby → aria-label → isi); teks khusus pembaca layar tidak dihitung sebagai teks terlihat.
+- Hasil: 2.424 elemen dicek, 0 temuan (nama selalu memuat teks terlihat; logo "Candra Analis, beranda", tautan "Sumber", tombol istilah, tautan sumber "(tab baru)" lolos).
+- Saran WCAG (nama sebaiknya diawali teks terlihat): 144 tautan kode emiten bernama "Profil ANTM" padahal yang terlihat "ANTM". Diperbaiki menjadi "ANTM, profil emiten" agar perintah suara "klik ANTM" langsung cocok. Tampilan tidak berubah. Saran kini 0.
+- Uji balik UJI-LABEL (tombol "Kirim" ber-aria-label "Tutup") tertangkap 4/4. Nina menambah cek statis di `tests/cek.mjs` (aria-label di app.js & HTML wajib memuat teksnya; tautan kode wajib diawali kode) + 5 uji balik.
+- Berikutnya: pesan status (WCAG 4.1.3).

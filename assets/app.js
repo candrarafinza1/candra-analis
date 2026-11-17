@@ -56,7 +56,7 @@
 
   function selKode(e) {
     // Kode menaut ke profil emiten (Dewi, 29 Okt)
-    return el("td", null, [el("a", { class: "kode tautan-kode", href: "emiten.html?kode=" + e.kode, text: e.kode, "aria-label": "Profil " + e.kode }), el("span", { class: "nama-emiten", text: e.nama })]);
+    return el("td", null, [el("a", { class: "kode tautan-kode", href: "emiten.html?kode=" + e.kode, text: e.kode, "aria-label": e.kode + ", profil emiten" }), el("span", { class: "nama-emiten", text: e.nama })]);
   }
 
   function pitaSumber(wadah) {
@@ -1056,7 +1056,7 @@
     return el("li", { class: "kabar" }, [
       el("p", { class: "kabar-kepala" }, kepala),
       denganKode ? el("h3", { class: "kabar-judul" }, [
-        el("a", { class: "kode tautan-kode", href: "emiten.html?kode=" + e.kode, text: e.kode, "aria-label": "Profil " + e.kode }),
+        el("a", { class: "kode tautan-kode", href: "emiten.html?kode=" + e.kode, text: e.kode, "aria-label": e.kode + ", profil emiten" }),
         el("span", { class: "nama-emiten", text: e.nama })
       ]) : null,
       el("p", { class: "kabar-isi", text: k.ringkas }),
