@@ -1686,3 +1686,11 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: giliran BSSR & MIKA; teratas masih penjualan Januari–September 2025 (BSSR) dan laba semester I 2026 (MIKA) → tetap 25 dari 32. Berikutnya MDKA & MBMA. Raka/Hana: tidak ada kabar baru.
 - Tugas baru: Nina + Tegar (uji ujung-ke-ujung modul PDF: judul & tautan di PDF hasil).
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 17 Nov 2026, 07.10 WIB — sesi kerja (Bima)
+- Email "Masuk kerja pagi 17 November 2026" terkirim ke Rafinza (12 karyawan siap, tugas sesi, status cek.mjs lolos).
+- Masalah ringan ditemukan & diperbaiki: CI GitHub "Periksa sebelum rilis" gagal sejak commit 16 Nov 20.15 (dan 21.14) karena runner tidak punya `reportlab`, padahal cek modul PDF dinamis membutuhkannya. Website tetap tayang (Vercel tidak bergantung pada CI). Yoga + Nina & Tegar menambah langkah pasang `reportlab` dan `pypdf` (gratis, versi dibatasi) di `periksa.yml`; cekAlurCI hanya mengizinkan perintah itu, tepat sekali, sebelum `node tests/cek.mjs` (3 uji balik). README "Cara menguji" diperbarui.
+- Nina + Tegar: uji ujung-ke-ujung modul PDF di `tests/cek.mjs`: skrip PDF dijalankan sungguhan ke folder sementara, PDF dibaca pypdf: 8 judul pelajaran tampil di halamannya, di daftar isi dan kunci jawaban; 9 judul rujukan tampil; 9 tautan URI sama persis dan berurutan dengan url `data/rujukan.js`; PDF di assets/ tidak berubah. 6 uji balik tertangkap; uji sabot gagal sesuai harapan. Tanpa pypdf/huruf DejaVu: dilewati dengan catatan.
+- Fajar: giliran MDKA & MBMA; berita kuartal III 2026 hanya kinerja operasional (tanpa laba Januari–September) → tetap 25 dari 32. Berikutnya KLBF & BRIS. Raka/Hana: tidak ada kabar baru.
+- Tugas baru: Yoga + Nina (pastikan CI hijau untuk commit sesi ini; putuskan soal huruf DejaVu di CI).
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

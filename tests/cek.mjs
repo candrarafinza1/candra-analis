@@ -4699,6 +4699,9 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
   // Nina & Tegar (15 Nov 18.09): kepala tests/cek.mjs menautkan README bagian "Cara menguji", dan alur CI
   // .github/workflows/periksa.yml hanya menjalankan cek sintaks + node tests/cek.mjs (audit peramban tidak di CI).
   const PY_SINTAKS = "python3 -m py_compile tools/*.py";
+  // Nina & Tegar (17 Nov 07.10): CI gagal sejak 16 Nov 20.15 karena reportlab tidak terpasang di runner. Satu-satunya
+  // pemasangan yang diizinkan: pustaka Python gratis untuk cek modul PDF, versi dibatasi.
+  const PIP_CI = 'python3 -m pip install --break-system-packages "reportlab>=4,<6" "pypdf>=5,<7"';
   const cekAlurCI = (srcCek, readme, yml) => {
     const salah = [];
     const kepala = [];
@@ -4709,9 +4712,12 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
     if (!run.includes("node tests/cek.mjs")) salah.push("alur CI tidak menjalankan node tests/cek.mjs");
     for (const r of run) {
       if (/audit-aksesibel|audit-kontras|playwright|http\.server|chromium/i.test(r)) salah.push(`alur CI menjalankan audit peramban: ${r}`);
-      else if (r !== "node tests/cek.mjs" && r !== PY_SINTAKS && !/^for f in .+; do node --check "\$f"; done$/.test(r)) salah.push(`alur CI menjalankan perintah lain: ${r}`);
+      else if (r !== "node tests/cek.mjs" && r !== PY_SINTAKS && r !== PIP_CI && !/^for f in .+; do node --check "\$f"; done$/.test(r)) salah.push(`alur CI menjalankan perintah lain: ${r}`);
     }
     if (/^\s*run:\s*[|>]/m.test(yml)) salah.push("alur CI memakai run berbaris banyak (tidak bisa diperiksa)");
+    const nPip = run.filter((r) => r === PIP_CI).length, iPip = run.indexOf(PIP_CI), iCek = run.indexOf("node tests/cek.mjs");
+    if (nPip !== 1) salah.push(`alur CI harus memasang pustaka Python modul PDF tepat sekali (ada ${nPip})`);
+    else if (iCek >= 0 && iPip > iCek) salah.push("pemasangan pustaka Python harus sebelum node tests/cek.mjs");
     const iB = readme.indexOf("## Cara menguji\n");
     const bagian = iB < 0 ? "" : readme.slice(iB).split(/\n## /)[0];
     if (!/CI[^\n]*hanya menjalankan `node tests\/cek\.mjs`/.test(bagian)) salah.push("README Cara menguji tidak menyebut CI hanya menjalankan node tests/cek.mjs");
@@ -4729,6 +4735,9 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
     [srcCekT, readmeT, ymlT + "      - name: Lain\n        run: npm test\n", "perintah lain: npm test"],
     [srcCekT, readmeT, ymlT + "      - name: Banyak\n        run: |\n          node tools/audit-kontras.js\n", "berbaris banyak"],
     [srcCekT, readmeT.replace("hanya menjalankan `node tests/cek.mjs`", "menjalankan semua audit"), ymlT, "CI hanya menjalankan"],
+    [srcCekT, readmeT, ymlT.replace(PIP_CI, PIP_CI + " requests"), "perintah lain: python3 -m pip"],
+    [srcCekT, readmeT, ymlT.replace(PIP_CI, 'python3 -m pip install --break-system-packages reportlab pypdf'), "tepat sekali (ada 0)"],
+    [srcCekT, readmeT, ymlT.replace("        run: " + PIP_CI + "\n", "        run: echo lewati\n") + "      - name: Pasang\n        run: " + PIP_CI + "\n", "harus sebelum node tests/cek.mjs"],
   ];
   for (const [c, r, y, pesan] of rusakCI)
     ok((c !== srcCekT || r !== readmeT || y !== ymlT) && cekAlurCI(c, r, y).some((x) => x.includes(pesan)), `uji balik alur CI: "${pesan}" harus tertangkap`);
@@ -5369,6 +5378,91 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
   for (const [jenis, py, rj, pesan] of rusakRP) {
     const h = jenis === "statis" ? cekRujPdfStatis(py, rj) : cekRujPdfDinamis(rj);
     ok(h.some((x) => x.includes(pesan)), `uji balik teks rujukan modul PDF (${jenis}): "${pesan}" harus tertangkap`);
+  }
+}
+
+// Nina & Tegar (17 Nov 07.10): uji ujung-ke-ujung modul PDF. tools/buat-modul-pdf.py dijalankan sungguhan oleh python3 ke folder
+// sementara (KELUAR diganti; assets/ tidak disentuh), lalu PDF hasilnya dibaca dengan pypdf: setiap "Pelajaran i dari N" ada dan
+// judul pelajaran i tampil di halaman itu, judul juga ada di daftar isi (dan kunci jawaban bila berkuis), semua judul rujukan tampil,
+// dan tautan URI di PDF (berurutan) sama persis dengan url di data/rujukan.js. Bila pypdf/huruf DejaVu tidak ada: dilewati dengan catatan.
+{
+  const skripE2E = readFileSync("tools/buat-modul-pdf.py", "utf8");
+  const KODE_E2E = String.raw`import json, sys, os, io, tempfile, contextlib
+masuk = json.load(sys.stdin)
+hasil = []
+try:
+    from pypdf import PdfReader
+except Exception:
+    print(json.dumps({"lewati": "pustaka pypdf tidak terpasang"})); sys.exit(0)
+f = os.path.join(os.getcwd(), "tools", "buat-modul-pdf.py")
+if not all(os.path.exists(f"/usr/share/fonts/truetype/dejavu/DejaVuSans{a}.ttf") for a in ["", "-Bold", "-Oblique", "-BoldOblique"]):
+    print(json.dumps({"lewati": "huruf DejaVu tidak lengkap"})); sys.exit(0)
+with tempfile.TemporaryDirectory() as d:
+    keluar = os.path.join(d, "modul-uji.pdf")
+    g = {"__name__": "modul_uji", "__file__": f}
+    try:
+        with contextlib.redirect_stdout(io.StringIO()):
+            exec(compile(masuk["skrip"], f, "exec"), g)
+            g["KELUAR"] = keluar
+            g["main"]()
+    except Exception as e:
+        print(json.dumps({"salah": [f"modul PDF: skrip galat saat dijalankan ({type(e).__name__}: {e})"]})); sys.exit(0)
+    baca = PdfReader(keluar)
+    hal = ["".join((p.extract_text() or "").split()) for p in baca.pages]
+    uri = []
+    for p in baca.pages:
+        for a in p.get("/Annots") or []:
+            o = a.get_object()
+            act = o.get("/A")
+            if act is not None and act.get_object().get("/URI") is not None:
+                u = str(act.get_object()["/URI"])
+                if not uri or uri[-1] != u: uri.append(u)
+semua = "".join(hal)
+rapat = lambda s: "".join(s.split())
+n = len(masuk["judul"])
+for i, (j, kuis) in enumerate(zip(masuk["judul"], masuk["kuis"]), 1):
+    tanda = rapat(f"Pelajaran {i} dari {n}")
+    ada = [k for k, t in enumerate(hal) if tanda in t]
+    if not ada: hasil.append(f"modul PDF: baris \"Pelajaran {i} dari {n}\" tidak ada di PDF hasil"); continue
+    if rapat(j) not in hal[ada[0]]: hasil.append(f"modul PDF: judul pelajaran {i} \"{j[:40]}\" tidak tampil di halaman pelajarannya")
+    if semua.count(rapat(j)) < (3 if kuis else 2): hasil.append(f"modul PDF: judul pelajaran {i} \"{j[:40]}\" harus tampil di daftar isi dan halaman pelajaran" + (" serta kunci jawaban" if kuis else ""))
+for r in masuk["rujukan"]:
+    if rapat(r["judul"]) not in semua: hasil.append(f"modul PDF: rujukan \"{r['judul'][:40]}\" tidak tampil di PDF hasil")
+harap = [r["url"] for r in masuk["rujukan"]]
+if uri != harap: hasil.append(f"modul PDF: tautan (URI) di PDF hasil tidak sama dengan url data/rujukan.js ({len(uri)} tautan vs {len(harap)} url; beda pertama: {next((u for u, h in zip(uri + [''] * len(harap), harap) if u != h), '-')[:60]})")
+print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
+`;
+  const harapE2E = {
+    judul: MODUL.map((m) => m.judul),
+    kuis: MODUL.map((m) => Array.isArray(m.kuis) && m.kuis.length > 0),
+    rujukan: RUJUKAN.flatMap((k) => k.item.map((r) => ({ judul: r.judul, url: r.url }))),
+  };
+  const sidikAset = () => (existsSync("assets/modul/modul-candra-analis.pdf") ? createHash("sha256").update(readFileSync("assets/modul/modul-candra-analis.pdf")).digest("hex") : "");
+  const jalankanE2E = (skrip, harap) => {
+    const r = spawnSync("python3", ["-I", "-c", KODE_E2E], { input: JSON.stringify({ skrip, ...harap }), encoding: "utf8", timeout: 60000 });
+    try { if (r.status === 0) return JSON.parse(r.stdout); } catch { /* lanjut */ }
+    return { salah: [`modul PDF: uji ujung-ke-ujung tidak bisa dijalankan python3 (${(r.stderr || "").trim().split("\n").pop()})`] };
+  };
+  const asetSebelum = sidikAset();
+  const hE2E = jalankanE2E(skripE2E, harapE2E);
+  if (hE2E.lewati) console.log(`Catatan: uji ujung-ke-ujung modul PDF dilewati (${hE2E.lewati}).`);
+  else {
+    ok(hE2E.salah.length === 0, `uji ujung-ke-ujung modul PDF: ${hE2E.salah.join("; ")}`);
+    ok(hE2E.tautan === harapE2E.rujukan.length, `uji ujung-ke-ujung modul PDF: ${hE2E.tautan} tautan di PDF, harus ${harapE2E.rujukan.length}`);
+    ok(sidikAset() === asetSebelum, "uji ujung-ke-ujung modul PDF tidak boleh mengubah assets/modul/modul-candra-analis.pdf");
+    const rusakE2E = [
+      [skripE2E, { ...harapE2E, judul: harapE2E.judul.map((j, i) => (i === 2 ? j + " baru" : j)) }, "judul pelajaran 3"],
+      [skripE2E, { ...harapE2E, rujukan: [...harapE2E.rujukan, { judul: "Rujukan tambahan", url: "https://ojk.go.id" }] }, "rujukan \"Rujukan tambahan\""],
+      [skripE2E, { ...harapE2E, rujukan: harapE2E.rujukan.map((r, i) => (i === 1 ? { ...r, url: r.url + "/x" } : r)) }, "tautan (URI)"],
+      [skripE2E.replace(`isi.append(Paragraph(m["judul"], GAYA["h1"]))`, `isi.append(Paragraph(m["judul"][:8], GAYA["h1"]))`), harapE2E, "tidak tampil di halaman pelajarannya"],
+      [skripE2E.replace(`<link href='{r['url']}' color='#262b63'>`, `<link href='{r['url']}/' color='#262b63'>`), harapE2E, "tautan (URI)"],
+      [skripE2E.replace("doc.build(isi)", "raise RuntimeError('rusak')"), harapE2E, "skrip galat"],
+    ];
+    for (const [s, h, pesan] of rusakE2E) {
+      const x = jalankanE2E(s, h);
+      ok(!x.lewati && (x.salah || []).some((t) => t.includes(pesan)), `uji balik ujung-ke-ujung modul PDF: "${pesan}" harus tertangkap`);
+    }
+    ok(sidikAset() === asetSebelum, "uji balik ujung-ke-ujung modul PDF tidak boleh mengubah assets/");
   }
 }
 
