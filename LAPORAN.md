@@ -1712,3 +1712,11 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: giliran BSSR & MIKA; belum ada laba Januari–September 2026 bersumber → tetap 25 dari 32. Berikutnya MDKA & MBMA. Raka/Hana: tidak ada kabar baru.
 - Tugas baru: Dewi + Nina (fokus tidak tertutup elemen lengket).
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 17 Nov 2026, 10.08 WIB — sesi kerja (Bima)
+- Yoga: run CI #298 (commit sesi 09.09) hijau.
+- Dewi + Nina: pemeriksaan "fokus tertutup elemen lengket" (WCAG 2.4.11) di `tools/audit-kontras.js`, Tab maju & Shift+Tab mundur. Dua masalah nyata ditemukan & diperbaiki: (1) Peringkat 1280px, Shift+Tab berhenti di bawah kepala tabel lengket → `scroll-margin-top: 4rem` pada tautan/tombol baris; (2) kotak istilah terbuka menutupi elemen berikutnya → kotak ditutup saat fokus pindah keluar. Hasil 0 temuan, uji balik tertangkap. Klik, Enter, Tab ke tautan kotak tetap berfungsi; tanpa scroll horizontal di 390px & 1280px, tanpa galat JS. Nina: cek statis + 4 uji balik.
+- Fajar: giliran MDKA & MBMA; baru ada penjualan kuartal III (MDKA) dan biaya eksplorasi (MBMA), belum laba Januari–September 2026 → tetap 25 dari 32. Berikutnya KLBF & BRIS. Raka/Hana: tidak ada kabar baru.
+- Tugas baru: Dewi + Nina (fokus tertutup di halaman lain + tombol "Ke atas").
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+

@@ -5564,6 +5564,33 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
   ok(cekFokus(cssF.replace(".form-tanya textarea:focus { border-color: var(--aksen);", ".form-tanya textarea:focus { border-color: var(--tinta-2);").replace("--tinta-2:", "--tinta-2: #e0e0e0; --x-lama:")).some((x) => x.includes("kotak tanya")), "uji balik border fokus: border fokus pucat di atas putih harus tertangkap");
 }
 
+// Dewi & Nina (17 Nov 10.xx): fokus tidak tertutup elemen lengket/menumpuk (WCAG 2.2, 2.4.11).
+// (a) Kepala tabel Peringkat lengket (≥900px): tautan/tombol baris wajib punya scroll-margin-top ≥3rem (kepala ±42px),
+//     agar Shift+Tab mundur tidak berhenti di bawah kepala tabel. (b) Kotak istilah (fixed) wajib tertutup saat fokus
+//     pindah keluar dari tombol istilah & kotaknya. Pemeriksaan di peramban: AUDIT=fokus node tools/audit-kontras.js.
+{
+  const cekTutup = (css, js) => {
+    const salah = [];
+    const media = /@media \(min-width: 900px\) \{\s*\.tabel-wadah\.tabel-wadah-kartu[\s\S]*?\n\}/.exec(css);
+    if (!media || !/\.tabel-kartu thead th \{[^}]*position: sticky/.test(media[0])) salah.push("blok kepala tabel lengket Peringkat (≥900px) tidak ditemukan");
+    else {
+      const m = /\.tabel-kartu tbody :is\(a, button\) \{ scroll-margin-top: ([\d.]+)rem; \}/.exec(media[0]);
+      if (!m) salah.push("tautan/tombol baris Peringkat tanpa scroll-margin-top di blok kepala lengket");
+      else if (parseFloat(m[1]) < 3) salah.push(`scroll-margin-top baris Peringkat hanya ${m[1]}rem (minimal 3rem, kepala tabel ±42px)`);
+    }
+    const f = /document\.addEventListener\("focusin", function \(ev\) \{\s*if \(aktif && kotak && ev\.target !== aktif && !kotak\.contains\(ev\.target\)\) tutupIstilah\(false\);\s*\}\);/.test(js);
+    if (!f) salah.push("kotak istilah tidak ditutup saat fokus pindah keluar (focusin → tutupIstilah(false))");
+    return salah;
+  };
+  const cssT = readFileSync("assets/styles.css", "utf8"), jsT = readFileSync("assets/app.js", "utf8");
+  const sT = cekTutup(cssT, jsT);
+  ok(sT.length === 0, `fokus tertutup: ${sT.join("; ")}`);
+  ok(cekTutup(cssT.replace("  .tabel-kartu tbody :is(a, button) { scroll-margin-top: 4rem; }\n", ""), jsT).some((x) => x.includes("tanpa scroll-margin")), "uji balik fokus tertutup: scroll-margin baris Peringkat yang hilang harus tertangkap");
+  ok(cekTutup(cssT.replace("scroll-margin-top: 4rem;", "scroll-margin-top: 1rem;"), jsT).some((x) => x.includes("minimal 3rem")), "uji balik fokus tertutup: scroll-margin terlalu kecil harus tertangkap");
+  ok(cekTutup(cssT, jsT.replace('document.addEventListener("focusin"', 'document.addEventListener("focusout"')).some((x) => x.includes("kotak istilah")), "uji balik fokus tertutup: kotak istilah yang tidak ditutup saat fokus pindah harus tertangkap");
+  ok(cekTutup(cssT, jsT.replace("ev.target !== aktif && !kotak.contains(ev.target)) tutupIstilah(false);", "ev.target !== aktif && !kotak.contains(ev.target)) letakkan();")).some((x) => x.includes("kotak istilah")), "uji balik fokus tertutup: focusin yang tidak menutup kotak harus tertangkap");
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);
 

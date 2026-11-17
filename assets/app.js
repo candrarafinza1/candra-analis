@@ -1424,6 +1424,11 @@
     if (aktif && kotak && !kotak.contains(ev.target)) tutupIstilah(false);
   });
   document.addEventListener("keydown", function (ev) { if (ev.key === "Escape" && aktif) tutupIstilah(true); });
+  // Dewi & Nina (17 Nov 10.xx, WCAG 2.4.11): kotak istilah melayang (fixed) bisa menutupi elemen berikutnya yang
+  // dituju Tab. Bila fokus pindah keluar dari tombol istilah & kotaknya, kotak ditutup (fokus tidak dipindahkan).
+  document.addEventListener("focusin", function (ev) {
+    if (aktif && kotak && ev.target !== aktif && !kotak.contains(ev.target)) tutupIstilah(false);
+  });
   window.addEventListener("resize", letakkan);
   window.addEventListener("scroll", letakkan, { passive: true });
   document.addEventListener("scroll", letakkan, { passive: true, capture: true });

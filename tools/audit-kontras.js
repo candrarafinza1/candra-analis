@@ -6,7 +6,7 @@
 // garis fokus terlihat (outline ≥2px, atau box-shadow/border berubah) dengan kontras ≥3:1 terhadap latar di sekitarnya.
 // Halaman "UJI-FOKUS" sengaja mematikan outline; audit wajib menangkapnya (uji balik).
 // 17 Nov 09.xx (Dewi & Tegar): Tab sampai habis, + keadaan istilah terbuka, hasil Radar UNTR, kuis terjawab; cek border kotak tanya Asisten.
-// Cara pakai: python3 -m http.server 8765 (di akar repo), lalu: node tools/audit-kontras.js (AUDIT=fokus: hanya garis fokus)
+// Cara pakai: python3 -m http.server 8765 (di akar repo), lalu: node tools/audit-kontras.js (AUDIT=fokus: hanya garis fokus & fokus tertutup)
 // Butuh Playwright + Chromium (sudah ada di lingkungan kerja tim); tidak dijalankan oleh tests/cek.mjs.
 const { chromium } = require('playwright');
 const pages = ['radar.html#UNTR','radar.html#INTP','radar.html#TPIA','radar.html#HEAL','peringkat.html#istilah','asisten.html#jawab','UJI','peringkat.html','radar.html','emiten.html?kode=ANTM','emiten.html?kode=TPIA','kabar.html','metodologi.html','asisten.html',
@@ -124,5 +124,60 @@ const halamanFokus = ['index.html','peringkat.html','peringkat.html#istilah','ra
     await ctx.close();
   }
   console.log('total temuan fokus',totalFokus,'(uji balik UJI-FOKUS tertangkap:',ujiFokus,'; UJI-FOKUS-BORDER tertangkap:',ujiBorder,')');
+  // 17 Nov 10.xx (Dewi & Nina): fokus tidak boleh tertutup elemen lengket/menumpuk (WCAG 2.2, 2.4.11 Focus Not Obscured).
+  // Tab maju lalu Shift+Tab mundur sampai habis; setelah peramban menggulir elemen ke layar, 9 titik di dalam elemen
+  // dicek dengan elementsFromPoint: bila elemen teratas di titik itu bukan elemen terfokus (atau isinya) dan berasal
+  // dari elemen sticky/fixed → titik tertutup. Semua 9 titik tertutup = temuan (2.4.11); sebagian = catatan (2.4.12, AAA).
+  // Uji balik: UJI-TUTUP memasang lapisan fixed setinggi layar di atas halaman; audit wajib menangkapnya.
+  const halamanTutup = ['peringkat.html','peringkat.html#istilah','metodologi.html','radar.html#UNTR','emiten.html?kode=ANTM','index.html','UJI-TUTUP'];
+  let totalTutup=0, ujiTutup=0, catatanTutup=0;
+  for (const scheme of ['dark','light']) for (const w of [390,1280]) {
+    const ctx = await b.newContext({ viewport:{width:w,height:700}, colorScheme:scheme });
+    const p = await ctx.newPage();
+    for (const pg of halamanTutup) {
+      const [path,hash]=pg.split('#');
+      await p.goto('http://localhost:8765/'+(path==='UJI-TUTUP'?'peringkat.html':path)); await p.waitForTimeout(300);
+      // gulir halus (scroll-behavior: smooth) dimatikan agar posisi akhir langsung terbaca; posisi akhirnya sama
+      await p.addStyleTag({content:'html{scroll-behavior:auto!important}'});
+      if (path==='UJI-TUTUP') await p.addStyleTag({content:'body::after{content:"";position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.01)}'});
+      if (path==='radar.html'&&hash){ await p.selectOption('#pilih-saham',hash); await p.waitForTimeout(300); }
+      if (hash==='istilah'){ const t=await p.$('button.istilah'); if(t){await t.click(); await p.waitForTimeout(200);} }
+      else await p.evaluate(()=>{ document.activeElement&&document.activeElement.blur&&document.activeElement.blur(); window.scrollTo(0,0); });
+      const temuan=new Map(), sebagian=new Map(); let dicek=0;
+      for (const tombol of ['Tab','Shift+Tab']) {
+        let pertama=null;
+        for (let i=0;i<400;i++) {
+          await p.keyboard.press(tombol); await p.waitForTimeout(30);
+          const r = await p.evaluate(() => {
+            const el=document.activeElement; if(!el||el===document.body) return {habis:true};
+            if(!window.__idT) window.__idT=new WeakMap(), window.__nT=0;
+            if(!window.__idT.has(el)) window.__idT.set(el,++window.__nT);
+            const rc=el.getBoundingClientRect(); const nama=el.tagName.toLowerCase()+' "'+(el.textContent||el.getAttribute('aria-label')||el.id||'').trim().slice(0,30)+'"';
+            if(rc.width===0||rc.height===0) return {id:window.__idT.get(el), lewat:true};
+            const lengket=e=>{ for(;e&&e!==document.documentElement;e=e.parentElement){ const ps=getComputedStyle(e).position; if(ps==='sticky'||ps==='fixed') return e; } const a=getComputedStyle(document.body,'::after'); return null; };
+            let tutup=0, oleh=new Set(), titik=0;
+            for (const fx of [.15,.5,.85]) for (const fy of [.15,.5,.85]) {
+              const x=rc.left+rc.width*fx, y=rc.top+rc.height*fy;
+              if (x<0||y<0||x>=innerWidth||y>=innerHeight) { tutup++; titik++; oleh.add('di luar layar'); continue; }
+              titik++; const atas=document.elementFromPoint(x,y);
+              if (!atas || atas===el || el.contains(atas) || atas.contains(el)) { if(atas===document.body||atas===document.documentElement){ /* lapisan semu body::after */ if(getComputedStyle(document.body,'::after').position==='fixed'){tutup++;oleh.add('body::after');} } continue; }
+              const l=lengket(atas); if (l && !l.contains(el)) { tutup++; oleh.add(l.tagName.toLowerCase()+'.'+(l.className||'').toString().split(' ')[0]); }
+            }
+            return {id:window.__idT.get(el), nama, tutup, titik, oleh:[...oleh].join(',')};
+          });
+          if (r.habis) { if (pertama!==null) break; else continue; }
+          if (pertama===null) pertama=r.id; else if (r.id===pertama) break;
+          if (r.lewat) continue; dicek++;
+          const ket=`${tombol} ${r.nama} tertutup ${r.tutup}/${r.titik} oleh ${r.oleh}`;
+          if (r.tutup===r.titik && !temuan.has(r.nama)) temuan.set(r.nama, ket); else if (r.tutup>0 && r.tutup<r.titik && !sebagian.has(r.nama)) sebagian.set(r.nama, ket);
+        }
+      }
+      const tag=`tutup ${scheme} ${w} ${pg}`;
+      console.log(tag,'dicek',dicek); [...temuan.values()].forEach(o=>console.log(tag,'TEMUAN',o)); [...sebagian.values()].forEach(o=>console.log(tag,'sebagian',o));
+      if (path==='UJI-TUTUP') ujiTutup+=temuan.size; else { totalTutup+=temuan.size; catatanTutup+=sebagian.size; }
+    }
+    await ctx.close();
+  }
+  console.log('total temuan tertutup',totalTutup,'(sebagian tertutup:',catatanTutup,'; uji balik UJI-TUTUP tertangkap:',ujiTutup,')');
   console.log('total temuan',total); await b.close();
 })();

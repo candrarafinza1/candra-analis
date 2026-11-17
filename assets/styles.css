@@ -545,6 +545,8 @@ input::placeholder, textarea::placeholder { color: var(--tinta-2); opacity: 1; }
     position: sticky; top: 0; z-index: 1;
     background: var(--putih); box-shadow: inset 0 -1px 0 var(--garis);
   }
+  /* Dewi & Nina (17 Nov 10.xx, WCAG 2.4.11): saat Shift+Tab mundur, tautan baris tidak boleh berhenti di bawah kepala tabel lengket */
+  .tabel-kartu tbody :is(a, button) { scroll-margin-top: 4rem; }
 }
 
 /* Kamus istilah di tempat (tim Arif & Dewi, usulan Kirana #3) */

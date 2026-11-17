@@ -565,3 +565,10 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Uji balik baru UJI-FOKUS-BORDER (border fokus disamakan dengan border biasa) tertangkap di keempat kombinasi. Nina menambah cek statis yang sama di `tests/cek.mjs` (3 uji balik).
 - Catatan: keadaan istilah terbuka dan kuis terjawab mulai Tab dari elemen itu sampai akhir halaman; bagian sebelumnya sudah tercakup di keadaan awal halaman yang sama.
 - Berikutnya: elemen terfokus tidak tertutup elemen lengket (kepala tabel Peringkat, #30).
+
+### Fokus tidak tertutup elemen lengket (Dewi & Nina, 17 Nov 10.08)
+- `tools/audit-kontras.js` (`AUDIT=fokus`) kini juga menekan Tab maju lalu Shift+Tab mundur sampai habis di Peringkat, Peringkat dengan istilah terbuka, Metodologi (daftar isi lengket), Radar UNTR, profil ANTM, beranda; gelap/terang, 390/1280px (tinggi layar 700px). Tiap elemen terfokus dicek di 9 titik: tertutup elemen sticky/fixed atau di luar layar.
+- Temuan nyata 1: di 1280px, Shift+Tab mundur di tabel Peringkat berhenti tepat di bawah kepala tabel lengket (#30), tautan kode & "Sumber" tertutup penuh. Diperbaiki: `scroll-margin-top: 4rem` untuk tautan/tombol baris (kepala ±42px).
+- Temuan nyata 2: kotak istilah terbuka (melayang) menutupi "Tentang data ini" saat Tab berlanjut di 390px. Diperbaiki: kotak istilah ditutup saat fokus pindah keluar dari tombol istilah & kotaknya (Tab ke tautan di dalam kotak tetap bisa; Escape tetap mengembalikan fokus).
+- Hasil setelah perbaikan: 0 temuan tertutup penuh, 0 tertutup sebagian. Uji balik UJI-TUTUP (lapisan fixed di atas halaman) tertangkap. Nina menambah cek statis di `tests/cek.mjs` (4 uji balik).
+- Berikutnya: halaman Kabar, Belajar, pelajaran, Asisten, 404 dan tombol "Ke atas".
