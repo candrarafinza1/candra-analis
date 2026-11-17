@@ -557,3 +557,11 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Cek baru garis fokus: Tab 10× per halaman (10 halaman), latar diambil dari titik tepat di luar garis. Temuan: di mode terang garis kuning bulan di atas kertas hanya 1,55:1 (di kartu putih 1,67:1), sulit terlihat oleh pengguna keyboard.
 - Perbaikan Dewi: token `--fokus` (terang biru malam ≥10:1, gelap kuning bulan), garis kuning dipertahankan di bagian biru malam; menu atas di HP memakai garis di dalam tombol agar tidak menimpa tombol aktif yang putih. Kirana: tangkapan 390px & 1280px rapi, garis jelas tanpa menggeser tata letak.
 - Berikutnya: Tab sampai habis di halaman interaktif, kotak tanya Asisten, menu aktif.
+
+### Garis fokus: Tab sampai habis + kotak tanya Asisten (Dewi & Tegar, 17 Nov 09.09)
+- `tools/audit-kontras.js` kini menekan Tab sampai fokus kembali ke elemen pertama atau keluar halaman (maks. 400×), bukan 10×. Keadaan baru: kotak istilah terbuka (Peringkat), hasil Radar UNTR, kuis terjawab. `AUDIT=fokus` menjalankan cek fokus saja.
+- Hasil: 13 keadaan × gelap/terang × 390/1280px = 2.068 elemen terfokus dicek, 0 garis fokus di bawah 3:1. Menu aktif (tombol putih) lolos: di HP garis biru malam di dalam tombol, di desktop garis kuning di atas biru malam.
+- Kotak tanya Asisten (tanda fokus = warna border 2px, outline dimatikan): dicek terhadap latar di sekitarnya dan terhadap border biasa (WCAG 2.4.13: berubah ≥3:1); lolos di kedua mode. Di lingkungan uji Asisten "belum aktif" sehingga kotak tanya dinonaktifkan; audit mengaktifkannya sementara agar ikut diperiksa.
+- Uji balik baru UJI-FOKUS-BORDER (border fokus disamakan dengan border biasa) tertangkap di keempat kombinasi. Nina menambah cek statis yang sama di `tests/cek.mjs` (3 uji balik).
+- Catatan: keadaan istilah terbuka dan kuis terjawab mulai Tab dari elemen itu sampai akhir halaman; bagian sebelumnya sudah tercakup di keadaan awal halaman yang sama.
+- Berikutnya: elemen terfokus tidak tertutup elemen lengket (kepala tabel Peringkat, #30).

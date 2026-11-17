@@ -5537,6 +5537,19 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
     const aturGelap = /([^{}]*)\{\s*outline-color:\s*var\(--bulan\);?\s*\}/.exec(css);
     for (const sel of [".kepala :focus-visible", ".hero :focus-visible", ".judul-halaman :focus-visible", ".panel-gelap :focus-visible", ".lompat:focus-visible"])
       if (!aturGelap || !aturGelap[1].includes(sel)) salah.push(`garis fokus kuning bulan belum dipasang untuk ${sel}`);
+    // Tegar + Nina (17 Nov 09.xx): kotak tanya Asisten memakai warna border sebagai tanda fokus (outline: none).
+    // Border wajib ≥2px; warna border saat fokus ≥3:1 terhadap latar (--putih, --kertas) DAN terhadap border biasa (--garis).
+    const tBiasa = /\.form-tanya textarea\s*\{([^}]*)\}/.exec(css), tFokus = /\.form-tanya textarea:focus\s*\{([^}]*)\}/.exec(css);
+    if (!tBiasa || !tFokus) salah.push("aturan .form-tanya textarea / :focus tidak ditemukan");
+    else {
+      const lebar = /border:\s*(\d+)px solid var\(--([\w-]+)\)/.exec(tBiasa[1]); const warnaF = /border-color:\s*var\(--([\w-]+)\)/.exec(tFokus[1]);
+      if (!lebar || +lebar[1] < 2) salah.push("border kotak tanya harus ≥2px solid var(--…)");
+      if (!warnaF) salah.push("kotak tanya :focus harus mengganti border-color dengan var(--…)");
+      else for (const [mode, v] of [["terang", terang], ["gelap", gelap]]) {
+        const f = hex(v, warnaF[1]); if (!f) { salah.push(`border fokus kotak tanya (${mode}) tidak terbaca`); continue; }
+        for (const latar of ["putih", "kertas", lebar ? lebar[2] : "garis"]) { const l = hex(v, latar); if (l && rasio(f, l) < 3) salah.push(`border fokus kotak tanya di atas/terhadap --${latar} (${mode}) hanya ${rasio(f, l).toFixed(2)}:1`); }
+      }
+    }
     return salah;
   };
   const cssF = readFileSync("assets/styles.css", "utf8");
@@ -5546,6 +5559,9 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
   ok(cekFokus(cssF.replace("    --fokus: var(--bulan);\n", "")).some((x) => x.includes("gelap")), "uji balik garis fokus: --fokus gelap yang lupa diganti harus tertangkap");
   ok(cekFokus(cssF.replace("outline: 3px solid var(--fokus);", "outline: 3px solid var(--bulan);")).length > 0, "uji balik garis fokus: :focus-visible tanpa --fokus harus tertangkap");
   ok(cekFokus(cssF.replace(".hero :focus-visible, ", "")).some((x) => x.includes(".hero")), "uji balik garis fokus: hero tanpa garis kuning harus tertangkap");
+  ok(cekFokus(cssF.replace(".form-tanya textarea:focus { border-color: var(--aksen);", ".form-tanya textarea:focus { border-color: var(--garis);")).some((x) => x.includes("kotak tanya")), "uji balik border fokus: kotak tanya yang border fokusnya sama dengan border biasa harus tertangkap");
+  ok(cekFokus(cssF.replace("border: 2px solid var(--garis); background: var(--putih); color: var(--tinta); resize", "border: 1px solid var(--garis); background: var(--putih); color: var(--tinta); resize")).some((x) => x.includes("≥2px")), "uji balik border fokus: border kotak tanya 1px harus tertangkap");
+  ok(cekFokus(cssF.replace(".form-tanya textarea:focus { border-color: var(--aksen);", ".form-tanya textarea:focus { border-color: var(--tinta-2);").replace("--tinta-2:", "--tinta-2: #e0e0e0; --x-lama:")).some((x) => x.includes("kotak tanya")), "uji balik border fokus: border fokus pucat di atas putih harus tertangkap");
 }
 
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
