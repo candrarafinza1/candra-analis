@@ -16,7 +16,7 @@ jobs:
       - name: Cek sintaks JavaScript
         run: for f in assets/*.js data/*.js api/*.mjs tests/*.mjs tools/*.js; do node --check "$f"; done
       - name: Pasang pustaka Python untuk cek modul PDF (gratis, dari PyPI)
-        run: python3 -m pip install --break-system-packages "reportlab>=4,<6" "pypdf>=5,<7"
+        run: sudo python3 -m pip install --break-system-packages "reportlab>=4,<6" "pypdf>=5,<7"
       - name: Cek sintaks Python (skrip modul PDF)
         run: python3 -m py_compile tools/*.py
       - name: Pemeriksaan QA (tautan, data, bahasa ajakan)

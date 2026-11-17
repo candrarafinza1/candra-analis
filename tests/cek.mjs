@@ -4700,8 +4700,9 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
   // .github/workflows/periksa.yml hanya menjalankan cek sintaks + node tests/cek.mjs (audit peramban tidak di CI).
   const PY_SINTAKS = "python3 -m py_compile tools/*.py";
   // Nina & Tegar (17 Nov 07.10): CI gagal sejak 16 Nov 20.15 karena reportlab tidak terpasang di runner. Satu-satunya
-  // pemasangan yang diizinkan: pustaka Python gratis untuk cek modul PDF, versi dibatasi.
-  const PIP_CI = 'python3 -m pip install --break-system-packages "reportlab>=4,<6" "pypdf>=5,<7"';
+  // pemasangan yang diizinkan: pustaka Python gratis untuk cek modul PDF, versi dibatasi. Pakai sudo
+  // agar masuk site-packages sistem: python3 -I (dipakai cek ini) mengabaikan site-packages pengguna (~/.local).
+  const PIP_CI = 'sudo python3 -m pip install --break-system-packages "reportlab>=4,<6" "pypdf>=5,<7"';
   const cekAlurCI = (srcCek, readme, yml) => {
     const salah = [];
     const kepala = [];
@@ -4735,8 +4736,8 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
     [srcCekT, readmeT, ymlT + "      - name: Lain\n        run: npm test\n", "perintah lain: npm test"],
     [srcCekT, readmeT, ymlT + "      - name: Banyak\n        run: |\n          node tools/audit-kontras.js\n", "berbaris banyak"],
     [srcCekT, readmeT.replace("hanya menjalankan `node tests/cek.mjs`", "menjalankan semua audit"), ymlT, "CI hanya menjalankan"],
-    [srcCekT, readmeT, ymlT.replace(PIP_CI, PIP_CI + " requests"), "perintah lain: python3 -m pip"],
-    [srcCekT, readmeT, ymlT.replace(PIP_CI, 'python3 -m pip install --break-system-packages reportlab pypdf'), "tepat sekali (ada 0)"],
+    [srcCekT, readmeT, ymlT.replace(PIP_CI, PIP_CI + " requests"), "perintah lain: sudo python3 -m pip"],
+    [srcCekT, readmeT, ymlT.replace(PIP_CI, 'sudo python3 -m pip install --break-system-packages reportlab pypdf'), "tepat sekali (ada 0)"],
     [srcCekT, readmeT, ymlT.replace("        run: " + PIP_CI + "\n", "        run: echo lewati\n") + "      - name: Pasang\n        run: " + PIP_CI + "\n", "harus sebelum node tests/cek.mjs"],
   ];
   for (const [c, r, y, pesan] of rusakCI)
