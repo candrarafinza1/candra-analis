@@ -5617,6 +5617,33 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
   ok(fokusTanpa !== auT && cekTutup2(jsT2, fokusTanpa).some((x) => x.includes("gulir halus")), "uji balik: pemeriksaan garis fokus dengan gulir halus harus tertangkap");
 }
 
+// Dewi & Nina (17 Nov 14.xx): zoom 200% & layar pendek HP (WCAG 1.4.10, 2.4.11). tools/audit-kontras.js wajib punya auditZoom
+// dengan jendela 640×450 (deviceScaleFactor 2 = zoom 200% di 1280×900), 390×600, dan 390×360 (papan ketik terbuka), uji balik
+// UJI-LEBAR, UJI-TUTUP, UJI-KETIK; langkah Tab dipakai bersama (tabTutup) dan audit penuh ikut menjalankan auditZoom.
+{
+  const cekZoom = (audit) => {
+    const salah = [];
+    const fn = /async function auditZoom\(b\) \{([\s\S]*?)\n\}\n/.exec(audit);
+    if (!fn) return ["fungsi auditZoom tidak ditemukan di audit"];
+    const z = fn[1];
+    if (!/viewport:\{width:640,height:450\}, dsf:2/.test(z)) salah.push("audit zoom 200% (640×450, deviceScaleFactor 2) tidak ada");
+    if (!/viewport:\{width:390,height:600\}/.test(z)) salah.push("audit layar pendek HP 390×600 tidak ada");
+    if (!/viewport:\{width:390,height:360\}/.test(z)) salah.push("audit papan ketik terbuka 390×360 tidak ada");
+    for (const u of ["UJI-LEBAR", "UJI-TUTUP", "UJI-KETIK"]) if (!z.includes(`'${u}'`)) salah.push(`uji balik ${u} tidak ada di audit zoom`);
+    if (!/await tabTutup\(p\)/.test(z)) salah.push("audit zoom tidak memakai langkah Tab bersama (tabTutup)");
+    if (!/scrollWidth/.test(z)) salah.push("audit zoom tidak memeriksa scroll horizontal");
+    if (!/await auditZoom\(b\);\n  console\.log\('total temuan',total\)/.test(audit)) salah.push("audit penuh tidak menjalankan auditZoom");
+    return salah;
+  };
+  const auZ = readFileSync("tools/audit-kontras.js", "utf8");
+  const sZ = cekZoom(auZ);
+  ok(sZ.length === 0, `audit zoom 200% & layar pendek: ${sZ.join("; ")}`);
+  ok(cekZoom(auZ.replace("viewport:{width:640,height:450}, dsf:2", "viewport:{width:1280,height:900}, dsf:1")).some((x) => x.includes("zoom 200%")), "uji balik: audit tanpa jendela zoom 200% harus tertangkap");
+  ok(cekZoom(auZ.replaceAll("'UJI-LEBAR'", "'UJI-X'")).some((x) => x.includes("UJI-LEBAR")), "uji balik: audit zoom tanpa UJI-LEBAR harus tertangkap");
+  ok(cekZoom(auZ.replace("viewport:{width:390,height:360}", "viewport:{width:390,height:844}")).some((x) => x.includes("papan ketik")), "uji balik: audit tanpa keadaan papan ketik terbuka harus tertangkap");
+  ok(cekZoom(auZ.replace("  await auditZoom(b);\n  console.log('total temuan',total)", "  console.log('total temuan',total)")).some((x) => x.includes("audit penuh")), "uji balik: audit penuh yang melewatkan auditZoom harus tertangkap");
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);
 

@@ -6,14 +6,117 @@
 // garis fokus terlihat (outline ≥2px, atau box-shadow/border berubah) dengan kontras ≥3:1 terhadap latar di sekitarnya.
 // Halaman "UJI-FOKUS" sengaja mematikan outline; audit wajib menangkapnya (uji balik).
 // 17 Nov 09.xx (Dewi & Tegar): Tab sampai habis, + keadaan istilah terbuka, hasil Radar UNTR, kuis terjawab; cek border kotak tanya Asisten.
-// Cara pakai: python3 -m http.server 8765 (di akar repo), lalu: node tools/audit-kontras.js (AUDIT=fokus: hanya garis fokus & fokus tertutup)
+// Cara pakai: python3 -m http.server 8765 (di akar repo), lalu: node tools/audit-kontras.js (AUDIT=fokus: hanya garis fokus & fokus tertutup; AUDIT=zoom: hanya zoom 200% & layar pendek HP)
 // Butuh Playwright + Chromium (sudah ada di lingkungan kerja tim); tidak dijalankan oleh tests/cek.mjs.
 const { chromium } = require('playwright');
+// 17 Nov 14.xx (Dewi & Nina): langkah Tab maju & Shift+Tab mundur untuk cek fokus tertutup, dipakai bersama oleh
+// audit fokus tertutup dan audit zoom 200% / layar pendek HP.
+// 17 Nov 14.xx (Dewi & Nina): zoom 200% dan layar pendek HP (WCAG 1.4.10 Reflow, 2.4.11 Focus Not Obscured).
+// Zoom 200% di layar 1280×900 setara jendela 640×450 piksel CSS (deviceScaleFactor 2). Layar pendek HP: 390×600,
+// dan 390×360 = papan ketik terbuka (kotak tanya Asisten & kotak ketik Radar terfokus, papan ketik menutup ±240px).
+// Tiap halaman: tidak boleh scroll horizontal, lalu Tab maju & Shift+Tab mundur: fokus tidak boleh tertutup elemen lengket.
+// Keadaan papan ketik: kotak isian difokus → wajib tampil utuh di layar dan tidak tertutup elemen lengket.
+// Uji balik: UJI-LEBAR (elemen 900px) wajib tertangkap sebagai scroll horizontal; UJI-TUTUP (lapisan fixed) sebagai fokus tertutup.
+async function auditZoom(b) {
+  const ukuran = [
+    {nama:'zoom200', viewport:{width:640,height:450}, dsf:2, halaman:['peringkat.html','emiten.html?kode=ANTM','asisten.html','pelajaran.html?m=apa-itu-saham#benar','radar.html#UNTR','index.html','UJI-LEBAR','UJI-TUTUP']},
+    {nama:'hp-pendek', viewport:{width:390,height:600}, dsf:1, halaman:['peringkat.html','emiten.html?kode=ANTM','asisten.html','pelajaran.html?m=apa-itu-saham#benar','UJI-LEBAR','UJI-TUTUP']},
+  ];
+  let totalZoom=0, ujiLebar=0, ujiTutupZ=0, catatanZ=0;
+  for (const scheme of ['dark','light']) for (const u of ukuran) {
+    const ctx = await b.newContext({ viewport:u.viewport, deviceScaleFactor:u.dsf, colorScheme:scheme });
+    const p = await ctx.newPage(); const errs=[]; p.on('pageerror', e=>errs.push(e.message));
+    for (const pg of u.halaman) {
+      const [path,hash]=pg.split('#'); const uji=path.startsWith('UJI-');
+      await p.goto('http://localhost:8765/'+(uji?'peringkat.html':path)); await p.waitForTimeout(300);
+      await p.addStyleTag({content:'html{scroll-behavior:auto!important}'});
+      if (path==='UJI-LEBAR') await p.evaluate(()=>{ const d=document.createElement('div'); d.style.cssText='width:900px;height:4px'; document.querySelector('main').appendChild(d); });
+      if (path==='UJI-TUTUP') await p.addStyleTag({content:'body::after{content:"";position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.01)}'});
+      if (path==='radar.html'&&hash){ await p.selectOption('#pilih-saham',hash); await p.waitForTimeout(300); }
+      if (path==='asisten.html') await p.evaluate(()=>{ document.querySelectorAll('.form-tanya textarea, .form-tanya button').forEach(e=>e.disabled=false); });
+      if (hash==='benar'){ const id=new URL('http://x/'+path).searchParams.get('m');
+        await p.evaluate((id)=>{ const m=window.MODUL.find(x=>x.id===id); m.kuis.forEach((q,i)=>{ document.querySelector('input[name="soal-'+i+'"][value="'+q.benar+'"]').checked=true; }); },id);
+        await p.click('.kuis button[type="submit"]'); await p.waitForTimeout(200); }
+      await p.$$eval('details', d=>d.forEach(x=>x.open=true));
+      const tag=`zoom ${scheme} ${u.nama} ${u.viewport.width}x${u.viewport.height} ${pg}`;
+      const sw = await p.evaluate(()=>document.documentElement.scrollWidth);
+      if (sw>u.viewport.width) { console.log(tag,'TEMUAN scroll horizontal',sw); if(path==='UJI-LEBAR') ujiLebar++; else totalZoom++; }
+      if (path==='UJI-LEBAR') continue;
+      await p.evaluate(()=>{ document.activeElement&&document.activeElement.blur&&document.activeElement.blur(); window.scrollTo(0,0); });
+      const {temuan, sebagian, dicek} = await tabTutup(p);
+      console.log(tag,'lebar',sw,'dicek',dicek); [...temuan.values()].forEach(o=>console.log(tag,'TEMUAN',o)); [...sebagian.values()].forEach(o=>console.log(tag,'sebagian',o));
+      if (path==='UJI-TUTUP') ujiTutupZ+=temuan.size; else { totalZoom+=temuan.size; catatanZ+=sebagian.size; }
+    }
+    if (errs.length) { console.log('zoom',scheme,u.nama,'JS errors',errs); totalZoom+=errs.length; }
+    await ctx.close();
+  }
+  // papan ketik terbuka: 390×360, kotak isian difokus lewat Tab (bukan .focus() langsung, agar peramban yang menggulir)
+  for (const scheme of ['dark','light']) {
+    const ctx = await b.newContext({ viewport:{width:390,height:360}, colorScheme:scheme });
+    const p = await ctx.newPage();
+    for (const [pg,sel] of [['asisten.html','.form-tanya textarea'],['radar.html','#ketik-saham, input[list]'],['UJI-KETIK','.form-tanya textarea']]) {
+      await p.goto('http://localhost:8765/'+(pg==='UJI-KETIK'?'asisten.html':pg)); await p.waitForTimeout(300);
+      await p.addStyleTag({content:'html{scroll-behavior:auto!important}'});
+      if (pg!=='radar.html') await p.evaluate(()=>{ document.querySelectorAll('.form-tanya textarea, .form-tanya button').forEach(e=>e.disabled=false); });
+      if (pg==='UJI-KETIK') await p.addStyleTag({content:'body::after{content:"";position:fixed;left:0;right:0;bottom:0;height:100vh;z-index:50;background:rgba(0,0,0,.01)}'});
+      const tag=`ketik ${scheme} 390x360 ${pg}`;
+      const ada = await p.$(sel); if (!ada) { console.log(tag,'TEMUAN kotak isian tidak ketemu',sel); if(pg==='UJI-KETIK') ujiTutupZ++; else totalZoom++; continue; }
+      await p.evaluate(()=>{ document.activeElement&&document.activeElement.blur&&document.activeElement.blur(); window.scrollTo(0,0); });
+      let ok=false; for (let i=0;i<200;i++) { await p.keyboard.press('Tab'); await p.waitForTimeout(20); if (await p.evaluate((sel)=>document.activeElement&&document.activeElement.matches(sel),sel)) { ok=true; break; } }
+      if (!ok) { console.log(tag,'TEMUAN kotak isian tidak tercapai dengan Tab'); totalZoom++; continue; }
+      const r = await p.evaluate(()=>{ const el=document.activeElement; const rc=el.getBoundingClientRect(); const m=[];
+        if (rc.top<-1||rc.bottom>innerHeight+1) m.push('tidak tampil utuh (top '+Math.round(rc.top)+', bawah '+Math.round(rc.bottom)+', tinggi layar '+innerHeight+')');
+        let tutup=0; for (const fx of [.15,.5,.85]) for (const fy of [.2,.5,.8]) { const x=rc.left+rc.width*fx, y=Math.min(Math.max(rc.top+rc.height*fy,0),innerHeight-1); const a=document.elementFromPoint(x,y);
+          if (a===document.body||a===document.documentElement) { if(getComputedStyle(document.body,'::after').position==='fixed') tutup++; continue; }
+          if (a && a!==el && !el.contains(a) && !a.contains(el)) { for(let e=a;e&&e!==document.documentElement;e=e.parentElement){ const ps=getComputedStyle(e).position; if(ps==='sticky'||ps==='fixed'){tutup++;break;} } } }
+        if (tutup) m.push('tertutup elemen lengket di '+tutup+'/9 titik'); return m.join('; '); });
+      console.log(tag, r?'TEMUAN '+r:'lolos');
+      if (r) { if(pg==='UJI-KETIK') ujiTutupZ++; else totalZoom++; }
+    }
+    await ctx.close();
+  }
+  console.log('total temuan zoom/layar pendek',totalZoom,'(sebagian tertutup:',catatanZ,'; uji balik UJI-LEBAR tertangkap:',ujiLebar,'; UJI-TUTUP/UJI-KETIK tertangkap:',ujiTutupZ,')');
+}
+// (lanjutan) fungsi bersama Tab maju & mundur
+async function tabTutup(p) {
+      const temuan=new Map(), sebagian=new Map(); let dicek=0;
+      for (const tombol of ['Tab','Shift+Tab']) {
+        let pertama=null;
+        for (let i=0;i<400;i++) {
+          await p.keyboard.press(tombol); await p.waitForTimeout(30);
+          const r = await p.evaluate(() => {
+            const el=document.activeElement; if(!el||el===document.body) return {habis:true};
+            if(!window.__idT) window.__idT=new WeakMap(), window.__nT=0;
+            if(!window.__idT.has(el)) window.__idT.set(el,++window.__nT);
+            const rc=el.getBoundingClientRect(); const nama=el.tagName.toLowerCase()+' "'+(el.textContent||el.getAttribute('aria-label')||el.id||'').trim().slice(0,30)+'"';
+            if(rc.width===0||rc.height===0) return {id:window.__idT.get(el), lewat:true};
+            const lengket=e=>{ for(;e&&e!==document.documentElement;e=e.parentElement){ const ps=getComputedStyle(e).position; if(ps==='sticky'||ps==='fixed') return e; } const a=getComputedStyle(document.body,'::after'); return null; };
+            let tutup=0, oleh=new Set(), titik=0;
+            for (const fx of [.15,.5,.85]) for (const fy of [.15,.5,.85]) {
+              const x=rc.left+rc.width*fx, y=rc.top+rc.height*fy;
+              if (x<0||y<0||x>=innerWidth||y>=innerHeight) { tutup++; titik++; oleh.add('di luar layar'); continue; }
+              titik++; const atas=document.elementFromPoint(x,y);
+              if (!atas || atas===el || el.contains(atas) || atas.contains(el)) { if(atas===document.body||atas===document.documentElement){ /* lapisan semu body::after */ if(getComputedStyle(document.body,'::after').position==='fixed'){tutup++;oleh.add('body::after');} } continue; }
+              const l=lengket(atas); if (l && !l.contains(el)) { tutup++; oleh.add(l.tagName.toLowerCase()+'.'+(l.className||'').toString().split(' ')[0]); }
+            }
+            return {id:window.__idT.get(el), nama, tutup, titik, oleh:[...oleh].join(',')};
+          });
+          if (r.habis) { if (pertama!==null) break; else continue; }
+          if (pertama===null) pertama=r.id; else if (r.id===pertama) break;
+          if (r.lewat) continue; dicek++;
+          const ket=`${tombol} ${r.nama} tertutup ${r.tutup}/${r.titik} oleh ${r.oleh}`;
+          if (r.tutup===r.titik && !temuan.has(r.nama)) temuan.set(r.nama, ket); else if (r.tutup>0 && r.tutup<r.titik && !sebagian.has(r.nama)) sebagian.set(r.nama, ket);
+        }
+      }
+  return {temuan, sebagian, dicek};
+}
 const pages = ['radar.html#UNTR','radar.html#INTP','radar.html#TPIA','radar.html#HEAL','peringkat.html#istilah','asisten.html#jawab','UJI','peringkat.html','radar.html','emiten.html?kode=ANTM','emiten.html?kode=TPIA','kabar.html','metodologi.html','asisten.html',
   'index.html','belajar.html','pelajaran.html?m=apa-itu-saham#benar','pelajaran.html?m=saham-syariah#salah','404.html'];
 const halamanFokus = ['index.html','peringkat.html','peringkat.html#istilah','radar.html','radar.html#UNTR','emiten.html?kode=ANTM','kabar.html','belajar.html','pelajaran.html?m=apa-itu-saham','pelajaran.html?m=apa-itu-saham#benar','metodologi.html','asisten.html','404.html','UJI-FOKUS','UJI-FOKUS-BORDER'];
 (async () => {
   const b = await chromium.launch();
+  // AUDIT=zoom node tools/audit-kontras.js → hanya zoom 200% & layar pendek HP
+  if (process.env.AUDIT==='zoom') { await auditZoom(b); await b.close(); return; }
   let total = 0;
   // AUDIT=fokus node tools/audit-kontras.js → hanya cek garis fokus (lebih cepat)
   if (process.env.AUDIT!=='fokus') for (const scheme of ['dark','light']) for (const w of [390,1280]) {
@@ -152,35 +255,7 @@ const halamanFokus = ['index.html','peringkat.html','peringkat.html#istilah','ra
         await p.click('.kuis button[type="submit"]'); await p.waitForTimeout(200); }
       if (hash==='istilah'){ const t=await p.$('button.istilah'); if(t){await t.click(); await p.waitForTimeout(200);} else console.log('tutup',pg,'tombol istilah tidak ketemu'); }
       else await p.evaluate(()=>{ document.activeElement&&document.activeElement.blur&&document.activeElement.blur(); window.scrollTo(0,0); });
-      const temuan=new Map(), sebagian=new Map(); let dicek=0;
-      for (const tombol of ['Tab','Shift+Tab']) {
-        let pertama=null;
-        for (let i=0;i<400;i++) {
-          await p.keyboard.press(tombol); await p.waitForTimeout(30);
-          const r = await p.evaluate(() => {
-            const el=document.activeElement; if(!el||el===document.body) return {habis:true};
-            if(!window.__idT) window.__idT=new WeakMap(), window.__nT=0;
-            if(!window.__idT.has(el)) window.__idT.set(el,++window.__nT);
-            const rc=el.getBoundingClientRect(); const nama=el.tagName.toLowerCase()+' "'+(el.textContent||el.getAttribute('aria-label')||el.id||'').trim().slice(0,30)+'"';
-            if(rc.width===0||rc.height===0) return {id:window.__idT.get(el), lewat:true};
-            const lengket=e=>{ for(;e&&e!==document.documentElement;e=e.parentElement){ const ps=getComputedStyle(e).position; if(ps==='sticky'||ps==='fixed') return e; } const a=getComputedStyle(document.body,'::after'); return null; };
-            let tutup=0, oleh=new Set(), titik=0;
-            for (const fx of [.15,.5,.85]) for (const fy of [.15,.5,.85]) {
-              const x=rc.left+rc.width*fx, y=rc.top+rc.height*fy;
-              if (x<0||y<0||x>=innerWidth||y>=innerHeight) { tutup++; titik++; oleh.add('di luar layar'); continue; }
-              titik++; const atas=document.elementFromPoint(x,y);
-              if (!atas || atas===el || el.contains(atas) || atas.contains(el)) { if(atas===document.body||atas===document.documentElement){ /* lapisan semu body::after */ if(getComputedStyle(document.body,'::after').position==='fixed'){tutup++;oleh.add('body::after');} } continue; }
-              const l=lengket(atas); if (l && !l.contains(el)) { tutup++; oleh.add(l.tagName.toLowerCase()+'.'+(l.className||'').toString().split(' ')[0]); }
-            }
-            return {id:window.__idT.get(el), nama, tutup, titik, oleh:[...oleh].join(',')};
-          });
-          if (r.habis) { if (pertama!==null) break; else continue; }
-          if (pertama===null) pertama=r.id; else if (r.id===pertama) break;
-          if (r.lewat) continue; dicek++;
-          const ket=`${tombol} ${r.nama} tertutup ${r.tutup}/${r.titik} oleh ${r.oleh}`;
-          if (r.tutup===r.titik && !temuan.has(r.nama)) temuan.set(r.nama, ket); else if (r.tutup>0 && r.tutup<r.titik && !sebagian.has(r.nama)) sebagian.set(r.nama, ket);
-        }
-      }
+      const {temuan, sebagian, dicek} = await tabTutup(p);
       const tag=`tutup ${scheme} ${w} ${pg}`;
       console.log(tag,'dicek',dicek); [...temuan.values()].forEach(o=>console.log(tag,'TEMUAN',o)); [...sebagian.values()].forEach(o=>console.log(tag,'sebagian',o));
       if (path==='UJI-TUTUP') ujiTutup+=temuan.size; else { totalTutup+=temuan.size; catatanTutup+=sebagian.size; }
@@ -219,5 +294,6 @@ const halamanFokus = ['index.html','peringkat.html','peringkat.html#istilah','ra
     await ctx.close();
   }
   console.log('total temuan ke-atas',totalAtas,'(uji balik UJI-KEATAS tertangkap:',ujiAtas,')');
+  await auditZoom(b);
   console.log('total temuan',total); await b.close();
 })();

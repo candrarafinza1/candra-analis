@@ -1727,3 +1727,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: giliran KLBF & BRIS; belum ada laba Januari–September 2026 bersumber → tetap 25 dari 32. Raka/Hana: tidak ada kabar baru. Tegar: pindai rahasia, bersih.
 - Tugas baru: Dewi + Nina (zoom 200% & layar pendek HP).
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 17 Nov 2026, 14.10 WIB — sesi kerja (Bima)
+- Yoga: run CI #300 (commit sesi 13.09) hijau.
+- Dewi + Nina: audit zoom 200% (640×450) & layar pendek HP (390×600, papan ketik terbuka 390×360) di `tools/audit-kontras.js` (`AUDIT=zoom`), gelap/terang: 0 scroll horizontal, 0 fokus tertutup, kotak tanya Asisten & kotak ketik Radar tampil utuh, tanpa galat JS. Uji balik UJI-LEBAR/UJI-TUTUP/UJI-KETIK tertangkap. Langkah Tab disatukan (`tabTutup`), audit fokus tertutup lama tetap 0 temuan. Nina: cek statis + 4 uji balik. Tampilan website tidak berubah.
+- Fajar: giliran BSSR & MIKA; teratas masih semester I 2026 → belum ada laba Januari–September 2026 bersumber, tetap 25 dari 32. Berikutnya MDKA & MBMA. Raka/Hana: tidak ada kabar baru.
+- Tugas baru: Dewi + Nina (jarak teks WCAG 1.4.12).
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

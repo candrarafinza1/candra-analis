@@ -581,3 +581,10 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Kirana: tidak ada perubahan tampilan yang terlihat; perilaku kotak tanya lebih nyaman di HP.
 - Berikutnya: zoom 200% dan layar pendek HP (papan ketik terbuka).
 
+### Zoom 200% & layar pendek HP (Dewi & Nina, 17 Nov 14.10)
+- Audit baru `AUDIT=zoom node tools/audit-kontras.js` (juga ikut di audit penuh): zoom 200% = jendela 640×450 piksel CSS (deviceScaleFactor 2) untuk Peringkat, profil ANTM, Asisten, pelajaran (kuis terjawab), Radar UNTR, beranda; HP pendek 390×600 untuk Peringkat, profil, Asisten, pelajaran. Gelap & terang, Tab maju & Shift+Tab.
+- Hasil: 0 scroll horizontal, 0 fokus tertutup penuh, 0 sebagian, tanpa galat JS. Kepala tabel lengket tidak menghabiskan layar pendek.
+- Papan ketik terbuka (390×360): kotak tanya Asisten dan kotak ketik Radar dicapai dengan Tab → tampil utuh dan tidak tertutup elemen lengket.
+- Uji balik: UJI-LEBAR (elemen 900px), UJI-TUTUP (lapisan fixed), UJI-KETIK (lapisan menutup kotak tanya) semua tertangkap.
+- Kirana: tidak ada perubahan tampilan; tangkapan layar Peringkat 640×450 rapi (tabel muat, tanpa geser).
+- Berikutnya: jarak teks (WCAG 1.4.12) agar teks tidak terpotong saat pengguna memperbesar jarak baris/huruf.
