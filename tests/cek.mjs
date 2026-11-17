@@ -5632,7 +5632,7 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
     for (const u of ["UJI-LEBAR", "UJI-TUTUP", "UJI-KETIK"]) if (!z.includes(`'${u}'`)) salah.push(`uji balik ${u} tidak ada di audit zoom`);
     if (!/await tabTutup\(p\)/.test(z)) salah.push("audit zoom tidak memakai langkah Tab bersama (tabTutup)");
     if (!/scrollWidth/.test(z)) salah.push("audit zoom tidak memeriksa scroll horizontal");
-    if (!/await auditZoom\(b\);\n  console\.log\('total temuan',total\)/.test(audit)) salah.push("audit penuh tidak menjalankan auditZoom");
+    if (!/await auditZoom\(b\);\n(  await auditJarak\(b\);\n)?  console\.log\('total temuan',total\)/.test(audit)) salah.push("audit penuh tidak menjalankan auditZoom");
     return salah;
   };
   const auZ = readFileSync("tools/audit-kontras.js", "utf8");
@@ -5641,7 +5641,41 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
   ok(cekZoom(auZ.replace("viewport:{width:640,height:450}, dsf:2", "viewport:{width:1280,height:900}, dsf:1")).some((x) => x.includes("zoom 200%")), "uji balik: audit tanpa jendela zoom 200% harus tertangkap");
   ok(cekZoom(auZ.replaceAll("'UJI-LEBAR'", "'UJI-X'")).some((x) => x.includes("UJI-LEBAR")), "uji balik: audit zoom tanpa UJI-LEBAR harus tertangkap");
   ok(cekZoom(auZ.replace("viewport:{width:390,height:360}", "viewport:{width:390,height:844}")).some((x) => x.includes("papan ketik")), "uji balik: audit tanpa keadaan papan ketik terbuka harus tertangkap");
-  ok(cekZoom(auZ.replace("  await auditZoom(b);\n  console.log('total temuan',total)", "  console.log('total temuan',total)")).some((x) => x.includes("audit penuh")), "uji balik: audit penuh yang melewatkan auditZoom harus tertangkap");
+  ok(cekZoom(auZ.replace("  await auditZoom(b);\n", "")).some((x) => x.includes("audit penuh")), "uji balik: audit penuh yang melewatkan auditZoom harus tertangkap");
+}
+
+// Dewi & Nina (17 Nov 15.xx): jarak teks (WCAG 1.4.12). tools/audit-kontras.js wajib punya auditJarak yang memasang
+// line-height 1.5, letter-spacing .12em, word-spacing .16em, jarak paragraf 2em; memeriksa scroll horizontal, teks terpotong
+// (overflow hidden/clip) dan teks menumpuk di 390px & 1280px; uji balik UJI-POTONG & UJI-TUMPUK; audit penuh ikut menjalankannya.
+// Temuan nyata yang diperbaiki: menu atas di HP (≤600px) dulu nowrap → dengan jarak huruf lebar meluber 21px. Kini boleh turun baris.
+{
+  const cekJarak = (audit, css) => {
+    const salah = [];
+    const g = /const GAYA_JARAK='([^']*)'/.exec(audit);
+    if (!g) salah.push("gaya jarak teks (GAYA_JARAK) tidak ditemukan di audit");
+    else for (const [k, v] of [["line-height", "1.5"], ["letter-spacing", ".12em"], ["word-spacing", ".16em"], ["margin-bottom", "2em"]])
+      if (!g[1].includes(`${k}:${v}`)) salah.push(`gaya jarak teks tanpa ${k}:${v}`);
+    const fn = /async function auditJarak\(b\) \{([\s\S]*?)\n\}\n/.exec(audit);
+    if (!fn) salah.push("fungsi auditJarak tidak ditemukan di audit");
+    else {
+      const j = fn[1];
+      if (!/for \(const w of \[390,1280\]\)/.test(j)) salah.push("audit jarak teks tidak memeriksa 390px & 1280px");
+      for (const u of ["UJI-POTONG", "UJI-TUMPUK"]) if (!j.includes(`'${u}'`)) salah.push(`uji balik ${u} tidak ada di audit jarak teks`);
+      for (const h of ["peringkat.html", "emiten.html", "radar.html", "pelajaran.html", "asisten.html"]) if (!j.includes(`'${h}`)) salah.push(`audit jarak teks tidak memeriksa ${h}`);
+      if (!/scrollWidth/.test(j)) salah.push("audit jarak teks tidak memeriksa scroll horizontal");
+    }
+    if (!/await auditJarak\(b\);\n  console\.log\('total temuan',total\)/.test(audit)) salah.push("audit penuh tidak menjalankan auditJarak");
+    const hp = /@media \(max-width: 600px\) \{([\s\S]*?)\n\}/.exec(css);
+    if (hp && /\.nav \{[^}]*flex-wrap: nowrap/.test(hp[1])) salah.push("menu atas HP memakai flex-wrap: nowrap (meluber bila jarak huruf diperlebar)");
+    return salah;
+  };
+  const auJ = readFileSync("tools/audit-kontras.js", "utf8"), cssJ = readFileSync("assets/styles.css", "utf8");
+  const sJ = cekJarak(auJ, cssJ);
+  ok(sJ.length === 0, `audit jarak teks: ${sJ.join("; ")}`);
+  ok(cekJarak(auJ, cssJ.replace(".nav { gap: 2px; flex-wrap: wrap;", ".nav { gap: 2px; flex-wrap: nowrap;")).some((x) => x.includes("menu atas")), "uji balik: menu atas HP nowrap harus tertangkap");
+  ok(cekJarak(auJ.replace("letter-spacing:.12em", "letter-spacing:.05em"), cssJ).some((x) => x.includes("letter-spacing")), "uji balik: jarak huruf kurang dari 0,12em harus tertangkap");
+  ok(cekJarak(auJ.replaceAll("'UJI-TUMPUK'", "'UJI-X'"), cssJ).some((x) => x.includes("UJI-TUMPUK")), "uji balik: audit jarak teks tanpa UJI-TUMPUK harus tertangkap");
+  ok(cekJarak(auJ.replace("  await auditJarak(b);\n", ""), cssJ).some((x) => x.includes("audit penuh")), "uji balik: audit penuh yang melewatkan auditJarak harus tertangkap");
 }
 
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }

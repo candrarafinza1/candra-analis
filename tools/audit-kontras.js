@@ -6,7 +6,7 @@
 // garis fokus terlihat (outline ≥2px, atau box-shadow/border berubah) dengan kontras ≥3:1 terhadap latar di sekitarnya.
 // Halaman "UJI-FOKUS" sengaja mematikan outline; audit wajib menangkapnya (uji balik).
 // 17 Nov 09.xx (Dewi & Tegar): Tab sampai habis, + keadaan istilah terbuka, hasil Radar UNTR, kuis terjawab; cek border kotak tanya Asisten.
-// Cara pakai: python3 -m http.server 8765 (di akar repo), lalu: node tools/audit-kontras.js (AUDIT=fokus: hanya garis fokus & fokus tertutup; AUDIT=zoom: hanya zoom 200% & layar pendek HP)
+// Cara pakai: python3 -m http.server 8765 (di akar repo), lalu: node tools/audit-kontras.js (AUDIT=fokus: hanya garis fokus & fokus tertutup; AUDIT=zoom: hanya zoom 200% & layar pendek HP; AUDIT=jarak: hanya jarak teks WCAG 1.4.12)
 // Butuh Playwright + Chromium (sudah ada di lingkungan kerja tim); tidak dijalankan oleh tests/cek.mjs.
 const { chromium } = require('playwright');
 // 17 Nov 14.xx (Dewi & Nina): langkah Tab maju & Shift+Tab mundur untuk cek fokus tertutup, dipakai bersama oleh
@@ -110,6 +110,73 @@ async function tabTutup(p) {
       }
   return {temuan, sebagian, dicek};
 }
+// 17 Nov 15.xx (Dewi & Nina): jarak teks (WCAG 1.4.12 Text Spacing). Pengguna boleh memasang sendiri
+// line-height 1,5×, jarak paragraf 2×, letter-spacing 0,12×, word-spacing 0,16× ukuran huruf; tidak boleh ada isi hilang.
+// Tiap halaman (gelap/terang, 390px & 1280px): gaya jarak dipasang, lalu dicek: (1) tidak ada scroll horizontal,
+// (2) tidak ada teks terpotong oleh kotak ber-overflow hidden/clip (termasuk elipsis "…"),
+// (3) tidak ada dua baris teks yang saling menumpuk (kotak teks berpotongan ≥3px).
+// Kotak melayang (position fixed, mis. kotak istilah) hanya dibandingkan dengan teks di dalam kotak itu sendiri.
+// Teks khusus pembaca layar (kotak 1px / clip) dan isi yang sengaja bisa digulir (overflow auto/scroll) tidak dihitung terpotong.
+// Uji balik: UJI-POTONG (judul diberi tinggi tetap 1em + overflow hidden) dan UJI-TUMPUK (judul tinggi tetap 1em, overflow terlihat)
+// wajib tertangkap.
+const GAYA_JARAK='*{line-height:1.5!important;letter-spacing:.12em!important;word-spacing:.16em!important}p{margin-bottom:2em!important}';
+async function auditJarak(b) {
+  const halaman=['peringkat.html','peringkat.html#istilah','emiten.html?kode=ANTM','radar.html#UNTR','pelajaran.html?m=apa-itu-saham#benar','asisten.html','asisten.html#jawab',
+    'index.html','kabar.html','belajar.html','metodologi.html','404.html','UJI-POTONG','UJI-TUMPUK'];
+  let totalJarak=0, ujiPotong=0, ujiTumpuk=0;
+  for (const scheme of ['dark','light']) for (const w of [390,1280]) {
+    const ctx = await b.newContext({ viewport:{width:w,height:900}, colorScheme:scheme });
+    const p = await ctx.newPage(); const errs=[]; p.on('pageerror', e=>errs.push(e.message));
+    for (const pg of halaman) {
+      const [path,hash]=pg.split('#');
+      await p.goto('http://localhost:8765/'+(path.startsWith('UJI-')?'peringkat.html':path)); await p.waitForTimeout(300);
+      if (path==='radar.html'&&hash){ await p.selectOption('#pilih-saham',hash); await p.waitForTimeout(300); }
+      if (hash==='benar'){ const id=new URL('http://x/'+path).searchParams.get('m');
+        await p.evaluate(id=>{ const m=window.MODUL.find(x=>x.id===id); m.kuis.forEach((q,i)=>{ document.querySelector('input[name="soal-'+i+'"][value="'+q.benar+'"]').checked=true; }); },id);
+        await p.click('.kuis button[type="submit"]'); await p.waitForTimeout(200); }
+      if (hash==='istilah'){ const t=await p.$('.istilah, [data-istilah], button.istilah'); if(t){await t.click(); await p.waitForTimeout(200);} }
+      if (hash==='jawab') await p.evaluate(()=>{const log=document.querySelector('[aria-live="polite"]'); if(log) log.insertAdjacentHTML('beforeend','<div class="pesan pesan-galat"><span class="pesan-label">Asisten</span><p>Maaf, server galat</p></div><div class="pesan pesan-asisten"><span class="pesan-label">Asisten</span><p>Contoh jawaban <strong>tebal</strong> yang agak panjang supaya terbungkus beberapa baris.</p><ul><li>Butir satu</li><li>Butir dua</li></ul></div>');});
+      await p.$$eval('details', d=>d.forEach(x=>x.open=true));
+      await p.addStyleTag({content:GAYA_JARAK});
+      if (path==='UJI-POTONG') await p.addStyleTag({content:'h1{height:1em!important;overflow:hidden!important}'});
+      if (path==='UJI-TUMPUK') await p.addStyleTag({content:'h1{height:1em!important;overflow:visible!important;margin-bottom:0!important}h1+*{margin-top:0!important}'});
+      await p.waitForTimeout(250);
+      const res = await p.evaluate(() => {
+        const tersembunyi = el => { for(let e=el;e;e=e.parentElement){ const s=getComputedStyle(e); if(s.display==='none'||s.visibility==='hidden'||s.clipPath.includes('inset(50%')||(s.clip&&s.clip.startsWith('rect(0'))) return true; const r=e.getBoundingClientRect(); if(r.width<=1&&r.height<=1&&s.overflow==='hidden') return true; } return false; };
+        const potong=[], kotak=[]; const dicekEl=new Set();
+        const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT); let n;
+        while(n=w.nextNode()){ if(!n.textContent.trim()) continue; const el=n.parentElement; if(!el||['SCRIPT','STYLE','NOSCRIPT','OPTION','TEXTAREA'].includes(el.tagName)) continue; if(tersembunyi(el)) continue;
+          const rg=document.createRange(); rg.selectNodeContents(n);
+          let lapis=null; for(let e=el;e;e=e.parentElement){ if(getComputedStyle(e).position==='fixed'){ lapis=e; break; } }
+          for (const r of rg.getClientRects()) if (r.width>1&&r.height>1) kotak.push({r, el, lapis, t:n.textContent.trim().slice(0,30)});
+          // terpotong: cari leluhur ber-overflow hidden/clip yang kotaknya tidak memuat teks
+          for (let e=el;e&&e!==document.body;e=e.parentElement){ const s=getComputedStyle(e);
+            const ox=s.overflowX, oy=s.overflowY; if(['auto','scroll'].includes(ox)&&['auto','scroll'].includes(oy)) break;
+            const hX=ox==='hidden'||ox==='clip', hY=oy==='hidden'||oy==='clip'; if(!hX&&!hY) continue;
+            if (dicekEl.has(e)) break; dicekEl.add(e);
+            const lebih = (hX&&e.scrollWidth>e.clientWidth+1)||(hY&&e.scrollHeight>e.clientHeight+1);
+            if (lebih) potong.push(`<${e.tagName.toLowerCase()} class="${e.className}"> ${hY?'tinggi '+e.clientHeight+'/'+e.scrollHeight:''} ${hX?'lebar '+e.clientWidth+'/'+e.scrollWidth:''} "${(e.textContent||'').trim().slice(0,40)}"`);
+            break; }
+        }
+        // tumpuk: dua kotak baris dari elemen berbeda yang berpotongan ≥3px di kedua sumbu
+        const tumpuk=[]; kotak.sort((a,b)=>a.r.top-b.r.top);
+        for (let i=0;i<kotak.length&&tumpuk.length<10;i++) for (let j=i+1;j<kotak.length;j++){ const a=kotak[i], c=kotak[j]; if(c.r.top>=a.r.bottom-3) break; if(a.el===c.el) continue; if(a.lapis!==c.lapis) continue; // kotak melayang (mis. kotak istilah, position fixed) memang menutupi isi di bawahnya
+          if (a.el.contains(c.el)||c.el.contains(a.el)) { /* teks bertingkat dalam satu baris: tetap dicek */ }
+          const ox=Math.min(a.r.right,c.r.right)-Math.max(a.r.left,c.r.left), oy=Math.min(a.r.bottom,c.r.bottom)-Math.max(a.r.top,c.r.top);
+          if (ox>=3&&oy>=3) { tumpuk.push(`"${a.t}" ⟂ "${c.t}" (${Math.round(ox)}×${Math.round(oy)}px)`); break; } }
+        return {sw:document.documentElement.scrollWidth, potong, tumpuk, n:kotak.length};
+      });
+      const tag=`jarak ${scheme} ${w} ${pg}`; const masalah=[];
+      if (res.sw>w) masalah.push('scroll horizontal '+res.sw);
+      res.potong.forEach(x=>masalah.push('terpotong '+x)); res.tumpuk.forEach(x=>masalah.push('tumpuk '+x));
+      console.log(tag, 'baris teks dicek', res.n, masalah.length?'TEMUAN '+masalah.length:'lolos'); masalah.forEach(m=>console.log('   ',m));
+      if (path==='UJI-POTONG') ujiPotong+=res.potong.length; else if (path==='UJI-TUMPUK') ujiTumpuk+=res.tumpuk.length; else totalJarak+=masalah.length;
+    }
+    if (errs.length) { console.log('jarak',scheme,w,'galat JS',errs); totalJarak+=errs.length; }
+    await ctx.close();
+  }
+  console.log('total temuan jarak teks',totalJarak,'(uji balik UJI-POTONG tertangkap:',ujiPotong,'; UJI-TUMPUK tertangkap:',ujiTumpuk,')');
+}
 const pages = ['radar.html#UNTR','radar.html#INTP','radar.html#TPIA','radar.html#HEAL','peringkat.html#istilah','asisten.html#jawab','UJI','peringkat.html','radar.html','emiten.html?kode=ANTM','emiten.html?kode=TPIA','kabar.html','metodologi.html','asisten.html',
   'index.html','belajar.html','pelajaran.html?m=apa-itu-saham#benar','pelajaran.html?m=saham-syariah#salah','404.html'];
 const halamanFokus = ['index.html','peringkat.html','peringkat.html#istilah','radar.html','radar.html#UNTR','emiten.html?kode=ANTM','kabar.html','belajar.html','pelajaran.html?m=apa-itu-saham','pelajaran.html?m=apa-itu-saham#benar','metodologi.html','asisten.html','404.html','UJI-FOKUS','UJI-FOKUS-BORDER'];
@@ -117,6 +184,8 @@ const halamanFokus = ['index.html','peringkat.html','peringkat.html#istilah','ra
   const b = await chromium.launch();
   // AUDIT=zoom node tools/audit-kontras.js → hanya zoom 200% & layar pendek HP
   if (process.env.AUDIT==='zoom') { await auditZoom(b); await b.close(); return; }
+  // AUDIT=jarak node tools/audit-kontras.js → hanya jarak teks (WCAG 1.4.12)
+  if (process.env.AUDIT==='jarak') { await auditJarak(b); await b.close(); return; }
   let total = 0;
   // AUDIT=fokus node tools/audit-kontras.js → hanya cek garis fokus (lebih cepat)
   if (process.env.AUDIT!=='fokus') for (const scheme of ['dark','light']) for (const w of [390,1280]) {
@@ -295,5 +364,6 @@ const halamanFokus = ['index.html','peringkat.html','peringkat.html#istilah','ra
   }
   console.log('total temuan ke-atas',totalAtas,'(uji balik UJI-KEATAS tertangkap:',ujiAtas,')');
   await auditZoom(b);
+  await auditJarak(b);
   console.log('total temuan',total); await b.close();
 })();

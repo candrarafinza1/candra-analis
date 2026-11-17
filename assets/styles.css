@@ -295,14 +295,14 @@ tbody tr:hover { background: var(--hover-baris); }
   .tab-baris { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 16px 0 12px; }
   .tab { font-size: .88rem; line-height: 1.25; padding: 8px 10px; min-height: 48px; text-align: center; }
   .kepala .wadah { gap: 4px 16px; padding-top: 8px; padding-bottom: 8px; }
-  .nav { gap: 2px; flex-wrap: nowrap; margin: 0 -8px; }
+  /* Boleh turun baris bila tidak muat (mis. pengguna memperlebar jarak huruf, WCAG 1.4.12); biasanya tetap satu baris (Dewi, 17 Nov 15.xx) */
+  .nav { gap: 2px; flex-wrap: wrap; margin: 0 -8px; }
   .nav a { font-size: .86rem; padding: 8px 9px; white-space: nowrap; }
   /* Jarak antartombol hanya 2px: garis fokus digambar di dalam tombol agar tidak menimpa tetangga (Dewi, 17 Nov) */
   .nav a:focus-visible { outline-offset: -3px; }
   .nav a[aria-current="page"]:focus-visible { outline-color: var(--malam); }
   .bagian { padding: 32px 0; }
 }
-@media (max-width: 359px) { .nav { flex-wrap: wrap; } }
 
 .catatan-metode { font-size: .92rem; color: var(--tinta-2); max-width: var(--lebar-teks); }
 /* Arif & Dewi (16 Nov, IDE.md #33): baris kesegaran data di bawah judul profil */

@@ -1734,3 +1734,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: giliran BSSR & MIKA; teratas masih semester I 2026 → belum ada laba Januari–September 2026 bersumber, tetap 25 dari 32. Berikutnya MDKA & MBMA. Raka/Hana: tidak ada kabar baru.
 - Tugas baru: Dewi + Nina (jarak teks WCAG 1.4.12).
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 17 Nov 2026, 15.09 WIB — sesi kerja (Bima)
+- Yoga: run CI #301 (commit sesi 14.10) hijau.
+- Dewi + Nina: audit jarak teks (WCAG 1.4.12) di `tools/audit-kontras.js` (`AUDIT=jarak`): 12 keadaan, gelap/terang, 390px & 1280px. Satu masalah nyata diperbaiki: menu atas di HP meluber 21px saat jarak huruf diperlebar (kini boleh turun baris; tampilan biasa tidak berubah). Kotak istilah melayang tidak dihitung tumpuk. Hasil 0 temuan, tanpa galat JS; uji balik UJI-POTONG/UJI-TUMPUK tertangkap. Audit zoom tetap 0 temuan. Nina: cek statis + 4 uji balik.
+- Fajar: giliran MDKA & MBMA; baru ada penjualan kuartal III MDKA, belum laba Januari–September 2026 bersumber → tetap 25 dari 32. Raka/Hana: tidak ada kabar baru.
+- Tugas baru: Dewi + Nina (orientasi layar WCAG 1.3.4).
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

@@ -588,3 +588,11 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Uji balik: UJI-LEBAR (elemen 900px), UJI-TUTUP (lapisan fixed), UJI-KETIK (lapisan menutup kotak tanya) semua tertangkap.
 - Kirana: tidak ada perubahan tampilan; tangkapan layar Peringkat 640×450 rapi (tabel muat, tanpa geser).
 - Berikutnya: jarak teks (WCAG 1.4.12) agar teks tidak terpotong saat pengguna memperbesar jarak baris/huruf.
+
+### Audit jarak teks WCAG 1.4.12 (Dewi & Nina, 17 Nov 15.09)
+- `AUDIT=jarak node tools/audit-kontras.js`: gaya jarak dipasang (line-height 1,5; jarak paragraf 2em; jarak huruf 0,12em; jarak kata 0,16em) di 12 keadaan (Peringkat kartu HP & tabel, kotak istilah terbuka, profil ANTM, Radar UNTR, pelajaran kuis terjawab, Asisten kosong & berisi jawaban, beranda, Kabar, Belajar, Metodologi, 404), gelap/terang, 390px & 1280px.
+- Diperiksa: scroll horizontal, teks terpotong kotak ber-overflow hidden/clip, baris teks menumpuk (≥3px).
+- Temuan nyata: menu atas di HP (≤600px) disetel `nowrap` → dengan jarak huruf lebar meluber 21px (scroll horizontal di semua halaman 390px). Diperbaiki: menu boleh turun baris bila tidak muat. Tampilan biasa tidak berubah (360/390/600/1280px tetap satu baris, tinggi kepala sama).
+- Temuan palsu disaring: kotak istilah (position fixed) memang melayang menutupi teks di bawahnya; hanya dibandingkan dengan teksnya sendiri.
+- Hasil sesudah perbaikan: 0 temuan, tanpa galat JS. Uji balik UJI-POTONG (judul tinggi tetap + overflow hidden) dan UJI-TUMPUK (judul tinggi tetap) tertangkap.
+- Berikutnya: orientasi layar (WCAG 1.3.4) — HP mendatar 844×390 tanpa isi hilang.
