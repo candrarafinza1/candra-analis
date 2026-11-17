@@ -1433,6 +1433,12 @@
     if (aktif && kotak && !kotak.contains(ev.target)) tutupIstilah(false);
   });
   document.addEventListener("keydown", function (ev) { if (ev.key === "Escape" && aktif) tutupIstilah(true); });
+  // Dewi & Nina (17 Nov 18.xx, WCAG 1.4.13): tautan "Langsung ke isi" muncul saat difokus dan menutupi logo.
+  // Escape menyembunyikannya tanpa memindah fokus; muncul lagi saat difokus berikutnya.
+  Array.prototype.forEach.call(document.querySelectorAll("a.lompat"), function (a) {
+    a.addEventListener("keydown", function (ev) { if (ev.key === "Escape") a.classList.add("lompat-tutup"); });
+    a.addEventListener("blur", function () { a.classList.remove("lompat-tutup"); });
+  });
   // Dewi & Nina (17 Nov 10.xx, WCAG 2.4.11): kotak istilah melayang (fixed) bisa menutupi elemen berikutnya yang
   // dituju Tab. Bila fokus pindah keluar dari tombol istilah & kotaknya, kotak ditutup (fokus tidak dipindahkan).
   document.addEventListener("focusin", function (ev) {

@@ -610,3 +610,11 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Hasil akhir: 0 temuan, tanpa galat JS. Uji balik UJI-SENTUH (dua tombol 12px berdempetan) tertangkap 2/2.
 - Berikutnya: konten yang muncul saat diarahkan/difokus (WCAG 1.4.13) — kotak istilah.
 
+
+### Audit konten saat diarahkan/difokus — WCAG 1.4.13 (Dewi & Nina, 17 Nov 18.10)
+- Alat: `AUDIT=sorot node tools/audit-kontras.js` (juga ikut audit penuh). 10 halaman (Peringkat, profil ANTM, Radar UNTR, pelajaran dengan kuis terjawab, Asisten, beranda, Kabar, Belajar, Metodologi, 404) × 390/1280px × gelap/terang. Tiap elemen yang bisa difokus diarahkan penunjuk lalu difokus keyboard; konten baru yang tampil wajib: tertutup dengan Escape tanpa memindah penunjuk/fokus (kecuali bila tidak menutupi isi lain), tetap tampil saat penunjuk digeser ke atasnya, dan tidak hilang sendiri (ditunggu 3 detik).
+- Kotak istilah (dibuka klik/Enter) diuji khusus: tetap tampil saat penunjuk di atas kotak, saat penunjuk pergi, dan setelah 3 detik; Escape menutup dari tombol maupun dari tautan di dalam kotak, dan fokus kembali ke tombol istilah. Lolos di semua keadaan.
+- Temuan: tautan "Langsung ke isi" yang muncul saat difokus menutupi logo dan tidak bisa disembunyikan dengan Escape (40 temuan, satu per halaman per keadaan). Perbaikan: Escape kini menyembunyikannya tanpa memindah fokus (muncul lagi saat difokus berikutnya). Di 404.html (tanpa JavaScript) tautan itu ikut alur halaman saat difokus sehingga tidak menutupi apa pun.
+- Hasil akhir: 0 temuan, tanpa galat JS. Uji balik UJI-SOROT (kotak hilang saat mouseout/blur, tanpa Escape) tertangkap 4/4, UJI-HILANG (kotak hilang sendiri setelah 1 detik) tertangkap 4/4.
+- Catatan: tooltip bawaan peramban dari atribut `title` pada tombol istilah diatur peramban (di luar kendali situs), jadi tidak diaudit.
+- Berikutnya: label dalam nama (WCAG 2.5.3) — nama aksesibel tombol/tautan wajib memuat teks yang terlihat.

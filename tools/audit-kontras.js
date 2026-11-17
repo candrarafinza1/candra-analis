@@ -6,7 +6,7 @@
 // garis fokus terlihat (outline ≥2px, atau box-shadow/border berubah) dengan kontras ≥3:1 terhadap latar di sekitarnya.
 // Halaman "UJI-FOKUS" sengaja mematikan outline; audit wajib menangkapnya (uji balik).
 // 17 Nov 09.xx (Dewi & Tegar): Tab sampai habis, + keadaan istilah terbuka, hasil Radar UNTR, kuis terjawab; cek border kotak tanya Asisten.
-// Cara pakai: python3 -m http.server 8765 (di akar repo), lalu: node tools/audit-kontras.js (AUDIT=fokus: hanya garis fokus & fokus tertutup; AUDIT=zoom: hanya zoom 200% & layar pendek HP; AUDIT=jarak: hanya jarak teks WCAG 1.4.12; AUDIT=orientasi: hanya orientasi layar WCAG 1.3.4; AUDIT=sentuh: hanya ukuran sasaran sentuh WCAG 2.5.8)
+// Cara pakai: python3 -m http.server 8765 (di akar repo), lalu: node tools/audit-kontras.js (AUDIT=fokus: hanya garis fokus & fokus tertutup; AUDIT=zoom: hanya zoom 200% & layar pendek HP; AUDIT=jarak: hanya jarak teks WCAG 1.4.12; AUDIT=orientasi: hanya orientasi layar WCAG 1.3.4; AUDIT=sentuh: hanya ukuran sasaran sentuh WCAG 2.5.8; AUDIT=sorot: hanya konten saat diarahkan/difokus WCAG 1.4.13)
 // Butuh Playwright + Chromium (sudah ada di lingkungan kerja tim); tidak dijalankan oleh tests/cek.mjs.
 const { chromium } = require('playwright');
 // 17 Nov 14.xx (Dewi & Nina): langkah Tab maju & Shift+Tab mundur untuk cek fokus tertutup, dipakai bersama oleh
@@ -295,6 +295,115 @@ async function auditJarak(b) {
   }
   console.log('total temuan jarak teks',totalJarak,'(uji balik UJI-POTONG tertangkap:',ujiPotong,'; UJI-TUMPUK tertangkap:',ujiTumpuk,')');
 }
+// 17 Nov 18.xx (Dewi & Nina): konten yang muncul saat diarahkan/difokus (WCAG 1.4.13 Content on Hover or Focus).
+// Tiap elemen yang bisa difokus diarahkan penunjuk (hover) lalu difokus keyboard; bila ada konten baru yang tampil, konten itu wajib:
+// (1) bisa ditutup dengan Escape tanpa memindah penunjuk/fokus, (2) tetap tampil saat penunjuk digeser ke atasnya,
+// (3) tidak hilang sendiri (dicek 3 detik). Kotak istilah (dibuka dengan klik/Enter) diuji khusus: Escape menutup & fokus
+// kembali ke tombolnya, tetap tampil saat penunjuk di atas kotak, saat penunjuk pergi, dan setelah 3 detik.
+// 390px & 1280px × gelap/terang. Uji balik: UJI-SOROT (kotak hilang saat mouseout/blur, tanpa Escape) dan
+// UJI-HILANG (kotak hilang sendiri setelah 1 detik) wajib tertangkap.
+async function auditSorot(b) {
+  const halaman=['peringkat.html','emiten.html?kode=ANTM','radar.html#UNTR','pelajaran.html?m=apa-itu-saham#benar','asisten.html',
+    'index.html','kabar.html','belajar.html','metodologi.html','404.html','UJI-SOROT','UJI-HILANG'];
+  let total=0, ujiSorot=0, ujiHilang=0;
+  const PASANG=()=>{ window.__tampil=()=>{ const out=[]; for (const e of document.querySelectorAll('body *')) {
+      if (!e.checkVisibility({visibilityProperty:true,opacityProperty:true})) continue;
+      const r=e.getBoundingClientRect(); if (r.width<1||r.height<1) continue;
+      if (r.right+scrollX<=0||r.bottom+scrollY<=0) continue; const cs=getComputedStyle(e);
+      if (cs.position==='absolute'&&(cs.clip.startsWith('rect(0')||cs.clipPath.includes('inset(50%'))) continue; out.push(e); } return out; };
+    window.__awal=()=>{ window.__set=new Set(window.__tampil()); };
+    window.__baru=()=>{ const b=window.__tampil().filter(e=>!window.__set.has(e)); const atas=b.filter(e=>!b.some(o=>o!==e&&o.contains(e)));
+      window.__konten=atas; const semua=window.__tampil();
+      // Konten yang tidak menutupi elemen lain (ikut alur halaman) dikecualikan dari syarat Escape (WCAG 1.4.13).
+      const menutupi=e=>{ const r=e.getBoundingClientRect(); return semua.some(o=>{ if(o===e||o.contains(e)||e.contains(o)||atas.some(a=>a.contains(o))) return false;
+        if (o.children.length&&![...o.childNodes].some(n=>n.nodeType===3&&/\S/.test(n.nodeValue))) return false; const q=o.getBoundingClientRect();
+        return Math.min(r.right,q.right)-Math.max(r.left,q.left)>2&&Math.min(r.bottom,q.bottom)-Math.max(r.top,q.top)>2; }); };
+      return atas.map(e=>{ const r=e.getBoundingClientRect(); return {tutup:menutupi(e), nama:e.tagName.toLowerCase()+(typeof e.className==='string'&&e.className?'.'+e.className.split(' ')[0]:'')+' "'+(e.innerText||e.textContent||'').trim().slice(0,30)+'"', x:r.left+r.width/2, y:r.top+r.height/2}; }); };
+    window.__masih=()=>window.__konten.filter(e=>document.contains(e)&&e.checkVisibility({visibilityProperty:true,opacityProperty:true})&&e.getBoundingClientRect().right+scrollX>0).length; };
+  // Empat keadaan (gelap/terang × 390/1280) dijalankan bersamaan agar audit selesai < 5 menit; hasil dicetak per keadaan.
+  const keadaan=[]; for (const scheme of ['dark','light']) for (const w of [390,1280]) keadaan.push([scheme,w]);
+  const hasil=await Promise.all(keadaan.map(async ([scheme,w])=>{ const log=[]; const console={log:(...a)=>log.push(a.join(' '))}; let total=0, ujiSorot=0, ujiHilang=0;
+    const ctx=await b.newContext({ viewport:{width:w,height:844}, colorScheme:scheme, deviceScaleFactor:1 });
+    const p=await ctx.newPage(); const errs=[]; p.on('pageerror',e=>errs.push(e.message));
+    for (const pg of halaman) {
+      const [path,hash]=pg.split('#'); const uji=path.startsWith('UJI-'); const tag=`sorot ${scheme} ${w} ${pg}`;
+      await p.goto('http://localhost:8765/'+(uji?'peringkat.html':path)); await p.waitForTimeout(300);
+      await p.addStyleTag({content:'html{scroll-behavior:auto!important}'});
+      if (path==='UJI-SOROT') await p.evaluate(()=>{ document.querySelector('main').insertAdjacentHTML('afterbegin','<p style="position:relative"><button id="uji-sorot">uji</button><span id="uji-tip" hidden style="position:absolute;left:0;top:48px;background:#888;padding:8px">keterangan</span></p>');
+        const t=document.getElementById('uji-sorot'), s=document.getElementById('uji-tip'); const buka=()=>s.hidden=false, tutup=()=>s.hidden=true;
+        t.addEventListener('mouseenter',buka); t.addEventListener('mouseleave',tutup); t.addEventListener('focus',buka); t.addEventListener('blur',tutup); });
+      if (path==='UJI-HILANG') await p.evaluate(()=>{ document.querySelector('main').insertAdjacentHTML('afterbegin','<p style="position:relative"><button id="uji-sorot">uji</button><span id="uji-tip" hidden style="position:absolute;left:0;top:100%;background:#888;padding:8px">keterangan</span></p>');
+        const t=document.getElementById('uji-sorot'), s=document.getElementById('uji-tip'); let w;
+        const buka=()=>{ s.hidden=false; clearTimeout(w); w=setTimeout(()=>s.hidden=true,1000); }; t.addEventListener('mouseenter',buka); t.addEventListener('focus',buka);
+        document.addEventListener('keydown',e=>{ if(e.key==='Escape') s.hidden=true; }); });
+      if (path==='radar.html'&&hash){ await p.selectOption('#pilih-saham',hash); await p.waitForTimeout(300); }
+      if (path==='asisten.html') await p.evaluate(()=>{ document.querySelectorAll('.form-tanya textarea, .form-tanya button').forEach(e=>e.disabled=false); });
+      if (hash==='benar'){ const id=new URL('http://x/'+path).searchParams.get('m');
+        await p.evaluate((id)=>{ const m=window.MODUL.find(x=>x.id===id); m.kuis.forEach((q,i)=>{ document.querySelector('input[name="soal-'+i+'"][value="'+q.benar+'"]').checked=true; }); },id);
+        await p.click('.kuis button[type="submit"]'); await p.waitForTimeout(200); }
+      await p.evaluate(PASANG);
+      const n=await p.evaluate(()=>{ const sel='a[href],button,input:not([type=hidden]),select,textarea,summary,[tabindex]:not([tabindex="-1"])';
+        const d=[...document.querySelectorAll(sel)].filter(e=>!e.disabled&&e.checkVisibility()); d.forEach((e,i)=>e.dataset.sorot=i); return d.length; });
+      const temuan=[]; let muncul=0;
+      const netral=async()=>{ await p.mouse.move(w-2,843); await p.evaluate(()=>{ document.activeElement&&document.activeElement.blur&&document.activeElement.blur(); }); };
+      for (let i=0;i<n;i++) {
+        for (const cara of ['arah','fokus']) {
+          await netral(); const sel=`[data-sorot="${i}"]`;
+          const pos=await p.evaluate((sel)=>{ const e=document.querySelector(sel); if(!e) return null; e.scrollIntoView({block:'center'}); const r=e.getBoundingClientRect(); window.__awal(); return {x:r.left+r.width/2,y:r.top+r.height/2,nama:e.tagName.toLowerCase()+' "'+(e.innerText||e.value||e.getAttribute('aria-label')||'').trim().slice(0,30)+'"'}; },sel);
+          if (!pos) continue;
+          if (cara==='arah') { if (pos.x<0||pos.x>w||pos.y<0||pos.y>844) continue; await p.mouse.move(pos.x,pos.y); }
+          else await p.focus(sel);
+          await p.waitForTimeout(80); const baru=await p.evaluate(()=>window.__baru());
+          if (!baru.length) continue; muncul++;
+          const nama=`${pos.nama} (${cara==='arah'?'diarahkan':'difokus'}) → ${baru.map(x=>x.nama).join(', ')}`;
+          // (3) tidak hilang sendiri
+          await p.waitForTimeout(3000); if ((await p.evaluate(()=>window.__masih()))<baru.length) temuan.push(nama+': hilang sendiri sebelum 3 detik');
+          // (2) bisa diarahkan: geser penunjuk dari pemicu ke atas konten
+          if (cara==='arah') { await p.mouse.move(pos.x,pos.y); await p.waitForTimeout(50);
+            for (const k of baru) { await p.mouse.move(k.x,k.y,{steps:8}); await p.waitForTimeout(100);
+              if ((await p.evaluate(()=>window.__masih()))<baru.length) { temuan.push(nama+': hilang saat penunjuk digeser ke atasnya'); break; } }
+            await p.mouse.move(pos.x,pos.y); await p.waitForTimeout(100); }
+          // (1) bisa ditutup dengan Escape tanpa memindah penunjuk/fokus
+          if ((await p.evaluate(()=>window.__masih()))>0) { await p.keyboard.press('Escape'); await p.waitForTimeout(100);
+            const r=await p.evaluate((sel)=>({sisa:window.__masih(), fokus:document.activeElement===document.querySelector(sel)}),sel);
+            if (r.sisa>0&&baru.some(k=>k.tutup)) temuan.push(nama+': tidak tertutup dengan Escape (dan menutupi isi lain)');
+            else if (cara==='fokus'&&!r.fokus) temuan.push(nama+': Escape memindah fokus'); }
+        }
+      }
+      // Kotak istilah (dibuka dengan klik/Enter)
+      let istilah='tidak ada tombol istilah';
+      if (!uji && await p.$('button.istilah')) {
+        await netral(); const bt=await p.evaluate(()=>{ const t=[...document.querySelectorAll('button.istilah')].find(x=>x.checkVisibility()&&x.tabIndex>=0); if(!t) return null; t.scrollIntoView({block:'center'}); t.dataset.sorotIstilah='1'; const r=t.getBoundingClientRect(); return {x:r.left+r.width/2,y:r.top+r.height/2}; });
+        if (bt) { const st='[data-sorot-istilah="1"]', buka=()=>p.evaluate(()=>{ const k=document.getElementById('kotak-istilah'); return !!(k&&!k.hidden&&k.checkVisibility()); });
+          const masalah=[];
+          await p.mouse.click(bt.x,bt.y); await p.waitForTimeout(150);
+          if (!await buka()) masalah.push('kotak tidak terbuka saat diklik');
+          else { const k=await p.evaluate(()=>{ const r=document.getElementById('kotak-istilah').getBoundingClientRect(); return {x:r.left+r.width/2,y:r.top+r.height/2}; });
+            await p.mouse.move(k.x,k.y,{steps:8}); await p.waitForTimeout(100); if (!await buka()) masalah.push('hilang saat penunjuk digeser ke atas kotak');
+            await p.mouse.move(Math.min(w-2,k.x+400),Math.min(843,k.y+300),{steps:8}); await p.waitForTimeout(100); if (!await buka()) masalah.push('hilang saat penunjuk pergi (mouseout)');
+            await p.waitForTimeout(3000); if (!await buka()) masalah.push('hilang sendiri sebelum 3 detik');
+            await p.keyboard.press('Escape'); await p.waitForTimeout(100); if (await buka()) masalah.push('tidak tertutup dengan Escape (dibuka klik)');
+            await p.focus(st); await p.keyboard.press('Enter'); await p.waitForTimeout(150);
+            if (!await buka()) masalah.push('kotak tidak terbuka dengan Enter');
+            else { await p.keyboard.press('Escape'); await p.waitForTimeout(100);
+              if (await buka()) masalah.push('tidak tertutup dengan Escape (dibuka Enter)');
+              else if (!await p.evaluate((st)=>document.activeElement===document.querySelector(st),st)) masalah.push('fokus tidak kembali ke tombol istilah setelah Escape');
+              await p.keyboard.press('Enter'); await p.waitForTimeout(150);
+              if (await p.$('#kotak-istilah a')) { await p.keyboard.press('Tab'); await p.waitForTimeout(50); await p.keyboard.press('Escape'); await p.waitForTimeout(100);
+                if (await buka()) masalah.push('tidak tertutup dengan Escape dari tautan di dalam kotak');
+                else if (!await p.evaluate((st)=>document.activeElement===document.querySelector(st),st)) masalah.push('fokus tidak kembali ke tombol istilah dari tautan di kotak'); } } }
+          masalah.forEach(m=>temuan.push('kotak istilah: '+m)); istilah=masalah.length?'kotak istilah bermasalah':'kotak istilah lolos'; }
+      }
+      temuan.forEach(t=>console.log(tag,'TEMUAN',t));
+      console.log(tag,'elemen dicek',n,'konten muncul',muncul,istilah, temuan.length?'':'lolos');
+      if (path==='UJI-SOROT') ujiSorot+=temuan.length?1:0; else if (path==='UJI-HILANG') ujiHilang+=temuan.length?1:0; else total+=temuan.length;
+    }
+    if (errs.length) { console.log('sorot',scheme,w,'JS errors',errs); total+=errs.length; }
+    await ctx.close(); return {log,total,ujiSorot,ujiHilang};
+  }));
+  for (const h of hasil) { h.log.forEach(l=>console.log(l)); total+=h.total; ujiSorot+=h.ujiSorot; ujiHilang+=h.ujiHilang; }
+  console.log('total temuan konten sorot',total,'(uji balik UJI-SOROT tertangkap:',ujiSorot,'dari 4; UJI-HILANG tertangkap:',ujiHilang,'dari 4)');
+}
 const pages = ['radar.html#UNTR','radar.html#INTP','radar.html#TPIA','radar.html#HEAL','peringkat.html#istilah','asisten.html#jawab','UJI','peringkat.html','radar.html','emiten.html?kode=ANTM','emiten.html?kode=TPIA','kabar.html','metodologi.html','asisten.html',
   'index.html','belajar.html','pelajaran.html?m=apa-itu-saham#benar','pelajaran.html?m=saham-syariah#salah','404.html'];
 const halamanFokus = ['index.html','peringkat.html','peringkat.html#istilah','radar.html','radar.html#UNTR','emiten.html?kode=ANTM','kabar.html','belajar.html','pelajaran.html?m=apa-itu-saham','pelajaran.html?m=apa-itu-saham#benar','metodologi.html','asisten.html','404.html','UJI-FOKUS','UJI-FOKUS-BORDER'];
@@ -308,6 +417,8 @@ const halamanFokus = ['index.html','peringkat.html','peringkat.html#istilah','ra
   if (process.env.AUDIT==='orientasi') { await auditOrientasi(b); await b.close(); return; }
   // AUDIT=sentuh node tools/audit-kontras.js → hanya ukuran sasaran sentuh (WCAG 2.5.8)
   if (process.env.AUDIT==='sentuh') { await auditSentuh(b); await b.close(); return; }
+  // AUDIT=sorot node tools/audit-kontras.js → hanya konten saat diarahkan/difokus (WCAG 1.4.13)
+  if (process.env.AUDIT==='sorot') { await auditSorot(b); await b.close(); return; }
   let total = 0;
   // AUDIT=fokus node tools/audit-kontras.js → hanya cek garis fokus (lebih cepat)
   if (process.env.AUDIT!=='fokus') for (const scheme of ['dark','light']) for (const w of [390,1280]) {
@@ -489,5 +600,6 @@ const halamanFokus = ['index.html','peringkat.html','peringkat.html#istilah','ra
   await auditJarak(b);
   await auditOrientasi(b);
   await auditSentuh(b);
+  await auditSorot(b);
   console.log('total temuan',total); await b.close();
 })();

@@ -1755,3 +1755,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Tugas baru: Dewi + Nina (konten saat diarahkan/difokus, WCAG 1.4.13).
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
 
+
+## 17 Nov 2026, 18.10 WIB (Bima)
+- Yoga: run CI #304 (commit sesi 17.09) hijau.
+- Dewi + Nina: audit konten saat diarahkan/difokus (WCAG 1.4.13) di `tools/audit-kontras.js` (`AUDIT=sorot`, juga ikut audit penuh): 10 halaman × 390/1280px × gelap/terang. Kotak istilah lolos (Escape menutup & fokus kembali, tetap tampil saat penunjuk di atasnya/pergi dan setelah 3 detik). Temuan: tautan "Langsung ke isi" menutupi logo saat difokus dan tidak bisa disembunyikan → kini Escape menyembunyikannya tanpa memindah fokus; di 404 (tanpa JavaScript) tautan ikut alur halaman. Hasil 0 temuan; uji balik UJI-SOROT 4/4, UJI-HILANG 4/4. Nina: cek statis + 4 uji balik; pola audit penuh di cek lama disesuaikan.
+- Fajar: giliran MDKA & MBMA; hanya ada penjualan kuartal III MDKA, belum ada laba Januari–September 2026 bersumber → tetap 25 dari 32. Raka/Hana: tidak ada kabar baru.
+- Tugas baru: Dewi + Nina (label dalam nama, WCAG 2.5.3).
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
