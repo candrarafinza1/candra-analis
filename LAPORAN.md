@@ -1741,3 +1741,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: giliran MDKA & MBMA; baru ada penjualan kuartal III MDKA, belum laba Januari–September 2026 bersumber → tetap 25 dari 32. Raka/Hana: tidak ada kabar baru.
 - Tugas baru: Dewi + Nina (orientasi layar WCAG 1.3.4).
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 17 Nov 2026, 16.09 WIB — sesi kerja (Bima)
+- Yoga: run CI #302 (commit sesi 15.09) hijau.
+- Dewi + Nina: audit orientasi layar (WCAG 1.3.4) di `tools/audit-kontras.js` (`AUDIT=orientasi`, juga ikut audit penuh): HP mendatar 844×390 & tablet mendatar 1024×768, 6 halaman, gelap/terang. 0 temuan: isi tidak hilang saat mendatar, tanpa scroll horizontal, kepala lengket maks 42px, kotak tanya Asisten tampil utuh. Uji balik UJI-KUNCI/UJI-LENGKET tertangkap 4/4. Nina: cek statis + 4 uji balik (termasuk larangan `screen.orientation.lock`); cek zoom & jarak dilonggarkan agar audit orientasi boleh berjalan sesudahnya.
+- Fajar: giliran KLBF & BRIS; belum ada laba Januari–September 2026 bersumber → tetap 25 dari 32. Raka/Hana: tidak ada kabar baru.
+- Tugas baru: Dewi + Nina (ukuran sasaran sentuh WCAG 2.5.8).
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

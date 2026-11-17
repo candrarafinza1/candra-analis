@@ -6,7 +6,7 @@
 // garis fokus terlihat (outline ≥2px, atau box-shadow/border berubah) dengan kontras ≥3:1 terhadap latar di sekitarnya.
 // Halaman "UJI-FOKUS" sengaja mematikan outline; audit wajib menangkapnya (uji balik).
 // 17 Nov 09.xx (Dewi & Tegar): Tab sampai habis, + keadaan istilah terbuka, hasil Radar UNTR, kuis terjawab; cek border kotak tanya Asisten.
-// Cara pakai: python3 -m http.server 8765 (di akar repo), lalu: node tools/audit-kontras.js (AUDIT=fokus: hanya garis fokus & fokus tertutup; AUDIT=zoom: hanya zoom 200% & layar pendek HP; AUDIT=jarak: hanya jarak teks WCAG 1.4.12)
+// Cara pakai: python3 -m http.server 8765 (di akar repo), lalu: node tools/audit-kontras.js (AUDIT=fokus: hanya garis fokus & fokus tertutup; AUDIT=zoom: hanya zoom 200% & layar pendek HP; AUDIT=jarak: hanya jarak teks WCAG 1.4.12; AUDIT=orientasi: hanya orientasi layar WCAG 1.3.4)
 // Butuh Playwright + Chromium (sudah ada di lingkungan kerja tim); tidak dijalankan oleh tests/cek.mjs.
 const { chromium } = require('playwright');
 // 17 Nov 14.xx (Dewi & Nina): langkah Tab maju & Shift+Tab mundur untuk cek fokus tertutup, dipakai bersama oleh
@@ -120,6 +120,62 @@ async function tabTutup(p) {
 // Uji balik: UJI-POTONG (judul diberi tinggi tetap 1em + overflow hidden) dan UJI-TUMPUK (judul tinggi tetap 1em, overflow terlihat)
 // wajib tertangkap.
 const GAYA_JARAK='*{line-height:1.5!important;letter-spacing:.12em!important;word-spacing:.16em!important}p{margin-bottom:2em!important}';
+// 17 Nov 16.xx (Dewi & Nina): orientasi layar (WCAG 1.3.4). HP mendatar 844×390 dan tablet mendatar 1024×768.
+// Tiap halaman: (1) isi tidak terkunci orientasi: panjang teks <main> yang terlihat saat mendatar ≥90% dari saat tegak
+// (390×844 / 768×1024); (2) tanpa scroll horizontal; (3) setelah digulir, elemen lengket (sticky/fixed) yang menempel
+// di layar tidak menutupi lebih dari separuh tinggi layar; (4) Tab maju & mundur: fokus tidak tertutup elemen lengket;
+// (5) kotak tanya Asisten tercapai dengan Tab dan tampil utuh. Juga cek statis: tidak ada screen.orientation.lock.
+// Uji balik: UJI-KUNCI (isi <main> disembunyikan saat mendatar) dan UJI-LENGKET (kepala lengket 60% tinggi layar) wajib tertangkap.
+async function auditOrientasi(b) {
+  const fs=require('fs'), path=require('path'); const akar=path.join(__dirname,'..');
+  let total=0, ujiKunci=0, ujiLengket=0;
+  for (const f of fs.readdirSync(akar).filter(f=>f.endsWith('.html')).concat(fs.readdirSync(path.join(akar,'assets')).filter(f=>f.endsWith('.js')).map(f=>'assets/'+f))) {
+    const t=fs.readFileSync(path.join(akar,f),'utf8'); if (/orientation\s*\.\s*lock|orientation\s*:\s*(portrait|landscape)/.test(t.replace(/@media[^{]*orientation[^{]*\{/g,''))) { console.log('orientasi statis TEMUAN kunci orientasi di',f); total++; }
+  }
+  const halaman=['peringkat.html','emiten.html?kode=ANTM','radar.html#UNTR','pelajaran.html?m=apa-itu-saham#benar','asisten.html','index.html','UJI-KUNCI','UJI-LENGKET'];
+  const ukuran=[{nama:'hp-mendatar',datar:{width:844,height:390},tegak:{width:390,height:844},hp:true},{nama:'tablet-mendatar',datar:{width:1024,height:768},tegak:{width:768,height:1024},hp:false}];
+  const buka=async(p,pg)=>{ const [path,hash]=pg.split('#'); const uji=path.startsWith('UJI-');
+    await p.goto('http://localhost:8765/'+(uji?'peringkat.html':path)); await p.waitForTimeout(300);
+    await p.addStyleTag({content:'html{scroll-behavior:auto!important}'});
+    if (path==='UJI-KUNCI') await p.addStyleTag({content:'@media (orientation:landscape){main{display:none!important}}'});
+    if (path==='UJI-LENGKET') await p.addStyleTag({content:'body::before{content:"";display:block;position:sticky;top:0;height:60vh;z-index:40;background:#888}'});
+    if (path==='radar.html'&&hash){ await p.selectOption('#pilih-saham',hash); await p.waitForTimeout(300); }
+    if (path==='asisten.html') await p.evaluate(()=>{ document.querySelectorAll('.form-tanya textarea, .form-tanya button').forEach(e=>e.disabled=false); });
+    if (hash==='benar'){ const id=new URL('http://x/'+path).searchParams.get('m');
+      await p.evaluate((id)=>{ const m=window.MODUL.find(x=>x.id===id); m.kuis.forEach((q,i)=>{ document.querySelector('input[name="soal-'+i+'"][value="'+q.benar+'"]').checked=true; }); },id);
+      await p.click('.kuis button[type="submit"]'); await p.waitForTimeout(200); }
+    await p.$$eval('details', d=>d.forEach(x=>x.open=true)); return path; };
+  const teks=p=>p.evaluate(()=>{ const m=document.querySelector('main'); return m&&m.getClientRects().length&&m.checkVisibility()?m.innerText.replace(/\s+/g,' ').trim().length:0; });
+  for (const scheme of ['dark','light']) for (const u of ukuran) {
+    const opsi=v=>({viewport:v, colorScheme:scheme, isMobile:u.hp, hasTouch:u.hp, deviceScaleFactor:1});
+    const cT=await b.newContext(opsi(u.tegak)), pT=await cT.newPage();
+    const cD=await b.newContext(opsi(u.datar)), pD=await cD.newPage(); const errs=[]; pD.on('pageerror',e=>errs.push(e.message));
+    for (const pg of halaman) {
+      const tag=`orientasi ${scheme} ${u.nama} ${u.datar.width}x${u.datar.height} ${pg}`; let n=0;
+      await buka(pT,pg); const path=await buka(pD,pg); const lT=await teks(pT), lD=await teks(pD);
+      if (lD<lT*0.9) { console.log(tag,'TEMUAN isi berkurang saat mendatar',lD,'dari',lT); n++; }
+      const sw=await pD.evaluate(()=>document.documentElement.scrollWidth); if (sw>u.datar.width) { console.log(tag,'TEMUAN scroll horizontal',sw); n++; }
+      const lengket=await pD.evaluate(()=>{ window.scrollTo(0,Math.min(600,document.documentElement.scrollHeight)); let tinggi=0;
+        const cek=(e,r)=>{ if(r.bottom<=0||r.top>=innerHeight||r.height===0) return; tinggi=Math.max(tinggi,Math.min(r.bottom,innerHeight)-Math.max(r.top,0)); };
+        for (const e of document.querySelectorAll('body *')) { const ps=getComputedStyle(e).position; if(ps==='sticky'||ps==='fixed') cek(e,e.getBoundingClientRect()); }
+        const sb=getComputedStyle(document.body,'::before'); if(sb.position==='sticky'||sb.position==='fixed') tinggi=Math.max(tinggi,parseFloat(sb.height)||0);
+        return Math.round(tinggi); });
+      if (lengket>u.datar.height/2) { console.log(tag,'TEMUAN elemen lengket menutupi',lengket,'px dari',u.datar.height); n++; }
+      if (path!=='UJI-KUNCI') { await pD.evaluate(()=>{ document.activeElement&&document.activeElement.blur&&document.activeElement.blur(); window.scrollTo(0,0); });
+        const {temuan,dicek}=await tabTutup(pD); [...temuan.values()].forEach(o=>console.log(tag,'TEMUAN fokus tertutup',o)); if(path!=='UJI-LENGKET') n+=temuan.size; else if(temuan.size) n++;
+        if (path==='asisten.html') { await pD.evaluate(()=>{ document.activeElement&&document.activeElement.blur&&document.activeElement.blur(); window.scrollTo(0,0); });
+          let ok=false; for (let i=0;i<200;i++){ await pD.keyboard.press('Tab'); await pD.waitForTimeout(20); if (await pD.evaluate(()=>document.activeElement&&document.activeElement.matches('.form-tanya textarea'))){ok=true;break;} }
+          const r=ok?await pD.evaluate(()=>{ const rc=document.activeElement.getBoundingClientRect(); return rc.top<-1||rc.bottom>innerHeight+1?'kotak tanya tidak tampil utuh (top '+Math.round(rc.top)+', bawah '+Math.round(rc.bottom)+')':''; }):'kotak tanya tidak tercapai dengan Tab';
+          if (r) { console.log(tag,'TEMUAN',r); n++; } }
+        console.log(tag,'teks',lD+'/'+lT,'lebar',sw,'lengket',lengket,'dicek',dicek, n?'':'lolos'); }
+      else console.log(tag,'teks',lD+'/'+lT,'lebar',sw,'lengket',lengket);
+      if (path==='UJI-KUNCI') ujiKunci+=n?1:0; else if (path==='UJI-LENGKET') ujiLengket+=n?1:0; else total+=n;
+    }
+    if (errs.length) { console.log('orientasi',scheme,u.nama,'JS errors',errs); total+=errs.length; }
+    await cT.close(); await cD.close();
+  }
+  console.log('total temuan orientasi',total,'(uji balik UJI-KUNCI tertangkap:',ujiKunci,'dari 4; UJI-LENGKET tertangkap:',ujiLengket,'dari 4)');
+}
 async function auditJarak(b) {
   const halaman=['peringkat.html','peringkat.html#istilah','emiten.html?kode=ANTM','radar.html#UNTR','pelajaran.html?m=apa-itu-saham#benar','asisten.html','asisten.html#jawab',
     'index.html','kabar.html','belajar.html','metodologi.html','404.html','UJI-POTONG','UJI-TUMPUK'];
@@ -186,6 +242,8 @@ const halamanFokus = ['index.html','peringkat.html','peringkat.html#istilah','ra
   if (process.env.AUDIT==='zoom') { await auditZoom(b); await b.close(); return; }
   // AUDIT=jarak node tools/audit-kontras.js → hanya jarak teks (WCAG 1.4.12)
   if (process.env.AUDIT==='jarak') { await auditJarak(b); await b.close(); return; }
+  // AUDIT=orientasi node tools/audit-kontras.js → hanya orientasi layar (WCAG 1.3.4)
+  if (process.env.AUDIT==='orientasi') { await auditOrientasi(b); await b.close(); return; }
   let total = 0;
   // AUDIT=fokus node tools/audit-kontras.js → hanya cek garis fokus (lebih cepat)
   if (process.env.AUDIT!=='fokus') for (const scheme of ['dark','light']) for (const w of [390,1280]) {
@@ -365,5 +423,6 @@ const halamanFokus = ['index.html','peringkat.html','peringkat.html#istilah','ra
   console.log('total temuan ke-atas',totalAtas,'(uji balik UJI-KEATAS tertangkap:',ujiAtas,')');
   await auditZoom(b);
   await auditJarak(b);
+  await auditOrientasi(b);
   console.log('total temuan',total); await b.close();
 })();

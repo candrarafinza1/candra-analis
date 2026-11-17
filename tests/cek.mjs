@@ -5632,7 +5632,7 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
     for (const u of ["UJI-LEBAR", "UJI-TUTUP", "UJI-KETIK"]) if (!z.includes(`'${u}'`)) salah.push(`uji balik ${u} tidak ada di audit zoom`);
     if (!/await tabTutup\(p\)/.test(z)) salah.push("audit zoom tidak memakai langkah Tab bersama (tabTutup)");
     if (!/scrollWidth/.test(z)) salah.push("audit zoom tidak memeriksa scroll horizontal");
-    if (!/await auditZoom\(b\);\n(  await auditJarak\(b\);\n)?  console\.log\('total temuan',total\)/.test(audit)) salah.push("audit penuh tidak menjalankan auditZoom");
+    if (!/await auditZoom\(b\);\n(  await auditJarak\(b\);\n)?(  await auditOrientasi\(b\);\n)?  console\.log\('total temuan',total\)/.test(audit)) salah.push("audit penuh tidak menjalankan auditZoom");
     return salah;
   };
   const auZ = readFileSync("tools/audit-kontras.js", "utf8");
@@ -5664,7 +5664,7 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
       for (const h of ["peringkat.html", "emiten.html", "radar.html", "pelajaran.html", "asisten.html"]) if (!j.includes(`'${h}`)) salah.push(`audit jarak teks tidak memeriksa ${h}`);
       if (!/scrollWidth/.test(j)) salah.push("audit jarak teks tidak memeriksa scroll horizontal");
     }
-    if (!/await auditJarak\(b\);\n  console\.log\('total temuan',total\)/.test(audit)) salah.push("audit penuh tidak menjalankan auditJarak");
+    if (!/await auditJarak\(b\);\n(  await auditOrientasi\(b\);\n)?  console\.log\('total temuan',total\)/.test(audit)) salah.push("audit penuh tidak menjalankan auditJarak");
     const hp = /@media \(max-width: 600px\) \{([\s\S]*?)\n\}/.exec(css);
     if (hp && /\.nav \{[^}]*flex-wrap: nowrap/.test(hp[1])) salah.push("menu atas HP memakai flex-wrap: nowrap (meluber bila jarak huruf diperlebar)");
     return salah;
@@ -5676,6 +5676,36 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
   ok(cekJarak(auJ.replace("letter-spacing:.12em", "letter-spacing:.05em"), cssJ).some((x) => x.includes("letter-spacing")), "uji balik: jarak huruf kurang dari 0,12em harus tertangkap");
   ok(cekJarak(auJ.replaceAll("'UJI-TUMPUK'", "'UJI-X'"), cssJ).some((x) => x.includes("UJI-TUMPUK")), "uji balik: audit jarak teks tanpa UJI-TUMPUK harus tertangkap");
   ok(cekJarak(auJ.replace("  await auditJarak(b);\n", ""), cssJ).some((x) => x.includes("audit penuh")), "uji balik: audit penuh yang melewatkan auditJarak harus tertangkap");
+}
+
+// Dewi & Nina (17 Nov 16.xx): orientasi layar (WCAG 1.3.4). tools/audit-kontras.js wajib punya auditOrientasi yang memeriksa
+// HP mendatar 844×390 & tablet mendatar 1024×768 (dibanding tegak), uji balik UJI-KUNCI & UJI-LENGKET, dan audit penuh menjalankannya.
+// Situs tidak boleh mengunci orientasi (screen.orientation.lock, atau "orientation" di manifest).
+{
+  const cekOrientasi = (audit, sumber) => {
+    const salah = [];
+    const fn = /async function auditOrientasi\(b\) \{([\s\S]*?)\n\}\n/.exec(audit);
+    if (!fn) salah.push("fungsi auditOrientasi tidak ditemukan di audit");
+    else {
+      const j = fn[1];
+      if (!/width:844,height:390/.test(j)) salah.push("audit orientasi tidak memeriksa HP mendatar 844×390");
+      if (!/width:1024,height:768/.test(j)) salah.push("audit orientasi tidak memeriksa tablet mendatar 1024×768");
+      for (const u of ["UJI-KUNCI", "UJI-LENGKET"]) if (!j.includes(`'${u}'`)) salah.push(`uji balik ${u} tidak ada di audit orientasi`);
+      for (const h of ["peringkat.html", "emiten.html", "radar.html", "pelajaran.html", "asisten.html"]) if (!j.includes(`'${h}`)) salah.push(`audit orientasi tidak memeriksa ${h}`);
+      if (!/scrollWidth/.test(j)) salah.push("audit orientasi tidak memeriksa scroll horizontal");
+    }
+    if (!/await auditOrientasi\(b\);\n  console\.log\('total temuan',total\)/.test(audit)) salah.push("audit penuh tidak menjalankan auditOrientasi");
+    for (const [f, t] of sumber) if (/orientation\s*\.\s*lock\s*\(|"orientation"\s*:/.test(t)) salah.push(`${f} mengunci orientasi layar`);
+    return salah;
+  };
+  const auO = readFileSync("tools/audit-kontras.js", "utf8");
+  const sumberO = readdirSync(".").filter((f) => /\.(html|json|webmanifest)$/.test(f)).concat(readdirSync("assets").filter((f) => /\.(js|json|webmanifest)$/.test(f)).map((f) => "assets/" + f)).map((f) => [f, readFileSync(f, "utf8")]);
+  const sO = cekOrientasi(auO, sumberO);
+  ok(sO.length === 0, `audit orientasi: ${sO.join("; ")}`);
+  ok(cekOrientasi(auO, sumberO.concat([["uji.js", "screen.orientation.lock('portrait')"]])).some((x) => x.includes("mengunci")), "uji balik: screen.orientation.lock harus tertangkap");
+  ok(cekOrientasi(auO.replaceAll("'UJI-KUNCI'", "'UJI-X'"), sumberO).some((x) => x.includes("UJI-KUNCI")), "uji balik: audit orientasi tanpa UJI-KUNCI harus tertangkap");
+  ok(cekOrientasi(auO.replace("width:844,height:390", "width:390,height:844"), sumberO).some((x) => x.includes("844×390")), "uji balik: audit orientasi tanpa HP mendatar harus tertangkap");
+  ok(cekOrientasi(auO.replace("  await auditOrientasi(b);\n", ""), sumberO).some((x) => x.includes("audit penuh")), "uji balik: audit penuh yang melewatkan auditOrientasi harus tertangkap");
 }
 
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }

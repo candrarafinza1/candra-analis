@@ -596,3 +596,9 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Temuan palsu disaring: kotak istilah (position fixed) memang melayang menutupi teks di bawahnya; hanya dibandingkan dengan teksnya sendiri.
 - Hasil sesudah perbaikan: 0 temuan, tanpa galat JS. Uji balik UJI-POTONG (judul tinggi tetap + overflow hidden) dan UJI-TUMPUK (judul tinggi tetap) tertangkap.
 - Berikutnya: orientasi layar (WCAG 1.3.4) — HP mendatar 844×390 tanpa isi hilang.
+
+### Audit orientasi layar (WCAG 1.3.4) — Dewi & Nina, 17 Nov 16.18
+- `AUDIT=orientasi node tools/audit-kontras.js`: HP mendatar 844×390 dan tablet mendatar 1024×768, dibanding tegak (390×844 / 768×1024); Peringkat, profil ANTM, Radar UNTR, pelajaran kuis terjawab, Asisten, beranda; gelap & terang.
+- Diperiksa: isi <main> yang terlihat saat mendatar ≥90% dari saat tegak (tidak terkunci orientasi), scroll horizontal, tinggi elemen lengket setelah digulir (maks separuh layar), fokus tertutup (Tab maju & mundur), kotak tanya Asisten tercapai Tab dan tampil utuh. Cek statis: tidak ada `screen.orientation.lock` / kunci orientasi.
+- Hasil: 0 temuan, tanpa galat JS. Panjang isi sama persis mendatar/tegak; kepala lengket paling tinggi 42px (tablet Peringkat). Uji balik UJI-KUNCI (isi disembunyikan saat mendatar) dan UJI-LENGKET (kepala lengket 60% layar) tertangkap 4/4.
+- Berikutnya: ukuran sasaran sentuh (WCAG 2.5.8) di 390px.
