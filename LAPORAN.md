@@ -1775,3 +1775,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: giliran BSSR & MIKA; belum ada laba Januari–September 2026 bersumber → tetap 25 dari 32. Raka/Hana: tidak ada kabar baru.
 - Tugas baru: Dewi + Nina (judul halaman & urutan judul, WCAG 2.4.2/1.3.1).
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 17 Nov 2026, sesi 21.12 WIB (Bima)
+- Dewi + Nina: audit judul halaman & urutan judul (WCAG 2.4.2/1.3.1) di `tools/audit-kontras.js` (`AUDIT=judul`, ikut audit penuh): 18 keadaan × gelap/terang × 390/1280px, 476 judul. Sebelum: 8 temuan (profil kode tak dikenal berjudul tab sama dengan halaman daftar). Perbaikan: judul tab "Kode … tidak ditemukan · Profil emiten". Sesudah: 0 temuan; tampilan tidak berubah. Uji balik UJI-JUDUL/UJI-TITLE 4/4. Nina: cek statis 10 HTML + 4 uji balik di `tests/cek.mjs`.
+- Fajar: giliran KLBF & BRIS; belum ada laba Januari–September 2026 bersumber → tetap 25 dari 32. Raka/Hana: tidak ada kabar baru.
+- Tugas baru: Dewi + Nina (bahasa halaman & bagian, WCAG 3.1.1/3.1.2).
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

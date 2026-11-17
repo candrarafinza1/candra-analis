@@ -6,7 +6,7 @@
 // garis fokus terlihat (outline ≥2px, atau box-shadow/border berubah) dengan kontras ≥3:1 terhadap latar di sekitarnya.
 // Halaman "UJI-FOKUS" sengaja mematikan outline; audit wajib menangkapnya (uji balik).
 // 17 Nov 09.xx (Dewi & Tegar): Tab sampai habis, + keadaan istilah terbuka, hasil Radar UNTR, kuis terjawab; cek border kotak tanya Asisten.
-// Cara pakai: python3 -m http.server 8765 (di akar repo), lalu: node tools/audit-kontras.js (AUDIT=fokus: hanya garis fokus & fokus tertutup; AUDIT=zoom: hanya zoom 200% & layar pendek HP; AUDIT=jarak: hanya jarak teks WCAG 1.4.12; AUDIT=orientasi: hanya orientasi layar WCAG 1.3.4; AUDIT=sentuh: hanya ukuran sasaran sentuh WCAG 2.5.8; AUDIT=sorot: hanya konten saat diarahkan/difokus WCAG 1.4.13; AUDIT=label: hanya label dalam nama WCAG 2.5.3; AUDIT=status: hanya pesan status WCAG 4.1.3)
+// Cara pakai: python3 -m http.server 8765 (di akar repo), lalu: node tools/audit-kontras.js (AUDIT=fokus: hanya garis fokus & fokus tertutup; AUDIT=zoom: hanya zoom 200% & layar pendek HP; AUDIT=jarak: hanya jarak teks WCAG 1.4.12; AUDIT=orientasi: hanya orientasi layar WCAG 1.3.4; AUDIT=sentuh: hanya ukuran sasaran sentuh WCAG 2.5.8; AUDIT=sorot: hanya konten saat diarahkan/difokus WCAG 1.4.13; AUDIT=label: hanya label dalam nama WCAG 2.5.3; AUDIT=status: hanya pesan status WCAG 4.1.3; AUDIT=judul: hanya judul halaman & urutan judul WCAG 2.4.2/1.3.1)
 // Butuh Playwright + Chromium (sudah ada di lingkungan kerja tim); tidak dijalankan oleh tests/cek.mjs.
 const { chromium } = require('playwright');
 // 17 Nov 14.xx (Dewi & Nina): langkah Tab maju & Shift+Tab mundur untuk cek fokus tertutup, dipakai bersama oleh
@@ -543,6 +543,60 @@ async function auditStatus(b) {
   }
   console.log('total temuan pesan status',total,'(skenario:',AKTIF.length-1,'× 4 keadaan; pesan dicek:',dicek,'; catatan:',catatan,'; uji balik UJI-STATUS tertangkap:',ujiStatus,'dari 4)');
 }
+// 17 Nov 21.xx (Dewi & Nina): audit judul halaman & urutan judul (WCAG 2.4.2 Page Titled, 1.3.1 Info and Relationships).
+// Tiap keadaan: <title> tidak kosong & unik antar-keadaan yang isinya beda (profil per emiten, pelajaran per modul),
+// tepat satu <h1> terlihat, judul pertama di <main> = h1, dan tingkat judul tidak melompat turun (mis. h2 → h4).
+// Keadaan dengan isi berbeda di halaman yang sama (kunci: halaman + h1 + pesan status) wajib berjudul berbeda.
+// Uji balik: UJI-JUDUL (h1 kedua + h4 langsung setelah h2) wajib tertangkap; UJI-TITLE (title kosong) juga.
+async function auditJudul(b) {
+  const halaman=['index.html','peringkat.html','peringkat.html#istilah','radar.html','radar.html#UNTR','emiten.html','emiten.html?kode=ANTM','emiten.html?kode=TPIA',
+    'kabar.html','belajar.html','pelajaran.html?m=apa-itu-saham','pelajaran.html?m=saham-syariah','pelajaran.html?m=apa-itu-saham#benar','metodologi.html','asisten.html','404.html','emiten.html?kode=ZZZZ','pelajaran.html?m=tidak-ada','UJI-JUDUL','UJI-TITLE'];
+  let total=0, ujiJudul=0, ujiTitle=0, dicek=0;
+  for (const scheme of ['dark','light']) for (const w of [390,1280]) {
+    const ctx=await b.newContext({ viewport:{width:w,height:844}, colorScheme:scheme, deviceScaleFactor:1 });
+    const p=await ctx.newPage(); const errs=[]; p.on('pageerror',e=>errs.push(e.message));
+    const judulKe=new Map();
+    for (const pg of halaman) {
+      const [path,hash]=pg.split('#'); const uji=path.startsWith('UJI-');
+      await p.goto('http://localhost:8765/'+(uji?'peringkat.html':path)); await p.waitForTimeout(300);
+      if (path==='UJI-JUDUL') await p.evaluate(()=>{ document.querySelector('main').insertAdjacentHTML('beforeend','<h1>Judul kedua</h1><h2>Sub</h2><h4>Lompat</h4>'); });
+      if (path==='UJI-TITLE') await p.evaluate(()=>{ document.title=''; });
+      if (path==='radar.html'&&hash){ await p.selectOption('#pilih-saham',hash); await p.waitForTimeout(300); }
+      if (hash==='benar'){ const id=new URL('http://x/'+path).searchParams.get('m');
+        await p.evaluate((id)=>{ const m=window.MODUL.find(x=>x.id===id); m.kuis.forEach((q,i)=>{ document.querySelector('input[name="soal-'+i+'"][value="'+q.benar+'"]').checked=true; }); },id);
+        await p.click('.kuis button[type="submit"]'); await p.waitForTimeout(200); }
+      if (hash==='istilah'){ const t=await p.$('.istilah, [data-istilah], button.istilah'); if(t){await t.click(); await p.waitForTimeout(200);} }
+      await p.$$eval('details', d=>d.forEach(x=>x.open=true));
+      const r=await p.evaluate(()=>{
+        const temuan=[]; const title=document.title.trim();
+        if (!title) temuan.push('<title> kosong');
+        const lihat=e=>e.checkVisibility({visibilityProperty:true,opacityProperty:true});
+        const hs=[...document.querySelectorAll('h1,h2,h3,h4,h5,h6,[role=heading]')].filter(e=>lihat(e)&&!e.closest('[aria-hidden="true"]'));
+        const lv=e=>e.getAttribute('aria-level')?+e.getAttribute('aria-level'):(/^H\d$/.test(e.tagName)?+e.tagName[1]:2);
+        const teks=e=>e.textContent.trim().replace(/\s+/g,' ').slice(0,40);
+        const h1=hs.filter(e=>lv(e)===1);
+        if (h1.length!==1) temuan.push(`jumlah h1 terlihat ${h1.length} (${h1.map(teks).join(' | ')})`);
+        h1.forEach(e=>{ if(!teks(e)) temuan.push('h1 tanpa teks'); });
+        const diMain=hs.filter(e=>e.closest('main'));
+        if (diMain.length && lv(diMain[0])!==1) temuan.push(`judul pertama di <main> bukan h1: h${lv(diMain[0])} "${teks(diMain[0])}"`);
+        let prev=0;
+        for (const e of hs) { const l=lv(e); if (prev && l>prev+1) temuan.push(`lompat h${prev} → h${l} "${teks(e)}"`); if(!teks(e)) temuan.push(`h${l} kosong`); prev=l; }
+        return {title, temuan, n:hs.length, garis:hs.map(e=>'h'+lv(e)).join(' '), h1:h1.map(teks).join('|'), status:(document.querySelector('main [role=status] strong')||{}).textContent||''};
+      });
+      const tag=`judul ${scheme} ${w} ${pg}`; dicek+=r.n;
+      // keunikan: keadaan dengan isi berbeda (path + query) wajib punya title berbeda
+      // kunci = halaman + h1 + pesan status: keadaan yang tampil sama (mis. ?m=tidak-ada menampilkan pelajaran 1 utuh) boleh berjudul sama
+      if (!uji) { const kunci=path.split('?')[0]+'|'+r.h1+'|'+r.status; const lain=[...judulKe.entries()].find(([k,t])=>t===r.title&&k!==kunci&&r.title);
+        if (lain) r.temuan.push(`<title> "${r.title}" sama dengan ${lain[0]}`); judulKe.set(kunci,r.title); }
+      r.temuan.forEach(t=>console.log(tag,'TEMUAN',t));
+      console.log(tag,`"${r.title}"`,'judul',r.n,r.temuan.length?'':'lolos', scheme==='dark'&&w===390?r.garis:'');
+      if (path==='UJI-JUDUL') ujiJudul+=r.temuan.length>=2?1:0; else if (path==='UJI-TITLE') ujiTitle+=r.temuan.some(t=>t.includes('kosong'))?1:0; else total+=r.temuan.length;
+    }
+    if (errs.length) { console.log('judul',scheme,w,'JS errors',errs); total+=errs.length; }
+    await ctx.close();
+  }
+  console.log('total temuan judul',total,'(judul dicek:',dicek,'; uji balik UJI-JUDUL tertangkap:',ujiJudul,'dari 4; UJI-TITLE:',ujiTitle,'dari 4)');
+}
 const pages = ['radar.html#UNTR','radar.html#INTP','radar.html#TPIA','radar.html#HEAL','peringkat.html#istilah','asisten.html#jawab','UJI','peringkat.html','radar.html','emiten.html?kode=ANTM','emiten.html?kode=TPIA','kabar.html','metodologi.html','asisten.html',
   'index.html','belajar.html','pelajaran.html?m=apa-itu-saham#benar','pelajaran.html?m=saham-syariah#salah','404.html'];
 const halamanFokus = ['index.html','peringkat.html','peringkat.html#istilah','radar.html','radar.html#UNTR','emiten.html?kode=ANTM','kabar.html','belajar.html','pelajaran.html?m=apa-itu-saham','pelajaran.html?m=apa-itu-saham#benar','metodologi.html','asisten.html','404.html','UJI-FOKUS','UJI-FOKUS-BORDER'];
@@ -562,6 +616,8 @@ const halamanFokus = ['index.html','peringkat.html','peringkat.html#istilah','ra
   if (process.env.AUDIT==='label') { await auditLabel(b); await b.close(); return; }
   // AUDIT=status node tools/audit-kontras.js → hanya pesan status (WCAG 4.1.3)
   if (process.env.AUDIT==='status') { await auditStatus(b); await b.close(); return; }
+  // AUDIT=judul node tools/audit-kontras.js → hanya judul halaman & urutan judul (WCAG 2.4.2 & 1.3.1)
+  if (process.env.AUDIT==='judul') { await auditJudul(b); await b.close(); return; }
   let total = 0;
   // AUDIT=fokus node tools/audit-kontras.js → hanya cek garis fokus (lebih cepat)
   if (process.env.AUDIT!=='fokus') for (const scheme of ['dark','light']) for (const w of [390,1280]) {
@@ -746,5 +802,6 @@ const halamanFokus = ['index.html','peringkat.html','peringkat.html#istilah','ra
   await auditSorot(b);
   await auditLabel(b);
   await auditStatus(b);
+  await auditJudul(b);
   console.log('total temuan',total); await b.close();
 })();

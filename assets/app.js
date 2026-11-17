@@ -853,6 +853,8 @@
 
     if (!e) {
       // Arif: kode kosong atau tidak ada di data → pesan ramah + daftar emiten yang tersedia
+      // Dewi & Nina (17 Nov 21.xx, WCAG 2.4.2): judul tab ikut menyebut kode yang tidak ditemukan
+      if (kode) document.title = "Kode " + kode.slice(0, 8) + " tidak ditemukan · Profil emiten · Candra Analis";
       akar.appendChild(el("div", { class: "pita-sumber", role: "status" }, [
         el("p", null, kode
           ? [el("strong", { text: "Kode " + kode.slice(0, 8) + " belum ada di data kami. " }),

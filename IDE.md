@@ -633,3 +633,11 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Perbaikan: saat kosong, wilayah hanya dikecilkan keluar dari alur (pola teks khusus pembaca layar, `clip-path: inset(50%)`); tampilan sama seperti dulu. Pita Asisten kini di dalam wadah role="status" yang selalu ada. Sesudah: 0 temuan. Zoom/layar pendek & sasaran sentuh dijalankan ulang: 0 temuan; tanpa scroll horizontal di 10 halaman (390 & 1280px).
 - Uji balik UJI-STATUS (pesan di `<p>` tanpa aria-live + wilayah status yang dibuat bersama pesannya) tertangkap 4/4. Nina menambah cek statis di `tests/cek.mjs` (wilayah status tidak boleh `:empty { display:none }` atau dibuat hidden; pita Asisten di wadah status) + uji balik.
 - Berikutnya: halaman berjudul jelas & urutan judul (WCAG 2.4.2 / 1.3.1, judul h1–h3 tidak melompat) di 10 halaman.
+
+#### Audit judul halaman & urutan judul (WCAG 2.4.2 & 1.3.1) — Dewi & Nina, 17 Nov 21.12
+- Alat: `AUDIT=judul node tools/audit-kontras.js` (juga ikut audit penuh). 18 keadaan (10 halaman + profil ANTM/TPIA/kode tak dikenal, pelajaran 2 modul/kuis terjawab/modul tak dikenal, Radar UNTR, kotak istilah) × gelap/terang × 390/1280px; 476 judul dicek.
+- Aturan: `<title>` tidak kosong dan berbeda untuk keadaan yang isinya berbeda; tepat satu `<h1>` terlihat; judul pertama di `<main>` = h1; tingkat judul tidak melompat turun (h2 → h4).
+- Temuan sebelum perbaikan: 8 (semuanya sama): profil dengan kode yang tidak ada di data (mis. `?kode=ZZZZ`) berjudul tab "Profil emiten" seperti halaman daftar, padahal isinya pesan "Kode ZZZZ belum ada di data kami". Perbaikan: judul tab kini "Kode ZZZZ tidak ditemukan · Profil emiten · Candra Analis". Sesudah: 0 temuan. Tampilan halaman tidak berubah.
+- Catatan: `pelajaran.html?m=tidak-ada` menampilkan pelajaran 1 utuh, jadi judulnya ikut pelajaran 1 (sesuai isi) dan tidak dihitung temuan.
+- Uji balik: UJI-JUDUL (h1 kedua + h2 → h4) dan UJI-TITLE (title kosong) tertangkap 4/4. Nina menambah cek statis di `tests/cek.mjs` (10 file HTML: title unik, satu h1, tanpa lompatan) + 4 uji balik.
+- Berikutnya: bahasa halaman & bagian (WCAG 3.1.1 / 3.1.2).
