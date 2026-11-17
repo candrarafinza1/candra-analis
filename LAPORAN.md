@@ -1720,3 +1720,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Tugas baru: Dewi + Nina (fokus tertutup di halaman lain + tombol "Ke atas").
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
 
+### 17 Nov 2026, 13.09 WIB — sesi kerja (Bima)
+- Laporan masuk kerja siang dikirim ke Rafinza (email).
+- Yoga: run CI #299 (commit sesi 10.08) hijau.
+- Dewi + Nina: audit fokus tertutup diperluas ke Kabar, Belajar, pelajaran (kuis terjawab), Asisten, 404 + tautan "Kembali ke atas" → 0 temuan penuh. Satu catatan nyata diperbaiki: kotak tanya Asisten terpotong saat Shift+Tab di 390px (kini digulir utuh ke layar). Temuan palsu garis fokus akibat gulir halus diperbaiki di alat audit. Nina: cek statis + 4 uji balik. Tanpa scroll horizontal di 390px & 1280px, tanpa galat JS.
+- Fajar: giliran KLBF & BRIS; belum ada laba Januari–September 2026 bersumber → tetap 25 dari 32. Raka/Hana: tidak ada kabar baru. Tegar: pindai rahasia, bersih.
+- Tugas baru: Dewi + Nina (zoom 200% & layar pendek HP).
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

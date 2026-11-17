@@ -5591,6 +5591,32 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
   ok(cekTutup(cssT, jsT.replace("ev.target !== aktif && !kotak.contains(ev.target)) tutupIstilah(false);", "ev.target !== aktif && !kotak.contains(ev.target)) letakkan();")).some((x) => x.includes("kotak istilah")), "uji balik fokus tertutup: focusin yang tidak menutup kotak harus tertangkap");
 }
 
+// Dewi & Nina (17 Nov 13.xx): perluasan fokus tertutup. (a) Kotak tanya Asisten: peramban hanya menggulir kursor teks, jadi
+// app.js wajib punya pendengar focus yang memanggil scrollIntoView({ block: "nearest" }) bila kotak tidak tampil utuh.
+// (b) tools/audit-kontras.js wajib mencakup Kabar, Belajar, pelajaran (kuis terjawab), Asisten, 404 dan tautan "Kembali ke atas"
+//     (dengan uji balik UJI-KEATAS), serta mematikan gulir halus di pemeriksaan garis fokus (sumber temuan palsu di profil).
+{
+  const cekTutup2 = (js, audit) => {
+    const salah = [];
+    if (!/area\.addEventListener\("focus", function \(\) \{[\s\S]{0,260}?area\.scrollIntoView\(\{ block: "nearest" \}\)/.test(js)) salah.push("kotak tanya Asisten tanpa pendengar focus → scrollIntoView nearest");
+    const daftar = /const halamanTutup = \[([\s\S]*?)\];/.exec(audit);
+    if (!daftar) salah.push("daftar halamanTutup tidak ditemukan di audit");
+    else for (const h of ["kabar.html", "belajar.html", "pelajaran.html?m=apa-itu-saham#benar", "asisten.html", "404.html"]) if (!daftar[1].includes(`'${h}'`)) salah.push(`audit fokus tertutup tidak mencakup ${h}`);
+    if (!/for \(const pg of \['peringkat\.html','kabar\.html','UJI-KEATAS'\]\)/.test(audit)) salah.push("audit tautan Kembali ke atas (Peringkat, Kabar, UJI-KEATAS) tidak ditemukan");
+    const fokus = /for \(const pg of halamanFokus\) \{([\s\S]*?)const borderBiasa/.exec(audit);
+    if (!fokus || !fokus[1].includes("html{scroll-behavior:auto!important}")) salah.push("pemeriksaan garis fokus tidak mematikan gulir halus");
+    return salah;
+  };
+  const jsT2 = readFileSync("assets/app.js", "utf8"), auT = readFileSync("tools/audit-kontras.js", "utf8");
+  const sT2 = cekTutup2(jsT2, auT);
+  ok(sT2.length === 0, `fokus tertutup (perluasan): ${sT2.join("; ")}`);
+  ok(cekTutup2(jsT2.replace('area.scrollIntoView({ block: "nearest" })', "area.blur()"), auT).some((x) => x.includes("kotak tanya")), "uji balik: kotak tanya tanpa scrollIntoView harus tertangkap");
+  ok(cekTutup2(jsT2, auT.replace("'asisten.html','404.html','UJI-TUTUP'", "'404.html','UJI-TUTUP'")).some((x) => x.includes("asisten.html")), "uji balik: Asisten yang keluar dari audit fokus tertutup harus tertangkap");
+  ok(cekTutup2(jsT2, auT.replace("['peringkat.html','kabar.html','UJI-KEATAS']", "['peringkat.html','kabar.html']")).some((x) => x.includes("Kembali ke atas")), "uji balik: audit Kembali ke atas tanpa UJI-KEATAS harus tertangkap");
+  const fokusTanpa = auT.replace(/(for \(const pg of halamanFokus\) \{[\s\S]*?)await p\.addStyleTag\(\{content:'html\{scroll-behavior:auto!important\}'\}\);\n/, "$1");
+  ok(fokusTanpa !== auT && cekTutup2(jsT2, fokusTanpa).some((x) => x.includes("gulir halus")), "uji balik: pemeriksaan garis fokus dengan gulir halus harus tertangkap");
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);
 

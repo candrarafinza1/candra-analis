@@ -469,6 +469,7 @@ tbody tr:hover { background: var(--hover-baris); }
 .form-tanya textarea {
   width: 100%; font: inherit; padding: 12px 14px; border-radius: var(--radius-kecil);
   border: 2px solid var(--garis); background: var(--putih); color: var(--tinta); resize: vertical; min-height: 96px;
+  scroll-margin: 16px 0; /* Dewi 17 Nov: jarak saat kotak tanya digulir ke layar (lihat pendengar focus di app.js) */
 }
 .form-tanya textarea:focus { border-color: var(--aksen); outline: none; }
 .form-tanya textarea::placeholder { color: var(--tinta-2); opacity: 1; }

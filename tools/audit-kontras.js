@@ -71,6 +71,9 @@ const halamanFokus = ['index.html','peringkat.html','peringkat.html#istilah','ra
     for (const pg of halamanFokus) {
       const [path,hash]=pg.split('#');
       await p.goto('http://localhost:8765/'+(path==='UJI-FOKUS'?'index.html':path==='UJI-FOKUS-BORDER'?'asisten.html':path)); await p.waitForTimeout(300);
+      // 17 Nov 13.xx (Dewi): gulir halus (profil, Peringkat, Kabar) dimatikan; tanpa ini elemen yang baru difokus kadang masih di
+      // luar layar saat diukur, latar diambil dari titik yang salah → temuan palsu (select.pilih-banding 2,38:1 di profil 1280px)
+      await p.addStyleTag({content:'html{scroll-behavior:auto!important}'});
       if (path==='UJI-FOKUS') await p.addStyleTag({content:'*:focus,*:focus-visible{outline:none!important;box-shadow:none!important}'});
       if (path==='UJI-FOKUS-BORDER') await p.addStyleTag({content:'.form-tanya textarea:focus{border-color:var(--garis)!important}'});
       if (path==='radar.html'&&hash){ await p.selectOption('#pilih-saham',hash); await p.waitForTimeout(300); }
@@ -129,7 +132,9 @@ const halamanFokus = ['index.html','peringkat.html','peringkat.html#istilah','ra
   // dicek dengan elementsFromPoint: bila elemen teratas di titik itu bukan elemen terfokus (atau isinya) dan berasal
   // dari elemen sticky/fixed → titik tertutup. Semua 9 titik tertutup = temuan (2.4.11); sebagian = catatan (2.4.12, AAA).
   // Uji balik: UJI-TUTUP memasang lapisan fixed setinggi layar di atas halaman; audit wajib menangkapnya.
-  const halamanTutup = ['peringkat.html','peringkat.html#istilah','metodologi.html','radar.html#UNTR','emiten.html?kode=ANTM','index.html','UJI-TUTUP'];
+  // 17 Nov 13.xx (Dewi & Nina): + Kabar, Belajar (Kamus istilah: daftar biasa, tanpa tombol istilah melayang), pelajaran (kuis terjawab), Asisten, 404.
+  const halamanTutup = ['peringkat.html','peringkat.html#istilah','metodologi.html','radar.html#UNTR','emiten.html?kode=ANTM','index.html',
+    'kabar.html','belajar.html','pelajaran.html?m=apa-itu-saham#benar','asisten.html','404.html','UJI-TUTUP'];
   let totalTutup=0, ujiTutup=0, catatanTutup=0;
   for (const scheme of ['dark','light']) for (const w of [390,1280]) {
     const ctx = await b.newContext({ viewport:{width:w,height:700}, colorScheme:scheme });
@@ -141,7 +146,11 @@ const halamanFokus = ['index.html','peringkat.html','peringkat.html#istilah','ra
       await p.addStyleTag({content:'html{scroll-behavior:auto!important}'});
       if (path==='UJI-TUTUP') await p.addStyleTag({content:'body::after{content:"";position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.01)}'});
       if (path==='radar.html'&&hash){ await p.selectOption('#pilih-saham',hash); await p.waitForTimeout(300); }
-      if (hash==='istilah'){ const t=await p.$('button.istilah'); if(t){await t.click(); await p.waitForTimeout(200);} }
+      if (path==='asisten.html') await p.evaluate(()=>{ document.querySelectorAll('.form-tanya textarea, .form-tanya button').forEach(e=>e.disabled=false); });
+      if (hash==='benar'){ const id=new URL('http://x/'+path).searchParams.get('m');
+        await p.evaluate((id)=>{ const m=window.MODUL.find(x=>x.id===id); m.kuis.forEach((q,i)=>{ document.querySelector('input[name="soal-'+i+'"][value="'+q.benar+'"]').checked=true; }); },id);
+        await p.click('.kuis button[type="submit"]'); await p.waitForTimeout(200); }
+      if (hash==='istilah'){ const t=await p.$('button.istilah'); if(t){await t.click(); await p.waitForTimeout(200);} else console.log('tutup',pg,'tombol istilah tidak ketemu'); }
       else await p.evaluate(()=>{ document.activeElement&&document.activeElement.blur&&document.activeElement.blur(); window.scrollTo(0,0); });
       const temuan=new Map(), sebagian=new Map(); let dicek=0;
       for (const tombol of ['Tab','Shift+Tab']) {
@@ -179,5 +188,36 @@ const halamanFokus = ['index.html','peringkat.html','peringkat.html#istilah','ra
     await ctx.close();
   }
   console.log('total temuan tertutup',totalTutup,'(sebagian tertutup:',catatanTutup,'; uji balik UJI-TUTUP tertangkap:',ujiTutup,')');
+  // 17 Nov 13.xx (Dewi & Nina): tombol "Kembali ke atas" (.ke-atas) di Peringkat & Kabar. Dari bawah halaman, Tab ke tautan,
+  // tekan Enter: awal isi (#isi) harus kembali tampil di layar dan tidak tertutup elemen lengket; tautan tidak boleh tertutup.
+  // Uji balik UJI-KEATAS: tujuan tautan diganti ke id yang tidak ada → halaman tidak bergulir → wajib tertangkap.
+  let totalAtas=0, ujiAtas=0;
+  for (const scheme of ['dark','light']) for (const w of [390,1280]) {
+    const ctx = await b.newContext({ viewport:{width:w,height:700}, colorScheme:scheme });
+    const p = await ctx.newPage();
+    for (const pg of ['peringkat.html','kabar.html','UJI-KEATAS']) {
+      await p.goto('http://localhost:8765/'+(pg==='UJI-KEATAS'?'kabar.html':pg)); await p.waitForTimeout(300);
+      await p.addStyleTag({content:'html{scroll-behavior:auto!important}'});
+      if (pg==='UJI-KEATAS') await p.evaluate(()=>document.querySelectorAll('.ke-atas').forEach(a=>a.setAttribute('href','#tidak-ada')));
+      const ada = await p.$('.ke-atas'); const tag=`ke-atas ${scheme} ${w} ${pg}`;
+      if (!ada) { console.log(tag,'TEMUAN tautan .ke-atas tidak ada'); if(pg==='UJI-KEATAS') ujiAtas++; else totalAtas++; continue; }
+      await p.evaluate(()=>{ window.scrollTo(0,document.documentElement.scrollHeight); document.querySelector('.ke-atas').focus(); });
+      const r0 = await p.evaluate(()=>{ const rc=document.querySelector('.ke-atas').getBoundingClientRect(); return rc.top>=0&&rc.bottom<=innerHeight; });
+      await p.keyboard.press('Enter'); await p.waitForTimeout(200);
+      const r = await p.evaluate(()=>{
+        const t=document.getElementById('isi'); if(!t) return {masalah:'#isi tidak ada'};
+        const rc=t.getBoundingClientRect(); let lengket=0;
+        document.querySelectorAll('body *').forEach(e=>{ const ps=getComputedStyle(e).position; if((ps==='sticky'||ps==='fixed')&&!e.contains(t)){ const r2=e.getBoundingClientRect(); if(r2.height>0&&r2.top<=1&&r2.bottom>lengket&&r2.bottom<innerHeight/2) lengket=r2.bottom; } });
+        const masalah=[]; if(rc.top<-1||rc.top>innerHeight*0.5) masalah.push('awal isi tidak tampil (top '+Math.round(rc.top)+'px, scrollY '+Math.round(scrollY)+')');
+        if(rc.top<lengket-1) masalah.push('awal isi tertutup elemen lengket (top '+Math.round(rc.top)+' < '+Math.round(lengket)+')');
+        return {masalah:masalah.join('; '), scrollY:Math.round(scrollY)};
+      });
+      const masalah=[!r0&&'tautan .ke-atas tidak tampil penuh saat terfokus', r.masalah].filter(Boolean).join('; ');
+      console.log(tag, masalah?'TEMUAN '+masalah:'lolos (scrollY sesudah Enter '+r.scrollY+')');
+      if (masalah) { if(pg==='UJI-KEATAS') ujiAtas++; else totalAtas++; }
+    }
+    await ctx.close();
+  }
+  console.log('total temuan ke-atas',totalAtas,'(uji balik UJI-KEATAS tertangkap:',ujiAtas,')');
   console.log('total temuan',total); await b.close();
 })();

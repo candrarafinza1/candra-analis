@@ -1213,6 +1213,15 @@
       area, el("div", { class: "form-bawah" }, [hitung, tombol])
     ]);
 
+    // Dewi 17 Nov (audit fokus tertutup): peramban hanya menggulir kursor teks ke layar, sehingga saat Shift+Tab bagian atas
+    // kotak tanya bisa terpotong. Bila kotak tidak tampil utuh, gulir secukupnya (tanpa animasi paksa, ikut pengaturan CSS).
+    area.addEventListener("focus", function () {
+      var r = area.getBoundingClientRect();
+      if ((r.top < 0 || r.bottom > window.innerHeight) && r.height < window.innerHeight && area.scrollIntoView) {
+        area.scrollIntoView({ block: "nearest" });
+      }
+    });
+
     contoh.forEach(function (c) {
       var b = el("button", { type: "button", class: "chip", text: c });
       b.addEventListener("click", function () { area.value = c; area.focus(); perbaruiHitung(); });

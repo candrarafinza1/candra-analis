@@ -572,3 +572,12 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Temuan nyata 2: kotak istilah terbuka (melayang) menutupi "Tentang data ini" saat Tab berlanjut di 390px. Diperbaiki: kotak istilah ditutup saat fokus pindah keluar dari tombol istilah & kotaknya (Tab ke tautan di dalam kotak tetap bisa; Escape tetap mengembalikan fokus).
 - Hasil setelah perbaikan: 0 temuan tertutup penuh, 0 tertutup sebagian. Uji balik UJI-TUTUP (lapisan fixed di atas halaman) tertangkap. Nina menambah cek statis di `tests/cek.mjs` (4 uji balik).
 - Berikutnya: halaman Kabar, Belajar, pelajaran, Asisten, 404 dan tombol "Ke atas".
+
+### Fokus tertutup di halaman lain + "Kembali ke atas" (Dewi & Nina, 17 Nov 13.09)
+- Audit `AUDIT=fokus` kini mencakup Kabar, Belajar (Kamus istilah berupa daftar biasa, tanpa kotak melayang), pelajaran dengan kuis terjawab, Asisten (kotak tanya diaktifkan), 404; Tab maju & Shift+Tab, gelap/terang, 390/1280px. Hasil: 0 tertutup penuh.
+- Catatan nyata (sebagian, 2.4.12): di Asisten 390px, Shift+Tab ke kotak tanya hanya menggulir kursor teks sehingga bagian atas kotak terpotong (3/9 titik). Diperbaiki: pendengar focus memanggil `scrollIntoView({block:"nearest"})` bila kotak tidak tampil utuh → 0 catatan.
+- "Kembali ke atas" (Peringkat & Kabar): dari bawah halaman, Tab ke tautan lalu Enter → awal isi kembali di layar dan tidak tertutup elemen lengket. Uji balik UJI-KEATAS (tujuan diganti ke id yang tidak ada) tertangkap.
+- Audit garis fokus: gulir halus di profil membuat select "Pilih emiten" sempat diukur di luar layar (temuan palsu 2,38:1). Gulir halus kini dimatikan selama audit; hasil 0 temuan.
+- Kirana: tidak ada perubahan tampilan yang terlihat; perilaku kotak tanya lebih nyaman di HP.
+- Berikutnya: zoom 200% dan layar pendek HP (papan ketik terbuka).
+
