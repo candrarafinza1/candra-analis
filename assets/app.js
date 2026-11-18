@@ -1583,4 +1583,52 @@
   // Dewi + Arif (8 Nov 13.08; Kabar ikut sejak 14.10): kalimat pembuka kepala halaman ikut ditandai,
   // tetapi istilah yang sudah ditandai di isi halaman dilewati agar tidak ganda.
   if (!document.querySelector(".judul-halaman button.istilah")) pasangIstilahKepala();
+  pasangTandaBahasa();
+
+  /* ---------- Bahasa bagian (WCAG 3.1.2) ---------- */
+  // Dewi + Arif (18 Nov 07.xx): istilah berbahasa Inggris di teks Indonesia dibungkus <span lang="en">
+  // agar pembaca layar mengucapkannya dengan lafal Inggris. Berjalan sesudah istilah ditandai
+  // (agar pola istilah tidak terpotong) dan memantau isi yang dibuat ulang lewat JavaScript.
+  function pasangTandaBahasa() {
+    var KATA = ["Sharia Online Trading System", "Sharia Virtual Trading", "Single Investor Identification",
+      "Jakarta Islamic Index", "Price to Earnings Ratio", "Debt to Equity Ratio", "Return on Equity",
+      "year on year", "limited review", "core profit", "dividend payout", "payout ratio", "Dividend yield",
+      "Capital gain", "Capital loss", "Short selling", "buyback", "payout", "Matched", "fee"];
+    var RE = new RegExp("(?<!\\p{L})(" + KATA.join("|") + ")(?!\\p{L})", "giu");
+    var TOLAK = /^(SCRIPT|STYLE|TEXTAREA|SELECT|OPTION|TITLE|CODE|svg)$/;
+    function tandai(akar) {
+      if (!akar || akar.nodeType !== 1 && akar.nodeType !== 3) return;
+      var simpul = [];
+      if (akar.nodeType === 3) simpul.push(akar);
+      else {
+        var jalan = document.createTreeWalker(akar, NodeFilter.SHOW_TEXT);
+        while (jalan.nextNode()) simpul.push(jalan.currentNode);
+      }
+      simpul.forEach(function (n) {
+        var induk = n.parentNode;
+        if (!induk || induk.nodeType !== 1) return;
+        for (var p = induk; p && p.nodeType === 1; p = p.parentNode) if (TOLAK.test(p.nodeName)) return;
+        var bhs = induk.closest("[lang]");
+        if (bhs && !/^id\b/i.test(bhs.getAttribute("lang"))) return;
+        RE.lastIndex = 0;
+        if (!RE.test(n.nodeValue)) return;
+        var potong = document.createDocumentFragment(), teks = n.nodeValue, akhir = 0, m;
+        RE.lastIndex = 0;
+        while ((m = RE.exec(teks))) {
+          if (m.index > akhir) potong.appendChild(document.createTextNode(teks.slice(akhir, m.index)));
+          potong.appendChild(el("span", { lang: "en", text: m[0] }));
+          akhir = m.index + m[0].length;
+        }
+        if (akhir < teks.length) potong.appendChild(document.createTextNode(teks.slice(akhir)));
+        induk.replaceChild(potong, n);
+      });
+    }
+    tandai(document.body);
+    if (window.MutationObserver) new MutationObserver(function (daftar) {
+      daftar.forEach(function (d) {
+        if (d.type === "characterData") tandai(d.target);
+        else Array.prototype.forEach.call(d.addedNodes, tandai);
+      });
+    }).observe(document.body, { childList: true, subtree: true, characterData: true });
+  }
 })();

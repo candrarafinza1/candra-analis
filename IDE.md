@@ -641,3 +641,12 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Catatan: `pelajaran.html?m=tidak-ada` menampilkan pelajaran 1 utuh, jadi judulnya ikut pelajaran 1 (sesuai isi) dan tidak dihitung temuan.
 - Uji balik: UJI-JUDUL (h1 kedua + h2 → h4) dan UJI-TITLE (title kosong) tertangkap 4/4. Nina menambah cek statis di `tests/cek.mjs` (10 file HTML: title unik, satu h1, tanpa lompatan) + 4 uji balik.
 - Berikutnya: bahasa halaman & bagian (WCAG 3.1.1 / 3.1.2).
+- Selesai 18 Nov 07.xx (lihat di bawah).
+
+#### Audit bahasa halaman & bagian (WCAG 3.1.1 & 3.1.2) — Dewi, Arif & Nina, 18 Nov 07.xx
+- Alat: `AUDIT=bahasa node tools/audit-kontras.js` (juga ikut audit penuh). 16 keadaan (10 halaman + Radar UNTR, profil ANTM/TPIA, 2 pelajaran, kuis terjawab, kotak istilah) × gelap/terang × 390/1280px.
+- Aturan: `<html lang="id">` di semua halaman; atribut lang lain hanya id/en; 20 istilah Inggris (mis. buyback, Dividend yield, Capital gain, Short selling, Sharia Online Trading System, Return on Equity) yang terlihat wajib berada di dalam `lang="en"`.
+- Temuan sebelum perbaikan: 96 (semuanya di Belajar/kamus dan pelajaran; halaman lain belum memuat istilah Inggris yang terlihat). Perbaikan (Arif + Dewi): app.js membungkus istilah itu dengan `<span lang="en">` sesudah tombol istilah dipasang, dan memantau isi yang dibuat ulang (kotak istilah, kuis). Sesudah: 0 temuan, 144 penanda; jumlah tombol istilah dan panjang teks tiap halaman sama persis seperti sebelumnya; tanpa scroll horizontal. Audit label, status, judul, dan sorot tetap 0.
+- Uji balik: UJI-LANG (lang `<html>` dihapus) dan UJI-EN (penanda diubah ke id) tertangkap 4/4. Nina menambah cek statis di `tests/cek.mjs` (lang tiap halaman, pemanggilan, daftar istilah app.js = audit) + 4 uji balik.
+- Kirana meninjau tangkapan 390px pelajaran "Saham syariah": tampilan tidak berubah (penanda tidak terlihat).
+- Berikutnya: label & pesan salah isian (WCAG 3.3.1 / 3.3.2).
