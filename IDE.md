@@ -712,3 +712,12 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Catatan: kotak istilah yang sedang terbuka tertutup bila penunjuk dilepas di luar kotak; ini terjadi saat dilepas (klik di luar), bukan saat ditekan, jadi sesuai 2.5.2. Klik Playwright sendiri memasang pendengar sementara di `window`; pendengar dicatat sebelum keadaan dibuat agar tidak jadi temuan palsu.
 - Uji balik: UJI-TEKAN (tab Peringkat kedua dipasangi `pointerdown` yang langsung memilih tab) 4/4. Nina: cek statis app.js & 10 HTML (tanpa pendengar/atribut turun), mode audit + 9 uji balik di `tests/cek.mjs`.
 - Berikutnya: gerakan penunjuk (WCAG 2.5.1) dan aktivasi lewat gerakan perangkat (2.5.4).
+
+### 18 Nov 17.09: gerakan penunjuk WCAG 2.5.1 & gerakan perangkat WCAG 2.5.4 (Dewi & Nina; Kirana meninjau)
+- Audit baru `AUDIT=gerak` di `tools/audit-kontras.js` (ikut audit penuh): 12 keadaan × gelap/terang × 390/1280px + 2 uji balik.
+- Empat cara: (1) skrip pemantau mencatat pendengar `touchmove`, `pointermove`, `gesture*`, `drag*`, `drop`, `wheel`, `devicemotion`, `deviceorientation` dan elemen `draggable`; (2) 32 kali setiap tab dipilih dengan satu klik; (3) 48 kali geser sungguhan 200px di isi halaman; (4) 56 kali goyang tiruan (`devicemotion` + `deviceorientation`).
+- Hasil: 0 temuan. Tidak ada fungsi yang hanya bisa lewat geser, seret, cubit, goyang, atau miring HP; tabel Peringkat & tab dipakai dengan satu ketuk. Tidak ada perubahan tampilan.
+- Uji balik: UJI-GOYANG (window dipasangi `devicemotion` yang memilih tab) dan UJI-GESER (daftar tab dipasangi `touchmove`) tertangkap 8/8. Nina: cek statis app.js & 10 HTML + 12 uji balik di `tests/cek.mjs`.
+- Kirana: setuju, tidak ada usulan geser/carousel yang perlu ditolak; bila kelak ada fitur geser, wajib disertai tombol satu ketuk.
+- Berikutnya: label & nama bagian yang bisa diubah ukurannya (WCAG 1.4.4 ubah ukuran teks 200% tanpa zoom halaman).
+
