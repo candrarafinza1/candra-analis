@@ -721,3 +721,9 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Kirana: setuju, tidak ada usulan geser/carousel yang perlu ditolak; bila kelak ada fitur geser, wajib disertai tombol satu ketuk.
 - Berikutnya: label & nama bagian yang bisa diubah ukurannya (WCAG 1.4.4 ubah ukuran teks 200% tanpa zoom halaman).
 
+### 18 Nov 18.10: ubah ukuran teks 200% WCAG 1.4.4 (Dewi & Nina; Kirana meninjau)
+- Cara uji: ukuran huruf dasar peramban dinaikkan 16px → 32px (seperti setelan "Ukuran font" Chrome, bukan zoom), lebar layar tetap 390px & 1280px, gelap/terang, 14 keadaan (`AUDIT=teks`). Diperiksa: teks ikut membesar, tidak terpotong, tidak bertumpuk, tanpa scroll samping.
+- Temuan awal 12 (semua di 390px): scroll samping di beranda (tabel tiga teratas), Peringkat (tombol pilihan 2×2 terlalu sempit), profil ANTM (tabel profil & batang 9 bulan); angka "Pendapatan YoY" dan "DER" bertumpuk di kartu Peringkat.
+- Perbaikan Dewi: kueri media `@media (max-width: 19.5em)`. Karena memakai em, ia aktif saat teks besar (624px pada 200%, 390px pada 125%) tetapi tidak pada ukuran biasa di HP ≥320px. Isinya: tombol pilihan & kartu Peringkat satu kolom, label batang 9 bulan di baris sendiri, angka di tabel kecil boleh turun baris. Hasil: 0 temuan; audit jarak teks, sentuh, zoom, orientasi tetap 0.
+- Catatan: 34 judul membesar kurang dari 1,9× karena memakai clamp/vw (tetap membesar ≥1,2× dan sudah besar); dicatat, bukan temuan.
+- Kirana: tangkapan 390px teks 200% rapi: tombol pilihan bertumpuk satu kolom, kartu Peringkat terbaca berurutan (Sektor, Laba 2025, Pendapatan YoY, DER, Sumber), batang 9 bulan tanpa terpotong.

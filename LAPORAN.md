@@ -1850,3 +1850,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: giliran BSSR & MIKA; belum ada laba Januari–September 2026 bersumber yang bisa dibuka → tetap 25 dari 32. Raka/Hana: tidak ada kabar baru.
 - Tugas baru: Dewi + Nina (ubah ukuran teks 200%, WCAG 1.4.4).
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 18 Nov 2026, sesi 18.10 WIB (Bima)
+- Yoga: run CI #318 (commit sesi 17.09) hijau.
+- Dewi + Nina: audit ubah ukuran teks 200% (WCAG 1.4.4) di `tools/audit-kontras.js` (`AUDIT=teks`, ikut audit penuh): huruf dasar peramban 32px, 14 keadaan × gelap/terang × 390/1280px, 13.290 baris teks. Sebelum: 12 temuan di 390px (scroll samping beranda/Peringkat/profil, angka bertumpuk di kartu Peringkat). Perbaikan CSS: kueri media `max-width: 19.5em` (tombol pilihan & kartu satu kolom, label batang 9 bulan sebaris sendiri, angka tabel kecil boleh turun baris); ukuran biasa di 320/390/1280px tidak berubah. Sesudah: 0 temuan; audit jarak, sentuh, zoom, orientasi tetap 0. Uji balik UJI-PX/UJI-TETAP 8/8. Nina: cek statis (tanpa font-size px) + 12 uji balik di `tests/cek.mjs`. Kirana: tangkapan 390px teks 200% rapi.
+- Fajar: giliran KLBF & BRIS; teratas masih KLBF semester I 2026 dan BRIS kuartal II 2026 → belum ada laba Januari–September 2026 bersumber, tetap 25 dari 32. Raka/Hana: tidak ada kabar baru.
+- Tugas baru: Dewi + Nina (jeda, hentikan, sembunyikan animasi, WCAG 2.2.2).
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

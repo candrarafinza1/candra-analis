@@ -6299,6 +6299,53 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
   ok(cekGerak(htmlG, jsG + '\nwindow.addEventListener("scroll", f); b.addEventListener("click", g); window.addEventListener("resize", h);', audG).length === 0, "uji balik gerakan: scroll, click & resize tidak boleh dianggap pendengar gerak");
 }
 
+// (g) Dewi & Nina (18 Nov 18.xx): ubah ukuran teks 200% WCAG 1.4.4. Ukuran huruf ditulis relatif (rem/em/%), bukan px,
+// di styles.css dan gaya sisipan app.js/HTML, agar ikut membesar saat pengguna menaikkan ukuran huruf peramban. Ada kueri
+// media berbasis em (max-width: 19.5em) yang menjadikan tombol pilihan & kartu Peringkat satu kolom saat teks besar.
+// Audit AUDIT=teks ada, ikut audit penuh, memuat uji balik UJI-PX & UJI-TETAP. Disertai uji balik.
+{
+  const cekTeks = (css, js, htmls, aud) => {
+    const s = [];
+    for (const m of css.matchAll(/font-size\s*:\s*[0-9.]+px/gi)) s.push(`styles.css: ukuran huruf px "${m[0]}"`);
+    for (const m of css.matchAll(/(?<![-\w])font\s*:[^;{}]*?\b[0-9.]+px/gi)) s.push(`styles.css: font singkat ber-px "${m[0]}"`);
+    for (const m of js.matchAll(/font-size\s*:\s*[0-9.]+px/gi)) s.push(`app.js: ukuran huruf px "${m[0]}"`);
+    for (const [h, t] of htmls) for (const m of t.matchAll(/font-size\s*:\s*[0-9.]+px/gi)) s.push(`${h}: ukuran huruf px "${m[0]}"`);
+    const mq = /@media \(max-width: 19\.5em\) \{([\s\S]*?)\n\}/.exec(css);
+    if (!mq) s.push("kueri media teks besar (max-width: 19.5em) tidak ada");
+    else {
+      if (!/\.tab-baris \{ grid-template-columns: minmax\(0, 1fr\); \}/.test(mq[1])) s.push("teks besar: tombol pilihan belum satu kolom");
+      if (!/\.tabel-kartu tr \{ grid-template-columns: minmax\(0, 1fr\); \}/.test(mq[1])) s.push("teks besar: kartu Peringkat belum satu kolom");
+      if (!/\.batang9-label \{ grid-column: 1 \/ -1;/.test(mq[1])) s.push("teks besar: label batang 9 bulan belum di baris sendiri");
+    }
+    if (!/async function auditTeks\(b\)/.test(aud)) s.push("auditTeks tidak ada");
+    if (!/process\.env\.AUDIT==='teks'\) \{ await auditTeks\(b\)/.test(aud)) s.push("mode AUDIT=teks tidak ada");
+    if (!/  await auditTeks\(b\);\n  await auditZoom\(b\);\n/.test(aud)) s.push("audit penuh tidak menjalankan auditTeks");
+    if (!/Page\.setFontSizes/.test(aud)) s.push("auditTeks tidak menaikkan ukuran huruf dasar peramban");
+    if (!aud.includes("'UJI-PX'")) s.push("uji balik UJI-PX tidak ada");
+    if (!aud.includes("'UJI-TETAP'")) s.push("uji balik UJI-TETAP tidak ada");
+    return s;
+  };
+  const cssT = readFileSync("assets/styles.css", "utf8"), jsT = readFileSync("assets/app.js", "utf8"), audT = readFileSync("tools/audit-kontras.js", "utf8");
+  const htmlT = halaman.map((h) => [h, readFileSync(h, "utf8")]);
+  const sT = cekTeks(cssT, jsT, htmlT, audT);
+  ok(sT.length === 0, `Ubah ukuran teks WCAG 1.4.4: ${sT.join("; ")}`);
+  const rusakT = [
+    [cssT + "\n.x { font-size: 14px; }", jsT, htmlT, audT, "styles.css: ukuran huruf px"],
+    [cssT + "\n.y { font: 700 15px/1.2 sans-serif; }", jsT, htmlT, audT, "styles.css: font singkat"],
+    [cssT, jsT + '\nel("p", { style: "font-size:12px" });', htmlT, audT, "app.js: ukuran huruf px"],
+    [cssT, jsT, htmlT.map(([n, t]) => [n, n === "index.html" ? t.replace("<main", '<main style="font-size:13px"') : t]), audT, "index.html: ukuran huruf px"],
+    [cssT.replace("@media (max-width: 19.5em)", "@media (max-width: 312px)"), jsT, htmlT, audT, "kueri media teks besar"],
+    [cssT.replace("  .tab-baris { grid-template-columns: minmax(0, 1fr); }\n", ""), jsT, htmlT, audT, "tombol pilihan"],
+    [cssT.replace("  .tabel-kartu tr { grid-template-columns: minmax(0, 1fr); }\n", ""), jsT, htmlT, audT, "kartu Peringkat"],
+    [cssT, jsT, htmlT, audT.replace("  await auditTeks(b);\n", ""), "audit penuh"],
+    [cssT, jsT, htmlT, audT.replace("process.env.AUDIT==='teks'", "process.env.AUDIT==='t'"), "mode AUDIT=teks"],
+    [cssT, jsT, htmlT, audT.split("'UJI-PX'").join("'UJI-X'"), "UJI-PX"],
+    [cssT, jsT, htmlT, audT.split("'UJI-TETAP'").join("'UJI-Y'"), "UJI-TETAP"],
+  ];
+  for (const [c, j, h, a, pesan] of rusakT) ok(cekTeks(c, j, h, a).some((x) => x.includes(pesan)), `uji balik ubah ukuran teks: "${pesan}" harus tertangkap`);
+  ok(cekTeks(cssT + "\n.z { border-width: 2px; padding: 12px; font-size: 1.1rem; }", jsT, htmlT, audT).length === 0, "uji balik ubah ukuran teks: px pada border/padding & font-size rem tidak boleh dianggap temuan");
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);
 

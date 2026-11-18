@@ -827,3 +827,18 @@ button.istilah:hover, button.istilah[aria-expanded="true"] { color: var(--aksen)
   position: absolute; width: 1px; height: 1px; margin: 0; padding: 0; border: 0;
   overflow: hidden; clip-path: inset(50%); white-space: nowrap;
 }
+
+/* Dewi & Nina (18 Nov 18.xx, audit ubah ukuran teks WCAG 1.4.4): bila pengguna membesarkan ukuran huruf peramban
+   (mis. 200% = 32px), HP 390px kini dianggap "layar sempit untuk teks sebesar ini". Kueri media memakai em, yang
+   mengikuti ukuran huruf dasar peramban: 19.5em = 312px pada ukuran biasa (tidak mengubah HP ≥320px), tetapi 624px
+   pada teks 200% dan 390px pada teks 125%. Di keadaan ini tombol pilihan, kartu Peringkat, dan batang 9 bulan jadi
+   satu kolom, dan tabel kecil boleh turun baris agar tidak ada scroll ke samping dan angka tidak bertumpuk. */
+@media (max-width: 19.5em) {
+  .tab-baris { grid-template-columns: minmax(0, 1fr); }
+  .tabel-kartu tr { grid-template-columns: minmax(0, 1fr); }
+  .batang9-baris, .batang-tahun .batang9-baris { grid-template-columns: minmax(0, 1fr) auto; row-gap: .2rem; }
+  .batang9-label { grid-column: 1 / -1; white-space: normal; }
+  .panel table:not(.tabel-kartu) th.angka, .panel table:not(.tabel-kartu) td.angka, .tabel-profil th.angka, .tabel-profil td.angka { white-space: normal; }
+  .panel table .nama-emiten { overflow-wrap: anywhere; }
+  .tabel-profil th[scope="row"] { overflow-wrap: anywhere; }
+}

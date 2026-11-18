@@ -6,7 +6,7 @@
 // garis fokus terlihat (outline ≥2px, atau box-shadow/border berubah) dengan kontras ≥3:1 terhadap latar di sekitarnya.
 // Halaman "UJI-FOKUS" sengaja mematikan outline; audit wajib menangkapnya (uji balik).
 // 17 Nov 09.xx (Dewi & Tegar): Tab sampai habis, + keadaan istilah terbuka, hasil Radar UNTR, kuis terjawab; cek border kotak tanya Asisten.
-// Cara pakai: python3 -m http.server 8765 (di akar repo), lalu: node tools/audit-kontras.js (AUDIT=fokus: hanya garis fokus & fokus tertutup; AUDIT=zoom: hanya zoom 200% & layar pendek HP; AUDIT=jarak: hanya jarak teks WCAG 1.4.12; AUDIT=orientasi: hanya orientasi layar WCAG 1.3.4; AUDIT=sentuh: hanya ukuran sasaran sentuh WCAG 2.5.8; AUDIT=sorot: hanya konten saat diarahkan/difokus WCAG 1.4.13; AUDIT=label: hanya label dalam nama WCAG 2.5.3; AUDIT=status: hanya pesan status WCAG 4.1.3; AUDIT=judul: hanya judul halaman & urutan judul WCAG 2.4.2/1.3.1; AUDIT=bahasa: hanya bahasa halaman & bagian WCAG 3.1.1/3.1.2; AUDIT=isian: hanya label/petunjuk & pesan salah isian WCAG 3.3.2/3.3.1; AUDIT=urutan: hanya urutan fokus WCAG 2.4.3; AUDIT=nonteks: hanya kontras non-teks WCAG 1.4.11; AUDIT=warna: hanya penggunaan warna WCAG 1.4.1; AUDIT=tautan: hanya tujuan tautan WCAG 2.4.4; AUDIT=konsisten: hanya identifikasi konsisten WCAG 3.2.4; AUDIT=penunjuk: hanya pembatalan penunjuk WCAG 2.5.2; AUDIT=gerak: hanya gerakan penunjuk & gerakan perangkat WCAG 2.5.1/2.5.4)
+// Cara pakai: python3 -m http.server 8765 (di akar repo), lalu: node tools/audit-kontras.js (AUDIT=fokus: hanya garis fokus & fokus tertutup; AUDIT=zoom: hanya zoom 200% & layar pendek HP; AUDIT=jarak: hanya jarak teks WCAG 1.4.12; AUDIT=orientasi: hanya orientasi layar WCAG 1.3.4; AUDIT=sentuh: hanya ukuran sasaran sentuh WCAG 2.5.8; AUDIT=sorot: hanya konten saat diarahkan/difokus WCAG 1.4.13; AUDIT=label: hanya label dalam nama WCAG 2.5.3; AUDIT=status: hanya pesan status WCAG 4.1.3; AUDIT=judul: hanya judul halaman & urutan judul WCAG 2.4.2/1.3.1; AUDIT=bahasa: hanya bahasa halaman & bagian WCAG 3.1.1/3.1.2; AUDIT=isian: hanya label/petunjuk & pesan salah isian WCAG 3.3.2/3.3.1; AUDIT=urutan: hanya urutan fokus WCAG 2.4.3; AUDIT=nonteks: hanya kontras non-teks WCAG 1.4.11; AUDIT=warna: hanya penggunaan warna WCAG 1.4.1; AUDIT=tautan: hanya tujuan tautan WCAG 2.4.4; AUDIT=konsisten: hanya identifikasi konsisten WCAG 3.2.4; AUDIT=penunjuk: hanya pembatalan penunjuk WCAG 2.5.2; AUDIT=gerak: hanya gerakan penunjuk & gerakan perangkat WCAG 2.5.1/2.5.4; AUDIT=teks: hanya ubah ukuran teks 200% WCAG 1.4.4)
 // Butuh Playwright + Chromium (sudah ada di lingkungan kerja tim); tidak dijalankan oleh tests/cek.mjs.
 const { chromium } = require('playwright');
 // 17 Nov 14.xx (Dewi & Nina): langkah Tab maju & Shift+Tab mundur untuk cek fokus tertutup, dipakai bersama oleh
@@ -1316,6 +1316,79 @@ async function auditGerak(b) {
   console.log('total temuan gerak',total,'(tab dipilih satu klik:',tab,'; geser sungguhan:',geser,'; goyang tiruan:',goyang,'; uji balik UJI-GOYANG/UJI-GESER tertangkap:',ujiTangkap,'dari 8)');
 }
 
+// 18 Nov 18.xx (Dewi & Nina): ubah ukuran teks 200% (WCAG 1.4.4 Resize Text). Bukan zoom halaman: ukuran huruf dasar peramban
+// dinaikkan dari 16px ke 32px (CDP Page.setFontSizes, sama seperti setelan "Ukuran font" di Chrome), lebar layar tetap
+// 390px & 1280px, gelap/terang. Tiap keadaan diukur dua kali (100% lalu 200%) di halaman yang sama:
+// (1) teks wajib membesar (ukuran huruf 200% ≥ 1,2× ukuran 100%; di bawah 1,9× dicatat saja karena judul memakai clamp/vw),
+// (2) tidak ada teks terpotong wadah ber-overflow hidden/clip, (3) tidak ada baris teks yang tumpang tindih,
+// (4) tanpa scroll horizontal, (5) tanpa galat JS. Uji balik: UJI-PX (tinggi tetap 40px + overflow hidden pada h1)
+// wajib tertangkap sebagai terpotong; UJI-TETAP (body font-size 17px) wajib tertangkap sebagai teks tidak membesar.
+async function auditTeks(b) {
+  const halaman=['index.html','peringkat.html','peringkat.html#istilah','radar.html#UNTR','emiten.html?kode=ANTM','kabar.html','belajar.html',
+    'pelajaran.html?m=apa-itu-saham#benar','metodologi.html','asisten.html','asisten.html#jawab','404.html','UJI-PX','UJI-TETAP'];
+  let total=0, catatan=0, ujiPx=0, ujiTetap=0, dicekTotal=0;
+  for (const scheme of ['dark','light']) for (const w of [390,1280]) {
+    const ctx = await b.newContext({ viewport:{width:w,height:900}, colorScheme:scheme });
+    for (const pg of halaman) {
+      const p = await ctx.newPage(); const errs=[]; p.on('pageerror', e=>errs.push(e.message));
+      const cdp = await ctx.newCDPSession(p);
+      const [path,hash]=pg.split('#'); const uji=path.startsWith('UJI-');
+      await p.goto('http://localhost:8765/'+(uji?'peringkat.html':path)); await p.waitForTimeout(300);
+      if (path==='radar.html'&&hash){ await p.selectOption('#pilih-saham',hash); await p.waitForTimeout(300); }
+      if (hash==='benar'){ const id=new URL('http://x/'+path).searchParams.get('m');
+        await p.evaluate(id=>{ const m=window.MODUL.find(x=>x.id===id); m.kuis.forEach((q,i)=>{ document.querySelector('input[name="soal-'+i+'"][value="'+q.benar+'"]').checked=true; }); },id);
+        await p.click('.kuis button[type="submit"]'); await p.waitForTimeout(200); }
+      if (hash==='istilah'){ const t=await p.$('button.istilah'); if(t){await t.click(); await p.waitForTimeout(200);} }
+      if (hash==='jawab') await p.evaluate(()=>{const log=document.querySelector('[aria-live="polite"]'); if(log) log.insertAdjacentHTML('beforeend','<div class="pesan pesan-galat"><span class="pesan-label">Asisten</span><p>Maaf, server galat</p></div><div class="pesan pesan-asisten"><span class="pesan-label">Asisten</span><p>Contoh jawaban <strong>tebal</strong> yang agak panjang supaya terbungkus beberapa baris.</p><ul><li>Butir satu</li><li>Butir dua</li></ul></div>');});
+      await p.$$eval('details', d=>d.forEach(x=>x.open=true));
+      if (path==='UJI-PX') await p.addStyleTag({content:'h1{height:40px!important;overflow:hidden!important}'});
+      if (path==='UJI-TETAP') await p.addStyleTag({content:'body{font-size:17px!important}'});
+      // ukuran 100%: tandai tiap elemen pemilik teks dengan ukuran hurufnya
+      await p.evaluate(()=>{ const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT); let n, i=0;
+        while(n=w.nextNode()){ const el=n.parentElement; if(!n.textContent.trim()||!el||['SCRIPT','STYLE','NOSCRIPT','OPTION','TEXTAREA'].includes(el.tagName)) continue;
+          if(!el.dataset.ukuranAwal) el.dataset.ukuranAwal=parseFloat(getComputedStyle(el).fontSize); } });
+      await cdp.send('Page.setFontSizes',{fontSizes:{standard:32,fixed:26}}); await p.waitForTimeout(300);
+      const res = await p.evaluate(() => {
+        const tersembunyi = el => { for(let e=el;e;e=e.parentElement){ const s=getComputedStyle(e); if(s.display==='none'||s.visibility==='hidden'||s.clipPath.includes('inset(50%')||(s.clip&&s.clip.startsWith('rect(0'))) return true; const r=e.getBoundingClientRect(); if(r.width<=1&&r.height<=1&&s.overflow==='hidden') return true; } return false; };
+        const potong=[], kotak=[], kecil=[], kurang=[]; const dicekEl=new Set(), dicekUkuran=new Set();
+        const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT); let n;
+        while(n=w.nextNode()){ if(!n.textContent.trim()) continue; const el=n.parentElement; if(!el||['SCRIPT','STYLE','NOSCRIPT','OPTION','TEXTAREA'].includes(el.tagName)) continue; if(tersembunyi(el)) continue;
+          if (el.dataset.ukuranAwal && !dicekUkuran.has(el)) { dicekUkuran.add(el); const a=+el.dataset.ukuranAwal, z=parseFloat(getComputedStyle(el).fontSize), r=z/a;
+            const ket=`<${el.tagName.toLowerCase()}${el.className&&typeof el.className==='string'?' class="'+el.className+'"':''}> ${a}px→${z}px "${n.textContent.trim().slice(0,30)}"`;
+            if (r<1.2) kecil.push(ket); else if (r<1.9) kurang.push(ket); }
+          const rg=document.createRange(); rg.selectNodeContents(n);
+          let lapis=null; for(let e=el;e;e=e.parentElement){ if(getComputedStyle(e).position==='fixed'){ lapis=e; break; } }
+          for (const r of rg.getClientRects()) if (r.width>1&&r.height>1) kotak.push({r, el, lapis, t:n.textContent.trim().slice(0,30)});
+          for (let e=el;e&&e!==document.body;e=e.parentElement){ const s=getComputedStyle(e);
+            const ox=s.overflowX, oy=s.overflowY; if(['auto','scroll'].includes(ox)&&['auto','scroll'].includes(oy)) break;
+            const hX=ox==='hidden'||ox==='clip', hY=oy==='hidden'||oy==='clip'; if(!hX&&!hY) continue;
+            if (dicekEl.has(e)) break; dicekEl.add(e);
+            const lebih = (hX&&e.scrollWidth>e.clientWidth+1)||(hY&&e.scrollHeight>e.clientHeight+1);
+            if (lebih) potong.push(`<${e.tagName.toLowerCase()} class="${e.className}"> ${hY?'tinggi '+e.clientHeight+'/'+e.scrollHeight:''} ${hX?'lebar '+e.clientWidth+'/'+e.scrollWidth:''} "${(e.textContent||'').trim().slice(0,40)}"`);
+            break; }
+        }
+        const tumpuk=[]; kotak.sort((a,b)=>a.r.top-b.r.top);
+        for (let i=0;i<kotak.length&&tumpuk.length<10;i++) for (let j=i+1;j<kotak.length;j++){ const a=kotak[i], c=kotak[j]; if(c.r.top>=a.r.bottom-3) break; if(a.el===c.el) continue; if(a.lapis!==c.lapis) continue;
+          const ox=Math.min(a.r.right,c.r.right)-Math.max(a.r.left,c.r.left), oy=Math.min(a.r.bottom,c.r.bottom)-Math.max(a.r.top,c.r.top);
+          if (ox>=3&&oy>=3) { tumpuk.push(`"${a.t}" ⟂ "${c.t}" (${Math.round(ox)}×${Math.round(oy)}px)`); break; } }
+        return {sw:document.documentElement.scrollWidth, potong, tumpuk, kecil, kurang, n:kotak.length, dasar:getComputedStyle(document.body).fontSize};
+      });
+      const tag=`teks ${scheme} ${w} ${pg}`; const masalah=[];
+      if (res.sw>w) masalah.push('scroll horizontal '+res.sw);
+      res.potong.forEach(x=>masalah.push('terpotong '+x)); res.tumpuk.forEach(x=>masalah.push('tumpuk '+x));
+      res.kecil.slice(0,10).forEach(x=>masalah.push('tidak membesar '+x)); if (res.kecil.length>10) masalah.push('tidak membesar … +'+(res.kecil.length-10)+' lagi');
+      errs.forEach(e=>masalah.push('galat JS '+e));
+      console.log(tag, 'huruf dasar', res.dasar, 'baris teks dicek', res.n, masalah.length?'TEMUAN '+masalah.length:'lolos', res.kurang.length?'(catatan <1,9×: '+res.kurang.length+')':'');
+      if (path==='UJI-PX') { if (res.potong.length) ujiPx++; }
+      else if (path==='UJI-TETAP') { if (res.kecil.length) ujiTetap++; }
+      else { masalah.forEach(m=>console.log('   ',m)); total+=masalah.length; catatan+=res.kurang.length; dicekTotal+=res.n; }
+      await p.close();
+    }
+    await ctx.close();
+  }
+  console.log('total temuan ubah ukuran teks',total,'(baris teks dicek:',dicekTotal,'; catatan judul <1,9×:',catatan,'; uji balik UJI-PX tertangkap:',ujiPx,'dari 4; UJI-TETAP tertangkap:',ujiTetap,'dari 4)');
+}
+
 const pages = ['radar.html#UNTR','radar.html#INTP','radar.html#TPIA','radar.html#HEAL','peringkat.html#istilah','asisten.html#jawab','UJI','peringkat.html','radar.html','emiten.html?kode=ANTM','emiten.html?kode=TPIA','kabar.html','metodologi.html','asisten.html',
   'index.html','belajar.html','pelajaran.html?m=apa-itu-saham#benar','pelajaran.html?m=saham-syariah#salah','404.html'];
 const halamanFokus = ['index.html','peringkat.html','peringkat.html#istilah','radar.html','radar.html#UNTR','emiten.html?kode=ANTM','kabar.html','belajar.html','pelajaran.html?m=apa-itu-saham','pelajaran.html?m=apa-itu-saham#benar','metodologi.html','asisten.html','404.html','UJI-FOKUS','UJI-FOKUS-BORDER'];
@@ -1355,6 +1428,8 @@ const halamanFokus = ['index.html','peringkat.html','peringkat.html#istilah','ra
   if (process.env.AUDIT==='penunjuk') { await auditPenunjuk(b); await b.close(); return; }
   // AUDIT=gerak node tools/audit-kontras.js → hanya gerakan penunjuk & gerakan perangkat (WCAG 2.5.1 & 2.5.4)
   if (process.env.AUDIT==='gerak') { await auditGerak(b); await b.close(); return; }
+  // AUDIT=teks node tools/audit-kontras.js → hanya ubah ukuran teks 200% (WCAG 1.4.4)
+  if (process.env.AUDIT==='teks') { await auditTeks(b); await b.close(); return; }
   let total = 0;
   // AUDIT=fokus node tools/audit-kontras.js → hanya cek garis fokus (lebih cepat)
   if (process.env.AUDIT!=='fokus') for (const scheme of ['dark','light']) for (const w of [390,1280]) {
@@ -1532,6 +1607,7 @@ const halamanFokus = ['index.html','peringkat.html','peringkat.html#istilah','ra
     await ctx.close();
   }
   console.log('total temuan ke-atas',totalAtas,'(uji balik UJI-KEATAS tertangkap:',ujiAtas,')');
+  await auditTeks(b);
   await auditZoom(b);
   await auditJarak(b);
   await auditOrientasi(b);
