@@ -6,7 +6,7 @@
 // garis fokus terlihat (outline ≥2px, atau box-shadow/border berubah) dengan kontras ≥3:1 terhadap latar di sekitarnya.
 // Halaman "UJI-FOKUS" sengaja mematikan outline; audit wajib menangkapnya (uji balik).
 // 17 Nov 09.xx (Dewi & Tegar): Tab sampai habis, + keadaan istilah terbuka, hasil Radar UNTR, kuis terjawab; cek border kotak tanya Asisten.
-// Cara pakai: python3 -m http.server 8765 (di akar repo), lalu: node tools/audit-kontras.js (AUDIT=fokus: hanya garis fokus & fokus tertutup; AUDIT=zoom: hanya zoom 200% & layar pendek HP; AUDIT=jarak: hanya jarak teks WCAG 1.4.12; AUDIT=orientasi: hanya orientasi layar WCAG 1.3.4; AUDIT=sentuh: hanya ukuran sasaran sentuh WCAG 2.5.8; AUDIT=sorot: hanya konten saat diarahkan/difokus WCAG 1.4.13; AUDIT=label: hanya label dalam nama WCAG 2.5.3; AUDIT=status: hanya pesan status WCAG 4.1.3; AUDIT=judul: hanya judul halaman & urutan judul WCAG 2.4.2/1.3.1; AUDIT=bahasa: hanya bahasa halaman & bagian WCAG 3.1.1/3.1.2; AUDIT=isian: hanya label/petunjuk & pesan salah isian WCAG 3.3.2/3.3.1; AUDIT=urutan: hanya urutan fokus WCAG 2.4.3; AUDIT=nonteks: hanya kontras non-teks WCAG 1.4.11; AUDIT=warna: hanya penggunaan warna WCAG 1.4.1; AUDIT=tautan: hanya tujuan tautan WCAG 2.4.4)
+// Cara pakai: python3 -m http.server 8765 (di akar repo), lalu: node tools/audit-kontras.js (AUDIT=fokus: hanya garis fokus & fokus tertutup; AUDIT=zoom: hanya zoom 200% & layar pendek HP; AUDIT=jarak: hanya jarak teks WCAG 1.4.12; AUDIT=orientasi: hanya orientasi layar WCAG 1.3.4; AUDIT=sentuh: hanya ukuran sasaran sentuh WCAG 2.5.8; AUDIT=sorot: hanya konten saat diarahkan/difokus WCAG 1.4.13; AUDIT=label: hanya label dalam nama WCAG 2.5.3; AUDIT=status: hanya pesan status WCAG 4.1.3; AUDIT=judul: hanya judul halaman & urutan judul WCAG 2.4.2/1.3.1; AUDIT=bahasa: hanya bahasa halaman & bagian WCAG 3.1.1/3.1.2; AUDIT=isian: hanya label/petunjuk & pesan salah isian WCAG 3.3.2/3.3.1; AUDIT=urutan: hanya urutan fokus WCAG 2.4.3; AUDIT=nonteks: hanya kontras non-teks WCAG 1.4.11; AUDIT=warna: hanya penggunaan warna WCAG 1.4.1; AUDIT=tautan: hanya tujuan tautan WCAG 2.4.4; AUDIT=konsisten: hanya identifikasi konsisten WCAG 3.2.4)
 // Butuh Playwright + Chromium (sudah ada di lingkungan kerja tim); tidak dijalankan oleh tests/cek.mjs.
 const { chromium } = require('playwright');
 // 17 Nov 14.xx (Dewi & Nina): langkah Tab maju & Shift+Tab mundur untuk cek fokus tertutup, dipakai bersama oleh
@@ -1077,6 +1077,78 @@ async function auditTautan(b) {
   console.log('total temuan tautan',total,'(tautan & tombol dicek:',dicek,'; uji balik UJI-DISINI tertangkap:',uji['UJI-DISINI'],'dari 4; UJI-KEMBAR:',uji['UJI-KEMBAR'],'dari 4)');
 }
 
+// 18 Nov 15.xx (Dewi & Nina): identifikasi konsisten (WCAG 3.2.4 Consistent Identification), gelap/terang × 390/1280px.
+// Komponen yang fungsinya sama di beberapa halaman wajib bernama sama: tautan "Langsung ke isi", logo beranda, label
+// menu utama & tiap tautan menu (+ urutan menu, WCAG 3.2.3), tautan kaki, tautan unduhan, label kotak "Ketik kode",
+// pola tombol istilah ("Apa itu …?", aria-expanded), label kotak istilah, tombol "Salin tautan profil".
+// Juga: satu nama di menu/kaki tidak boleh menuju dua tempat. Halaman dibandingkan satu sama lain per skema & lebar.
+// Uji balik: UJI-MENU (tautan menu "Radar Risiko" di Kabar diganti "Cek Risiko") dan UJI-KAKI (tautan kaki Metodologi
+// di Belajar diganti "Metodologi") wajib tertangkap sebagai nama berbeda.
+async function auditKonsisten(b) {
+  const KEADAAN=[
+    ['index.html'],['peringkat.html'],['radar.html'],['emiten.html?kode=ANTM'],['emiten.html?kode=TPIA'],['kabar.html'],['belajar.html'],
+    ['pelajaran.html?m=apa-itu-saham'],['metodologi.html'],['asisten.html'],['404.html'],
+    ['peringkat.html','istilah',async p=>{ const t=await p.$('button.istilah'); if(!t) return 'button.istilah tidak ada'; await t.click(); await p.waitForTimeout(200); }],
+    ['pelajaran.html?m=apa-itu-saham','istilah',async p=>{ const t=await p.$('main button.istilah'); if(!t) return 'button.istilah tidak ada'; await t.click(); await p.waitForTimeout(200); }],
+    ['kabar.html','UJI-MENU',async p=>{ await p.evaluate(()=>{ document.querySelector('.nav a[href$="radar.html"]').textContent='Cek Risiko'; }); }],
+    ['belajar.html','UJI-KAKI',async p=>{ await p.evaluate(()=>{ document.querySelector('footer a[href$="metodologi.html"]').textContent='Metodologi'; }); }],
+  ];
+  const ambil=async p=>p.evaluate(()=>{
+    const tampak=e=>e.checkVisibility({visibilityProperty:true,opacityProperty:true})&&e.getBoundingClientRect().width>=1;
+    const rapi=t=>(t||'').replace(/\s+/g,' ').trim();
+    const nama=e=>{ if (rapi(e.getAttribute('aria-label'))) return rapi(e.getAttribute('aria-label'));
+      let t=''; const jalan=n=>{ if(n.nodeType===3){ t+=n.nodeValue; return; } if(n.nodeType!==1||n.getAttribute('aria-hidden')==='true') return;
+        if(n.tagName==='IMG') { t+=' '+(n.getAttribute('alt')||'')+' '; return; } n.childNodes.forEach(jalan); };
+      e.childNodes.forEach(jalan); return rapi(t)||rapi(e.getAttribute('title')); };
+    const tuju=a=>{ const u=new URL(a.href,location.href); return u.origin===location.origin?u.pathname.replace(/\/index\.html$/,'/')+u.hash:u.href; };
+    const k=[]; const catat=(kunci,nilai)=>k.push([kunci,nilai]);
+    document.querySelectorAll('a.lompat').forEach(a=>catat('tautan lompat '+tuju(a).replace(/^.*#/,'#'),nama(a)));
+    document.querySelectorAll('a.merek').forEach(a=>catat('logo '+tuju(a),nama(a)));
+    document.querySelectorAll('nav.nav').forEach(n=>{ catat('label menu utama',n.getAttribute('aria-label')||'(tanpa label)');
+      const a=[...n.querySelectorAll('a[href]')]; catat('urutan menu',a.map(tuju).join(' > '));
+      a.forEach(x=>catat('menu '+tuju(x),nama(x))); });
+    document.querySelectorAll('footer a[href]').forEach(a=>catat('kaki '+tuju(a),nama(a)));
+    document.querySelectorAll('a[download]').forEach(a=>{ if(tampak(a)) catat('unduhan '+tuju(a),nama(a)); });
+    document.querySelectorAll('.kotak-ketik').forEach(d=>{ const i=d.querySelector('input[list]'); const l=i&&document.querySelector('label[for="'+i.id+'"]');
+      catat('label kotak ketik kode',l?rapi(l.textContent):'(tanpa label)'); catat('atribut kotak ketik kode',i?['type','inputmode','autocomplete'].map(x=>x+'='+i.getAttribute(x)).join(' '):'(tanpa isian)'); });
+    document.querySelectorAll('button.istilah').forEach(t=>{ const ti=t.getAttribute('title')||''; const nm=rapi(t.textContent);
+      catat('pola tombol istilah',(/^Apa itu .+\?$/.test(ti)?'Apa itu …?':'title "'+ti+'"')+' · aria-expanded '+(t.hasAttribute('aria-expanded')?'ada':'tidak ada')+' · type='+t.getAttribute('type')+(nm?'':' · tanpa nama')); });
+    document.querySelectorAll('.kotak-istilah').forEach(d=>{ if(tampak(d)) catat('kotak istilah',(d.getAttribute('role')||'-')+' "'+(d.getAttribute('aria-label')||'')+'"'); });
+    document.querySelectorAll('button.tombol-salin').forEach(t=>catat('tombol salin tautan',nama(t)));
+    return {k, sw:document.documentElement.scrollWidth};
+  });
+  // Bandingkan: kunci → nilai → daftar halaman. Satu kunci punya >1 nilai = temuan. Satu nama menu/kaki → >1 tujuan = temuan.
+  const banding=data=>{ const peta={}, namaKe={}, out=[];
+    data.forEach(([hal,k])=>k.forEach(([kunci,nilai])=>{ ((peta[kunci]=peta[kunci]||{})[nilai]=peta[kunci][nilai]||new Set()).add(hal);
+      const m=kunci.match(/^(menu|kaki) (.*)$/); if (m) ((namaKe[m[1]+' "'+nilai+'"']=namaKe[m[1]+' "'+nilai+'"']||new Set())).add(m[2]); }));
+    Object.entries(peta).forEach(([kunci,v])=>{ const n=Object.keys(v); if(n.length>1) out.push(`${kunci} dinamai berbeda: `+n.map(x=>`"${x}" (${[...v[x]].join(', ')})`).join(' | ')); });
+    Object.entries(namaKe).forEach(([nm,t])=>{ if(t.size>1) out.push(`${nm} menuju ${t.size} tempat: ${[...t].join(' | ')}`); });
+    return out; };
+  let total=0, dicek=0; const uji={'UJI-MENU':0,'UJI-KAKI':0};
+  for (const scheme of ['dark','light']) for (const w of [390,1280]) {
+    const sehat=[], ujiData={};
+    for (const [pg,ket,aksi] of KEADAAN) {
+      const isUji=ket&&ket.startsWith('UJI-'); const tag=`konsisten ${scheme} ${w} ${pg}${ket?' ('+ket+')':''}`;
+      const ctx=await b.newContext({ viewport:{width:w,height:844}, colorScheme:scheme, deviceScaleFactor:1, reducedMotion:'reduce' });
+      const p=await ctx.newPage(); const errs=[]; p.on('pageerror',e=>errs.push(e.message));
+      await p.goto('http://localhost:8765/'+pg); await p.waitForTimeout(400);
+      const temuan=[];
+      if (aksi) { const r=await aksi(p); if (r) temuan.push('keadaan gagal dibuat: '+r); }
+      const r=await ambil(p); dicek+=r.k.length;
+      if (r.sw>w) temuan.push('scroll horizontal '+r.sw);
+      errs.forEach(e=>temuan.push('galat JS: '+e));
+      temuan.forEach(t=>console.log(tag,'TEMUAN',t));
+      const hal=pg+(ket?' ('+ket+')':'');
+      if (isUji) ujiData[ket]=[hal,r.k]; else { total+=temuan.length; sehat.push([hal,r.k]); }
+      await ctx.close();
+    }
+    const t=banding(sehat); t.forEach(x=>console.log(`konsisten ${scheme} ${w}`,'TEMUAN',x)); total+=t.length;
+    for (const u of Object.keys(uji)) { const tu=banding([...sehat,ujiData[u]]); const kunci=u==='UJI-MENU'?'menu /radar.html dinamai berbeda':'kaki /metodologi.html dinamai berbeda';
+      if (tu.some(x=>x.startsWith(kunci)&&x.includes(u))) uji[u]++; }
+  }
+  console.log('total temuan konsisten',total,'(komponen dicek:',dicek,'; uji balik UJI-MENU tertangkap:',uji['UJI-MENU'],'dari 4; UJI-KAKI:',uji['UJI-KAKI'],'dari 4)');
+}
+
 const pages = ['radar.html#UNTR','radar.html#INTP','radar.html#TPIA','radar.html#HEAL','peringkat.html#istilah','asisten.html#jawab','UJI','peringkat.html','radar.html','emiten.html?kode=ANTM','emiten.html?kode=TPIA','kabar.html','metodologi.html','asisten.html',
   'index.html','belajar.html','pelajaran.html?m=apa-itu-saham#benar','pelajaran.html?m=saham-syariah#salah','404.html'];
 const halamanFokus = ['index.html','peringkat.html','peringkat.html#istilah','radar.html','radar.html#UNTR','emiten.html?kode=ANTM','kabar.html','belajar.html','pelajaran.html?m=apa-itu-saham','pelajaran.html?m=apa-itu-saham#benar','metodologi.html','asisten.html','404.html','UJI-FOKUS','UJI-FOKUS-BORDER'];
@@ -1110,6 +1182,8 @@ const halamanFokus = ['index.html','peringkat.html','peringkat.html#istilah','ra
   if (process.env.AUDIT==='warna') { await auditWarna(b); await b.close(); return; }
   // AUDIT=tautan node tools/audit-kontras.js → hanya tujuan tautan (WCAG 2.4.4)
   if (process.env.AUDIT==='tautan') { await auditTautan(b); await b.close(); return; }
+  // AUDIT=konsisten node tools/audit-kontras.js → hanya identifikasi konsisten (WCAG 3.2.4)
+  if (process.env.AUDIT==='konsisten') { await auditKonsisten(b); await b.close(); return; }
   let total = 0;
   // AUDIT=fokus node tools/audit-kontras.js → hanya cek garis fokus (lebih cepat)
   if (process.env.AUDIT!=='fokus') for (const scheme of ['dark','light']) for (const w of [390,1280]) {
@@ -1301,5 +1375,6 @@ const halamanFokus = ['index.html','peringkat.html','peringkat.html#istilah','ra
   await auditNonteks(b);
   await auditWarna(b);
   await auditTautan(b);
+  await auditKonsisten(b);
   console.log('total temuan',total); await b.close();
 })();

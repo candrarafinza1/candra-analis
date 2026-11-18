@@ -695,4 +695,12 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Sesudah: 0 temuan; tanpa scroll horizontal 390/1280px; audit label dalam nama, sentuh, warna, urutan tetap 0.
 - Uji balik: UJI-DISINI (tautan "di sini" disisipkan) dan UJI-KEMBAR (tautan "Belajar" ke halaman lain) masing-masing 4/4. Nina: cek statis (tautan samar di 10 HTML & app.js, nama "Lompat ke" Radar, mode audit) + 9 uji balik di `tests/cek.mjs`.
 - Kirana: tangkapan 390px: "Radar Risiko emiten ini" membungkus rapi ke baris kedua chip "Lompat ke"; tombol "Unduh PDF modul" tetap satu baris.
-- Berikutnya: identifikasi konsisten (WCAG 3.2.4).
+- Berikutnya: identifikasi konsisten (WCAG 3.2.4) — selesai 18 Nov 15.09, lihat di bawah.
+
+### Audit identifikasi konsisten (WCAG 3.2.4), 18 Nov 15.09 (Dewi & Nina, ditinjau Kirana)
+- Alat: `AUDIT=konsisten node tools/audit-kontras.js` (ikut audit penuh). 15 keadaan (10 halaman + profil TPIA, kotak istilah terbuka di Peringkat & pelajaran, 2 uji balik) × gelap/terang × 390/1280px, 1.404 komponen.
+- Yang dibandingkan antarhalaman: "Langsung ke isi", logo beranda, label & urutan menu utama serta nama tiap tautan menu, tautan kaki, tautan unduhan, label & atribut kotak "Ketik kode atau nama emiten" (Radar & Bandingkan), pola tombol istilah ("Apa itu …?", aria-expanded), label kotak istilah, tombol "Salin tautan profil". Juga satu nama di menu/kaki tidak boleh menuju dua tempat.
+- Hasil: 0 temuan (404 memakai alamat berawalan "/", setelah dinormalkan tujuannya sama). Tidak ada perubahan tampilan.
+- Catatan: daftar pilihan emiten di Radar ("Atau pilih saham yang Anda pegang") dan Bandingkan ("Bandingkan ANTM dengan") berlabel beda karena fungsinya beda (memeriksa vs membandingkan); itu sesuai 3.2.4.
+- Uji balik: UJI-MENU (menu "Radar Risiko" di Kabar diganti "Cek Risiko") dan UJI-KAKI (kaki Metodologi di Belajar diganti "Metodologi") masing-masing 4/4. Nina: cek statis menu/kaki/lompat/logo di 10 HTML, label kotak ketik tunggal, mode audit + 10 uji balik di `tests/cek.mjs`.
+- Berikutnya: pembatalan penunjuk (WCAG 2.5.2).
