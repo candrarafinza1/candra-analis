@@ -9,6 +9,7 @@
   --tinta: #1c2230;      /* teks utama */
   --tinta-2: #4a5266;    /* teks sekunder */
   --garis: #dfe2d8;
+  --garis-kontrol: #80867a; /* garis tepi kotak isian, tab & chip: ≥3:1 terhadap kertas & kartu (Dewi, 18 Nov, WCAG 1.4.11) */
   --naik: #17784e;       /* indikator naik (digelapkan 1 Nov agar kontras ≥4,5:1) */
   --naik-muda: #e3f2ea;
   --turun: #b23a31;      /* indikator turun / risiko */
@@ -42,6 +43,7 @@
     --tinta: #e8eaf0;
     --tinta-2: #b4bacb;
     --garis: #353a4e;
+    --garis-kontrol: #6b7290;
     --naik: #4cc38a;
     --naik-muda: #13291e;
     --turun: #f2857b;
@@ -162,7 +164,7 @@ p { margin: 0 0 1em; }
 }
 .tombol-utama { background: var(--bulan); color: var(--malam); }
 .tombol-utama:hover { background: #f2d488; color: var(--malam); }
-.tombol-garis { border-color: #4b51a0; color: #fff; background: transparent; }
+.tombol-garis { border-color: #7b82d6; /* ≥3:1 di atas biru malam (Dewi, 18 Nov, WCAG 1.4.11; dulu #4b51a0 = 2,22:1) */ color: #fff; background: transparent; }
 .tombol-garis:hover { border-color: #fff; color: #fff; }
 /* Lanjutkan belajar di beranda (Arif & Dewi, IDE.md #9) */
 .lanjutkan { margin-top: 20px; padding: 14px 16px; border: 1px solid #4b51a0; border-radius: var(--radius-kecil); background: rgba(255,255,255,.04); }
@@ -292,7 +294,7 @@ tbody tr:hover { background: var(--hover-baris); }
 .tab {
   font: inherit; font-weight: 700; font-size: .95rem;
   padding: 10px 16px; border-radius: 999px; cursor: pointer;
-  border: 2px solid var(--garis); background: var(--putih); color: var(--tinta);
+  border: 2px solid var(--garis-kontrol); background: var(--putih); color: var(--tinta);
 }
 .tab:hover { border-color: var(--aksen); }
 .tab[aria-selected="true"] { background: var(--malam); border-color: var(--malam); color: #fff; }
@@ -320,7 +322,7 @@ tbody tr:hover { background: var(--hover-baris); }
 .saring-sektor label { font-weight: 700; }
 .saring-sektor select {
   font: inherit; min-height: 48px; padding: 0 14px; border-radius: var(--radius-kecil);
-  border: 2px solid var(--garis); background: var(--putih); color: var(--tinta); flex: 1 1 220px; max-width: 360px; min-width: 0;
+  border: 2px solid var(--garis-kontrol); background: var(--putih); color: var(--tinta); flex: 1 1 220px; max-width: 360px; min-width: 0;
 }
 .saring-ket { width: 100%; margin: 0; font-size: .9rem; color: var(--tinta-2); }
 
@@ -331,7 +333,7 @@ tbody tr:hover { background: var(--hover-baris); }
 .cari-kamus label { font-weight: 700; }
 .cari-kamus input {
   font: inherit; min-height: 48px; padding: 0 14px; border-radius: var(--radius-kecil);
-  border: 2px solid var(--garis); background: var(--putih); color: var(--tinta); flex: 1 1 220px; max-width: 360px; min-width: 0;
+  border: 2px solid var(--garis-kontrol); background: var(--putih); color: var(--tinta); flex: 1 1 220px; max-width: 360px; min-width: 0;
 }
 .info-kamus { margin: 0 0 12px; font-size: .9rem; color: var(--tinta-2); }
 .daftar-kamus { margin: 0; }
@@ -348,7 +350,7 @@ tbody tr:hover { background: var(--hover-baris); }
 .radar-form label { width: 100%; font-weight: 700; }
 .radar-form select {
   font: inherit; min-height: 48px; padding: 0 14px; border-radius: var(--radius-kecil);
-  border: 2px solid var(--garis); background: var(--putih); color: var(--tinta); min-width: 0; flex: 1 1 240px; max-width: 420px;
+  border: 2px solid var(--garis-kontrol); background: var(--putih); color: var(--tinta); min-width: 0; flex: 1 1 240px; max-width: 420px;
 }
 .sinyal-daftar { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
 .sinyal {
@@ -470,15 +472,15 @@ tbody tr:hover { background: var(--hover-baris); }
 .contoh-tanya { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
 .chip {
   font: inherit; font-size: .92rem; text-align: left; cursor: pointer;
-  padding: 8px 14px; border-radius: 999px; border: 1px solid var(--garis); background: var(--putih); color: var(--tinta);
+  padding: 8px 14px; border-radius: 999px; border: 1px solid var(--garis-kontrol); background: var(--putih); color: var(--tinta);
 }
 .chip:hover { border-color: var(--aksen); }
 .form-tanya textarea {
   width: 100%; font: inherit; padding: 12px 14px; border-radius: var(--radius-kecil);
-  border: 2px solid var(--garis); background: var(--putih); color: var(--tinta); resize: vertical; min-height: 96px;
+  border: 2px solid var(--garis-kontrol); background: var(--putih); color: var(--tinta); resize: vertical; min-height: 96px;
   scroll-margin: 16px 0; /* Dewi 17 Nov: jarak saat kotak tanya digulir ke layar (lihat pendengar focus di app.js) */
 }
-.form-tanya textarea:focus { border-color: var(--aksen); outline: none; }
+.form-tanya textarea:focus { border-color: var(--tinta); outline: none; } /* Dewi 18 Nov: --tinta ≥3:1 terhadap --garis-kontrol di gelap & terang (aksen gelap hanya 2,35:1) */
 .form-tanya textarea::placeholder { color: var(--tinta-2); opacity: 1; }
 /* Teks contoh di semua kolom isian (mis. cari istilah di Belajar) — terbaca di mode gelap (Dewi, 11 Nov) */
 input::placeholder, textarea::placeholder { color: var(--tinta-2); opacity: 1; }
@@ -625,7 +627,7 @@ button.istilah:hover, button.istilah[aria-expanded="true"] { color: var(--aksen)
 .kotak-ketik label { width: 100%; font-weight: 700; }
 .kotak-ketik input {
   font: inherit; min-height: 48px; padding: 0 14px; border-radius: var(--radius-kecil);
-  border: 2px solid var(--garis); background: var(--putih); color: var(--tinta); flex: 1 1 240px; max-width: 420px; min-width: 0;
+  border: 2px solid var(--garis-kontrol); background: var(--putih); color: var(--tinta); flex: 1 1 240px; max-width: 420px; min-width: 0;
 }
 .info-ketik { width: 100%; margin: 0; font-size: .9rem; color: var(--tinta-2); }
 
@@ -634,7 +636,7 @@ button.istilah:hover, button.istilah[aria-expanded="true"] { color: var(--aksen)
 .tombol-salin { background: transparent; color: var(--aksen); border-color: var(--aksen); max-width: 100%; white-space: normal; }
 .tombol-salin:hover { background: var(--hover-baris); }
 .alamat-salin { flex: 1 1 16rem; min-width: 0; max-width: 100%; min-height: 44px; padding: 0 12px; font: inherit; font-size: .95rem;
-  color: var(--tinta); background: var(--putih); border: 1px solid var(--garis); border-radius: var(--radius-kecil); }
+  color: var(--tinta); background: var(--putih); border: 1px solid var(--garis-kontrol); border-radius: var(--radius-kecil); }
 .alamat-salin[hidden] { display: none; }
 .info-salin { width: 100%; margin: 0; font-size: .9rem; color: var(--tinta-2); }
 

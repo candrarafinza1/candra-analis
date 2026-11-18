@@ -666,3 +666,13 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Hasil: 2.192 fokus dicek, 0 temuan. Tidak ada perubahan tampilan.
 - Uji balik: UJI-POSITIF (tabindex="2" di tautan kaki), UJI-SEMBUNYI (tautan di left:-9999px & tautan opacity 0), UJI-BALIK (menu atas dibalik row-reverse) masing-masing tertangkap 4/4. Nina: cek statis tabindex positif di 10 HTML & app.js + uji balik di `tests/cek.mjs`.
 - Berikutnya: kontras non-teks (WCAG 1.4.11).
+
+### Audit kontras non-teks (WCAG 1.4.11), 18 Nov 10.09 (Dewi & Nina, ditinjau Kirana)
+- Alat: `AUDIT=nonteks node tools/audit-kontras.js` (ikut audit penuh). 14 keadaan: 10 halaman, Radar sesudah memilih UNTR, profil ANTM + Bandingkan, kuis sesudah Periksa, Asisten aktif + kirim kosong (garis merah aria-invalid). Gelap/terang × 390/1280px.
+- Yang dicek (≥3:1 terhadap latar di sebelahnya): garis tepi kotak isian (atau isi kotak), tombol bergaris (.tombol-garis, .tombol-salin, .tombol-lagi, tab tak terpilih, chip), lingkaran pilihan kuis (diukur dari piksel tangkapan layar), isi batang terhadap jalurnya, lampu panduan Radar, garis kiri kartu tanda Radar.
+- Sebelum: 96 temuan. Garis tepi kotak isian, tab, dan chip memakai `--garis` (#dfe2d8 = 1,2:1 di terang; #353a4e = 1,5:1 di gelap); tombol "garis" di hero #4b51a0 di atas biru malam 2,22:1. Lingkaran kuis, batang, lampu, dan garis kartu Radar sudah lolos.
+- Perbaikan (Dewi): token baru `--garis-kontrol` (terang #80867a = 3,48:1 di kertas / 3,74:1 di kartu; gelap #6b7290 = 3,91:1 / 3,54:1) untuk kotak isian, tab, chip, kotak alamat salin; garis `.tombol-garis` kini #7b82d6 (4,47:1). Garis fokus kotak tanya kini `--tinta` karena aksen gelap hanya 2,35:1 terhadap garis baru. Garis kartu & tabel tetap `--garis` (hiasan, bukan komponen).
+- Sesudah: 352 komponen dicek, 0 temuan; tanpa scroll horizontal; audit fokus tetap 0 (UJI-FOKUS-BORDER tetap tertangkap 4/4).
+- Uji balik: UJI-PUDAR (garis isian = warna isi kotak) dan UJI-LAMPU (lampu = warna garis) masing-masing 4/4. Nina: cek statis token & aturan CSS + 9 uji balik di `tests/cek.mjs`.
+- Kirana: tangkapan 390px gelap & 1280px terang: kotak isian dan chip kini jelas batasnya tanpa terlihat berat.
+- Berikutnya: penggunaan warna (WCAG 1.4.1): informasi tidak boleh hanya lewat warna.

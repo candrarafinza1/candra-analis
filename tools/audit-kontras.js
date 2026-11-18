@@ -6,7 +6,7 @@
 // garis fokus terlihat (outline ≥2px, atau box-shadow/border berubah) dengan kontras ≥3:1 terhadap latar di sekitarnya.
 // Halaman "UJI-FOKUS" sengaja mematikan outline; audit wajib menangkapnya (uji balik).
 // 17 Nov 09.xx (Dewi & Tegar): Tab sampai habis, + keadaan istilah terbuka, hasil Radar UNTR, kuis terjawab; cek border kotak tanya Asisten.
-// Cara pakai: python3 -m http.server 8765 (di akar repo), lalu: node tools/audit-kontras.js (AUDIT=fokus: hanya garis fokus & fokus tertutup; AUDIT=zoom: hanya zoom 200% & layar pendek HP; AUDIT=jarak: hanya jarak teks WCAG 1.4.12; AUDIT=orientasi: hanya orientasi layar WCAG 1.3.4; AUDIT=sentuh: hanya ukuran sasaran sentuh WCAG 2.5.8; AUDIT=sorot: hanya konten saat diarahkan/difokus WCAG 1.4.13; AUDIT=label: hanya label dalam nama WCAG 2.5.3; AUDIT=status: hanya pesan status WCAG 4.1.3; AUDIT=judul: hanya judul halaman & urutan judul WCAG 2.4.2/1.3.1; AUDIT=bahasa: hanya bahasa halaman & bagian WCAG 3.1.1/3.1.2; AUDIT=isian: hanya label/petunjuk & pesan salah isian WCAG 3.3.2/3.3.1; AUDIT=urutan: hanya urutan fokus WCAG 2.4.3)
+// Cara pakai: python3 -m http.server 8765 (di akar repo), lalu: node tools/audit-kontras.js (AUDIT=fokus: hanya garis fokus & fokus tertutup; AUDIT=zoom: hanya zoom 200% & layar pendek HP; AUDIT=jarak: hanya jarak teks WCAG 1.4.12; AUDIT=orientasi: hanya orientasi layar WCAG 1.3.4; AUDIT=sentuh: hanya ukuran sasaran sentuh WCAG 2.5.8; AUDIT=sorot: hanya konten saat diarahkan/difokus WCAG 1.4.13; AUDIT=label: hanya label dalam nama WCAG 2.5.3; AUDIT=status: hanya pesan status WCAG 4.1.3; AUDIT=judul: hanya judul halaman & urutan judul WCAG 2.4.2/1.3.1; AUDIT=bahasa: hanya bahasa halaman & bagian WCAG 3.1.1/3.1.2; AUDIT=isian: hanya label/petunjuk & pesan salah isian WCAG 3.3.2/3.3.1; AUDIT=urutan: hanya urutan fokus WCAG 2.4.3; AUDIT=nonteks: hanya kontras non-teks WCAG 1.4.11)
 // Butuh Playwright + Chromium (sudah ada di lingkungan kerja tim); tidak dijalankan oleh tests/cek.mjs.
 const { chromium } = require('playwright');
 // 17 Nov 14.xx (Dewi & Nina): langkah Tab maju & Shift+Tab mundur untuk cek fokus tertutup, dipakai bersama oleh
@@ -837,6 +837,98 @@ async function auditUrutan(b) {
   console.log('total temuan urutan',total,'(keadaan:',KEADAAN.length-3,'× 4; fokus dicek:',dicek,'; uji balik UJI-POSITIF',uji['UJI-POSITIF'],'UJI-SEMBUNYI',uji['UJI-SEMBUNYI'],'UJI-BALIK',uji['UJI-BALIK'],'dari 4)');
 }
 
+// 18 Nov 10.xx (Dewi & Nina): kontras non-teks (WCAG 1.4.11 Non-text Contrast), gelap/terang × 390/1280px.
+// Wajib ≥3:1 terhadap latar di sebelahnya (latar dihitung dari leluhur, warna transparan dicampur):
+// (1) kotak isian (input, textarea, select) yang aktif: garis tepi ≥3:1, ATAU isi kotak sendiri ≥3:1 terhadap latar luar;
+// (2) tombol sekunder bergaris (.tombol-garis, .tombol-salin, .tombol-lagi, .tab yang tidak terpilih, .chip): aturan sama;
+// (3) lingkaran pilihan kuis & kotak centang bawaan peramban: diukur dari piksel tangkapan layar (warna paling kontras
+//     di dalam lingkaran terhadap latar);
+// (4) batang 9 bulan / batang tahun Radar / batang musim laporan: isi batang terhadap jalurnya;
+// (5) penanda Radar: lampu panduan terhadap latar kotak, garis kiri kartu tanda terhadap isi kartu dan latar luar.
+// Kotak isian & tombol yang disabled dikecualikan (WCAG: komponen tidak aktif). Keadaan: 10 halaman + Radar UNTR,
+// profil ANTM + Bandingkan, kuis sesudah Periksa, Asisten aktif + kirim kosong (aria-invalid).
+// Uji balik: UJI-PUDAR (garis tepi isian disamakan dengan isi kotak) dan UJI-LAMPU (lampu panduan = warna garis) wajib tertangkap.
+async function auditNonteks(b) {
+  const KEADAAN=[
+    ['index.html'],['peringkat.html'],['radar.html'],['emiten.html?kode=ANTM'],['kabar.html'],['belajar.html'],
+    ['pelajaran.html?m=apa-itu-saham'],['metodologi.html'],['asisten.html'],['404.html'],
+    ['radar.html','UNTR',async p=>{ await p.selectOption('#pilih-saham','UNTR'); await p.waitForTimeout(300); }],
+    ['emiten.html?kode=ANTM','Bandingkan',async p=>{ const s=await p.$('select.pilih-banding'); if(!s) return 'select.pilih-banding tidak ada';
+      const v=await s.$$eval('option',o=>o.map(x=>x.value).filter(x=>x&&x!=='ANTM')); await s.selectOption(v[0]); await p.waitForTimeout(300); }],
+    ['pelajaran.html?m=apa-itu-saham','periksa',async p=>{ await p.evaluate(()=>{ const m=window.MODUL.find(x=>x.id==='apa-itu-saham'); m.kuis.forEach((q,i)=>{ document.querySelector('input[name="soal-'+i+'"][value="'+(i?q.benar:(q.benar+1)%q.pilihan.length)+'"]').checked=true; }); });
+      await p.click('.kuis button[type="submit"]'); await p.waitForTimeout(200); }],
+    ['asisten.html','kirim kosong',async p=>{ await p.click('.form-tanya button[type="submit"]'); await p.waitForTimeout(200); await p.evaluate(()=>document.activeElement&&document.activeElement.blur()); }],
+    ['radar.html','UJI-PUDAR',async p=>{ await p.addStyleTag({content:'input,textarea,select{border-color:var(--putih)!important}'}); }],
+    ['radar.html','UJI-LAMPU',async p=>{ await p.addStyleTag({content:'.lampu{background:var(--garis)!important}'}); }],
+  ];
+  let total=0, dicek=0; const uji={'UJI-PUDAR':0,'UJI-LAMPU':0}; const jenisDicek={};
+  for (const scheme of ['dark','light']) for (const w of [390,1280]) {
+    for (const [pg,ket,aksi] of KEADAAN) {
+      const isUji=ket&&ket.startsWith('UJI-'); const tag=`nonteks ${scheme} ${w} ${pg}${ket?' ('+ket+')':''}`;
+      const ctx=await b.newContext({ viewport:{width:w,height:844}, colorScheme:scheme, deviceScaleFactor:2, reducedMotion:'reduce' });
+      if (pg==='asisten.html') await ctx.route('**/api/tanya', r=>r.fulfill({ status:200, contentType:'application/json', body:JSON.stringify({aktif:true}) }));
+      const p=await ctx.newPage(); const errs=[]; p.on('pageerror',e=>errs.push(e.message));
+      await p.goto('http://localhost:8765/'+pg); await p.waitForTimeout(400);
+      const temuan=[];
+      if (aksi) { const r=await aksi(p); if (r) temuan.push('keadaan gagal dibuat: '+r); }
+      const r=await p.evaluate(()=>{
+        const cv=document.createElement('canvas'); cv.width=cv.height=1; const x=cv.getContext('2d',{willReadFrequently:true});
+        const rgba=c=>{ x.clearRect(0,0,1,1); x.fillStyle='rgba(0,0,0,0)'; x.fillStyle=c; x.fillRect(0,0,1,1); const d=x.getImageData(0,0,1,1).data; return [d[0],d[1],d[2],d[3]/255]; };
+        const campur=(atas,bawah)=>[0,1,2].map(k=>atas[k]*atas[3]+bawah[k]*(1-atas[3]));
+        const latar=el=>{ const lap=[]; for(let e=el;e;e=e.parentElement){ const c=rgba(getComputedStyle(e).backgroundColor); if(c[3]>0){ lap.push(c); if(c[3]>=1) break; } }
+          let dasar=[255,255,255]; for(let i=lap.length-1;i>=0;i--) dasar=campur(lap[i],dasar); return dasar; };
+        const lum=c=>{ const f=v=>{ v/=255; return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4); }; return .2126*f(c[0])+.7152*f(c[1])+.0722*f(c[2]); };
+        const rasio=(a,b)=>{ const A=lum(a),B=lum(b); return (Math.max(A,B)+.05)/(Math.min(A,B)+.05); };
+        const hex=c=>'#'+c.map(v=>Math.round(v).toString(16).padStart(2,'0')).join('');
+        const tampak=e=>e.checkVisibility({visibilityProperty:true,opacityProperty:true})&&e.getBoundingClientRect().width>=2;
+        const nama=e=>e.tagName.toLowerCase()+(e.id?'#'+e.id:'')+(typeof e.className==='string'&&e.className?'.'+e.className.trim().split(/\s+/).join('.'):'');
+        const hasil=[], cek=[], radio=[];
+        const garisAtauIsi=(e,jenis)=>{ const s=getComputedStyle(e); const luar=latar(e.parentElement), dalam=latar(e);
+          const sisi=['Top','Right','Bottom','Left'].map(k=>({w:parseFloat(s['border'+k+'Width'])||0,c:rgba(s['border'+k+'Color'])})).filter(o=>o.w>=1&&o.c[3]>0&&s['border'+'Top'+'Style']!=='none');
+          const rIsi=rasio(dalam,luar); let rGaris=0, warna='';
+          if (sisi.length) { const g=sisi.map(o=>({r:rasio(campur(o.c,luar),luar),c:campur(o.c,luar)})).sort((a,b)=>a.r-b.r)[0]; rGaris=g.r; warna=hex(g.c); }
+          cek.push(jenis);
+          if (rGaris<3&&rIsi<3) hasil.push(`${jenis} ${nama(e)}: garis tepi ${rGaris?rGaris.toFixed(2):'tidak ada'}:1${warna?' ('+warna+')':''}, isi kotak ${rIsi.toFixed(2)}:1 (${hex(dalam)}) terhadap latar ${hex(luar)}`); };
+        // (1) kotak isian aktif
+        document.querySelectorAll('input:not([type=radio]):not([type=checkbox]):not([type=hidden]), textarea, select').forEach(e=>{ if(!tampak(e)||e.disabled) return; garisAtauIsi(e,'isian'); });
+        // (2) tombol sekunder bergaris
+        document.querySelectorAll('.tombol-garis, .tombol-salin, .tombol-lagi, .tab:not([aria-selected="true"]), .chip').forEach(e=>{ if(!tampak(e)||e.disabled) return; garisAtauIsi(e,'tombol'); });
+        // (3) lingkaran pilihan & kotak centang: dicatat untuk diukur dari piksel
+        document.querySelectorAll('input[type=radio], input[type=checkbox]').forEach(e=>{ if(!tampak(e)||e.disabled) return; const rc=e.getBoundingClientRect();
+          radio.push({nama:nama(e)+(e.checked?' (terpilih)':''), luar:latar(e.parentElement), x:rc.left+scrollX, y:rc.top+scrollY, w:rc.width, h:rc.height}); });
+        // (4) batang terhadap jalurnya
+        document.querySelectorAll('.batang9-isi, .musim-isi').forEach(e=>{ if(!tampak(e)) return; const isi=latar(e), jalur=latar(e.parentElement), rr=rasio(isi,jalur); cek.push('batang');
+          if (rr<3) hasil.push(`batang ${nama(e)}: isi ${hex(isi)} terhadap jalur ${hex(jalur)} ${rr.toFixed(2)}:1`); });
+        // (5) penanda Radar
+        document.querySelectorAll('.lampu').forEach(e=>{ if(!tampak(e)) return; const isi=latar(e), luar=latar(e.parentElement), rr=rasio(isi,luar); cek.push('lampu');
+          if (rr<3) hasil.push(`lampu ${nama(e)}: ${hex(isi)} terhadap latar ${hex(luar)} ${rr.toFixed(2)}:1`); });
+        document.querySelectorAll('.sinyal').forEach(e=>{ if(!tampak(e)) return; const s=getComputedStyle(e); if((parseFloat(s.borderLeftWidth)||0)<3) return;
+          const dalam=latar(e), luar=latar(e.parentElement), g=campur(rgba(s.borderLeftColor),luar), r1=rasio(g,dalam), r2=rasio(g,luar); cek.push('penanda');
+          if (Math.min(r1,r2)<3) hasil.push(`penanda ${nama(e)}: garis kiri ${hex(g)} terhadap isi kartu ${hex(dalam)} ${r1.toFixed(2)}:1, latar luar ${hex(luar)} ${r2.toFixed(2)}:1`); });
+        return {hasil, cek, radio, sw:document.documentElement.scrollWidth};
+      });
+      r.hasil.forEach(t=>temuan.push(t)); r.cek.forEach(j=>jenisDicek[j]=(jenisDicek[j]||0)+1); dicek+=r.cek.length;
+      // (3) piksel lingkaran pilihan
+      for (const o of r.radio) {
+        const buf=await p.screenshot({clip:{x:o.x,y:o.y,width:o.w,height:o.h}, fullPage:true});
+        const rr=await p.evaluate(async ([b64,luar])=>{ const img=new Image(); img.src='data:image/png;base64,'+b64; await img.decode();
+          const cv=document.createElement('canvas'); cv.width=img.width; cv.height=img.height; const x=cv.getContext('2d'); x.drawImage(img,0,0); const d=x.getImageData(0,0,cv.width,cv.height).data;
+          const lum=c=>{ const f=v=>{ v/=255; return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4); }; return .2126*f(c[0])+.7152*f(c[1])+.0722*f(c[2]); };
+          const L=lum(luar); let maks=0; for(let i=0;i<d.length;i+=4){ const A=lum([d[i],d[i+1],d[i+2]]); const q=(Math.max(A,L)+.05)/(Math.min(A,L)+.05); if(q>maks) maks=q; } return maks; }, [buf.toString('base64'), o.luar]);
+        jenisDicek.pilihan=(jenisDicek.pilihan||0)+1; dicek++;
+        if (rr<3) temuan.push(`pilihan ${o.nama}: piksel paling kontras ${rr.toFixed(2)}:1 terhadap latar`);
+      }
+      if (r.sw>w) temuan.push('scroll horizontal '+r.sw);
+      errs.forEach(e=>temuan.push('galat JS: '+e));
+      temuan.forEach(t=>console.log(tag,'TEMUAN',t));
+      if (isUji) { const ok = ket==='UJI-PUDAR'?temuan.some(t=>t.startsWith('isian')):temuan.some(t=>t.startsWith('lampu')); uji[ket]+=ok?1:0; }
+      else total+=temuan.length;
+      await ctx.close();
+    }
+  }
+  console.log('total temuan non-teks',total,'(komponen dicek:',dicek,JSON.stringify(jenisDicek),'; uji balik UJI-PUDAR tertangkap:',uji['UJI-PUDAR'],'dari 4; UJI-LAMPU:',uji['UJI-LAMPU'],'dari 4)');
+}
+
 const pages = ['radar.html#UNTR','radar.html#INTP','radar.html#TPIA','radar.html#HEAL','peringkat.html#istilah','asisten.html#jawab','UJI','peringkat.html','radar.html','emiten.html?kode=ANTM','emiten.html?kode=TPIA','kabar.html','metodologi.html','asisten.html',
   'index.html','belajar.html','pelajaran.html?m=apa-itu-saham#benar','pelajaran.html?m=saham-syariah#salah','404.html'];
 const halamanFokus = ['index.html','peringkat.html','peringkat.html#istilah','radar.html','radar.html#UNTR','emiten.html?kode=ANTM','kabar.html','belajar.html','pelajaran.html?m=apa-itu-saham','pelajaran.html?m=apa-itu-saham#benar','metodologi.html','asisten.html','404.html','UJI-FOKUS','UJI-FOKUS-BORDER'];
@@ -864,6 +956,8 @@ const halamanFokus = ['index.html','peringkat.html','peringkat.html#istilah','ra
   if (process.env.AUDIT==='isian') { await auditIsian(b); await b.close(); return; }
   // AUDIT=urutan node tools/audit-kontras.js → hanya urutan fokus (WCAG 2.4.3)
   if (process.env.AUDIT==='urutan') { await auditUrutan(b); await b.close(); return; }
+  // AUDIT=nonteks node tools/audit-kontras.js → hanya kontras non-teks (WCAG 1.4.11)
+  if (process.env.AUDIT==='nonteks') { await auditNonteks(b); await b.close(); return; }
   let total = 0;
   // AUDIT=fokus node tools/audit-kontras.js → hanya cek garis fokus (lebih cepat)
   if (process.env.AUDIT!=='fokus') for (const scheme of ['dark','light']) for (const w of [390,1280]) {
@@ -925,7 +1019,7 @@ const halamanFokus = ['index.html','peringkat.html','peringkat.html#istilah','ra
       // luar layar saat diukur, latar diambil dari titik yang salah → temuan palsu (select.pilih-banding 2,38:1 di profil 1280px)
       await p.addStyleTag({content:'html{scroll-behavior:auto!important}'});
       if (path==='UJI-FOKUS') await p.addStyleTag({content:'*:focus,*:focus-visible{outline:none!important;box-shadow:none!important}'});
-      if (path==='UJI-FOKUS-BORDER') await p.addStyleTag({content:'.form-tanya textarea:focus{border-color:var(--garis)!important}'});
+      if (path==='UJI-FOKUS-BORDER') await p.addStyleTag({content:'.form-tanya textarea:focus{border-color:var(--garis-kontrol)!important}'});
       if (path==='radar.html'&&hash){ await p.selectOption('#pilih-saham',hash); await p.waitForTimeout(300); }
       // Asisten di lingkungan uji "belum aktif" (kotak tanya dinonaktifkan): aktifkan agar kotak tanya ikut diperiksa
       if (path==='asisten.html'||path==='UJI-FOKUS-BORDER') await p.evaluate(()=>{ document.querySelectorAll('.form-tanya textarea, .form-tanya button').forEach(e=>e.disabled=false); });
@@ -1052,5 +1146,6 @@ const halamanFokus = ['index.html','peringkat.html','peringkat.html#istilah','ra
   await auditBahasa(b);
   await auditUrutan(b);
   await auditIsian(b);
+  await auditNonteks(b);
   console.log('total temuan',total); await b.close();
 })();

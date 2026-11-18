@@ -5595,9 +5595,9 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
   ok(cekFokus(cssF.replace("    --fokus: var(--bulan);\n", "")).some((x) => x.includes("gelap")), "uji balik garis fokus: --fokus gelap yang lupa diganti harus tertangkap");
   ok(cekFokus(cssF.replace("outline: 3px solid var(--fokus);", "outline: 3px solid var(--bulan);")).length > 0, "uji balik garis fokus: :focus-visible tanpa --fokus harus tertangkap");
   ok(cekFokus(cssF.replace(".hero :focus-visible, ", "")).some((x) => x.includes(".hero")), "uji balik garis fokus: hero tanpa garis kuning harus tertangkap");
-  ok(cekFokus(cssF.replace(".form-tanya textarea:focus { border-color: var(--aksen);", ".form-tanya textarea:focus { border-color: var(--garis);")).some((x) => x.includes("kotak tanya")), "uji balik border fokus: kotak tanya yang border fokusnya sama dengan border biasa harus tertangkap");
-  ok(cekFokus(cssF.replace("border: 2px solid var(--garis); background: var(--putih); color: var(--tinta); resize", "border: 1px solid var(--garis); background: var(--putih); color: var(--tinta); resize")).some((x) => x.includes("≥2px")), "uji balik border fokus: border kotak tanya 1px harus tertangkap");
-  ok(cekFokus(cssF.replace(".form-tanya textarea:focus { border-color: var(--aksen);", ".form-tanya textarea:focus { border-color: var(--tinta-2);").replace("--tinta-2:", "--tinta-2: #e0e0e0; --x-lama:")).some((x) => x.includes("kotak tanya")), "uji balik border fokus: border fokus pucat di atas putih harus tertangkap");
+  ok(cekFokus(cssF.replace(".form-tanya textarea:focus { border-color: var(--tinta);", ".form-tanya textarea:focus { border-color: var(--garis);")).some((x) => x.includes("kotak tanya")), "uji balik border fokus: kotak tanya yang border fokusnya sama dengan border biasa harus tertangkap");
+  ok(cekFokus(cssF.replace("border: 2px solid var(--garis-kontrol); background: var(--putih); color: var(--tinta); resize", "border: 1px solid var(--garis-kontrol); background: var(--putih); color: var(--tinta); resize")).some((x) => x.includes("≥2px")), "uji balik border fokus: border kotak tanya 1px harus tertangkap");
+  ok(cekFokus(cssF.replace(".form-tanya textarea:focus { border-color: var(--tinta);", ".form-tanya textarea:focus { border-color: var(--tinta-2);").replace("--tinta-2:", "--tinta-2: #e0e0e0; --x-lama:")).some((x) => x.includes("kotak tanya")), "uji balik border fokus: border fokus pucat di atas putih harus tertangkap");
 }
 
 // Dewi & Nina (17 Nov 10.xx): fokus tidak tertutup elemen lengket/menumpuk (WCAG 2.2, 2.4.11).
@@ -5668,7 +5668,7 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
     for (const u of ["UJI-LEBAR", "UJI-TUTUP", "UJI-KETIK"]) if (!z.includes(`'${u}'`)) salah.push(`uji balik ${u} tidak ada di audit zoom`);
     if (!/await tabTutup\(p\)/.test(z)) salah.push("audit zoom tidak memakai langkah Tab bersama (tabTutup)");
     if (!/scrollWidth/.test(z)) salah.push("audit zoom tidak memeriksa scroll horizontal");
-    if (!/await auditZoom\(b\);\n(  await auditJarak\(b\);\n)?(  await auditOrientasi\(b\);\n)?(  await auditSentuh\(b\);\n)?(  await auditSorot\(b\);\n)?(  await auditLabel\(b\);\n)?(  await auditStatus\(b\);\n)?(  await auditJudul\(b\);\n)?(  await auditBahasa\(b\);\n)?(  await auditUrutan\(b\);\n)?(  await auditIsian\(b\);\n)?  console\.log\('total temuan',total\)/.test(audit)) salah.push("audit penuh tidak menjalankan auditZoom");
+    if (!/await auditZoom\(b\);\n(  await auditJarak\(b\);\n)?(  await auditOrientasi\(b\);\n)?(  await auditSentuh\(b\);\n)?(  await auditSorot\(b\);\n)?(  await auditLabel\(b\);\n)?(  await auditStatus\(b\);\n)?(  await auditJudul\(b\);\n)?(  await auditBahasa\(b\);\n)?(  await auditUrutan\(b\);\n)?(  await auditIsian\(b\);\n)?(  await auditNonteks\(b\);\n)?  console\.log\('total temuan',total\)/.test(audit)) salah.push("audit penuh tidak menjalankan auditZoom");
     return salah;
   };
   const auZ = readFileSync("tools/audit-kontras.js", "utf8");
@@ -5700,7 +5700,7 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
       for (const h of ["peringkat.html", "emiten.html", "radar.html", "pelajaran.html", "asisten.html"]) if (!j.includes(`'${h}`)) salah.push(`audit jarak teks tidak memeriksa ${h}`);
       if (!/scrollWidth/.test(j)) salah.push("audit jarak teks tidak memeriksa scroll horizontal");
     }
-    if (!/await auditJarak\(b\);\n(  await auditOrientasi\(b\);\n)?(  await auditSentuh\(b\);\n)?(  await auditSorot\(b\);\n)?(  await auditLabel\(b\);\n)?(  await auditStatus\(b\);\n)?(  await auditJudul\(b\);\n)?(  await auditBahasa\(b\);\n)?(  await auditUrutan\(b\);\n)?(  await auditIsian\(b\);\n)?  console\.log\('total temuan',total\)/.test(audit)) salah.push("audit penuh tidak menjalankan auditJarak");
+    if (!/await auditJarak\(b\);\n(  await auditOrientasi\(b\);\n)?(  await auditSentuh\(b\);\n)?(  await auditSorot\(b\);\n)?(  await auditLabel\(b\);\n)?(  await auditStatus\(b\);\n)?(  await auditJudul\(b\);\n)?(  await auditBahasa\(b\);\n)?(  await auditUrutan\(b\);\n)?(  await auditIsian\(b\);\n)?(  await auditNonteks\(b\);\n)?  console\.log\('total temuan',total\)/.test(audit)) salah.push("audit penuh tidak menjalankan auditJarak");
     const hp = /@media \(max-width: 600px\) \{([\s\S]*?)\n\}/.exec(css);
     if (hp && /\.nav \{[^}]*flex-wrap: nowrap/.test(hp[1])) salah.push("menu atas HP memakai flex-wrap: nowrap (meluber bila jarak huruf diperlebar)");
     return salah;
@@ -5730,7 +5730,7 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
       for (const h of ["peringkat.html", "emiten.html", "radar.html", "pelajaran.html", "asisten.html"]) if (!j.includes(`'${h}`)) salah.push(`audit orientasi tidak memeriksa ${h}`);
       if (!/scrollWidth/.test(j)) salah.push("audit orientasi tidak memeriksa scroll horizontal");
     }
-    if (!/await auditOrientasi\(b\);\n(  await auditSentuh\(b\);\n)?(  await auditSorot\(b\);\n)?(  await auditLabel\(b\);\n)?(  await auditStatus\(b\);\n)?(  await auditJudul\(b\);\n)?(  await auditBahasa\(b\);\n)?(  await auditUrutan\(b\);\n)?(  await auditIsian\(b\);\n)?  console\.log\('total temuan',total\)/.test(audit)) salah.push("audit penuh tidak menjalankan auditOrientasi");
+    if (!/await auditOrientasi\(b\);\n(  await auditSentuh\(b\);\n)?(  await auditSorot\(b\);\n)?(  await auditLabel\(b\);\n)?(  await auditStatus\(b\);\n)?(  await auditJudul\(b\);\n)?(  await auditBahasa\(b\);\n)?(  await auditUrutan\(b\);\n)?(  await auditIsian\(b\);\n)?(  await auditNonteks\(b\);\n)?  console\.log\('total temuan',total\)/.test(audit)) salah.push("audit penuh tidak menjalankan auditOrientasi");
     for (const [f, t] of sumber) if (/orientation\s*\.\s*lock\s*\(|"orientation"\s*:/.test(t)) salah.push(`${f} mengunci orientasi layar`);
     return salah;
   };
@@ -5760,7 +5760,7 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
       if (!j.includes("'UJI-SENTUH'")) salah.push("uji balik UJI-SENTUH tidak ada di audit sentuh");
       for (const h of ["peringkat.html", "emiten.html", "radar.html", "pelajaran.html", "asisten.html", "index.html"]) if (!j.includes(`'${h}`)) salah.push(`audit sentuh tidak memeriksa ${h}`);
     }
-    if (!/await auditSentuh\(b\);\n(  await auditSorot\(b\);\n)?(  await auditLabel\(b\);\n)?(  await auditStatus\(b\);\n)?(  await auditJudul\(b\);\n)?(  await auditBahasa\(b\);\n)?(  await auditUrutan\(b\);\n)?(  await auditIsian\(b\);\n)?  console\.log\('total temuan',total\)/.test(audit)) salah.push("audit penuh tidak menjalankan auditSentuh");
+    if (!/await auditSentuh\(b\);\n(  await auditSorot\(b\);\n)?(  await auditLabel\(b\);\n)?(  await auditStatus\(b\);\n)?(  await auditJudul\(b\);\n)?(  await auditBahasa\(b\);\n)?(  await auditUrutan\(b\);\n)?(  await auditIsian\(b\);\n)?(  await auditNonteks\(b\);\n)?  console\.log\('total temuan',total\)/.test(audit)) salah.push("audit penuh tidak menjalankan auditSentuh");
     if (!/\.baris-istilah button\.istilah \{[^}]*padding: 2px 0/.test(css)) salah.push("tombol di deretan istilah tanpa padding 2px (tinggi < 24px)");
     if (!/\.kotak-istilah a \{[^}]*padding: 2px 0/.test(css)) salah.push("tautan di kotak istilah tanpa padding 2px (tinggi < 24px)");
     return salah;
@@ -5795,7 +5795,7 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
       for (const u of ["'UJI-SOROT'", "'UJI-HILANG'"]) if (!j.includes(u)) salah.push(`uji balik ${u.replaceAll("'", "")} tidak ada di audit sorot`);
       for (const h of ["peringkat.html", "emiten.html", "radar.html", "pelajaran.html", "asisten.html", "index.html", "kabar.html", "belajar.html", "metodologi.html", "404.html"]) if (!j.includes(`'${h}`)) salah.push(`audit sorot tidak memeriksa ${h}`);
     }
-    if (!/await auditSorot\(b\);\n(  await auditLabel\(b\);\n)?(  await auditStatus\(b\);\n)?(  await auditJudul\(b\);\n)?(  await auditBahasa\(b\);\n)?(  await auditUrutan\(b\);\n)?(  await auditIsian\(b\);\n)?  console\.log\('total temuan',total\)/.test(audit)) salah.push("audit penuh tidak menjalankan auditSorot");
+    if (!/await auditSorot\(b\);\n(  await auditLabel\(b\);\n)?(  await auditStatus\(b\);\n)?(  await auditJudul\(b\);\n)?(  await auditBahasa\(b\);\n)?(  await auditUrutan\(b\);\n)?(  await auditIsian\(b\);\n)?(  await auditNonteks\(b\);\n)?  console\.log\('total temuan',total\)/.test(audit)) salah.push("audit penuh tidak menjalankan auditSorot");
     if (!/a\.addEventListener\("keydown", function \(ev\) \{ if \(ev\.key === "Escape"\) a\.classList\.add\("lompat-tutup"\); \}\);/.test(js)) salah.push("tautan Langsung ke isi tidak bisa disembunyikan dengan Escape");
     if (!/\.lompat\.lompat-tutup:focus \{ left: -999px; \}/.test(css)) salah.push("gaya .lompat-tutup tidak ada");
     return salah;
@@ -5826,7 +5826,7 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
       if (!j.includes("'UJI-LABEL'")) salah.push("uji balik UJI-LABEL tidak ada di audit label");
       for (const h of ["peringkat.html", "emiten.html", "radar.html", "pelajaran.html", "asisten.html", "index.html", "kabar.html", "belajar.html", "metodologi.html", "404.html"]) if (!j.includes(`'${h}`)) salah.push(`audit label tidak memeriksa ${h}`);
     }
-    if (!/await auditLabel\(b\);\n(  await auditStatus\(b\);\n)?(  await auditJudul\(b\);\n)?(  await auditBahasa\(b\);\n)?(  await auditUrutan\(b\);\n)?(  await auditIsian\(b\);\n)?  console\.log\('total temuan',total\)/.test(audit)) salah.push("audit penuh tidak menjalankan auditLabel");
+    if (!/await auditLabel\(b\);\n(  await auditStatus\(b\);\n)?(  await auditJudul\(b\);\n)?(  await auditBahasa\(b\);\n)?(  await auditUrutan\(b\);\n)?(  await auditIsian\(b\);\n)?(  await auditNonteks\(b\);\n)?  console\.log\('total temuan',total\)/.test(audit)) salah.push("audit penuh tidak menjalankan auditLabel");
     // Statis app.js: el("a"/"button", { … text: "X", … "aria-label": "Y" … }) → Y wajib memuat X.
     for (const m of js.matchAll(/el\("(?:a|button)", \{([^{}]*)\}/g)) {
       const t = /text: "([^"]+)"/.exec(m[1]), l = /"aria-label": "([^"]+)"/.exec(m[1]);
@@ -5897,7 +5897,7 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
     const s = [];
     if (!/async function auditStatus\(b\)/.test(a)) s.push("auditStatus tidak ada");
     if (!/process\.env\.AUDIT==='status'\) \{ await auditStatus\(b\)/.test(a)) s.push("mode AUDIT=status tidak ada");
-    if (!/await auditStatus\(b\);\n(  await auditJudul\(b\);\n)?(  await auditBahasa\(b\);\n)?(  await auditUrutan\(b\);\n)?(  await auditIsian\(b\);\n)?  console\.log\('total temuan',total\)/.test(a)) s.push("audit penuh tidak menjalankan auditStatus");
+    if (!/await auditStatus\(b\);\n(  await auditJudul\(b\);\n)?(  await auditBahasa\(b\);\n)?(  await auditUrutan\(b\);\n)?(  await auditIsian\(b\);\n)?(  await auditNonteks\(b\);\n)?  console\.log\('total temuan',total\)/.test(a)) s.push("audit penuh tidak menjalankan auditStatus");
     if (!/UJI-STATUS/.test(a) || !/dataset\.auditSiap/.test(a)) s.push("uji balik UJI-STATUS / penanda wilayah siap tidak ada");
     return s;
   };
@@ -5935,7 +5935,7 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
   for (const [p, pesan] of rusakJ) ok(cekJudul(p).some((x) => x.includes(pesan)), `uji balik Judul halaman: "${pesan}" harus tertangkap`);
   const audJ = readFileSync("tools/audit-kontras.js", "utf8");
   ok(/async function auditJudul\(b\)/.test(audJ) && /process\.env\.AUDIT==='judul'\) \{ await auditJudul\(b\)/.test(audJ) &&
-     /await auditJudul\(b\);\n(  await auditBahasa\(b\);\n)?(  await auditUrutan\(b\);\n)?(  await auditIsian\(b\);\n)?  console\.log\('total temuan',total\)/.test(audJ) && /UJI-JUDUL/.test(audJ) && /UJI-TITLE/.test(audJ),
+     /await auditJudul\(b\);\n(  await auditBahasa\(b\);\n)?(  await auditUrutan\(b\);\n)?(  await auditIsian\(b\);\n)?(  await auditNonteks\(b\);\n)?  console\.log\('total temuan',total\)/.test(audJ) && /UJI-JUDUL/.test(audJ) && /UJI-TITLE/.test(audJ),
      "Audit judul: auditJudul, mode AUDIT=judul, ikut audit penuh, dan uji balik UJI-JUDUL/UJI-TITLE wajib ada");
   ok(/document\.title = "Kode " \+ kode\.slice\(0, 8\) \+ " tidak ditemukan/.test(readFileSync("assets/app.js", "utf8")), "Profil emiten: judul tab menyebut kode yang tidak ditemukan");
 }
@@ -5958,7 +5958,7 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
     if (!kApp || !kAud || JSON.stringify(kApp) !== JSON.stringify(kAud)) s.push("daftar istilah Inggris di app.js dan audit tidak sama");
     else if (!kApp.includes("buyback")) s.push("daftar istilah Inggris tidak memuat buyback");
     if (!/async function auditBahasa\(b\)/.test(aud) || !/process\.env\.AUDIT==='bahasa'\) \{ await auditBahasa\(b\)/.test(aud) ||
-        !/await auditBahasa\(b\);\n(  await auditUrutan\(b\);\n)?(  await auditIsian\(b\);\n)?  console\.log\('total temuan',total\)/.test(aud) || !/UJI-LANG/.test(aud) || !/UJI-EN/.test(aud))
+        !/await auditBahasa\(b\);\n(  await auditUrutan\(b\);\n)?(  await auditIsian\(b\);\n)?(  await auditNonteks\(b\);\n)?  console\.log\('total temuan',total\)/.test(aud) || !/UJI-LANG/.test(aud) || !/UJI-EN/.test(aud))
       s.push("audit: auditBahasa, mode AUDIT=bahasa, ikut audit penuh, dan uji balik UJI-LANG/UJI-EN wajib ada");
     return s;
   };
@@ -5983,7 +5983,7 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
     const s = [];
     if (!/async function auditIsian\(b\)/.test(aud)) s.push("auditIsian tidak ada");
     if (!/process\.env\.AUDIT==='isian'\) \{ await auditIsian\(b\)/.test(aud)) s.push("mode AUDIT=isian tidak ada");
-    if (!/await auditIsian\(b\);\n  console\.log\('total temuan',total\)/.test(aud)) s.push("audit penuh tidak menjalankan auditIsian");
+    if (!/await auditIsian\(b\);\n(  await auditNonteks\(b\);\n)?  console\.log\('total temuan',total\)/.test(aud)) s.push("audit penuh tidak menjalankan auditIsian");
     if (!/UJI-ISIAN/.test(aud)) s.push("uji balik UJI-ISIAN tidak ada");
     for (const k of ["kuis kosong", "Asisten kosong", "Radar kode tak dikenal", "Bandingkan kode tak dikenal", "Radar kode dikenal"])
       if (!aud.includes("'" + k + "'")) s.push(`keadaan "${k}" tidak diaudit`);
@@ -5993,12 +5993,65 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
   const sI = cekIsian(audI);
   ok(sI.length === 0, `Audit isian WCAG 3.3.1/3.3.2: ${sI.join("; ")}`);
   const rusakI = [
-    [audI.replace("  await auditIsian(b);\n  console.log('total temuan',total)", "  console.log('total temuan',total)"), "audit penuh tidak menjalankan auditIsian"],
+    [audI.replace("  await auditIsian(b);\n", ""), "audit penuh tidak menjalankan auditIsian"],
     [audI.replace("process.env.AUDIT==='isian'", "process.env.AUDIT==='isi'"), "mode AUDIT=isian"],
     [audI.split("UJI-ISIAN").join("UJI-X"), "UJI-ISIAN"],
     [audI.replace("'Radar kode dikenal'", "'Radar'"), "Radar kode dikenal"],
   ];
   for (const [a, pesan] of rusakI) ok(a !== audI && cekIsian(a).some((x) => x.includes(pesan)), `uji balik Audit isian: "${pesan}" harus tertangkap`);
+}
+
+// Dewi & Nina (18 Nov 10.xx): kontras non-teks (WCAG 1.4.11). (a) Token --garis-kontrol (terang & gelap) ≥3:1 terhadap
+// --kertas dan --putih; kotak isian, tab, chip, dan kotak alamat salin memakai var(--garis-kontrol); garis .tombol-garis ≥3:1
+// terhadap --malam; lampu panduan Radar (--turun, --waspada, --aksen, --naik) ≥3:1 terhadap --putih dan isi batang ≥3:1 terhadap
+// jalurnya (--garis). (b) Audit AUDIT=nonteks di tools/audit-kontras.js wajib ada, ikut audit penuh, dan memuat uji balik
+// UJI-PUDAR & UJI-LAMPU. Disertai uji balik.
+{
+  const cekNonteks = (css, aud) => {
+    const s = [];
+    const blokVar = (teks) => { const v = {}; for (const m of teks.matchAll(/--([\w-]+):\s*([^;]+);/g)) v[m[1]] = m[2].trim(); return v; };
+    const akar = /:root\s*\{([^}]*)\}/.exec(css), gelapM = /@media \(prefers-color-scheme: dark\)\s*\{\s*:root\s*\{([^}]*)\}/.exec(css);
+    if (!akar || !gelapM) return ["blok :root atau mode gelap tidak ditemukan"];
+    const terang = blokVar(akar[1]), gelap = { ...terang, ...blokVar(gelapM[1]) };
+    const hex = (v, n) => { let x = v[n]; for (let i = 0; i < 5 && x && x.startsWith("var("); i++) x = v[x.slice(6, -1)]; return /^#[0-9a-f]{6}$/i.test(x || "") ? x : null; };
+    const lum = (h) => { const c = [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16) / 255).map((u) => (u <= 0.03928 ? u / 12.92 : ((u + 0.055) / 1.055) ** 2.4)); return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]; };
+    const rasio = (a, b) => { const x = lum(a), y = lum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); };
+    if (!/--garis-kontrol:/.test(gelapM[1])) s.push("--garis-kontrol mode gelap tidak ada");
+    for (const [mode, v] of [["terang", terang], ["gelap", gelap]]) {
+      const g = hex(v, "garis-kontrol"); if (!g) { s.push(`--garis-kontrol (${mode}) tidak terbaca`); continue; }
+      for (const l of ["kertas", "putih"]) { const h = hex(v, l); if (h && rasio(g, h) < 3) s.push(`--garis-kontrol terhadap --${l} (${mode}) hanya ${rasio(g, h).toFixed(2)}:1`); }
+      for (const w of ["turun", "waspada", "aksen", "naik"]) { const c = hex(v, w), p = hex(v, "putih"), j = hex(v, "garis");
+        if (c && p && rasio(c, p) < 3) s.push(`lampu --${w} terhadap --putih (${mode}) hanya ${rasio(c, p).toFixed(2)}:1`);
+        if (w !== "aksen" && c && j && rasio(c, j) < 3) s.push(`batang --${w} terhadap jalur --garis (${mode}) hanya ${rasio(c, j).toFixed(2)}:1`); }
+      const t2 = hex(v, "tinta-2"), j = hex(v, "garis"); if (t2 && j && rasio(t2, j) < 3) s.push(`batang --tinta-2 terhadap jalur --garis (${mode}) di bawah 3:1`);
+    }
+    for (const sel of [".tab", ".saring-sektor select", ".cari-kamus input", ".radar-form select", ".chip", ".form-tanya textarea", ".kotak-ketik input", ".alamat-salin"]) {
+      const m = new RegExp("(^|\\n)" + sel.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\s*\\{([^}]*)\\}").exec(css);
+      if (!m) s.push(`aturan ${sel} tidak ditemukan`); else if (!/border:\s*\d+px solid var\(--garis-kontrol\)/.test(m[2])) s.push(`${sel} belum memakai garis tepi var(--garis-kontrol)`);
+    }
+    const tg = /\.tombol-garis\s*\{[^}]*border-color:\s*(#[0-9a-f]{6})/i.exec(css), mlm = hex(terang, "malam");
+    if (!tg) s.push(".tombol-garis tanpa border-color hex"); else if (mlm && rasio(tg[1], mlm) < 3) s.push(`garis .tombol-garis terhadap --malam hanya ${rasio(tg[1], mlm).toFixed(2)}:1`);
+    if (!/async function auditNonteks\(b\)/.test(aud)) s.push("auditNonteks tidak ada");
+    if (!/process\.env\.AUDIT==='nonteks'\) \{ await auditNonteks\(b\)/.test(aud)) s.push("mode AUDIT=nonteks tidak ada");
+    if (!/await auditNonteks\(b\);\n  console\.log\('total temuan',total\)/.test(aud)) s.push("audit penuh tidak menjalankan auditNonteks");
+    for (const u of ["UJI-PUDAR", "UJI-LAMPU"]) if (!aud.includes("'" + u + "'")) s.push(`uji balik ${u} tidak ada`);
+    return s;
+  };
+  const cssN = readFileSync("assets/styles.css", "utf8"), audN = readFileSync("tools/audit-kontras.js", "utf8");
+  const sN = cekNonteks(cssN, audN);
+  ok(sN.length === 0, `Kontras non-teks WCAG 1.4.11: ${sN.join("; ")}`);
+  const rusakN = [
+    [cssN.replace("--garis-kontrol: #80867a;", "--garis-kontrol: #dfe2d8;"), audN, "(terang)"],
+    [cssN.replace("    --garis-kontrol: #6b7290;\n", ""), audN, "gelap tidak ada"],
+    [cssN.replace(/(\.kotak-ketik input \{[^}]*?)var\(--garis-kontrol\)/, "$1var(--garis)"), audN, ".kotak-ketik input"],
+    [cssN.replace(/(\.chip \{[^}]*?)var\(--garis-kontrol\)/, "$1var(--garis)"), audN, ".chip"],
+    [cssN.replace(".tombol-garis { border-color: #7b82d6;", ".tombol-garis { border-color: #4b51a0;"), audN, ".tombol-garis"],
+    [cssN.replace("--waspada: #8f5d12;", "--waspada: #e0c080;"), audN, "--waspada"],
+    [cssN, audN.replace("  await auditNonteks(b);\n", ""), "audit penuh"],
+    [cssN, audN.replace("process.env.AUDIT==='nonteks'", "process.env.AUDIT==='non'"), "mode AUDIT=nonteks"],
+    [cssN, audN.split("'UJI-PUDAR'").join("'UJI-X'"), "UJI-PUDAR"],
+  ];
+  for (const [c, a, pesan] of rusakN) ok((c !== cssN || a !== audN) && cekNonteks(c, a).some((x) => x.includes(pesan)), `uji balik kontras non-teks: "${pesan}" harus tertangkap`);
 }
 
 // Dewi & Nina (18 Nov 09.xx): urutan fokus (WCAG 2.4.3). (a) Tidak ada tabindex positif di 10 HTML dan di app.js
