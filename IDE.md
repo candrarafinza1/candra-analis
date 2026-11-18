@@ -659,3 +659,10 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Uji balik: UJI-ISIAN (isian aria-invalid tanpa pesan, textarea maxlength tanpa petunjuk, pesan salah tak terhubung) tertangkap 4/4. Nina: cek DOM tiruan (Asisten, kuis, kotak ketik) + uji balik di `tests/cek.mjs`.
 - Temuan sampingan audit fokus: garis fokus tautan "Langsung ke isi" di 404 (mode terang) kuning di atas latar terang 1,55:1 → kini memakai warna teks halaman.
 - Berikutnya: urutan fokus (WCAG 2.4.3).
+
+### Audit urutan fokus (WCAG 2.4.3), 18 Nov 09.09 (Dewi & Nina, ditinjau Kirana)
+- Alat: `AUDIT=urutan node tools/audit-kontras.js` (ikut audit penuh). 15 keadaan: 10 halaman, kotak istilah terbuka di Peringkat, kuis sesudah Periksa (lewat Enter) dan sesudah "Ulangi soal yang salah", Radar sesudah memilih UNTR, profil ANTM sesudah memilih pembanding. Gelap/terang × 390/1280px; Tab sampai kembali ke awal.
+- Aturan: tidak ada tabindex positif; elemen yang terfokus terlihat (bukan opacity 0, bukan di luar dokumen/layar, bukan di aria-hidden/inert, bukan teks khusus pembaca layar); fokus berikutnya tidak di kiri pada baris yang sama dan tidak lebih atas kecuali pindah ke kolom kanan; Tab dari tombol istilah terbuka harus masuk ke kotak istilah.
+- Hasil: 2.192 fokus dicek, 0 temuan. Tidak ada perubahan tampilan.
+- Uji balik: UJI-POSITIF (tabindex="2" di tautan kaki), UJI-SEMBUNYI (tautan di left:-9999px & tautan opacity 0), UJI-BALIK (menu atas dibalik row-reverse) masing-masing tertangkap 4/4. Nina: cek statis tabindex positif di 10 HTML & app.js + uji balik di `tests/cek.mjs`.
+- Berikutnya: kontras non-teks (WCAG 1.4.11).

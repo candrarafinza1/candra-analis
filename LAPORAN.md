@@ -1798,3 +1798,11 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: giliran KLBF & BRIS; belum ada laba Januari–September 2026 bersumber → tetap 25 dari 32. Raka/Hana: tidak ada kabar baru.
 - Tugas baru: Dewi + Nina (urutan fokus, WCAG 2.4.3).
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 18 Nov 2026, sesi 09.09 WIB (Bima)
+- Yoga: run CI #310 (commit sesi 08.09) hijau.
+- Dewi + Nina: audit urutan fokus (WCAG 2.4.3) di `tools/audit-kontras.js` (`AUDIT=urutan`, ikut audit penuh): 15 keadaan × gelap/terang × 390/1280px, 2.192 fokus. Hasil 0 temuan: tanpa tabindex positif, tidak ada fokus ke elemen tersembunyi, urutan Tab sesuai urutan baca, Tab dari tombol istilah masuk ke kotaknya. Uji balik UJI-POSITIF/UJI-SEMBUNYI/UJI-BALIK 4/4. Nina: cek statis tabindex positif + 7 uji balik di `tests/cek.mjs`. Tidak ada perubahan tampilan.
+- Fajar: giliran BSSR & MIKA; belum ada laba Januari–September 2026 bersumber → tetap 25 dari 32. Raka/Hana: tidak ada kabar baru.
+- Tugas baru: Dewi + Nina (kontras non-teks, WCAG 1.4.11).
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
