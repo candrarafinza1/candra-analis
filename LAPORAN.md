@@ -1836,3 +1836,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: giliran BSSR & MIKA; belum ada laba Januari–September 2026 bersumber (teratas MIKA semester I 2026 Rp684 M) → tetap 25 dari 32. Raka/Hana: tidak ada kabar baru.
 - Tugas baru: Dewi + Nina (pembatalan penunjuk, WCAG 2.5.2).
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 18 Nov 2026, sesi 16.09 WIB (Bima)
+- Yoga: run CI #316 (commit sesi 15.09) hijau.
+- Dewi + Nina: audit pembatalan penunjuk (WCAG 2.5.2) di `tools/audit-kontras.js` (`AUDIT=penunjuk`, ikut audit penuh): 13 keadaan × gelap/terang × 390/1280px; 2.460 elemen ditekan tiruan tanpa dilepas + 248 tekan-geser-batal sungguhan (tombol istilah, tab, kuis, Periksa, Salin tautan, menu, logo, chip Asisten). Hasil 0 temuan, tidak ada pendengar mousedown/pointerdown/touchstart; tidak ada perubahan tampilan. Uji balik UJI-TEKAN 4/4. Nina: cek statis app.js & 10 HTML + 9 uji balik di `tests/cek.mjs`; pola "audit penuh" di cek lama ikut menerima auditPenunjuk. Kirana: tinjau catatan IDE.md (tanpa tangkapan baru karena tampilan tidak berubah).
+- Fajar: giliran KLBF & BRIS; belum ada laba Januari–September 2026 bersumber (BRIS baru Januari–Agustus 2026, bank saja) → tetap 25 dari 32. Raka/Hana: tidak ada kabar baru.
+- Tugas baru: Dewi + Nina (gerakan penunjuk & gerakan perangkat, WCAG 2.5.1/2.5.4).
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

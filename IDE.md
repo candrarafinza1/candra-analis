@@ -704,3 +704,11 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Catatan: daftar pilihan emiten di Radar ("Atau pilih saham yang Anda pegang") dan Bandingkan ("Bandingkan ANTM dengan") berlabel beda karena fungsinya beda (memeriksa vs membandingkan); itu sesuai 3.2.4.
 - Uji balik: UJI-MENU (menu "Radar Risiko" di Kabar diganti "Cek Risiko") dan UJI-KAKI (kaki Metodologi di Belajar diganti "Metodologi") masing-masing 4/4. Nina: cek statis menu/kaki/lompat/logo di 10 HTML, label kotak ketik tunggal, mode audit + 10 uji balik di `tests/cek.mjs`.
 - Berikutnya: pembatalan penunjuk (WCAG 2.5.2).
+
+### Audit pembatalan penunjuk (WCAG 2.5.2), 18 Nov 16.xx (Dewi & Nina; Kirana meninjau)
+- Alat: `tools/audit-kontras.js` (`AUDIT=penunjuk`, ikut audit penuh). 13 keadaan (10 halaman + kotak istilah terbuka di Peringkat + Radar UNTR) × gelap/terang × 390/1280px (390px dengan layar sentuh).
+- Tiga cara: (1) skrip pemantau dipasang sebelum app.js untuk mencatat pendengar `mousedown`/`pointerdown`/`touchstart` dan properti `on…`; (2) 2.460 elemen yang bisa ditekan dikirimi tekan tiruan tanpa lepas: DOM, alamat, gulir, centang tidak boleh berubah; (3) 248 kali tekan sungguhan lalu geser keluar dan lepas di area kosong pada tombol istilah, tab Peringkat, pilihan kuis, Periksa, Salin tautan, menu, logo, chip Asisten, kaki, tombol di isi.
+- Hasil: 0 temuan. Semua aksi memakai `click` (jalan saat dilepas) atau papan ketik. Tidak ada perubahan tampilan.
+- Catatan: kotak istilah yang sedang terbuka tertutup bila penunjuk dilepas di luar kotak; ini terjadi saat dilepas (klik di luar), bukan saat ditekan, jadi sesuai 2.5.2. Klik Playwright sendiri memasang pendengar sementara di `window`; pendengar dicatat sebelum keadaan dibuat agar tidak jadi temuan palsu.
+- Uji balik: UJI-TEKAN (tab Peringkat kedua dipasangi `pointerdown` yang langsung memilih tab) 4/4. Nina: cek statis app.js & 10 HTML (tanpa pendengar/atribut turun), mode audit + 9 uji balik di `tests/cek.mjs`.
+- Berikutnya: gerakan penunjuk (WCAG 2.5.1) dan aktivasi lewat gerakan perangkat (2.5.4).
