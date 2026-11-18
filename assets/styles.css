@@ -189,10 +189,13 @@ p { margin: 0 0 1em; }
   .bulan-grup { animation: terbit 1.8s cubic-bezier(.2,.7,.2,1) both; }
   .lilin rect { animation: tumbuh .7s cubic-bezier(.3,.8,.3,1) both; }
   .lilin .sumbu { animation: muncul .5s ease both; }
-  .bintang circle { animation: kedip 4s ease-in-out infinite alternate; }
-  .bintang circle:nth-child(2n) { animation-delay: 1.3s; }
-  .bintang circle:nth-child(3n) { animation-delay: 2.1s; }
+  /* Dewi & Nina (18 Nov 19.xx, WCAG 2.2.2): bintang dulu berkedip tanpa henti. Kini dua kali kedip lalu diam
+     di terang semula (.55); selesai paling lambat 4 detik setelah halaman dibuka, jadi tidak perlu tombol jeda. */
+  .bintang circle { animation: kedip-bintang 1.6s ease-in-out 2; }
+  .bintang circle:nth-child(2n) { animation-delay: .4s; }
+  .bintang circle:nth-child(3n) { animation-delay: .8s; }
 }
+@keyframes kedip-bintang { 0%, 100% { opacity: .55; } 50% { opacity: .2; } }
 @keyframes terbit { from { transform: translateY(140px); opacity: 0; } to { transform: none; opacity: 1; } }
 @keyframes tumbuh { from { transform: scaleY(0); } to { transform: scaleY(1); } }
 @keyframes muncul { from { opacity: 0; } to { opacity: 1; } }
@@ -466,7 +469,9 @@ tbody tr:hover { background: var(--hover-baris); }
 .pesan-galat { color: var(--turun); }
 .mengetik { color: var(--tinta-2); }
 @media (prefers-reduced-motion: no-preference) {
-  .mengetik::after { content: "…"; animation: kedip 1s ease-in-out infinite alternate; }
+  /* WCAG 2.2.2: penanda "sedang mengetik" berkedip 4 kali (4 detik) lalu diam; titik-titik tetap terlihat. */
+  .mengetik::after { content: "…"; animation: kedip-titik 1s ease-in-out 4; }
+  @keyframes kedip-titik { 0%, 100% { opacity: 1; } 50% { opacity: .3; } }
   .pesan { animation: muncul .3s ease both; }
 }
 .label-tanya { display: block; font-weight: 700; margin: 0 0 8px; }

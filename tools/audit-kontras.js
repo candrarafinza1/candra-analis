@@ -1323,6 +1323,63 @@ async function auditGerak(b) {
 // (2) tidak ada teks terpotong wadah ber-overflow hidden/clip, (3) tidak ada baris teks yang tumpang tindih,
 // (4) tanpa scroll horizontal, (5) tanpa galat JS. Uji balik: UJI-PX (tinggi tetap 40px + overflow hidden pada h1)
 // wajib tertangkap sebagai terpotong; UJI-TETAP (body font-size 17px) wajib tertangkap sebagai teks tidak membesar.
+// Dewi & Nina (18 Nov 19.xx): audit jeda, hentikan, sembunyikan (WCAG 2.2.2).
+// Gerak/kedip yang mulai sendiri tidak boleh berjalan lebih dari 5 detik tanpa tombol jeda,
+// dan semua animasi wajib mati saat prefers-reduced-motion: reduce.
+// (1) gerak bebas: 5,2 detik setelah halaman/keadaan dibuat, document.getAnimations() tidak boleh ada yang masih berjalan;
+//     juga dicek waktu selesai tiap animasi (getComputedTiming().endTime) ≤ 5000 ms, jadi animasi tak berujung tertangkap walau sedang jeda.
+// (2) gerak dikurangi: tidak ada animasi sama sekali (berjalan/menunggu) sesudah halaman/keadaan dibuat.
+// Uji balik UJI-ANIMASI: animasi tak berujung disisipkan di judul → wajib tertangkap di kedua mode.
+// AUDIT=animasi node tools/audit-kontras.js
+async function auditAnimasi(b) {
+  const KEADAAN=[
+    ['index.html'],['peringkat.html'],['radar.html'],['emiten.html?kode=ANTM'],['kabar.html'],['belajar.html'],
+    ['pelajaran.html?m=apa-itu-saham'],['metodologi.html'],['asisten.html'],['404.html'],
+    ['peringkat.html','istilah',async p=>{ const t=await p.$('button.istilah'); if(!t) return 'button.istilah tidak ada'; await t.click(); }],
+    ['radar.html','UNTR',async p=>{ await p.selectOption('#pilih-saham','UNTR'); }],
+    // penanda "sedang menyusun jawaban" Asisten AI (situs tim belum bisa memanggil /api/tanya, jadi pesannya disisipkan)
+    ['asisten.html','mengetik',async p=>{ await p.evaluate(()=>{ const x=document.createElement('p'); x.className='mengetik'; x.textContent='Sedang menyusun jawaban'; (document.querySelector('main')||document.body).appendChild(x); }); }],
+    ['index.html','UJI-ANIMASI',async p=>{ await p.addStyleTag({content:'h1{animation:uji-kedip 1s linear infinite alternate!important}@keyframes uji-kedip{from{opacity:1}to{opacity:.6}}'}); }],
+  ];
+  let total=0, ujiTangkap=0, ujiJumlah=0, dicek=0;
+  for (const gerak of ['no-preference','reduce']) for (const scheme of ['dark','light']) for (const w of [390,1280]) for (const [pg,ket,aksi] of KEADAAN) {
+    const isUji=ket==='UJI-ANIMASI'; const tag=`animasi ${gerak} ${scheme} ${w} ${pg}${ket?' ('+ket+')':''}`;
+    const ctx=await b.newContext({ viewport:{width:w,height:844}, colorScheme:scheme, deviceScaleFactor:1, reducedMotion:gerak });
+    const p=await ctx.newPage(); const errs=[]; p.on('pageerror',e=>errs.push(e.message));
+    await p.goto('http://localhost:8765/'+pg); await p.waitForTimeout(150);
+    const temuan=[];
+    if (aksi) { const r=await aksi(p); if (r) temuan.push('keadaan gagal dibuat: '+r); }
+    const nama=a=>{ const t=a.effect&&a.effect.target; const e=t? (t.tagName||'?').toLowerCase()+(t.id?'#'+t.id:'')+(typeof t.className==='string'&&t.className?'.'+t.className.trim().split(/\s+/)[0]:'') + (a.effect.pseudoElement||'') : '?';
+      return (a.animationName||a.transitionProperty||a.constructor.name)+' pada '+e; };
+    if (gerak==='reduce') {
+      const ada=await p.evaluate(()=>document.getAnimations().filter(a=>a.playState==='running'||a.pending).map(a=>{ const t=a.effect&&a.effect.target;
+        return (a.animationName||a.transitionProperty||a.constructor.name)+' pada '+(t?(t.tagName||'?').toLowerCase()+(t.id?'#'+t.id:'')+(typeof t.className==='string'&&t.className?'.'+t.className.trim().split(/\s+/)[0]:'')+(a.effect.pseudoElement||''):'?'); }));
+      [...new Set(ada)].forEach(x=>temuan.push('animasi tetap jalan saat gerak dikurangi: '+x));
+    } else {
+      // waktu selesai tiap animasi, diukur dari awal waktu dokumen
+      const lama=await p.evaluate(()=>document.getAnimations().map(a=>{ const t=a.effect&&a.effect.target; const ct=a.effect?a.effect.getComputedTiming():{endTime:0};
+        const mulai=(a.startTime??document.timeline.currentTime)||0;
+        return {n:(a.animationName||a.transitionProperty||a.constructor.name)+' pada '+(t?(t.tagName||'?').toLowerCase()+(t.id?'#'+t.id:'')+(typeof t.className==='string'&&t.className?'.'+t.className.trim().split(/\s+/)[0]:'')+(a.effect.pseudoElement||''):'?'),
+          selesai: ct.endTime===Infinity?Infinity: mulai+ct.endTime/(a.playbackRate||1)}; }));
+      const aksiMs=await p.evaluate(()=>document.timeline.currentTime);
+      // batas 5 detik dihitung sejak gerak mulai: sejak halaman dimuat, atau sejak keadaan (klik) dibuat
+      const pangkal = aksi ? aksiMs : 0;
+      [...new Map(lama.filter(x=>x.selesai===Infinity||x.selesai-pangkal>5000).map(x=>[x.n,x])).values()]
+        .forEach(x=>temuan.push('animasi lebih dari 5 detik tanpa jeda: '+x.n+' ('+(x.selesai===Infinity?'tak berujung':Math.round(x.selesai-pangkal)+' ms')+')'));
+      await p.waitForTimeout(5200);
+      const masih=await p.evaluate(()=>document.getAnimations().filter(a=>a.playState==='running').length);
+      if (masih && !temuan.length) temuan.push(masih+' animasi masih berjalan 5,2 detik setelah dimuat');
+    }
+    if (errs.length) temuan.push('galat JS: '+errs.join(' | '));
+    dicek++;
+    console.log(tag, temuan.length?'TEMUAN '+temuan.join('; '):'lolos');
+    if (isUji) { ujiJumlah++; if (temuan.length) ujiTangkap++; } else total+=temuan.length;
+    await ctx.close();
+  }
+  console.log('total temuan animasi',total,'dari',dicek,'keadaan×mode (uji balik UJI-ANIMASI tertangkap:',ujiTangkap+'/'+ujiJumlah+')');
+  return total;
+}
+
 async function auditTeks(b) {
   const halaman=['index.html','peringkat.html','peringkat.html#istilah','radar.html#UNTR','emiten.html?kode=ANTM','kabar.html','belajar.html',
     'pelajaran.html?m=apa-itu-saham#benar','metodologi.html','asisten.html','asisten.html#jawab','404.html','UJI-PX','UJI-TETAP'];
@@ -1430,6 +1487,8 @@ const halamanFokus = ['index.html','peringkat.html','peringkat.html#istilah','ra
   if (process.env.AUDIT==='gerak') { await auditGerak(b); await b.close(); return; }
   // AUDIT=teks node tools/audit-kontras.js → hanya ubah ukuran teks 200% (WCAG 1.4.4)
   if (process.env.AUDIT==='teks') { await auditTeks(b); await b.close(); return; }
+  // AUDIT=animasi node tools/audit-kontras.js → hanya jeda, hentikan, sembunyikan (WCAG 2.2.2)
+  if (process.env.AUDIT==='animasi') { await auditAnimasi(b); await b.close(); return; }
   let total = 0;
   // AUDIT=fokus node tools/audit-kontras.js → hanya cek garis fokus (lebih cepat)
   if (process.env.AUDIT!=='fokus') for (const scheme of ['dark','light']) for (const w of [390,1280]) {
@@ -1625,5 +1684,6 @@ const halamanFokus = ['index.html','peringkat.html','peringkat.html#istilah','ra
   await auditKonsisten(b);
   await auditPenunjuk(b);
   await auditGerak(b);
+  await auditAnimasi(b);
   console.log('total temuan',total); await b.close();
 })();

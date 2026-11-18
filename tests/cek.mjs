@@ -5668,7 +5668,7 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
     for (const u of ["UJI-LEBAR", "UJI-TUTUP", "UJI-KETIK"]) if (!z.includes(`'${u}'`)) salah.push(`uji balik ${u} tidak ada di audit zoom`);
     if (!/await tabTutup\(p\)/.test(z)) salah.push("audit zoom tidak memakai langkah Tab bersama (tabTutup)");
     if (!/scrollWidth/.test(z)) salah.push("audit zoom tidak memeriksa scroll horizontal");
-    if (!/await auditZoom\(b\);\n(  await auditJarak\(b\);\n)?(  await auditOrientasi\(b\);\n)?(  await auditSentuh\(b\);\n)?(  await auditSorot\(b\);\n)?(  await auditLabel\(b\);\n)?(  await auditStatus\(b\);\n)?(  await auditJudul\(b\);\n)?(  await auditBahasa\(b\);\n)?(  await auditUrutan\(b\);\n)?(  await auditIsian\(b\);\n)?(  await auditNonteks\(b\);\n)?(  await auditWarna\(b\);\n)?(  await auditTautan\(b\);\n)?(  await auditKonsisten\(b\);\n)?(  await auditPenunjuk\(b\);\n)?(  await auditGerak\(b\);\n)?  console\.log\('total temuan',total\)/.test(audit)) salah.push("audit penuh tidak menjalankan auditZoom");
+    if (!/await auditZoom\(b\);\n(  await auditJarak\(b\);\n)?(  await auditOrientasi\(b\);\n)?(  await auditSentuh\(b\);\n)?(  await auditSorot\(b\);\n)?(  await auditLabel\(b\);\n)?(  await auditStatus\(b\);\n)?(  await auditJudul\(b\);\n)?(  await auditBahasa\(b\);\n)?(  await auditUrutan\(b\);\n)?(  await auditIsian\(b\);\n)?(  await auditNonteks\(b\);\n)?(  await auditWarna\(b\);\n)?(  await auditTautan\(b\);\n)?(  await auditKonsisten\(b\);\n)?(  await auditPenunjuk\(b\);\n)?(  await auditGerak\(b\);\n)?(  await auditAnimasi\(b\);\n)?  console\.log\('total temuan',total\)/.test(audit)) salah.push("audit penuh tidak menjalankan auditZoom");
     return salah;
   };
   const auZ = readFileSync("tools/audit-kontras.js", "utf8");
@@ -5700,7 +5700,7 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
       for (const h of ["peringkat.html", "emiten.html", "radar.html", "pelajaran.html", "asisten.html"]) if (!j.includes(`'${h}`)) salah.push(`audit jarak teks tidak memeriksa ${h}`);
       if (!/scrollWidth/.test(j)) salah.push("audit jarak teks tidak memeriksa scroll horizontal");
     }
-    if (!/await auditJarak\(b\);\n(  await auditOrientasi\(b\);\n)?(  await auditSentuh\(b\);\n)?(  await auditSorot\(b\);\n)?(  await auditLabel\(b\);\n)?(  await auditStatus\(b\);\n)?(  await auditJudul\(b\);\n)?(  await auditBahasa\(b\);\n)?(  await auditUrutan\(b\);\n)?(  await auditIsian\(b\);\n)?(  await auditNonteks\(b\);\n)?(  await auditWarna\(b\);\n)?(  await auditTautan\(b\);\n)?(  await auditKonsisten\(b\);\n)?(  await auditPenunjuk\(b\);\n)?(  await auditGerak\(b\);\n)?  console\.log\('total temuan',total\)/.test(audit)) salah.push("audit penuh tidak menjalankan auditJarak");
+    if (!/await auditJarak\(b\);\n(  await auditOrientasi\(b\);\n)?(  await auditSentuh\(b\);\n)?(  await auditSorot\(b\);\n)?(  await auditLabel\(b\);\n)?(  await auditStatus\(b\);\n)?(  await auditJudul\(b\);\n)?(  await auditBahasa\(b\);\n)?(  await auditUrutan\(b\);\n)?(  await auditIsian\(b\);\n)?(  await auditNonteks\(b\);\n)?(  await auditWarna\(b\);\n)?(  await auditTautan\(b\);\n)?(  await auditKonsisten\(b\);\n)?(  await auditPenunjuk\(b\);\n)?(  await auditGerak\(b\);\n)?(  await auditAnimasi\(b\);\n)?  console\.log\('total temuan',total\)/.test(audit)) salah.push("audit penuh tidak menjalankan auditJarak");
     const hp = /@media \(max-width: 600px\) \{([\s\S]*?)\n\}/.exec(css);
     if (hp && /\.nav \{[^}]*flex-wrap: nowrap/.test(hp[1])) salah.push("menu atas HP memakai flex-wrap: nowrap (meluber bila jarak huruf diperlebar)");
     return salah;
@@ -5730,7 +5730,7 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
       for (const h of ["peringkat.html", "emiten.html", "radar.html", "pelajaran.html", "asisten.html"]) if (!j.includes(`'${h}`)) salah.push(`audit orientasi tidak memeriksa ${h}`);
       if (!/scrollWidth/.test(j)) salah.push("audit orientasi tidak memeriksa scroll horizontal");
     }
-    if (!/await auditOrientasi\(b\);\n(  await auditSentuh\(b\);\n)?(  await auditSorot\(b\);\n)?(  await auditLabel\(b\);\n)?(  await auditStatus\(b\);\n)?(  await auditJudul\(b\);\n)?(  await auditBahasa\(b\);\n)?(  await auditUrutan\(b\);\n)?(  await auditIsian\(b\);\n)?(  await auditNonteks\(b\);\n)?(  await auditWarna\(b\);\n)?(  await auditTautan\(b\);\n)?(  await auditKonsisten\(b\);\n)?(  await auditPenunjuk\(b\);\n)?(  await auditGerak\(b\);\n)?  console\.log\('total temuan',total\)/.test(audit)) salah.push("audit penuh tidak menjalankan auditOrientasi");
+    if (!/await auditOrientasi\(b\);\n(  await auditSentuh\(b\);\n)?(  await auditSorot\(b\);\n)?(  await auditLabel\(b\);\n)?(  await auditStatus\(b\);\n)?(  await auditJudul\(b\);\n)?(  await auditBahasa\(b\);\n)?(  await auditUrutan\(b\);\n)?(  await auditIsian\(b\);\n)?(  await auditNonteks\(b\);\n)?(  await auditWarna\(b\);\n)?(  await auditTautan\(b\);\n)?(  await auditKonsisten\(b\);\n)?(  await auditPenunjuk\(b\);\n)?(  await auditGerak\(b\);\n)?(  await auditAnimasi\(b\);\n)?  console\.log\('total temuan',total\)/.test(audit)) salah.push("audit penuh tidak menjalankan auditOrientasi");
     for (const [f, t] of sumber) if (/orientation\s*\.\s*lock\s*\(|"orientation"\s*:/.test(t)) salah.push(`${f} mengunci orientasi layar`);
     return salah;
   };
@@ -5760,7 +5760,7 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
       if (!j.includes("'UJI-SENTUH'")) salah.push("uji balik UJI-SENTUH tidak ada di audit sentuh");
       for (const h of ["peringkat.html", "emiten.html", "radar.html", "pelajaran.html", "asisten.html", "index.html"]) if (!j.includes(`'${h}`)) salah.push(`audit sentuh tidak memeriksa ${h}`);
     }
-    if (!/await auditSentuh\(b\);\n(  await auditSorot\(b\);\n)?(  await auditLabel\(b\);\n)?(  await auditStatus\(b\);\n)?(  await auditJudul\(b\);\n)?(  await auditBahasa\(b\);\n)?(  await auditUrutan\(b\);\n)?(  await auditIsian\(b\);\n)?(  await auditNonteks\(b\);\n)?(  await auditWarna\(b\);\n)?(  await auditTautan\(b\);\n)?(  await auditKonsisten\(b\);\n)?(  await auditPenunjuk\(b\);\n)?(  await auditGerak\(b\);\n)?  console\.log\('total temuan',total\)/.test(audit)) salah.push("audit penuh tidak menjalankan auditSentuh");
+    if (!/await auditSentuh\(b\);\n(  await auditSorot\(b\);\n)?(  await auditLabel\(b\);\n)?(  await auditStatus\(b\);\n)?(  await auditJudul\(b\);\n)?(  await auditBahasa\(b\);\n)?(  await auditUrutan\(b\);\n)?(  await auditIsian\(b\);\n)?(  await auditNonteks\(b\);\n)?(  await auditWarna\(b\);\n)?(  await auditTautan\(b\);\n)?(  await auditKonsisten\(b\);\n)?(  await auditPenunjuk\(b\);\n)?(  await auditGerak\(b\);\n)?(  await auditAnimasi\(b\);\n)?  console\.log\('total temuan',total\)/.test(audit)) salah.push("audit penuh tidak menjalankan auditSentuh");
     if (!/\.baris-istilah button\.istilah \{[^}]*padding: 2px 0/.test(css)) salah.push("tombol di deretan istilah tanpa padding 2px (tinggi < 24px)");
     if (!/\.kotak-istilah a \{[^}]*padding: 2px 0/.test(css)) salah.push("tautan di kotak istilah tanpa padding 2px (tinggi < 24px)");
     return salah;
@@ -5795,7 +5795,7 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
       for (const u of ["'UJI-SOROT'", "'UJI-HILANG'"]) if (!j.includes(u)) salah.push(`uji balik ${u.replaceAll("'", "")} tidak ada di audit sorot`);
       for (const h of ["peringkat.html", "emiten.html", "radar.html", "pelajaran.html", "asisten.html", "index.html", "kabar.html", "belajar.html", "metodologi.html", "404.html"]) if (!j.includes(`'${h}`)) salah.push(`audit sorot tidak memeriksa ${h}`);
     }
-    if (!/await auditSorot\(b\);\n(  await auditLabel\(b\);\n)?(  await auditStatus\(b\);\n)?(  await auditJudul\(b\);\n)?(  await auditBahasa\(b\);\n)?(  await auditUrutan\(b\);\n)?(  await auditIsian\(b\);\n)?(  await auditNonteks\(b\);\n)?(  await auditWarna\(b\);\n)?(  await auditTautan\(b\);\n)?(  await auditKonsisten\(b\);\n)?(  await auditPenunjuk\(b\);\n)?(  await auditGerak\(b\);\n)?  console\.log\('total temuan',total\)/.test(audit)) salah.push("audit penuh tidak menjalankan auditSorot");
+    if (!/await auditSorot\(b\);\n(  await auditLabel\(b\);\n)?(  await auditStatus\(b\);\n)?(  await auditJudul\(b\);\n)?(  await auditBahasa\(b\);\n)?(  await auditUrutan\(b\);\n)?(  await auditIsian\(b\);\n)?(  await auditNonteks\(b\);\n)?(  await auditWarna\(b\);\n)?(  await auditTautan\(b\);\n)?(  await auditKonsisten\(b\);\n)?(  await auditPenunjuk\(b\);\n)?(  await auditGerak\(b\);\n)?(  await auditAnimasi\(b\);\n)?  console\.log\('total temuan',total\)/.test(audit)) salah.push("audit penuh tidak menjalankan auditSorot");
     if (!/a\.addEventListener\("keydown", function \(ev\) \{ if \(ev\.key === "Escape"\) a\.classList\.add\("lompat-tutup"\); \}\);/.test(js)) salah.push("tautan Langsung ke isi tidak bisa disembunyikan dengan Escape");
     if (!/\.lompat\.lompat-tutup:focus \{ left: -999px; \}/.test(css)) salah.push("gaya .lompat-tutup tidak ada");
     return salah;
@@ -5826,7 +5826,7 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
       if (!j.includes("'UJI-LABEL'")) salah.push("uji balik UJI-LABEL tidak ada di audit label");
       for (const h of ["peringkat.html", "emiten.html", "radar.html", "pelajaran.html", "asisten.html", "index.html", "kabar.html", "belajar.html", "metodologi.html", "404.html"]) if (!j.includes(`'${h}`)) salah.push(`audit label tidak memeriksa ${h}`);
     }
-    if (!/await auditLabel\(b\);\n(  await auditStatus\(b\);\n)?(  await auditJudul\(b\);\n)?(  await auditBahasa\(b\);\n)?(  await auditUrutan\(b\);\n)?(  await auditIsian\(b\);\n)?(  await auditNonteks\(b\);\n)?(  await auditWarna\(b\);\n)?(  await auditTautan\(b\);\n)?(  await auditKonsisten\(b\);\n)?(  await auditPenunjuk\(b\);\n)?(  await auditGerak\(b\);\n)?  console\.log\('total temuan',total\)/.test(audit)) salah.push("audit penuh tidak menjalankan auditLabel");
+    if (!/await auditLabel\(b\);\n(  await auditStatus\(b\);\n)?(  await auditJudul\(b\);\n)?(  await auditBahasa\(b\);\n)?(  await auditUrutan\(b\);\n)?(  await auditIsian\(b\);\n)?(  await auditNonteks\(b\);\n)?(  await auditWarna\(b\);\n)?(  await auditTautan\(b\);\n)?(  await auditKonsisten\(b\);\n)?(  await auditPenunjuk\(b\);\n)?(  await auditGerak\(b\);\n)?(  await auditAnimasi\(b\);\n)?  console\.log\('total temuan',total\)/.test(audit)) salah.push("audit penuh tidak menjalankan auditLabel");
     // Statis app.js: el("a"/"button", { … text: "X", … "aria-label": "Y" … }) → Y wajib memuat X.
     for (const m of js.matchAll(/el\("(?:a|button)", \{([^{}]*)\}/g)) {
       const t = /text: "([^"]+)"/.exec(m[1]), l = /"aria-label": "([^"]+)"/.exec(m[1]);
@@ -5897,7 +5897,7 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
     const s = [];
     if (!/async function auditStatus\(b\)/.test(a)) s.push("auditStatus tidak ada");
     if (!/process\.env\.AUDIT==='status'\) \{ await auditStatus\(b\)/.test(a)) s.push("mode AUDIT=status tidak ada");
-    if (!/await auditStatus\(b\);\n(  await auditJudul\(b\);\n)?(  await auditBahasa\(b\);\n)?(  await auditUrutan\(b\);\n)?(  await auditIsian\(b\);\n)?(  await auditNonteks\(b\);\n)?(  await auditWarna\(b\);\n)?(  await auditTautan\(b\);\n)?(  await auditKonsisten\(b\);\n)?(  await auditPenunjuk\(b\);\n)?(  await auditGerak\(b\);\n)?  console\.log\('total temuan',total\)/.test(a)) s.push("audit penuh tidak menjalankan auditStatus");
+    if (!/await auditStatus\(b\);\n(  await auditJudul\(b\);\n)?(  await auditBahasa\(b\);\n)?(  await auditUrutan\(b\);\n)?(  await auditIsian\(b\);\n)?(  await auditNonteks\(b\);\n)?(  await auditWarna\(b\);\n)?(  await auditTautan\(b\);\n)?(  await auditKonsisten\(b\);\n)?(  await auditPenunjuk\(b\);\n)?(  await auditGerak\(b\);\n)?(  await auditAnimasi\(b\);\n)?  console\.log\('total temuan',total\)/.test(a)) s.push("audit penuh tidak menjalankan auditStatus");
     if (!/UJI-STATUS/.test(a) || !/dataset\.auditSiap/.test(a)) s.push("uji balik UJI-STATUS / penanda wilayah siap tidak ada");
     return s;
   };
@@ -5935,7 +5935,7 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
   for (const [p, pesan] of rusakJ) ok(cekJudul(p).some((x) => x.includes(pesan)), `uji balik Judul halaman: "${pesan}" harus tertangkap`);
   const audJ = readFileSync("tools/audit-kontras.js", "utf8");
   ok(/async function auditJudul\(b\)/.test(audJ) && /process\.env\.AUDIT==='judul'\) \{ await auditJudul\(b\)/.test(audJ) &&
-     /await auditJudul\(b\);\n(  await auditBahasa\(b\);\n)?(  await auditUrutan\(b\);\n)?(  await auditIsian\(b\);\n)?(  await auditNonteks\(b\);\n)?(  await auditWarna\(b\);\n)?(  await auditTautan\(b\);\n)?(  await auditKonsisten\(b\);\n)?(  await auditPenunjuk\(b\);\n)?(  await auditGerak\(b\);\n)?  console\.log\('total temuan',total\)/.test(audJ) && /UJI-JUDUL/.test(audJ) && /UJI-TITLE/.test(audJ),
+     /await auditJudul\(b\);\n(  await auditBahasa\(b\);\n)?(  await auditUrutan\(b\);\n)?(  await auditIsian\(b\);\n)?(  await auditNonteks\(b\);\n)?(  await auditWarna\(b\);\n)?(  await auditTautan\(b\);\n)?(  await auditKonsisten\(b\);\n)?(  await auditPenunjuk\(b\);\n)?(  await auditGerak\(b\);\n)?(  await auditAnimasi\(b\);\n)?  console\.log\('total temuan',total\)/.test(audJ) && /UJI-JUDUL/.test(audJ) && /UJI-TITLE/.test(audJ),
      "Audit judul: auditJudul, mode AUDIT=judul, ikut audit penuh, dan uji balik UJI-JUDUL/UJI-TITLE wajib ada");
   ok(/document\.title = "Kode " \+ kode\.slice\(0, 8\) \+ " tidak ditemukan/.test(readFileSync("assets/app.js", "utf8")), "Profil emiten: judul tab menyebut kode yang tidak ditemukan");
 }
@@ -5958,7 +5958,7 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
     if (!kApp || !kAud || JSON.stringify(kApp) !== JSON.stringify(kAud)) s.push("daftar istilah Inggris di app.js dan audit tidak sama");
     else if (!kApp.includes("buyback")) s.push("daftar istilah Inggris tidak memuat buyback");
     if (!/async function auditBahasa\(b\)/.test(aud) || !/process\.env\.AUDIT==='bahasa'\) \{ await auditBahasa\(b\)/.test(aud) ||
-        !/await auditBahasa\(b\);\n(  await auditUrutan\(b\);\n)?(  await auditIsian\(b\);\n)?(  await auditNonteks\(b\);\n)?(  await auditWarna\(b\);\n)?(  await auditTautan\(b\);\n)?(  await auditKonsisten\(b\);\n)?(  await auditPenunjuk\(b\);\n)?(  await auditGerak\(b\);\n)?  console\.log\('total temuan',total\)/.test(aud) || !/UJI-LANG/.test(aud) || !/UJI-EN/.test(aud))
+        !/await auditBahasa\(b\);\n(  await auditUrutan\(b\);\n)?(  await auditIsian\(b\);\n)?(  await auditNonteks\(b\);\n)?(  await auditWarna\(b\);\n)?(  await auditTautan\(b\);\n)?(  await auditKonsisten\(b\);\n)?(  await auditPenunjuk\(b\);\n)?(  await auditGerak\(b\);\n)?(  await auditAnimasi\(b\);\n)?  console\.log\('total temuan',total\)/.test(aud) || !/UJI-LANG/.test(aud) || !/UJI-EN/.test(aud))
       s.push("audit: auditBahasa, mode AUDIT=bahasa, ikut audit penuh, dan uji balik UJI-LANG/UJI-EN wajib ada");
     return s;
   };
@@ -5983,7 +5983,7 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
     const s = [];
     if (!/async function auditIsian\(b\)/.test(aud)) s.push("auditIsian tidak ada");
     if (!/process\.env\.AUDIT==='isian'\) \{ await auditIsian\(b\)/.test(aud)) s.push("mode AUDIT=isian tidak ada");
-    if (!/await auditIsian\(b\);\n(  await auditNonteks\(b\);\n)?(  await auditWarna\(b\);\n)?(  await auditTautan\(b\);\n)?(  await auditKonsisten\(b\);\n)?(  await auditPenunjuk\(b\);\n)?(  await auditGerak\(b\);\n)?  console\.log\('total temuan',total\)/.test(aud)) s.push("audit penuh tidak menjalankan auditIsian");
+    if (!/await auditIsian\(b\);\n(  await auditNonteks\(b\);\n)?(  await auditWarna\(b\);\n)?(  await auditTautan\(b\);\n)?(  await auditKonsisten\(b\);\n)?(  await auditPenunjuk\(b\);\n)?(  await auditGerak\(b\);\n)?(  await auditAnimasi\(b\);\n)?  console\.log\('total temuan',total\)/.test(aud)) s.push("audit penuh tidak menjalankan auditIsian");
     if (!/UJI-ISIAN/.test(aud)) s.push("uji balik UJI-ISIAN tidak ada");
     for (const k of ["kuis kosong", "Asisten kosong", "Radar kode tak dikenal", "Bandingkan kode tak dikenal", "Radar kode dikenal"])
       if (!aud.includes("'" + k + "'")) s.push(`keadaan "${k}" tidak diaudit`);
@@ -6033,7 +6033,7 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
     if (!tg) s.push(".tombol-garis tanpa border-color hex"); else if (mlm && rasio(tg[1], mlm) < 3) s.push(`garis .tombol-garis terhadap --malam hanya ${rasio(tg[1], mlm).toFixed(2)}:1`);
     if (!/async function auditNonteks\(b\)/.test(aud)) s.push("auditNonteks tidak ada");
     if (!/process\.env\.AUDIT==='nonteks'\) \{ await auditNonteks\(b\)/.test(aud)) s.push("mode AUDIT=nonteks tidak ada");
-    if (!/await auditNonteks\(b\);\n(  await auditWarna\(b\);\n)?(  await auditTautan\(b\);\n)?(  await auditKonsisten\(b\);\n)?(  await auditPenunjuk\(b\);\n)?(  await auditGerak\(b\);\n)?  console\.log\('total temuan',total\)/.test(aud)) s.push("audit penuh tidak menjalankan auditNonteks");
+    if (!/await auditNonteks\(b\);\n(  await auditWarna\(b\);\n)?(  await auditTautan\(b\);\n)?(  await auditKonsisten\(b\);\n)?(  await auditPenunjuk\(b\);\n)?(  await auditGerak\(b\);\n)?(  await auditAnimasi\(b\);\n)?  console\.log\('total temuan',total\)/.test(aud)) s.push("audit penuh tidak menjalankan auditNonteks");
     for (const u of ["UJI-PUDAR", "UJI-LAMPU"]) if (!aud.includes("'" + u + "'")) s.push(`uji balik ${u} tidak ada`);
     return s;
   };
@@ -6115,7 +6115,7 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
     if (!jalur || !/text-decoration:\s*underline/.test(jalur[1])) s.push(".jalur h3 a harus bergaris bawah");
     if (!/async function auditWarna\(b\)/.test(aud)) s.push("auditWarna tidak ada");
     if (!/process\.env\.AUDIT==='warna'\) \{ await auditWarna\(b\)/.test(aud)) s.push("mode AUDIT=warna tidak ada");
-    if (!/await auditWarna\(b\);\n(  await auditTautan\(b\);\n)?(  await auditKonsisten\(b\);\n)?(  await auditPenunjuk\(b\);\n)?(  await auditGerak\(b\);\n)?  console\.log\('total temuan',total\)/.test(aud)) s.push("audit penuh tidak menjalankan auditWarna");
+    if (!/await auditWarna\(b\);\n(  await auditTautan\(b\);\n)?(  await auditKonsisten\(b\);\n)?(  await auditPenunjuk\(b\);\n)?(  await auditGerak\(b\);\n)?(  await auditAnimasi\(b\);\n)?  console\.log\('total temuan',total\)/.test(aud)) s.push("audit penuh tidak menjalankan auditWarna");
     for (const u of ["UJI-GARIS", "UJI-TINGKAT"]) if (!aud.includes("'" + u + "'")) s.push(`uji balik ${u} tidak ada`);
     return s;
   };
@@ -6149,7 +6149,7 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
     if (/\["radar-risiko", "Radar Risiko"\]/.test(js)) s.push('"Lompat ke" Radar bernama sama dengan menu "Radar Risiko" tetapi tujuannya lain');
     if (!/async function auditTautan\(b\)/.test(aud)) s.push("auditTautan tidak ada");
     if (!/process\.env\.AUDIT==='tautan'\) \{ await auditTautan\(b\)/.test(aud)) s.push("mode AUDIT=tautan tidak ada");
-    if (!/await auditTautan\(b\);\n(  await auditKonsisten\(b\);\n)?(  await auditPenunjuk\(b\);\n)?(  await auditGerak\(b\);\n)?  console\.log\('total temuan',total\)/.test(aud)) s.push("audit penuh tidak menjalankan auditTautan");
+    if (!/await auditTautan\(b\);\n(  await auditKonsisten\(b\);\n)?(  await auditPenunjuk\(b\);\n)?(  await auditGerak\(b\);\n)?(  await auditAnimasi\(b\);\n)?  console\.log\('total temuan',total\)/.test(aud)) s.push("audit penuh tidak menjalankan auditTautan");
     for (const u of ["UJI-DISINI", "UJI-KEMBAR"]) if (!aud.includes("'" + u + "'")) s.push(`uji balik ${u} tidak ada`);
     return s;
   };
@@ -6195,7 +6195,7 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
     if (lbl.length !== 1) s.push(`kotakKetik: label isian harus tepat satu (ada ${lbl.length})`);
     if (!/async function auditKonsisten\(b\)/.test(aud)) s.push("auditKonsisten tidak ada");
     if (!/process\.env\.AUDIT==='konsisten'\) \{ await auditKonsisten\(b\)/.test(aud)) s.push("mode AUDIT=konsisten tidak ada");
-    if (!/await auditKonsisten\(b\);\n(  await auditPenunjuk\(b\);\n)?(  await auditGerak\(b\);\n)?  console\.log\('total temuan',total\)/.test(aud)) s.push("audit penuh tidak menjalankan auditKonsisten");
+    if (!/await auditKonsisten\(b\);\n(  await auditPenunjuk\(b\);\n)?(  await auditGerak\(b\);\n)?(  await auditAnimasi\(b\);\n)?  console\.log\('total temuan',total\)/.test(aud)) s.push("audit penuh tidak menjalankan auditKonsisten");
     for (const u of ["UJI-MENU", "UJI-KAKI"]) if (!aud.includes("'" + u + "'")) s.push(`uji balik ${u} tidak ada`);
     return s;
   };
@@ -6233,7 +6233,7 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
     }
     if (!/async function auditPenunjuk\(b\)/.test(aud)) s.push("auditPenunjuk tidak ada");
     if (!/process\.env\.AUDIT==='penunjuk'\) \{ await auditPenunjuk\(b\)/.test(aud)) s.push("mode AUDIT=penunjuk tidak ada");
-    if (!/await auditPenunjuk\(b\);\n(  await auditGerak\(b\);\n)?  console\.log\('total temuan',total\)/.test(aud)) s.push("audit penuh tidak menjalankan auditPenunjuk");
+    if (!/await auditPenunjuk\(b\);\n(  await auditGerak\(b\);\n)?(  await auditAnimasi\(b\);\n)?  console\.log\('total temuan',total\)/.test(aud)) s.push("audit penuh tidak menjalankan auditPenunjuk");
     if (!aud.includes("'UJI-TEKAN'")) s.push("uji balik UJI-TEKAN tidak ada");
     return s;
   };
@@ -6273,7 +6273,7 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
     }
     if (!/async function auditGerak\(b\)/.test(aud)) s.push("auditGerak tidak ada");
     if (!/process\.env\.AUDIT==='gerak'\) \{ await auditGerak\(b\)/.test(aud)) s.push("mode AUDIT=gerak tidak ada");
-    if (!/await auditGerak\(b\);\n  console\.log\('total temuan',total\)/.test(aud)) s.push("audit penuh tidak menjalankan auditGerak");
+    if (!/\n  await auditGerak\(b\);\n/.test(aud)) s.push("audit penuh tidak menjalankan auditGerak");
     if (!aud.includes("'UJI-GOYANG'")) s.push("uji balik UJI-GOYANG tidak ada");
     if (!aud.includes("'UJI-GESER'")) s.push("uji balik UJI-GESER tidak ada");
     return s;
@@ -6344,6 +6344,52 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
   ];
   for (const [c, j, h, a, pesan] of rusakT) ok(cekTeks(c, j, h, a).some((x) => x.includes(pesan)), `uji balik ubah ukuran teks: "${pesan}" harus tertangkap`);
   ok(cekTeks(cssT + "\n.z { border-width: 2px; padding: 12px; font-size: 1.1rem; }", jsT, htmlT, audT).length === 0, "uji balik ubah ukuran teks: px pada border/padding & font-size rem tidak boleh dianggap temuan");
+}
+
+// (h) Dewi & Nina (18 Nov 19.xx): jeda, hentikan, sembunyikan WCAG 2.2.2. Gerak/kedip yang mulai sendiri selesai ≤5 detik:
+// styles.css tanpa animasi "infinite" dan tanpa animation-iteration-count tak berujung; setiap deklarasi animation berada di
+// dalam @media (prefers-reduced-motion: no-preference) (kecuali "animation: none" dan animation-delay/duration);
+// app.js tanpa setInterval & .animate( (pembaruan/gerak otomatis); audit AUDIT=animasi ada, ikut audit penuh, memuat
+// uji balik UJI-ANIMASI. Disertai uji balik.
+{
+  const cekAnimasi = (css, js, aud) => {
+    const s = [];
+    const tanpaKomentar = css.replace(/\/\*[\s\S]*?\*\//g, "");
+    if (/\binfinite\b/.test(tanpaKomentar)) s.push("styles.css: animasi infinite");
+    // cari blok @media (prefers-reduced-motion: no-preference) { … } (dengan kurung bertingkat)
+    const aman = [];
+    for (const m of tanpaKomentar.matchAll(/@media\s*\(prefers-reduced-motion:\s*no-preference\)\s*\{/g)) {
+      let i = m.index + m[0].length, d = 1;
+      while (i < tanpaKomentar.length && d) { if (tanpaKomentar[i] === "{") d++; else if (tanpaKomentar[i] === "}") d--; i++; }
+      aman.push([m.index, i]);
+    }
+    for (const m of tanpaKomentar.matchAll(/(?<![-\w])animation(-name)?\s*:\s*([^;}]+)/g)) {
+      if (/^\s*none\b/.test(m[2])) continue;
+      if (!aman.some(([a, z]) => m.index > a && m.index < z)) s.push(`styles.css: animasi di luar prefers-reduced-motion: no-preference ("${m[0].trim().slice(0, 50)}")`);
+    }
+    if (/\bsetInterval\s*\(/.test(js)) s.push("app.js: setInterval");
+    if (/\.animate\s*\(/.test(js)) s.push("app.js: .animate(");
+    if (!/async function auditAnimasi\(b\)/.test(aud)) s.push("auditAnimasi tidak ada");
+    if (!/process\.env\.AUDIT==='animasi'\) \{ await auditAnimasi\(b\)/.test(aud)) s.push("mode AUDIT=animasi tidak ada");
+    if (!/\n  await auditAnimasi\(b\);\n/.test(aud)) s.push("audit penuh tidak menjalankan auditAnimasi");
+    if (!aud.includes("'UJI-ANIMASI'")) s.push("uji balik UJI-ANIMASI tidak ada");
+    return s;
+  };
+  const cssA = readFileSync("assets/styles.css", "utf8"), jsA = readFileSync("assets/app.js", "utf8"), audA = readFileSync("tools/audit-kontras.js", "utf8");
+  const sA = cekAnimasi(cssA, jsA, audA);
+  ok(sA.length === 0, `Jeda, hentikan, sembunyikan WCAG 2.2.2: ${sA.join("; ")}`);
+  const rusakA = [
+    [cssA.replace("animation: kedip-bintang 1.6s ease-in-out 2;", "animation: kedip-bintang 1.6s ease-in-out infinite;"), jsA, audA, "infinite"],
+    [cssA + "\n.kartu { animation: muncul .3s ease both; }", jsA, audA, "di luar prefers-reduced-motion"],
+    [cssA + "\n.kartu { animation-name: muncul; }", jsA, audA, "di luar prefers-reduced-motion"],
+    [cssA, jsA + "\nsetInterval(geser, 3000);", audA, "setInterval"],
+    [cssA, jsA + "\nel.animate([{opacity:0},{opacity:1}], 9000);", audA, ".animate("],
+    [cssA, jsA, audA.replace("  await auditAnimasi(b);\n", ""), "audit penuh"],
+    [cssA, jsA, audA.replace("process.env.AUDIT==='animasi'", "process.env.AUDIT==='a'"), "mode AUDIT=animasi"],
+    [cssA, jsA, audA.split("'UJI-ANIMASI'").join("'UJI-Z'"), "UJI-ANIMASI"],
+  ];
+  for (const [c, j, a, pesan] of rusakA) ok(cekAnimasi(c, j, a).some((x) => x.includes(pesan)), `uji balik jeda/hentikan: "${pesan}" harus tertangkap`);
+  ok(cekAnimasi(cssA + "\n@media print { .z { animation: none !important; } }", jsA, audA).length === 0, "uji balik jeda/hentikan: animation: none tidak boleh dianggap animasi");
 }
 
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }

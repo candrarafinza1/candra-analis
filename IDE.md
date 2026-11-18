@@ -727,3 +727,10 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Perbaikan Dewi: kueri media `@media (max-width: 19.5em)`. Karena memakai em, ia aktif saat teks besar (624px pada 200%, 390px pada 125%) tetapi tidak pada ukuran biasa di HP ≥320px. Isinya: tombol pilihan & kartu Peringkat satu kolom, label batang 9 bulan di baris sendiri, angka di tabel kecil boleh turun baris. Hasil: 0 temuan; audit jarak teks, sentuh, zoom, orientasi tetap 0.
 - Catatan: 34 judul membesar kurang dari 1,9× karena memakai clamp/vw (tetap membesar ≥1,2× dan sudah besar); dicatat, bukan temuan.
 - Kirana: tangkapan 390px teks 200% rapi: tombol pilihan bertumpuk satu kolom, kartu Peringkat terbaca berurutan (Sektor, Laba 2025, Pendapatan YoY, DER, Sumber), batang 9 bulan tanpa terpotong.
+
+### Catatan audit: jeda, hentikan, sembunyikan WCAG 2.2.2 (Dewi & Nina, 18 Nov 19.11)
+- Alat: `AUDIT=animasi node tools/audit-kontras.js`. 15 keadaan (10 halaman, kotak istilah terbuka, Radar UNTR, penanda mengetik Asisten, uji balik) × gerak bebas/dikurangi × gelap/terang × 390/1280px = 112 pengecekan. Waktu selesai tiap animasi dihitung dari `getComputedTiming()`, lalu ditunggu 5,2 detik.
+- Temuan 4 (beranda, semua ukuran): bintang di langit hero berkedip tanpa henti (`infinite`) tanpa tombol jeda.
+- Perbaikan Dewi: bintang berkedip 2 kali (1,6 detik, jeda .4/.8 detik) lalu diam di terang semula; selesai ≤4 detik. Penanda "sedang menyusun jawaban" juga dibatasi 4 kedip, titik-titik tetap terlihat. Saat gerak dikurangi tetap tanpa animasi.
+- Hasil: 0 temuan; uji balik UJI-ANIMASI 8/8. Nina menambah cek statis (tanpa `infinite`, animasi hanya di `prefers-reduced-motion: no-preference`, tanpa setInterval) + 8 uji balik.
+- Kirana: tangkapan 390px setelah 4,5 detik: bintang diam rapi, tidak ada scroll samping.
