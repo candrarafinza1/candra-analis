@@ -650,3 +650,12 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Uji balik: UJI-LANG (lang `<html>` dihapus) dan UJI-EN (penanda diubah ke id) tertangkap 4/4. Nina menambah cek statis di `tests/cek.mjs` (lang tiap halaman, pemanggilan, daftar istilah app.js = audit) + 4 uji balik.
 - Kirana meninjau tangkapan 390px pelajaran "Saham syariah": tampilan tidak berubah (penanda tidak terlihat).
 - Berikutnya: label & pesan salah isian (WCAG 3.3.1 / 3.3.2).
+
+#### Audit label, petunjuk & pesan salah isian (WCAG 3.3.2 & 3.3.1) — Dewi & Nina, 18 Nov 08.xx
+- Alat: `AUDIT=isian node tools/audit-kontras.js` (juga ikut audit penuh). 9 keadaan (kuis kosong & sebagian, Asisten kosong / 600 karakter / kosong lalu diisi, Radar kode tak dikenal & dikenal, Bandingkan kode tak dikenal, cari kamus tanpa hasil) × gelap/terang × 390/1280px, 124 isian.
+- Aturan: tiap isian terlihat punya label bertulisan; isian ber-maxlength punya petunjuk yang menyebut batasnya lewat aria-describedby; isian aria-invalid="true" punya pesan teks terlihat lewat aria-describedby; tiap pesan salah yang tampil dirujuk isiannya; keadaan benar tidak boleh bertanda salah.
+- Temuan sebelum perbaikan: 52 (Asisten: kirim kosong diam saja tanpa pesan, batas 600 karakter hanya angka "0/600"; kuis: "Belum dijawab." tidak terhubung ke soalnya; kotak ketik: kode tak dikenal tidak ditandai aria-invalid). Sesudah: 0.
+- Perbaikan: petunjuk "Paling banyak 600 karakter. Tekan Enter untuk mengirim, Shift+Enter untuk baris baru." di atas kotak tanya; pesan "Pertanyaan masih kosong. Tulis pertanyaan Anda dulu, lalu kirim." (wilayah status, hilang saat mulai mengetik) + garis merah bila tidak sedang difokus; fieldset soal kuis aria-describedby ke umpannya; kotak ketik aria-invalid saat tidak ada emiten cocok. Kontras teks baru: terang 7,25 & 5,51; gelap 9,55 & 7,42.
+- Uji balik: UJI-ISIAN (isian aria-invalid tanpa pesan, textarea maxlength tanpa petunjuk, pesan salah tak terhubung) tertangkap 4/4. Nina: cek DOM tiruan (Asisten, kuis, kotak ketik) + uji balik di `tests/cek.mjs`.
+- Temuan sampingan audit fokus: garis fokus tautan "Langsung ke isi" di 404 (mode terang) kuning di atas latar terang 1,55:1 → kini memakai warna teks halaman.
+- Berikutnya: urutan fokus (WCAG 2.4.3).

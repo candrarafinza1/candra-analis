@@ -228,7 +228,8 @@
     form.appendChild(el("p", { class: "kuis-pengantar", text: "Tiga soal singkat dari pelajaran ini. Pilih satu jawaban di tiap soal, lalu periksa. Tidak dinilai dan tidak disimpan." }));
     var umpan = [], soalFs = [], wadahPilihan = [], masukan = [], dilipat = [], salahTerakhir = [], tepatTerakhir = [];
     m.kuis.forEach(function (q, i) {
-      var fs = el("fieldset", { class: "kuis-soal" });
+      // Dewi & Nina (18 Nov 08.xx, WCAG 3.3.1): umpan per soal (mis. "Belum dijawab.") terhubung ke kelompok soalnya.
+      var fs = el("fieldset", { class: "kuis-soal", "aria-describedby": "kuis-umpan-" + i });
       fs.appendChild(el("legend", { text: (i + 1) + ". " + q.soal }));
       wadahPilihan[i] = []; masukan[i] = []; dilipat[i] = false;
       q.pilihan.forEach(function (p, j) {
@@ -238,7 +239,7 @@
         wadahPilihan[i].push(w); masukan[i].push(inp);
         fs.appendChild(w);
       });
-      var u = el("p", { class: "kuis-umpan", hidden: "" });
+      var u = el("p", { class: "kuis-umpan", id: "kuis-umpan-" + i, hidden: "" });
       umpan.push(u); soalFs.push(fs); fs.appendChild(u);
       form.appendChild(fs);
     });
@@ -618,6 +619,8 @@
     var dariKetik = false;
     isi.addEventListener("input", function () {
       var c = cocokEmiten(isi.value, daftar);
+      // Dewi & Nina (18 Nov 08.xx, WCAG 3.3.1): isian tanpa emiten cocok ditandai aria-invalid; pesannya sudah di aria-describedby.
+      if (c.q && !c.hasil.length) isi.setAttribute("aria-invalid", "true"); else isi.removeAttribute("aria-invalid");
       if (!c.q) { info.textContent = ""; return; }
       if (c.hasil.length === 1) {
         var x = c.hasil[0];
@@ -637,7 +640,7 @@
     // Bila <select> diganti langsung, isian dikosongkan agar keduanya tidak bertentangan.
     pilih.addEventListener("change", function () {
       if (dariKetik) return;
-      isi.value = ""; info.textContent = "";
+      isi.value = ""; info.textContent = ""; isi.removeAttribute("aria-invalid");
     });
     return el("div", { class: "kotak-ketik" }, [
       el("label", { for: idIsi, text: "Ketik kode atau nama emiten" }), isi, dl, info
@@ -1211,12 +1214,17 @@
     var wadahStatus = el("div", { class: "status-asisten", role: "status", "aria-live": "polite" }, [status]);
     var log = el("div", { class: "obrolan", "aria-live": "polite", "aria-label": "Percakapan dengan asisten" });
     var chips = el("div", { class: "contoh-tanya" });
-    var area = el("textarea", { id: "kotak-tanya", rows: "3", maxlength: "600", placeholder: "Tulis pertanyaan Anda" });
+    // Dewi & Nina (18 Nov 08.xx, WCAG 3.3.1/3.3.2): petunjuk batas karakter tertulis, dan pesan salah isian
+    // (pertanyaan kosong) tampil sebagai teks yang terhubung ke kotak tanya lewat aria-describedby.
+    var area = el("textarea", { id: "kotak-tanya", rows: "3", maxlength: "600", placeholder: "Tulis pertanyaan Anda",
+      "aria-describedby": "petunjuk-tanya galat-tanya" });
+    var petunjuk = el("p", { id: "petunjuk-tanya", class: "petunjuk-isian", text: "Paling banyak 600 karakter. Tekan Enter untuk mengirim, Shift+Enter untuk baris baru." });
+    var galat = el("p", { id: "galat-tanya", class: "galat-isian", role: "status", "aria-live": "polite" });
     var tombol = el("button", { class: "tombol tombol-gelap", type: "submit", text: "Kirim pertanyaan" });
     var hitung = el("span", { class: "hitung-karakter", text: "0/600" });
     var form = el("form", { class: "form-tanya" }, [
       el("label", { for: "kotak-tanya", class: "label-tanya", text: "Pertanyaan Anda" }),
-      area, el("div", { class: "form-bawah" }, [hitung, tombol])
+      petunjuk, area, galat, el("div", { class: "form-bawah" }, [hitung, tombol])
     ]);
 
     // Dewi 17 Nov (audit fokus tertutup): peramban hanya menggulir kursor teks ke layar, sehingga saat Shift+Tab bagian atas
@@ -1242,7 +1250,13 @@
     akar.appendChild(el("p", { class: "catatan-metode", style: "margin-top:16px",
       text: "Asisten AI bisa keliru. Selalu cek angka di laporan keuangan resmi. Jawaban asisten bukan rekomendasi membeli atau menjual efek. Jangan menuliskan data pribadi seperti nomor KTP atau rekening." }));
 
-    function perbaruiHitung() { hitung.textContent = area.value.length + "/600"; }
+    var salahKosong = false;
+    function perbaruiHitung() {
+      hitung.textContent = area.value.length + "/600";
+      if (salahKosong && area.value.trim()) { salahKosong = false; area.removeAttribute("aria-invalid"); }
+      if (area.value.length >= 600) galat.textContent = "Sudah 600 karakter, batas paling banyak. Ringkas pertanyaan bila perlu.";
+      else if (!salahKosong) galat.textContent = "";
+    }
     area.addEventListener("input", perbaruiHitung);
     area.addEventListener("keydown", function (e) {
       if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); form.requestSubmit(); }
@@ -1271,6 +1285,11 @@
     form.addEventListener("submit", function (e) {
       e.preventDefault();
       var q = area.value.trim();
+      if (!q && !tombol.disabled) {
+        salahKosong = true; area.setAttribute("aria-invalid", "true");
+        galat.textContent = "Pertanyaan masih kosong. Tulis pertanyaan Anda dulu, lalu kirim.";
+        area.focus();
+      }
       if (!q || tombol.disabled) return;
       tambahPesan("pengguna", el("p", { text: q }));
       area.value = ""; perbaruiHitung();

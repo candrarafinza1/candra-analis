@@ -1790,3 +1790,11 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: giliran BSSR & MIKA; belum ada laba Januari–September 2026 bersumber → tetap 25 dari 32. Raka/Hana: tidak ada kabar baru.
 - Tugas baru: Dewi + Nina (label & pesan salah isian, WCAG 3.3.1/3.3.2); Sari + Hana (istilah Inggris baru ikut daftar).
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 18 Nov 2026, sesi 08.09 WIB (Bima)
+- Yoga: run CI #309 (commit sesi 07.10) hijau.
+- Dewi + Nina: audit label, petunjuk & pesan salah isian (WCAG 3.3.2/3.3.1) di `tools/audit-kontras.js` (`AUDIT=isian`, ikut audit penuh): 9 keadaan × gelap/terang × 390/1280px, 124 isian. Sebelum: 52 temuan (Asisten: kirim kosong diam saja, batas 600 karakter hanya "0/600"; kuis: "Belum dijawab." tidak terhubung ke soalnya; kotak ketik: kode tak dikenal tanpa aria-invalid). Perbaikan: petunjuk batas karakter & cara kirim di atas kotak tanya, pesan "Pertanyaan masih kosong…" di wilayah status + aria-invalid, fieldset kuis aria-describedby ke umpan, kotak ketik aria-invalid saat tidak cocok. Sesudah: 0 temuan; tanpa scroll horizontal 390/1280px; kontras teks baru ≥5,5:1. Uji balik UJI-ISIAN 4/4. Nina: cek DOM tiruan + 13 uji balik di `tests/cek.mjs`. Audit status, label, sentuh, bahasa, fokus tetap 0.
+- Dewi: temuan sampingan audit fokus: garis fokus "Langsung ke isi" di 404 mode terang 1,55:1 → kini warna teks halaman; audit fokus 0.
+- Fajar: giliran KLBF & BRIS; belum ada laba Januari–September 2026 bersumber → tetap 25 dari 32. Raka/Hana: tidak ada kabar baru.
+- Tugas baru: Dewi + Nina (urutan fokus, WCAG 2.4.3).
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

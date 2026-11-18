@@ -106,6 +106,9 @@ p { margin: 0 0 1em; }
 .lompat[data-geser]:focus { position: static; display: block; }
 /* Di bagian biru malam (kepala, hero, judul halaman, panel gelap) garis fokus tetap kuning bulan (Dewi, 17 Nov). */
 .kepala :focus-visible, .hero :focus-visible, .judul-halaman :focus-visible, .panel-gelap :focus-visible, .lompat:focus-visible { outline-color: var(--bulan); }
+/* Dewi (18 Nov 08.xx): di 404 tautan lompat ikut alur di atas latar halaman (bukan biru malam), jadi garis kuning hanya 1,55:1
+   di mode terang. Di sana garis fokus memakai warna teks halaman. */
+.lompat[data-geser]:focus-visible { outline-color: var(--tinta); }
 
 /* ---------- Header ---------- */
 .kepala {
@@ -482,6 +485,10 @@ input::placeholder, textarea::placeholder { color: var(--tinta-2); opacity: 1; }
 .form-tanya textarea:disabled, .form-tanya button:disabled { opacity: .6; cursor: not-allowed; }
 .form-bawah { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 10px; }
 .hitung-karakter { font-size: .85rem; color: var(--tinta-2); }
+/* Dewi (18 Nov 08.xx, WCAG 3.3.1/3.3.2): petunjuk & pesan salah isian */
+.petunjuk-isian { margin: -4px 0 8px; font-size: .85rem; color: var(--tinta-2); }
+.galat-isian { margin: 8px 0 0; font-size: .92rem; font-weight: 600; color: var(--turun); }
+.form-tanya textarea[aria-invalid="true"]:not(:focus), .kotak-ketik input[aria-invalid="true"]:not(:focus) { border-color: var(--turun); }
 
 /* Data asli (tim Galih & Dewi) */
 .pita-sumber {
@@ -807,7 +814,7 @@ button.istilah:hover, button.istilah[aria-expanded="true"] { color: var(--aksen)
    dulu disembunyikan dengan display:none. Itu mengeluarkannya dari pohon aksesibilitas, sehingga saat pesan masuk
    wilayahnya ikut "lahir" bersamaan dan pembaca layar bisa tidak mengumumkan. Kini saat kosong hanya dikecilkan
    keluar dari alur tata letak (tampilan sama seperti dulu), tetapi tetap ada untuk pembaca layar. */
-.tandai-info:empty, .saring-ket:empty, .kuis-hasil:empty, .obrolan:empty, .info-ketik:empty, .info-salin:empty {
+.tandai-info:empty, .saring-ket:empty, .kuis-hasil:empty, .galat-isian:empty, .obrolan:empty, .info-ketik:empty, .info-salin:empty {
   position: absolute; width: 1px; height: 1px; margin: 0; padding: 0; border: 0;
   overflow: hidden; clip-path: inset(50%); white-space: nowrap;
 }
