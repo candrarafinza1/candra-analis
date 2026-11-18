@@ -686,3 +686,13 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Uji balik: UJI-GARIS (garis bawah tautan dihapus) dan UJI-TINGKAT (label tingkat disembunyikan) masing-masing 4/4. Nina: cek statis + 10 uji balik di `tests/cek.mjs`.
 - Kirana: tangkapan 390px terang & 1280px gelap: label tingkat terbaca jelas tanpa membuat kartu ramai; garis bawah judul pelajaran tidak berat.
 - Berikutnya: tujuan tautan (WCAG 2.4.4).
+
+### Audit tujuan tautan (WCAG 2.4.4), 18 Nov 14.10 (Dewi & Nina, ditinjau Kirana)
+- Alat: `AUDIT=tautan node tools/audit-kontras.js` (ikut audit penuh). 15 keadaan: 10 halaman, Radar UNTR, profil ANTM + Bandingkan, kuis sesudah Periksa, kotak istilah terbuka. Gelap/terang × 390/1280px, 2.708 tautan & tombol.
+- Yang dicek: setiap tautan & tombol punya nama; nama tidak samar bila berdiri sendiri ("di sini", "klik", "selengkapnya", "lihat", "lanjut", "lainnya"); tautan bernama sama di satu halaman menuju tempat yang sama.
+- Sebelum: 8 temuan, satu masalah: di profil emiten, tautan "Radar Risiko" di menu (ke radar.html) dan di baris "Lompat ke" (ke bagian Radar di profil) bernama sama tetapi tujuannya beda.
+- Perbaikan: tautan "Lompat ke" menjadi "Radar Risiko emiten ini". Tambahan (bukan temuan alat, tetapi tujuannya hanya jelas dari kotak di sebelahnya): tombol "Unduh PDF" di Belajar menjadi "Unduh PDF modul".
+- Sesudah: 0 temuan; tanpa scroll horizontal 390/1280px; audit label dalam nama, sentuh, warna, urutan tetap 0.
+- Uji balik: UJI-DISINI (tautan "di sini" disisipkan) dan UJI-KEMBAR (tautan "Belajar" ke halaman lain) masing-masing 4/4. Nina: cek statis (tautan samar di 10 HTML & app.js, nama "Lompat ke" Radar, mode audit) + 9 uji balik di `tests/cek.mjs`.
+- Kirana: tangkapan 390px: "Radar Risiko emiten ini" membungkus rapi ke baris kedua chip "Lompat ke"; tombol "Unduh PDF modul" tetap satu baris.
+- Berikutnya: identifikasi konsisten (WCAG 3.2.4).

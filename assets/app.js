@@ -1026,7 +1026,7 @@
 
     // Arif + Dewi (IDE.md #21, 4 Nov): baris "Lompat ke" di atas profil. Dibuat setelah semua bagian ada,
     // jadi hanya menaut ke judul yang benar-benar tampil (Kabar tidak muncul bila emiten belum punya kabar).
-    var tujuan = [["angka-utama", "Angka utama"], ["judul-banding", "Bandingkan"], ["radar-risiko", "Radar Risiko"],
+    var tujuan = [["angka-utama", "Angka utama"], ["judul-banding", "Bandingkan"], ["radar-risiko", "Radar Risiko emiten ini"],
       ["kabar-terbaru", "Kabar"], ["sumber-data", "Sumber data"]];
     var ulLompat = el("ul");
     tujuan.forEach(function (t) {
