@@ -1808,7 +1808,7 @@ Satu entri per sesi kerja. Terbaru di bawah.
 
 
 ## 18 Nov 2026, sesi 10.09 WIB (Bima)
-- Yoga: commit sesi 09.09 sudah di `main`; status CI dicek ulang sesi berikutnya.
+- Yoga: run CI #311 (commit sesi 09.09) hijau; #312 (commit sesi ini) masih antre, dicek sesi berikutnya.
 - Dewi + Nina: audit kontras non-teks (WCAG 1.4.11) di `tools/audit-kontras.js` (`AUDIT=nonteks`, ikut audit penuh): 14 keadaan × gelap/terang × 390/1280px, 352 komponen (kotak isian, tombol bergaris, lingkaran kuis, batang, lampu & garis tanda Radar). Sebelum: 96 temuan (garis tepi kotak isian/tab/chip 1,2–1,5:1; tombol garis hero 2,22:1). Perbaikan: token `--garis-kontrol` (≥3,48:1), `.tombol-garis` #7b82d6 (4,47:1), fokus kotak tanya `--tinta`. Sesudah: 0 temuan; tanpa scroll horizontal 390/1280px; audit fokus tetap 0. Uji balik UJI-PUDAR/UJI-LAMPU 4/4. Nina: cek statis + 9 uji balik di `tests/cek.mjs`. Kirana: tangkapan 390/1280px rapi.
 - Fajar: giliran KLBF & BRIS; belum ada laba Januari–September 2026 bersumber → tetap 25 dari 32. Raka/Hana: tidak ada kabar baru.
 - Tugas baru: Dewi + Nina (penggunaan warna, WCAG 1.4.1).
