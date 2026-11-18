@@ -676,3 +676,13 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Uji balik: UJI-PUDAR (garis isian = warna isi kotak) dan UJI-LAMPU (lampu = warna garis) masing-masing 4/4. Nina: cek statis token & aturan CSS + 9 uji balik di `tests/cek.mjs`.
 - Kirana: tangkapan 390px gelap & 1280px terang: kotak isian dan chip kini jelas batasnya tanpa terlihat berat.
 - Berikutnya: penggunaan warna (WCAG 1.4.1): informasi tidak boleh hanya lewat warna.
+
+### Audit penggunaan warna (WCAG 1.4.1), 18 Nov 13.10 (Dewi & Nina, ditinjau Kirana)
+- Alat: `AUDIT=warna node tools/audit-kontras.js` (ikut audit penuh). 13 keadaan: 10 halaman, Radar sesudah memilih UNTR, profil ANTM + Bandingkan, kuis sesudah Periksa. Gelap/terang × 390/1280px.
+- Yang dicek: tautan & tombol istilah di dalam blok teks harus bergaris bawah (atau beda ≥3:1 dari teks sekitar DAN bergaris saat diarahkan); kartu temuan Radar harus punya label teks tingkat; lampu panduan berlabel; angka naik/turun bertanda +/−; umpan kuis ✓/✗; status syariah bertulisan; setiap baris batang punya angka tertulis; batang musim laporan punya teks "n dari m". Teks khusus pembaca layar tidak dihitung.
+- Sebelum: 120 temuan. (1) Tingkat kartu temuan Radar & profil (berat/dicermati/keterangan/aman) hanya dibedakan warna garis & judul (52); pemula harus mencocokkan warna dengan panduan. (2) Judul pelajaran di beranda & Belajar (tautan) tanpa garis bawah dan berwarna sama dengan teks (64). (3) Panduan Hijau tanpa label yang sama dengan kartu (4).
+- Perbaikan: label teks kecil di atas judul setiap kartu temuan ("Tanda berat", "Perlu dicermati", "Keterangan", "Tanpa tanda risiko") lewat `kartuSinyal()`/`labelTingkat()` (dipakai Radar & profil); panduan kini "Merah (Tanda berat): …" dst.; judul pelajaran bergaris bawah tipis (`--garis-kontrol`), menebal saat diarahkan.
+- Sesudah: 1.332 penanda dicek, 0 temuan; tanpa scroll horizontal 390/1280px; audit non-teks, judul, label, sentuh, orientasi tetap 0.
+- Uji balik: UJI-GARIS (garis bawah tautan dihapus) dan UJI-TINGKAT (label tingkat disembunyikan) masing-masing 4/4. Nina: cek statis + 10 uji balik di `tests/cek.mjs`.
+- Kirana: tangkapan 390px terang & 1280px gelap: label tingkat terbaca jelas tanpa membuat kartu ramai; garis bawah judul pelajaran tidak berat.
+- Berikutnya: tujuan tautan (WCAG 2.4.4).

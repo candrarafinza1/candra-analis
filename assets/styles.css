@@ -220,8 +220,9 @@ p { margin: 0 0 1em; }
   display: grid; place-items: center;
 }
 .jalur h3 { margin-bottom: .25em; }
-.jalur h3 a { color: var(--tinta); text-decoration: none; }
-.jalur h3 a:hover { color: var(--naik); text-decoration: underline; }
+/* Dewi (18 Nov, WCAG 1.4.1): judul pelajaran selalu bergaris bawah tipis agar terlihat bisa diketuk tanpa bergantung warna */
+.jalur h3 a { color: var(--tinta); text-decoration: underline; text-decoration-thickness: 1px; text-decoration-color: var(--garis-kontrol); }
+.jalur h3 a:hover { color: var(--naik); text-decoration-color: currentColor; text-decoration-thickness: 2px; }
 .jalur p { color: var(--tinta-2); margin: 0; max-width: var(--lebar-teks); }
 .jalur .durasi { font-size: .88rem; color: var(--tinta-2); }
 /* Penanda kemajuan belajar (Arif & Dewi) */
@@ -616,6 +617,12 @@ button.istilah:hover, button.istilah[aria-expanded="true"] { color: var(--aksen)
 .sinyal-tinggi .sinyal-judul { color: var(--turun); }
 .sinyal-sedang .sinyal-judul { color: var(--waspada); }
 .sinyal-aman .sinyal-judul { color: var(--naik); }
+/* Dewi (18 Nov, WCAG 1.4.1): label teks tingkat temuan, warna sama dengan judul (≥4,5:1) */
+.sinyal .sinyal-tingkat { margin: 0 0 .25em; font-size: .82rem; font-weight: 700; letter-spacing: .02em; text-transform: uppercase; color: var(--tinta-2); }
+.sinyal-tinggi .sinyal-tingkat { color: var(--turun); }
+.sinyal-sedang .sinyal-tingkat { color: var(--waspada); }
+.sinyal-info .sinyal-tingkat { color: var(--aksen); }
+.sinyal-aman .sinyal-tingkat { color: var(--naik); }
 .daftar-emiten { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr)); gap: 8px; }
 .daftar-emiten a { display: block; padding: 12px 14px; min-height: 48px; background: var(--putih); border: 1px solid var(--garis); border-radius: var(--radius-kecil); text-decoration: none; color: var(--tinta); }
 .daftar-emiten a:hover { border-color: var(--aksen); }

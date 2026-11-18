@@ -577,22 +577,33 @@
 
   // Radar (IDE.md #6, Dewi): contoh cara membaca hasil, tampil sebelum emiten dipilih.
   var PANDUAN_RADAR = [
-    { tingkat: "tinggi", warna: "Merah", arti: "Tanda berat, misalnya rugi, laba turun lebih dari separuh, atau tidak lagi tercatat sebagai saham syariah." },
-    { tingkat: "sedang", warna: "Kuning", arti: "Tanda yang perlu dicermati, misalnya laba atau pendapatan menurun, atau utang lebih dari dua kali modal." },
-    { tingkat: "info", warna: "Biru", arti: "Keterangan tambahan, misalnya catatan data dari tim kami atau laba 9 bulan yang naik." },
+    { tingkat: "tinggi", warna: "Merah", arti: "Misalnya rugi, laba turun lebih dari separuh, atau tidak lagi tercatat sebagai saham syariah." },
+    { tingkat: "sedang", warna: "Kuning", arti: "Misalnya laba atau pendapatan menurun, atau utang lebih dari dua kali modal." },
+    { tingkat: "info", warna: "Biru", arti: "Misalnya catatan data dari tim kami atau laba 9 bulan yang naik." },
     { tingkat: "aman", warna: "Hijau", arti: "Tidak ada tanda risiko dari pemeriksaan ini. Tetap pantau laporan berikutnya." }
   ];
+  // Dewi & Nina (18 Nov 13.xx, WCAG 1.4.1): tingkat temuan tidak boleh hanya dibedakan warna.
+  // Setiap kartu temuan diberi label teks; label yang sama dipakai di panduan warna.
+  function labelTingkat(t) {
+    return { tinggi: "Tanda berat", sedang: "Perlu dicermati", info: "Keterangan", aman: "Tanpa tanda risiko" }[t] || "";
+  }
+  function kartuSinyal(x) {
+    return el("li", { class: "sinyal sinyal-" + x.tingkat }, [
+      el("p", { class: "sinyal-tingkat", text: labelTingkat(x.tingkat) }),
+      el("h3", { class: "sinyal-judul", text: x.judul }), el("p", { text: x.isi }), el("p", { class: "bukti", text: x.bukti })
+    ]);
+  }
   function panduanRadar() {
     var ul = el("ul", { class: "panduan-radar" });
     PANDUAN_RADAR.forEach(function (x) {
       ul.appendChild(el("li", { class: "panduan-baris" }, [
         el("span", { class: "lampu lampu-" + x.tingkat, "aria-hidden": "true" }),
-        el("p", null, [el("strong", { text: x.warna + ": " }), document.createTextNode(x.arti)])
+        el("p", null, [el("strong", { text: x.warna + " (" + labelTingkat(x.tingkat) + "): " }), document.createTextNode(x.arti)])
       ]));
     });
     return el("div", { class: "kotak-panduan" }, [
       el("h2", { class: "panduan-judul", text: "Cara membaca hasil Radar" }),
-      el("p", { class: "catatan-metode", text: "Setiap temuan diberi warna. Warna menunjukkan jenis temuan, bukan saran membeli atau menjual." }),
+      el("p", { class: "catatan-metode", text: "Setiap temuan diberi warna dan label. Keduanya menunjukkan jenis temuan, bukan saran membeli atau menjual." }),
       ul
     ]);
   }
@@ -685,9 +696,7 @@
         (usd(e) ? " Emiten ini melapor dalam dolar AS; angka ditampilkan dalam dolar AS sesuai laporannya." : "") }));
       var ul = el("ul", { class: "sinyal-daftar" });
       s.forEach(function (x) {
-        ul.appendChild(el("li", { class: "sinyal sinyal-" + x.tingkat }, [
-          el("h3", { class: "sinyal-judul", text: x.judul }), el("p", { text: x.isi }), el("p", { class: "bukti", text: x.bukti })
-        ]));
+        ul.appendChild(kartuSinyal(x));
       });
       hasil.appendChild(ul);
       var bL = batangTahun("Laba", e.labaTahun || {}, uang(e)), bP = batangTahun("Pendapatan", e.pendapatan || {}, uang(e));
@@ -988,9 +997,7 @@
     akar.appendChild(el("h2", { class: "judul-profil-bagian", id: "radar-risiko", text: "Radar Risiko" }));
     var ul = el("ul", { class: "sinyal-daftar" });
     s.forEach(function (x) {
-      ul.appendChild(el("li", { class: "sinyal sinyal-" + x.tingkat }, [
-        el("h3", { class: "sinyal-judul", text: x.judul }), el("p", { text: x.isi }), el("p", { class: "bukti", text: x.bukti })
-      ]));
+      ul.appendChild(kartuSinyal(x));
     });
     akar.appendChild(ul);
 

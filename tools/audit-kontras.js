@@ -6,7 +6,7 @@
 // garis fokus terlihat (outline ≥2px, atau box-shadow/border berubah) dengan kontras ≥3:1 terhadap latar di sekitarnya.
 // Halaman "UJI-FOKUS" sengaja mematikan outline; audit wajib menangkapnya (uji balik).
 // 17 Nov 09.xx (Dewi & Tegar): Tab sampai habis, + keadaan istilah terbuka, hasil Radar UNTR, kuis terjawab; cek border kotak tanya Asisten.
-// Cara pakai: python3 -m http.server 8765 (di akar repo), lalu: node tools/audit-kontras.js (AUDIT=fokus: hanya garis fokus & fokus tertutup; AUDIT=zoom: hanya zoom 200% & layar pendek HP; AUDIT=jarak: hanya jarak teks WCAG 1.4.12; AUDIT=orientasi: hanya orientasi layar WCAG 1.3.4; AUDIT=sentuh: hanya ukuran sasaran sentuh WCAG 2.5.8; AUDIT=sorot: hanya konten saat diarahkan/difokus WCAG 1.4.13; AUDIT=label: hanya label dalam nama WCAG 2.5.3; AUDIT=status: hanya pesan status WCAG 4.1.3; AUDIT=judul: hanya judul halaman & urutan judul WCAG 2.4.2/1.3.1; AUDIT=bahasa: hanya bahasa halaman & bagian WCAG 3.1.1/3.1.2; AUDIT=isian: hanya label/petunjuk & pesan salah isian WCAG 3.3.2/3.3.1; AUDIT=urutan: hanya urutan fokus WCAG 2.4.3; AUDIT=nonteks: hanya kontras non-teks WCAG 1.4.11)
+// Cara pakai: python3 -m http.server 8765 (di akar repo), lalu: node tools/audit-kontras.js (AUDIT=fokus: hanya garis fokus & fokus tertutup; AUDIT=zoom: hanya zoom 200% & layar pendek HP; AUDIT=jarak: hanya jarak teks WCAG 1.4.12; AUDIT=orientasi: hanya orientasi layar WCAG 1.3.4; AUDIT=sentuh: hanya ukuran sasaran sentuh WCAG 2.5.8; AUDIT=sorot: hanya konten saat diarahkan/difokus WCAG 1.4.13; AUDIT=label: hanya label dalam nama WCAG 2.5.3; AUDIT=status: hanya pesan status WCAG 4.1.3; AUDIT=judul: hanya judul halaman & urutan judul WCAG 2.4.2/1.3.1; AUDIT=bahasa: hanya bahasa halaman & bagian WCAG 3.1.1/3.1.2; AUDIT=isian: hanya label/petunjuk & pesan salah isian WCAG 3.3.2/3.3.1; AUDIT=urutan: hanya urutan fokus WCAG 2.4.3; AUDIT=nonteks: hanya kontras non-teks WCAG 1.4.11; AUDIT=warna: hanya penggunaan warna WCAG 1.4.1)
 // Butuh Playwright + Chromium (sudah ada di lingkungan kerja tim); tidak dijalankan oleh tests/cek.mjs.
 const { chromium } = require('playwright');
 // 17 Nov 14.xx (Dewi & Nina): langkah Tab maju & Shift+Tab mundur untuk cek fokus tertutup, dipakai bersama oleh
@@ -929,6 +929,95 @@ async function auditNonteks(b) {
   console.log('total temuan non-teks',total,'(komponen dicek:',dicek,JSON.stringify(jenisDicek),'; uji balik UJI-PUDAR tertangkap:',uji['UJI-PUDAR'],'dari 4; UJI-LAMPU:',uji['UJI-LAMPU'],'dari 4)');
 }
 
+// 18 Nov 13.xx (Dewi & Nina): penggunaan warna (WCAG 1.4.1 Use of Color), gelap/terang × 390/1280px.
+// (1) Tautan & tombol istilah di dalam blok teks (ada teks lain di blok yang sama): wajib bergaris bawah/garis tepi bawah,
+//     ATAU kontras warna ≥3:1 terhadap teks sekitar DAN muncul garis bawah saat diarahkan (hover) — kalau tidak, TEMUAN.
+// (2) Penanda keadaan berwarna wajib punya teks/ikon yang terlihat (teks tersembunyi khusus pembaca layar tidak dihitung):
+//     kartu temuan Radar (.sinyal-*: label tingkat), lampu panduan (label tingkat di baris yang sama), angka naik/turun
+//     (tanda +/−), umpan kuis (✓ Benar / ✗ Belum tepat), status syariah (teks), batang 9 bulan & batang tahun
+//     (angka tertulis di setiap baris), batang musim laporan (teks "n dari m").
+// Keadaan: 10 halaman + Radar UNTR, profil ANTM + Bandingkan, kuis sesudah Periksa.
+// Uji balik: UJI-GARIS (garis bawah tautan dihapus) dan UJI-TINGKAT (label tingkat temuan disembunyikan) wajib tertangkap.
+async function auditWarna(b) {
+  const KEADAAN=[
+    ['index.html'],['peringkat.html'],['radar.html'],['emiten.html?kode=ANTM'],['kabar.html'],['belajar.html'],
+    ['pelajaran.html?m=apa-itu-saham'],['metodologi.html'],['asisten.html'],['404.html'],
+    ['radar.html','UNTR',async p=>{ await p.selectOption('#pilih-saham','UNTR'); await p.waitForTimeout(300); }],
+    ['emiten.html?kode=ANTM','Bandingkan',async p=>{ const s=await p.$('select.pilih-banding'); if(!s) return 'select.pilih-banding tidak ada';
+      const v=await s.$$eval('option',o=>o.map(x=>x.value).filter(x=>x&&x!=='ANTM')); await s.selectOption(v[0]); await p.waitForTimeout(300); }],
+    ['pelajaran.html?m=apa-itu-saham','periksa',async p=>{ await p.evaluate(()=>{ const m=window.MODUL.find(x=>x.id==='apa-itu-saham'); m.kuis.forEach((q,i)=>{ document.querySelector('input[name="soal-'+i+'"][value="'+(i?q.benar:(q.benar+1)%q.pilihan.length)+'"]').checked=true; }); });
+      await p.click('.kuis button[type="submit"]'); await p.waitForTimeout(200); }],
+    ['index.html','UJI-GARIS',async p=>{ await p.addStyleTag({content:'a,a:hover,a:focus{text-decoration:none!important;border-bottom:0!important}'}); }],
+    ['radar.html','UJI-TINGKAT',async p=>{ await p.selectOption('#pilih-saham','UNTR'); await p.waitForTimeout(300); await p.addStyleTag({content:'.sinyal-tingkat{display:none!important}'}); }],
+  ];
+  let total=0, dicek=0; const uji={'UJI-GARIS':0,'UJI-TINGKAT':0}; const jenisDicek={};
+  for (const scheme of ['dark','light']) for (const w of [390,1280]) {
+    for (const [pg,ket,aksi] of KEADAAN) {
+      const isUji=ket&&ket.startsWith('UJI-'); const tag=`warna ${scheme} ${w} ${pg}${ket?' ('+ket+')':''}`;
+      const ctx=await b.newContext({ viewport:{width:w,height:844}, colorScheme:scheme, deviceScaleFactor:1, reducedMotion:'reduce' });
+      const p=await ctx.newPage(); const errs=[]; p.on('pageerror',e=>errs.push(e.message));
+      await p.goto('http://localhost:8765/'+pg); await p.waitForTimeout(400);
+      const temuan=[];
+      if (aksi) { const r=await aksi(p); if (r) temuan.push('keadaan gagal dibuat: '+r); }
+      const r=await p.evaluate(()=>{
+        const cv=document.createElement('canvas'); cv.width=cv.height=1; const x=cv.getContext('2d',{willReadFrequently:true});
+        const rgba=c=>{ x.clearRect(0,0,1,1); x.fillStyle='rgba(0,0,0,0)'; x.fillStyle=c; x.fillRect(0,0,1,1); const d=x.getImageData(0,0,1,1).data; return [d[0],d[1],d[2],d[3]/255]; };
+        const lum=c=>{ const f=v=>{ v/=255; return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4); }; return .2126*f(c[0])+.7152*f(c[1])+.0722*f(c[2]); };
+        const rasio=(a,b)=>{ const A=lum(a),B=lum(b); return (Math.max(A,B)+.05)/(Math.min(A,B)+.05); };
+        const tampak=e=>e.checkVisibility({visibilityProperty:true,opacityProperty:true})&&e.getBoundingClientRect().width>=1;
+        const nama=e=>e.tagName.toLowerCase()+(e.id?'#'+e.id:'')+(typeof e.className==='string'&&e.className?'.'+e.className.trim().split(/\s+/).join('.'):'');
+        // teks yang benar-benar terlihat (lewati elemen tersembunyi & teks khusus pembaca layar)
+        const teksTampak=root=>{ let t=''; const jalan=n=>{ if(n.nodeType===3){ t+=n.nodeValue; return; } if(n.nodeType!==1) return;
+          if(!n.checkVisibility({visibilityProperty:true,opacityProperty:true})) return; if(n.classList.contains('khusus-pembaca-layar')) return;
+          const r=n.getBoundingClientRect(); if(r.width<=1&&r.height<=1&&getComputedStyle(n).overflow==='hidden') return; n.childNodes.forEach(jalan); }; jalan(root); return t.replace(/\s+/g,' ').trim(); };
+        const hasil=[], cek=[], tautanPolos=[];
+        // (1) tautan & tombol istilah di dalam blok teks
+        const BLOK='p, li, dd, td, th, figcaption, blockquote, summary';
+        document.querySelectorAll('a[href], button.istilah').forEach((a,i)=>{ if(!tampak(a)) return; if(a.closest('.nav, .kepala, .tombol-baris')) return;
+          if(/\btombol\b|tombol-|\bchip\b|\btab\b/.test(a.className)) return;
+          const blok=a.parentElement&&a.parentElement.closest(BLOK); if(!blok) return;
+          const sisa=teksTampak(blok).replace(teksTampak(a),'').replace(/[\s.,;:()·—–\-→↑]/g,''); if(sisa.length<2) return;
+          cek.push('tautan'); const s=getComputedStyle(a);
+          const garis=s.textDecorationLine.includes('underline')||((parseFloat(s.borderBottomWidth)||0)>=1&&s.borderBottomStyle!=='none');
+          if (garis) return;
+          const r=rasio(rgba(s.color),rgba(getComputedStyle(blok).color));
+          if (r<3) { hasil.push(`tautan ${nama(a)} "${teksTampak(a).slice(0,30)}": tanpa garis bawah, beda warna dengan teks sekitar ${r.toFixed(2)}:1 (<3:1)`); return; }
+          a.setAttribute('data-uji-warna',i); tautanPolos.push({sel:`[data-uji-warna="${i}"]`, nama:nama(a)+' "'+teksTampak(a).slice(0,30)+'"'}); });
+        // (2) penanda keadaan berwarna
+        const LABEL={tinggi:/tanda berat/i, sedang:/perlu dicermati/i, info:/keterangan/i, aman:/tanpa tanda risiko/i};
+        document.querySelectorAll('.sinyal').forEach(e=>{ if(!tampak(e)) return; const t=(e.className.match(/sinyal-(tinggi|sedang|info|aman)/)||[])[1]; if(!t) return; cek.push('sinyal');
+          const lab=e.querySelector('.sinyal-tingkat'); const tl=lab?teksTampak(lab):'';
+          if(!LABEL[t].test(tl)) hasil.push(`sinyal ${nama(e)} "${(e.querySelector('.sinyal-judul')||e).textContent.slice(0,40)}": tingkat "${t}" hanya ditandai warna (label terlihat: "${tl}")`); });
+        document.querySelectorAll('.lampu').forEach(e=>{ if(!tampak(e)) return; const t=(e.className.match(/lampu-(tinggi|sedang|info|aman)/)||[])[1]; if(!t) return; cek.push('lampu');
+          if(!LABEL[t].test(teksTampak(e.parentElement))) hasil.push(`lampu ${nama(e)}: baris panduan tanpa label tingkat "${t}"`); });
+        document.querySelectorAll('.naik, .turun').forEach(e=>{ if(!tampak(e)||!/^(td|th|span|p|strong|b)$/i.test(e.tagName)) return; const t=teksTampak(e); if(!t) return; cek.push('naikturun');
+          const naik=e.classList.contains('naik'); const ok=naik?/^[+▲↑]|^0(,0+)?\s?%|naik/i.test(t):/^[−\-▼↓]|turun/i.test(t);
+          if(!ok) hasil.push(`angka ${nama(e)} "${t}": arah ${naik?'naik':'turun'} hanya ditandai warna (tanpa tanda ${naik?'+':'−'})`); });
+        document.querySelectorAll('.kuis-tepat, .kuis-salah').forEach(e=>{ if(!tampak(e)) return; cek.push('kuis'); const t=teksTampak(e);
+          const ok=e.classList.contains('kuis-tepat')?/✓|benar/i.test(t):/✗|✕|belum tepat|salah/i.test(t); if(!ok) hasil.push(`umpan kuis ${nama(e)} "${t.slice(0,40)}": benar/salah hanya ditandai warna`); });
+        document.querySelectorAll('.status-syariah').forEach(e=>{ if(!tampak(e)) return; cek.push('status'); if(!/syariah/i.test(teksTampak(e))) hasil.push(`status ${nama(e)}: tanpa teks status`); });
+        document.querySelectorAll('.batang9-baris').forEach(e=>{ if(!tampak(e)) return; const isi=e.querySelector('.batang9-isi'); if(!isi) return; cek.push('batang');
+          const ang=e.querySelector('.batang9-angka'); if(!ang||!/\d/.test(teksTampak(ang))) hasil.push(`batang ${nama(isi)}: baris tanpa angka tertulis, naik/turun hanya dari warna`); });
+        document.querySelectorAll('.musim-isi').forEach(e=>{ if(!tampak(e)) return; cek.push('musim'); const kotak=e.closest('.musim-laporan, .musim-beranda')||e.parentElement.parentElement;
+          if(!/\d+\s+dari\s+\d+/.test(teksTampak(kotak))) hasil.push(`batang musim ${nama(e)}: tanpa teks "n dari m"`); });
+        return {hasil, cek, tautanPolos, sw:document.documentElement.scrollWidth};
+      });
+      r.hasil.forEach(t=>temuan.push(t)); r.cek.forEach(j=>jenisDicek[j]=(jenisDicek[j]||0)+1); dicek+=r.cek.length;
+      // (1b) tautan tanpa garis bawah tetapi kontras ≥3:1: wajib bergaris saat diarahkan
+      for (const o of r.tautanPolos) { await p.hover(o.sel).catch(()=>{}); await p.waitForTimeout(50);
+        const g=await p.$eval(o.sel,a=>{ const s=getComputedStyle(a); return s.textDecorationLine.includes('underline')||((parseFloat(s.borderBottomWidth)||0)>=1&&s.borderBottomStyle!=='none'); }).catch(()=>false);
+        if(!g) temuan.push(`tautan ${o.nama}: tanpa garis bawah, juga saat diarahkan`); }
+      if (r.sw>w) temuan.push('scroll horizontal '+r.sw);
+      errs.forEach(e=>temuan.push('galat JS: '+e));
+      temuan.forEach(t=>console.log(tag,'TEMUAN',t));
+      if (isUji) { const ok = ket==='UJI-GARIS'?temuan.some(t=>t.startsWith('tautan')):temuan.some(t=>t.startsWith('sinyal')); uji[ket]+=ok?1:0; }
+      else total+=temuan.length;
+      await ctx.close();
+    }
+  }
+  console.log('total temuan warna',total,'(penanda dicek:',dicek,JSON.stringify(jenisDicek),'; uji balik UJI-GARIS tertangkap:',uji['UJI-GARIS'],'dari 4; UJI-TINGKAT:',uji['UJI-TINGKAT'],'dari 4)');
+}
+
 const pages = ['radar.html#UNTR','radar.html#INTP','radar.html#TPIA','radar.html#HEAL','peringkat.html#istilah','asisten.html#jawab','UJI','peringkat.html','radar.html','emiten.html?kode=ANTM','emiten.html?kode=TPIA','kabar.html','metodologi.html','asisten.html',
   'index.html','belajar.html','pelajaran.html?m=apa-itu-saham#benar','pelajaran.html?m=saham-syariah#salah','404.html'];
 const halamanFokus = ['index.html','peringkat.html','peringkat.html#istilah','radar.html','radar.html#UNTR','emiten.html?kode=ANTM','kabar.html','belajar.html','pelajaran.html?m=apa-itu-saham','pelajaran.html?m=apa-itu-saham#benar','metodologi.html','asisten.html','404.html','UJI-FOKUS','UJI-FOKUS-BORDER'];
@@ -958,6 +1047,8 @@ const halamanFokus = ['index.html','peringkat.html','peringkat.html#istilah','ra
   if (process.env.AUDIT==='urutan') { await auditUrutan(b); await b.close(); return; }
   // AUDIT=nonteks node tools/audit-kontras.js → hanya kontras non-teks (WCAG 1.4.11)
   if (process.env.AUDIT==='nonteks') { await auditNonteks(b); await b.close(); return; }
+  // AUDIT=warna node tools/audit-kontras.js → hanya penggunaan warna (WCAG 1.4.1)
+  if (process.env.AUDIT==='warna') { await auditWarna(b); await b.close(); return; }
   let total = 0;
   // AUDIT=fokus node tools/audit-kontras.js → hanya cek garis fokus (lebih cepat)
   if (process.env.AUDIT!=='fokus') for (const scheme of ['dark','light']) for (const w of [390,1280]) {
@@ -1147,5 +1238,6 @@ const halamanFokus = ['index.html','peringkat.html','peringkat.html#istilah','ra
   await auditUrutan(b);
   await auditIsian(b);
   await auditNonteks(b);
+  await auditWarna(b);
   console.log('total temuan',total); await b.close();
 })();
