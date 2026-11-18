@@ -797,24 +797,23 @@
 
   // Arif & Dewi (14 Nov, IDE.md #29): tombol "Salin tautan profil". Memakai Clipboard API bawaan peramban bila ada;
   // bila tidak ada atau ditolak, alamat ditampilkan di kotak teks yang sudah terpilih agar bisa disalin manual.
-  // Tanpa simpanan, tanpa layanan luar. Pesan di role=status; "Tautan disalin" hilang sendiri.
-  function tombolSalin(alamat, papan, tunda) {
+  // Tanpa simpanan, tanpa layanan luar. Pesan di role=status.
+  // Dewi & Nina (18 Nov 20.xx, WCAG 2.2.1): "Tautan disalin." tidak lagi hilang sendiri setelah 4 detik; pesan tetap
+  // sampai tombol ditekan lagi, agar pemula (dan pembaca layar yang lambat) sempat membacanya.
+  function tombolSalin(alamat, papan) {
     var info = el("p", { id: "salin-info", class: "info-salin", role: "status", "aria-live": "polite" });
     var tombol = el("button", { type: "button", class: "tombol tombol-salin", text: "Salin tautan profil" });
     var kotak = el("input", { type: "text", id: "salin-alamat", class: "alamat-salin", readonly: "", hidden: "",
       "aria-label": "Alamat profil ini" });
     kotak.value = alamat;
-    var waktu = null;
-    function pesan(t, hilang) {
+    function pesan(t) {
       info.textContent = t;
-      if (waktu) clearTimeout(waktu);
-      waktu = hilang ? (tunda || setTimeout)(function () { info.textContent = ""; waktu = null; }, 4000) : null;
     }
     function cadangan() {
       kotak.hidden = false;
       kotak.focus();
       kotak.select();
-      pesan("Tautan belum bisa disalin otomatis. Alamatnya sudah dipilih di kotak ini: salin dengan Ctrl+C, atau tekan lama lalu Salin.", false);
+      pesan("Tautan belum bisa disalin otomatis. Alamatnya sudah dipilih di kotak ini: salin dengan Ctrl+C, atau tekan lama lalu Salin.");
     }
     tombol.addEventListener("click", function () {
       if (!papan || typeof papan.writeText !== "function") { cadangan(); return; }
@@ -822,7 +821,7 @@
       try { janji = papan.writeText(alamat); } catch (err) { cadangan(); return; }
       Promise.resolve(janji).then(function () {
         kotak.hidden = true;
-        pesan("Tautan disalin.", true);
+        pesan("Tautan disalin.");
       }, cadangan);
     });
     return el("div", { class: "salin-profil" }, [tombol, kotak, info]);

@@ -490,7 +490,7 @@ async function skenarioKetik(p, sabot) {
 // Nina & Tegar (14 Nov 13.09, IDE.md #29): skenario ketujuh, tombol "Salin tautan profil" di profil TLKM dengan keyboard.
 // Konteks sendiri (localhost = konteks aman). (a) Papan klip diizinkan: Tab dari awal sampai tombol, Enter → pesan
 // "Tautan disalin." di role=status + aria-live=polite, isi papan klip = alamat profil TLKM, kotak alamat tetap tersembunyi,
-// fokus tetap di tombol, lalu pesan hilang sendiri setelah 4 detik. (b) Papan klip ditolak (writeText menolak): Tab + Enter →
+// fokus tetap di tombol, dan pesan masih ada setelah 4 detik (18 Nov 20.xx, WCAG 2.2.1: tidak hilang sendiri). (b) Papan klip ditolak (writeText menolak): Tab + Enter →
 // kotak #salin-alamat tampil, berisi alamat TLKM, terfokus dan seluruh teksnya terpilih, pesan cadangan di role=status.
 // Sesudah tiap langkah: cekDom (id unik, rujukan aria, fokus tidak hilang). Sabot: status kehilangan role/aria-live (a),
 // writeText "berhasil" tanpa menulis (a), tombol tabindex=-1 (b), fokus dilepas (b), id ganda #salin-alamat (b).
@@ -534,7 +534,7 @@ async function skenarioSalin(b, sabot, lebar = 390) {
   (await cekDom(p)).forEach((t) => temuan.push(`Salin a: ${t}`));
   await p.waitForTimeout(4200);
   st = await baca();
-  if (!sabot && st.teks !== '') temuan.push(`Salin a: status: pesan "${st.teks}" tidak hilang setelah 4 detik`);
+  if (!sabot && st.teks !== 'Tautan disalin.') temuan.push(`Salin a: status: pesan "${st.teks}" hilang sendiri sebelum 4 detik`);
   // (b) ditolak
   await p.goto(alamat); await p.waitForTimeout(400);
   await p.evaluate(() => { navigator.clipboard.writeText = () => Promise.reject(new Error('ditolak')); });

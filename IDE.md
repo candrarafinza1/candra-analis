@@ -734,3 +734,11 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Perbaikan Dewi: bintang berkedip 2 kali (1,6 detik, jeda .4/.8 detik) lalu diam di terang semula; selesai ≤4 detik. Penanda "sedang menyusun jawaban" juga dibatasi 4 kedip, titik-titik tetap terlihat. Saat gerak dikurangi tetap tanpa animasi.
 - Hasil: 0 temuan; uji balik UJI-ANIMASI 8/8. Nina menambah cek statis (tanpa `infinite`, animasi hanya di `prefers-reduced-motion: no-preference`, tanpa setInterval) + 8 uji balik.
 - Kirana: tangkapan 390px setelah 4,5 detik: bintang diam rapi, tidak ada scroll samping.
+
+### Catatan audit: batas waktu & pembaruan otomatis WCAG 2.2.1 (Dewi & Nina, 18 Nov 20.13)
+- Alat: `AUDIT=waktu node tools/audit-kontras.js`. 16 keadaan (10 halaman, kotak istilah terbuka, Radar UNTR, salin tautan berhasil & cadangan, cari kamus, kuis benar, tandai selesai, galat Asisten, 2 uji balik) × gelap/terang × 390/1280px = 64 pengecekan. Jam halaman dipalsukan (`page.clock`) lalu dimajukan 20 menit sekaligus; dibandingkan alamat, navigasi, dan 4.664 baris teks terlihat sebelum vs sesudah.
+- Temuan 4 (profil emiten, semua ukuran): pesan "Tautan disalin." hilang sendiri setelah 4 detik; pembaca layar yang lambat atau pemula bisa tidak sempat membacanya.
+- Perbaikan Dewi: pesan tetap tampil sampai tombol "Salin tautan profil" ditekan lagi; tidak ada lagi setTimeout di app.js. Tidak ada halaman yang memuat ulang atau berpindah sendiri, tidak ada meta refresh.
+- Hasil: 0 temuan; uji balik UJI-HILANG/UJI-MUAT 8/8; audit animasi & pesan status tetap 0; skenario keyboard Salin (390/1280px) 0 temuan. Nina menambah cek statis (tanpa setTimeout/setInterval, tanpa location.reload/replace/assign/href =, tanpa meta refresh) + 10 uji balik; tes salin diubah: pesan tidak boleh dijadwalkan hilang.
+- Kirana: perubahan hanya teks pesan yang menetap; dicek 390px & 1280px setelah 6 detik, pesan masih ada, tanpa scroll samping.
+
