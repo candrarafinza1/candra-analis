@@ -1872,3 +1872,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Tugas baru: Dewi + Nina (saat fokus & saat mengisi, WCAG 3.2.1/3.2.2).
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
 
+
+## 18 Nov 2026, sesi 21.12 WIB (Bima)
+- Dewi + Nina: audit saat fokus & saat mengisi (WCAG 3.2.1/3.2.2) di `tools/audit-kontras.js` (`AUDIT=konteks`, ikut audit penuh): 2.292 langkah Tab di 11 halaman/keadaan + 10 perubahan isian, gelap/terang, 390/1280px. Hasil 0 temuan (tidak ada halaman berpindah, jendela baru, atau fokus dipindah skrip); uji balik UJI-FOKUS/UJI-JENDELA/UJI-UBAH/UJI-ISI 16/16. Nina: cek statis + 9 uji balik. Tanpa perubahan tampilan.
+- Fajar: giliran BSSR & MIKA; masih hanya semester I 2026 → tetap 25 dari 32. Raka/Hana: tidak ada kabar baru.
+- Tugas baru: Dewi + Nina (nama, peran, nilai WCAG 4.1.2).
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

@@ -1438,6 +1438,100 @@ async function auditWaktu(b) {
   return total;
 }
 
+// Dewi & Nina (18 Nov 21.xx): saat fokus & saat mengisi, WCAG 3.2.1 (On Focus) & 3.2.2 (On Input).
+// (a) Tab sampai habis di 11 halaman/keadaan: setiap tekan Tab hanya boleh memindah fokus SATU kali (focusin dihitung di
+//     halaman; lebih dari satu = fokus dipindah skrip), tanpa navigasi, tanpa window.open, tanpa tab/jendela baru.
+// (b) Mengubah pilihan/isian (pilih saham Radar, ketik kode Radar, saring sektor, saring jenis kabar, pilih & ketik
+//     Bandingkan, cari kamus, pilih jawaban kuis, ketik di kotak tanya Asisten): halaman tidak berpindah, tidak ada
+//     jendela baru, dan fokus tetap di kontrol yang diubah.
+// Uji balik wajib tertangkap: UJI-FOKUS (fokus dipindah ke h1 saat tautan difokus), UJI-JENDELA (window.open saat fokus),
+// UJI-UBAH (pindah halaman saat pilihan Radar diganti), UJI-ISI (fokus dipindah saat mengetik di cari kamus).
+// AUDIT=konteks node tools/audit-kontras.js
+async function auditKonteks(b) {
+  const jalur = `(()=>{ window.__buka=0; window.open=function(){ window.__buka++; return null; }; window.__fin=0;
+    document.addEventListener('focusin',()=>{ window.__fin++; },true); window.__lalu=null; })()`;
+  const ambil = p => p.evaluate(()=>{ const a=document.activeElement; const n=window.__fin; window.__fin=0;
+    let id='body'; if (a && a!==document.body) { const ps=[]; for (let e=a;e&&e.nodeType===1&&e!==document.body;e=e.parentElement){ let i=0,s=e; while((s=s.previousElementSibling)) i++; ps.unshift(e.tagName+i); } id=ps.join('>'); }
+    const lalu=window.__lalu; const mundur=!!(lalu&&a&&a!==document.body&&lalu!==a&&(lalu.compareDocumentPosition(a)&Node.DOCUMENT_POSITION_PRECEDING)&&!lalu.contains(a));
+    window.__lalu=a&&a!==document.body?a:null;
+    const luar=!!(a&&a!==document.body&&a.getAttribute('tabindex')!==null&&a.tabIndex<0);
+    return { id, n, mundur, luar, buka:window.__buka, url:location.href, ket:a?(a.id||a.textContent||'').trim().slice(0,30):'' }; });
+  const TAB=['index.html','peringkat.html','radar.html','radar.html#UNTR','emiten.html?kode=ANTM','kabar.html','belajar.html',
+    'pelajaran.html?m=apa-itu-saham','metodologi.html','asisten.html','404.html','UJI-FOKUS','UJI-JENDELA'];
+  const ketik = async (p,sel,teks)=>{ await p.focus(sel); await p.keyboard.type(teks,{delay:20}); };
+  const pilihKe2 = async (p,sel)=>{ await p.focus(sel); const v=await p.$$eval(sel+' option',o=>o.map(x=>x.value).filter(Boolean)); await p.selectOption(sel,v[1]||v[0]); };
+  const UBAH=[
+    ['radar.html','pilih saham Radar','#pilih-saham',async p=>{ await p.focus('#pilih-saham'); await p.selectOption('#pilih-saham','UNTR'); }],
+    ['radar.html','panah bawah pilih saham','#pilih-saham',async p=>{ await p.focus('#pilih-saham'); await p.keyboard.press('ArrowDown'); }],
+    ['radar.html','ketik kode Radar','#radar-ketik',p=>ketik(p,'#radar-ketik','UNTR')],
+    ['peringkat.html','saring sektor','#pilih-sektor',p=>pilihKe2(p,'#pilih-sektor')],
+    ['kabar.html','saring jenis kabar','#pilih-jenis',p=>pilihKe2(p,'#pilih-jenis')],
+    ['emiten.html?kode=ANTM','pilih Bandingkan','#pilih-banding',p=>pilihKe2(p,'#pilih-banding')],
+    ['emiten.html?kode=ANTM','ketik Bandingkan','#banding-ketik',p=>ketik(p,'#banding-ketik','TLKM')],
+    ['belajar.html','cari kamus','#cari-istilah',p=>ketik(p,'#cari-istilah','dividen')],
+    ['pelajaran.html?m=apa-itu-saham','pilih jawaban kuis','input[name="soal-0"]',async p=>{ await p.focus('input[name="soal-0"]'); await p.keyboard.press('ArrowDown'); }],
+    ['asisten.html','ketik kotak tanya','#kotak-tanya',p=>ketik(p,'#kotak-tanya','Apa itu ROE')],
+    ['radar.html','UJI-UBAH','#pilih-saham',async p=>{ await p.evaluate(()=>document.getElementById('pilih-saham').addEventListener('change',()=>{ location.href='index.html'; })); await p.focus('#pilih-saham'); await p.selectOption('#pilih-saham','UNTR'); }],
+    ['belajar.html','UJI-ISI','#cari-istilah',async p=>{ await p.evaluate(()=>document.getElementById('cari-istilah').addEventListener('input',()=>{ const h=document.querySelector('h1'); h.tabIndex=-1; h.focus(); })); await ketik(p,'#cari-istilah','di'); }],
+  ];
+  let total=0, uji=0, ujiN=0, langkah=0, ubahN=0;
+  for (const scheme of ['dark','light']) for (const w of [390,1280]) {
+    for (const pg of TAB) {
+      const [path,hash]=pg.split('#'); const isUji=path.startsWith('UJI-');
+      const ctx=await b.newContext({ viewport:{width:w,height:844}, colorScheme:scheme, deviceScaleFactor:1 });
+      await ctx.addInitScript(jalur); let baru=0;
+      if (path==='asisten.html') await ctx.route('**/api/tanya', r=>r.fulfill({ status:200, contentType:'application/json', body:JSON.stringify({aktif:true}) }));
+      const p=await ctx.newPage(); ctx.on('page',()=>baru++); const errs=[]; p.on('pageerror',e=>errs.push(e.message));
+      let nav=0; p.on('framenavigated',f=>{ if (f===p.mainFrame()) nav++; });
+      await p.goto('http://localhost:8765/'+(isUji?'index.html':path)); await p.waitForTimeout(300);
+      if (path==='radar.html'&&hash) { await p.selectOption('#pilih-saham',hash); await p.waitForTimeout(200); }
+      if (path==='UJI-FOKUS') await p.evaluate(()=>{ const a=document.querySelectorAll('a[href]')[2]; a.addEventListener('focus',()=>{ const h=document.querySelector('h1'); h.tabIndex=-1; h.focus(); }); });
+      if (path==='UJI-JENDELA') await p.evaluate(()=>{ document.querySelectorAll('a[href]')[2].addEventListener('focus',()=>window.open('index.html')); });
+      await p.evaluate(()=>{ window.__fin=0; }); const navAwal=nav; const temuan=[]; let pertama=null, n=0;
+      for (; n<250; n++) {
+        await p.keyboard.press('Tab'); await p.waitForTimeout(25);
+        const s=await ambil(p); langkah++;
+        if (s.mundur && s.id!==pertama) temuan.push('Tab ke-'+(n+1)+': fokus mundur ke "'+s.ket+'" (dipindah skrip)');
+        if (s.luar) temuan.push('Tab ke-'+(n+1)+': fokus jatuh di elemen tabindex=-1 "'+s.ket+'" (dipindah skrip)');
+        if (s.n>1) temuan.push('Tab ke-'+(n+1)+': fokus dipindah '+s.n+'× (berakhir di "'+s.ket+'")');
+        if (s.buka) { temuan.push('Tab ke-'+(n+1)+': window.open dipanggil'); await p.evaluate(()=>{ window.__buka=0; }); }
+        if (s.id==='body' || s.id===pertama) break; if (!pertama) pertama=s.id;
+      }
+      await p.waitForTimeout(300); const akhir=await ambil(p);
+      if (akhir.n>0) temuan.push('fokus berpindah sendiri setelah Tab berhenti ('+akhir.n+'×)');
+      if (nav>navAwal) temuan.push('halaman berpindah saat Tab ('+(nav-navAwal)+' navigasi)');
+      if (baru) temuan.push('tab/jendela baru terbuka saat Tab ('+baru+')');
+      if (errs.length) temuan.push('galat JS: '+errs.join(' | '));
+      console.log(`konteks fokus ${scheme} ${w} ${pg}`, n+' Tab', temuan.length?'TEMUAN '+temuan.slice(0,4).join('; '):'lolos');
+      if (isUji) { ujiN++; if (temuan.length) uji++; } else total+=temuan.length;
+      await ctx.close();
+    }
+    for (const [path,ket,sel,aksi] of UBAH) {
+      const isUji=ket.startsWith('UJI-');
+      const ctx=await b.newContext({ viewport:{width:w,height:844}, colorScheme:scheme, deviceScaleFactor:1 });
+      await ctx.addInitScript(jalur); let baru=0;
+      if (path==='asisten.html') await ctx.route('**/api/tanya', r=>r.fulfill({ status:200, contentType:'application/json', body:JSON.stringify({aktif:true}) }));
+      const p=await ctx.newPage(); ctx.on('page',()=>baru++); const errs=[]; p.on('pageerror',e=>errs.push(e.message));
+      let nav=0; p.on('framenavigated',f=>{ if (f===p.mainFrame()) nav++; });
+      await p.goto('http://localhost:8765/'+path); await p.waitForTimeout(300);
+      const navAwal=nav; const temuan=[];
+      try { await aksi(p); } catch(e) { temuan.push('keadaan gagal dibuat: '+e.message.split('\n')[0]); }
+      await p.waitForTimeout(400);
+      let s; try { s=await p.evaluate(sel=>{ const a=document.activeElement; return { tetap:!!a&&a.matches(sel), ket:a?(a.id||a.tagName):'', buka:window.__buka||0 }; },sel); } catch(e) { s={tetap:false,ket:'?',buka:0}; }
+      if (nav>navAwal) temuan.push('halaman berpindah setelah '+ket);
+      if (!s.tetap) temuan.push('fokus pindah dari '+sel+' ke '+s.ket);
+      if (s.buka||baru) temuan.push('jendela baru dibuka');
+      if (errs.length) temuan.push('galat JS: '+errs.join(' | '));
+      ubahN++;
+      console.log(`konteks isian ${scheme} ${w} ${path} (${ket})`, temuan.length?'TEMUAN '+temuan.join('; '):'lolos');
+      if (isUji) { ujiN++; if (temuan.length) uji++; } else total+=temuan.length;
+      await ctx.close();
+    }
+  }
+  console.log('total temuan saat fokus & saat mengisi',total,'(Tab dicek:',langkah,'; perubahan isian:',ubahN,'; uji balik UJI-FOKUS/UJI-JENDELA/UJI-UBAH/UJI-ISI tertangkap:',uji+'/'+ujiN+')');
+  return total;
+}
+
 async function auditTeks(b) {
   const halaman=['index.html','peringkat.html','peringkat.html#istilah','radar.html#UNTR','emiten.html?kode=ANTM','kabar.html','belajar.html',
     'pelajaran.html?m=apa-itu-saham#benar','metodologi.html','asisten.html','asisten.html#jawab','404.html','UJI-PX','UJI-TETAP'];
@@ -1549,6 +1643,8 @@ const halamanFokus = ['index.html','peringkat.html','peringkat.html#istilah','ra
   if (process.env.AUDIT==='animasi') { await auditAnimasi(b); await b.close(); return; }
   // AUDIT=waktu node tools/audit-kontras.js → hanya batas waktu & pembaruan otomatis (WCAG 2.2.1)
   if (process.env.AUDIT==='waktu') { await auditWaktu(b); await b.close(); return; }
+  // AUDIT=konteks node tools/audit-kontras.js → hanya saat fokus & saat mengisi (WCAG 3.2.1 & 3.2.2)
+  if (process.env.AUDIT==='konteks') { await auditKonteks(b); await b.close(); return; }
   let total = 0;
   // AUDIT=fokus node tools/audit-kontras.js → hanya cek garis fokus (lebih cepat)
   if (process.env.AUDIT!=='fokus') for (const scheme of ['dark','light']) for (const w of [390,1280]) {
@@ -1726,6 +1822,7 @@ const halamanFokus = ['index.html','peringkat.html','peringkat.html#istilah','ra
     await ctx.close();
   }
   console.log('total temuan ke-atas',totalAtas,'(uji balik UJI-KEATAS tertangkap:',ujiAtas,')');
+  await auditKonteks(b);
   await auditTeks(b);
   await auditZoom(b);
   await auditJarak(b);

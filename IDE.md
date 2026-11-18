@@ -742,3 +742,9 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Hasil: 0 temuan; uji balik UJI-HILANG/UJI-MUAT 8/8; audit animasi & pesan status tetap 0; skenario keyboard Salin (390/1280px) 0 temuan. Nina menambah cek statis (tanpa setTimeout/setInterval, tanpa location.reload/replace/assign/href =, tanpa meta refresh) + 10 uji balik; tes salin diubah: pesan tidak boleh dijadwalkan hilang.
 - Kirana: perubahan hanya teks pesan yang menetap; dicek 390px & 1280px setelah 6 detik, pesan masih ada, tanpa scroll samping.
 
+
+### Catatan audit: saat fokus & saat mengisi WCAG 3.2.1/3.2.2 (Dewi & Nina, 18 Nov 21.21)
+- Alat: `AUDIT=konteks node tools/audit-kontras.js` (ikut audit penuh). Tab sampai habis di 11 halaman/keadaan (2.292 langkah Tab): tiap Tab hanya boleh memindah fokus sekali, maju sesuai urutan dokumen, tidak jatuh di elemen tabindex=-1, tanpa navigasi, window.open, atau tab baru. Ditambah 10 perubahan isian (pilih & panah bawah pilihan Radar, ketik kode Radar, saring sektor, saring jenis kabar, pilih & ketik Bandingkan, cari kamus, jawaban kuis, kotak tanya Asisten): halaman tetap, tanpa jendela baru, fokus tetap di kontrol yang diubah. Gelap/terang × 390/1280px.
+- Hasil: 0 temuan, tanpa perubahan tampilan. Uji balik UJI-FOKUS, UJI-JENDELA, UJI-UBAH, UJI-ISI tertangkap 16/16.
+- Nina: cek statis di `tests/cek.mjs` (app.js tanpa window.open dan .submit(); requestSubmit hanya satu, dari Enter di kotak tanya) + 9 uji balik.
+- Kirana: tidak ada perubahan tampilan yang perlu ditinjau; usul berikutnya audit nama, peran, nilai (WCAG 4.1.2).

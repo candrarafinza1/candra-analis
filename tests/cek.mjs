@@ -6433,6 +6433,42 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
   ok(cekWaktu(jsW + '\n// setTimeout(x, 1) hanya contoh di komentar\nif (location.href === "x") {}\nvar u = location.search;', htmlW, audW).length === 0, "uji balik batas waktu: komentar, perbandingan location.href & location.search tidak boleh dianggap temuan");
 }
 
+// (j) Dewi & Nina (18 Nov 21.xx): saat fokus & saat mengisi WCAG 3.2.1/3.2.2. app.js tidak membuka jendela baru
+// (window.open) dan tidak mengirim formulir sendiri lewat .submit() (requestSubmit hanya dari Enter di kotak tanya).
+// Audit AUDIT=konteks (Tab sampai habis + 10 perubahan isian) ada, ikut audit penuh, memuat uji balik
+// UJI-FOKUS, UJI-JENDELA, UJI-UBAH, UJI-ISI.
+{
+  const cekKonteks = (js, aud) => {
+    const s = [];
+    const kode = js.replace(/\/\*[\s\S]*?\*\//g, "").replace(/^\s*\/\/.*$/gm, "");
+    if (/\bwindow\.open\s*\(/.test(kode)) s.push("app.js: window.open (jendela baru tanpa diminta)");
+    if (/\.submit\s*\(\s*\)/.test(kode)) s.push("app.js: .submit() (formulir terkirim sendiri)");
+    const rq = kode.match(/requestSubmit\s*\(/g) || [];
+    if (rq.length > 1) s.push("app.js: requestSubmit dipakai di lebih dari satu tempat");
+    if (!/async function auditKonteks\(b\)/.test(aud)) s.push("auditKonteks tidak ada");
+    if (!/process\.env\.AUDIT==='konteks'\) \{ await auditKonteks\(b\)/.test(aud)) s.push("mode AUDIT=konteks tidak ada");
+    if (!/\n  await auditKonteks\(b\);\n/.test(aud)) s.push("audit penuh tidak menjalankan auditKonteks");
+    for (const u of ["UJI-FOKUS", "UJI-JENDELA", "UJI-UBAH", "UJI-ISI"]) if (!aud.includes(`'${u}'`)) s.push(`uji balik ${u} tidak ada`);
+    return s;
+  };
+  const jsK2 = readFileSync("assets/app.js", "utf8"), audK2 = readFileSync("tools/audit-kontras.js", "utf8");
+  const sK2 = cekKonteks(jsK2, audK2);
+  ok(sK2.length === 0, `Saat fokus & saat mengisi WCAG 3.2.1/3.2.2: ${sK2.join("; ")}`);
+  const rusakK2 = [
+    [jsK2 + '\nisi.addEventListener("focus", function () { window.open("index.html"); });', audK2, "window.open"],
+    [jsK2 + '\npilih.addEventListener("change", function () { form.submit(); });', audK2, ".submit()"],
+    [jsK2 + '\npilih.addEventListener("change", function () { form.requestSubmit(); });', audK2, "requestSubmit"],
+    [jsK2, audK2.replace("  await auditKonteks(b);\n", ""), "audit penuh"],
+    [jsK2, audK2.replace("process.env.AUDIT==='konteks'", "process.env.AUDIT==='k'"), "mode AUDIT=konteks"],
+    [jsK2, audK2.split("'UJI-FOKUS'").join("'UJI-A'"), "UJI-FOKUS"],
+    [jsK2, audK2.split("'UJI-JENDELA'").join("'UJI-B'"), "UJI-JENDELA"],
+    [jsK2, audK2.split("'UJI-UBAH'").join("'UJI-C'"), "UJI-UBAH"],
+    [jsK2, audK2.split("'UJI-ISI'").join("'UJI-D'"), "UJI-ISI"],
+  ];
+  for (const [j, a, pesan] of rusakK2) ok(cekKonteks(j, a).some((x) => x.includes(pesan)), `uji balik saat fokus & saat mengisi: "${pesan}" harus tertangkap`);
+  ok(cekKonteks(jsK2 + "\n// window.open(x) hanya contoh di komentar", audK2).length === 0, "uji balik saat fokus & saat mengisi: komentar tidak boleh dianggap temuan");
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);
 
