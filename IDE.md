@@ -829,3 +829,9 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Uji balik UJI-TANPA (tanda dihapus) tertangkap 8 dan UJI-GANDA (semua tautan ditandai) tertangkap 8.
 - Nina: cek statis di `tests/cek.mjs` (tandaiMenu membuang .html bila cleanUrls aktif, pelajaran → Belajar, aria-current="page", gaya menu aktif, mode audit, alamat bersih & 2 uji balik) + 8 uji balik.
 - Kirana: tinjau. Usul berikutnya: audit keyboard & tanpa jebakan keyboard (WCAG 2.1.1/2.1.2).
+
+### 19 Nov 19.10 — Audit keyboard & tanpa jebakan (WCAG 2.1.1/2.1.2) (Dewi & Nina, ditinjau Kirana)
+- `AUDIT=keyboard node tools/audit-kontras.js`: 11 halaman/keadaan (termasuk kotak istilah terbuka), 390/1280px, gelap/terang. Tab maju & Shift+Tab mundur sampai keluar halaman: semua elemen terjangkau, fokus tidak pernah tertahan.
+- Elemen dengan pendengar klik yang tidak bisa difokus: 0. Fitur utama dicoba hanya dengan keyboard (pilihan Radar, tab Peringkat dengan panah, istilah Enter/Esc, kuis Spasi/Enter, Bandingkan, salin tautan, saringan Kabar): semua bekerja. Hasil 0 temuan.
+- Uji balik UJI-JEBAK (Tab ditahan) tertangkap 8 dan UJI-KLIK (kotak klik tanpa fokus) tertangkap 4. Uji coba tambahan: panah tab Peringkat dimatikan sementara → tertangkap di 4 ukuran.
+- Kirana: tinjau. Usul berikutnya: audit pintasan tombol satu huruf (WCAG 2.1.4).

@@ -6924,6 +6924,41 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
   ok(cekLetak(appL, cssL + '\n/* .nav a[aria-current="page"] { background: red; } */\n', audL, verL).length === 0, "uji balik tahu sedang di mana: komentar CSS tidak boleh dianggap temuan");
 }
 
+// (u) Dewi & Nina (19 Nov 19.xx, usul Kirana): keyboard & tanpa jebakan (WCAG 2.1.1/2.1.2). Audit AUDIT=keyboard wajib ada,
+// ikut audit penuh, menekan Tab & Shift+Tab sampai keluar halaman, mencatat pendengar klik, mencoba fitur utama dengan keyboard
+// (Radar, tab Peringkat, istilah, kuis, Bandingkan, salin tautan, saringan Kabar), dan memuat uji balik UJI-JEBAK & UJI-KLIK.
+// Tab Peringkat wajib bisa dipindah dengan panah kanan/kiri. Disertai uji balik.
+{
+  const cekKb = (app, aud) => {
+    const s = [];
+    if (!/process\.env\.AUDIT==='keyboard'\) \{ await auditKeyboard\(b\)/.test(aud)) s.push("mode AUDIT=keyboard tidak ada");
+    if (!/\n  await auditKeyboard\(b\);\n/.test(aud)) s.push("auditKeyboard tidak ikut audit penuh");
+    const i = aud.indexOf("async function auditKeyboard"); const fK = i < 0 ? "" : aud.slice(i, aud.indexOf("const pages = [", i));
+    if (!fK) s.push("fungsi auditKeyboard tidak ada");
+    for (const u of ["UJI-JEBAK", "UJI-KLIK"]) if (!fK.includes(`'${u}'`)) s.push(`uji balik ${u} tidak ada`);
+    for (const a of ["'Tab'", "'Shift+Tab'"]) if (!fK.includes(a)) s.push(`audit keyboard tidak menekan ${a}`);
+    if (!/__klik/.test(fK)) s.push("audit keyboard tidak mencatat pendengar klik");
+    for (const f of ["pilihan Radar", "tab Peringkat", "istilah", "kuis", "Bandingkan", "salin tautan", "saringan Kabar"])
+      if (!fK.includes(`rasa('${f}'`)) s.push(`fitur "${f}" tidak dicoba dengan keyboard`);
+    if (!/ev\.key === "ArrowRight" \|\| ev\.key === "ArrowLeft"/.test(app)) s.push("tab Peringkat tidak bisa dipindah dengan panah");
+    return s;
+  };
+  const appK = readFileSync("assets/app.js", "utf8"), audK2 = readFileSync("tools/audit-kontras.js", "utf8");
+  const sK = cekKb(appK, audK2);
+  ok(sK.length === 0, `Keyboard & tanpa jebakan WCAG 2.1.1/2.1.2: ${sK.join("; ")}`);
+  const rusakK = [
+    [appK, audK2.replace("process.env.AUDIT==='keyboard'", "process.env.AUDIT==='kb'"), "mode AUDIT=keyboard"],
+    [appK, audK2.replace("  await auditKeyboard(b);\n", ""), "auditKeyboard tidak ikut"],
+    [appK, audK2.split("'UJI-JEBAK'").join("'UJI-Z'"), "UJI-JEBAK"],
+    [appK, audK2.split("'UJI-KLIK'").join("'UJI-Z'"), "UJI-KLIK"],
+    [appK, audK2.split("'Shift+Tab'").join("'Tab'"), "Shift+Tab"],
+    [appK, audK2.split("__klik").join("__x"), "pendengar klik"],
+    [appK, audK2.replace("rasa('salin tautan'", "rasa('salin'"), "salin tautan"],
+    [appK.replace('ev.key === "ArrowRight" || ev.key === "ArrowLeft"', 'ev.key === "Enter"'), audK2, "panah"],
+  ];
+  for (const [a, au, pesan] of rusakK) ok(cekKb(a, au).some((x) => x.includes(pesan)), `uji balik keyboard: "${pesan}" harus tertangkap`);
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);
 
