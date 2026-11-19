@@ -1966,3 +1966,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Nina: cek 2f di `tests/cek.mjs` (skema, tanggal & urutan, https, buktiSyariah, desBaris + kutipan DES, tanpa ajakan, acara > 60 hari) + 13 uji balik; uji rusak manual tertangkap.
 - Masalah ringan: e-ipo.co.id dan beberapa situs berita tidak bisa dibuka alat tim; dipakai sumber lain.
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Berikutnya: halaman `agenda.html` (Arif + Dewi). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 19 Nov 2026, 21.16 WIB — sesi kerja (Bima)
+- Proyek prioritas Agenda IPO & Dividen, tugas 2 selesai (Arif + Dewi): halaman `agenda.html` tayang. Dua bagian (IPO saham syariah, Dividen saham syariah), kartu urut dari tanggal penting terdekat, hitung mundur ("hari ini", "besok", "n hari lagi"), penjelasan singkat tiap tanggal (penawaran awal, penawaran umum, penjatahan, pencatatan; cum, ex, recording, pembayaran), tautan sumber + baris DES. Acara yang sudah lewat masuk "Baru saja lewat" (maks. 14 hari). IPO kosong → keadaan kosong menjelaskan cara tim memantau.
+- Tautan "Agenda" di menu atas & kaki semua 11 halaman. Dewi: huruf menu HP dikecilkan sedikit agar 5 tautan tetap satu baris di 390px (dua baris di ≤360px). Dicek 1280px & 390px terang/gelap tanpa scroll horizontal, tanpa galat JS; tanggal palsu 20 Des & 1 Feb 2027 dicoba.
+- Nina: cek kerangka diperbarui (menu 5 tautan, 11 halaman, wadah #agenda). Cek khusus Agenda jadi tugas baru Nina.
+- `node tests/cek.mjs` lolos (11 halaman, 8 pelajaran, 32 emiten). Berikutnya: tombol "Tambahkan ke kalender" (Arif + Tegar). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
