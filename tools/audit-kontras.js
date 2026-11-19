@@ -2255,6 +2255,100 @@ async function auditTeks(b) {
   console.log('total temuan ubah ukuran teks',total,'(baris teks dicek:',dicekTotal,'; catatan judul <1,9×:',catatan,'; uji balik UJI-PX tertangkap:',ujiPx,'dari 4; UJI-TETAP tertangkap:',ujiTetap,'dari 4)');
 }
 
+// 19 Nov 17.xx (Dewi & Nina, usul Kirana): tampilan fokus (WCAG 2.2, 2.4.13 Focus Appearance, AAA).
+// Tiap jenis elemen yang bisa difokus dengan Tab (tautan, tombol, tombol istilah, isian, pilihan, radio kuis, summary, dst.):
+// tangkapan layar area elemen (+8px) saat terfokus lalu saat tidak terfokus (blur). Piksel yang berubah dengan kontras ≥3:1
+// antara dua keadaan dihitung; luasnya wajib ≥ luas garis keliling 2px elemen saat tidak terfokus (4·lebar + 4·tinggi − 16).
+// Transisi/animasi dan kursor ketik dimatikan saat mengukur. Satu contoh per jenis elemen per halaman/keadaan (agar cepat).
+// Uji balik: UJI-TIPIS (garis fokus 1px tanpa jarak, border kotak tanya tidak berubah) dan UJI-MIRIP (warna garis fokus = warna latar halaman).
+// Luas garis keliling 2px (WCAG 2.4.13) dari elemen yang bisa terdiri atas beberapa kotak baris (tautan terlipat).
+// Kotak dirasterkan jadi satu bentuk (celah antarbaris ≤6px disambung, seperti garis fokus Chrome yang menyatu),
+// lalu dihitung piksel bentuk yang berjarak ≤2px dari tepinya. Untuk satu persegi panjang hasilnya = 4·lebar + 4·tinggi − 16.
+function luasKeliling2px(kotak, vw, vh) {
+  const ks=kotak.map(k=>{ const x0=Math.max(0,Math.round(k.x)), y0=Math.max(0,Math.round(k.y)); return {x0,y0,x1:Math.min(vw,Math.round(k.x+k.w)),y1:Math.min(vh,Math.round(k.y+k.h))}; }).filter(k=>k.x1>k.x0&&k.y1>k.y0);
+  if (!ks.length) return 0;
+  if (ks.length===1) { const w=ks[0].x1-ks[0].x0, h=ks[0].y1-ks[0].y0; return Math.max(0,4*w+4*h-16); }
+  ks.sort((a,b)=>a.y0-b.y0); const jem=[];
+  for (let i=0;i+1<ks.length;i++){ const a=ks[i], c=ks[i+1]; if (c.y0-a.y1<=6&&c.y0>=a.y1) { const x0=Math.max(a.x0,c.x0), x1=Math.min(a.x1,c.x1); if (x1>x0) jem.push({x0,x1,y0:a.y1,y1:c.y0}); } }
+  const semua=ks.concat(jem); const X0=Math.min(...semua.map(k=>k.x0)), Y0=Math.min(...semua.map(k=>k.y0));
+  const W=Math.max(...semua.map(k=>k.x1))-X0, H=Math.max(...semua.map(k=>k.y1))-Y0; const m=new Uint8Array(W*H);
+  for (const k of semua) for (let y=k.y0;y<k.y1;y++) m.fill(1,(y-Y0)*W+k.x0-X0,(y-Y0)*W+k.x1-X0);
+  const isi=(x,y)=>x>=0&&y>=0&&x<W&&y<H&&m[y*W+x]===1; let n=0;
+  for (let y=0;y<H;y++) for (let x=0;x<W;x++) if (m[y*W+x]) { let tepi=false; for (let dy=-2;dy<=2&&!tepi;dy++) for (let dx=-2;dx<=2;dx++) if(!isi(x+dx,y+dy)){tepi=true;break;} if(tepi) n++; }
+  return n;
+}
+async function auditTampilFokus(b) {
+  const HAL=['index.html','peringkat.html','peringkat.html#istilah','radar.html#UNTR','emiten.html?kode=ANTM','kabar.html','belajar.html',
+    'pelajaran.html?m=apa-itu-saham#benar','metodologi.html','asisten.html','404.html','UJI-TIPIS','UJI-MIRIP'];
+  let total=0, dicekN=0, uji={'UJI-TIPIS':0,'UJI-MIRIP':0};
+  for (const scheme of ['dark','light']) for (const w of [390,1280]) {
+    const ctx=await b.newContext({ viewport:{width:w,height:800}, colorScheme:scheme, deviceScaleFactor:1 });
+    const p=await ctx.newPage();
+    for (const pg of HAL) {
+      const [path,hash]=pg.split('#'); const isUji=pg.startsWith('UJI-');
+      await p.goto('http://localhost:8765/'+(isUji?'asisten.html':path)); await p.waitForTimeout(300);
+      await p.addStyleTag({content:'html{scroll-behavior:auto!important} *,*::before,*::after{transition:none!important;animation:none!important;caret-color:transparent!important}'});
+      if (path==='UJI-TIPIS') await p.addStyleTag({content:'*:focus-visible{outline-width:1px!important;outline-offset:0!important} .form-tanya textarea:focus{border-color:var(--garis-kontrol)!important}'});
+      if (path==='UJI-MIRIP') await p.evaluate(()=>{ const bg=getComputedStyle(document.body).backgroundColor; const s=document.createElement('style');
+        s.textContent=`*:focus-visible{outline-color:${bg}!important} .form-tanya textarea:focus{border-color:var(--garis-kontrol)!important}`; document.head.appendChild(s); });
+      if (path==='radar.html'&&hash){ await p.selectOption('#pilih-saham',hash); await p.waitForTimeout(300); }
+      if (path==='asisten.html'||isUji) await p.evaluate(()=>{ document.querySelectorAll('.form-tanya textarea, .form-tanya button').forEach(e=>e.disabled=false); });
+      if (hash==='benar'){ const id=new URL('http://x/'+path).searchParams.get('m');
+        await p.evaluate((id)=>{ const m=window.MODUL.find(x=>x.id===id); m.kuis.forEach((q,i)=>{ document.querySelector('input[name="soal-'+i+'"][value="'+q.benar+'"]').checked=true; }); },id);
+        await p.click('.kuis button[type="submit"]'); await p.waitForTimeout(200); }
+      if (hash==='istilah'){ const t=await p.$('button.istilah'); if(t){await t.click(); await p.waitForTimeout(200);} else console.log('tampil-fokus',pg,'tombol istilah tidak ketemu'); }
+      else await p.evaluate(()=>{ document.activeElement&&document.activeElement.blur&&document.activeElement.blur(); window.scrollTo(0,0); });
+      const jenisSudah=new Set(); const temuan=[]; let dicek=0, pertama=null, langkah=0;
+      for (; langkah<400; langkah++) {
+        await p.keyboard.press('Tab'); await p.waitForTimeout(30);
+        const info=await p.evaluate(()=>{
+          const el=document.activeElement; if(!el||el===document.body) return {habis:true};
+          if(!window.__idTF) window.__idTF=new WeakMap(), window.__nTF=0;
+          if(!window.__idTF.has(el)) window.__idTF.set(el,++window.__nTF);
+          const daerah=el.closest('.kepala')?'kepala':el.closest('.hero,.judul-halaman,.panel-gelap')?'gelap':el.closest('footer,.kaki')?'kaki':'isi';
+          const jenis=el.tagName.toLowerCase()+(el.type?'['+el.type+']':'')+(typeof el.className==='string'&&el.className?'.'+el.className.trim().split(/\s+/).sort().join('.'):'')+(el.getAttribute('aria-current')?'[aktif]':'')+' @'+daerah;
+          const nama=(el.textContent||el.getAttribute('aria-label')||el.id||'').trim().replace(/\s+/g,' ').slice(0,30);
+          window.__elTF=el; let r=el.getBoundingClientRect();
+          // peramban hanya menggulir sampai elemen tampil; garis fokus di tepi layar bisa terpotong → gulir ke tengah dulu
+          if (r.top<10||r.bottom>innerHeight-10||r.left<10||r.right>innerWidth-10) { el.scrollIntoView({block:'center',inline:'center'}); r=el.getBoundingClientRect(); }
+          // tautan/tombol sebaris yang terlipat ke dua baris: luas wajib dihitung per baris (getClientRects), bukan kotak gabungan
+          const kotak=[...el.getClientRects()].map(k=>({x:k.left,y:k.top,w:k.width,h:k.height})).filter(k=>k.w>0&&k.h>0);
+          return {id:window.__idTF.get(el), jenis, nama, r:{x:r.left,y:r.top,w:r.width,h:r.height}, kotak, vw:innerWidth, vh:innerHeight};
+        });
+        if (info.habis) { if (pertama!==null) break; else continue; }
+        if (pertama===null) pertama=info.id; else if (info.id===pertama) break;
+        if (jenisSudah.has(info.jenis) || info.r.w<1 || info.r.h<1) continue;
+        jenisSudah.add(info.jenis);
+        const m=8, x0=Math.max(0,Math.floor(info.r.x-m)), y0=Math.max(0,Math.floor(info.r.y-m));
+        const x1=Math.min(info.vw,Math.ceil(info.r.x+info.r.w+m)), y1=Math.min(info.vh,Math.ceil(info.r.y+info.r.h+m));
+        if (x1-x0<2||y1-y0<2) { temuan.push(`tidak tampil di layar saat terfokus: ${info.jenis} "${info.nama}"`); continue; }
+        const clip={x:x0,y:y0,width:x1-x0,height:y1-y0};
+        const fokus=(await p.screenshot({clip})).toString('base64');
+        await p.evaluate(()=>window.__elTF.blur());
+        const biasa=(await p.screenshot({clip})).toString('base64');
+        await p.evaluate(()=>window.__elTF.focus({preventScroll:true}));
+        // luas wajib dari bagian elemen yang tampil di layar
+        const wajib=luasKeliling2px(info.kotak.length?info.kotak:[info.r], info.vw, info.vh);
+        const berubah=await p.evaluate(async([a,c])=>{
+          const muat=s=>new Promise((ok,gagal)=>{ const i=new Image(); i.onload=()=>ok(i); i.onerror=gagal; i.src='data:image/png;base64,'+s; });
+          const [ia,ic]=await Promise.all([muat(a),muat(c)]); const cv=document.createElement('canvas'); cv.width=ia.width; cv.height=ia.height;
+          const g=cv.getContext('2d',{willReadFrequently:true}); g.drawImage(ia,0,0); const da=g.getImageData(0,0,cv.width,cv.height).data;
+          g.clearRect(0,0,cv.width,cv.height); g.drawImage(ic,0,0); const dc=g.getImageData(0,0,cv.width,cv.height).data;
+          const f=v=>{v/=255;return v<=.03928?v/12.92:((v+.055)/1.055)**2.4}; const L=(d,i)=>.2126*f(d[i])+.7152*f(d[i+1])+.0722*f(d[i+2]);
+          let n=0; for(let i=0;i<da.length;i+=4){ const x=L(da,i), y=L(dc,i); if((Math.max(x,y)+.05)/(Math.min(x,y)+.05)>=3) n++; } return n;
+        },[fokus,biasa]);
+        dicek++;
+        if (berubah<wajib) temuan.push(`${info.jenis} "${info.nama}": area berubah ≥3:1 ${berubah} px < wajib ${Math.round(wajib)} px`);
+      }
+      const tag=`tampil-fokus ${scheme} ${w} ${pg}`;
+      console.log(tag,'jenis elemen dicek',dicek); temuan.forEach(t=>console.log(tag,'TEMUAN',t));
+      if (isUji) uji[path]+=temuan.length; else { total+=temuan.length; dicekN+=dicek; }
+    }
+    await ctx.close();
+  }
+  console.log('total temuan tampilan fokus',total,'(contoh jenis elemen dicek:',dicekN,'; uji balik UJI-TIPIS tertangkap:',uji['UJI-TIPIS'],'; UJI-MIRIP tertangkap:',uji['UJI-MIRIP'],')');
+}
+
 const pages = ['radar.html#UNTR','radar.html#INTP','radar.html#TPIA','radar.html#HEAL','peringkat.html#istilah','asisten.html#jawab','UJI','peringkat.html','radar.html','emiten.html?kode=ANTM','emiten.html?kode=TPIA','kabar.html','metodologi.html','asisten.html',
   'index.html','belajar.html','pelajaran.html?m=apa-itu-saham#benar','pelajaran.html?m=saham-syariah#salah','404.html'];
 const halamanFokus = ['index.html','peringkat.html','peringkat.html#istilah','radar.html','radar.html#UNTR','emiten.html?kode=ANTM','kabar.html','belajar.html','pelajaran.html?m=apa-itu-saham','pelajaran.html?m=apa-itu-saham#benar','metodologi.html','asisten.html','404.html','UJI-FOKUS','UJI-FOKUS-BORDER'];
@@ -2317,6 +2411,7 @@ const halamanFokus = ['index.html','peringkat.html','peringkat.html#istilah','ra
   if (process.env.AUDIT==='deskriptif') { await auditDeskriptif(b); await b.close(); return; }
   // AUDIT=saran node tools/audit-kontras.js → hanya fokus tidak tertutup daftar saran & menu HP (WCAG 2.4.11)
   if (process.env.AUDIT==='saran') { await auditSaran(b); await b.close(); return; }
+  if (process.env.AUDIT==='tampilfokus') { await auditTampilFokus(b); await b.close(); return; }
   let total = 0;
   // AUDIT=fokus node tools/audit-kontras.js → hanya cek garis fokus (lebih cepat)
   if (process.env.AUDIT!=='fokus') for (const scheme of ['dark','light']) for (const w of [390,1280]) {
@@ -2503,6 +2598,7 @@ const halamanFokus = ['index.html','peringkat.html','peringkat.html#istilah','ra
   await auditBantuan(b);
   await auditDeskriptif(b);
   await auditSaran(b);
+  await auditTampilFokus(b);
   await auditTeks(b);
   await auditZoom(b);
   await auditJarak(b);

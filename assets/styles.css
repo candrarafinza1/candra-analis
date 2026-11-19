@@ -495,6 +495,9 @@ tbody tr:hover { background: var(--hover-baris); }
   scroll-margin: 16px 0; /* Dewi 17 Nov: jarak saat kotak tanya digulir ke layar (lihat pendengar focus di app.js) */
 }
 .form-tanya textarea:focus { border-color: var(--tinta); outline: none; } /* Dewi 18 Nov: --tinta ≥3:1 terhadap --garis-kontrol di gelap & terang (aksen gelap hanya 2,35:1) */
+/* Dewi & Nina (19 Nov 17.xx, WCAG 2.4.13): border 2px bersudut bulat sedikit di bawah luas garis keliling 2px → ditambah garis 1px warna sama
+   tepat di luar border, jadi tanda fokus kotak tanya setebal 3px. Tetap tanpa garis fokus kuning/biru agar tidak dobel. */
+.form-tanya textarea:focus { outline: 1px solid var(--tinta); outline-offset: 0; }
 .form-tanya textarea::placeholder { color: var(--tinta-2); opacity: 1; }
 /* Teks contoh di semua kolom isian (mis. cari istilah di Belajar) — terbaca di mode gelap (Dewi, 11 Nov) */
 input::placeholder, textarea::placeholder { color: var(--tinta-2); opacity: 1; }

@@ -812,3 +812,12 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Uji balik UJI-SARAN (daftar saran buatan sendiri 400px yang tetap terbuka) dan UJI-MENU (panel menu fixed 70% layar di HP) tertangkap 6/6.
 - Nina: cek statis di `tests/cek.mjs` (kotak ketik memakai datalist, kepala/menu tidak fixed/sticky, tanpa tombol buka-tutup menu, kotak ketik tidak melayang, mode audit & 2 uji balik) + 9 uji balik.
 - Kirana: tinjau. Usul berikutnya: audit tampilan fokus (WCAG 2.4.13): garis fokus minimal 2px dan kontras keadaan fokus vs tidak fokus ≥3:1 di semua jenis elemen.
+
+### Hasil audit tampilan fokus (WCAG 2.4.13) — Dewi & Nina, 19 Nov 17.xx
+- Alat: `AUDIT=tampilfokus node tools/audit-kontras.js` (ikut audit penuh). Tab sampai habis di 11 halaman/keadaan (beranda, Peringkat, istilah terbuka, Radar UNTR, profil ANTM, Kabar, Belajar, pelajaran dengan kuis terjawab, Metodologi, Asisten, 404) × gelap/terang × 390/1280px. Satu contoh per jenis elemen per halaman (384 contoh): tangkapan layar area elemen saat terfokus dan saat tidak, lalu piksel yang berubah dengan kontras ≥3:1 dihitung; luasnya wajib ≥ garis keliling 2px elemen (tautan terlipat dihitung sebagai satu bentuk, seperti garis fokus Chrome yang menyatu).
+- **Temuan nyata (1, diperbaiki):** kotak tanya Asisten memakai border 2px bersudut bulat sebagai tanda fokus; karena sudutnya bulat, luas perubahannya sedikit di bawah syarat (3.344 vs 3.366 piksel di 1280px). Kini ditambah garis 1px warna sama tepat di luar border → tanda fokus 3px, tanpa mengubah tata letak.
+- Bukan temuan (alat diperbaiki): pilihan sektor/Bandingkan yang terpotong di tepi bawah layar (alat kini menggulir elemen ke tengah dulu) dan tautan sumber yang terlipat dua-tiga baris (luas wajib kini dihitung dari bentuk gabungan, bukan kotak luar).
+- Garis fokus 3px warna --fokus (kuning bulan di bagian biru malam) lolos di semua jenis elemen lain: tautan, tombol, chip, tombol istilah, pilihan, radio kuis, summary, tab.
+- Uji balik UJI-TIPIS (garis 1px tanpa jarak) tertangkap 32 dan UJI-MIRIP (warna garis = warna latar) tertangkap 24.
+- Nina: cek statis di `tests/cek.mjs` (garis dasar ≥2px var(--fokus), tidak ada aturan fokus <2px, kotak tanya border + garis 1px warna sama, mode audit & 2 uji balik) + 8 uji balik.
+- Kirana: tinjau. Usul berikutnya: audit "tahu sedang di mana" (WCAG 2.4.8 Location): penanda halaman aktif di menu atau jejak letak di profil emiten & pelajaran.

@@ -1936,3 +1936,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: giliran BSSR & MIKA; pencarian masih hanya angka sampai Juni 2026 → tetap 25 dari 32. Raka/Hana: tidak ada kabar baru bersumber. Tegar: pindai rahasia bersih.
 - Tugas baru: Dewi + Nina (tampilan fokus, WCAG 2.4.13).
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 19 Nov 2026, 17.09 WIB (Bima)
+- Yoga: run CI #330 (commit sesi 16.09) hijau.
+- Dewi + Nina: audit tampilan fokus (WCAG 2.4.13) di `tools/audit-kontras.js` (`AUDIT=tampilfokus`, ikut audit penuh): 11 halaman/keadaan × gelap/terang × 390/1280px, 384 contoh jenis elemen, tangkapan layar terfokus vs tidak. 1 temuan nyata diperbaiki: kotak tanya Asisten kini border 2px + garis 1px warna sama (3px). Masalah ringan alat (elemen di tepi layar, tautan terlipat) diperbaiki. Uji balik UJI-TIPIS 32 & UJI-MIRIP 24 tertangkap. Audit garis fokus lama tetap 0 temuan (UJI-FOKUS-BORDER tetap tertangkap). Cek 390/1280px: tanpa scroll horizontal. Nina: cek statis + 8 uji balik. Kirana: tinjau, usul audit 2.4.8 (tahu sedang di mana).
+- Fajar: giliran KLBF & BRIS; laba Januari–September 2026 belum ada sumber → tetap 25 dari 32. Raka/Hana: tidak ada kabar baru bersumber. Tegar: pindai rahasia bersih.
+- Tugas baru: Dewi + Nina (WCAG 2.4.8).
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

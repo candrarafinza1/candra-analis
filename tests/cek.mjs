@@ -6842,6 +6842,47 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
   ok(cekSaran(appS, cssS + "\n/* .kepala { position: sticky; } */\n", htmlS, audS).length === 0, "uji balik daftar saran & menu HP: komentar CSS tidak boleh dianggap temuan");
 }
 
+// (s) Dewi & Nina (19 Nov 17.xx, usul Kirana): tampilan fokus (WCAG 2.4.13). Statis: garis fokus dasar :focus-visible ≥2px solid
+// var(--fokus); tidak ada aturan :focus/:focus-visible yang menipiskan garis di bawah 2px (kecuali garis 1px tambahan kotak tanya);
+// kotak tanya saat fokus: border 2px + garis 1px warna sama tepat di luar border (tanda fokus 3px). Audit AUDIT=tampilfokus
+// (tangkapan layar terfokus vs tidak, luas piksel berubah ≥3:1 ≥ garis keliling 2px) ada, ikut audit penuh, dengan 2 uji balik.
+{
+  const cekTampil = (css, aud) => {
+    const s = []; const atur = css.replace(/\/\*[\s\S]*?\*\//g, "");
+    const dasar = /(^|\n):focus-visible\s*\{([^}]*)\}/.exec(atur);
+    const ow = dasar && /outline:\s*(\d+)px solid var\(--fokus\)/.exec(dasar[2]);
+    if (!ow || +ow[1] < 2) s.push("garis fokus dasar :focus-visible harus ≥2px solid var(--fokus)");
+    for (const m of atur.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+      const sel = m[1].trim(); if (!/:focus/.test(sel)) continue;
+      const w = /outline(?:-width)?:\s*(\d*\.?\d+)px/.exec(m[2]);
+      if (w && +w[1] < 2 && !/^\.form-tanya textarea:focus$/.test(sel)) s.push(`garis fokus tipis (<2px): "${sel}"`);
+    }
+    const tf = [...atur.matchAll(/\.form-tanya textarea:focus\s*\{([^}]*)\}/g)].map((m) => m[1]).join(";");
+    const bc = /border-color:\s*var\(--([\w-]+)\)/.exec(tf), oc = /outline:\s*(\d+)px solid var\(--([\w-]+)\)/.exec(tf);
+    if (!bc || !oc || oc[2] !== bc[1] || !/outline-offset:\s*0/.test(tf)) s.push("kotak tanya: fokus harus border + garis 1px warna sama (outline-offset 0)");
+    if (!/process\.env\.AUDIT==='tampilfokus'\) \{ await auditTampilFokus\(b\)/.test(aud)) s.push("mode AUDIT=tampilfokus tidak ada");
+    if (!/\n  await auditTampilFokus\(b\);\n/.test(aud)) s.push("auditTampilFokus tidak ikut audit penuh");
+    const fT = aud.slice(aud.indexOf("async function auditTampilFokus"), aud.indexOf("const pages = ["));
+    for (const u of ["UJI-TIPIS", "UJI-MIRIP"]) if (!fT.includes(`'${u}'`)) s.push(`uji balik ${u} tidak ada`);
+    if (!/function luasKeliling2px/.test(aud)) s.push("hitungan luas garis keliling 2px tidak ada");
+    return s;
+  };
+  const cssT = readFileSync("assets/styles.css", "utf8"), audT = readFileSync("tools/audit-kontras.js", "utf8");
+  const sT = cekTampil(cssT, audT);
+  ok(sT.length === 0, `Tampilan fokus WCAG 2.4.13: ${sT.join("; ")}`);
+  const rusakT = [
+    [cssT.replace("outline: 3px solid var(--fokus);", "outline: 1px solid var(--fokus);"), audT, "garis fokus dasar"],
+    [cssT + "\n.chip:focus-visible { outline-width: 1px; }\n", audT, 'garis fokus tipis (<2px): ".chip:focus-visible"'],
+    [cssT.replace(".form-tanya textarea:focus { outline: 1px solid var(--tinta); outline-offset: 0; }", ""), audT, "kotak tanya"],
+    [cssT.replace(".form-tanya textarea:focus { outline: 1px solid var(--tinta);", ".form-tanya textarea:focus { outline: 1px solid var(--aksen);"), audT, "kotak tanya"],
+    [cssT, audT.replace("process.env.AUDIT==='tampilfokus'", "process.env.AUDIT==='tf'"), "mode AUDIT=tampilfokus"],
+    [cssT, audT.replace("  await auditTampilFokus(b);\n", ""), "auditTampilFokus tidak ikut"],
+    [cssT, audT.split("'UJI-MIRIP'").join("'UJI-Z'"), "UJI-MIRIP"],
+  ];
+  for (const [c, au, pesan] of rusakT) ok(cekTampil(c, au).some((x) => x.includes(pesan)), `uji balik tampilan fokus: "${pesan}" harus tertangkap`);
+  ok(cekTampil(cssT + "\n/* .chip:focus-visible { outline-width: 1px; } */\n", audT).length === 0, "uji balik tampilan fokus: komentar CSS tidak boleh dianggap temuan");
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);
 
