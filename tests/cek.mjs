@@ -6750,6 +6750,57 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
   ok(cekBantuan(ganti("kabar.html", "</footer>", '<!-- <a href="asisten.html">Asisten AI</a> --></footer>'), audB).length === 0, "uji balik bantuan konsisten: komentar tidak boleh dianggap temuan");
 }
 
+// (q) Dewi & Nina (19 Nov 15.xx, usul Kirana): judul & label deskriptif WCAG 2.4.6. Statis: tiap isian utama punya label yang
+// menjelaskan isinya (bukan kata umum seperti "Pilih"/"Cari"), tidak ada judul kosong atau kembar dalam satu file HTML.
+// Audit AUDIT=deskriptif (DOM terender, 11 keadaan, induk judul) ada, ikut audit penuh, dengan 3 uji balik.
+{
+  const UMUM = new Set(["pilih", "cari", "ketik", "isi", "input", "masukan", "isian", "label", "opsi", "teks", "judul", "bagian", "info", "lainnya", "detail"]);
+  const LABEL = { "pilih-saham": "Atau pilih saham", "pilih-banding": "Bandingkan ", "cari-istilah": "Cari istilah", "pilih-sektor": "Saring sektor", "pilih-jenis": "Saring jenis kabar", "kotak-tanya": "Pertanyaan Anda" };
+  const cekDeskriptif = (app, html, aud) => {
+    const s = [];
+    for (const [id, awal] of Object.entries(LABEL)) {
+      const m = app.match(new RegExp(`el\\("label", \\{ for: "${id}",[^}]*text: "([^"]*)"`));
+      if (!m) { s.push(`label ${id} tidak ada`); continue; }
+      const t = m[1].trim(); if (!t || UMUM.has(t.toLowerCase().replace(/[:.…]+$/, ""))) s.push(`label ${id} umum/kosong "${t}"`);
+      else if (!t.startsWith(awal.trim())) s.push(`label ${id} berubah menjadi "${t}" (periksa tetap deskriptif)`);
+    }
+    if (!/el\("label", \{ for: idIsi, text: "Ketik kode atau nama emiten" \}\)/.test(app)) s.push("label kotak ketik emiten tidak ada/berubah");
+    for (const [n, t] of html) {
+      const bersih = t.replace(/<!--[\s\S]*?-->/g, "");
+      const judul = [...bersih.matchAll(/<h([1-6])[^>]*>([\s\S]*?)<\/h\1>/g)].map((m) => [m[1], m[2].replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim()]);
+      const lihat = new Set();
+      for (const [lv, j] of judul) {
+        if (j.replace(/[^\p{L}\p{N}]/gu, "").length < 3) s.push(`${n}: judul h${lv} kosong/terlalu pendek "${j}"`);
+        else if (UMUM.has(j.toLowerCase())) s.push(`${n}: judul h${lv} umum "${j}"`);
+        const k = lv + "|" + j.toLowerCase(); if (lihat.has(k)) s.push(`${n}: judul kembar h${lv} "${j}"`); lihat.add(k);
+      }
+    }
+    if (!/process\.env\.AUDIT==='deskriptif'\) \{ await auditDeskriptif\(b\)/.test(aud)) s.push("mode AUDIT=deskriptif tidak ada");
+    if (!/\n  await auditDeskriptif\(b\);\n/.test(aud)) s.push("auditDeskriptif tidak ikut audit penuh");
+    const fD = aud.slice(aud.indexOf("async function auditDeskriptif"), aud.indexOf("async function auditTeks"));
+    for (const u of ["UJI-LABEL-KOSONG", "UJI-PILIH", "UJI-KEMBAR"]) if (!fD.includes(`'${u}'`)) s.push(`uji balik ${u} tidak ada`);
+    return s;
+  };
+  const appD = readFileSync("assets/app.js", "utf8"), audD = readFileSync("tools/audit-kontras.js", "utf8");
+  const htmlD = readdirSync(".").filter((n) => n.endsWith(".html")).map((n) => [n, readFileSync(n, "utf8")]);
+  const sD = cekDeskriptif(appD, htmlD, audD);
+  ok(sD.length === 0, `Judul & label deskriptif WCAG 2.4.6: ${sD.join("; ")}`);
+  const h1 = htmlD.find(([n]) => n === "metodologi.html")[1].match(/<h2[^>]*>[\s\S]*?<\/h2>/)[0];
+  const rusakD = [
+    [appD.replace('for: "pilih-saham", text: "Atau pilih saham yang Anda pegang"', 'for: "pilih-saham", text: "Pilih"'), htmlD, audD, "label pilih-saham umum"],
+    [appD.replace('for: "cari-istilah", text: "Cari istilah"', 'for: "cari-istilah", text: ""'), htmlD, audD, "label cari-istilah umum/kosong"],
+    [appD.replace('for: "pilih-jenis",', 'for: "pilih-jeniz",'), htmlD, audD, "label pilih-jenis tidak ada"],
+    [appD.replace('text: "Ketik kode atau nama emiten"', 'text: "Ketik"'), htmlD, audD, "label kotak ketik emiten"],
+    [appD, htmlD.map(([n, t]) => [n, n === "metodologi.html" ? t.replace(h1, h1 + h1) : t]), audD, "metodologi.html: judul kembar"],
+    [appD, htmlD.map(([n, t]) => [n, n === "kabar.html" ? t.replace("</main>", "<h2>Info</h2></main>") : t]), audD, 'kabar.html: judul h2 umum "Info"'],
+    [appD, htmlD, audD.replace("process.env.AUDIT==='deskriptif'", "process.env.AUDIT==='d'"), "mode AUDIT=deskriptif"],
+    [appD, htmlD, audD.replace("  await auditDeskriptif(b);\n", ""), "audit penuh"],
+    [appD, htmlD, audD.split("'UJI-KEMBAR'").join("'UJI-Z'"), "UJI-KEMBAR"],
+  ];
+  for (const [a, h, au, pesan] of rusakD) ok(cekDeskriptif(a, h, au).some((x) => x.includes(pesan)), `uji balik judul & label deskriptif: "${pesan}" harus tertangkap`);
+  ok(cekDeskriptif(appD, htmlD.map(([n, t]) => [n, n === "kabar.html" ? t.replace("</main>", "<!-- <h2>Info</h2> --></main>") : t]), audD).length === 0, "uji balik judul & label deskriptif: komentar tidak boleh dianggap temuan");
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);
 

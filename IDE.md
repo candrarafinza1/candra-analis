@@ -797,3 +797,10 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Uji balik UJI-TUKAR (Asisten & Belajar ditukar di Peringkat), UJI-PINDAH (Metodologi dipindah ke menu di Radar), UJI-HILANG (Asisten dihapus di Kabar) tertangkap 6/6.
 - Nina: cek statis di `tests/cek.mjs` (urutan menu & kaki 10 halaman sama dengan beranda, Asisten di menu, Metodologi di kaki dengan teks tetap, mode audit & 3 uji balik) + 8 uji balik.
 - Kirana: tinjau. Usul berikutnya: audit judul & label deskriptif (WCAG 2.4.6): setiap judul bagian dan label isian (pilih saham Radar, Bandingkan, cari kamus, saring sektor/kabar) menjelaskan isinya, tanpa judul kembar yang membingungkan dalam satu halaman.
+
+### Hasil audit judul & label deskriptif (WCAG 2.4.6) — Dewi & Nina, 19 Nov 15.xx
+- Alat: `AUDIT=deskriptif node tools/audit-kontras.js` (ikut audit penuh). 11 halaman/keadaan (beranda, Belajar, pelajaran, Peringkat, Radar UNTR, profil ANTM, daftar profil, Kabar, Metodologi, Asisten, 404) × gelap/terang × 390/1280px: 380 judul dan 78 isian dibaca dari DOM terender.
+- **Hasil: 0 temuan di situs.** Label isian sudah jelas: "Cari istilah", "Saring sektor", "Saring jenis kabar", "Ketik kode atau nama emiten", "Atau pilih saham yang Anda pegang", "Bandingkan ANTM dengan", "Pertanyaan Anda"; pilihan kuis dinilai bersama judul soalnya (legend). Tidak ada judul kosong, umum, atau kembar di bawah induk judul yang sama. Tampilan situs tidak diubah.
+- Uji balik UJI-LABEL-KOSONG (label pilih saham Radar dikosongkan), UJI-PILIH (label Bandingkan diganti "Pilih"), UJI-KEMBAR (judul pertama Peringkat disalin) tertangkap 6/6.
+- Nina: cek statis di `tests/cek.mjs` (6 label isian utama + label kotak ketik tidak umum/kosong, judul HTML statis tidak kosong/umum/kembar, mode audit & 3 uji balik) + 10 uji balik.
+- Kirana: tinjau. Catatan: Peringkat hanya punya satu judul (h1) karena isinya satu tabel; masih wajar. Usul berikutnya: audit fokus tidak tertutup (WCAG 2.4.11) khusus daftar saran kotak ketik emiten dan menu HP terbuka.
