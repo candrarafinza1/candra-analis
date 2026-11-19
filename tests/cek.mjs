@@ -6660,6 +6660,47 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
   ok(cekLewati(jsL + '\n// el("nav", { class: "x" }) hanya contoh di komentar', htmlL, cssL, audL).length === 0, "uji balik lewati blok: komentar tidak boleh dianggap temuan");
 }
 
+// (o) Dewi & Nina (19 Nov 13.xx, usul Kirana): beberapa cara WCAG 2.4.5. Statis: kaki setiap halaman memuat Beranda, Metodologi,
+// Profil semua emiten, Kabar (jalan kedua selain menu/logo); isi Peringkat menautkan daftar profil (jalan kedua selain kaki);
+// tautan di judul halaman berlatar malam wajib berwarna terang (kontras). Audit AUDIT=cara (penjelajahan peramban sungguhan) ada,
+// ikut audit penuh, dengan 3 uji balik.
+{
+  const cekCara = (html, css, aud) => {
+    const s = [];
+    for (const [n, t] of html) {
+      const kaki = (t.replace(/<!--[\s\S]*?-->/g, "").match(/<footer[^>]*>([\s\S]*?)<\/footer>/) || [])[1] || "";
+      for (const [h, nama] of [["index.html", "Beranda"], ["metodologi.html", "Metodologi"], ["emiten.html", "Profil semua emiten"], ["kabar.html", "Kabar"]])
+        if (!new RegExp(`<a href="/?${h.replace(".", "\\.")}">`).test(kaki)) s.push(`${n}: kaki tanpa tautan ${nama}`);
+    }
+    const per = (html.find(([n]) => n === "peringkat.html") || [])[1] || "";
+    const mainP = (per.match(/<main[\s\S]*?<\/main>/) || [""])[0];
+    if (!/<a href="emiten\.html">[^<]+<\/a>/.test(mainP)) s.push("peringkat.html: isi tidak menautkan daftar profil (emiten.html)");
+    if (!/\.judul-halaman p a\s*\{[^}]*color:\s*var\(--bulan\)/.test(css)) s.push("styles.css: tautan .judul-halaman p a tanpa warna terang");
+    if (!/process\.env\.AUDIT==='cara'\) \{ await auditCara\(b\)/.test(aud)) s.push("mode AUDIT=cara tidak ada");
+    if (!/\n  await auditCara\(b\);\n/.test(aud)) s.push("auditCara tidak ikut audit penuh");
+    const fC = aud.slice(aud.indexOf("async function auditCara"), aud.indexOf("async function auditTeks"));
+    for (const u of ["UJI-KAKI", "UJI-SATU", "UJI-MATI"]) if (!fC.includes(`'${u}'`)) s.push(`uji balik ${u} tidak ada`);
+    return s;
+  };
+  const cssC = readFileSync("assets/styles.css", "utf8"), audC = readFileSync("tools/audit-kontras.js", "utf8");
+  const htmlC = readdirSync(".").filter((n) => n.endsWith(".html")).map((n) => [n, readFileSync(n, "utf8")]);
+  const sC = cekCara(htmlC, cssC, audC);
+  ok(sC.length === 0, `Beberapa cara WCAG 2.4.5: ${sC.join("; ")}`);
+  const ganti = (nama, a, b) => htmlC.map(([n, t]) => [n, n === nama ? t.replace(a, b) : t]);
+  const rusakC = [
+    [ganti("radar.html", '<a href="index.html">Beranda</a> · ', ""), cssC, audC, "radar.html: kaki tanpa tautan Beranda"],
+    [ganti("404.html", '<a href="/emiten.html">Profil semua emiten</a> · <a href="/kabar', '<a href="/emiten-x.html">Profil semua emiten</a> · <a href="/kabar'), cssC, audC, "404.html: kaki tanpa tautan Profil semua emiten"],
+    [ganti("peringkat.html", '<a href="emiten.html">profil semua emiten</a>', "profil semua emiten"), cssC, audC, "isi tidak menautkan daftar profil"],
+    [htmlC, cssC.replace(".judul-halaman p a { color: var(--bulan);", ".judul-halaman p a {"), audC, "tanpa warna terang"],
+    [htmlC, cssC, audC.replace("process.env.AUDIT==='cara'", "process.env.AUDIT==='c'"), "mode AUDIT=cara"],
+    [htmlC, cssC, audC.replace("  await auditCara(b);\n", ""), "audit penuh"],
+    [htmlC, cssC, audC.split("'UJI-SATU'").join("'UJI-Z'"), "UJI-SATU"],
+    [htmlC, cssC, audC.split("'UJI-MATI'").join("'UJI-Z'"), "UJI-MATI"],
+  ];
+  for (const [h, c, a, pesan] of rusakC) ok(cekCara(h, c, a).some((x) => x.includes(pesan)), `uji balik beberapa cara: "${pesan}" harus tertangkap`);
+  ok(cekCara(ganti("kabar.html", "</footer>", "<!-- <a href=\"x.html\">contoh</a> --></footer>"), cssC, audC).length === 0, "uji balik beberapa cara: komentar tidak boleh dianggap temuan");
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);
 

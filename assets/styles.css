@@ -428,6 +428,9 @@ tbody tr:hover { background: var(--hover-baris); }
 .judul-halaman { background: var(--malam); color: #fff; padding: 48px 0 40px; }
 .judul-halaman h1 { color: #fff; font-size: clamp(1.9rem, 4.5vw, 2.8rem); }
 .judul-halaman p { color: #cfd3f2; max-width: var(--lebar-teks); margin: 0; font-size: 1.08rem; }
+/* 19 Nov (Dewi): tautan di judul halaman berlatar malam (mis. "profil semua emiten" di Peringkat) wajib terang agar kontras. */
+.judul-halaman p a { color: var(--bulan); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.judul-halaman p a:hover { color: #fff; }
 
 /* Kaki */
 .kaki { border-top: 1px solid var(--garis); padding: 40px 0 56px; margin-top: 24px; font-size: .92rem; color: var(--tinta-2); }
