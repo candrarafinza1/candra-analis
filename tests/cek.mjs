@@ -6701,6 +6701,55 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
   ok(cekCara(ganti("kabar.html", "</footer>", "<!-- <a href=\"x.html\">contoh</a> --></footer>"), cssC, audC).length === 0, "uji balik beberapa cara: komentar tidak boleh dianggap temuan");
 }
 
+// (p) Dewi & Nina (19 Nov 14.xx, usul Kirana): bantuan konsisten WCAG 3.2.6. Statis: di 10 halaman urutan tautan menu atas dan
+// kaki halaman (alamat tanpa "/" depan) sama persis dengan beranda; Asisten AI ada di menu (bukan di kaki) dan Metodologi
+// "Cara kami mengolah data" ada di kaki (bukan di menu). Audit AUDIT=bantuan (DOM terender, urutan tampil) ada, ikut audit
+// penuh, dengan 3 uji balik.
+{
+  const cekBantuan = (html, aud) => {
+    const s = [];
+    const urut = (t, tag) => {
+      const bersih = t.replace(/<!--[\s\S]*?-->/g, "");
+      const blok = tag === "nav" ? (bersih.match(/<nav class="nav"[^>]*>([\s\S]*?)<\/nav>/) || [])[1] || "" : (bersih.match(/<footer[^>]*>([\s\S]*?)<\/footer>/) || [])[1] || "";
+      return [...blok.matchAll(/<a [^>]*href="\/?([^"#?]+)[^"]*"[^>]*>([\s\S]*?)<\/a>/g)].map((m) => [m[1], m[2].replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim()]);
+    };
+    const acuan = html.find(([n]) => n === "index.html");
+    const aNav = urut(acuan[1], "nav").map((x) => x[0]).join(","), aKaki = urut(acuan[1], "kaki").map((x) => x[0]).join(",");
+    for (const [n, t] of html) {
+      const nav = urut(t, "nav"), kaki = urut(t, "kaki");
+      const as = nav.find((x) => x[0] === "asisten.html"), me = kaki.find((x) => x[0] === "metodologi.html");
+      if (!as) s.push(`${n}: Asisten AI tidak ada di menu`); else if (as[1] !== "Asisten AI") s.push(`${n}: teks menu Asisten "${as[1]}"`);
+      if (!me) s.push(`${n}: Metodologi tidak ada di kaki`); else if (me[1] !== "Cara kami mengolah data") s.push(`${n}: teks kaki Metodologi "${me[1]}"`);
+      if (nav.some((x) => x[0] === "metodologi.html")) s.push(`${n}: Metodologi pindah ke menu`);
+      if (kaki.some((x) => x[0] === "asisten.html")) s.push(`${n}: Asisten pindah ke kaki`);
+      if (nav.map((x) => x[0]).join(",") !== aNav) s.push(`${n}: urutan menu beda dari beranda`);
+      if (kaki.map((x) => x[0]).join(",") !== aKaki) s.push(`${n}: urutan kaki beda dari beranda`);
+    }
+    if (!/process\.env\.AUDIT==='bantuan'\) \{ await auditBantuan\(b\)/.test(aud)) s.push("mode AUDIT=bantuan tidak ada");
+    if (!/\n  await auditBantuan\(b\);\n/.test(aud)) s.push("auditBantuan tidak ikut audit penuh");
+    const fB = aud.slice(aud.indexOf("async function auditBantuan"), aud.indexOf("async function auditTeks"));
+    for (const u of ["UJI-TUKAR", "UJI-PINDAH", "UJI-HILANG"]) if (!fB.includes(`'${u}'`)) s.push(`uji balik ${u} tidak ada`);
+    return s;
+  };
+  const audB = readFileSync("tools/audit-kontras.js", "utf8");
+  const htmlB = readdirSync(".").filter((n) => n.endsWith(".html")).map((n) => [n, readFileSync(n, "utf8")]);
+  const sB = cekBantuan(htmlB, audB);
+  ok(sB.length === 0, `Bantuan konsisten WCAG 3.2.6: ${sB.join("; ")}`);
+  const ganti = (nama, a, b) => htmlB.map(([n, t]) => [n, n === nama ? t.replace(a, b) : t]);
+  const tukar = (nama) => htmlB.map(([n, t]) => [n, n === nama ? t.replace(/(<a [^>]*href="belajar\.html"[^>]*>[\s\S]*?<\/a>)([\s\S]*?)(<a [^>]*href="asisten\.html"[^>]*>[\s\S]*?<\/a>)/, "$3$2$1") : t]);
+  const rusakB = [
+    [tukar("peringkat.html"), audB, "peringkat.html: urutan menu beda"],
+    [ganti("radar.html", /<a href="metodologi\.html">Cara kami mengolah data<\/a> · /, ""), audB, "radar.html: Metodologi tidak ada di kaki"],
+    [ganti("kabar.html", /<a [^>]*href="asisten\.html"[^>]*>[\s\S]*?<\/a>/, ""), audB, "kabar.html: Asisten AI tidak ada di menu"],
+    [ganti("emiten.html", "Cara kami mengolah data</a>", "Metodologi</a>"), audB, 'emiten.html: teks kaki Metodologi "Metodologi"'],
+    [htmlB, audB.replace("process.env.AUDIT==='bantuan'", "process.env.AUDIT==='b'"), "mode AUDIT=bantuan"],
+    [htmlB, audB.replace("  await auditBantuan(b);\n", ""), "audit penuh"],
+    [htmlB, audB.split("'UJI-PINDAH'").join("'UJI-Z'"), "UJI-PINDAH"],
+  ];
+  for (const [h, a, pesan] of rusakB) ok(cekBantuan(h, a).some((x) => x.includes(pesan)), `uji balik bantuan konsisten: "${pesan}" harus tertangkap`);
+  ok(cekBantuan(ganti("kabar.html", "</footer>", '<!-- <a href="asisten.html">Asisten AI</a> --></footer>'), audB).length === 0, "uji balik bantuan konsisten: komentar tidak boleh dianggap temuan");
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);
 

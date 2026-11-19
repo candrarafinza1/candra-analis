@@ -6,7 +6,7 @@
 // garis fokus terlihat (outline ≥2px, atau box-shadow/border berubah) dengan kontras ≥3:1 terhadap latar di sekitarnya.
 // Halaman "UJI-FOKUS" sengaja mematikan outline; audit wajib menangkapnya (uji balik).
 // 17 Nov 09.xx (Dewi & Tegar): Tab sampai habis, + keadaan istilah terbuka, hasil Radar UNTR, kuis terjawab; cek border kotak tanya Asisten.
-// Cara pakai: python3 -m http.server 8765 (di akar repo), lalu: node tools/audit-kontras.js (AUDIT=fokus: hanya garis fokus & fokus tertutup; AUDIT=zoom: hanya zoom 200% & layar pendek HP; AUDIT=jarak: hanya jarak teks WCAG 1.4.12; AUDIT=orientasi: hanya orientasi layar WCAG 1.3.4; AUDIT=sentuh: hanya ukuran sasaran sentuh WCAG 2.5.8; AUDIT=sorot: hanya konten saat diarahkan/difokus WCAG 1.4.13; AUDIT=label: hanya label dalam nama WCAG 2.5.3; AUDIT=status: hanya pesan status WCAG 4.1.3; AUDIT=judul: hanya judul halaman & urutan judul WCAG 2.4.2/1.3.1; AUDIT=bahasa: hanya bahasa halaman & bagian WCAG 3.1.1/3.1.2; AUDIT=isian: hanya label/petunjuk & pesan salah isian WCAG 3.3.2/3.3.1; AUDIT=urutan: hanya urutan fokus WCAG 2.4.3; AUDIT=nonteks: hanya kontras non-teks WCAG 1.4.11; AUDIT=warna: hanya penggunaan warna WCAG 1.4.1; AUDIT=tautan: hanya tujuan tautan WCAG 2.4.4; AUDIT=konsisten: hanya identifikasi konsisten WCAG 3.2.4; AUDIT=penunjuk: hanya pembatalan penunjuk WCAG 2.5.2; AUDIT=gerak: hanya gerakan penunjuk & gerakan perangkat WCAG 2.5.1/2.5.4; AUDIT=teks: hanya ubah ukuran teks 200% WCAG 1.4.4; AUDIT=peran: hanya nama, peran, nilai WCAG 4.1.2; AUDIT=alt: hanya konten non-teks WCAG 1.1.1; AUDIT=tabel: hanya info & hubungan tabel/daftar WCAG 1.3.1; AUDIT=lewati: hanya lewati blok & landmark WCAG 2.4.1; AUDIT=cara: hanya beberapa cara WCAG 2.4.5)
+// Cara pakai: python3 -m http.server 8765 (di akar repo), lalu: node tools/audit-kontras.js (AUDIT=fokus: hanya garis fokus & fokus tertutup; AUDIT=zoom: hanya zoom 200% & layar pendek HP; AUDIT=jarak: hanya jarak teks WCAG 1.4.12; AUDIT=orientasi: hanya orientasi layar WCAG 1.3.4; AUDIT=sentuh: hanya ukuran sasaran sentuh WCAG 2.5.8; AUDIT=sorot: hanya konten saat diarahkan/difokus WCAG 1.4.13; AUDIT=label: hanya label dalam nama WCAG 2.5.3; AUDIT=status: hanya pesan status WCAG 4.1.3; AUDIT=judul: hanya judul halaman & urutan judul WCAG 2.4.2/1.3.1; AUDIT=bahasa: hanya bahasa halaman & bagian WCAG 3.1.1/3.1.2; AUDIT=isian: hanya label/petunjuk & pesan salah isian WCAG 3.3.2/3.3.1; AUDIT=urutan: hanya urutan fokus WCAG 2.4.3; AUDIT=nonteks: hanya kontras non-teks WCAG 1.4.11; AUDIT=warna: hanya penggunaan warna WCAG 1.4.1; AUDIT=tautan: hanya tujuan tautan WCAG 2.4.4; AUDIT=konsisten: hanya identifikasi konsisten WCAG 3.2.4; AUDIT=penunjuk: hanya pembatalan penunjuk WCAG 2.5.2; AUDIT=gerak: hanya gerakan penunjuk & gerakan perangkat WCAG 2.5.1/2.5.4; AUDIT=teks: hanya ubah ukuran teks 200% WCAG 1.4.4; AUDIT=peran: hanya nama, peran, nilai WCAG 4.1.2; AUDIT=alt: hanya konten non-teks WCAG 1.1.1; AUDIT=tabel: hanya info & hubungan tabel/daftar WCAG 1.3.1; AUDIT=lewati: hanya lewati blok & landmark WCAG 2.4.1; AUDIT=cara: hanya beberapa cara WCAG 2.4.5; AUDIT=bantuan: hanya bantuan konsisten WCAG 3.2.6)
 // Butuh Playwright + Chromium (sudah ada di lingkungan kerja tim); tidak dijalankan oleh tests/cek.mjs.
 const { chromium } = require('playwright');
 // 17 Nov 14.xx (Dewi & Nina): langkah Tab maju & Shift+Tab mundur untuk cek fokus tertutup, dipakai bersama oleh
@@ -1958,6 +1958,70 @@ async function auditCara(b) {
   return total;
 }
 
+// 19 Nov 14.xx (Dewi & Nina, usul Kirana): audit bantuan konsisten (WCAG 3.2.6). Jalan ke bantuan yang berulang di banyak halaman:
+// Asisten AI (menu atas) dan Metodologi "Cara kami mengolah data" (kaki halaman). Di DOM terender tiap halaman dicatat urutan semua
+// tautan menu atas + kaki halaman (alamat dinormalkan). Syarat: (a) kedua jalan bantuan ada di setiap halaman, di wilayah yang sama
+// (Asisten di menu, Metodologi di kaki) dengan teks yang sama; (b) urutan relatif tautan bersama sama persis dengan beranda;
+// (c) urutan tampil (atas→bawah, kiri→kanan) sama dengan urutan DOM; (d) di 390px Asisten terlihat atau ada di menu yang bisa dibuka.
+// Kamus istilah hanya di Belajar (bukan jalan berulang) sehingga di luar cakupan 3.2.6; kotak istilah ada di dalam isi masing-masing.
+// Uji balik: UJI-TUKAR (urutan Asisten & Belajar ditukar di Peringkat), UJI-PINDAH (Metodologi dipindah dari kaki ke menu di Radar),
+// UJI-HILANG (Asisten dihapus dari menu di Kabar) wajib bertemuan.
+async function auditBantuan(b) {
+  const HAL=['index.html','belajar.html','pelajaran.html?m=apa-itu-saham','peringkat.html','radar.html','emiten.html?kode=ANTM','emiten.html','kabar.html',
+    'metodologi.html','asisten.html','salah-ketik.html'];
+  const UJI={'UJI-TUKAR':'peringkat.html','UJI-PINDAH':'radar.html','UJI-HILANG':'kabar.html'};
+  let total=0, uji=0, ujiN=0, halN=0;
+  for (const scheme of ['dark','light']) for (const w of [390,1280]) for (const mode of ['NORMAL',...Object.keys(UJI)]) {
+    if (mode!=='NORMAL'&&!(scheme==='dark'&&w===390)&&!(scheme==='light'&&w===1280)) continue; // uji balik cukup di 2 susunan
+    const ctx=await b.newContext({ viewport:{width:w,height:844}, colorScheme:scheme, deviceScaleFactor:1 });
+    await ctx.route('**/api/tanya', r=>r.fulfill({ status:200, contentType:'application/json', body:JSON.stringify({aktif:true}) }));
+    const p=await ctx.newPage(); const errs=[]; p.on('pageerror',e=>errs.push(e.message));
+    let acuan=null; const temuan=[];
+    for (const pg of HAL) {
+      const res0=await p.goto('http://localhost:8765/'+pg); await p.waitForTimeout(250);
+      if (pg==='salah-ketik.html'&&res0&&res0.status()===404) { await p.goto('http://localhost:8765/404.html'); await p.waitForTimeout(250); }
+      if (mode!=='NORMAL'&&UJI[mode]===pg) await p.evaluate(mode=>{
+        const nav=document.querySelector('header nav'), as=nav.querySelector('a[href$="asisten.html"]');
+        if (mode==='UJI-TUKAR') { const bel=nav.querySelector('a[href$="belajar.html"]'); const x=document.createElement('i'); bel.replaceWith(x); as.replaceWith(bel); x.replaceWith(as); }
+        if (mode==='UJI-PINDAH') { const m=document.querySelector('footer a[href$="metodologi.html"]'); nav.insertBefore(m, nav.querySelector('a')); }
+        if (mode==='UJI-HILANG') as.remove();
+      }, mode);
+      const d=await p.evaluate(()=>{
+        const kunci=a=>{ const u=new URL(a.getAttribute('href'),location.href); return (u.pathname.replace(/^\//,'')||'index.html')+u.hash; };
+        const menuBuka=!!document.querySelector('header button[aria-controls],header button[aria-expanded]');
+        const ambil=sel=>[...document.querySelectorAll(sel)].map(a=>{ const r=a.getClientRects()[0]||a.getBoundingClientRect(); // kotak pertama: tautan yang terlipat dua baris dibaca dari awal teksnya
+          return { k:kunci(a), teks:a.textContent.replace(/\s+/g,' ').trim(), y:Math.round(r.top+scrollY), x:Math.round(r.left), terlihat:a.getClientRects().length>0&&getComputedStyle(a).visibility!=='hidden' }; });
+        return { menu:ambil('header nav a[href]'), kaki:ambil('footer a[href]'), menuBuka };
+      });
+      halN++;
+      const seq=[...d.menu.map(x=>'menu:'+x.k), ...d.kaki.map(x=>'kaki:'+x.k)];
+      const cari=(arr,k)=>arr.find(x=>x.k===k);
+      const as=cari(d.menu,'asisten.html'), me=cari(d.kaki,'metodologi.html');
+      if (!as) temuan.push(pg+': Asisten AI tidak ada di menu');
+      else { if (as.teks!=='Asisten AI') temuan.push(pg+': teks tautan Asisten "'+as.teks+'"'); if (!as.terlihat&&!d.menuBuka) temuan.push(pg+': Asisten tidak terlihat dan menu tidak bisa dibuka'); }
+      if (!me) temuan.push(pg+': Metodologi tidak ada di kaki halaman');
+      else if (me.teks!=='Cara kami mengolah data') temuan.push(pg+': teks tautan Metodologi "'+me.teks+'"');
+      if (cari(d.menu,'metodologi.html')) temuan.push(pg+': Metodologi pindah ke menu atas');
+      if (cari(d.kaki,'asisten.html')) temuan.push(pg+': Asisten pindah ke kaki halaman');
+      // urutan tampil sama dengan urutan DOM (atas→bawah, lalu kiri→kanan pada baris yang sama)
+      const semua=[...d.menu,...d.kaki].filter(x=>x.terlihat);
+      for (let i=1;i<semua.length;i++){ const a=semua[i-1], c=semua[i]; if (c.y<a.y-4||(Math.abs(c.y-a.y)<=4&&c.x<a.x)) { temuan.push(pg+': urutan tampil '+a.k+' → '+c.k+' terbalik dari urutan baca'); break; } }
+      if (!acuan) acuan={pg, seq};
+      else { // urutan relatif tautan bersama harus sama dengan beranda
+        const bersama=seq.filter(k=>acuan.seq.includes(k)), acuanB=acuan.seq.filter(k=>seq.includes(k));
+        if (bersama.join('|')!==acuanB.join('|')) temuan.push(pg+': urutan menu/kaki beda dari beranda ('+bersama.map(k=>k.replace('.html','')).join(', ')+')');
+        if (seq.length!==acuan.seq.length) temuan.push(pg+': jumlah tautan menu/kaki '+seq.length+' (beranda '+acuan.seq.length+')');
+      }
+    }
+    if (errs.length) temuan.push('galat JS: '+[...new Set(errs)].join(' | '));
+    console.log(`bantuan ${scheme} ${w} ${mode}`,'urutan beranda',JSON.stringify(acuan&&acuan.seq), temuan.length?'TEMUAN '+temuan.join('; '):'lolos');
+    if (mode!=='NORMAL') { ujiN++; if (temuan.some(x=>x.startsWith(UJI[mode]))) uji++; } else total+=temuan.length;
+    await ctx.close();
+  }
+  console.log('total temuan bantuan konsisten',total,'(halaman dicek:',halN,'; uji balik UJI-TUKAR/UJI-PINDAH/UJI-HILANG tertangkap:',uji+'/'+ujiN+')');
+  return total;
+}
+
 async function auditTeks(b) {
   const halaman=['index.html','peringkat.html','peringkat.html#istilah','radar.html#UNTR','emiten.html?kode=ANTM','kabar.html','belajar.html',
     'pelajaran.html?m=apa-itu-saham#benar','metodologi.html','asisten.html','asisten.html#jawab','404.html','UJI-PX','UJI-TETAP'];
@@ -2080,6 +2144,8 @@ const halamanFokus = ['index.html','peringkat.html','peringkat.html#istilah','ra
   // AUDIT=lewati node tools/audit-kontras.js → hanya lewati blok (WCAG 2.4.1)
   if (process.env.AUDIT==='lewati') { await auditLewati(b); await b.close(); return; }
   if (process.env.AUDIT==='cara') { await auditCara(b); await b.close(); return; }
+  // AUDIT=bantuan node tools/audit-kontras.js → hanya bantuan konsisten (WCAG 3.2.6)
+  if (process.env.AUDIT==='bantuan') { await auditBantuan(b); await b.close(); return; }
   let total = 0;
   // AUDIT=fokus node tools/audit-kontras.js → hanya cek garis fokus (lebih cepat)
   if (process.env.AUDIT!=='fokus') for (const scheme of ['dark','light']) for (const w of [390,1280]) {
@@ -2263,6 +2329,7 @@ const halamanFokus = ['index.html','peringkat.html','peringkat.html#istilah','ra
   await auditTabel(b);
   await auditLewati(b);
   await auditCara(b);
+  await auditBantuan(b);
   await auditTeks(b);
   await auditZoom(b);
   await auditJarak(b);
