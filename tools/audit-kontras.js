@@ -6,7 +6,7 @@
 // garis fokus terlihat (outline ≥2px, atau box-shadow/border berubah) dengan kontras ≥3:1 terhadap latar di sekitarnya.
 // Halaman "UJI-FOKUS" sengaja mematikan outline; audit wajib menangkapnya (uji balik).
 // 17 Nov 09.xx (Dewi & Tegar): Tab sampai habis, + keadaan istilah terbuka, hasil Radar UNTR, kuis terjawab; cek border kotak tanya Asisten.
-// Cara pakai: python3 -m http.server 8765 (di akar repo), lalu: node tools/audit-kontras.js (AUDIT=fokus: hanya garis fokus & fokus tertutup; AUDIT=zoom: hanya zoom 200% & layar pendek HP; AUDIT=jarak: hanya jarak teks WCAG 1.4.12; AUDIT=orientasi: hanya orientasi layar WCAG 1.3.4; AUDIT=sentuh: hanya ukuran sasaran sentuh WCAG 2.5.8; AUDIT=sorot: hanya konten saat diarahkan/difokus WCAG 1.4.13; AUDIT=label: hanya label dalam nama WCAG 2.5.3; AUDIT=status: hanya pesan status WCAG 4.1.3; AUDIT=judul: hanya judul halaman & urutan judul WCAG 2.4.2/1.3.1; AUDIT=bahasa: hanya bahasa halaman & bagian WCAG 3.1.1/3.1.2; AUDIT=isian: hanya label/petunjuk & pesan salah isian WCAG 3.3.2/3.3.1; AUDIT=urutan: hanya urutan fokus WCAG 2.4.3; AUDIT=nonteks: hanya kontras non-teks WCAG 1.4.11; AUDIT=warna: hanya penggunaan warna WCAG 1.4.1; AUDIT=tautan: hanya tujuan tautan WCAG 2.4.4; AUDIT=konsisten: hanya identifikasi konsisten WCAG 3.2.4; AUDIT=penunjuk: hanya pembatalan penunjuk WCAG 2.5.2; AUDIT=gerak: hanya gerakan penunjuk & gerakan perangkat WCAG 2.5.1/2.5.4; AUDIT=teks: hanya ubah ukuran teks 200% WCAG 1.4.4; AUDIT=peran: hanya nama, peran, nilai WCAG 4.1.2; AUDIT=alt: hanya konten non-teks WCAG 1.1.1; AUDIT=tabel: hanya info & hubungan tabel/daftar WCAG 1.3.1)
+// Cara pakai: python3 -m http.server 8765 (di akar repo), lalu: node tools/audit-kontras.js (AUDIT=fokus: hanya garis fokus & fokus tertutup; AUDIT=zoom: hanya zoom 200% & layar pendek HP; AUDIT=jarak: hanya jarak teks WCAG 1.4.12; AUDIT=orientasi: hanya orientasi layar WCAG 1.3.4; AUDIT=sentuh: hanya ukuran sasaran sentuh WCAG 2.5.8; AUDIT=sorot: hanya konten saat diarahkan/difokus WCAG 1.4.13; AUDIT=label: hanya label dalam nama WCAG 2.5.3; AUDIT=status: hanya pesan status WCAG 4.1.3; AUDIT=judul: hanya judul halaman & urutan judul WCAG 2.4.2/1.3.1; AUDIT=bahasa: hanya bahasa halaman & bagian WCAG 3.1.1/3.1.2; AUDIT=isian: hanya label/petunjuk & pesan salah isian WCAG 3.3.2/3.3.1; AUDIT=urutan: hanya urutan fokus WCAG 2.4.3; AUDIT=nonteks: hanya kontras non-teks WCAG 1.4.11; AUDIT=warna: hanya penggunaan warna WCAG 1.4.1; AUDIT=tautan: hanya tujuan tautan WCAG 2.4.4; AUDIT=konsisten: hanya identifikasi konsisten WCAG 3.2.4; AUDIT=penunjuk: hanya pembatalan penunjuk WCAG 2.5.2; AUDIT=gerak: hanya gerakan penunjuk & gerakan perangkat WCAG 2.5.1/2.5.4; AUDIT=teks: hanya ubah ukuran teks 200% WCAG 1.4.4; AUDIT=peran: hanya nama, peran, nilai WCAG 4.1.2; AUDIT=alt: hanya konten non-teks WCAG 1.1.1; AUDIT=tabel: hanya info & hubungan tabel/daftar WCAG 1.3.1; AUDIT=lewati: hanya lewati blok & landmark WCAG 2.4.1)
 // Butuh Playwright + Chromium (sudah ada di lingkungan kerja tim); tidak dijalankan oleh tests/cek.mjs.
 const { chromium } = require('playwright');
 // 17 Nov 14.xx (Dewi & Nina): langkah Tab maju & Shift+Tab mundur untuk cek fokus tertutup, dipakai bersama oleh
@@ -1814,6 +1814,82 @@ async function auditTabel(b) {
   return total;
 }
 
+// Audit lewati blok (WCAG 2.4.1) — Dewi & Nina, 19 Nov 2026.
+// (a) Tab pertama dari awal halaman jatuh ke tautan "Langsung ke isi" (a.lompat href="#isi"), yang saat difokus tampil di layar
+//     (di dalam viewport, tidak terpotong, tidak tertutup elemen lain).
+// (b) Menekan Enter memindahkan fokus sungguhan ke <main id="isi"> (document.activeElement), main terlihat di layar, dan Tab
+//     berikutnya jatuh ke elemen yang bisa difokus pertama di dalam <main> (melewati menu), bukan kembali ke kepala.
+// (c) Landmark dari pohon aksesibilitas peramban: tepat satu banner, satu main, satu contentinfo; setiap navigation bernama dan,
+//     bila lebih dari satu, namanya berbeda.
+// 13 halaman/keadaan × gelap/terang × 390/1280px. Uji balik wajib tertangkap: UJI-HAPUS (tautan lompat dihapus), UJI-SASARAN
+// (href menuju id yang tidak ada), UJI-MAIN (main kedua), UJI-NAV (nav kedua tanpa nama), UJI-TABINDEX (main tidak bisa menerima fokus).
+// AUDIT=lewati node tools/audit-kontras.js
+async function auditLewati(b) {
+  const HAL=['index.html','belajar.html','pelajaran.html?m=apa-itu-saham','peringkat.html','radar.html','emiten.html?kode=ANTM','emiten.html','kabar.html',
+    'metodologi.html','asisten.html','404.html','salah-ketik.html','pelajaran.html?m=tidak-ada',
+    'UJI-HAPUS','UJI-SASARAN','UJI-MAIN','UJI-NAV','UJI-TABINDEX'];
+  let total=0, uji=0, ujiN=0, landmarkN=0;
+  for (const scheme of ['dark','light']) for (const w of [390,1280]) for (const pg of HAL) {
+    const isUji=pg.startsWith('UJI-');
+    const ctx=await b.newContext({ viewport:{width:w,height:844}, colorScheme:scheme, deviceScaleFactor:1 });
+    if (pg==='asisten.html') await ctx.route('**/api/tanya', r=>r.fulfill({ status:200, contentType:'application/json', body:JSON.stringify({aktif:true}) }));
+    const p=await ctx.newPage(); const errs=[]; p.on('pageerror',e=>errs.push(e.message));
+    const res0=await p.goto('http://localhost:8765/'+(isUji?'peringkat.html':pg)); await p.waitForTimeout(350);
+    const temuan=[];
+    if (pg==='salah-ketik.html') { // server pengembangan tidak memakai rewrite Vercel; muat 404.html bila alamat salah
+      if (res0&&res0.status()===404) { await p.goto('http://localhost:8765/404.html'); await p.waitForTimeout(250); } }
+    await p.evaluate(pg=>{
+      const a=document.querySelector('a.lompat'), m=document.querySelector('main');
+      if (pg==='UJI-HAPUS') a.remove();
+      if (pg==='UJI-SASARAN') a.setAttribute('href','#tidak-ada');
+      if (pg==='UJI-MAIN') document.querySelector('footer').insertAdjacentHTML('beforebegin','<main><p>kedua</p></main>');
+      if (pg==='UJI-NAV') document.querySelector('footer').insertAdjacentHTML('afterbegin','<nav><a href="index.html">Beranda</a></nav>');
+      if (pg==='UJI-TABINDEX') m.removeAttribute('tabindex');
+      document.activeElement&&document.activeElement.blur&&document.activeElement.blur(); window.scrollTo(0,0);
+    }, pg);
+    // (a) Tab pertama
+    await p.keyboard.press('Tab'); await p.waitForTimeout(80);
+    const a=await p.evaluate(()=>{ const e=document.activeElement; if (!e||e===document.body) return {ada:false};
+      const r=e.getBoundingClientRect(); const cx=r.left+r.width/2, cy=r.top+r.height/2;
+      const atas=(cx>=0&&cy>=0&&cx<innerWidth&&cy<innerHeight)?document.elementFromPoint(cx,cy):null;
+      return { ada:true, lompat:e.matches('a.lompat'), href:e.getAttribute('href'), teks:(e.textContent||'').trim(), tag:e.tagName,
+        dalamLayar:r.width>1&&r.height>1&&r.left>=0&&r.top>=0&&r.right<=innerWidth&&r.bottom<=innerHeight, tertutup:!(atas&&(atas===e||e.contains(atas))) }; });
+    if (!a.ada||!a.lompat) temuan.push('Tab pertama tidak jatuh ke tautan "Langsung ke isi" (jatuh ke '+(a.ada?a.tag+' "'+a.teks.slice(0,20)+'"':'tidak ada')+')');
+    else {
+      if (!/^Langsung ke isi$/.test(a.teks)) temuan.push('teks tautan lompat "'+a.teks+'"');
+      if (!a.dalamLayar) temuan.push('tautan lompat tidak tampil penuh di layar saat difokus');
+      if (a.tertutup) temuan.push('tautan lompat tertutup elemen lain saat difokus');
+      // (b) Enter → fokus ke main
+      await p.keyboard.press('Enter'); await p.waitForTimeout(150);
+      const s=await p.evaluate(()=>{ const e=document.activeElement, m=document.querySelector('main'); const sasaran=document.getElementById(location.hash.slice(1));
+        const r=m?m.getBoundingClientRect():null;
+        return { tag:e?e.tagName:'', diMain:!!(m&&e===m), sasaranMain:!!(sasaran&&m&&sasaran===m), hash:location.hash, terlihat:!!r&&r.top<innerHeight&&r.bottom>0 }; });
+      if (!s.sasaranMain) temuan.push('tautan lompat ('+s.hash+') tidak menuju <main>');
+      if (!s.diMain) temuan.push('setelah Enter fokus berada di '+s.tag+', bukan <main>');
+      if (!s.terlihat) temuan.push('<main> tidak terlihat di layar setelah melompat');
+      await p.keyboard.press('Tab'); await p.waitForTimeout(80);
+      const t=await p.evaluate(()=>{ const e=document.activeElement, m=document.querySelector('main');
+        const bisa=[...m.querySelectorAll('a[href],button,input,select,textarea,summary,[tabindex]:not([tabindex="-1"])')].filter(x=>!x.disabled&&!x.closest('[hidden],[inert],[aria-hidden="true"]')&&x.getClientRects().length&&getComputedStyle(x).visibility!=='hidden');
+        return { diMain:!!(m&&e&&m.contains(e)&&e!==m), pertama:bisa.length?bisa[0]===e:true, ada:bisa.length, teks:e?(e.textContent||e.tagName).trim().slice(0,25):'' }; });
+      if (t.ada&&!t.diMain) temuan.push('Tab setelah melompat keluar dari <main> ("'+t.teks+'")');
+      else if (t.ada&&!t.pertama) temuan.push('Tab setelah melompat tidak jatuh ke elemen pertama di <main> ("'+t.teks+'")');
+    }
+    // (c) landmark
+    const c=await ctx.newCDPSession(p); const {nodes}=await c.send('Accessibility.getFullAXTree'); await c.detach();
+    const L={}; nodes.forEach(n=>{ if (n.ignored) return; const r=n.role&&n.role.value; if (['banner','main','contentinfo','navigation'].includes(r)) (L[r]=L[r]||[]).push((n.name&&n.name.value||'').trim()); });
+    for (const r of ['banner','main','contentinfo']) if ((L[r]||[]).length!==1) temuan.push('landmark '+r+' ada '+((L[r]||[]).length)+'× (harus 1)');
+    const nav=L.navigation||[]; nav.forEach(n=>{ if (!n) temuan.push('landmark navigation tanpa nama'); });
+    if (new Set(nav).size!==nav.length) temuan.push('nama navigation kembar: '+nav.join(' / '));
+    landmarkN+=Object.values(L).reduce((x,y)=>x+y.length,0);
+    if (errs.length) temuan.push('galat JS: '+errs.join(' | '));
+    console.log(`lewati ${scheme} ${w} ${pg}`,'landmark',JSON.stringify(L), temuan.length?'TEMUAN '+temuan.join('; '):'lolos');
+    if (isUji) { ujiN++; if (temuan.length) uji++; } else total+=temuan.length;
+    await ctx.close();
+  }
+  console.log('total temuan lewati blok',total,'(landmark dicek:',landmarkN,'; uji balik UJI-HAPUS/UJI-SASARAN/UJI-MAIN/UJI-NAV/UJI-TABINDEX tertangkap:',uji+'/'+ujiN+')');
+  return total;
+}
+
 async function auditTeks(b) {
   const halaman=['index.html','peringkat.html','peringkat.html#istilah','radar.html#UNTR','emiten.html?kode=ANTM','kabar.html','belajar.html',
     'pelajaran.html?m=apa-itu-saham#benar','metodologi.html','asisten.html','asisten.html#jawab','404.html','UJI-PX','UJI-TETAP'];
@@ -1933,6 +2009,8 @@ const halamanFokus = ['index.html','peringkat.html','peringkat.html#istilah','ra
   if (process.env.AUDIT==='alt') { await auditAlt(b); await b.close(); return; }
   // AUDIT=tabel node tools/audit-kontras.js → hanya info & hubungan tabel/daftar (WCAG 1.3.1)
   if (process.env.AUDIT==='tabel') { await auditTabel(b); await b.close(); return; }
+  // AUDIT=lewati node tools/audit-kontras.js → hanya lewati blok (WCAG 2.4.1)
+  if (process.env.AUDIT==='lewati') { await auditLewati(b); await b.close(); return; }
   let total = 0;
   // AUDIT=fokus node tools/audit-kontras.js → hanya cek garis fokus (lebih cepat)
   if (process.env.AUDIT!=='fokus') for (const scheme of ['dark','light']) for (const w of [390,1280]) {
@@ -2114,6 +2192,7 @@ const halamanFokus = ['index.html','peringkat.html','peringkat.html#istilah','ra
   await auditPeran(b);
   await auditAlt(b);
   await auditTabel(b);
+  await auditLewati(b);
   await auditTeks(b);
   await auditZoom(b);
   await auditJarak(b);

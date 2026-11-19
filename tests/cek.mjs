@@ -3311,8 +3311,8 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
     [asli.replace('initial-scale=1"', 'initial-scale=1, maximum-scale=1"'), "mengunci zoom"],
     [asli.replace(/<a class="lompat"[^>]*>[^<]*<\/a>/, ""), "tautan pertama"],
     [asli.replace('class="lompat" href="#isi"', 'class="lompat" href="#konten"'), "ada 0×"],
-    [asli.replace('<main id="isi">', '<main id="isi"><div id="isi"></div>'), "ada 2×"],
-    [asli.replace('<main id="isi">', "<main>").replace("</main>", '</main><div id="isi"></div>'), "tidak berada di <main>"],
+    [asli.replace('<main id="isi" tabindex="-1">', '<main id="isi" tabindex="-1"><div id="isi"></div>'), "ada 2×"],
+    [asli.replace('<main id="isi" tabindex="-1">', "<main>").replace("</main>", '</main><div id="isi"></div>'), "tidak berada di <main>"],
     [asli.replace(/(<body[^>]*>)/, '$1<a href="index.html">Beranda</a>'), "tautan pertama"],
   ];
   for (const [b, pesan] of rusak)
@@ -3368,7 +3368,7 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
     [asli.replace(/\s*<p class="ke-atas-baris">[\s\S]*?<\/p>/, ""), "ada 0×"],
     [asli.replace('href="#isi">Kembali', 'href="#atas">Kembali'), "harus menuju #isi"],
     [asli.replace(">Kembali ke atas<", ">Ke atas<"), "teks tautan"],
-    [asli.replace('<main id="isi">', '<main id="isi"><span id="isi"></span>'), "ada 2×"],
+    [asli.replace('<main id="isi" tabindex="-1">', '<main id="isi" tabindex="-1"><span id="isi"></span>'), "ada 2×"],
     [asli.replace(/(\s*<p class="ke-atas-baris">[\s\S]*?<\/p>)/, "").replace('<div id="kabar"></div>', '<p class="ke-atas-baris"><a class="ke-atas" href="#isi">Kembali ke atas</a></p><div id="kabar"></div>'), "sesudah #kabar"],
   ];
   for (const [b, p] of rusak) ok(b !== asli && ujiKeAtas(b, "kabar").some((s) => s.includes(p)), `uji balik ke-atas: "${p}" harus tertangkap`);
@@ -6614,6 +6614,50 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
   ];
   for (const [j, h, c, a, pesan] of rusakT) ok(cekTabel(j, h, c, a).some((x) => x.includes(pesan)), `uji balik tabel/daftar: "${pesan}" harus tertangkap`);
   ok(cekTabel(jsT + '\n// el("th", { text: "x" }) hanya contoh di komentar', htmlT, cssT, audT).length === 0, "uji balik tabel/daftar: komentar tidak boleh dianggap temuan");
+}
+
+// (n) Dewi & Nina (19 Nov 10.xx): lewati blok WCAG 2.4.1. Setiap halaman: <main id="isi" tabindex="-1"> (menerima fokus sungguhan
+// setelah "Langsung ke isi"), tepat satu <header>, <main>, <footer> di HTML, dan setiap <nav> bernama (aria-label/aria-labelledby).
+// app.js: setiap el("nav") bernama. CSS: main bertabindex tanpa garis fokus. Audit AUDIT=lewati (pohon aksesibilitas peramban) ada,
+// ikut audit penuh, dengan 5 uji balik.
+{
+  const cekLewati = (js, html, css, aud) => {
+    const s = [];
+    const jsK = js.replace(/\/\*[\s\S]*?\*\//g, "").replace(/^\s*\/\/.*$/gm, "");
+    for (const [n, t] of html) {
+      const tK = t.replace(/<!--[\s\S]*?-->/g, "");
+      if (!/<main id="isi" tabindex="-1">/.test(tK)) s.push(`${n}: <main> tanpa id="isi" tabindex="-1"`);
+      for (const tag of ["header", "main", "footer"]) { const j = (tK.match(new RegExp(`<${tag}[\\s>]`, "g")) || []).length; if (j !== 1) s.push(`${n}: <${tag}> ada ${j}× (harus 1)`); }
+      for (const m of tK.match(/<nav\b[^>]*>/g) || []) if (!/aria-label(ledby)?="[^"]+"/.test(m)) s.push(`${n}: <nav> tanpa nama`);
+    }
+    for (const m of jsK.match(/el\("nav",\s*\{[^}]*\}/g) || []) if (!/"aria-label(ledby)?":\s*"/.test(m)) s.push('app.js: el("nav") tanpa nama');
+    if (!/main\[tabindex="-1"\]:focus\s*\{\s*outline:\s*none;\s*\}/.test(css)) s.push("styles.css: main[tabindex=\"-1\"]:focus tanpa outline: none");
+    if (!/process\.env\.AUDIT==='lewati'\) \{ await auditLewati\(b\)/.test(aud)) s.push("mode AUDIT=lewati tidak ada");
+    if (!/\n  await auditLewati\(b\);\n/.test(aud)) s.push("auditLewati tidak ikut audit penuh");
+    const fL = aud.slice(aud.indexOf("async function auditLewati"), aud.indexOf("async function auditTeks"));
+    if (!/Accessibility\.getFullAXTree/.test(fL)) s.push("auditLewati tidak membaca pohon aksesibilitas peramban");
+    for (const u of ["UJI-HAPUS", "UJI-SASARAN", "UJI-MAIN", "UJI-NAV", "UJI-TABINDEX"]) if (!fL.includes(`'${u}`)) s.push(`uji balik ${u} tidak ada`);
+    return s;
+  };
+  const jsL = readFileSync("assets/app.js", "utf8"), cssL = readFileSync("assets/styles.css", "utf8"), audL = readFileSync("tools/audit-kontras.js", "utf8");
+  const htmlL = readdirSync(".").filter((n) => n.endsWith(".html")).map((n) => [n, readFileSync(n, "utf8")]);
+  const sL = cekLewati(jsL, htmlL, cssL, audL);
+  ok(sL.length === 0, `Lewati blok WCAG 2.4.1: ${sL.join("; ")}`);
+  const ganti = (nama, a, b) => htmlL.map(([n, t]) => [n, n === nama ? t.replace(a, b) : t]);
+  const rusakL = [
+    [jsL, ganti("radar.html", '<main id="isi" tabindex="-1">', '<main id="isi">'), cssL, audL, 'radar.html: <main> tanpa id="isi" tabindex="-1"'],
+    [jsL, ganti("index.html", "</main>", "</main><main><p>x</p></main>"), cssL, audL, "index.html: <main> ada 2×"],
+    [jsL, ganti("kabar.html", /<footer class="kaki">[\s\S]*?<\/footer>/, ""), cssL, audL, "kabar.html: <footer> ada 0×"],
+    [jsL, ganti("belajar.html", '<nav class="nav" aria-label="Menu utama">', '<nav class="nav">'), cssL, audL, "belajar.html: <nav> tanpa nama"],
+    [jsL.replace('el("nav", { class: "lompat-ke", "aria-label": "Lompat ke bagian profil" }', 'el("nav", { class: "lompat-ke" }'), htmlL, cssL, audL, 'el("nav") tanpa nama'],
+    [jsL, htmlL, cssL.replace('main[tabindex="-1"]:focus { outline: none; }', ""), audL, "outline: none"],
+    [jsL, htmlL, cssL, audL.replace("process.env.AUDIT==='lewati'", "process.env.AUDIT==='l'"), "mode AUDIT=lewati"],
+    [jsL, htmlL, cssL, audL.replace("  await auditLewati(b);\n", ""), "audit penuh"],
+    [jsL, htmlL, cssL, audL.split("'UJI-SASARAN").join("'UJI-Z"), "UJI-SASARAN"],
+    [jsL, htmlL, cssL, audL.split("'UJI-TABINDEX").join("'UJI-Z"), "UJI-TABINDEX"],
+  ];
+  for (const [j, h, c, a, pesan] of rusakL) ok(cekLewati(j, h, c, a).some((x) => x.includes(pesan)), `uji balik lewati blok: "${pesan}" harus tertangkap`);
+  ok(cekLewati(jsL + '\n// el("nav", { class: "x" }) hanya contoh di komentar', htmlL, cssL, audL).length === 0, "uji balik lewati blok: komentar tidak boleh dianggap temuan");
 }
 
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }

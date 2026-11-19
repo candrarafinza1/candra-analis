@@ -111,6 +111,9 @@ p { margin: 0 0 1em; }
 /* Dewi (18 Nov 08.xx): di 404 tautan lompat ikut alur di atas latar halaman (bukan biru malam), jadi garis kuning hanya 1,55:1
    di mode terang. Di sana garis fokus memakai warna teks halaman. */
 .lompat[data-geser]:focus-visible { outline-color: var(--tinta); }
+/* Dewi & Nina (19 Nov 10.xx, WCAG 2.4.1): <main tabindex="-1"> menerima fokus sungguhan setelah "Langsung ke isi", jadi pembaca
+   layar langsung membaca isi. main bukan kontrol, jadi tanpa garis fokus (Tab berikutnya tetap bergaris di elemen pertama isi). */
+main[tabindex="-1"]:focus { outline: none; }
 
 /* ---------- Header ---------- */
 .kepala {

@@ -1900,3 +1900,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: giliran KLBF & BRIS; masih hanya semester I/kuartal II 2026 → tetap 25 dari 32. Raka/Hana: tidak ada kabar baru bersumber.
 - Tugas baru: Dewi + Nina (lewati blok, WCAG 2.4.1).
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 19 Nov 2026, sesi 10.08 WIB (Bima)
+- Yoga: run CI #325 (commit sesi 09.08) hijau.
+- Dewi + Nina: audit lewati blok (WCAG 2.4.1) di `tools/audit-kontras.js` (`AUDIT=lewati`, ikut audit penuh): 13 halaman/keadaan × gelap/terang × 390/1280px, 312 landmark dari pohon aksesibilitas peramban. Temuan nyata 52 → 0: setelah "Langsung ke isi" fokus jatuh ke body, kini `<main id="isi" tabindex="-1">` di 10 halaman menerima fokus (tanpa garis fokus, tampilan sama). Landmark sudah lengkap & nav bernama. Uji balik 20/20; audit fokus/peran/alt/tabel/teks diulang tetap 0. Nina: cek statis + 11 uji balik; 3 uji balik lama disesuaikan. Kirana: tinjau, usul audit beberapa cara (WCAG 2.4.5).
+- Fajar: giliran BSSR & MIKA; belum ada laba Januari–September 2026 bersumber → tetap 25 dari 32. Raka/Hana: tidak ada kabar baru bersumber.
+- Tugas baru: Dewi + Nina (beberapa cara, WCAG 2.4.5).
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

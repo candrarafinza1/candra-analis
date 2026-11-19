@@ -772,3 +772,12 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Uji balik UJI-TH (th diganti td), UJI-SCOPE (scope dihapus), UJI-DAFTAR (daftar diganti div berderet), UJI-KARTU (tabel kartu kehilangan peran tabel) tertangkap 16/16.
 - Nina: cek statis di `tests/cek.mjs` (semua `<th>` di HTML & app.js ber-scope, setiap tabel ber-caption, kisi-ubin = ul role="list" berisi li, CSS list-style: none, mode audit & 4 uji balik ada) + 12 uji balik.
 - Kirana: tampilan tidak berubah. Usul berikutnya: audit lewati blok (WCAG 2.4.1): tautan "Lewati ke isi" di setiap halaman, tampil saat difokus, dan landmark header/nav/main/footer lengkap.
+
+### Catatan audit: lewati blok WCAG 2.4.1 (Dewi & Nina, 19 Nov 10.xx)
+- Alat: `AUDIT=lewati node tools/audit-kontras.js` (ikut audit penuh). 13 halaman/keadaan (beranda, Belajar, pelajaran, pelajaran tidak ada, Peringkat, Radar, profil ANTM, profil tanpa kode, Kabar, Metodologi, Asisten, 404, alamat salah ketik) × gelap/terang × 390/1280px; 312 landmark dibaca dari pohon aksesibilitas peramban.
+- Yang diperiksa: Tab pertama jatuh ke "Langsung ke isi", tampil penuh di layar dan tidak tertutup; Enter memindahkan fokus sungguhan ke `<main>`; Tab berikutnya jatuh ke elemen pertama di isi (menu terlewati); tepat satu banner/main/contentinfo; setiap navigation bernama dan namanya tidak kembar.
+- **Temuan nyata (52 → 0):** setelah Enter pada "Langsung ke isi", fokus jatuh ke `<body>`, bukan ke `<main>` (Tab berikutnya sudah benar, tetapi pembaca layar tidak langsung membaca isi). Kini `<main id="isi" tabindex="-1">` di 10 halaman, tanpa garis fokus pada main (bukan kontrol). Tampilan tidak berubah (390/1280px, tanpa scroll samping).
+- Landmark sudah baik: nav kedua (Pelajaran lain, Lompat ke bagian profil, Isi halaman ini) semuanya bernama dan berbeda dari "Menu utama".
+- Uji balik UJI-HAPUS (tautan dihapus), UJI-SASARAN (href ke id tidak ada), UJI-MAIN (main kedua), UJI-NAV (nav tanpa nama), UJI-TABINDEX (main tak bisa difokus) tertangkap 20/20. Audit fokus, tertutup, saat fokus, peran, alt, tabel, teks diulang: tetap 0.
+- Nina: cek statis di `tests/cek.mjs` (main id="isi" tabindex="-1", tepat satu header/main/footer per halaman, setiap nav HTML & app.js bernama, CSS, mode audit & 5 uji balik) + 11 uji balik; 3 uji balik lama disesuaikan dengan tag main baru.
+- Kirana: tampilan tidak berubah. Usul berikutnya: audit beberapa cara (WCAG 2.4.5): setiap halaman bisa dicapai lewat minimal dua jalan (menu utama, kaki halaman, daftar profil/pencarian kode), termasuk profil emiten dan pelajaran.
