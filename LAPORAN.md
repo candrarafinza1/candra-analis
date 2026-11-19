@@ -1954,3 +1954,8 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Dewi & Nina: audit keyboard & tanpa jebakan WCAG 2.1.1/2.1.2 (`AUDIT=keyboard`, 11 halaman/keadaan, 390/1280px, gelap/terang, 4.316 tekan tombol): semua elemen terjangkau Tab/Shift+Tab, fokus tidak tertahan, tanpa pendengar klik di elemen tak terfokus, 7 fitur utama bisa dipakai dengan keyboard → 0 temuan. Uji balik UJI-JEBAK 8 & UJI-KLIK 4; Nina: cek statis + 8 uji balik. Kirana meninjau, usul berikutnya audit pintasan satu huruf (WCAG 2.1.4) masuk backlog.
 - Fajar: KLBF & BRIS dicari, belum ada laba Januari–September 2026 bersumber; tetap 25 dari 32.
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 19 Nov 2026, 20.05 WIB — Bima
+- Rafinza memberi proyek prioritas: **Agenda IPO & Dividen** (pemberitahuan perusahaan syariah yang akan IPO dan emiten syariah yang akan membagi dividen, diperbarui terus).
+- Tugas dibagi di BACKLOG.md: data & skema (Arif, Raka, Fajar, Hana, Nina), halaman agenda (Arif, Dewi), pengingat kalender .ics gratis (Arif, Tegar), pemberitahuan di beranda/Radar/profil (Dewi, Galih), istilah & pelajaran (Sari, Laras, Hana), tinjauan kreatif (Kirana), rutin harian (Raka).
+- Audit aksesibilitas berulang ditunda; tugas pendukung harus bermanfaat langsung bagi pengguna.

@@ -8,6 +8,11 @@ Sejak 28 Okt 2026, Rafinza ke luar kota dan hanya memantau. Bima memegang penuh 
 disiplin jam kerja, tidak boleh ada karyawan menganggur (bila backlog menipis, Bima langsung menyusun tugas baru),
 dan setiap kejadian penting dikabarkan lewat laporan siang/malam atau email masalah berat.
 
+## Proyek prioritas & tugas pendukung
+- Bila BACKLOG.md punya bagian "PROYEK PRIORITAS", kerjakan itu dulu sebelum tugas lain.
+- Tugas pendukung (agar tidak ada yang menganggur) harus memberi manfaat nyata bagi pengguna: data baru, fitur, konten belajar, perbaikan bug. Audit aksesibilitas berulang hanya boleh bila tidak ada pekerjaan yang lebih bermanfaat.
+- Rutin harian Agenda IPO & Dividen (sejak 19 Nov 2026): lihat tugas RUTIN di BACKLOG.md.
+
 ## Produk
 Website belajar dan analisis **saham syariah** untuk pemula Indonesia: https://candra-analis.vercel.app
 Repo ini adalah website statis (HTML/CSS/JS tanpa build). Setiap push ke `main` otomatis tayang lewat Vercel.
