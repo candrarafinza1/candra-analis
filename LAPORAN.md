@@ -1947,5 +1947,5 @@ Satu entri per sesi kerja. Terbaru di bawah.
 ## 19 Nov 2026, 18.10 WIB — sesi kerja (Bima)
 - Dewi & Nina: audit "tahu sedang di mana" WCAG 2.4.8 (`AUDIT=letak`, alamat .html & alamat bersih Vercel, 390/1280px, gelap/terang, 96 halaman/keadaan). Temuan nyata: karena `cleanUrls`, menu aktif tidak pernah tertandai di situs tayang; `tandaiMenu` diperbaiki (20 temuan → 0). Uji balik UJI-TANPA 8 & UJI-GANDA 8; Nina: cek statis + 8 uji balik. Kirana meninjau, usul berikutnya audit keyboard (WCAG 2.1.1/2.1.2) masuk backlog.
 - Fajar: BSSR & MIKA dicari, belum ada laba Januari–September 2026 bersumber; tetap 25 dari 32.
-- Tegar: pindai rahasia bersih. Yoga: cek CI setelah push.
+- Tegar: pindai rahasia bersih. Yoga: CI #332 "Periksa sebelum rilis" hijau untuk commit 9ec5f28.
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
