@@ -535,6 +535,101 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
   ok(/data\/kabar\.js/.test(readFileSync("emiten.html", "utf8")), "emiten.html belum memuat data/kabar.js (kabar terbaru di profil)");
 }
 
+// 2f. Agenda IPO & Dividen (Nina, 19 Nov 2026; proyek prioritas Rafinza): skema data/agenda.js, tanggal valid & urut,
+// sumber https, IPO wajib buktiSyariah, dividen wajib desBaris + sumber DES yang mengutip baris & kode, tanpa kata ajakan,
+// acara lama (> 60 hari lewat) harus sudah dihapus. Disertai uji balik agar cek ini tidak diam-diam lemah.
+{
+  const ctxA = { window: {} };
+  vm.createContext(ctxA);
+  vm.runInContext(readFileSync("data/agenda.js", "utf8"), ctxA);
+  const { AGENDA_IPO, AGENDA_DIVIDEN } = ctxA.window;
+  const ajakanAgenda = /\b(wajib beli|pasti (naik|untung|cuan)|buruan|jangan sampai ketinggalan|dijamin untung|rekomendasi (beli|jual)|layak (dibeli|dikoleksi)|prospek cerah|saatnya (beli|masuk|jual)|target harga|cuan)\b/i;
+  const tgl = (t) => t === null || (typeof t === "string" && /^\d{4}-\d{2}-\d{2}$/.test(t) && !isNaN(Date.parse(t)) && new Date(t).toISOString().slice(0, 10) === t);
+  const sumberOk = (s) => Array.isArray(s) && s.length > 0 && s.every((x) => x && typeof x.judul === "string" && x.judul.length > 5 && /^https:\/\//.test(x.url || ""));
+  const urut = (...t) => { const a = t.filter(Boolean); return a.every((x, i) => i === 0 || a[i - 1] <= x); };
+  const teksSemua = (o) => JSON.stringify(o);
+  const hariIniA = new Date(Date.now() + 7 * 3600e3).toISOString().slice(0, 10);
+  const batasLama = new Date(Date.parse(hariIniA) - 60 * 864e5).toISOString().slice(0, 10);
+  const terakhir = (t) => Object.values(t).flatMap((v) => (v && typeof v === "object" ? Object.values(v) : [v])).filter(Boolean).sort().pop();
+  const desAsli = new Map(ASLI.map((e) => [e.kode, e.desBaris]));
+  const salahIpo = (x) => {
+    const s = [];
+    if (!x || typeof x.nama !== "string" || !x.nama) return ["nama wajib"];
+    if (!(x.kode === null || /^[A-Z]{4}$/.test(x.kode))) s.push("kode harus 4 huruf kapital atau null");
+    if (!x.buktiSyariah || !x.buktiSyariah.judul || !/^https:\/\//.test(x.buktiSyariah.url || "")) s.push("buktiSyariah (judul + https) wajib");
+    const t = x.tanggal || {};
+    const pa = t.penawaranAwal || {}, pu = t.penawaranUmum || {};
+    for (const v of [pa.mulai, pa.selesai, pu.mulai, pu.selesai, t.penjatahan, t.pencatatan]) if (v === undefined || !tgl(v)) s.push(`tanggal tidak valid: ${v}`);
+    if (!urut(pa.mulai, pa.selesai, pu.mulai, pu.selesai, t.penjatahan, t.pencatatan)) s.push("urutan tanggal IPO salah");
+    const h = x.harga || {};
+    for (const k of ["kisaranBawah", "kisaranAtas", "final"]) if (!(h[k] === null || (typeof h[k] === "number" && h[k] > 0))) s.push(`harga.${k} harus angka > 0 atau null`);
+    if (h.kisaranBawah && h.kisaranAtas && h.kisaranBawah > h.kisaranAtas) s.push("kisaran harga terbalik");
+    if (!sumberOk(x.sumber)) s.push("sumber wajib (judul + https)");
+    if (ajakanAgenda.test(teksSemua(x))) s.push("memuat kata ajakan");
+    const akhir = terakhir(t); if (akhir && akhir < batasLama) s.push("acara sudah lewat > 60 hari, hapus dari agenda");
+    return s;
+  };
+  const salahDiv = (x) => {
+    const s = [];
+    if (!x || !/^[A-Z]{4}$/.test(x.kode || "")) return ["kode harus 4 huruf kapital"];
+    if (!Number.isInteger(x.desBaris) || x.desBaris < 1) s.push("desBaris wajib (bilangan bulat)");
+    if (desAsli.has(x.kode) && desAsli.get(x.kode) !== x.desBaris) s.push(`desBaris beda dengan data/emiten-asli.js (${desAsli.get(x.kode)})`);
+    const des = (x.sumber || []).find((y) => /des-|Daftar-Efek-Syariah|DES/i.test((y && y.url) || "") || /^DES /.test((y && y.judul) || ""));
+    if (!des || !new RegExp(`baris ${x.desBaris}: ${x.kode}\\b`).test(des.judul || "")) s.push("sumber DES yang mengutip baris & kode wajib ada");
+    if (!["interim", "final"].includes(x.jenis)) s.push("jenis harus interim/final");
+    if (!Number.isInteger(x.tahunBuku) || x.tahunBuku < 2020) s.push("tahunBuku tidak valid");
+    if (!(typeof x.dps === "number" && x.dps > 0)) s.push("dps harus angka > 0");
+    if (!["IDR", "USD"].includes(x.mataUang)) s.push("mataUang harus IDR/USD");
+    const t = x.tanggal || {};
+    for (const k of ["cum", "ex", "recording", "pembayaran"]) if (t[k] === undefined || !tgl(t[k])) s.push(`tanggal.${k} tidak valid`);
+    if (!t.cum) s.push("tanggal.cum wajib");
+    if (!urut(t.cum, t.ex, t.recording, t.pembayaran)) s.push("urutan cum ≤ ex ≤ recording ≤ pembayaran salah");
+    if (t.cum && t.ex && t.cum === t.ex) s.push("cum dan ex tidak boleh sama");
+    if (!sumberOk(x.sumber)) s.push("sumber wajib (judul + https)");
+    if (ajakanAgenda.test(teksSemua(x))) s.push("memuat kata ajakan");
+    const akhir = terakhir(t); if (akhir && akhir < batasLama) s.push("acara sudah lewat > 60 hari, hapus dari agenda");
+    return s;
+  };
+  ok(Array.isArray(AGENDA_IPO), "data/agenda.js: window.AGENDA_IPO harus array (boleh kosong)");
+  ok(Array.isArray(AGENDA_DIVIDEN), "data/agenda.js: window.AGENDA_DIVIDEN harus array (boleh kosong)");
+  for (const x of AGENDA_IPO || []) for (const s of salahIpo(x)) ok(false, `agenda IPO ${x && x.nama}: ${s}`);
+  const kunciDiv = new Set();
+  for (const x of AGENDA_DIVIDEN || []) {
+    for (const s of salahDiv(x)) ok(false, `agenda dividen ${x && x.kode}: ${s}`);
+    const id = `${x.kode}|${x.jenis}|${x.tahunBuku}|${x.tanggal && x.tanggal.cum}`;
+    ok(!kunciDiv.has(id), `agenda dividen ganda: ${id}`); kunciDiv.add(id);
+  }
+  // Uji balik
+  const contohDiv = { kode: "AAAA", desBaris: 5, jenis: "interim", tahunBuku: 2026, dps: 10, mataUang: "IDR",
+    tanggal: { cum: hariIniA, ex: hariIniA.replace(/\d{2}$/, (d) => d), recording: null, pembayaran: null },
+    sumber: [{ judul: "Berita contoh", url: "https://contoh.id/a" }, { judul: "DES periode I 2026 baris 5: AAAA PT Contoh Tbk", url: "https://idx.id/media/x/des-mei-2026.pdf" }] };
+  const baikDiv = { ...contohDiv, tanggal: { ...contohDiv.tanggal, ex: new Date(Date.parse(hariIniA) + 864e5).toISOString().slice(0, 10) } };
+  ok(salahDiv(baikDiv).length === 0, `uji balik agenda: contoh dividen benar ditolak (${salahDiv(baikDiv).join("; ")})`);
+  const rusakDiv = [
+    [{ ...baikDiv, desBaris: undefined }, "desBaris"],
+    [{ ...baikDiv, sumber: [baikDiv.sumber[0]] }, "sumber DES"],
+    [{ ...baikDiv, sumber: [baikDiv.sumber[0], { ...baikDiv.sumber[1], judul: "DES periode I 2026 baris 6: AAAA" }] }, "sumber DES"],
+    [{ ...baikDiv, tanggal: { ...baikDiv.tanggal, cum: "2026-13-01" } }, "tanggal.cum"],
+    [{ ...baikDiv, tanggal: { cum: "2026-11-27", ex: "2026-11-26", recording: null, pembayaran: null } }, "urutan"],
+    [{ ...baikDiv, sumber: [{ judul: "Berita contoh", url: "http://contoh.id" }, baikDiv.sumber[1]] }, "https"],
+    [{ ...baikDiv, catatan: "Buruan beli sebelum cum date" }, "ajakan"],
+    [{ ...baikDiv, tanggal: { cum: "2020-01-02", ex: "2020-01-03", recording: null, pembayaran: null } }, "60 hari"],
+    [{ ...baikDiv, kode: "TLKM", desBaris: 5, sumber: [baikDiv.sumber[0], { judul: "DES periode I 2026 baris 5: TLKM", url: baikDiv.sumber[1].url }] }, "emiten-asli"],
+  ];
+  for (const [x, pesan] of rusakDiv) ok(salahDiv(x).some((s) => s.includes(pesan)), `uji balik agenda dividen: "${pesan}" harus tertangkap`);
+  const baikIpo = { nama: "PT Contoh Tbk", kode: null, sektor: "Contoh", buktiSyariah: { judul: "Prospektus", url: "https://contoh.id/p.pdf" },
+    tanggal: { penawaranAwal: { mulai: hariIniA, selesai: hariIniA }, penawaranUmum: { mulai: null, selesai: null }, penjatahan: null, pencatatan: null },
+    harga: { kisaranBawah: 100, kisaranAtas: 120, final: null }, sumber: [{ judul: "Berita contoh", url: "https://contoh.id/b" }] };
+  ok(salahIpo(baikIpo).length === 0, `uji balik agenda: contoh IPO benar ditolak (${salahIpo(baikIpo).join("; ")})`);
+  const rusakIpo = [
+    [{ ...baikIpo, buktiSyariah: undefined }, "buktiSyariah"],
+    [{ ...baikIpo, harga: { kisaranBawah: 150, kisaranAtas: 120, final: null } }, "terbalik"],
+    [{ ...baikIpo, nama: "IPO pasti untung Tbk" }, "ajakan"],
+    [{ ...baikIpo, tanggal: { ...baikIpo.tanggal, penjatahan: "2000-01-01" } }, "urutan"],
+  ];
+  for (const [x, pesan] of rusakIpo) ok(salahIpo(x).some((s) => s.includes(pesan)), `uji balik agenda IPO: "${pesan}" harus tertangkap`);
+}
+
 // Nina (2 Nov 13.19): label "Baru" pada kabar (IDE.md #19) — teks, 0–3 hari dari tanggal perangkat,
 // tanggal tidak valid/masa depan bukan baru, dipakai di kartuKabar() (halaman Kabar, beranda, profil), tanpa animasi kedip.
 {
