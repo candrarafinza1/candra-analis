@@ -6569,6 +6569,53 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
   ok(cekAlt(jsA + '\n// el("img", { src: "a.png" }) hanya contoh di komentar', htmlA, cssA, audA).length === 0, "uji balik konten non-teks: komentar tidak boleh dianggap temuan");
 }
 
+// (m) Dewi & Nina (19 Nov 09.xx): info & hubungan tabel/daftar WCAG 1.3.1. HTML & app.js: setiap <th> memakai scope
+// (col/row), setiap tabel punya <caption>, empat ubin "Angka utama" di profil berupa daftar sungguhan (ul.kisi-ubin role="list"
+// berisi li.ubin), dan CSS kisi-ubin menghapus penanda daftar. Audit AUDIT=tabel (pohon aksesibilitas peramban) ada, ikut audit
+// penuh, dengan 4 uji balik.
+{
+  const cekTabel = (js, html, css, aud) => {
+    const s = [];
+    const jsK = js.replace(/\/\*[\s\S]*?\*\//g, "").replace(/^\s*\/\/.*$/gm, "");
+    for (const [n, t] of html) {
+      for (const m of t.match(/<th\b[^>]*>/g) || []) if (!/\bscope="(col|row)"/.test(m)) s.push(`${n}: <th> tanpa scope`);
+      const tab = (t.match(/<table\b[^>]*>/g) || []).length, cap = (t.match(/<caption\b/g) || []).length;
+      if (cap < tab) s.push(`${n}: tabel tanpa <caption>`);
+    }
+    for (const m of jsK.match(/el\("th",\s*\{[^}]*\}/g) || []) if (!/scope:\s*"(col|row)"/.test(m)) s.push("app.js: el(\"th\") tanpa scope");
+    const tabJs = (jsK.match(/el\("table"/g) || []).length, capJs = (jsK.match(/el\("caption"/g) || []).length;
+    if (capJs < tabJs) s.push("app.js: el(\"table\") tanpa caption");
+    if (!/el\("ul",\s*\{\s*class:\s*"kisi-ubin",\s*role:\s*"list"/.test(jsK)) s.push("app.js: kisi-ubin bukan <ul role=\"list\">");
+    if (!/el\("li",\s*\{\s*class:\s*"ubin"/.test(jsK)) s.push("app.js: ubin bukan <li>");
+    if (!/\.kisi-ubin\s*\{[^}]*list-style:\s*none[^}]*\}/.test(css)) s.push("styles.css: kisi-ubin tanpa list-style: none");
+    if (!/process\.env\.AUDIT==='tabel'\) \{ await auditTabel\(b\)/.test(aud)) s.push("mode AUDIT=tabel tidak ada");
+    if (!/\n  await auditTabel\(b\);\n/.test(aud)) s.push("auditTabel tidak ikut audit penuh");
+    const fT = aud.slice(aud.indexOf("async function auditTabel"), aud.indexOf("async function auditTeks"));
+    if (!/Accessibility\.getFullAXTree/.test(fT)) s.push("auditTabel tidak membaca pohon aksesibilitas peramban");
+    for (const u of ["UJI-TH", "UJI-SCOPE", "UJI-DAFTAR", "UJI-KARTU"]) if (!fT.includes(`'${u}`)) s.push(`uji balik ${u} tidak ada`);
+    return s;
+  };
+  const jsT = readFileSync("assets/app.js", "utf8"), cssT = readFileSync("assets/styles.css", "utf8"), audT = readFileSync("tools/audit-kontras.js", "utf8");
+  const htmlT = readdirSync(".").filter((n) => n.endsWith(".html")).map((n) => [n, readFileSync(n, "utf8")]);
+  const sT = cekTabel(jsT, htmlT, cssT, audT);
+  ok(sT.length === 0, `Info & hubungan tabel/daftar WCAG 1.3.1: ${sT.join("; ")}`);
+  const rusakT = [
+    [jsT, htmlT.map(([n, t]) => [n, n === "index.html" ? t.replace('<th scope="col">Kode</th>', "<th>Kode</th>") : t]), cssT, audT, "index.html: <th> tanpa scope"],
+    [jsT, htmlT.map(([n, t]) => [n, n === "index.html" ? t.replace(/<caption[^>]*>[^<]*<\/caption>/, "") : t]), cssT, audT, "tabel tanpa <caption>"],
+    [jsT.replace('el("th", { scope: "col", text: "Emiten" })', 'el("th", { text: "Emiten" })'), htmlT, cssT, audT, 'el("th") tanpa scope'],
+    [jsT.replace(/el\("caption", \{ class: "keterangan-tabel", text: e\.kode \+ " dan "/, 'el("span", { class: "keterangan-tabel", text: e.kode + " dan "'), htmlT, cssT, audT, 'el("table") tanpa caption'],
+    [jsT.replace('el("ul", { class: "kisi-ubin", role: "list"', 'el("div", { class: "kisi-ubin", role: "list"'), htmlT, cssT, audT, "kisi-ubin bukan"],
+    [jsT.replace('el("li", { class: "ubin" }', 'el("div", { class: "ubin" }'), htmlT, cssT, audT, "ubin bukan <li>"],
+    [jsT, htmlT, cssT.replace("padding: 0; list-style: none; }", "padding: 0; }"), audT, "list-style"],
+    [jsT, htmlT, cssT, audT.replace("process.env.AUDIT==='tabel'", "process.env.AUDIT==='t'"), "mode AUDIT=tabel"],
+    [jsT, htmlT, cssT, audT.replace("  await auditTabel(b);\n", ""), "audit penuh"],
+    [jsT, htmlT, cssT, audT.split("'UJI-DAFTAR").join("'UJI-Z"), "UJI-DAFTAR"],
+    [jsT, htmlT, cssT, audT.split("'UJI-KARTU").join("'UJI-Z"), "UJI-KARTU"],
+  ];
+  for (const [j, h, c, a, pesan] of rusakT) ok(cekTabel(j, h, c, a).some((x) => x.includes(pesan)), `uji balik tabel/daftar: "${pesan}" harus tertangkap`);
+  ok(cekTabel(jsT + '\n// el("th", { text: "x" }) hanya contoh di komentar', htmlT, cssT, audT).length === 0, "uji balik tabel/daftar: komentar tidak boleh dianggap temuan");
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);
 

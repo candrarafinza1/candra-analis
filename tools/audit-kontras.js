@@ -6,7 +6,7 @@
 // garis fokus terlihat (outline ≥2px, atau box-shadow/border berubah) dengan kontras ≥3:1 terhadap latar di sekitarnya.
 // Halaman "UJI-FOKUS" sengaja mematikan outline; audit wajib menangkapnya (uji balik).
 // 17 Nov 09.xx (Dewi & Tegar): Tab sampai habis, + keadaan istilah terbuka, hasil Radar UNTR, kuis terjawab; cek border kotak tanya Asisten.
-// Cara pakai: python3 -m http.server 8765 (di akar repo), lalu: node tools/audit-kontras.js (AUDIT=fokus: hanya garis fokus & fokus tertutup; AUDIT=zoom: hanya zoom 200% & layar pendek HP; AUDIT=jarak: hanya jarak teks WCAG 1.4.12; AUDIT=orientasi: hanya orientasi layar WCAG 1.3.4; AUDIT=sentuh: hanya ukuran sasaran sentuh WCAG 2.5.8; AUDIT=sorot: hanya konten saat diarahkan/difokus WCAG 1.4.13; AUDIT=label: hanya label dalam nama WCAG 2.5.3; AUDIT=status: hanya pesan status WCAG 4.1.3; AUDIT=judul: hanya judul halaman & urutan judul WCAG 2.4.2/1.3.1; AUDIT=bahasa: hanya bahasa halaman & bagian WCAG 3.1.1/3.1.2; AUDIT=isian: hanya label/petunjuk & pesan salah isian WCAG 3.3.2/3.3.1; AUDIT=urutan: hanya urutan fokus WCAG 2.4.3; AUDIT=nonteks: hanya kontras non-teks WCAG 1.4.11; AUDIT=warna: hanya penggunaan warna WCAG 1.4.1; AUDIT=tautan: hanya tujuan tautan WCAG 2.4.4; AUDIT=konsisten: hanya identifikasi konsisten WCAG 3.2.4; AUDIT=penunjuk: hanya pembatalan penunjuk WCAG 2.5.2; AUDIT=gerak: hanya gerakan penunjuk & gerakan perangkat WCAG 2.5.1/2.5.4; AUDIT=teks: hanya ubah ukuran teks 200% WCAG 1.4.4; AUDIT=peran: hanya nama, peran, nilai WCAG 4.1.2; AUDIT=alt: hanya konten non-teks WCAG 1.1.1)
+// Cara pakai: python3 -m http.server 8765 (di akar repo), lalu: node tools/audit-kontras.js (AUDIT=fokus: hanya garis fokus & fokus tertutup; AUDIT=zoom: hanya zoom 200% & layar pendek HP; AUDIT=jarak: hanya jarak teks WCAG 1.4.12; AUDIT=orientasi: hanya orientasi layar WCAG 1.3.4; AUDIT=sentuh: hanya ukuran sasaran sentuh WCAG 2.5.8; AUDIT=sorot: hanya konten saat diarahkan/difokus WCAG 1.4.13; AUDIT=label: hanya label dalam nama WCAG 2.5.3; AUDIT=status: hanya pesan status WCAG 4.1.3; AUDIT=judul: hanya judul halaman & urutan judul WCAG 2.4.2/1.3.1; AUDIT=bahasa: hanya bahasa halaman & bagian WCAG 3.1.1/3.1.2; AUDIT=isian: hanya label/petunjuk & pesan salah isian WCAG 3.3.2/3.3.1; AUDIT=urutan: hanya urutan fokus WCAG 2.4.3; AUDIT=nonteks: hanya kontras non-teks WCAG 1.4.11; AUDIT=warna: hanya penggunaan warna WCAG 1.4.1; AUDIT=tautan: hanya tujuan tautan WCAG 2.4.4; AUDIT=konsisten: hanya identifikasi konsisten WCAG 3.2.4; AUDIT=penunjuk: hanya pembatalan penunjuk WCAG 2.5.2; AUDIT=gerak: hanya gerakan penunjuk & gerakan perangkat WCAG 2.5.1/2.5.4; AUDIT=teks: hanya ubah ukuran teks 200% WCAG 1.4.4; AUDIT=peran: hanya nama, peran, nilai WCAG 4.1.2; AUDIT=alt: hanya konten non-teks WCAG 1.1.1; AUDIT=tabel: hanya info & hubungan tabel/daftar WCAG 1.3.1)
 // Butuh Playwright + Chromium (sudah ada di lingkungan kerja tim); tidak dijalankan oleh tests/cek.mjs.
 const { chromium } = require('playwright');
 // 17 Nov 14.xx (Dewi & Nina): langkah Tab maju & Shift+Tab mundur untuk cek fokus tertutup, dipakai bersama oleh
@@ -1732,6 +1732,88 @@ async function auditAlt(b) {
   return total;
 }
 
+// Audit info & hubungan untuk tabel dan daftar (WCAG 1.3.1) — Dewi & Nina, 19 Nov 2026.
+// (a) Setiap tabel yang tampil: berperan table di pohon aksesibilitas, bernama (caption/aria-label), setiap <th> memakai scope
+//     (col/row) dan terbaca columnheader/rowheader, setiap <td> terbaca cell, dan setiap kolom sel data punya judul kolom.
+// (b) Kumpulan butir sejenis (≥3 anak bertag & berkelas sama, bukan teks sebaris, bukan kelompok berjudul) wajib <ul>/<ol>/role=list;
+//     setiap <ul>/<ol> yang tampil wajib terbaca list dengan listitem.
+// (c) Tabel kartu di HP (390px): tetap table/row/cell di pohon aksesibilitas, dan label kartu (data-label) sama dengan judul kolomnya.
+// Uji balik wajib tertangkap: UJI-TH (th diganti td), UJI-SCOPE (scope dihapus), UJI-DAFTAR (daftar diganti div berderet),
+// UJI-KARTU (tabel kartu kehilangan peran tabel).
+// AUDIT=tabel node tools/audit-kontras.js
+async function auditTabel(b) {
+  const HAL=['index.html','peringkat.html','peringkat.html#tab','peringkat.html#sektor','radar.html#UNTR','emiten.html?kode=ANTM','emiten.html?kode=UNTR',
+    'emiten.html?kode=ANTM#banding','kabar.html','belajar.html','pelajaran.html?m=apa-itu-saham','metodologi.html','asisten.html','404.html',
+    'UJI-TH','UJI-SCOPE','UJI-DAFTAR','UJI-KARTU'];
+  let total=0, uji=0, ujiN=0, tabelN=0, selN=0, daftarN=0;
+  for (const scheme of ['dark','light']) for (const w of [390,1280]) for (const pg of HAL) {
+    const [path,hash]=pg.split('#'); const isUji=path.startsWith('UJI-');
+    const ctx=await b.newContext({ viewport:{width:w,height:844}, colorScheme:scheme, deviceScaleFactor:1 });
+    if (path==='asisten.html') await ctx.route('**/api/tanya', r=>r.fulfill({ status:200, contentType:'application/json', body:JSON.stringify({aktif:true}) }));
+    const p=await ctx.newPage(); const errs=[]; p.on('pageerror',e=>errs.push(e.message));
+    const buka=isUji?(path==='UJI-DAFTAR'?'belajar.html':'peringkat.html'):path;
+    await p.goto('http://localhost:8765/'+buka); await p.waitForTimeout(350);
+    if (path==='radar.html'&&hash) { await p.selectOption('#pilih-saham',hash); await p.waitForTimeout(200); }
+    if (hash==='tab') { const t=await p.$$('[role=tab]'); await t[t.length-1].click(); await p.waitForTimeout(150); }
+    if (hash==='sektor') { const v=await p.$$eval('#pilih-sektor option',o=>o.map(x=>x.value).filter(Boolean)); await p.selectOption('#pilih-sektor',v[0]); await p.waitForTimeout(150); }
+    if (hash==='banding') { await p.selectOption('#pilih-banding','UNTR'); await p.waitForTimeout(200); }
+    await p.evaluate(path=>{
+      if (path==='UJI-TH') document.querySelectorAll('.tabel-kartu thead th').forEach(th=>{ const td=document.createElement('td'); td.textContent=th.textContent; th.replaceWith(td); });
+      if (path==='UJI-SCOPE') document.querySelectorAll('th[scope]').forEach(th=>th.removeAttribute('scope'));
+      if (path==='UJI-DAFTAR') { const ul=document.querySelector('main ul'); const d=document.createElement('div'); [...ul.children].forEach(li=>{ const x=document.createElement('div'); x.className='butir'; x.innerHTML=li.innerHTML; d.appendChild(x); }); ul.replaceWith(d); }
+      if (path==='UJI-KARTU') document.querySelector('.tabel-kartu').setAttribute('role','presentation');
+      let n=0; document.querySelectorAll('table,th,td,tr,ul,ol,li').forEach(e=>e.setAttribute('data-hub-id','h'+(n++)));
+    }, path);
+    await p.waitForTimeout(50);
+    const c=await ctx.newCDPSession(p);
+    const {root}=await c.send('DOM.getDocument',{depth:-1}); const {nodes}=await c.send('Accessibility.getFullAXTree');
+    const tandai=[]; (function jalan(d){ if (d.attributes) for (let i=0;i<d.attributes.length;i+=2) if (d.attributes[i]==='data-hub-id') tandai.push([d.attributes[i+1],d.backendNodeId]); (d.children||[]).forEach(jalan); })(root);
+    await c.detach();
+    const byBackend=new Map(); nodes.forEach(n=>{ if (n.backendDOMNodeId!==undefined) byBackend.set(n.backendDOMNodeId,n); });
+    const axDom={}; for (const [id,be] of tandai) { const n=byBackend.get(be); axDom[id]=n?{ ignored:!!n.ignored, role:n.role&&n.role.value, name:(n.name&&n.name.value||'').trim() }:{ ignored:true }; }
+    const hasil=await p.evaluate(axDom=>{ const t=[]; let tb=0, sel=0, dl=0;
+      const ax=e=>axDom[e.getAttribute('data-hub-id')]||{ignored:true};
+      const tampil=e=>!e.closest('[aria-hidden="true"],[hidden]')&&getComputedStyle(e).display!=='none'&&e.getClientRects().length>0;
+      const ket=e=>e.tagName.toLowerCase()+(e.id?'#'+e.id:'')+(e.className&&typeof e.className==='string'?'.'+e.className.trim().split(/\s+/)[0]:'');
+      // (a) tabel
+      document.querySelectorAll('table').forEach(tab=>{ if (!tampil(tab)) return; tb++; const a=ax(tab);
+        if (a.role!=='table'&&a.role!=='grid') t.push('tabel tidak terbaca sebagai tabel (peran '+(a.role||'tidak ada')+'): '+ket(tab));
+        if (!a.name) t.push('tabel tanpa nama (caption/aria-label): '+ket(tab));
+        const kepala=tab.tHead?[...tab.tHead.rows[0].cells]:[];
+        if (!kepala.length||kepala.some(x=>x.tagName!=='TH')) t.push('tabel tanpa baris judul kolom <th>: '+ket(tab));
+        tab.querySelectorAll('th').forEach(th=>{ const s=th.getAttribute('scope'); const r=ax(th).role;
+          const harus=th.closest('thead')?'col':'row';
+          if (s!==harus) t.push('<th> "'+th.textContent.trim().slice(0,20)+'" tanpa scope="'+harus+'": '+ket(tab));
+          if (r!==(harus==='col'?'columnheader':'rowheader')) t.push('<th> "'+th.textContent.trim().slice(0,20)+'" terbaca '+r+': '+ket(tab)); });
+        [...tab.tBodies].forEach(bd=>[...bd.rows].forEach(tr=>{ if (ax(tr).role!=='row') t.push('baris terbaca '+(ax(tr).role||'tidak ada')+': '+ket(tab));
+          [...tr.cells].forEach((td,i)=>{ if (td.tagName!=='TD') return; sel++; const r=ax(td).role;
+            if (r!=='cell'&&r!=='gridcell') t.push('sel data terbaca '+(r||'tidak ada')+', bukan cell: '+ket(tab));
+            const th=kepala[i]; if (!th||th.tagName!=='TH'||!th.textContent.trim()) t.push('sel kolom '+(i+1)+' tanpa judul kolom: '+ket(tab));
+            // (c) label kartu = judul kolom
+            if (td.hasAttribute('data-label')&&th&&td.getAttribute('data-label').trim()!==th.textContent.trim()) t.push('label kartu "'+td.getAttribute('data-label')+'" beda dengan judul kolom "'+th.textContent.trim()+'": '+ket(tab)); }); }));
+      });
+      // (b) daftar
+      document.querySelectorAll('ul,ol').forEach(l=>{ if (!tampil(l)) return; dl++; const r=ax(l).role;
+        if (r!=='list') t.push('<'+l.tagName.toLowerCase()+'> terbaca '+(r||'tidak ada')+', bukan list: '+ket(l));
+        [...l.children].forEach(li=>{ if (li.tagName!=='LI') t.push('anak <'+l.tagName.toLowerCase()+'> bukan <li>: '+ket(l)); else if (tampil(li)&&ax(li).role!=='listitem') t.push('<li> terbaca '+ax(li).role+': '+ket(l)); }); });
+      const LEWAT=['UL','OL','TABLE','THEAD','TBODY','TR','SELECT','DATALIST','P','NAV','svg','g','HEAD','DL','LABEL','BUTTON','A','STRONG','EM','SPAN','SMALL','H1','H2','H3','H4'];
+      document.querySelectorAll('body *').forEach(e=>{ if (LEWAT.includes(e.tagName)||!tampil(e)) return;
+        if (['list','tablist','radiogroup','menu','listbox','table','grid','tree'].includes(e.getAttribute('role'))) return;
+        const k=[...e.children].filter(tampil); if (k.length<3) return; const sig=x=>x.tagName+'.'+x.className;
+        if (!k.every(x=>sig(x)===sig(k[0]))) return; if (!['DIV','ARTICLE','SECTION','ASIDE','FIGURE'].includes(k[0].tagName)) return;
+        if (k.every(x=>x.querySelector('h2,h3,h4,h5,h6,legend'))) return;
+        t.push('kumpulan '+k.length+' butir '+ket(k[0])+' berderet tanpa <ul>/<ol>: '+ket(e)); });
+      return {t:[...new Set(t)], tb, sel, dl}; }, axDom);
+    const temuan=hasil.t; tabelN+=hasil.tb; selN+=hasil.sel; daftarN+=hasil.dl;
+    if (errs.length) temuan.push('galat JS: '+errs.join(' | '));
+    console.log(`tabel ${scheme} ${w} ${pg}`,'tabel',hasil.tb,'sel',hasil.sel,'daftar',hasil.dl, temuan.length?'TEMUAN '+temuan.slice(0,5).join('; '):'lolos');
+    if (isUji) { ujiN++; if (temuan.length) uji++; } else total+=temuan.length;
+    await ctx.close();
+  }
+  console.log('total temuan info & hubungan tabel/daftar',total,'(tabel dicek:',tabelN,'; sel data dicek:',selN,'; daftar dicek:',daftarN,'; uji balik UJI-TH/UJI-SCOPE/UJI-DAFTAR/UJI-KARTU tertangkap:',uji+'/'+ujiN+')');
+  return total;
+}
+
 async function auditTeks(b) {
   const halaman=['index.html','peringkat.html','peringkat.html#istilah','radar.html#UNTR','emiten.html?kode=ANTM','kabar.html','belajar.html',
     'pelajaran.html?m=apa-itu-saham#benar','metodologi.html','asisten.html','asisten.html#jawab','404.html','UJI-PX','UJI-TETAP'];
@@ -1849,6 +1931,8 @@ const halamanFokus = ['index.html','peringkat.html','peringkat.html#istilah','ra
   if (process.env.AUDIT==='peran') { await auditPeran(b); await b.close(); return; }
   // AUDIT=alt node tools/audit-kontras.js → hanya konten non-teks (WCAG 1.1.1)
   if (process.env.AUDIT==='alt') { await auditAlt(b); await b.close(); return; }
+  // AUDIT=tabel node tools/audit-kontras.js → hanya info & hubungan tabel/daftar (WCAG 1.3.1)
+  if (process.env.AUDIT==='tabel') { await auditTabel(b); await b.close(); return; }
   let total = 0;
   // AUDIT=fokus node tools/audit-kontras.js → hanya cek garis fokus (lebih cepat)
   if (process.env.AUDIT!=='fokus') for (const scheme of ['dark','light']) for (const w of [390,1280]) {
@@ -2029,6 +2113,7 @@ const halamanFokus = ['index.html','peringkat.html','peringkat.html#istilah','ra
   await auditKonteks(b);
   await auditPeran(b);
   await auditAlt(b);
+  await auditTabel(b);
   await auditTeks(b);
   await auditZoom(b);
   await auditJarak(b);

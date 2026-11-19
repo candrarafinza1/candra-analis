@@ -1893,3 +1893,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: giliran BSSR & MIKA; masih hanya MIKA semester I 2026 dan BSSR 2025 → tetap 25 dari 32. Raka/Hana: tidak ada kabar baru bersumber.
 - Tugas baru: Dewi + Nina (info & hubungan tabel/daftar, WCAG 1.3.1).
 - `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 19 Nov 2026, sesi 09.08 WIB (Bima)
+- Yoga: run CI #324 (commit sesi 08.09) hijau.
+- Dewi + Nina: audit info & hubungan tabel/daftar (WCAG 1.3.1) di `tools/audit-kontras.js` (`AUDIT=tabel`, ikut audit penuh), dari pohon aksesibilitas peramban: 14 halaman/keadaan × gelap/terang × 390/1280px, 44 tabel, 1.676 sel data, 184 daftar. Temuan nyata 24 → 0: judul kolom tabel mini beranda kini `scope="col"`; empat ubin "Angka utama" di profil kini daftar sungguhan (`ul`/`li`), tampilan sama persis. Uji balik UJI-TH/UJI-SCOPE/UJI-DAFTAR/UJI-KARTU 16/16. Nina: cek statis + 12 uji balik di `tests/cek.mjs`. Audit alt & peran diulang: tetap 0. Kirana: tinjau, usul audit lewati blok (WCAG 2.4.1).
+- Fajar: giliran KLBF & BRIS; masih hanya semester I/kuartal II 2026 → tetap 25 dari 32. Raka/Hana: tidak ada kabar baru bersumber.
+- Tugas baru: Dewi + Nina (lewati blok, WCAG 2.4.1).
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

@@ -909,11 +909,12 @@
 
     // Angka utama
     function ubin(label, nilai, ket) {
-      return el("div", { class: "ubin" }, [el("span", { class: "ubin-label", text: label }), el("strong", { class: "ubin-nilai", text: nilai }), ket ? el("span", { class: "ubin-ket", text: ket }) : null]);
+      return el("li", { class: "ubin" }, [el("span", { class: "ubin-label", text: label }), el("strong", { class: "ubin-nilai", text: nilai }), ket ? el("span", { class: "ubin-ket", text: ket }) : null]);
     }
     var gl = tumbuhLaba(e), gp = tumbuhPendapatan(e), g9 = tumbuh(N[2025], N[2026]);
     akar.appendChild(el("h2", { class: "judul-profil-bagian", id: "angka-utama", text: "Angka utama" }));
-    akar.appendChild(el("div", { class: "kisi-ubin" }, [
+    // Dewi & Nina (19 Nov, WCAG 1.3.1): empat ubin = satu kumpulan → daftar sungguhan (role="list" agar Safari tetap membacanya daftar).
+    akar.appendChild(el("ul", { class: "kisi-ubin", role: "list", "aria-labelledby": "angka-utama" }, [
       ubin("Laba bersih 2025", strip(L[2025], rp), ada(L[2024]) && L[2024] < 0 ? "2024: rugi " + rp(-L[2024]) : (ada(gl) ? ubah(gl) + " dibanding 2024" : null)),
       ubin("Pendapatan 2025", strip(P[2025], rp), ada(gp) ? ubah(gp) + " dibanding 2024" : null),
       ubin("ROE 2025", strip(roe(e), persen), "Laba bersih ÷ ekuitas"),
