@@ -2438,7 +2438,7 @@ ok(/\.form-tanya textarea::placeholder\s*\{[^}]*color:\s*var\(--tinta-2\)/.test(
     "judul-profil": ["emiten.html"], "sub-profil": ["emiten.html"], profil: ["emiten.html"],
     "istilah-hari": ["index.html"], "kabar-beranda": ["index.html"], "lanjutkan-belajar": ["index.html"],
     "mini-peringkat": ["index.html"], "musim-beranda": ["index.html"],
-    kabar: ["kabar.html"], "kamus-istilah": ["belajar.html"], rujukan: ["belajar.html"],
+    kabar: ["kabar.html"], agenda: ["agenda.html"], "kamus-istilah": ["belajar.html"], rujukan: ["belajar.html"],
     peringkat: ["peringkat.html"], radar: ["radar.html"],
     pita: ["emiten.html", "peringkat.html", "radar.html"],
   };
@@ -3320,7 +3320,8 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
 // tepat satu <h1>, menu utama (nav aria-label="Menu utama") berisi 4 tautan yang sama dan berurutan,
 // kaki halaman memuat "bukan penasihat investasi" + tautan Metodologi.
 {
-  const MENU = [["belajar.html", "Belajar"], ["peringkat.html", "Peringkat"], ["radar.html", "Radar Risiko"], ["asisten.html", "Asisten AI"]];
+  // Agenda masuk menu 19 Nov 2026 (proyek prioritas Rafinza, Arif + Dewi; cek diperbarui Nina).
+  const MENU = [["belajar.html", "Belajar"], ["peringkat.html", "Peringkat"], ["radar.html", "Radar Risiko"], ["agenda.html", "Agenda"], ["asisten.html", "Asisten AI"]];
   const ujiKerangka = (nama, html) => {
     const salah = [];
     const judul = (html.match(/<title>([^<]*)<\/title>/) || [])[1] || "";
@@ -3337,7 +3338,7 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
     else {
       const tautan = [...nav.matchAll(/<a href="\/?([^"]*)"[^>]*>([^<]*)<\/a>/g)].map((m) => [m[1], m[2].trim()]);
       if (JSON.stringify(tautan) !== JSON.stringify(MENU))
-        salah.push(`menu utama harus 4 tautan sama: ${MENU.map((m) => m[1]).join(", ")} (kini ${tautan.map((t) => t[1]).join(", ") || "kosong"})`);
+        salah.push(`menu utama harus 5 tautan sama: ${MENU.map((m) => m[1]).join(", ")} (kini ${tautan.map((t) => t[1]).join(", ") || "kosong"})`);
     }
     const kaki = (html.match(/<footer[^>]*>([\s\S]*?)<\/footer>/) || [])[1] || "";
     if (!/bukan penasihat investasi/.test(kaki)) salah.push("kaki halaman harus menyebut \"bukan penasihat investasi\"");
@@ -3345,7 +3346,7 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
     return salah;
   };
   for (const f of halaman) for (const pesan of ujiKerangka(f, readFileSync(f, "utf8"))) ok(false, `${f}: ${pesan}`);
-  ok(halaman.length === 10 && halaman.includes("404.html") && halaman.includes("index.html"), "cek kerangka harus mencakup 10 halaman termasuk index & 404");
+  ok(halaman.length === 11 && halaman.includes("404.html") && halaman.includes("index.html"), "cek kerangka harus mencakup 11 halaman termasuk index & 404");
   // Uji balik
   const per = readFileSync("peringkat.html", "utf8"), idx = readFileSync("index.html", "utf8"), e404 = readFileSync("404.html", "utf8");
   const rusak = [
@@ -3355,9 +3356,9 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
     ["peringkat.html", per.replace(/<meta name="description"[^>]*>/, ""), "deskripsi meta"],
     ["404.html", e404.replace('<meta name="robots" content="noindex">', ""), "deskripsi meta"],
     ["peringkat.html", per.replace(/<\/h1>/, "</h1><h1>Lagi</h1>"), "tepat satu <h1>"],
-    ["peringkat.html", per.replace('<a href="radar.html">Radar Risiko</a>', ""), "menu utama harus 4"],
-    ["peringkat.html", per.replace('<a href="radar.html">Radar Risiko</a>\n        <a href="asisten.html">Asisten AI</a>', '<a href="asisten.html">Asisten AI</a>\n        <a href="radar.html">Radar Risiko</a>'), "menu utama harus 4"],
-    ["peringkat.html", per.replace('>Asisten AI</a>\n      </nav>', ">Tanya AI</a>\n      </nav>"), "menu utama harus 4"],
+    ["peringkat.html", per.replace('<a href="radar.html">Radar Risiko</a>', ""), "menu utama harus 5"],
+    ["peringkat.html", per.replace('<a href="agenda.html">Agenda</a>\n        <a href="asisten.html">Asisten AI</a>', '<a href="asisten.html">Asisten AI</a>\n        <a href="agenda.html">Agenda</a>'), "menu utama harus 5"],
+    ["peringkat.html", per.replace('>Asisten AI</a>\n      </nav>', ">Tanya AI</a>\n      </nav>"), "menu utama harus 5"],
     ["peringkat.html", per.replace('aria-label="Menu utama"', 'aria-label="Menu"'), "tidak ditemukan"],
     ["peringkat.html", per.replace(/(<footer[\s\S]*?)bukan penasihat investasi/, "$1penyaji data"), "bukan penasihat investasi"],
     ["peringkat.html", per.replace(/(<footer[\s\S]*?)<a href="\/?metodologi\.html">[^<]*<\/a>/, "$1"), "metodologi.html"],

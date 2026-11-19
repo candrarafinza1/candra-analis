@@ -315,7 +315,8 @@ tbody tr:hover { background: var(--hover-baris); }
   .kepala .wadah { gap: 4px 16px; padding-top: 8px; padding-bottom: 8px; }
   /* Boleh turun baris bila tidak muat (mis. pengguna memperlebar jarak huruf, WCAG 1.4.12); biasanya tetap satu baris (Dewi, 17 Nov 15.xx) */
   .nav { gap: 2px; flex-wrap: wrap; margin: 0 -8px; }
-  .nav a { font-size: .86rem; padding: 8px 9px; white-space: nowrap; }
+  /* 5 tautan sejak Agenda masuk menu (Dewi, 19 Nov): huruf & jarak dikecilkan sedikit agar tetap satu baris di 390px */
+  .nav a { font-size: .8rem; padding: 8px 6px; white-space: nowrap; }
   /* Jarak antartombol hanya 2px: garis fokus digambar di dalam tombol agar tidak menimpa tetangga (Dewi, 17 Nov) */
   .nav a:focus-visible { outline-offset: -3px; }
   .nav a[aria-current="page"]:focus-visible { outline-color: var(--malam); }
@@ -858,3 +859,19 @@ button.istilah:hover, button.istilah[aria-expanded="true"] { color: var(--aksen)
   .panel table .nama-emiten { overflow-wrap: anywhere; }
   .tabel-profil th[scope="row"] { overflow-wrap: anywhere; }
 }
+
+/* Agenda IPO & Dividen (Dewi + Arif, 19 Nov 2026) */
+.agenda-mundur { font-weight: 700; color: var(--tinta); }
+.agenda-lewat { color: var(--tinta-2); font-weight: 600; }
+.agenda-tanggal { list-style: none; padding: 0; margin: 12px 0 0; display: grid; gap: 8px; border-left: 3px solid var(--garis); padding-left: 12px; }
+.agenda-tanggal li { margin: 0; }
+.agenda-t-kepala { margin: 0; overflow-wrap: anywhere; }
+.agenda-t-isi { margin: 2px 0 0; font-size: .9rem; color: var(--tinta-2); }
+.agenda-t-mundur { color: var(--tinta-2); }
+.agenda-t-lewat .agenda-t-kepala strong { font-weight: 600; }
+.agenda-t-lewat .agenda-t-kepala { color: var(--tinta-2); }
+.agenda-sumber-judul { margin: 12px 0 2px; font-size: .88rem; font-weight: 700; color: var(--tinta-2); }
+.agenda-sumber { margin: 0; padding-left: 18px; font-size: .88rem; overflow-wrap: anywhere; }
+.agenda-sumber a { color: var(--tinta-2); }
+.agenda-kosong { margin: 0 0 8px; color: var(--tinta-2); }
+#agenda .judul-profil-bagian { margin-top: 24px; }

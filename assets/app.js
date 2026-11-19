@@ -1589,6 +1589,140 @@
     });
   }
 
+  /* ---------- Agenda IPO & Dividen (Arif + Dewi, 19 Nov 2026; proyek prioritas Rafinza) ----------
+     Data dari data/agenda.js. Kartu diurutkan dari tanggal penting berikutnya yang paling dekat.
+     Acara yang semua tanggalnya sudah lewat pindah ke "Baru saja lewat" (maks. 14 hari), lebih lama disembunyikan.
+     Hitung mundur memakai tanggal perangkat. Tanpa simpanan, tanpa kirim data. Agenda = jadwal, bukan saran. */
+  var AGENDA_LEWAT_MAKS = 14;
+  var PENJELASAN_AGENDA = {
+    penawaranAwal: ["Penawaran awal (bookbuilding)", "Calon investor menyampaikan minat dan harga yang diinginkan, dalam kisaran harga yang ditetapkan. Belum membayar."],
+    penawaranUmum: ["Penawaran umum", "Masa pemesanan saham di harga final, misalnya lewat e-IPO melalui sekuritas. Dana pesanan disiapkan di RDN."],
+    penjatahan: ["Penjatahan", "Saham dibagikan kepada pemesan. Bila pesanan melebihi saham yang ditawarkan, pemesan bisa mendapat lebih sedikit dari yang dipesan; sisa dana dikembalikan."],
+    pencatatan: ["Pencatatan di bursa", "Hari pertama saham bisa diperdagangkan di Bursa Efek Indonesia."],
+    cum: ["Cum date", "Hari terakhir membeli saham di pasar reguler agar tercatat berhak atas dividen ini."],
+    ex: ["Ex date", "Mulai hari ini, pembeli saham tidak lagi berhak atas dividen ini. Harga saham biasanya menyesuaikan."],
+    recording: ["Recording date", "Tanggal pencatatan pemegang saham yang berhak menerima dividen."],
+    pembayaran: ["Tanggal pembayaran", "Dividen dikirim ke RDN pemegang saham yang berhak, setelah dipotong pajak."]
+  };
+  function hariDari(t, kini) {
+    var p = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(t));
+    if (!p) return null;
+    var h = kini || new Date();
+    var hariIni = new Date(h.getFullYear(), h.getMonth(), h.getDate());
+    return Math.round((new Date(+p[1], +p[2] - 1, +p[3]) - hariIni) / 86400000);
+  }
+  function teksMundur(n) {
+    if (n === 0) return "hari ini";
+    if (n === 1) return "besok";
+    if (n === -1) return "kemarin";
+    return n > 0 ? n + " hari lagi" : -n + " hari lalu";
+  }
+  // Ubah satu entri data jadi daftar tanggal [{kunci, tanggal}] berurutan.
+  function tanggalAgenda(a, jenis) {
+    var t = a.tanggal || {}, d = [];
+    if (jenis === "ipo") {
+      if (t.penawaranAwal) d.push({ kunci: "penawaranAwal", tanggal: t.penawaranAwal.mulai, sampai: t.penawaranAwal.selesai });
+      if (t.penawaranUmum) d.push({ kunci: "penawaranUmum", tanggal: t.penawaranUmum.mulai, sampai: t.penawaranUmum.selesai });
+      d.push({ kunci: "penjatahan", tanggal: t.penjatahan }, { kunci: "pencatatan", tanggal: t.pencatatan });
+    } else {
+      ["cum", "ex", "recording", "pembayaran"].forEach(function (k) { d.push({ kunci: k, tanggal: t[k] }); });
+    }
+    return d.filter(function (x) { return x.tanggal; });
+  }
+  function susunAgenda(kini) {
+    var semua = [];
+    (window.AGENDA_IPO || []).forEach(function (a) { semua.push({ jenis: "ipo", data: a, tgl: tanggalAgenda(a, "ipo") }); });
+    (window.AGENDA_DIVIDEN || []).forEach(function (a) { semua.push({ jenis: "dividen", data: a, tgl: tanggalAgenda(a, "dividen") }); });
+    var depan = [], lewat = [];
+    semua.forEach(function (x) {
+      if (!x.tgl.length) return;
+      // Tanggal dianggap masih berjalan sampai hari "sampai" (untuk masa penawaran).
+      var berikut = x.tgl.filter(function (d) { return hariDari(d.sampai || d.tanggal, kini) >= 0; })[0];
+      if (berikut) { x.kunciUrut = berikut.tanggal; x.berikut = berikut; depan.push(x); return; }
+      var akhir = x.tgl[x.tgl.length - 1], n = hariDari(akhir.sampai || akhir.tanggal, kini);
+      if (n >= -AGENDA_LEWAT_MAKS) { x.kunciUrut = akhir.sampai || akhir.tanggal; lewat.push(x); }
+    });
+    depan.sort(function (a, b) { return a.kunciUrut < b.kunciUrut ? -1 : a.kunciUrut > b.kunciUrut ? 1 : 0; });
+    lewat.sort(function (a, b) { return a.kunciUrut < b.kunciUrut ? 1 : a.kunciUrut > b.kunciUrut ? -1 : 0; });
+    return { depan: depan, lewat: lewat };
+  }
+  function kartuAgenda(x, kini) {
+    var a = x.data, ipo = x.jenis === "ipo";
+    var e = !ipo && (typeof EMITEN !== "undefined") && EMITEN.find(function (z) { return z.kode === a.kode; });
+    var judul = ipo
+      ? [el("span", { class: "kode", text: a.kode || "Kode belum ada" }), el("span", { class: "nama-emiten", text: a.nama })]
+      : [e ? el("a", { class: "kode tautan-kode", href: "emiten.html?kode=" + e.kode, text: e.kode, "aria-label": e.kode + ", profil emiten" })
+           : el("span", { class: "kode", text: a.kode }),
+         el("span", { class: "nama-emiten", text: "Dividen " + a.jenis + " tahun buku " + a.tahunBuku })];
+    var kepala = [el("span", { class: "kabar-jenis", text: ipo ? "IPO syariah" : "Dividen" })];
+    if (x.berikut) {
+      var n = hariDari(x.berikut.tanggal, kini);
+      var namaB = PENJELASAN_AGENDA[x.berikut.kunci][0];
+      kepala.push(el("span", { class: "agenda-mundur", text: n < 0 && x.berikut.sampai
+        ? namaB + " sedang berjalan" : namaB + " " + teksMundur(n) }));
+    } else kepala.push(el("span", { class: "agenda-mundur agenda-lewat", text: "Sudah lewat" }));
+    var info = [];
+    if (ipo) {
+      var hg = a.harga || {};
+      if (hg.final != null) info.push("Harga final Rp" + angka.format(hg.final) + " per saham.");
+      else if (hg.kisaranBawah != null) info.push("Kisaran harga Rp" + angka.format(hg.kisaranBawah) + "–Rp" + angka.format(hg.kisaranAtas) + " per saham.");
+      if (a.sektor) info.push("Sektor: " + a.sektor + ".");
+    } else {
+      info.push("Dividen " + (a.mataUang === "USD" ? "US$" + angka2.format(a.dps) : "Rp" + angka2.format(a.dps)) +
+        " per saham (sebelum pajak). Tercatat di Daftar Efek Syariah periode berjalan, baris " + a.desBaris + ".");
+    }
+    var ul = el("ol", { class: "agenda-tanggal" });
+    x.tgl.forEach(function (d) {
+      var p = PENJELASAN_AGENDA[d.kunci], n = hariDari(d.sampai || d.tanggal, kini);
+      var teksT = tanggalId(d.tanggal) + (d.sampai && d.sampai !== d.tanggal ? " – " + tanggalId(d.sampai) : "");
+      ul.appendChild(el("li", { class: n < 0 ? "agenda-t-lewat" : null }, [
+        el("p", { class: "agenda-t-kepala" }, [
+          el("strong", { text: p[0] }), " ",
+          el("time", { datetime: d.tanggal, text: teksT }),
+          el("span", { class: "agenda-t-mundur", text: " · " + (n < 0 ? "sudah lewat" : hariDari(d.tanggal, kini) < 0 ? "sedang berjalan" : teksMundur(hariDari(d.tanggal, kini))) })
+        ]),
+        el("p", { class: "agenda-t-isi", text: p[1] })
+      ]));
+    });
+    var sumber = el("ul", { class: "agenda-sumber" });
+    (ipo ? [a.buktiSyariah].concat(a.sumber || []) : a.sumber || []).forEach(function (s) {
+      if (s && s.url) sumber.appendChild(el("li", null, [el("a", { href: s.url, target: "_blank", rel: "noopener", text: s.judul + " (tab baru)" })]));
+    });
+    return el("li", { class: "kabar agenda" + (x.berikut ? "" : " agenda-sudah") }, [
+      el("p", { class: "kabar-kepala" }, kepala),
+      el("h3", { class: "kabar-judul" }, judul),
+      el("p", { class: "kabar-isi", text: info.join(" ") }),
+      ul,
+      el("p", { class: "agenda-sumber-judul", text: "Sumber:" }),
+      sumber
+    ]);
+  }
+  function renderAgenda() {
+    var akar = document.getElementById("agenda");
+    if (!akar) return;
+    var kini = new Date(), s = susunAgenda(kini);
+    akar.appendChild(el("div", { class: "pita-sumber", role: "note" }, [
+      el("p", null, ["Agenda disusun dari pengumuman emiten, prospektus, dan berita; tanggal dan angka ditulis seperti di sumbernya. Hitung mundur memakai tanggal di perangkat Anda. ",
+        el("strong", { text: "Agenda adalah jadwal, bukan saran membeli atau menjual." })])
+    ]));
+    function bagian(id, judulTeks, ketKosong, daftar) {
+      var ul = el("ul", { class: "kabar-daftar" });
+      daftar.forEach(function (x) { ul.appendChild(kartuAgenda(x, kini)); });
+      akar.appendChild(el("h2", { class: "judul-profil-bagian", id: id, text: judulTeks }));
+      akar.appendChild(daftar.length ? ul : el("p", { class: "agenda-kosong", text: ketKosong }));
+    }
+    var ipoDepan = s.depan.filter(function (x) { return x.jenis === "ipo"; });
+    var divDepan = s.depan.filter(function (x) { return x.jenis === "dividen"; });
+    bagian("agenda-ipo", "IPO saham syariah", "Belum ada IPO yang sumbernya menyebut sahamnya termasuk efek syariah. " +
+      "Tim memeriksa e-IPO, pengumuman bursa, dan prospektus setiap hari kerja; perusahaan baru dicatat di sini setelah ada bukti status syariahnya.", ipoDepan);
+    bagian("agenda-dividen", "Dividen saham syariah", "Belum ada jadwal dividen dari saham syariah yang diumumkan untuk waktu dekat. " +
+      "Tim memeriksa pengumuman emiten dan berita setiap hari kerja; hanya saham yang tercatat di Daftar Efek Syariah yang dicatat.", divDepan);
+    if (s.lewat.length) bagian("agenda-lewat", "Baru saja lewat", "", s.lewat);
+    akar.appendChild(el("p", { class: "catatan-metode" }, ["Acara yang sudah lewat lebih dari " + AGENDA_LEWAT_MAKS +
+      " hari tidak ditampilkan. Cara tim memilih data dijelaskan di ", el("a", { href: "metodologi.html", text: "halaman metodologi" }), "."]));
+    pasangIstilah(akar);
+  }
+
   tandaiMenu();
   renderJalur("jalur-ringkas", false);
   renderLanjutkan();
@@ -1602,6 +1736,7 @@
   renderRadar();
   renderProfil();
   renderKabar();
+  renderAgenda();
   renderKabarBeranda();
   istilahBeranda();
   renderRujukan();
