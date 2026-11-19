@@ -215,7 +215,9 @@ p { margin: 0 0 1em; }
 .jalur li { position: relative; padding: 0 0 28px 28px; }
 .jalur li:last-child { padding-bottom: 0; }
 .jalur li::before {
+  /* Dewi & Nina (19 Nov, WCAG 1.1.1): nomor/✓ hanya hiasan; urutan sudah dibacakan oleh <ol> dan "Selesai" tertulis di judul */
   content: attr(data-no);
+  content: attr(data-no) / "";
   position: absolute; left: -17px; top: 0;
   width: 31px; height: 31px; border-radius: 50%;
   background: var(--kertas); border: 3px solid var(--naik);

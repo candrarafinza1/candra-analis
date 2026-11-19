@@ -6517,6 +6517,58 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
   ok(cekPeran(jsP + '\n// el("div", { tabindex: "0" }) hanya contoh di komentar', htmlP, audP).length === 0, "uji balik nama, peran, nilai: komentar tidak boleh dianggap temuan");
 }
 
+// (l) Dewi & Nina (19 Nov 08.xx): konten non-teks WCAG 1.1.1. HTML: setiap <img> punya alt, setiap <svg> disembunyikan
+// (aria-hidden="true") atau berperan gambar bernama (role="img" + aria-label). app.js: batang grafik (batang9-isi) disembunyikan dan
+// daftarnya bernama; setiap el("img") punya alt. CSS: isi ::before/::after berupa simbol (✓ ↑ ★ …) wajib memakai teks pengganti
+// (content: "…" / ""). Audit AUDIT=alt (pohon aksesibilitas peramban) ada, ikut audit penuh, dengan 5 uji balik.
+{
+  const SIMBOL = /[\u{1F000}-\u{1FFFF}☀-➿■-◿←-⇿⬀-⯿]|attr\(data-no\)/u;
+  const cekAlt = (js, html, css, aud) => {
+    const s = [];
+    for (const [n, t] of html) {
+      for (const m of t.match(/<img\b[^>]*>/g) || []) if (!/\balt=/.test(m)) s.push(`${n}: <img> tanpa alt`);
+      for (const m of t.match(/<svg\b[^>]*>/g) || []) if (!/aria-hidden="true"/.test(m) && !(/role="img"/.test(m) && /aria-label="[^"]+"/.test(m))) s.push(`${n}: <svg> tidak disembunyikan dan tanpa nama`);
+    }
+    const jsK = js.replace(/\/\*[\s\S]*?\*\//g, "").replace(/^\s*\/\/.*$/gm, "");
+    for (const m of jsK.match(/el\("img",\s*\{[^}]*\}/g) || []) if (!/\balt:/.test(m)) s.push("app.js: el(\"img\") tanpa alt");
+    const batang = jsK.match(/el\("span",\s*\{\s*class:\s*"batang9-isi[^}]*\}/g) || [];
+    if (!batang.length) s.push("app.js: batang grafik batang9-isi tidak ditemukan");
+    for (const m of batang) if (!/"aria-hidden":\s*"true"/.test(m)) s.push("app.js: batang grafik tidak disembunyikan dari pembaca layar");
+    for (const m of jsK.match(/el\("ul",\s*\{\s*class:\s*"batang9[^}]*\}/g) || []) if (!/"aria-label":/.test(m)) s.push("app.js: daftar batang grafik tanpa aria-label");
+    const cssK = css.replace(/\/\*[\s\S]*?\*\//g, "");
+    for (const [, sel, isi] of cssK.matchAll(/([^{}]*::?(?:before|after)[^{}]*)\{([^}]*)\}/g)) {
+      if (/@media\s+print/.test(sel)) continue;
+      const cs = [...isi.matchAll(/content:\s*([^;]+);/g)].map((x) => x[1].trim());
+      if (cs.some((c) => SIMBOL.test(c)) && !cs.some((c) => / \/ /.test(c))) s.push(`styles.css: ${sel.trim().split("\n").pop().trim()} memakai simbol tanpa teks pengganti`);
+    }
+    if (!/process\.env\.AUDIT==='alt'\) \{ await auditAlt\(b\)/.test(aud)) s.push("mode AUDIT=alt tidak ada");
+    if (!/\n  await auditAlt\(b\);\n/.test(aud)) s.push("auditAlt tidak ikut audit penuh");
+    const fA = aud.slice(aud.indexOf("async function auditAlt"), aud.indexOf("async function auditTeks"));
+    if (!/Accessibility\.getFullAXTree/.test(fA)) s.push("auditAlt tidak membaca pohon aksesibilitas peramban");
+    for (const u of ["UJI-ALT", "UJI-SEMBUNYI", "UJI-SIMBOL", "UJI-CSS", "UJI-BATANG"]) if (!fA.includes(`'${u}`)) s.push(`uji balik ${u} tidak ada`);
+    return s;
+  };
+  const jsA = readFileSync("assets/app.js", "utf8"), cssA = readFileSync("assets/styles.css", "utf8"), audA = readFileSync("tools/audit-kontras.js", "utf8");
+  const htmlA = readdirSync(".").filter((n) => n.endsWith(".html")).map((n) => [n, readFileSync(n, "utf8")]);
+  const sA = cekAlt(jsA, htmlA, cssA, audA);
+  ok(sA.length === 0, `Konten non-teks WCAG 1.1.1: ${sA.join("; ")}`);
+  const rusakA = [
+    [jsA, htmlA.map(([n, t]) => [n, n === "index.html" ? t.replace("</main>", '<img src="assets/logo.svg"></main>') : t]), cssA, audA, "<img> tanpa alt"],
+    [jsA, htmlA.map(([n, t]) => [n, n === "kabar.html" ? t.replace('<svg viewBox="0 0 32 32" aria-hidden="true">', '<svg viewBox="0 0 32 32">') : t]), cssA, audA, "kabar.html: <svg>"],
+    [jsA.split('"batang9-isi batang-tumbuh"').join('"batang9-isi batang-tumbuh", x: "1"').replace(/(class: "batang9-isi batang-tumbuh"[^}]*?), "aria-hidden": "true"/, "$1"), htmlA, cssA, audA, "tidak disembunyikan"],
+    [jsA.replace('el("ul", { class: "batang9", "aria-label"', 'el("ul", { class: "batang9", "data-x"'), htmlA, cssA, audA, "daftar batang"],
+    [jsA + '\nvar g = el("img", { src: "a.png" });', htmlA, cssA, audA, 'el("img")'],
+    [jsA, htmlA, cssA.replace('  content: attr(data-no) / "";\n', ""), audA, ".jalur li::before"],
+    [jsA, htmlA, cssA + '\n.x::after { content: "★"; }', audA, ".x::after"],
+    [jsA, htmlA, cssA, audA.replace("process.env.AUDIT==='alt'", "process.env.AUDIT==='a'"), "mode AUDIT=alt"],
+    [jsA, htmlA, cssA, audA.replace("  await auditAlt(b);\n", ""), "audit penuh"],
+    [jsA, htmlA, cssA, audA.split("'UJI-SEMBUNYI").join("'UJI-Z"), "UJI-SEMBUNYI"],
+    [jsA, htmlA, cssA, audA.split("'UJI-BATANG").join("'UJI-Z"), "UJI-BATANG"],
+  ];
+  for (const [j, h, c, a, pesan] of rusakA) ok(cekAlt(j, h, c, a).some((x) => x.includes(pesan)), `uji balik konten non-teks: "${pesan}" harus tertangkap`);
+  ok(cekAlt(jsA + '\n// el("img", { src: "a.png" }) hanya contoh di komentar', htmlA, cssA, audA).length === 0, "uji balik konten non-teks: komentar tidak boleh dianggap temuan");
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);
 
