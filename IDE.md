@@ -804,3 +804,11 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Uji balik UJI-LABEL-KOSONG (label pilih saham Radar dikosongkan), UJI-PILIH (label Bandingkan diganti "Pilih"), UJI-KEMBAR (judul pertama Peringkat disalin) tertangkap 6/6.
 - Nina: cek statis di `tests/cek.mjs` (6 label isian utama + label kotak ketik tidak umum/kosong, judul HTML statis tidak kosong/umum/kembar, mode audit & 3 uji balik) + 10 uji balik.
 - Kirana: tinjau. Catatan: Peringkat hanya punya satu judul (h1) karena isinya satu tabel; masih wajar. Usul berikutnya: audit fokus tidak tertutup (WCAG 2.4.11) khusus daftar saran kotak ketik emiten dan menu HP terbuka.
+
+### Hasil audit fokus tidak tertutup daftar saran & menu HP (WCAG 2.4.11) — Dewi & Nina, 19 Nov 16.xx
+- Alat: `AUDIT=saran node tools/audit-kontras.js` (ikut audit penuh). Kotak "Ketik kode atau nama emiten" di Radar dan Bandingkan (profil ANTM) diketik sebagian ("A"/"B", banyak cocok) dan lengkap ("ANTM"/"BRIS", satu cocok), lalu Tab maju & Shift+Tab mundur sampai habis; ditambah beranda & Peringkat untuk menu atas. Gelap/terang × 390/1280px, 2.132 elemen terfokus dicek di 9 titik (penutup = elemen fixed/sticky/absolute).
+- **Hasil: 0 temuan di situs, tampilan tidak diubah.** Daftar saran memakai `<datalist>` bawaan peramban: tidak ada elemen melayang buatan halaman yang muncul saat mengetik, dan peramban menutup daftarnya saat fokus pindah. Menu HP tidak punya panel buka-tutup: menu atas selalu tampil di kepala yang tidak lengket, semua tautan terlihat di 390px.
+- Batas: tampilan daftar saran bawaan berbeda tiap peramban dan tidak bisa diukur di peramban uji; pengecekan di HP sungguhan tetap di tugas Kirana (Chrome Android, Safari iOS).
+- Uji balik UJI-SARAN (daftar saran buatan sendiri 400px yang tetap terbuka) dan UJI-MENU (panel menu fixed 70% layar di HP) tertangkap 6/6.
+- Nina: cek statis di `tests/cek.mjs` (kotak ketik memakai datalist, kepala/menu tidak fixed/sticky, tanpa tombol buka-tutup menu, kotak ketik tidak melayang, mode audit & 2 uji balik) + 9 uji balik.
+- Kirana: tinjau. Usul berikutnya: audit tampilan fokus (WCAG 2.4.13): garis fokus minimal 2px dan kontras keadaan fokus vs tidak fokus ≥3:1 di semua jenis elemen.

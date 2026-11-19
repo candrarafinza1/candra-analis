@@ -6801,6 +6801,47 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
   ok(cekDeskriptif(appD, htmlD.map(([n, t]) => [n, n === "kabar.html" ? t.replace("</main>", "<!-- <h2>Info</h2> --></main>") : t]), audD).length === 0, "uji balik judul & label deskriptif: komentar tidak boleh dianggap temuan");
 }
 
+// (r) Dewi & Nina (19 Nov 16.xx, usul Kirana): fokus tidak tertutup daftar saran & menu HP (WCAG 2.4.11). Statis: kotak ketik
+// emiten memakai <datalist> bawaan peramban (bukan daftar melayang buatan sendiri), menu atas di HP tidak fixed/sticky dan tanpa
+// tombol buka-tutup. Audit AUDIT=saran (DOM terender, Tab maju & mundur) ada, ikut audit penuh, dengan 2 uji balik.
+{
+  const cekSaran = (app, css, html, aud) => {
+    const s = [];
+    if (!/var dl = el\("datalist", \{ id: idDaftar \}\)/.test(app) || !/list: idDaftar/.test(app)) s.push("kotak ketik emiten tidak memakai <datalist> bawaan");
+    const atur = css.replace(/\/\*[\s\S]*?\*\//g, "");
+    for (const m of atur.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+      const sel = m[1].trim();
+      if (/(^|[\s,])(\.kepala|\.nav|nav)(\s|,|$|\.wadah|\s*\{)/.test(sel) && !/(\s(a|svg|span)(\[[^\]]*\])?|:[\w-]+(\([^)]*\))?)$/.test(sel) && /position\s*:\s*(fixed|sticky)/.test(m[2])) s.push(`menu/kepala melayang: "${sel}"`);
+      if (/(\.kotak-ketik|datalist|\.info-ketik)/.test(sel) && /position\s*:\s*(fixed|absolute)/.test(m[2]) && !/width\s*:\s*1px/.test(m[2])) s.push(`kotak ketik melayang: "${sel}"`);
+    }
+    for (const [n, t] of html) {
+      const k = t.replace(/<!--[\s\S]*?-->/g, "").match(/<header class="kepala"[\s\S]*?<\/header>/);
+      if (k && /<button[^>]*aria-expanded/.test(k[0])) s.push(`${n}: tombol buka-tutup menu di kepala (perlu audit panel menu)`);
+    }
+    if (!/process\.env\.AUDIT==='saran'\) \{ await auditSaran\(b\)/.test(aud)) s.push("mode AUDIT=saran tidak ada");
+    if (!/\n  await auditSaran\(b\);\n/.test(aud)) s.push("auditSaran tidak ikut audit penuh");
+    const fS = aud.slice(aud.indexOf("async function auditSaran"), aud.indexOf("async function auditTeks"));
+    for (const u of ["UJI-SARAN", "UJI-MENU"]) if (!fS.includes(`'${u}'`)) s.push(`uji balik ${u} tidak ada`);
+    return s;
+  };
+  const appS = readFileSync("assets/app.js", "utf8"), cssS = readFileSync("assets/styles.css", "utf8"), audS = readFileSync("tools/audit-kontras.js", "utf8");
+  const htmlS = readdirSync(".").filter((n) => n.endsWith(".html")).map((n) => [n, readFileSync(n, "utf8")]);
+  const sS = cekSaran(appS, cssS, htmlS, audS);
+  ok(sS.length === 0, `Fokus tidak tertutup daftar saran & menu HP WCAG 2.4.11: ${sS.join("; ")}`);
+  const rusakS = [
+    [appS.replace('var dl = el("datalist", { id: idDaftar });', 'var dl = el("ul", { id: idDaftar });'), cssS, htmlS, audS, "tidak memakai <datalist>"],
+    [appS, cssS + "\n.kepala { position: sticky; top: 0; }\n", htmlS, audS, 'menu/kepala melayang: ".kepala"'],
+    [appS, cssS + "\n@media (max-width: 600px) { .nav { position: fixed; inset: 0; } }\n", htmlS, audS, 'menu/kepala melayang: ".nav"'],
+    [appS, cssS + "\n.kotak-ketik ul { position: absolute; }\n", htmlS, audS, "kotak ketik melayang"],
+    [appS, cssS, htmlS.map(([n, t]) => [n, n === "index.html" ? t.replace('<nav class="nav"', '<button type="button" aria-expanded="false">Menu</button><nav class="nav"') : t]), audS, "index.html: tombol buka-tutup menu"],
+    [appS, cssS, htmlS, audS.replace("process.env.AUDIT==='saran'", "process.env.AUDIT==='s'"), "mode AUDIT=saran"],
+    [appS, cssS, htmlS, audS.replace("  await auditSaran(b);\n", ""), "auditSaran tidak ikut"],
+    [appS, cssS, htmlS, audS.split("'UJI-MENU'").join("'UJI-Z'"), "UJI-MENU"],
+  ];
+  for (const [a, c, h, au, pesan] of rusakS) ok(cekSaran(a, c, h, au).some((x) => x.includes(pesan)), `uji balik daftar saran & menu HP: "${pesan}" harus tertangkap`);
+  ok(cekSaran(appS, cssS + "\n/* .kepala { position: sticky; } */\n", htmlS, audS).length === 0, "uji balik daftar saran & menu HP: komentar CSS tidak boleh dianggap temuan");
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);
 
