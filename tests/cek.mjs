@@ -6469,6 +6469,54 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
   ok(cekKonteks(jsK2 + "\n// window.open(x) hanya contoh di komentar", audK2).length === 0, "uji balik saat fokus & saat mengisi: komentar tidak boleh dianggap temuan");
 }
 
+// (k) Dewi & Nina (19 Nov 07.xx): nama, peran, nilai WCAG 4.1.2. app.js: tab (role tab) memperbarui aria-selected,
+// tombol istilah memasang aria-expanded "true" dan "false", "Tandai selesai" memasang aria-pressed "true" dan "false",
+// tidak ada div/span/p/li bisa difokus (tabindex 0) tanpa peran, dan HTML tidak memakai role tombol/tab di elemen bukan tombol.
+// Audit AUDIT=peran (pohon aksesibilitas peramban) ada, ikut audit penuh, memuat uji balik UJI-NAMA, UJI-PERAN, UJI-KEADAAN.
+{
+  const cekPeran = (js, htmlList, aud) => {
+    const s = [];
+    const kode = js.replace(/\/\*[\s\S]*?\*\//g, "").replace(/^\s*\/\/.*$/gm, "");
+    if (/role:\s*"tab"/.test(kode) && !/setAttribute\("aria-selected"/.test(kode)) s.push("app.js: tab tanpa pembaruan aria-selected");
+    if (/"aria-expanded"/.test(kode) && !(/setAttribute\("aria-expanded",\s*"true"\)/.test(kode) && /setAttribute\("aria-expanded",\s*"false"\)/.test(kode))) s.push("app.js: aria-expanded tidak dipasang true & false");
+    if (/aria-pressed/.test(kode) && !/setAttribute\("aria-pressed",\s*sudah \? "true" : "false"\)/.test(kode)) s.push("app.js: aria-pressed tidak ikut keadaan Tandai selesai");
+    const dTab = kode.match(/el\("(div|span|p|li|td)",\s*\{[^}]*tabindex:\s*"0"[^}]*\}/g) || [];
+    for (const d of dTab) if (!/role:/.test(d)) s.push("app.js: elemen bisa difokus tanpa peran: " + d.slice(0, 50));
+    for (const [n, t] of htmlList) {
+      const m = t.match(/<(div|span|a|p|li)\b[^>]*role="(button|tab|checkbox)"[^>]*>/g) || [];
+      if (m.length) s.push(`${n}: role ${m[0].match(/role="(\w+)"/)[1]} di elemen bukan kontrol`);
+      const f = t.match(/<(div|span|p|li)\b[^>]*tabindex="0"[^>]*>/g) || [];
+      for (const x of f) if (!/role=/.test(x)) s.push(`${n}: elemen bisa difokus tanpa peran`);
+    }
+    if (!/async function auditPeran\(b\)/.test(aud)) s.push("auditPeran tidak ada");
+    if (!/process\.env\.AUDIT==='peran'\) \{ await auditPeran\(b\)/.test(aud)) s.push("mode AUDIT=peran tidak ada");
+    if (!/\n  await auditPeran\(b\);\n/.test(aud)) s.push("audit penuh tidak menjalankan auditPeran");
+    if (!/Accessibility\.getFullAXTree/.test(aud)) s.push("auditPeran tidak membaca pohon aksesibilitas peramban");
+    for (const u of ["UJI-NAMA", "UJI-PERAN", "UJI-KEADAAN"]) if (!aud.includes(`'${u}`)) s.push(`uji balik ${u} tidak ada`);
+    return s;
+  };
+  const jsP = readFileSync("assets/app.js", "utf8"), audP = readFileSync("tools/audit-kontras.js", "utf8");
+  const htmlP = readdirSync(".").filter((n) => n.endsWith(".html")).map((n) => [n, readFileSync(n, "utf8")]);
+  const sP = cekPeran(jsP, htmlP, audP);
+  ok(sP.length === 0, `Nama, peran, nilai WCAG 4.1.2: ${sP.join("; ")}`);
+  const rusakP = [
+    [jsP.split('t.setAttribute("aria-selected"').join('t.setAttribute("data-pilih"'), htmlP, audP, "aria-selected"],
+    [jsP.split('b.setAttribute("aria-expanded", "true")').join('b.setAttribute("data-buka", "true")'), htmlP, audP, "aria-expanded"],
+    [jsP.split('tombol.setAttribute("aria-pressed", sudah ? "true" : "false")').join('tombol.setAttribute("aria-pressed", "false")'), htmlP, audP, "aria-pressed"],
+    [jsP + '\nvar x = el("div", { class: "kartu", tabindex: "0" });', htmlP, audP, "tanpa peran"],
+    [jsP, htmlP.map(([n, t]) => [n, n === "index.html" ? t.replace("</main>", '<span role="button">Buka</span></main>') : t]), audP, "bukan kontrol"],
+    [jsP, htmlP.map(([n, t]) => [n, n === "kabar.html" ? t.replace("</main>", '<div tabindex="0">x</div></main>') : t]), audP, "kabar.html: elemen bisa difokus"],
+    [jsP, htmlP, audP.replace("  await auditPeran(b);\n", ""), "audit penuh"],
+    [jsP, htmlP, audP.replace("process.env.AUDIT==='peran'", "process.env.AUDIT==='p'"), "mode AUDIT=peran"],
+    [jsP, htmlP, audP.split("Accessibility.getFullAXTree").join("DOM.getDocument"), "pohon aksesibilitas"],
+    [jsP, htmlP, audP.split("'UJI-NAMA").join("'UJI-A"), "UJI-NAMA"],
+    [jsP, htmlP, audP.split("'UJI-PERAN").join("'UJI-B"), "UJI-PERAN"],
+    [jsP, htmlP, audP.split("'UJI-KEADAAN").join("'UJI-C"), "UJI-KEADAAN"],
+  ];
+  for (const [j, h, a, pesan] of rusakP) ok(cekPeran(j, h, a).some((x) => x.includes(pesan)), `uji balik nama, peran, nilai: "${pesan}" harus tertangkap`);
+  ok(cekPeran(jsP + '\n// el("div", { tabindex: "0" }) hanya contoh di komentar', htmlP, audP).length === 0, "uji balik nama, peran, nilai: komentar tidak boleh dianggap temuan");
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);
 

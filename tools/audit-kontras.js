@@ -6,7 +6,7 @@
 // garis fokus terlihat (outline ≥2px, atau box-shadow/border berubah) dengan kontras ≥3:1 terhadap latar di sekitarnya.
 // Halaman "UJI-FOKUS" sengaja mematikan outline; audit wajib menangkapnya (uji balik).
 // 17 Nov 09.xx (Dewi & Tegar): Tab sampai habis, + keadaan istilah terbuka, hasil Radar UNTR, kuis terjawab; cek border kotak tanya Asisten.
-// Cara pakai: python3 -m http.server 8765 (di akar repo), lalu: node tools/audit-kontras.js (AUDIT=fokus: hanya garis fokus & fokus tertutup; AUDIT=zoom: hanya zoom 200% & layar pendek HP; AUDIT=jarak: hanya jarak teks WCAG 1.4.12; AUDIT=orientasi: hanya orientasi layar WCAG 1.3.4; AUDIT=sentuh: hanya ukuran sasaran sentuh WCAG 2.5.8; AUDIT=sorot: hanya konten saat diarahkan/difokus WCAG 1.4.13; AUDIT=label: hanya label dalam nama WCAG 2.5.3; AUDIT=status: hanya pesan status WCAG 4.1.3; AUDIT=judul: hanya judul halaman & urutan judul WCAG 2.4.2/1.3.1; AUDIT=bahasa: hanya bahasa halaman & bagian WCAG 3.1.1/3.1.2; AUDIT=isian: hanya label/petunjuk & pesan salah isian WCAG 3.3.2/3.3.1; AUDIT=urutan: hanya urutan fokus WCAG 2.4.3; AUDIT=nonteks: hanya kontras non-teks WCAG 1.4.11; AUDIT=warna: hanya penggunaan warna WCAG 1.4.1; AUDIT=tautan: hanya tujuan tautan WCAG 2.4.4; AUDIT=konsisten: hanya identifikasi konsisten WCAG 3.2.4; AUDIT=penunjuk: hanya pembatalan penunjuk WCAG 2.5.2; AUDIT=gerak: hanya gerakan penunjuk & gerakan perangkat WCAG 2.5.1/2.5.4; AUDIT=teks: hanya ubah ukuran teks 200% WCAG 1.4.4)
+// Cara pakai: python3 -m http.server 8765 (di akar repo), lalu: node tools/audit-kontras.js (AUDIT=fokus: hanya garis fokus & fokus tertutup; AUDIT=zoom: hanya zoom 200% & layar pendek HP; AUDIT=jarak: hanya jarak teks WCAG 1.4.12; AUDIT=orientasi: hanya orientasi layar WCAG 1.3.4; AUDIT=sentuh: hanya ukuran sasaran sentuh WCAG 2.5.8; AUDIT=sorot: hanya konten saat diarahkan/difokus WCAG 1.4.13; AUDIT=label: hanya label dalam nama WCAG 2.5.3; AUDIT=status: hanya pesan status WCAG 4.1.3; AUDIT=judul: hanya judul halaman & urutan judul WCAG 2.4.2/1.3.1; AUDIT=bahasa: hanya bahasa halaman & bagian WCAG 3.1.1/3.1.2; AUDIT=isian: hanya label/petunjuk & pesan salah isian WCAG 3.3.2/3.3.1; AUDIT=urutan: hanya urutan fokus WCAG 2.4.3; AUDIT=nonteks: hanya kontras non-teks WCAG 1.4.11; AUDIT=warna: hanya penggunaan warna WCAG 1.4.1; AUDIT=tautan: hanya tujuan tautan WCAG 2.4.4; AUDIT=konsisten: hanya identifikasi konsisten WCAG 3.2.4; AUDIT=penunjuk: hanya pembatalan penunjuk WCAG 2.5.2; AUDIT=gerak: hanya gerakan penunjuk & gerakan perangkat WCAG 2.5.1/2.5.4; AUDIT=teks: hanya ubah ukuran teks 200% WCAG 1.4.4; AUDIT=peran: hanya nama, peran, nilai WCAG 4.1.2)
 // Butuh Playwright + Chromium (sudah ada di lingkungan kerja tim); tidak dijalankan oleh tests/cek.mjs.
 const { chromium } = require('playwright');
 // 17 Nov 14.xx (Dewi & Nina): langkah Tab maju & Shift+Tab mundur untuk cek fokus tertutup, dipakai bersama oleh
@@ -1532,6 +1532,113 @@ async function auditKonteks(b) {
   return total;
 }
 
+// Dewi & Nina (19 Nov 07.xx): nama, peran, nilai, WCAG 4.1.2 (Name, Role, Value).
+// Dibaca dari pohon aksesibilitas yang DIHITUNG peramban (CDP Accessibility), sama seperti yang diterima pembaca layar,
+// bukan dari atribut DOM saja (itu sudah dicek tools/audit-aksesibel.js).
+// (a) Setiap elemen yang bisa difokus atau berperan kontrol (tautan, tombol, tab, isian, pilihan, kotak centang/radio,
+//     ringkasan <details>) wajib punya peran kontrol yang tepat (bukan generic/none) dan nama tidak kosong;
+//     tab wajib di dalam tablist dan punya keadaan selected; radio wajib punya keadaan checked; tombol aria-pressed wajib terbaca pressed.
+// (b) Keadaan wajib ikut berubah saat dipakai: tab Peringkat (selected pindah), tombol istilah (expanded true → false lewat Escape),
+//     "Tandai selesai" (pressed true → false), jawaban kuis (checked), ringkasan <details> (expanded), pilihan Radar (nilai combobox).
+// Uji balik wajib tertangkap: UJI-NAMA (tombol ikon tanpa nama), UJI-PERAN (div bisa difokus tanpa peran),
+// UJI-KEADAAN (setAttribute aria-* dibekukan, keadaan tidak ikut berubah).
+// AUDIT=peran node tools/audit-kontras.js
+async function auditPeran(b) {
+  const KONTROL=new Set(['link','button','tab','textbox','searchbox','combobox','listbox','checkbox','radio','switch','slider','spinbutton','menuitem','option','DisclosureTriangle','textarea']);
+  const pohon = async p => { const c=await p.context().newCDPSession(p); const {nodes}=await c.send('Accessibility.getFullAXTree'); await c.detach(); return nodes; };
+  const ax = async (p,sel) => { const c=await p.context().newCDPSession(p);
+    try { const d=await c.send('DOM.getDocument',{depth:0}); const q=await c.send('DOM.querySelector',{nodeId:d.root.nodeId,selector:sel});
+      if (!q.nodeId) return null; const {nodes}=await c.send('Accessibility.getPartialAXTree',{nodeId:q.nodeId,fetchRelatives:false});
+      const n=nodes.find(x=>!x.ignored)||nodes[0]; const st={}; (n.properties||[]).forEach(x=>st[x.name]=x.value&&x.value.value);
+      return { role:n.role&&n.role.value, name:(n.name&&n.name.value||'').trim(), value:n.value&&n.value.value, st }; } finally { await c.detach(); } };
+  const statis = nodes => { const byId=new Map(nodes.map(n=>[n.nodeId,n])); const temuan=[]; let dicek=0;
+    for (const n of nodes) { if (n.ignored) continue; const st={}; (n.properties||[]).forEach(x=>st[x.name]=x.value&&x.value.value);
+      const role=n.role&&n.role.value||''; const name=(n.name&&n.name.value||'').trim();
+      if (!(st.focusable||KONTROL.has(role))) continue; if (role==='RootWebArea'||role==='WebArea'||role==='Iframe') continue;
+      if (role==='textbox'&&byId.get(n.parentId)&&(byId.get(n.parentId).role||{}).value==='combobox') continue;
+      dicek++; const ket=role+' "'+name.slice(0,30)+'"';
+      if (['generic','none','presentation',''].includes(role)) temuan.push('bisa difokus tanpa peran kontrol ('+(role||'kosong')+')');
+      if (KONTROL.has(role)&&!name&&role!=='option') temuan.push(ket+': tanpa nama');
+      if (role==='tab') { const ib=byId.get(n.parentId); let ada=false; for (let e=ib;e;e=byId.get(e.parentId)) if ((e.role||{}).value==='tablist') { ada=true; break; }
+        if (!ada) temuan.push(ket+': tab di luar tablist'); if (st.selected===undefined) temuan.push(ket+': tanpa keadaan selected'); }
+      if ((role==='radio'||role==='checkbox')&&st.checked===undefined) temuan.push(ket+': tanpa keadaan checked');
+    }
+    return {temuan:[...new Set(temuan)], dicek}; };
+  const HAL=['index.html','peringkat.html','radar.html#UNTR','emiten.html?kode=ANTM','kabar.html','belajar.html','pelajaran.html?m=apa-itu-saham',
+    'pelajaran.html?m=apa-itu-saham#kuis','metodologi.html','asisten.html','404.html','UJI-NAMA','UJI-PERAN'];
+  let total=0, uji=0, ujiN=0, simpul=0, ubahN=0;
+  for (const scheme of ['dark','light']) for (const w of [390,1280]) {
+    for (const pg of HAL) {
+      const [path,hash]=pg.split('#'); const isUji=path.startsWith('UJI-');
+      const ctx=await b.newContext({ viewport:{width:w,height:844}, colorScheme:scheme, deviceScaleFactor:1 });
+      if (path==='asisten.html') await ctx.route('**/api/tanya', r=>r.fulfill({ status:200, contentType:'application/json', body:JSON.stringify({aktif:true}) }));
+      const p=await ctx.newPage(); const errs=[]; p.on('pageerror',e=>errs.push(e.message));
+      await p.goto('http://localhost:8765/'+(isUji?'index.html':path)); await p.waitForTimeout(350);
+      if (path==='radar.html'&&hash) { await p.selectOption('#pilih-saham',hash); await p.waitForTimeout(200); }
+      if (hash==='kuis') { await p.evaluate(()=>{ const m=window.MODUL.find(x=>x.id==='apa-itu-saham'); m.kuis.forEach((q,i)=>{ document.querySelector('input[name="soal-'+i+'"][value="'+((q.benar+1)%q.pilihan.length)+'"]').checked=true; }); });
+        await p.click('.kuis button[type="submit"]'); await p.waitForTimeout(200); }
+      if (path==='UJI-NAMA') await p.evaluate(()=>{ const t=document.createElement('button'); t.type='button'; t.innerHTML='<svg width="16" height="16" aria-hidden="true"></svg>'; document.querySelector('main').appendChild(t); });
+      if (path==='UJI-PERAN') await p.evaluate(()=>{ const t=document.createElement('div'); t.tabIndex=0; t.textContent='Klik saya'; t.onclick=()=>{}; document.querySelector('main').appendChild(t); });
+      const {temuan,dicek}=statis(await pohon(p)); simpul+=dicek;
+      if (errs.length) temuan.push('galat JS: '+errs.join(' | '));
+      console.log(`peran ${scheme} ${w} ${pg}`,'dicek',dicek, temuan.length?'TEMUAN '+temuan.slice(0,5).join('; '):'lolos');
+      if (isUji) { ujiN++; if (temuan.length) uji++; } else total+=temuan.length;
+      await ctx.close();
+    }
+    // (b) keadaan berubah saat dipakai
+    const UBAH=[
+      ['peringkat.html','tab Peringkat', async p=>{ const t=[]; const id=await p.$$eval('[role=tab]',x=>x.map(e=>e.id));
+        for (const i of id) { await p.click('#'+i); await p.waitForTimeout(120);
+          for (const j of id) { const a=await ax(p,'#'+j); if (!!a.st.selected!==(i===j)) t.push('#'+j+' selected='+a.st.selected+' setelah klik #'+i); } }
+        await p.focus('#'+id[0]); await p.keyboard.press('ArrowRight'); await p.waitForTimeout(120);
+        const a=await ax(p,'#'+id[1]); if (!a.st.selected) t.push('panah kanan tidak memindah selected ke #'+id[1]); return t; }],
+      ['peringkat.html','tombol istilah', async p=>{ const t=[]; const b0=await ax(p,'main button.istilah');
+        if (b0.st.expanded!==false) t.push('istilah awal expanded='+b0.st.expanded);
+        await p.click('main button.istilah'); await p.waitForTimeout(120); const b1=await ax(p,'main button.istilah');
+        if (b1.st.expanded!==true) t.push('istilah setelah dibuka expanded='+b1.st.expanded);
+        await p.focus('#kotak-istilah a'); await p.keyboard.press('Escape'); await p.waitForTimeout(120); const b2=await ax(p,'main button.istilah');
+        if (b2.st.expanded!==false) t.push('istilah setelah Escape expanded='+b2.st.expanded); return t; }],
+      ['pelajaran.html?m=apa-itu-saham','Tandai selesai', async p=>{ const t=[]; await p.evaluate(()=>{ try{localStorage.clear();}catch(e){} });
+        const a0=await ax(p,'.tombol-tandai'); if (a0.st.pressed!=='false') t.push('awal pressed='+a0.st.pressed);
+        await p.click('.tombol-tandai'); await p.waitForTimeout(120); const a1=await ax(p,'.tombol-tandai');
+        if (a1.st.pressed!=='true') t.push('setelah ditekan pressed='+a1.st.pressed); if (!a1.name) t.push('nama kosong setelah ditekan');
+        await p.click('.tombol-tandai'); await p.waitForTimeout(120); const a2=await ax(p,'.tombol-tandai');
+        if (a2.st.pressed!=='false') t.push('setelah ditekan lagi pressed='+a2.st.pressed); return t; }],
+      ['pelajaran.html?m=apa-itu-saham','jawaban kuis', async p=>{ const t=[]; const s='input[name="soal-0"]';
+        await p.focus(s); await p.keyboard.press('Space'); await p.waitForTimeout(80); const id1=await p.evaluate(()=>document.activeElement.id);
+        let a=await ax(p,'#'+id1); if (a.st.checked!=='true') t.push('radio terpilih checked='+a.st.checked);
+        await p.keyboard.press('ArrowDown'); await p.waitForTimeout(80); const id2=await p.evaluate(()=>document.activeElement.id);
+        a=await ax(p,'#'+id2); if (a.st.checked!=='true') t.push('radio baru checked='+a.st.checked);
+        a=await ax(p,'#'+id1); if (a.st.checked!=='false') t.push('radio lama checked='+a.st.checked); return t; }],
+      ['peringkat.html','ringkasan details', async p=>{ const t=[]; const ada=await p.$('details:not([open]) > summary'); if (!ada) return ['tidak ada <details> tertutup untuk diuji'];
+        await p.evaluate(()=>{ document.querySelector('details:not([open]) > summary').id='uji-ringkas'; });
+        let a=await ax(p,'#uji-ringkas'); if (a.st.expanded!==false) t.push('summary awal expanded='+a.st.expanded);
+        await p.focus('#uji-ringkas'); await p.keyboard.press('Enter'); await p.waitForTimeout(100); a=await ax(p,'#uji-ringkas');
+        if (a.st.expanded!==true) t.push('summary dibuka expanded='+a.st.expanded); return t; }],
+      ['radar.html','pilihan Radar', async p=>{ const t=[]; await p.selectOption('#pilih-saham','UNTR'); await p.waitForTimeout(150);
+        const a=await ax(p,'#pilih-saham'); if (a.role!=='combobox') t.push('peran pilihan '+a.role); if (!a.name) t.push('pilihan tanpa nama');
+        if (!String(a.value||'').includes('UNTR')) t.push('nilai terbaca "'+a.value+'", bukan UNTR'); return t; }],
+      ['UJI-KEADAAN','tombol istilah dibekukan', async p=>{ await p.evaluate(()=>{ const asli=Element.prototype.setAttribute;
+          Element.prototype.setAttribute=function(k,v){ if (/^aria-(expanded|pressed|selected)$/.test(k)&&this.hasAttribute(k)) return; return asli.call(this,k,v); }; });
+        await p.click('main button.istilah'); await p.waitForTimeout(120); const a=await ax(p,'main button.istilah');
+        return a.st.expanded!==true?['istilah dibuka tetapi expanded='+a.st.expanded]:[]; }],
+    ];
+    for (const [path,ket,aksi] of UBAH) {
+      const isUji=path.startsWith('UJI-');
+      const ctx=await b.newContext({ viewport:{width:w,height:844}, colorScheme:scheme, deviceScaleFactor:1 });
+      const p=await ctx.newPage(); const errs=[]; p.on('pageerror',e=>errs.push(e.message));
+      await p.goto('http://localhost:8765/'+(isUji?'peringkat.html':path)); await p.waitForTimeout(350);
+      let temuan=[]; try { temuan=await aksi(p); } catch(e) { temuan=['keadaan gagal dibuat: '+e.message.split('\n')[0]]; }
+      if (errs.length) temuan.push('galat JS: '+errs.join(' | ')); ubahN++;
+      console.log(`peran keadaan ${scheme} ${w} ${path} (${ket})`, temuan.length?'TEMUAN '+temuan.join('; '):'lolos');
+      if (isUji) { ujiN++; if (temuan.length) uji++; } else total+=temuan.length;
+      await ctx.close();
+    }
+  }
+  console.log('total temuan nama, peran, nilai',total,'(simpul kontrol dicek:',simpul,'; skenario keadaan:',ubahN,'; uji balik UJI-NAMA/UJI-PERAN/UJI-KEADAAN tertangkap:',uji+'/'+ujiN+')');
+  return total;
+}
+
 async function auditTeks(b) {
   const halaman=['index.html','peringkat.html','peringkat.html#istilah','radar.html#UNTR','emiten.html?kode=ANTM','kabar.html','belajar.html',
     'pelajaran.html?m=apa-itu-saham#benar','metodologi.html','asisten.html','asisten.html#jawab','404.html','UJI-PX','UJI-TETAP'];
@@ -1645,6 +1752,8 @@ const halamanFokus = ['index.html','peringkat.html','peringkat.html#istilah','ra
   if (process.env.AUDIT==='waktu') { await auditWaktu(b); await b.close(); return; }
   // AUDIT=konteks node tools/audit-kontras.js → hanya saat fokus & saat mengisi (WCAG 3.2.1 & 3.2.2)
   if (process.env.AUDIT==='konteks') { await auditKonteks(b); await b.close(); return; }
+  // AUDIT=peran node tools/audit-kontras.js → hanya nama, peran, nilai (WCAG 4.1.2)
+  if (process.env.AUDIT==='peran') { await auditPeran(b); await b.close(); return; }
   let total = 0;
   // AUDIT=fokus node tools/audit-kontras.js → hanya cek garis fokus (lebih cepat)
   if (process.env.AUDIT!=='fokus') for (const scheme of ['dark','light']) for (const w of [390,1280]) {
@@ -1823,6 +1932,7 @@ const halamanFokus = ['index.html','peringkat.html','peringkat.html#istilah','ra
   }
   console.log('total temuan ke-atas',totalAtas,'(uji balik UJI-KEATAS tertangkap:',ujiAtas,')');
   await auditKonteks(b);
+  await auditPeran(b);
   await auditTeks(b);
   await auditZoom(b);
   await auditJarak(b);
