@@ -1579,11 +1579,13 @@
   }
 
   /* ---------- Tandai menu aktif ---------- */
+  /* Vercel memakai cleanUrls: alamat tayang "/belajar", bukan "/belajar.html". Akhiran .html dibuang di kedua sisi
+     agar menu aktif tetap tertandai di situs (WCAG 2.4.8; Dewi & Nina, 19 Nov 18.xx). */
   function tandaiMenu() {
-    var hal = location.pathname.split("/").pop() || "index.html";
-    if (hal === "pelajaran.html") hal = "belajar.html";
+    var hal = (location.pathname.split("/").pop() || "index").replace(/\.html$/, "");
+    if (hal === "pelajaran") hal = "belajar";
     document.querySelectorAll(".nav a").forEach(function (a) {
-      if (a.getAttribute("href") === hal) a.setAttribute("aria-current", "page");
+      if ((a.getAttribute("href") || "").replace(/\.html$/, "") === hal) a.setAttribute("aria-current", "page");
     });
   }
 

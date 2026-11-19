@@ -821,3 +821,11 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Uji balik UJI-TIPIS (garis 1px tanpa jarak) tertangkap 32 dan UJI-MIRIP (warna garis = warna latar) tertangkap 24.
 - Nina: cek statis di `tests/cek.mjs` (garis dasar ≥2px var(--fokus), tidak ada aturan fokus <2px, kotak tanya border + garis 1px warna sama, mode audit & 2 uji balik) + 8 uji balik.
 - Kirana: tinjau. Usul berikutnya: audit "tahu sedang di mana" (WCAG 2.4.8 Location): penanda halaman aktif di menu atau jejak letak di profil emiten & pelajaran.
+
+### Hasil audit "tahu sedang di mana" (WCAG 2.4.8) — Dewi & Nina, 19 Nov 18.10
+- Alat: `AUDIT=letak node tools/audit-kontras.js` (ikut audit penuh). 10 halaman (termasuk pelajaran & profil ANTM) dibuka dengan alamat .html dan alamat bersih seperti di Vercel ("/radar", "/pelajaran?m=…"), mode gelap/terang, 390px & 1280px: 96 halaman/keadaan.
+- **Temuan nyata (diperbaiki):** `vercel.json` memakai `cleanUrls`, jadi alamat tayang tanpa ".html". Fungsi `tandaiMenu` di app.js mencocokkan "radar.html", sehingga di situs tayang tanda halaman aktif (tombol putih di menu) tidak pernah muncul; saat diuji lokal tampak benar. Kini akhiran .html dibuang di kedua sisi. Sebelum perbaikan 20 temuan (5 halaman menu × 4 tampilan, alamat bersih), sesudah 0.
+- Judul tab dan <h1> semua halaman sudah menyebut letak (pelajaran: "… · Belajar · Candra Analis", profil: "ANTM · …"); halaman di luar menu tidak memberi tanda menu palsu.
+- Uji balik UJI-TANPA (tanda dihapus) tertangkap 8 dan UJI-GANDA (semua tautan ditandai) tertangkap 8.
+- Nina: cek statis di `tests/cek.mjs` (tandaiMenu membuang .html bila cleanUrls aktif, pelajaran → Belajar, aria-current="page", gaya menu aktif, mode audit, alamat bersih & 2 uji balik) + 8 uji balik.
+- Kirana: tinjau. Usul berikutnya: audit keyboard & tanpa jebakan keyboard (WCAG 2.1.1/2.1.2).

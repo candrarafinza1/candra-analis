@@ -6883,6 +6883,47 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
   ok(cekTampil(cssT + "\n/* .chip:focus-visible { outline-width: 1px; } */\n", audT).length === 0, "uji balik tampilan fokus: komentar CSS tidak boleh dianggap temuan");
 }
 
+// (t) Dewi & Nina (19 Nov 18.xx, usul Kirana): tahu sedang di mana (WCAG 2.4.8). Vercel memakai cleanUrls ("/belajar"), jadi
+// tandaiMenu wajib membuang akhiran .html di kedua sisi; sebelum 19 Nov menu aktif tidak pernah tertandai di situs tayang.
+// Gaya .nav a[aria-current="page"] wajib ada. Audit AUDIT=letak (alamat .html & alamat bersih) ada, ikut audit penuh, 2 uji balik.
+{
+  const cekLetak = (app, css, aud, vercel) => {
+    const s = []; const atur = css.replace(/\/\*[\s\S]*?\*\//g, "");
+    const fM = app.slice(app.indexOf("function tandaiMenu()"), app.indexOf("tandaiMenu();"));
+    if (!fM) s.push("fungsi tandaiMenu tidak ada");
+    else {
+      if (/cleanUrls"\s*:\s*true/.test(vercel) && (fM.match(/\.replace\(\/\\\.html\$\/, ""\)/g) || []).length < 2)
+        s.push("tandaiMenu tidak membuang .html di alamat & href (cleanUrls aktif)");
+      if (!/hal === "pelajaran"\) hal = "belajar"/.test(fM)) s.push("pelajaran tidak menandai menu Belajar");
+      if (!/setAttribute\("aria-current", "page"\)/.test(fM)) s.push('tandaiMenu tidak memasang aria-current="page"');
+    }
+    if (!/\.nav a\[aria-current="page"\]\s*\{[^}]*background/.test(atur)) s.push("gaya menu aktif (.nav a[aria-current=\"page\"]) tidak ada");
+    if (!/process\.env\.AUDIT==='letak'\) \{ await auditLetak\(b\)/.test(aud)) s.push("mode AUDIT=letak tidak ada");
+    if (!/\n  await auditLetak\(b\);\n/.test(aud)) s.push("auditLetak tidak ikut audit penuh");
+    const fL = aud.slice(aud.indexOf("async function auditLetak"), aud.indexOf("const pages = ["));
+    for (const u of ["UJI-TANPA", "UJI-GANDA"]) if (!fL.includes(`'${u}'`)) s.push(`uji balik ${u} tidak ada`);
+    if (!/ctx\.route\(/.test(fL)) s.push("audit letak tidak menguji alamat bersih");
+    return s;
+  };
+  const appL = readFileSync("assets/app.js", "utf8"), cssL = readFileSync("assets/styles.css", "utf8");
+  const audL = readFileSync("tools/audit-kontras.js", "utf8"), verL = readFileSync("vercel.json", "utf8");
+  const sL = cekLetak(appL, cssL, audL, verL);
+  ok(sL.length === 0, `Tahu sedang di mana WCAG 2.4.8: ${sL.join("; ")}`);
+  const lama = 'var hal = location.pathname.split("/").pop() || "index.html";\n    if (hal === "pelajaran.html") hal = "belajar.html";';
+  const rusakL = [
+    [appL.replace(/var hal = \(location[^\n]*\n[^\n]*\n/, lama + "\n").replace('(a.getAttribute("href") || "").replace(/\\.html$/, "") === hal', 'a.getAttribute("href") === hal'), cssL, audL, verL, "tidak membuang .html"],
+    [appL.replace('if (hal === "pelajaran") hal = "belajar";', ""), cssL, audL, verL, "pelajaran tidak menandai"],
+    [appL.replace('a.setAttribute("aria-current", "page")', 'a.classList.add("aktif")'), cssL, audL, verL, "tidak memasang aria-current"],
+    [appL, cssL.replace('.nav a[aria-current="page"] { color: var(--malam); background: #fff; }', ""), audL, verL, "gaya menu aktif"],
+    [appL, cssL, audL.replace("process.env.AUDIT==='letak'", "process.env.AUDIT==='l'"), verL, "mode AUDIT=letak"],
+    [appL, cssL, audL.replace("  await auditLetak(b);\n", ""), verL, "auditLetak tidak ikut"],
+    [appL, cssL, audL.split("'UJI-GANDA'").join("'UJI-Z'"), verL, "UJI-GANDA"],
+    [appL, cssL, audL.split("await ctx.route(").join("await ctx.rute("), verL, "alamat bersih"],
+  ];
+  for (const [a, c, au, v, pesan] of rusakL) ok(cekLetak(a, c, au, v).some((x) => x.includes(pesan)), `uji balik tahu sedang di mana: "${pesan}" harus tertangkap`);
+  ok(cekLetak(appL, cssL + '\n/* .nav a[aria-current="page"] { background: red; } */\n', audL, verL).length === 0, "uji balik tahu sedang di mana: komentar CSS tidak boleh dianggap temuan");
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);
 
