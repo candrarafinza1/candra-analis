@@ -1959,3 +1959,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Rafinza memberi proyek prioritas: **Agenda IPO & Dividen** (pemberitahuan perusahaan syariah yang akan IPO dan emiten syariah yang akan membagi dividen, diperbarui terus).
 - Tugas dibagi di BACKLOG.md: data & skema (Arif, Raka, Fajar, Hana, Nina), halaman agenda (Arif, Dewi), pengingat kalender .ics gratis (Arif, Tegar), pemberitahuan di beranda/Radar/profil (Dewi, Galih), istilah & pelajaran (Sari, Laras, Hana), tinjauan kreatif (Kirana), rutin harian (Raka).
 - Audit aksesibilitas berulang ditunda; tugas pendukung harus bermanfaat langsung bagi pengguna.
+
+## 19 Nov 2026, 20.22 WIB — sesi kerja (Bima)
+- Proyek prioritas Agenda IPO & Dividen, tugas 1 selesai: `data/agenda.js` (skema Arif). Raka + Fajar: 5 dividen interim tahun buku 2026 bersumber (TOTO, DGWG, BOBA, JTPE, PSGO; cum 24–27 Nov, bayar 15–18 Des). Hana: kelimanya ada di DES periode I 2026 (baris 198, 91, 211, 173, 269); IPCC dan MLBI juga mengumumkan dividen tetapi tidak ada di DES, tidak dicatat.
+- IPO: 0 dicatat. ANDA (penawaran umum 24–27 Nov) belum masuk karena sumber yang ditemukan tidak menyebut status syariah → tugas baru Hana + Raka.
+- Nina: cek 2f di `tests/cek.mjs` (skema, tanggal & urutan, https, buktiSyariah, desBaris + kutipan DES, tanpa ajakan, acara > 60 hari) + 13 uji balik; uji rusak manual tertangkap.
+- Masalah ringan: e-ipo.co.id dan beberapa situs berita tidak bisa dibuka alat tim; dipakai sumber lain.
+- `node tests/cek.mjs` lolos (10 halaman, 8 pelajaran, 32 emiten). Berikutnya: halaman `agenda.html` (Arif + Dewi). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
