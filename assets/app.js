@@ -694,6 +694,9 @@
       hasil.appendChild(el("h2", { style: "font-size:1.35rem", text: e.kode + ": " + (jml ? jml + " tanda yang perlu Anda perhatikan" : "tidak ada tanda risiko") }));
       hasil.appendChild(el("p", { class: "catatan-metode", text: "Tercatat di " + DES_LABEL + ", baris " + e.desBaris + "." +
         (usd(e) ? " Emiten ini melapor dalam dolar AS; angka ditampilkan dalam dolar AS sesuai laporannya." : "") }));
+      // Dewi + Galih (20 Nov 2026): kartu info jadwal dividen ≤30 hari, bukan bagian dari hitungan tanda risiko.
+      var infoA = infoAgendaEmiten(e.kode, new Date());
+      if (infoA) hasil.appendChild(infoA);
       var ul = el("ul", { class: "sinyal-daftar" });
       s.forEach(function (x) {
         ul.appendChild(kartuSinyal(x));
@@ -894,6 +897,9 @@
         ? "Bukti: " + DES_LABEL + ", baris " + e.desBaris + ". Masuk daftar bukan berarti disarankan untuk dibeli."
         : "Emiten ini tidak ada di Daftar Efek Syariah periode terbaru." })
     ]));
+    // Dewi + Galih (20 Nov 2026): info jadwal dividen dalam 30 hari ke depan, tautan ke Agenda.
+    var infoAgenda = infoAgendaEmiten(e.kode, new Date());
+    if (infoAgenda) akar.appendChild(infoAgenda);
     // Raka & Sari (30 Okt): ringkasan usaha 1–2 kalimat, hanya bila ada sumbernya
     if (e.usaha && e.usaha.teks && e.usaha.sumber && e.usaha.sumber.url) {
       akar.appendChild(el("h2", { class: "judul-profil-bagian", text: "Usaha perusahaan" }));
@@ -1814,6 +1820,59 @@
     });
   }
 
+  /* ---------- Pemberitahuan Agenda di beranda, Radar, dan profil (Dewi + Galih, 20 Nov 2026; proyek prioritas Agenda) ----------
+     Beranda: pita "Agenda terdekat" (maks. 3 acara yang belum lewat). Radar & profil: kartu tingkat "info" bila emiten itu
+     punya tanggal dividen dalam 30 hari ke depan. Info jadwal, bukan tanda risiko dan bukan saran membeli atau menjual. */
+  var AGENDA_INFO_HARI = 30;
+  // Tanggal dividen terdekat (0–30 hari lagi) untuk satu kode, atau null.
+  function dividenDekat(kode, kini) {
+    var calon = null;
+    susunAgenda(kini).depan.forEach(function (x) {
+      if (calon || x.jenis !== "dividen" || x.data.kode !== kode) return;
+      var n = hariDari(x.berikut.tanggal, kini);
+      if (n >= 0 && n <= AGENDA_INFO_HARI) calon = { x: x, n: n };
+    });
+    return calon;
+  }
+  function infoAgendaEmiten(kode, kini) {
+    var c = dividenDekat(kode, kini);
+    if (!c) return null;
+    var a = c.x.data, namaB = PENJELASAN_AGENDA[c.x.berikut.kunci][0];
+    return el("div", { class: "info-agenda", role: "note" }, [
+      el("p", { class: "info-agenda-kepala" }, [el("span", { class: "kabar-jenis", text: "Info" }), " ",
+        el("strong", { text: namaB + " dividen " + a.jenis + " " + tanggalId(c.x.berikut.tanggal) + ", " + teksMundur(c.n) })]),
+      el("p", { text: "Dividen " + (a.mataUang === "USD" ? "US$" + angka2.format(a.dps) : "Rp" + angka2.format(a.dps)) +
+        " per saham (sebelum pajak), tahun buku " + a.tahunBuku + ". Ini jadwal, bukan tanda risiko dan bukan saran membeli atau menjual." }),
+      el("p", null, [el("a", { href: "agenda.html", text: "Lihat semua tanggal dan sumbernya di Agenda" })])
+    ]);
+  }
+  function renderAgendaBeranda() {
+    var wadah = document.getElementById("agenda-beranda");
+    if (!wadah) return;
+    var kini = new Date(), dekat = susunAgenda(kini).depan.slice(0, 3);
+    if (!dekat.length) return;
+    var ul = el("ul", { class: "agenda-pita" });
+    dekat.forEach(function (x) {
+      var a = x.data, ipo = x.jenis === "ipo", n = hariDari(x.berikut.tanggal, kini);
+      var namaB = PENJELASAN_AGENDA[x.berikut.kunci][0];
+      ul.appendChild(el("li", null, [
+        el("span", { class: "kode", text: a.kode || "IPO" }),
+        el("span", { class: "agenda-pita-isi" }, [
+          (ipo ? "IPO " + a.nama + ": " : "Dividen " + a.jenis + ": ") + namaB + " ",
+          el("time", { datetime: x.berikut.tanggal, text: tanggalId(x.berikut.tanggal) })
+        ]),
+        el("span", { class: "agenda-mundur", text: n < 0 && x.berikut.sampai ? "sedang berjalan" : teksMundur(n) })
+      ]));
+    });
+    wadah.appendChild(el("div", { class: "wadah" }, [
+      el("h2", { id: "judul-agenda-beranda", text: "Agenda terdekat" }),
+      el("p", { class: "pengantar" }, ["Jadwal IPO dan dividen saham syariah. ",
+        el("strong", { text: "Agenda adalah jadwal, bukan saran membeli atau menjual." })]),
+      ul,
+      el("p", { style: "margin-top:16px" }, [el("a", { href: "agenda.html", text: "Semua agenda IPO & dividen" })])
+    ]));
+    wadah.hidden = false;
+  }
   function renderAgenda() {
     var akar = document.getElementById("agenda");
     if (!akar) return;
@@ -1854,6 +1913,7 @@
   renderProfil();
   renderKabar();
   renderAgenda();
+  renderAgendaBeranda();
   tandaAgendaBaru();
   renderKabarBeranda();
   istilahBeranda();

@@ -2438,7 +2438,7 @@ ok(/\.form-tanya textarea::placeholder\s*\{[^}]*color:\s*var\(--tinta-2\)/.test(
     "judul-profil": ["emiten.html"], "sub-profil": ["emiten.html"], profil: ["emiten.html"],
     "istilah-hari": ["index.html"], "kabar-beranda": ["index.html"], "lanjutkan-belajar": ["index.html"],
     "mini-peringkat": ["index.html"], "musim-beranda": ["index.html"],
-    kabar: ["kabar.html"], agenda: ["agenda.html"], "kamus-istilah": ["belajar.html"], rujukan: ["belajar.html"],
+    kabar: ["kabar.html"], agenda: ["agenda.html"], "agenda-beranda": ["index.html"], "kamus-istilah": ["belajar.html"], rujukan: ["belajar.html"],
     peringkat: ["peringkat.html"], radar: ["radar.html"],
     pita: ["emiten.html", "peringkat.html", "radar.html"],
   };
@@ -3529,7 +3529,7 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
       { kode: "BBBB", nama: "Contoh B", desBaris: 2, sumber: [] },
     ];
     const ctxR = { document, EMITEN, DES_LABEL: "DES", URLSearchParams, location: { search: "" },
-      pitaSumber() {}, musimLaporan() {}, pasangIstilah() {}, tutupIstilah() {}, usd: () => false, uang: () => String,
+      pitaSumber() {}, musimLaporan() {}, pasangIstilah() {}, tutupIstilah() {}, usd: () => false, uang: () => String, infoAgendaEmiten: () => null,
       periksa: () => [{ tingkat: "sedang", judul: "Tanda", isi: "Isi", bukti: "Bukti" }, { tingkat: "info", judul: "Tanda 2", isi: "Isi", bukti: "Bukti" }],
       batangTahun: (j, D) => (D[2024] > 0 && D[2025] > 0 ? simpul("div") : null) };
     try { vm.runInNewContext(blokApp.join("\n") + "\n;globalThis.renderRadar = renderRadar;", ctxR); ctxR.renderRadar(); }
@@ -3726,7 +3726,7 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
         const document = { title: "", createElement: simpul, createTextNode: () => ({ tag: "#text", anak: [] }), getElementById: (id) => wadah[id] || null };
         const ctxP = { document, EMITEN, window: { KABAR }, location: { search: kode ? "?kode=" + kode : "" }, URLSearchParams, Date, Intl, Math,
           DES_LABEL: "DES", KRITERIA: { tumbuhLaba: { nilai: () => null, tampil: String }, roe: { nilai: () => null, tampil: String } },
-          peserta: () => [], sekaliWaktu9b: () => null, pasangIstilah() {}, tutupIstilah() {},
+          peserta: () => [], sekaliWaktu9b: () => null, pasangIstilah() {}, tutupIstilah() {}, infoAgendaEmiten: () => null,
           periksa: () => [{ tingkat: "sedang", judul: "Tanda", isi: "Isi", bukti: "Bukti" }] };
         try { vm.runInNewContext(blokApp.join("\n") + "\n;globalThis.renderProfil = renderProfil;", ctxP); ctxP.renderProfil(); }
         catch (err) { salah.push(`renderProfil ${nama} galat: ${err.message}`); continue; }
@@ -7124,6 +7124,51 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
     const h = readFileSync(f, "utf8"), a = h.indexOf('<script src="data/agenda.js"></script>'), b = h.indexOf('<script src="assets/app.js"></script>');
     ok(a >= 0 && a < b, `${f}: harus memuat data/agenda.js sebelum assets/app.js (tanda "baru" di menu Agenda)`);
   }
+}
+
+// 2f-3. Pemberitahuan Agenda di beranda, Radar, dan profil (Dewi + Galih + Nina, 20 Nov 2026).
+// dividenDekat dijalankan sungguhan: hanya dividen kode itu, tanggal berikut 0–30 hari; IPO & kode lain diabaikan.
+{
+  const app = readFileSync("assets/app.js", "utf8");
+  const potong = (dari, sampai) => { const i = app.indexOf(dari), j = app.indexOf(sampai, i); return i < 0 || j < 0 ? "" : app.slice(i, j); };
+  const blok = [potong("  var AGENDA_LEWAT_MAKS", "  function kartuAgenda("), potong("  var AGENDA_INFO_HARI", "  function infoAgendaEmiten(")];
+  ok(blok.every(Boolean), "app.js: susunAgenda & dividenDekat harus bisa diambil untuk diuji");
+  const jalan = (kodeJs, data) => {
+    const c = { window: data };
+    vm.createContext(c);
+    try { vm.runInContext(kodeJs + "\n;globalThis.dividenDekat = dividenDekat;", c); } catch (e) { return null; }
+    return c.dividenDekat;
+  };
+  const div = (kode, cum, bayar) => ({ kode, jenis: "interim", tahunBuku: 2026, dps: 10, mataUang: "IDR",
+    tanggal: { cum, ex: null, recording: null, pembayaran: bayar } });
+  const data = { AGENDA_IPO: [{ nama: "PT Contoh", kode: "AAAA", tanggal: { penjatahan: "2026-11-21", pencatatan: "2026-11-25" } }],
+    AGENDA_DIVIDEN: [div("BBBB", "2026-11-26", "2026-12-15"), div("CCCC", "2026-12-21", "2026-12-30"), div("DDDD", "2026-11-01", "2026-11-10"), div("EEEE", "2026-11-18", "2026-12-04")] };
+  const kini = new Date(2026, 10, 20, 9, 0, 0);
+  const cekDekat = (f) => {
+    const s = [];
+    if (!f) return ["dividenDekat gagal dijalankan"];
+    const b = f("BBBB", kini); if (!b || b.n !== 6 || b.x.berikut.kunci !== "cum") s.push("BBBB harus cum 6 hari lagi");
+    if (f("CCCC", kini)) s.push("CCCC 31 hari lagi harus diabaikan (batas 30 hari)");
+    if (f("DDDD", kini)) s.push("DDDD sudah lewat harus diabaikan");
+    const e = f("EEEE", kini); if (!e || e.x.berikut.kunci !== "pembayaran" || e.n !== 14) s.push("EEEE: cum sudah lewat, harus menunjuk pembayaran 14 hari lagi");
+    if (f("AAAA", kini)) s.push("IPO tidak boleh memunculkan info dividen");
+    if (f("ZZZZ", kini)) s.push("kode tanpa agenda harus null");
+    return s;
+  };
+  const sD = cekDekat(jalan(blok.join("\n"), data));
+  ok(!sD.length, "dividenDekat: " + sD.join("; "));
+  for (const [rusak, pesan] of [
+    [blok.join("\n").replace("AGENDA_INFO_HARI = 30", "AGENDA_INFO_HARI = 31"), "31 hari"],
+    [blok.join("\n").replace('x.jenis !== "dividen" || ', ""), "IPO"],
+    [blok.join("\n").replace(" || x.data.kode !== kode", ""), "kode tanpa agenda"],
+  ]) ok(cekDekat(jalan(rusak, data)).some((x) => x.includes(pesan)), `uji balik dividenDekat: "${pesan}" harus tertangkap`);
+  const fInfo = potong("  function infoAgendaEmiten(", "  function renderAgendaBeranda(");
+  ok(/bukan tanda risiko dan bukan saran membeli atau menjual/.test(fInfo) && /href: "agenda\.html"/.test(fInfo), "infoAgendaEmiten: wajib kalimat 'bukan tanda risiko dan bukan saran membeli atau menjual' + tautan ke Agenda");
+  const fBer = potong("  function renderAgendaBeranda(", "  function renderAgenda(");
+  ok(/\.slice\(0, 3\)/.test(fBer) && /bukan saran membeli atau menjual/.test(fBer), "renderAgendaBeranda: maks. 3 acara + kalimat bukan saran");
+  ok(/infoAgendaEmiten\(e\.kode/.test(potong("  function renderRadar()", "  function bagianBanding(")) && /infoAgendaEmiten\(e\.kode/.test(potong("  function renderProfil()", "  function tanggalId(")),
+    "Radar & profil harus memasang infoAgendaEmiten");
+  ok(/id="agenda-beranda"[^>]*hidden/.test(readFileSync("index.html", "utf8")), 'index.html: wadah <section id="agenda-beranda" hidden> wajib ada');
 }
 
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
