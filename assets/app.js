@@ -1880,24 +1880,95 @@
       el("p", null, ["Agenda disusun dari pengumuman emiten, prospektus, dan berita; tanggal dan angka ditulis seperti di sumbernya. Hitung mundur memakai tanggal di perangkat Anda. ",
         el("strong", { text: "Agenda adalah jadwal, bukan saran membeli atau menjual." })])
     ]));
-    function bagian(id, judulTeks, ketKosong, daftar) {
-      var ul = el("ul", { class: "kabar-daftar" });
-      daftar.forEach(function (x) { ul.appendChild(kartuAgenda(x, kini)); });
-      akar.appendChild(el("h2", { class: "judul-profil-bagian", id: id, text: judulTeks }));
-      akar.appendChild(daftar.length ? ul : el("p", { class: "agenda-kosong", text: ketKosong }));
+    akar.appendChild(el("p", { class: "agenda-ringkas", id: "agenda-ringkas" }, [el("strong", { text: "Minggu ini" }), " " + ringkasMingguIni(s, kini)]));
+    var saring = kotakSaringAgenda(akar);
+    akar.appendChild(saring);
+    // Tiap judul bagian dan daftarnya diberi data-jenis agar bisa disembunyikan tombol pilihan (IDE.md #35).
+    function bagian(id, judulTeks, ketKosong, daftar, jenisBagian) {
+      var ul = el("ul", { class: "kabar-daftar", "data-jenis": jenisBagian });
+      daftar.forEach(function (x) { var k = kartuAgenda(x, kini); k.setAttribute("data-jenis", x.jenis); ul.appendChild(k); });
+      akar.appendChild(el("h2", { class: "judul-profil-bagian", id: id, text: judulTeks, "data-jenis": jenisBagian }));
+      akar.appendChild(daftar.length ? ul : el("p", { class: "agenda-kosong", text: ketKosong, "data-jenis": jenisBagian }));
     }
     var ipoDepan = s.depan.filter(function (x) { return x.jenis === "ipo"; });
     var divDepan = s.depan.filter(function (x) { return x.jenis === "dividen"; });
     bagian("agenda-ipo", "IPO saham syariah", "Belum ada IPO yang sumbernya menyebut sahamnya termasuk efek syariah. " +
-      "Tim memeriksa e-IPO, pengumuman bursa, dan prospektus setiap hari kerja; perusahaan baru dicatat di sini setelah ada bukti status syariahnya.", ipoDepan);
+      "Tim memeriksa e-IPO, pengumuman bursa, dan prospektus setiap hari kerja; perusahaan baru dicatat di sini setelah ada bukti status syariahnya.", ipoDepan, "ipo");
     bagian("agenda-dividen", "Dividen saham syariah", "Belum ada jadwal dividen dari saham syariah yang diumumkan untuk waktu dekat. " +
-      "Tim memeriksa pengumuman emiten dan berita setiap hari kerja; hanya saham yang tercatat di Daftar Efek Syariah yang dicatat.", divDepan);
-    if (s.lewat.length) bagian("agenda-lewat", "Baru saja lewat", "", s.lewat);
+      "Tim memeriksa pengumuman emiten dan berita setiap hari kerja; hanya saham yang tercatat di Daftar Efek Syariah yang dicatat.", divDepan, "dividen");
+    if (s.lewat.length) bagian("agenda-lewat", "Baru saja lewat", "", s.lewat, "campur");
     akar.appendChild(el("p", { class: "catatan-metode" }, ["Acara yang sudah lewat lebih dari " + AGENDA_LEWAT_MAKS +
       " hari tidak ditampilkan. Cara tim memilih data dijelaskan di ", el("a", { href: "metodologi.html", text: "halaman metodologi" }), "."]));
     // Istilah dipasang lebih dulu di kartu (nama tanggal bisa diketuk), baru kotak arti disisipkan di atas daftar.
     pasangIstilah(akar);
     akar.insertBefore(kotakArtiAgenda(), akar.querySelector("h2"));
+    saring.terapkan(jenisAwalAgenda());
+  }
+  /* Dewi + Arif (20 Nov 2026, IDE.md #35): ringkasan "Minggu ini" dan tombol pilihan Semua / IPO / Dividen.
+     Ringkasan hanya menghitung tanggal dari data yang sama (hari ini sampai 6 hari lagi), tanpa kata ajakan.
+     Pilihan tidak disimpan; alamat ikut berubah (?jenis=ipo / ?jenis=dividen) agar bisa dibagikan. */
+  var AGENDA_JENIS = ["semua", "ipo", "dividen"];
+  var NAMA_RINGKAS_AGENDA = { cum: "cum date", ex: "ex date", recording: "recording date", pembayaran: "pembayaran dividen" };
+  function hitungMingguIni(s, kini) {
+    var hitung = { cum: 0, ex: 0, recording: 0, pembayaran: 0, ipo: 0 };
+    s.depan.forEach(function (x) {
+      x.tgl.forEach(function (d) {
+        var awal = hariDari(d.tanggal, kini), akhir = hariDari(d.sampai || d.tanggal, kini);
+        if (awal == null || akhir == null || akhir < 0 || awal > 6) return;
+        if (x.jenis === "ipo") hitung.ipo++; else if (hitung[d.kunci] != null) hitung[d.kunci]++;
+      });
+    });
+    return hitung;
+  }
+  function ringkasMingguIni(s, kini) {
+    var h = hitungMingguIni(s, kini), bagianT = [];
+    ["cum", "ex", "recording", "pembayaran"].forEach(function (k) { if (h[k]) bagianT.push(h[k] + " " + NAMA_RINGKAS_AGENDA[k]); });
+    bagianT.push(h.ipo + " tahap IPO");
+    var d0 = new Date(kini.getFullYear(), kini.getMonth(), kini.getDate()), d6 = new Date(d0.getFullYear(), d0.getMonth(), d0.getDate() + 6);
+    var iso = function (d) { return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); };
+    return "(" + tanggalId(iso(d0)) + " – " + tanggalId(iso(d6)) + "): " + bagianT.join(", ") + ".";
+  }
+  function jenisAwalAgenda() {
+    try {
+      var j = new URLSearchParams(location.search).get("jenis");
+      return AGENDA_JENIS.indexOf(j) > 0 ? j : "semua";
+    } catch (e) { return "semua"; }
+  }
+  function kotakSaringAgenda(akar) {
+    var label = { semua: "Semua", ipo: "IPO", dividen: "Dividen" };
+    var status = el("p", { class: "khusus-pembaca-layar", "aria-live": "polite" });
+    var tombol = {};
+    var baris = el("div", { class: "agenda-saring", role: "group", "aria-label": "Tampilkan agenda" },
+      AGENDA_JENIS.map(function (j) {
+        var b = el("button", { type: "button", class: "agenda-saring-tombol", "aria-pressed": "false", text: label[j] });
+        b.addEventListener("click", function () { wadah.terapkan(j, true); });
+        tombol[j] = b;
+        return b;
+      }));
+    var wadah = el("div", { class: "agenda-saring-wadah" }, [baris, status]);
+    wadah.terapkan = function (jenis, dariKlik) {
+      AGENDA_JENIS.forEach(function (j) { tombol[j].setAttribute("aria-pressed", j === jenis ? "true" : "false"); });
+      var cocok = function (j) { return jenis === "semua" || j === jenis; };
+      akar.querySelectorAll('[data-jenis="ipo"], [data-jenis="dividen"]').forEach(function (e) {
+        if (!e.closest('[data-jenis="campur"]')) e.hidden = !cocok(e.getAttribute("data-jenis"));
+      });
+      // "Baru saja lewat" berisi campuran: sembunyikan kartu yang tidak cocok, dan bagiannya bila kosong.
+      var lewatUl = akar.querySelector('ul[data-jenis="campur"]'), lewatH = akar.querySelector('h2[data-jenis="campur"]');
+      if (lewatUl) {
+        var ada = 0;
+        lewatUl.querySelectorAll("li[data-jenis]").forEach(function (li) { li.hidden = !cocok(li.getAttribute("data-jenis")); if (!li.hidden) ada++; });
+        lewatUl.hidden = !ada; if (lewatH) lewatH.hidden = !ada;
+      }
+      if (dariKlik) {
+        status.textContent = "Menampilkan agenda: " + label[jenis] + ".";
+        try {
+          var u = new URL(location.href);
+          if (jenis === "semua") u.searchParams.delete("jenis"); else u.searchParams.set("jenis", jenis);
+          history.replaceState(null, "", u.pathname + u.search + u.hash);
+        } catch (e) { /* alamat tidak diubah; pilihan tetap berlaku */ }
+      }
+    };
+    return wadah;
   }
   /* Dewi + Arif (20 Nov 2026, IDE.md #34): penjelasan tiap tanggal ditulis sekali di kotak <details> di atas daftar,
      tidak diulang di setiap kartu, agar halaman lebih pendek di HP. Teks dari PENJELASAN_AGENDA, tidak diubah. */

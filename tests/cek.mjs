@@ -7262,6 +7262,59 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
   ]) ok(cekRingkas(...rusak).some((x) => x.includes(pesan)), `uji balik Agenda ringkas: "${pesan}" harus tertangkap`);
 }
 
+// 2f-6. Agenda: ringkasan "Minggu ini" + tombol pilihan Semua / IPO / Dividen (Nina, 20 Nov 2026, IDE.md #35).
+// hitungMingguIni dijalankan sungguhan dengan tanggal palsu + uji balik; tombol wajib aria-pressed, tanpa simpanan.
+{
+  const app = readFileSync("assets/app.js", "utf8");
+  const potong = (dari, sampai) => { const i = app.indexOf(dari), j = app.indexOf(sampai, i); return i < 0 || j < 0 ? "" : app.slice(i, j); };
+  const blokS = potong("  var AGENDA_LEWAT_MAKS", "  function kartuAgenda(");
+  const blokM = potong("  var AGENDA_JENIS", "  function jenisAwalAgenda(");
+  const blokSaring = potong("  function kotakSaringAgenda(", "\n    return wadah;\n");
+  const render = potong("  function renderAgenda()", "  function kotakArtiAgenda()");
+  const jalan = (m) => {
+    const c = { window: {
+      AGENDA_IPO: [{ nama: "PT Tawar", kode: null, tanggal: { penawaranUmum: { mulai: "2026-11-18", selesai: "2026-11-21" }, penjatahan: "2026-11-21", pencatatan: "2026-11-30" } }],
+      AGENDA_DIVIDEN: [
+        { kode: "AAAA", tanggal: { cum: "2026-11-19", ex: "2026-11-23", recording: "2026-11-24", pembayaran: "2026-12-10" } },
+        { kode: "BBBB", tanggal: { cum: "2026-11-26", ex: "2026-11-27", recording: "2026-11-30", pembayaran: "2026-11-26" } },
+        { kode: "CCCC", tanggal: { cum: "2026-11-10", ex: "2026-11-11", recording: "2026-11-12", pembayaran: "2026-11-19" } }] } };
+    vm.createContext(c);
+    try { vm.runInContext(blokS + m + "\n;globalThis.h = hitungMingguIni(susunAgenda(new Date(2026, 10, 20, 9)), new Date(2026, 10, 20, 9));", c); } catch (e) { return null; }
+    return c.h;
+  };
+  // 20–26 Nov: cum BBBB(26) = 1 (cum AAAA 19 Nov sudah lewat); ex AAAA(23) = 1; recording AAAA(24) = 1; pembayaran BBBB(26) = 1;
+  // IPO: penawaran umum (masih berjalan) + penjatahan 21 = 2; pencatatan 30 di luar. CCCC sudah lewat semua.
+  const cekM = (h) => {
+    if (!h) return ["hitungMingguIni gagal dijalankan"];
+    const s = [], harap = { cum: 1, ex: 1, recording: 1, pembayaran: 1, ipo: 2 };
+    for (const k in harap) if (h[k] !== harap[k]) s.push(`${k} harus ${harap[k]} (dapat ${h[k]})`);
+    return s;
+  };
+  const sM = cekM(jalan(blokM));
+  ok(!sM.length, "Agenda Minggu ini: " + sM.join("; "));
+  for (const [rusak, pesan] of [
+    [blokM.replace("awal > 6", "awal > 7"), "ex harus 1"],
+    [blokM.replace("akhir < 0 || ", ""), "cum harus 1"],
+    [blokM.replace("var awal = hariDari(d.tanggal, kini), akhir = hariDari(d.sampai || d.tanggal, kini);", "var awal = hariDari(d.tanggal, kini), akhir = awal;"), "ipo harus 2"],
+  ]) ok(cekM(jalan(rusak)).some((x) => x.includes(pesan)), `uji balik Agenda Minggu ini: "${pesan}" harus tertangkap`);
+  const cekSaring = (b, r) => {
+    const s = [];
+    if (!/role: "group"/.test(b) || !/"aria-label": "Tampilkan agenda"/.test(b)) s.push("tombol pilihan wajib dalam role=group berlabel");
+    if (!/"aria-pressed"/.test(b) || !/setAttribute\("aria-pressed"/.test(b)) s.push("tombol pilihan wajib memakai aria-pressed");
+    if (!/el\("button", \{ type: "button"/.test(b)) s.push("pilihan wajib berupa <button> (bisa dipakai keyboard)");
+    if (/localStorage|sessionStorage|fetch\(|sendBeacon/.test(b)) s.push("pilihan tidak boleh disimpan atau dikirim");
+    if (!/kotakSaringAgenda\(akar\)/.test(r) || !/ringkasMingguIni\(s, kini\)/.test(r) || !/saring\.terapkan\(jenisAwalAgenda\(\)\)/.test(r)) s.push("renderAgenda wajib memasang ringkasan dan tombol pilihan");
+    return s;
+  };
+  const sSar = cekSaring(blokSaring, render);
+  ok(!sSar.length, "Agenda pilihan: " + sSar.join("; "));
+  for (const [rusak, pesan] of [
+    [[blokSaring.replace(/"aria-pressed"/g, '"data-pilih"'), render], "aria-pressed"],
+    [[blokSaring.replace("var tombol = {};", "var tombol = {}; localStorage.setItem('x', 1);"), render], "tidak boleh disimpan"],
+  ]) ok(cekSaring(...rusak).some((x) => x.includes(pesan)), `uji balik Agenda pilihan: "${pesan}" harus tertangkap`);
+  ok(!/pasti|buruan|ketinggalan|rekomendasi|beli sebelum/i.test(blokM), "Agenda Minggu ini: teks ringkasan tidak boleh memuat kata ajakan");
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);
 

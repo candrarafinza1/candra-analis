@@ -59,7 +59,7 @@
     --bayangan: rgba(0, 0, 0, .5);
   }
   /* Tinjauan Kirana: tombol terpilih diberi garis aksen agar beda jelas dari tombol lain di latar gelap */
-  .tab[aria-selected="true"] { border-color: var(--aksen); }
+  .tab[aria-selected="true"], .agenda-saring-tombol[aria-pressed="true"] { border-color: var(--aksen); }
 }
 
 *,
@@ -909,3 +909,19 @@ button.istilah:hover, button.istilah[aria-expanded="true"] { color: var(--aksen)
 .info-agenda { border: 1px solid var(--garis); border-left: 6px solid #7b82d6; background: var(--putih); border-radius: var(--radius-kecil); padding: 12px 16px; margin: 12px 0; max-width: var(--lebar-teks); }
 .info-agenda p { margin: 4px 0 0; overflow-wrap: anywhere; }
 .info-agenda .info-agenda-kepala { margin: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; }
+
+/* Agenda: ringkasan "Minggu ini" dan tombol pilihan Semua / IPO / Dividen (Dewi + Arif, 20 Nov 2026, IDE.md #35) */
+.agenda-ringkas { margin: 16px 0 0; }
+#agenda [hidden] { display: none; }
+.agenda-saring { display: flex; gap: 8px; flex-wrap: wrap; margin: 12px 0 0; }
+.agenda-saring-tombol {
+  font: inherit; font-weight: 700; font-size: .95rem; min-height: 44px;
+  padding: 8px 18px; border-radius: 999px; cursor: pointer;
+  border: 2px solid var(--garis-kontrol); background: var(--putih); color: var(--tinta);
+}
+.agenda-saring-tombol:hover { border-color: var(--aksen); }
+.agenda-saring-tombol[aria-pressed="true"] { background: var(--malam); border-color: var(--malam); color: #fff; }
+@media (max-width: 600px) {
+  .agenda-saring { display: grid; grid-template-columns: repeat(3, 1fr); }
+  .agenda-saring-tombol { padding: 8px 6px; font-size: .9rem; }
+}

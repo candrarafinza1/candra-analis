@@ -541,7 +541,21 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Dampak bagi pemula: tahu sekilas apa yang terjadi minggu ini.
 - Batasan: ringkasan hanya menghitung, tanpa kata ajakan. **Catatan:** pemberitahuan lewat email berlangganan TIDAK diusulkan sekarang karena butuh server pengirim email dan menyimpan alamat email pengguna (data pribadi); itu perlu keputusan Rafinza. Tombol "Tambahkan ke kalender" sudah menjadi pengingat tanpa data pribadi.
 - Usaha: kecil–sedang (Arif + Dewi). Menunggu antrean setelah #34.
-- Status: diusulkan Kirana 20 Nov 10.xx; dipilih Bima 20 Nov 13.xx untuk Dewi + Arif, masuk BACKLOG.md.
+- Status: diusulkan Kirana 20 Nov 10.xx; dipilih Bima 20 Nov 13.xx untuk Dewi + Arif, masuk BACKLOG.md. **Selesai 20 Nov 14.xx** (Dewi + Arif, cek Nina 2f-6): kalimat "Minggu ini (20 Nov 2026 – 26 Nov 2026): 3 cum date, 2 ex date, 1 recording date, 0 tahap IPO." dan tombol Semua/IPO/Dividen (aria-pressed, ?jenis=ipo|dividen, tanpa simpanan); di 390px tiga tombol satu baris.
+
+### Tinjauan Kirana, 20 Nov 14.xx: kartu Agenda ringkas + tombol pilihan (390px terang/gelap)
+- Kotak "Arti tanggal-tanggal ini" tertutup di kunjungan kedua; tombol pilihan jelas mana yang aktif (terang: isi biru malam; gelap: garis aksen). Tanpa scroll horizontal.
+- Halaman 390px setinggi 5.248px (kotak arti tertutup), kartu pertama mulai di 1.080px. Tiap kartu dividen masih ±700px: daftar sumber (3 tautan, ±200px) dan kalimat penjelasan berkas .ics (±100px) memakan hampir separuh kartu, dan kalimat .ics sama persis di setiap kartu. Usulan #36 di bawah.
+
+### 36. Agenda: sumber per kartu di dalam <details> dan penjelasan .ics ditulis sekali ★ paling berdampak
+- **Kartu dividen ±700px → perkiraan ±420px di 390px** — tampilan, usaha kecil
+- Masalah: daftar sumber dan kalimat "Berkas .ics untuk aplikasi kalender…" memenuhi kartu; kalimat .ics diulang di tiap kartu.
+- Ide: (a) daftar sumber dibungkus `<details>` "Sumber (3)" per kartu, sumber tetap satu ketukan (keyboard bisa membuka); (b) kalimat .ics pindah ke kotak "Arti tanggal-tanggal ini" (atau satu catatan di atas daftar), tombol kalender tetap di kartu.
+- Acuan tren: progressive disclosure yang sama dengan #34.
+- Dampak bagi pemula: 2–3 kartu terlihat sekaligus di HP; sumber tetap mudah dibuka.
+- Batasan: sumber tidak boleh hilang dari halaman (aturan perusahaan: setiap angka bersumber); tanpa pustaka baru; hormati prefers-reduced-motion. Hana memastikan sumber tetap jelas untuk tiap angka.
+- Usaha: kecil (Dewi; Nina menyesuaikan cek).
+- Status: diusulkan Kirana 20 Nov 14.xx; dipilih Bima 20 Nov 14.xx untuk Dewi + Nina, masuk BACKLOG.md.
 
 ### Tinjauan Kirana, 9 Nov 10.09: hero & kartu beranda setelah teks diubah
 - 390px: kalimat hero 5 baris, rata-rata ±37 huruf per baris (nyaman dibaca di HP); istilah bergaris tetap terbaca, tombol "Mulai belajar" & "Lihat peringkat saham" masih di layar pertama 390×844.

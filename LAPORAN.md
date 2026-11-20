@@ -2004,3 +2004,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Bima memilih IDE.md #35 (pilihan Semua/IPO/Dividen + ringkasan minggu ini) untuk Dewi + Arif; Kirana meninjau kartu ringkas.
 - Masalah ringan: situs sumber (idx.id, Bisnis, Ajaib) tidak bisa dibuka alat tim; dicoba lagi sesi 07.xx besok.
 - `node tests/cek.mjs` lolos (11 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 20 Nov 2026, 14.09 WIB — sesi kerja (Bima)
+- Proyek prioritas Agenda, IDE.md #35 selesai (Dewi + Arif): di atas daftar kini ada kalimat "Minggu ini (20 Nov 2026 – 26 Nov 2026): 3 cum date, 2 ex date, 1 recording date, 0 tahap IPO." (hanya menghitung data yang sama) dan tombol Semua / IPO / Dividen (aria-pressed, diumumkan ke pembaca layar, alamat ?jenis=ipo|dividen bisa dibagikan, tanpa simpanan). Nina: cek 2f-6 + 5 uji balik; uji rusak manual (batas 7 hari diubah) tertangkap. Dicek 390/1280px terang/gelap dan keyboard, tanpa scroll horizontal & galat JS.
+- Kirana: tinjau kartu ringkas 390px terang/gelap → halaman 5.248px, kartu dividen masih ±700px karena daftar sumber & kalimat .ics → usulan IDE.md #36, dipilih Bima untuk Dewi + Nina.
+- Hana + Raka: IPO ANDA dicek lagi lewat Katadata, EmitenNews, RCTI+/IDXChannel: tidak satu pun menyebut status syariah → tetap tidak dicatat. KMDS & TOTL (cek DES) tetap menunggu sesi 07.xx besok.
+- Masalah ringan: halaman e-IPO yang muncul di pencarian ternyata milik emiten lain. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+- `node tests/cek.mjs` lolos (11 halaman, 8 pelajaran, 32 emiten).
