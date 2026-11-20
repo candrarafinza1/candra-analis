@@ -900,6 +900,13 @@ button.istilah:hover, button.istilah[aria-expanded="true"] { color: var(--aksen)
 /* Tautan per kartu Agenda (Arif + Dewi, 20 Nov 2026, IDE.md #37) */
 .salin-kartu { margin: 10px 0 0; }
 .tombol-salin-kartu { min-height: 44px; padding: 0 16px; font-size: .92rem; }
+/* Baris aksi kartu Agenda (Dewi + Kirana, 20 Nov 2026): satu baris di layar lebar, dua baris di 390px. */
+.agenda-aksi { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 8px 12px; margin-top: 14px; }
+.agenda-aksi > .agenda-kalender, .agenda-aksi > .salin-kartu, .agenda-aksi > .agenda-sumber-lipat { margin: 0; }
+.agenda-aksi > .salin-kartu { flex: 0 1 auto; max-width: 100%; }
+.agenda-aksi > .agenda-sumber-lipat { flex: 0 1 auto; }
+.agenda-aksi > .agenda-sumber-lipat[open] { flex-basis: 100%; }
+.agenda-aksi > .salin-kartu:has(.alamat-salin:not([hidden])) { flex-basis: 100%; }
 .kabar.agenda { scroll-margin-top: 16px; }
 .kabar.agenda:focus { outline: none; }
 .kabar.agenda:focus-visible { outline: 3px solid var(--aksen); outline-offset: 2px; }

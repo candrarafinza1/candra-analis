@@ -570,7 +570,7 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Dampak bagi pemula: berbagi jadwal yang tepat tanpa harus menjelaskan.
 - Batasan: tanpa layanan pihak ketiga, tanpa data pribadi; sorotan dimatikan bila prefers-reduced-motion; tombol bisa dipakai keyboard.
 - Usaha: kecil (Arif + Dewi; Nina menambah cek).
-- Status: diusulkan Kirana 20 Nov 15.xx; dipilih Bima; **selesai 20 Nov 16.xx** (cek 2f-8). Tinjauan Kirana: kartu 390px 481→535px karena tombol Salin di baris sendiri → tugas lanjutan Dewi (satu baris aksi).
+- Status: diusulkan Kirana 20 Nov 15.xx; dipilih Bima; **selesai 20 Nov 16.xx** (cek 2f-8). Tinjauan Kirana: kartu 390px 481→535px karena tombol Salin di baris sendiri → tugas lanjutan Dewi (satu baris aksi). **Selesai 20 Nov 17.xx** (Dewi + Kirana, cek 2f-9): kalender, Salin tautan, dan Sumber (n) dalam satu baris aksi flex-wrap; 390px kartu 535→483px, 1280px ketiganya sebaris (kartu 322px).
 
 ### 38. Agenda: contoh hitungan dividen di kartu ("bila punya 1 lot")
 - **Angka dividen jadi nyata bagi pemula** — konten, usaha kecil
@@ -580,7 +580,7 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Dampak bagi pemula: paham besar dividen per lot tanpa kalkulator.
 - Batasan: hanya contoh hitungan, bukan perkiraan keuntungan; tanpa kata ajakan (Hana meninjau); USD ditulis dalam US$ tanpa konversi kurs.
 - Usaha: kecil (Dewi + Sari; Nina menambah cek).
-- Status: diusulkan Kirana 20 Nov 15.xx.
+- Status: diusulkan Kirana 20 Nov 15.xx; **dipilih Bima 20 Nov 17.xx** (masuk BACKLOG.md).
 
 ### 39. Beranda: pita "Agenda terdekat" menampilkan hitung mundur dengan istilah yang bisa diketuk
 - **Istilah tanggal langsung terjelaskan di beranda** — tampilan, usaha kecil

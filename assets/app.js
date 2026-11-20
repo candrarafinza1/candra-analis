@@ -1734,13 +1734,18 @@
       el("h3", { class: "kabar-judul" }, judul),
       el("p", { class: "kabar-isi", text: info.join(" ") }),
       ul,
-      tombolKalender(x, kini),
-      tombolSalinKartu(dasarAlamatAgenda() + "#" + idK, papanKlipAgenda(),
-        ipo ? (a.kode || a.nama) : a.kode + " dividen " + a.jenis + " " + a.tahunBuku),
-      // Dewi (20 Nov 2026, IDE.md #36): daftar sumber dilipat agar kartu lebih pendek; jumlah sumber tetap terlihat.
-      el("details", { class: "agenda-sumber-lipat" }, [
-        el("summary", { class: "agenda-sumber-judul", text: "Sumber (" + sumber.children.length + ")" }),
-        sumber
+      /* Dewi + Kirana (20 Nov 2026, temuan tinjauan #37): kalender, "Salin tautan", dan "Sumber (n)" dalam satu baris aksi
+         yang boleh turun baris (flex-wrap). Di layar lebar ketiganya sebaris; di 390px tombol kalender penuh satu baris lalu
+         "Salin tautan" sejajar "Sumber (n)". Urutan DOM = urutan tampil = urutan Tab. */
+      el("div", { class: "agenda-aksi" }, [
+        tombolKalender(x, kini),
+        tombolSalinKartu(dasarAlamatAgenda() + "#" + idK, papanKlipAgenda(),
+          ipo ? (a.kode || a.nama) : a.kode + " dividen " + a.jenis + " " + a.tahunBuku),
+        // Dewi (20 Nov 2026, IDE.md #36): daftar sumber dilipat agar kartu lebih pendek; jumlah sumber tetap terlihat.
+        el("details", { class: "agenda-sumber-lipat" }, [
+          el("summary", { class: "agenda-sumber-judul", text: "Sumber (" + sumber.children.length + ")" }),
+          sumber
+        ])
       ])
     ]);
   }

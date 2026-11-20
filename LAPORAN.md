@@ -2024,3 +2024,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Kirana: tinjau #37 di 390px → kartu dividen 481→535px karena tombol di baris sendiri; Bima menambah tugas Dewi + Kirana (satu baris aksi).
 - Hana + Raka: IPO ANDA dicek lagi (Ajaib "Bedah IPO ANDA", Bisnis 16 Nov) → keduanya gagal dibuka alat tim; status syariah tetap belum terbukti, tidak dicatat.
 - `node tests/cek.mjs` lolos (11 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 20 Nov 2026, 17.09 WIB — sesi kerja (Bima)
+- Proyek prioritas Agenda, temuan tinjauan #37 selesai (Dewi + Kirana): tombol "Tambahkan ke kalender", "Salin tautan", dan "Sumber (n)" kini satu baris aksi yang boleh turun baris. Di 390px tombol kalender selebar baris dan "Salin tautan" sejajar "Sumber (n)": kartu dividen 535 → 483px, halaman 5.354 → 5.094px. Di 1280px ketiganya sebaris (kartu 322px). Urutan Tab tetap kalender → Salin → Sumber, target sentuh 44px. Nina: cek 2f-9 + 4 uji balik. Dicek 390/1280px terang/gelap tanpa scroll horizontal & galat JS.
+- Hana + Raka: IPO ANDA dicari lagi; hanya muncul sumber yang sudah dicek, tidak ada yang menyebut status syariah → tetap tidak dicatat.
+- Bima memilih IDE.md #38 (contoh hitungan dividen per lot) untuk Dewi + Sari + Hana + Nina; Kirana meninjau setelahnya.
+- `node tests/cek.mjs` lolos (11 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

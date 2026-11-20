@@ -7419,6 +7419,35 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
   ]) ok(rusakJ + rusakC !== app + css && (await uji(rusakJ, rusakC)).some((x) => x.includes(pesan)), `uji balik Agenda tautan per kartu: "${pesan}" harus tertangkap`);
 }
 
+// 2f-9. Agenda: baris aksi kartu (kalender, Salin tautan, Sumber) dalam satu wadah flex-wrap (Nina, 20 Nov 2026, temuan tinjauan #37).
+{
+  const app = readFileSync("assets/app.js", "utf8"), css = readFileSync("assets/styles.css", "utf8");
+  const uji = (js, css) => {
+    const salah = [];
+    const i = js.indexOf("  function kartuAgenda("), j = js.indexOf("\n  }\n", i), kartu = i < 0 ? "" : js.slice(i, j);
+    const k = kartu.indexOf('el("div", { class: "agenda-aksi" }');
+    if (k < 0) return ["kartu Agenda wajib wadah .agenda-aksi"];
+    const bagian = kartu.slice(k);
+    const pK = bagian.indexOf("tombolKalender("), pS = bagian.indexOf("tombolSalinKartu("), pD = bagian.indexOf('class: "agenda-sumber-lipat"');
+    if (pK < 0 || pS < 0 || pD < 0) salah.push("kalender, Salin tautan, dan Sumber wajib di dalam .agenda-aksi");
+    else if (!(pK < pS && pS < pD)) salah.push("urutan Tab wajib: kalender, Salin tautan, Sumber");
+    const blok = (sel) => { const m = css.match(new RegExp("(^|\\n)" + sel.replace(/[.*+?^${}()|[\]\\>]/g, "\\$&") + " \\{([^}]*)\\}")); return m ? m[2] : ""; };
+    const aksi = blok(".agenda-aksi");
+    if (!/display:\s*flex/.test(aksi) || !/flex-wrap:\s*wrap/.test(aksi)) salah.push(".agenda-aksi wajib display:flex + flex-wrap:wrap (tanpa scroll horizontal)");
+    if (!/\.agenda-aksi > \.agenda-sumber-lipat\[open\] \{[^}]*flex-basis:\s*100%/.test(css)) salah.push("Sumber yang dibuka wajib selebar kartu (flex-basis 100%)");
+    if (!/\.tombol-salin-kartu \{[^}]*min-height:\s*44px/.test(css) || !/\.agenda-sumber-judul \{[^}]*min-height:\s*44px/.test(css)) salah.push("target sentuh Salin & Sumber tetap ≥44px");
+    return salah;
+  };
+  const s9 = uji(app, css);
+  ok(!s9.length, "Agenda baris aksi: " + s9.join("; "));
+  for (const [rusakJ, rusakC, pesan] of [
+    [app.replace('el("div", { class: "agenda-aksi" }', 'el("div", { class: "agenda-x" }'), css, "wadah .agenda-aksi"],
+    [app.replace(/(\n\s*)tombolKalender\(x, kini\),(\n\s*tombolSalinKartu\([^\n]*\n[^\n]*\),)/, "$2$1tombolKalender(x, kini),"), css, "urutan Tab"],
+    [app, css.replace(".agenda-aksi { display: flex; flex-wrap: wrap;", ".agenda-aksi { display: flex;"), "flex-wrap"],
+    [app, css.replace(".agenda-aksi > .agenda-sumber-lipat[open] { flex-basis: 100%; }", ""), "flex-basis 100%"],
+  ]) ok(rusakJ + rusakC !== app + css && uji(rusakJ, rusakC).some((x) => x.includes(pesan)), `uji balik Agenda baris aksi: "${pesan}" harus tertangkap`);
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);
 
