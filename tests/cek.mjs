@@ -7342,6 +7342,83 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
   ]) ok(cekLipat(...rusak).some((x) => x.includes(pesan)), `uji balik Agenda sumber dilipat: "${pesan}" harus tertangkap`);
 }
 
+// 2f-8. Agenda: id stabil per kartu, alamat #id menyorot kartu, tombol "Salin tautan" per kartu (Nina, 20 Nov 2026, IDE.md #37).
+{
+  const app = readFileSync("assets/app.js", "utf8"), css = readFileSync("assets/styles.css", "utf8");
+  const ambil = (js, awal) => { const i = js.indexOf("  " + awal); const j = js.indexOf("\n  }\n", i); return i < 0 || j < 0 ? "" : js.slice(i, j + 5); };
+  const uji = async (js, css) => {
+    const salah = [];
+    const kode = [ambil(js, "function el("), ambil(js, "function slugAgenda("), ambil(js, "function idKartuAgenda("), ambil(js, "function tombolSalinKartu(")];
+    if (!kode.every(Boolean)) return ["fungsi el/slugAgenda/idKartuAgenda/tombolSalinKartu tidak ketemu"];
+    const simpul = (tag) => ({ tag, anak: [], atribut: {}, className: "", value: "", textContent: "", hidden: false, _d: {}, _fokus: 0, _pilih: 0,
+      appendChild(c) { this.anak.push(c); return c; }, setAttribute(k, v) { this.atribut[k] = String(v); if (k === "hidden") this.hidden = true; },
+      addEventListener(n, f) { (this._d[n] = this._d[n] || []).push(f); }, focus() { this._fokus++; }, select() { this._pilih++; } });
+    const document = { createElement: simpul, createTextNode: (t) => ({ tag: "#text", teks: t }) };
+    let f;
+    try { f = new Function("document", kode.join("\n") + "\nreturn { idKartuAgenda, tombolSalinKartu };")(document); }
+    catch (e) { return ["kode galat: " + e.message]; }
+    // (a) id stabil
+    const idD = f.idKartuAgenda({ jenis: "dividen", data: { kode: "TOTO", jenis: "interim", tahunBuku: 2026 } });
+    if (idD !== "dividen-toto-2026-interim") salah.push(`id dividen harus dividen-toto-2026-interim (dapat ${idD})`);
+    const idI = f.idKartuAgenda({ jenis: "ipo", data: { kode: null, nama: "PT Contoh Jaya Tbk" } });
+    if (idI !== "ipo-pt-contoh-jaya-tbk") salah.push(`id IPO tanpa kode harus dari nama (dapat ${idI})`);
+    if (f.idKartuAgenda({ jenis: "ipo", data: { kode: "ANDA", nama: "x" } }) !== "ipo-anda") salah.push("id IPO dengan kode harus ipo-<kode>");
+    const jahat = f.idKartuAgenda({ jenis: "ipo", data: { kode: '"><img src=x>', nama: "x" } });
+    if (!/^ipo-[a-z0-9-]+$/.test(jahat)) salah.push("id harus hanya huruf kecil, angka, dan tanda hubung");
+    for (const a of window_AGENDA()) { const id = f.idKartuAgenda(a); if (!/^(ipo|dividen)-[a-z0-9-]+$/.test(id)) salah.push("id data asli tidak sah: " + id); }
+    // (b) tombol salin
+    const cari = (m, g) => (g(m) ? m : (m.anak || []).map((c) => cari(c, g)).find(Boolean));
+    const alamat = "https://candra-analis.vercel.app/agenda.html#dividen-toto-2026-interim";
+    const siap = (papan) => { const w = f.tombolSalinKartu(alamat, papan, "TOTO dividen interim 2026");
+      return { tombol: cari(w, (m) => m.tag === "button"), kotak: cari(w, (m) => m.tag === "input"), info: cari(w, (m) => m.atribut && m.atribut.role === "status") }; };
+    const tunggu = () => new Promise((r) => setTimeout(r, 0));
+    let disalin = null;
+    const a = siap({ writeText: (t) => { disalin = t; return Promise.resolve(); } });
+    if (!a.tombol || !a.kotak || !a.info) return salah.concat(["button/input/role=status harus ada"]);
+    if (a.tombol.atribut.type !== "button" || a.tombol.textContent !== "Salin tautan") salah.push('tombol harus type=button bertuliskan "Salin tautan"');
+    if (!/TOTO/.test(a.tombol.atribut["aria-label"] || "")) salah.push("aria-label tombol harus menyebut kartunya");
+    if ("id" in a.tombol.atribut || "id" in a.info.atribut || "id" in a.kotak.atribut) salah.push("tombol per kartu tidak boleh memakai id tetap (id ganda)");
+    if (!("readonly" in a.kotak.atribut) || !a.kotak.hidden) salah.push("kotak alamat harus readonly dan tersembunyi sebelum dibutuhkan");
+    a.tombol._d.click.forEach((g) => g({})); await tunggu();
+    if (disalin !== alamat) salah.push("alamat yang disalin harus persis alamat kartu");
+    if (!/disalin\.$/.test(a.info.textContent)) salah.push("berhasil: pesan disalin harus muncul");
+    const b = siap(null); b.tombol._d.click.forEach((g) => g({})); await tunggu();
+    if (b.kotak.hidden || !b.kotak._fokus || !b.kotak._pilih) salah.push("tanpa Clipboard API: kotak alamat harus tampil, difokus, dan terpilih");
+    const c = siap({ writeText: () => Promise.reject(new Error("x")) }); c.tombol._d.click.forEach((g) => g({})); await tunggu(); await tunggu();
+    if (c.kotak.hidden || /disalin\.$/.test(c.info.textContent)) salah.push("ditolak: kotak alamat tampil, tanpa pesan disalin");
+    if (/beli|jual/i.test(a.tombol.textContent + a.info.textContent + b.info.textContent)) salah.push("tanpa kata beli/jual");
+    // (c) pemasangan di kartu & halaman
+    const kartu = ambil(js, "function kartuAgenda("), sorot = ambil(js, "function sorotKartuAgenda("), render = ambil(js, "function renderAgenda()");
+    if (!/id: idK, tabindex: "-1"/.test(kartu)) salah.push("kartu Agenda wajib id stabil + tabindex=-1 agar bisa difokus");
+    if (!/tombolSalinKartu\(dasarAlamatAgenda\(\) \+ "#" \+ idK/.test(kartu)) salah.push("tiap kartu wajib tombol Salin tautan ke alamat Agenda + #id");
+    if (!/dipakai\[idK\]/.test(render)) salah.push("id ganda harus diberi akhiran agar unik");
+    if (!/sorotKartuAgenda\(akar, saring\)/.test(render) || !/hashchange/.test(render)) salah.push("alamat #id wajib menyorot kartu saat dimuat dan saat hash berubah");
+    if (!/saring\.terapkan\("semua"/.test(sorot)) salah.push("kartu yang tersembunyi pilihan harus ditampilkan lagi (Semua)");
+    if (!/prefers-reduced-motion: reduce/.test(sorot) || !/\^\(ipo\|dividen\)-/.test(sorot)) salah.push("sorot wajib cek reduced-motion dan menerima id agenda saja");
+    const m = css.match(/@media \(prefers-reduced-motion: no-preference\) \{\s*\.kabar\.agenda\.agenda-sorot \{[^}]*animation:/);
+    if (!m) salah.push("animasi sorotan hanya boleh di dalam prefers-reduced-motion: no-preference");
+    if (/^\s*\.kabar\.agenda\.agenda-sorot \{[^}]*animation/m.test(css.replace(/@media \(prefers-reduced-motion: no-preference\) \{[\s\S]*?\n\}/g, ""))) salah.push("animasi sorotan tidak boleh di luar blok no-preference");
+    return salah;
+  };
+  function window_AGENDA() {
+    const w = {}; new Function("window", readFileSync("data/agenda.js", "utf8"))(w);
+    return (w.AGENDA_IPO || []).map((d) => ({ jenis: "ipo", data: d })).concat((w.AGENDA_DIVIDEN || []).map((d) => ({ jenis: "dividen", data: d })));
+  }
+  const s8 = await uji(app, css);
+  ok(!s8.length, "Agenda tautan per kartu: " + s8.join("; "));
+  const ids = window_AGENDA().map((x) => x.jenis + ":" + (x.data.kode || x.data.nama) + ":" + x.data.jenis + ":" + x.data.tahunBuku);
+  ok(new Set(ids).size === ids.length, "data/agenda.js tidak boleh punya entri ganda (id kartu jadi bertabrakan)");
+  for (const [rusakJ, rusakC, pesan] of [
+    [app.replace('return ["dividen", slugAgenda(a.kode)', 'return ["dividen", a.kode'), css, "id dividen harus"],
+    [app.replace('.replace(/[^a-z0-9]+/g, "-")', ""), css, "hanya huruf kecil"],
+    [app.replace('class: "info-salin", role: "status", "aria-live": "polite" });\n    var tombol = el("button", { type: "button", class: "tombol tombol-salin tombol-salin-kartu"',
+      'class: "info-salin", id: "salin-info", role: "status", "aria-live": "polite" });\n    var tombol = el("button", { type: "button", class: "tombol tombol-salin tombol-salin-kartu"'), css, "id tetap"],
+    [app.replace('id: idK, tabindex: "-1"', "id: idK"), css, "tabindex=-1"],
+    [app.replace('if (k.hidden || (k.parentNode && k.parentNode.hidden)) saring.terapkan("semua", true);', ""), css, "Semua"],
+    [app, css.replace("@media (prefers-reduced-motion: no-preference) {\n  .kabar.agenda.agenda-sorot", ".x{}\n@media print {\n  .kabar.agenda.agenda-sorot"), "no-preference"],
+  ]) ok(rusakJ + rusakC !== app + css && (await uji(rusakJ, rusakC)).some((x) => x.includes(pesan)), `uji balik Agenda tautan per kartu: "${pesan}" harus tertangkap`);
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);
 

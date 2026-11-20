@@ -1652,8 +1652,44 @@
     lewat.sort(function (a, b) { return a.kunciUrut < b.kunciUrut ? 1 : a.kunciUrut > b.kunciUrut ? -1 : 0; });
     return { depan: depan, lewat: lewat };
   }
-  function kartuAgenda(x, kini) {
+  /* Arif + Dewi (20 Nov 2026, IDE.md #37): tiap kartu Agenda punya id stabil (mis. dividen-toto-2026-interim, ipo-anda)
+     agar satu jadwal bisa dibagikan lewat alamat halaman Agenda + "#" + id. Id hanya dari kode/nama/jenis/tahun buku di data. */
+  function slugAgenda(t) {
+    return String(t == null ? "" : t).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+  }
+  function idKartuAgenda(x) {
+    var a = x.data || {};
+    if (x.jenis === "ipo") return "ipo-" + (slugAgenda(a.kode || a.nama) || "tanpa-nama");
+    return ["dividen", slugAgenda(a.kode) || "tanpa-kode", slugAgenda(a.tahunBuku), slugAgenda(a.jenis)].filter(Boolean).join("-");
+  }
+  // Tombol "Salin tautan" per kartu, pola sama dengan tombolSalin di profil (Clipboard API, cadangan kotak teks terpilih).
+  // Tanpa id tetap (bisa banyak kartu), tanpa simpanan, tanpa layanan luar. Pesan tetap sampai tombol ditekan lagi.
+  function tombolSalinKartu(alamat, papan, label) {
+    var info = el("p", { class: "info-salin", role: "status", "aria-live": "polite" });
+    var tombol = el("button", { type: "button", class: "tombol tombol-salin tombol-salin-kartu", text: "Salin tautan",
+      "aria-label": "Salin tautan kartu ini: " + label });
+    var kotak = el("input", { type: "text", class: "alamat-salin", readonly: "", hidden: "", "aria-label": "Alamat kartu " + label });
+    kotak.value = alamat;
+    function cadangan() {
+      kotak.hidden = false;
+      kotak.focus();
+      kotak.select();
+      info.textContent = "Tautan belum bisa disalin otomatis. Alamatnya sudah dipilih di kotak ini: salin dengan Ctrl+C, atau tekan lama lalu Salin.";
+    }
+    tombol.addEventListener("click", function () {
+      if (!papan || typeof papan.writeText !== "function") { cadangan(); return; }
+      var janji;
+      try { janji = papan.writeText(alamat); } catch (err) { cadangan(); return; }
+      Promise.resolve(janji).then(function () {
+        kotak.hidden = true;
+        info.textContent = "Tautan kartu " + label + " disalin.";
+      }, cadangan);
+    });
+    return el("div", { class: "salin-profil salin-kartu" }, [tombol, kotak, info]);
+  }
+  function kartuAgenda(x, kini, idK) {
     var a = x.data, ipo = x.jenis === "ipo";
+    idK = idK || idKartuAgenda(x);
     var e = !ipo && (typeof EMITEN !== "undefined") && EMITEN.find(function (z) { return z.kode === a.kode; });
     var judul = ipo
       ? [el("span", { class: "kode", text: a.kode || "Kode belum ada" }), el("span", { class: "nama-emiten", text: a.nama })]
@@ -1693,12 +1729,14 @@
     (ipo ? [a.buktiSyariah].concat(a.sumber || []) : a.sumber || []).forEach(function (s) {
       if (s && s.url) sumber.appendChild(el("li", null, [el("a", { href: s.url, target: "_blank", rel: "noopener", text: s.judul + " (tab baru)" })]));
     });
-    return el("li", { class: "kabar agenda" + (x.berikut ? "" : " agenda-sudah") }, [
+    return el("li", { class: "kabar agenda" + (x.berikut ? "" : " agenda-sudah"), id: idK, tabindex: "-1" }, [
       el("p", { class: "kabar-kepala" }, kepala),
       el("h3", { class: "kabar-judul" }, judul),
       el("p", { class: "kabar-isi", text: info.join(" ") }),
       ul,
       tombolKalender(x, kini),
+      tombolSalinKartu(dasarAlamatAgenda() + "#" + idK, papanKlipAgenda(),
+        ipo ? (a.kode || a.nama) : a.kode + " dividen " + a.jenis + " " + a.tahunBuku),
       // Dewi (20 Nov 2026, IDE.md #36): daftar sumber dilipat agar kartu lebih pendek; jumlah sumber tetap terlihat.
       el("details", { class: "agenda-sumber-lipat" }, [
         el("summary", { class: "agenda-sumber-judul", text: "Sumber (" + sumber.children.length + ")" }),
@@ -1875,6 +1913,30 @@
     wadah.hidden = false;
   }
   var CATATAN_ICS = "Tombol \u201cTambahkan ke kalender\u201d di tiap kartu membuat berkas .ics untuk aplikasi kalender di HP atau komputer, dengan pengingat sehari sebelumnya pukul 09.00. Berkas dibuat di perangkat Anda; tidak ada data yang dikirim.";
+  function dasarAlamatAgenda() {
+    try { return String(location.href || "").split(/[?#]/)[0] || "agenda.html"; } catch (e) { return "agenda.html"; }
+  }
+  function papanKlipAgenda() {
+    return typeof window !== "undefined" && window.isSecureContext && typeof navigator !== "undefined" && navigator.clipboard ? navigator.clipboard : null;
+  }
+  // Alamat Agenda berakhiran "#" + id kartu: kartu itu ditampilkan (pilihan kembali ke "Semua" bila kartunya tersembunyi), digulir ke layar,
+  // difokus, dan disorot sebentar. Sorotan bergerak hanya bila prefers-reduced-motion: no-preference (lihat styles.css).
+  function sorotKartuAgenda(akar, saring) {
+    var id = "";
+    try { id = decodeURIComponent(String(location.hash || "").slice(1)); } catch (e) { return null; }
+    if (!/^(ipo|dividen)-[a-z0-9-]+$/.test(id)) return null;
+    var k = document.getElementById(id);
+    if (!k || !akar.contains(k)) return null;
+    if (k.hidden || (k.parentNode && k.parentNode.hidden)) saring.terapkan("semua", true);
+    var tenang = false;
+    try { tenang = window.matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) { /* anggap boleh bergerak */ }
+    akar.querySelectorAll(".agenda-sorot").forEach(function (z) { z.classList.remove("agenda-sorot"); });
+    k.classList.add("agenda-sorot");
+    k.addEventListener("animationend", function () { k.classList.remove("agenda-sorot"); }, { once: true });
+    try { k.scrollIntoView({ block: "start", behavior: tenang ? "auto" : "smooth" }); } catch (e) { k.scrollIntoView(); }
+    try { k.focus({ preventScroll: true }); } catch (e) { k.focus(); }
+    return k;
+  }
   function renderAgenda() {
     var akar = document.getElementById("agenda");
     if (!akar) return;
@@ -1886,10 +1948,17 @@
     akar.appendChild(el("p", { class: "agenda-ringkas", id: "agenda-ringkas" }, [el("strong", { text: "Minggu ini" }), " " + ringkasMingguIni(s, kini)]));
     var saring = kotakSaringAgenda(akar);
     akar.appendChild(saring);
+    var dipakai = {};
     // Tiap judul bagian dan daftarnya diberi data-jenis agar bisa disembunyikan tombol pilihan (IDE.md #35).
     function bagian(id, judulTeks, ketKosong, daftar, jenisBagian) {
       var ul = el("ul", { class: "kabar-daftar", "data-jenis": jenisBagian });
-      daftar.forEach(function (x) { var k = kartuAgenda(x, kini); k.setAttribute("data-jenis", x.jenis); ul.appendChild(k); });
+      daftar.forEach(function (x) {
+        // Id ganda (dua entri sama) diberi akhiran -2, -3 agar tiap alamat menunjuk satu kartu.
+        var dasar = idKartuAgenda(x), idK = dasar, n = 1;
+        while (dipakai[idK]) idK = dasar + "-" + (++n);
+        dipakai[idK] = true;
+        var k = kartuAgenda(x, kini, idK); k.setAttribute("data-jenis", x.jenis); ul.appendChild(k);
+      });
       akar.appendChild(el("h2", { class: "judul-profil-bagian", id: id, text: judulTeks, "data-jenis": jenisBagian }));
       akar.appendChild(daftar.length ? ul : el("p", { class: "agenda-kosong", text: ketKosong, "data-jenis": jenisBagian }));
     }
@@ -1909,6 +1978,8 @@
     // Penjelasan berkas .ics ditulis sekali di atas daftar, hanya bila ada tombol kalender (IDE.md #36).
     if (akar.querySelector(".tombol-kalender")) akar.insertBefore(el("p", { class: "agenda-catatan-ics", id: "catatan-ics", text: CATATAN_ICS }), h2Awal);
     saring.terapkan(jenisAwalAgenda());
+    sorotKartuAgenda(akar, saring);
+    window.addEventListener("hashchange", function () { sorotKartuAgenda(akar, saring); });
   }
   /* Dewi + Arif (20 Nov 2026, IDE.md #35): ringkasan "Minggu ini" dan tombol pilihan Semua / IPO / Dividen.
      Ringkasan hanya menghitung tanggal dari data yang sama (hari ini sampai 6 hari lagi), tanpa kata ajakan.

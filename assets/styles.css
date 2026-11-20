@@ -897,6 +897,17 @@ button.istilah:hover, button.istilah[aria-expanded="true"] { color: var(--aksen)
 .agenda-kalender { margin-top: 14px; }
 .tombol-kalender { border-color: #7b82d6; min-height: 44px; padding: 0 18px; font-size: .95rem; max-width: 100%; text-align: center; }
 .kalender-info { margin: 4px 0 0; font-size: .9rem; font-weight: 600; }
+/* Tautan per kartu Agenda (Arif + Dewi, 20 Nov 2026, IDE.md #37) */
+.salin-kartu { margin: 10px 0 0; }
+.tombol-salin-kartu { min-height: 44px; padding: 0 16px; font-size: .92rem; }
+.kabar.agenda { scroll-margin-top: 16px; }
+.kabar.agenda:focus { outline: none; }
+.kabar.agenda:focus-visible { outline: 3px solid var(--aksen); outline-offset: 2px; }
+.kabar.agenda.agenda-sorot { outline: 3px solid var(--aksen); outline-offset: 2px; }
+@media (prefers-reduced-motion: no-preference) {
+  .kabar.agenda.agenda-sorot { animation: sorot-kartu 2.4s ease-out forwards; }
+  @keyframes sorot-kartu { 0%, 60% { outline-color: var(--aksen); } 100% { outline-color: transparent; } }
+}
 .titik-baru { display: inline-block; width: 8px; height: 8px; margin-left: 6px; border-radius: 50%; background: var(--bulan); vertical-align: middle; }
 
 /* Pemberitahuan Agenda di beranda, Radar, dan profil (Dewi + Galih, 20 Nov 2026) */
