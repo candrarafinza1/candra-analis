@@ -1919,7 +1919,8 @@
       ul.appendChild(el("li", null, [
         el("span", { class: "kode", text: a.kode || "IPO" }),
         el("span", { class: "agenda-pita-isi" }, [
-          (ipo ? "IPO " + a.nama + ": " : "Dividen " + a.jenis + ": ") + namaB + " ",
+          (ipo ? "IPO " + a.nama + ": " : "Dividen " + a.jenis + ": "),
+          el("span", { class: "agenda-pita-tanggal", text: namaB }), " ",
           el("time", { datetime: x.berikut.tanggal, text: tanggalId(x.berikut.tanggal) })
         ]),
         el("span", { class: "agenda-mundur", text: n < 0 && x.berikut.sampai ? "sedang berjalan" : teksMundur(n) })
@@ -1930,8 +1931,12 @@
       el("p", { class: "pengantar" }, ["Jadwal IPO dan dividen saham syariah. ",
         el("strong", { text: "Agenda adalah jadwal, bukan saran membeli atau menjual." })]),
       ul,
-      el("p", { style: "margin-top:16px" }, [el("a", { href: "agenda.html", text: "Semua agenda IPO & dividen" })])
+      el("p", { class: "agenda-pita-tautan" }, [el("a", { href: "agenda.html", text: "Semua agenda IPO & dividen" }),
+        el("a", { href: "agenda.html#arti-tanggal", text: "Arti tanggal" })])
     ]));
+    // Dewi + Nina (20 Nov 2026, IDE.md #39): nama tanggal di tiap baris (Cum date, Penawaran umum, dll.) bisa diketuk.
+    // Hanya nama tanggal yang ditandai (nama emiten & jenis dividen tidak), di setiap baris agar tiap acara terjelaskan.
+    ul.querySelectorAll(".agenda-pita-tanggal").forEach(function (s) { pasangIstilah(s); });
     wadah.hidden = false;
   }
   var CATATAN_ICS = "Tombol \u201cTambahkan ke kalender\u201d di tiap kartu membuat berkas .ics untuk aplikasi kalender di HP atau komputer, dengan pengingat sehari sebelumnya pukul 09.00. Berkas dibuat di perangkat Anda; tidak ada data yang dikirim.";
@@ -2001,7 +2006,22 @@
     if (akar.querySelector(".tombol-kalender")) akar.insertBefore(el("p", { class: "agenda-catatan-ics", id: "catatan-ics", text: CATATAN_ICS }), h2Awal);
     saring.terapkan(jenisAwalAgenda());
     sorotKartuAgenda(akar, saring);
-    window.addEventListener("hashchange", function () { sorotKartuAgenda(akar, saring); });
+    bukaArtiTanggal(akar);
+    window.addEventListener("hashchange", function () { sorotKartuAgenda(akar, saring); bukaArtiTanggal(akar); });
+  }
+  // Dewi + Nina (20 Nov 2026, IDE.md #39): tautan "Arti tanggal" dari beranda (agenda.html#arti-tanggal) membuka kotak arti
+  // walau biasanya tertutup sesudah kunjungan pertama, lalu menggulir ke sana (tanpa gulir halus bila gerak dikurangi).
+  function bukaArtiTanggal(akar) {
+    if (String(location.hash || "") !== "#arti-tanggal") return null;
+    var d = akar.querySelector("#arti-tanggal");
+    if (!d) return null;
+    d.open = true;
+    var tenang = false;
+    try { tenang = window.matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) { /* anggap boleh bergerak */ }
+    try { d.scrollIntoView({ block: "start", behavior: tenang ? "auto" : "smooth" }); } catch (e) { d.scrollIntoView(); }
+    var r = d.querySelector("summary");
+    if (r) { try { r.focus({ preventScroll: true }); } catch (e) { r.focus(); } }
+    return d;
   }
   /* Dewi + Arif (20 Nov 2026, IDE.md #35): ringkasan "Minggu ini" dan tombol pilihan Semua / IPO / Dividen.
      Ringkasan hanya menghitung tanggal dari data yang sama (hari ini sampai 6 hari lagi), tanpa kata ajakan.

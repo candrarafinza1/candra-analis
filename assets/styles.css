@@ -910,7 +910,7 @@ button.istilah:hover, button.istilah[aria-expanded="true"] { color: var(--aksen)
 .agenda-aksi > .agenda-sumber-lipat { flex: 0 1 auto; }
 .agenda-aksi > .agenda-sumber-lipat[open] { flex-basis: 100%; }
 .agenda-aksi > .salin-kartu:has(.alamat-salin:not([hidden])) { flex-basis: 100%; }
-.kabar.agenda { scroll-margin-top: 16px; }
+.kabar.agenda, .agenda-arti { scroll-margin-top: 16px; }
 .kabar.agenda:focus { outline: none; }
 .kabar.agenda:focus-visible { outline: 3px solid var(--aksen); outline-offset: 2px; }
 .kabar.agenda.agenda-sorot { outline: 3px solid var(--aksen); outline-offset: 2px; }
@@ -927,6 +927,8 @@ button.istilah:hover, button.istilah[aria-expanded="true"] { color: var(--aksen)
   background: var(--putih); border: 1px solid var(--garis); border-radius: var(--radius-kecil); padding: 10px 14px; min-width: 0;
 }
 .agenda-pita-isi { overflow-wrap: anywhere; }
+/* Dewi (20 Nov 2026, IDE.md #39): dua tautan di bawah pita beranda, boleh turun baris di HP. */
+.agenda-pita-tautan { margin-top: 16px; display: flex; flex-wrap: wrap; gap: 8px 24px; }
 @media (max-width: 600px) {
   .agenda-pita li { grid-template-columns: auto minmax(0, 1fr); }
   .agenda-pita .agenda-mundur { grid-column: 2; }

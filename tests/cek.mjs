@@ -26,6 +26,10 @@ for (const h of halaman) {
 // dan tautan jangkar (#bagian) harus menunjuk id yang ada di halaman tujuan.
 {
   const idDi = new Map(halaman.map(h => [h, new Set([...readFileSync(h, "utf8").matchAll(/\bid="([^"]+)"/g)].map(m => m[1]))]));
+  // Nina (20 Nov 2026, IDE.md #39): id yang dibuat app.js dengan teks tetap (mis. el("details", { id: "arti-tanggal" })) ikut dihitung,
+  // tetapi hanya untuk halaman yang memuat app.js. id hasil hitungan (variabel) tidak dihitung.
+  const idJs = [...readFileSync("assets/app.js", "utf8").matchAll(/\bid: "([a-z][a-z0-9-]*)"/g)].map(m => m[1]);
+  for (const h of halaman) if (/src="assets\/app\.js/.test(readFileSync(h, "utf8"))) idJs.forEach(x => idDi.get(h).add(x));
   const skrip = ["assets", "data"].flatMap(d => readdirSync(d).filter(f => f.endsWith(".js")).map(f => `${d}/${f}`));
   for (const f of skrip) {
     for (const [, nama, jangkar] of readFileSync(f, "utf8").matchAll(/(?<![\/\w.-])([a-z][a-z0-9-]*\.html)(?:#([A-Za-z0-9_-]+))?/g)) {
@@ -7490,6 +7494,50 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
     [app.replace("ipo ? null : contohDividenLot(a),", ""), "wajib memanggil"],
     [app.replace('" sebelum pajak."', '" sebelum pajak, jangan sampai ketinggalan."'), "ajakan"],
   ]) ok(rusak !== app && uji(rusak).some((x) => x.includes(pesan)), `uji balik Agenda contoh hitungan: "${pesan}" harus tertangkap`);
+}
+
+// 2f-11. Beranda: nama tanggal di pita "Agenda terdekat" bisa diketuk + tautan "Arti tanggal" (Nina, 20 Nov 2026, IDE.md #39).
+// Agenda: alamat #arti-tanggal membuka kotak arti walau tertutup, gulir tanpa animasi bila gerak dikurangi.
+{
+  const app = readFileSync("assets/app.js", "utf8");
+  const potongF = (js, awal) => { const i = js.indexOf(awal), j = js.indexOf("\n  }\n", i); return i < 0 ? "" : js.slice(i, j); };
+  const uji = (js) => {
+    const salah = [];
+    const f = potongF(js, "  function renderAgendaBeranda(");
+    if (!f) return ["fungsi renderAgendaBeranda wajib ada"];
+    if (!/el\("span", \{ class: "agenda-pita-tanggal", text: namaB \}\)/.test(f)) salah.push("nama tanggal wajib dibungkus span .agenda-pita-tanggal");
+    if (!/\.agenda-pita-tanggal"\)\.forEach\(function \(s\) \{ pasangIstilah\(s\); \}\)/.test(f)) salah.push("nama tanggal di tiap baris wajib dipasangi istilah");
+    if (!/href: "agenda\.html#arti-tanggal", text: "Arti tanggal"/.test(f)) salah.push('tautan "Arti tanggal" ke agenda.html#arti-tanggal wajib ada');
+    if (!/bukan saran membeli atau menjual/.test(f)) salah.push("kalimat bukan saran wajib tetap ada");
+    const b = potongF(js, "  function bukaArtiTanggal(");
+    if (!b) salah.push("fungsi bukaArtiTanggal wajib ada");
+    else {
+      if (!/"#arti-tanggal"/.test(b) || !/d\.open = true/.test(b)) salah.push("#arti-tanggal wajib membuka kotak arti");
+      if (!/prefers-reduced-motion: reduce/.test(b) || !/tenang \? "auto" : "smooth"/.test(b)) salah.push("gulir wajib menghormati prefers-reduced-motion");
+    }
+    const r = potongF(js, "  function renderAgenda(");
+    if (!/\n    bukaArtiTanggal\(akar\);\n/.test(r) || !/hashchange[^\n]*bukaArtiTanggal\(akar\)/.test(r)) salah.push("renderAgenda wajib memanggil bukaArtiTanggal saat muat & hashchange");
+    return salah;
+  };
+  const s11 = uji(app);
+  ok(!s11.length, "Beranda pita Agenda & arti tanggal: " + s11.join("; "));
+  // Setiap nama tanggal Agenda harus cocok dengan pola istilah di kamus (agar benar-benar menjadi tombol).
+  {
+    const i = app.indexOf("  var PENJELASAN_AGENDA = {"), j = app.indexOf("\n  };\n", i);
+    const PA = new Function(app.slice(i, j + 5) + " return PENJELASAN_AGENDA;")();
+    const IST = (() => { const w = {}; new Function("window", readFileSync("data/istilah.js", "utf8"))(w); return w.ISTILAH || []; })();
+    for (const [k, [nama]] of Object.entries(PA)) {
+      const cocok = IST.some((t) => t.pola.some((p) => new RegExp("(^|[^A-Za-z0-9À-ÿ])(" + p.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + ")(?![A-Za-z0-9À-ÿ])", t.besarKecil ? "" : "i").test(nama)));
+      ok(cocok, `nama tanggal Agenda "${nama}" (${k}) harus cocok dengan istilah di data/istilah.js`);
+    }
+  }
+  for (const [rusak, pesan] of [
+    [app.replace('el("span", { class: "agenda-pita-tanggal", text: namaB }), " ",', 'namaB + " ",'), "span .agenda-pita-tanggal"],
+    [app.replace('ul.querySelectorAll(".agenda-pita-tanggal").forEach(function (s) { pasangIstilah(s); });', ""), "dipasangi istilah"],
+    [app.replace('el("a", { href: "agenda.html#arti-tanggal", text: "Arti tanggal" })', 'el("span")'), "Arti tanggal"],
+    [app.replace("    d.open = true;\n", ""), "membuka kotak arti"],
+    [app.replace('    bukaArtiTanggal(akar);\n    window.addEventListener', "    window.addEventListener"), "saat muat & hashchange"],
+  ]) ok(rusak !== app && uji(rusak).some((x) => x.includes(pesan)), `uji balik pita Agenda beranda: "${pesan}" harus tertangkap`);
 }
 
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
