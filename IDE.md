@@ -555,7 +555,42 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Dampak bagi pemula: 2–3 kartu terlihat sekaligus di HP; sumber tetap mudah dibuka.
 - Batasan: sumber tidak boleh hilang dari halaman (aturan perusahaan: setiap angka bersumber); tanpa pustaka baru; hormati prefers-reduced-motion. Hana memastikan sumber tetap jelas untuk tiap angka.
 - Usaha: kecil (Dewi; Nina menyesuaikan cek).
-- Status: diusulkan Kirana 20 Nov 14.xx; dipilih Bima 20 Nov 14.xx untuk Dewi + Nina, masuk BACKLOG.md.
+- Status: diusulkan Kirana 20 Nov 14.xx; dipilih Bima 20 Nov 14.xx untuk Dewi + Nina, masuk BACKLOG.md. **Selesai 20 Nov 15.xx** (Dewi + Nina, cek 2f-7 + 4 uji balik): sumber dilipat dalam "Sumber (n)", kalimat .ics jadi satu catatan di atas daftar (hanya bila ada tombol kalender). Kartu dividen 390px: 696px → 481px; 1280px: 451px → 372px.
+
+### Tinjauan Kirana, 20 Nov 15.xx: hasil #36 dan tombol pilihan di 1280px (terang/gelap)
+- Kartu kini 481px di 390px (perkiraan ±420px, sedikit lebih tinggi karena ringkasan "Sumber (n)" dibuat setinggi 44px agar mudah diketuk). Tanda +/− sama dengan kotak arti, jadi pola lipatan konsisten.
+- 1280px: tombol Semua/IPO/Dividen rapi di satu baris kiri, kontras terang & gelap baik. Tanpa scroll horizontal.
+- Usulan minggu 23–29 Nov di bawah (#37–#39).
+
+### 37. Agenda: tautan langsung ke satu kartu + tombol "Salin tautan" ★ paling berdampak
+- **Mudah berbagi satu jadwal** — fitur, usaha kecil
+- Masalah: pengguna yang ingin mengirim jadwal TOTO ke teman hanya bisa membagikan seluruh halaman Agenda.
+- Ide: tiap kartu diberi id (`#dividen-toto-2026-interim`, `#ipo-anda`), alamat dengan id itu menggulir & menyorot kartu sebentar; tombol kecil "Salin tautan" memakai pola yang sudah ada di profil emiten (Clipboard API, cadangan teks bila gagal).
+- Acuan tren: tautan berbagi per item di aplikasi kalender & berita pasar.
+- Dampak bagi pemula: berbagi jadwal yang tepat tanpa harus menjelaskan.
+- Batasan: tanpa layanan pihak ketiga, tanpa data pribadi; sorotan dimatikan bila prefers-reduced-motion; tombol bisa dipakai keyboard.
+- Usaha: kecil (Arif + Dewi; Nina menambah cek).
+- Status: diusulkan Kirana 20 Nov 15.xx.
+
+### 38. Agenda: contoh hitungan dividen di kartu ("bila punya 1 lot")
+- **Angka dividen jadi nyata bagi pemula** — konten, usaha kecil
+- Masalah: "Rp10 per saham" sulit dibayangkan; pelajaran praktik sudah punya contoh Rp40 × 200 lembar, tetapi kartu belum.
+- Ide: satu baris netral di kartu: "Contoh: 1 lot (100 saham) × Rp10 = Rp1.000 sebelum pajak", dihitung dari `dps` yang sama, dengan tautan ke istilah "lot".
+- Acuan tren: contoh hitungan singkat di aplikasi edukasi investasi.
+- Dampak bagi pemula: paham besar dividen per lot tanpa kalkulator.
+- Batasan: hanya contoh hitungan, bukan perkiraan keuntungan; tanpa kata ajakan (Hana meninjau); USD ditulis dalam US$ tanpa konversi kurs.
+- Usaha: kecil (Dewi + Sari; Nina menambah cek).
+- Status: diusulkan Kirana 20 Nov 15.xx.
+
+### 39. Beranda: pita "Agenda terdekat" menampilkan hitung mundur dengan istilah yang bisa diketuk
+- **Istilah tanggal langsung terjelaskan di beranda** — tampilan, usaha kecil
+- Masalah: pita beranda menyebut "Cum date" tetapi pemula yang belum membuka Agenda tidak tahu artinya.
+- Ide: pasang penanda istilah (pola `pasangIstilah` yang sudah ada) pada nama tanggal di pita beranda, plus tautan "Arti tanggal" ke `agenda.html#arti-tanggal`.
+- Acuan tren: tooltip istilah di aplikasi edukasi keuangan.
+- Dampak bagi pemula: belajar istilah tepat saat melihatnya.
+- Batasan: tanpa pustaka baru, bisa keyboard, ringan.
+- Usaha: kecil (Dewi; Nina menyesuaikan cek).
+- Status: diusulkan Kirana 20 Nov 15.xx.
 
 ### Tinjauan Kirana, 9 Nov 10.09: hero & kartu beranda setelah teks diubah
 - 390px: kalimat hero 5 baris, rata-rata ±37 huruf per baris (nyaman dibaca di HP); istilah bergaris tetap terbaca, tombol "Mulai belajar" & "Lihat peringkat saham" masih di layar pertama 390×844.

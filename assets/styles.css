@@ -882,7 +882,12 @@ button.istilah:hover, button.istilah[aria-expanded="true"] { color: var(--aksen)
 .agenda-t-mundur { color: var(--tinta-2); }
 .agenda-t-lewat .agenda-t-kepala strong { font-weight: 600; }
 .agenda-t-lewat .agenda-t-kepala { color: var(--tinta-2); }
-.agenda-sumber-judul { margin: 12px 0 2px; font-size: .88rem; font-weight: 700; color: var(--tinta-2); }
+.agenda-sumber-lipat { margin-top: 10px; }
+.agenda-sumber-judul { margin: 0; font-size: .88rem; font-weight: 700; color: var(--tinta-2); cursor: pointer; min-height: 44px; display: flex; align-items: center; list-style: none; }
+.agenda-sumber-judul::-webkit-details-marker { display: none; }
+.agenda-sumber-judul::before { content: "+"; display: inline-block; width: 1.2em; font-weight: 800; }
+.agenda-sumber-lipat[open] .agenda-sumber-judul::before { content: "\2212"; }
+.agenda-catatan-ics { margin: 10px 0 0; font-size: .9rem; color: var(--tinta-2); }
 .agenda-sumber { margin: 0; padding-left: 18px; font-size: .88rem; overflow-wrap: anywhere; }
 .agenda-sumber a { color: var(--tinta-2); }
 .agenda-kosong { margin: 0 0 8px; color: var(--tinta-2); }
@@ -891,7 +896,6 @@ button.istilah:hover, button.istilah[aria-expanded="true"] { color: var(--aksen)
 /* Tambahkan ke kalender & tanda "baru" di menu Agenda (Dewi + Arif, 20 Nov 2026) */
 .agenda-kalender { margin-top: 14px; }
 .tombol-kalender { border-color: #7b82d6; min-height: 44px; padding: 0 18px; font-size: .95rem; max-width: 100%; text-align: center; }
-.agenda-kalender .agenda-t-isi { margin-top: 6px; }
 .kalender-info { margin: 4px 0 0; font-size: .9rem; font-weight: 600; }
 .titik-baru { display: inline-block; width: 8px; height: 8px; margin-left: 6px; border-radius: 50%; background: var(--bulan); vertical-align: middle; }
 

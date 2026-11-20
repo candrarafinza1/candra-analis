@@ -1699,8 +1699,11 @@
       el("p", { class: "kabar-isi", text: info.join(" ") }),
       ul,
       tombolKalender(x, kini),
-      el("p", { class: "agenda-sumber-judul", text: "Sumber:" }),
-      sumber
+      // Dewi (20 Nov 2026, IDE.md #36): daftar sumber dilipat agar kartu lebih pendek; jumlah sumber tetap terlihat.
+      el("details", { class: "agenda-sumber-lipat" }, [
+        el("summary", { class: "agenda-sumber-judul", text: "Sumber (" + sumber.children.length + ")" }),
+        sumber
+      ])
     ]);
   }
   /* ---------- Tambahkan ke kalender (Arif + Tegar, 20 Nov 2026; proyek prioritas Agenda) ----------
@@ -1793,7 +1796,6 @@
     });
     return el("div", { class: "agenda-kalender" }, [
       tombol,
-      el("p", { class: "agenda-t-isi", text: "Berkas .ics untuk aplikasi kalender di HP atau komputer, dengan pengingat sehari sebelumnya pukul 09.00. Dibuat di perangkat Anda; tidak ada data yang dikirim." }),
       info
     ]);
   }
@@ -1872,6 +1874,7 @@
     ]));
     wadah.hidden = false;
   }
+  var CATATAN_ICS = "Tombol \u201cTambahkan ke kalender\u201d di tiap kartu membuat berkas .ics untuk aplikasi kalender di HP atau komputer, dengan pengingat sehari sebelumnya pukul 09.00. Berkas dibuat di perangkat Anda; tidak ada data yang dikirim.";
   function renderAgenda() {
     var akar = document.getElementById("agenda");
     if (!akar) return;
@@ -1902,6 +1905,9 @@
     // Istilah dipasang lebih dulu di kartu (nama tanggal bisa diketuk), baru kotak arti disisipkan di atas daftar.
     pasangIstilah(akar);
     akar.insertBefore(kotakArtiAgenda(), akar.querySelector("h2"));
+    var h2Awal = akar.querySelector("h2");
+    // Penjelasan berkas .ics ditulis sekali di atas daftar, hanya bila ada tombol kalender (IDE.md #36).
+    if (akar.querySelector(".tombol-kalender")) akar.insertBefore(el("p", { class: "agenda-catatan-ics", id: "catatan-ics", text: CATATAN_ICS }), h2Awal);
     saring.terapkan(jenisAwalAgenda());
   }
   /* Dewi + Arif (20 Nov 2026, IDE.md #35): ringkasan "Minggu ini" dan tombol pilihan Semua / IPO / Dividen.

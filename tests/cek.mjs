@@ -7315,6 +7315,33 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
   ok(!/pasti|buruan|ketinggalan|rekomendasi|beli sebelum/i.test(blokM), "Agenda Minggu ini: teks ringkasan tidak boleh memuat kata ajakan");
 }
 
+// 2f-7. Kartu Agenda: sumber dilipat & penjelasan .ics sekali di atas daftar (Nina, 20 Nov 2026, IDE.md #36).
+{
+  const app = readFileSync("assets/app.js", "utf8");
+  const potong = (dari, sampai) => { const i = app.indexOf(dari), j = app.indexOf(sampai, i); return i < 0 || j < 0 ? "" : app.slice(i, j); };
+  const kartu = potong("  function kartuAgenda(", "  function tombolKalender(");
+  const tombolK = potong("  function tombolKalender(", "\n  }\n");
+  const render = potong("  function renderAgenda()", "  function kotakArtiAgenda()");
+  const cekLipat = (kartu, tombolK, render) => {
+    const s = [];
+    if (!/el\("details", \{ class: "agenda-sumber-lipat" \}/.test(kartu)) s.push("sumber kartu wajib di dalam <details> agenda-sumber-lipat");
+    if (!/"Sumber \(" \+ sumber\.children\.length \+ "\)"/.test(kartu)) s.push("ringkasan wajib menyebut jumlah sumber: Sumber (n)");
+    if (/buktiSyariah/.test(kartu) === false) s.push("bukti syariah IPO wajib tetap masuk daftar sumber kartu");
+    if (/\.ics untuk|tidak ada data yang dikirim/i.test(tombolK)) s.push("penjelasan berkas .ics tidak boleh diulang di tiap kartu");
+    if (!/CATATAN_ICS/.test(render) || !/querySelector\("\.tombol-kalender"\)/.test(render)) s.push("penjelasan .ics wajib ditulis sekali di atas daftar, hanya bila ada tombol kalender");
+    return s;
+  };
+  const sL = cekLipat(kartu, tombolK, render);
+  ok(!sL.length, "Agenda sumber dilipat: " + sL.join("; "));
+  ok(/var CATATAN_ICS = "[^"]*pengingat sehari sebelumnya pukul 09\.00[^"]*tidak ada data yang dikirim/.test(app), "CATATAN_ICS wajib menjelaskan pengingat 09.00 dan bahwa tidak ada data yang dikirim");
+  for (const [rusak, pesan] of [
+    [[kartu.replace('el("details", { class: "agenda-sumber-lipat" }', 'el("div", { class: "agenda-sumber-lipat" }'), tombolK, render], "<details>"],
+    [[kartu.replace('"Sumber (" + sumber.children.length + ")"', '"Sumber"'), tombolK, render], "jumlah sumber"],
+    [[kartu, tombolK.replace("tombol,\n", 'tombol, el("p", { text: "Berkas .ics untuk kalender" }),\n'), render], "tidak boleh diulang"],
+    [[kartu, tombolK, render.replace(/CATATAN_ICS/g, '"x"')], "ditulis sekali"],
+  ]) ok(cekLipat(...rusak).some((x) => x.includes(pesan)), `uji balik Agenda sumber dilipat: "${pesan}" harus tertangkap`);
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);
 

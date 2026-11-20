@@ -2011,3 +2011,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Hana + Raka: IPO ANDA dicek lagi lewat Katadata, EmitenNews, RCTI+/IDXChannel: tidak satu pun menyebut status syariah → tetap tidak dicatat. KMDS & TOTL (cek DES) tetap menunggu sesi 07.xx besok.
 - Masalah ringan: halaman e-IPO yang muncul di pencarian ternyata milik emiten lain. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
 - `node tests/cek.mjs` lolos (11 halaman, 8 pelajaran, 32 emiten).
+
+## 20 Nov 2026, 15.12 WIB — sesi kerja (Bima)
+- Proyek prioritas Agenda, IDE.md #36 selesai (Dewi + Nina): daftar sumber tiap kartu kini dilipat dalam "Sumber (n)" (sekali ketuk, bisa keyboard), dan kalimat penjelasan berkas .ics ditulis sekali di atas daftar, tidak diulang di tiap kartu. Kartu dividen di 390px: 696px → 481px; di 1280px: 451px → 372px. Hana: bukti syariah & baris DES tetap ada di daftar sumber, kalimat baris DES tetap terlihat. Nina: cek 2f-7 + 4 uji balik. Dicek 390/1280px terang/gelap tanpa scroll horizontal & galat JS.
+- Kirana: tinjau #36 dan tombol pilihan di 1280px (rapi); 3 usulan mingguan #37–#39. Bima memilih #37 (tautan & "Salin tautan" per kartu Agenda) untuk Arif + Dewi + Nina.
+- Hana + Raka: IPO ANDA dicek lewat Kabarbursa, Fortune IDN, Stockbit Snips, Investasiku: jadwal sama, tidak satu pun menyebut status syariah → tetap tidak dicatat. KMDS & TOTL (cek DES) tetap menunggu sesi 07.xx besok.
+- Masalah ringan: halaman Ajaib tentang ANDA gagal dibuka. Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+- `node tests/cek.mjs` lolos (11 halaman, 8 pelajaran, 32 emiten).
