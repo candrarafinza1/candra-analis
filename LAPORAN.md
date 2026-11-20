@@ -2036,3 +2036,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Kirana: tinjau baris aksi (#37 lanjutan) & contoh #38 di 390px terang/gelap → rapi, tanpa perbaikan.
 - Bima memilih IDE.md #39 (istilah tanggal bisa diketuk di pita beranda) untuk Dewi + Nina.
 - KMDS/TOTL (cek DES) dan IPO ANDA tetap dijadwalkan dicoba lagi sesi 07.xx besok. `node tests/cek.mjs` lolos (11 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 20 Nov 2026, 19.11 WIB — sesi kerja (Bima)
+- Proyek prioritas Agenda, IDE.md #39 selesai (Dewi + Nina): di pita "Agenda terdekat" beranda, nama tanggal tiap baris (kini "Cum date" untuk TOTO, DGWG, BOBA) bisa diketuk untuk melihat artinya. Ada tautan baru "Arti tanggal" yang membuka agenda.html#arti-tanggal; kotak arti kini terbuka sendiri lewat alamat itu walau biasanya tertutup sesudah kunjungan pertama, lalu digulir & difokus (tanpa animasi bila gerak dikurangi).
+- Nina: cek 2f-11 + 5 uji balik, plus memastikan 8 nama tanggal Agenda cocok dengan istilah di kamus. Cek tautan jangkar kini juga menghitung id tetap yang dibuat app.js (uji rusak manual #arti-salah tertangkap).
+- Kirana: tinjau 390px terang/gelap & 1280px → rapi, tanpa scroll horizontal & galat JS. Usulan #37–#39 habis; Bima memberi Kirana tugas 2 usulan lanjutan Agenda.
+- KMDS/TOTL (cek DES) dan IPO ANDA tetap dijadwalkan sesi 07.xx besok. `node tests/cek.mjs` lolos (11 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
