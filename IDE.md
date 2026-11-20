@@ -592,6 +592,28 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Usaha: kecil (Dewi; Nina menyesuaikan cek).
 - Status: diusulkan Kirana 20 Nov 15.xx; **dipilih Bima 20 Nov 18.11** (masuk BACKLOG.md); **selesai 20 Nov 19.xx** (Dewi + Nina, cek 2f-11). Tinjauan Kirana 390/1280px terang/gelap: tiga "Cum date" bergaris titik, kotak istilah terbuka lewat Enter, tautan "Semua agenda" & "Arti tanggal" sebaris; tanpa perbaikan.
 
+### Usulan lanjutan Kirana, 20 Nov 20.xx (tugas pendukung setelah #37–#39)
+
+### 40. Agenda: kotak "Cara memeriksa status syariah sebuah IPO" di bagian IPO ★ paling berdampak
+- **Bagian IPO yang kosong jadi bahan belajar** — konten + tampilan, usaha kecil
+- Masalah: bagian "IPO saham syariah" sejak tayang selalu kosong (IPO ANDA belum terbukti syariah). Pemula hanya membaca "belum ada", padahal berita IPO ramai dan mereka tidak tahu cara memeriksa sendiri apakah saham yang ditawarkan termasuk efek syariah.
+- Ide: satu kotak `<details>` "Cara memeriksa status syariah sebuah IPO" di bawah judul bagian IPO: (1) baca prospektus di e-ipo.co.id atau situs perusahaan dan cari kalimat bahwa sahamnya termasuk efek syariah; (2) bila tidak ada, cek pengumuman OJK (DES berkala berlaku 1 Juni & 1 Desember, OJK juga bisa menambah saham baru secara insidentil); (3) berita yang hanya menulis jadwal & harga belum cukup sebagai bukti; (4) status bisa berubah tiap periode DES. Tautan ke pengumuman DES OJK dan pelajaran "Praktik". Terbuka sendiri bila belum ada IPO di daftar, tertutup bila sudah ada kartu IPO.
+- Acuan tren: "how we verify" / kotak transparansi di aplikasi berita & edukasi keuangan; empty state yang mengajari, bukan sekadar "tidak ada data".
+- Dampak bagi pemula: bisa menilai sendiri berita IPO tanpa bergantung pada kata "syariah" di media.
+- Batasan: teks memakai kalimat yang sudah ditinjau Hana di pelajaran & kamus (tidak ada klaim baru tanpa sumber), tanpa ajakan ikut IPO, `<details>` bawaan (keyboard), tanpa animasi, tanpa pustaka.
+- Usaha: kecil (Sari + Hana untuk teks, Dewi untuk tampilan, Nina menambah cek).
+- Status: diusulkan Kirana 20 Nov 20.xx; **dipilih Bima 20 Nov 20.xx**; **selesai 20 Nov 20.xx** (Sari + Hana + Dewi, cek Nina 2f-12 + 5 uji balik). Kotak terbuka saat bagian IPO kosong, tersembunyi saat pilihan "Dividen". Tinjauan Kirana 390/1280px terang/gelap: rapi, tanpa scroll horizontal; tinggi kotak terbuka 838px di 390px dan 312px di 1280px (wajar karena hanya terbuka selama belum ada IPO).
+
+### 41. Beranda: ringkasan "Minggu ini" di pita "Agenda terdekat"
+- **Sekilas tahu ramai-tidaknya minggu ini** — tampilan, usaha kecil
+- Masalah: pita beranda hanya menampilkan 3 acara terdekat; pemula tidak tahu apakah masih ada acara lain minggu ini.
+- Ide: satu baris di atas 3 acara memakai fungsi `ringkasMingguIni` yang sudah ada di Agenda ("Minggu ini: 3 cum date, 2 ex date, 0 tahap IPO"), tanpa hitungan baru.
+- Acuan tren: ringkasan pekan di aplikasi kalender pasar.
+- Dampak bagi pemula: tahu ada acara lain tanpa membuka Agenda.
+- Batasan: hanya menghitung, tanpa kata ajakan; ringan; tersembunyi bila pita kosong.
+- Usaha: kecil (Dewi; Nina menyesuaikan cek 2f-11).
+- Status: diusulkan Kirana 20 Nov 20.xx; dipilih Bima 20 Nov 20.xx untuk sesi berikutnya (masuk BACKLOG.md).
+
 ### Tinjauan Kirana, 9 Nov 10.09: hero & kartu beranda setelah teks diubah
 - 390px: kalimat hero 5 baris, rata-rata ±37 huruf per baris (nyaman dibaca di HP); istilah bergaris tetap terbaca, tombol "Mulai belajar" & "Lihat peringkat saham" masih di layar pertama 390×844.
 - 1280px: 4 baris, ±47 huruf per baris. Tanpa scroll horizontal di kedua lebar (juga Radar, Peringkat, profil ANTM).

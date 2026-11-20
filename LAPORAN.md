@@ -2042,3 +2042,8 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Nina: cek 2f-11 + 5 uji balik, plus memastikan 8 nama tanggal Agenda cocok dengan istilah di kamus. Cek tautan jangkar kini juga menghitung id tetap yang dibuat app.js (uji rusak manual #arti-salah tertangkap).
 - Kirana: tinjau 390px terang/gelap & 1280px → rapi, tanpa scroll horizontal & galat JS. Usulan #37–#39 habis; Bima memberi Kirana tugas 2 usulan lanjutan Agenda.
 - KMDS/TOTL (cek DES) dan IPO ANDA tetap dijadwalkan sesi 07.xx besok. `node tests/cek.mjs` lolos (11 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 20 Nov 2026, 20.12 WIB — sesi kerja (Bima)
+- Kirana: 2 usulan lanjutan Agenda di IDE.md: #40 ★ kotak "Cara memeriksa status syariah sebuah IPO" dan #41 ringkasan "Minggu ini" di pita beranda. Bima memilih #40 untuk sesi ini dan #41 untuk sesi berikutnya (Dewi + Nina).
+- Proyek prioritas Agenda, IDE.md #40 selesai (Sari + Hana + Dewi + Nina): bagian IPO yang masih kosong kini punya kotak 3 langkah memeriksa status syariah IPO (prospektus, pengumuman DES OJK, status bisa berubah tiap periode), tautan ke pengumuman DES OJK & pelajaran Praktik. Kalimat diambil dari pelajaran & kamus yang sudah ditinjau Hana, tanpa klaim baru dan tanpa ajakan. Terbuka selama belum ada IPO, ikut tombol pilihan. Nina: cek 2f-12 + 5 uji balik. Dicek 390/1280px terang/gelap tanpa scroll horizontal & galat JS.
+- KMDS/TOTL (cek DES) dan IPO ANDA tetap dijadwalkan sesi 07.xx besok. `node tests/cek.mjs` lolos (11 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

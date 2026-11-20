@@ -880,6 +880,11 @@ button.istilah:hover, button.istilah[aria-expanded="true"] { color: var(--aksen)
 .agenda-arti-kelompok { display: grid; gap: 4px; margin-top: 8px; }
 .agenda-arti-judul { margin: 0; font-size: .88rem; font-weight: 700; color: var(--tinta-2); }
 .agenda-arti-daftar { margin: 0; }
+.agenda-cara-ipo { margin: 12px 0 0; }
+.agenda-cara-isi .tanpa-putus { white-space: nowrap; }
+.agenda-cara-isi p { margin: 8px 0 0; }
+.agenda-cara-isi ol { margin: 8px 0 0; padding-left: 1.3em; }
+.agenda-cara-isi li + li { margin-top: 6px; }
 .agenda-arti-daftar dt { font-weight: 700; margin-top: 6px; }
 .agenda-arti-daftar dd { margin: 2px 0 0; font-size: .92rem; color: var(--tinta-2); }
 .agenda-t-mundur { color: var(--tinta-2); }

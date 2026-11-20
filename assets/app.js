@@ -1964,6 +1964,26 @@
     try { k.focus({ preventScroll: true }); } catch (e) { k.focus(); }
     return k;
   }
+  // Kotak "Cara memeriksa status syariah sebuah IPO" di bagian IPO (Sari + Hana + Dewi, 20 Nov 2026, IDE.md #40).
+  // Kalimat memakai isi pelajaran & kamus yang sudah ditinjau Hana. Terbuka bila belum ada IPO di daftar.
+  var URL_DES_OJK = "https://ojk.go.id/id/berita-dan-kegiatan/pengumuman/Pages/Daftar-Efek-Syariah-KEP21D042026.aspx";
+  function kotakCaraIpo(adaIpo) {
+    var isi = el("div", { class: "agenda-cara-isi" }, [
+      el("p", { text: "Berita IPO biasanya menulis jadwal dan harga, tetapi belum tentu menyebut status syariah. Anda bisa memeriksanya sendiri:" }),
+      el("ol", null, [
+        el("li", null, ["Baca prospektus perusahaan di ", el("span", { class: "tanpa-putus", text: "e-ipo.co.id" }), " atau situs perusahaan. Cari kalimat yang menyebut sahamnya termasuk efek syariah."]),
+        el("li", null, ["Bila prospektus tidak menyebutnya, lihat ",
+          el("a", { href: URL_DES_OJK, rel: "noopener", text: "pengumuman Daftar Efek Syariah dari OJK" }),
+          ". OJK menerbitkan DES secara berkala, berlaku efektif 1 Juni dan 1 Desember; di antara jadwal itu OJK juga bisa menambahkan saham baru secara insidentil, misalnya emiten yang baru mencatatkan saham."]),
+        el("li", { text: "Status syariah bisa berubah. Setelah saham tercatat di bursa, cek lagi di DES periode berikutnya." })
+      ]),
+      el("p", null, ["Candra Analis baru mencatat IPO di Agenda bila salah satu bukti di atas ada. Status syariah hanya satu hal yang diperiksa; ikut IPO atau tidak tetap keputusan Anda sendiri. Langkah ikut e-IPO dijelaskan di pelajaran ",
+        el("a", { href: "pelajaran.html?m=praktik-beli-pertama", text: "Praktik: membeli saham pertama Anda" }), "."])
+    ]);
+    var a = { class: "agenda-arti agenda-cara-ipo", id: "cara-cek-ipo", "data-jenis": "ipo" };
+    if (!adaIpo) a.open = "";
+    return el("details", a, [el("summary", { text: "Cara memeriksa status syariah sebuah IPO" }), isi]);
+  }
   function renderAgenda() {
     var akar = document.getElementById("agenda");
     if (!akar) return;
@@ -2001,6 +2021,10 @@
     // Istilah dipasang lebih dulu di kartu (nama tanggal bisa diketuk), baru kotak arti disisipkan di atas daftar.
     pasangIstilah(akar);
     akar.insertBefore(kotakArtiAgenda(), akar.querySelector("h2"));
+    // Kotak cara cek IPO disisipkan sesudah daftar/keterangan kosong bagian IPO; istilah hanya di isinya, bukan di summary.
+    var caraIpo = kotakCaraIpo(ipoDepan.length > 0), judulDiv = akar.querySelector("#agenda-dividen");
+    akar.insertBefore(caraIpo, judulDiv);
+    pasangIstilah(caraIpo.querySelector(".agenda-cara-isi"));
     var h2Awal = akar.querySelector("h2");
     // Penjelasan berkas .ics ditulis sekali di atas daftar, hanya bila ada tombol kalender (IDE.md #36).
     if (akar.querySelector(".tombol-kalender")) akar.insertBefore(el("p", { class: "agenda-catatan-ics", id: "catatan-ics", text: CATATAN_ICS }), h2Awal);

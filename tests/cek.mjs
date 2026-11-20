@@ -7540,6 +7540,39 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
   ]) ok(rusak !== app && uji(rusak).some((x) => x.includes(pesan)), `uji balik pita Agenda beranda: "${pesan}" harus tertangkap`);
 }
 
+// 2f-12. Agenda: kotak "Cara memeriksa status syariah sebuah IPO" (Nina, 20 Nov 2026, IDE.md #40).
+{
+  const app = readFileSync("assets/app.js", "utf8");
+  const potongF = (js, awal) => { const i = js.indexOf(awal), j = js.indexOf("\n  }\n", i); return i < 0 ? "" : js.slice(i, j); };
+  const uji = (js) => {
+    const salah = [];
+    const f = potongF(js, "  function kotakCaraIpo(");
+    if (!f) return ["fungsi kotakCaraIpo wajib ada"];
+    if (!/el\("details", a, \[el\("summary", \{ text: "Cara memeriksa status syariah sebuah IPO" \}\), isi\]\)/.test(f)) salah.push("kotak wajib <details> dengan summary tetap");
+    if (!/"data-jenis": "ipo"/.test(f)) salah.push("kotak wajib ikut tombol pilihan (data-jenis ipo)");
+    if (!/if \(!adaIpo\) a\.open = "";/.test(f)) salah.push("kotak wajib terbuka bila belum ada IPO");
+    if (!/prospektus/.test(f) || !/efek syariah/.test(f)) salah.push("langkah prospektus & efek syariah wajib ada");
+    if (!/href: URL_DES_OJK/.test(f) || !/var URL_DES_OJK = "https:\/\/ojk\.go\.id\//.test(js)) salah.push("tautan pengumuman DES OJK (https) wajib ada");
+    if (!/pelajaran\.html\?m=praktik-beli-pertama/.test(f)) salah.push("tautan pelajaran praktik wajib ada");
+    if (!/keputusan Anda sendiri/.test(f)) salah.push("kalimat keputusan sendiri wajib ada");
+    if (/buruan|pasti untung|jangan sampai ketinggalan|rekomendasi beli/i.test(f)) salah.push("kata ajakan dilarang");
+    const r = potongF(js, "  function renderAgenda(");
+    if (!/kotakCaraIpo\(ipoDepan\.length > 0\)/.test(r)) salah.push("renderAgenda wajib memanggil kotakCaraIpo");
+    if (!/pasangIstilah\(caraIpo\.querySelector\("\.agenda-cara-isi"\)\)/.test(r)) salah.push("istilah wajib dipasang di isi, bukan summary");
+    return salah;
+  };
+  const s12 = uji(app);
+  ok(!s12.length, "Agenda kotak cara cek IPO: " + s12.join("; "));
+  ok(existsSync("data/modul.js") && readFileSync("data/modul.js", "utf8").includes('id: "praktik-beli-pertama"'), "pelajaran praktik-beli-pertama (tujuan tautan kotak IPO) harus ada");
+  for (const [rusak, pesan] of [
+    [app.replace('    if (!adaIpo) a.open = "";\n', ""), "terbuka bila belum ada IPO"],
+    [app.replace('var a = { class: "agenda-arti agenda-cara-ipo", id: "cara-cek-ipo", "data-jenis": "ipo" };', 'var a = { class: "agenda-arti agenda-cara-ipo", id: "cara-cek-ipo" };'), "data-jenis ipo"],
+    [app.replace("tetap keputusan Anda sendiri", "silakan ikut IPO, pasti untung"), "kata ajakan"],
+    [app.replace('pasangIstilah(caraIpo.querySelector(".agenda-cara-isi"));', "pasangIstilah(caraIpo);"), "bukan summary"],
+    [app.replace("el(\"a\", { href: URL_DES_OJK,", "el(\"a\", { href: \"#\","), "pengumuman DES OJK"],
+  ]) ok(rusak !== app && uji(rusak).some((x) => x.includes(pesan)), `uji balik kotak cara cek IPO: "${pesan}" harus tertangkap`);
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);
 
