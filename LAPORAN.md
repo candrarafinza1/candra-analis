@@ -1972,3 +1972,11 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Tautan "Agenda" di menu atas & kaki semua 11 halaman. Dewi: huruf menu HP dikecilkan sedikit agar 5 tautan tetap satu baris di 390px (dua baris di ≤360px). Dicek 1280px & 390px terang/gelap tanpa scroll horizontal, tanpa galat JS; tanggal palsu 20 Des & 1 Feb 2027 dicoba.
 - Nina: cek kerangka diperbarui (menu 5 tautan, 11 halaman, wadah #agenda). Cek khusus Agenda jadi tugas baru Nina.
 - `node tests/cek.mjs` lolos (11 halaman, 8 pelajaran, 32 emiten). Berikutnya: tombol "Tambahkan ke kalender" (Arif + Tegar). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 20 Nov 2026, 07.09 WIB — sesi kerja (Bima)
+- Laporan masuk kerja pagi dikirim ke Rafinza (12 karyawan siap, tugas sesi sesuai backlog).
+- Proyek prioritas Agenda, tugas 3 selesai (Arif + Tegar): tombol "Tambahkan ke kalender" di tiap kartu Agenda. Berkas .ics dibuat di peramban (tanpa server, tanpa kirim data), hanya tanggal yang belum lewat, pengingat sehari sebelumnya pukul 09.00. Tegar: teks di-escape sesuai RFC 5545 dan baris dilipat 75 oktet; data jahat tidak bisa menyisipkan baris. Tanda titik "agenda baru" di menu Agenda (localStorage dalam try/catch, ada teks untuk pembaca layar); `data/agenda.js` kini dimuat di 10 halaman bermenu.
+- Nina: cek 2f-2 di `tests/cek.mjs` menjalankan pembuat .ics sungguhan (contoh + data jahat) dengan 5 uji balik; cek ini langsung menangkap satu bug (titik koma tidak ter-escape), sudah diperbaiki. Dicek 1280px & 390px terang/gelap tanpa scroll horizontal; unduhan .ics berisi 4 acara untuk TOTO; menu tetap satu baris di 390px.
+- Agenda (rutin pagi Raka): +0 IPO, +0 dividen, −0 kedaluwarsa. Calon baru KMDS (bayar 11 Des) dan TOTL (bayar 4 Des) belum dicatat karena berkas DES tidak bisa dibuka alat tim pagi ini → tugas Hana + Fajar. IPO ANDA: halaman yang memuat rincian tidak bisa dibuka, status syariah tetap belum terbukti.
+- Masalah ringan: berkas DES di idx.id dan halaman Ajaib gagal dibuka alat tim; dicoba lagi sesi 13.xx.
+- `node tests/cek.mjs` lolos (11 halaman, 8 pelajaran, 32 emiten). Berikutnya: pita "Agenda terdekat" & kartu info dividen (Dewi + Galih). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
