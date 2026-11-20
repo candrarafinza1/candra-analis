@@ -612,7 +612,7 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Dampak bagi pemula: tahu ada acara lain tanpa membuka Agenda.
 - Batasan: hanya menghitung, tanpa kata ajakan; ringan; tersembunyi bila pita kosong.
 - Usaha: kecil (Dewi; Nina menyesuaikan cek 2f-11).
-- Status: diusulkan Kirana 20 Nov 20.xx; dipilih Bima 20 Nov 20.xx untuk sesi berikutnya (masuk BACKLOG.md).
+- Status: diusulkan Kirana 20 Nov 20.xx; dipilih Bima 20 Nov 20.xx untuk sesi berikutnya (masuk BACKLOG.md) **Selesai 20 Nov 21.xx** (Dewi, cek Nina 2f-11 + 2 uji balik). Tinjauan Kirana 390/1280px terang/gelap: rapi, tanpa scroll horizontal; di 390px kalimat 3 baris, tinggi pita 669px (sebelumnya ±600px).
 
 ### Tinjauan Kirana, 9 Nov 10.09: hero & kartu beranda setelah teks diubah
 - 390px: kalimat hero 5 baris, rata-rata ±37 huruf per baris (nyaman dibaca di HP); istilah bergaris tetap terbaca, tombol "Mulai belajar" & "Lihat peringkat saham" masih di layar pertama 390×844.

@@ -1910,7 +1910,7 @@
   function renderAgendaBeranda() {
     var wadah = document.getElementById("agenda-beranda");
     if (!wadah) return;
-    var kini = new Date(), dekat = susunAgenda(kini).depan.slice(0, 3);
+    var kini = new Date(), sAg = susunAgenda(kini), dekat = sAg.depan.slice(0, 3);
     if (!dekat.length) return;
     var ul = el("ul", { class: "agenda-pita" });
     dekat.forEach(function (x) {
@@ -1930,6 +1930,9 @@
       el("h2", { id: "judul-agenda-beranda", text: "Agenda terdekat" }),
       el("p", { class: "pengantar" }, ["Jadwal IPO dan dividen saham syariah. ",
         el("strong", { text: "Agenda adalah jadwal, bukan saran membeli atau menjual." })]),
+      // Dewi + Nina (20 Nov 2026, IDE.md #41): ringkasan "Minggu ini" memakai ringkasMingguIni yang sama dengan Agenda
+      // (tanpa hitungan baru). Ikut tersembunyi bersama pita bila tidak ada acara (fungsi berhenti di atas).
+      el("p", { class: "agenda-ringkas", id: "agenda-ringkas-beranda" }, [el("strong", { text: "Minggu ini" }), " " + ringkasMingguIni(sAg, kini)]),
       ul,
       el("p", { class: "agenda-pita-tautan" }, [el("a", { href: "agenda.html", text: "Semua agenda IPO & dividen" }),
         el("a", { href: "agenda.html#arti-tanggal", text: "Arti tanggal" })])

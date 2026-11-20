@@ -7509,6 +7509,11 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
     if (!/\.agenda-pita-tanggal"\)\.forEach\(function \(s\) \{ pasangIstilah\(s\); \}\)/.test(f)) salah.push("nama tanggal di tiap baris wajib dipasangi istilah");
     if (!/href: "agenda\.html#arti-tanggal", text: "Arti tanggal"/.test(f)) salah.push('tautan "Arti tanggal" ke agenda.html#arti-tanggal wajib ada');
     if (!/bukan saran membeli atau menjual/.test(f)) salah.push("kalimat bukan saran wajib tetap ada");
+    // Nina (20 Nov 2026, IDE.md #41): ringkasan "Minggu ini" di pita beranda memakai ringkasMingguIni yang sama, setelah cek pita kosong.
+    const iR = f.indexOf('id: "agenda-ringkas-beranda"'), iK = f.indexOf("if (!dekat.length) return;");
+    if (iR < 0 || !/el\("strong", \{ text: "Minggu ini" \}\), " " \+ ringkasMingguIni\(sAg, kini\)/.test(f)) salah.push('ringkasan "Minggu ini" wajib memakai ringkasMingguIni');
+    else if (iK < 0 || iK > iR) salah.push("ringkasan wajib tersembunyi bila pita kosong");
+    if (!/dekat = sAg\.depan\.slice\(0, 3\)/.test(f)) salah.push("pita & ringkasan wajib memakai susunan agenda yang sama");
     const b = potongF(js, "  function bukaArtiTanggal(");
     if (!b) salah.push("fungsi bukaArtiTanggal wajib ada");
     else {
@@ -7536,6 +7541,8 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
     [app.replace('ul.querySelectorAll(".agenda-pita-tanggal").forEach(function (s) { pasangIstilah(s); });', ""), "dipasangi istilah"],
     [app.replace('el("a", { href: "agenda.html#arti-tanggal", text: "Arti tanggal" })', 'el("span")'), "Arti tanggal"],
     [app.replace("    d.open = true;\n", ""), "membuka kotak arti"],
+    [app.replace('" " + ringkasMingguIni(sAg, kini)]),\n      ul,', '" 3 cum date."]),\n      ul,'), "wajib memakai ringkasMingguIni"],
+    [app.replace("    if (!dekat.length) return;\n    var ul = el(\"ul\", { class: \"agenda-pita\" });", "    var ul = el(\"ul\", { class: \"agenda-pita\" });"), "tersembunyi bila pita kosong"],
     [app.replace('    bukaArtiTanggal(akar);\n    window.addEventListener', "    window.addEventListener"), "saat muat & hashchange"],
   ]) ok(rusak !== app && uji(rusak).some((x) => x.includes(pesan)), `uji balik pita Agenda beranda: "${pesan}" harus tertangkap`);
 }
