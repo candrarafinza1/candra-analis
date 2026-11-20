@@ -427,6 +427,26 @@ window.MODUL = [
         <li>Pasang saham Anda di Radar Risiko Candra Analis agar Anda tahu bila muncul tanda masalah.</li>
         <li>Tinjau ulang setiap kali laporan kuartal terbit, bukan setiap kali harga naik-turun.</li>
       </ul>
+      <h2>Cara ikut IPO lewat e-IPO dan menerima dividen</h2>
+      <p>Bagian ini menjelaskan cara kerjanya agar Anda tidak bingung saat melihat jadwal di halaman Agenda. Ikut IPO atau memegang saham sampai dividen dibagikan adalah pilihan Anda sendiri, bukan langkah wajib.</p>
+      <p><strong>Ikut IPO lewat e-IPO</strong></p>
+      <ol>
+        <li>Pastikan rekening efek dan RDN Anda sudah aktif di sekuritas yang melayani e-IPO.</li>
+        <li>Baca prospektus perusahaan. Cek usaha, laporan keuangan, risiko, dan rencana penggunaan dana. Untuk saham syariah, pastikan prospektus atau pengumuman OJK menyebut sahamnya termasuk efek syariah.</li>
+        <li>Pada masa penawaran umum, kirim pesanan (jumlah lot) lewat e-IPO di aplikasi sekuritas atau situs e-ipo.co.id. Dana pesanan harus ada di RDN dan ditahan sampai penjatahan.</li>
+        <li>Setelah penjatahan, Anda bisa mendapat saham lebih sedikit dari yang dipesan, bahkan tidak mendapat sama sekali. Dana yang tidak terpakai dikembalikan ke RDN.</li>
+        <li>Pada hari pencatatan di bursa, saham bisa diperjualbelikan. Harganya bisa naik atau turun dari harga IPO.</li>
+      </ol>
+      <p><strong>Membaca jadwal dividen</strong></p>
+      <ol>
+        <li><strong>Cum date</strong>: hari terakhir membeli saham di pasar reguler agar berhak atas dividen.</li>
+        <li><strong>Ex date</strong>: hari bursa berikutnya; pembeli mulai hari ini tidak lagi berhak atas dividen itu. Harga saham biasanya menyesuaikan.</li>
+        <li><strong>Recording date</strong>: daftar pemegang saham yang berhak dicatat, biasanya dua hari bursa sesudah cum date karena penyelesaian T+2.</li>
+        <li><strong>Tanggal pembayaran</strong>: dividen masuk ke RDN Anda setelah dipotong pajak bila ada. Cek mutasi RDN dan AKSes KSEI.</li>
+      </ol>
+      <p>Contoh hitungan: dividen Rp40 per saham dan Anda memegang 2 lot (200 lembar) pada recording date, maka dividen sebelum pajak = Rp40 × 200 = Rp8.000.</p>
+      <div class="kotak-penting">Sisi syariah (Hana): Agenda Candra Analis hanya memuat IPO yang terbukti efek syariah dan dividen dari saham yang tercatat di Daftar Efek Syariah. Dividen bukan janji keuntungan tetap: jumlahnya diputuskan perusahaan dan bisa berubah setiap tahun, sedangkan harga saham bisa turun lebih besar daripada dividen yang diterima.</div>
+
       <div class="kotak-penting">Tujuan pembelian pertama adalah belajar prosesnya, bukan mencari untung besar. Mulai kecil, catat semuanya.</div>
     `
   },
