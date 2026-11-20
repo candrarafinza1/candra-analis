@@ -519,6 +519,30 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Usaha: kecil (Arif). Nina menambah cek bahwa tanggal yang tampil ada di data sumber.
 - Status: diusulkan Kirana 16 Nov 07.10; dipilih Bima 16 Nov 09.09 untuk Arif (+ Hana, Nina), masuk BACKLOG.md. **Selesai 16 Nov 10.08** (Arif, Hana, Nina); Kirana meninjau tangkapan layar 390px & 1280px: rapi, baris kecil tidak mendorong tombol salin keluar layar.
 
+### Tinjauan Kirana, 20 Nov 10.xx: halaman Agenda setelah tayang
+- Dicek lewat tangkapan layar lokal (situs tayang belum bisa dibuka alat tim): 390px & 1280px, 5 kartu dividen, tanpa scroll horizontal dan tanpa galat JS. Hitung mundur jelas ("Cum date 4 hari lagi").
+- Temuan: di 390px halaman setinggi ±6.100px untuk 5 kartu, karena tiap kartu mengulang penjelasan yang sama untuk 4 tanggal (cum, ex, recording, pembayaran). Pemula perlu menggulir jauh untuk melihat kartu ke-3 dst. Dua usulan di bawah.
+
+### 34. Agenda: penjelasan tanggal tidak diulang di setiap kartu ★ paling berdampak
+- **Kartu lebih pendek, mudah dipindai di HP** — tampilan, usaha kecil
+- Masalah: penjelasan cum/ex/recording/pembayaran (dan tahap IPO) yang sama tertulis di setiap kartu; 5 kartu = ±6.100px di 390px.
+- Ide: kartu hanya menampilkan nama tanggal + tanggal + hitung mundur. Penjelasan dipindah ke satu kotak "Arti tanggal-tanggal ini" di atas daftar (elemen `<details>` bawaan, terbuka di kunjungan pertama), dan nama tanggal di kartu tetap bisa diketuk sebagai istilah (kamus istilah sudah memuat 12 istilah Agenda).
+- Acuan tren: kartu ringkas + legenda bersama di kalender acara aplikasi investasi; pola "progressive disclosure".
+- Dampak bagi pemula: melihat lebih banyak acara sekaligus tanpa kehilangan penjelasan.
+- Batasan: tanpa pustaka baru, `<details>` bisa dibuka keyboard, tidak ada animasi wajib (hormati prefers-reduced-motion), teks penjelasan tidak berubah (sudah ditinjau Hana).
+- Usaha: kecil (Dewi; Nina menyesuaikan cek 2f-4 dan menambah cek tinggi halaman).
+- Status: diusulkan Kirana 20 Nov 10.xx; dipilih Bima 20 Nov 10.xx untuk Dewi, masuk BACKLOG.md.
+
+### 35. Agenda: pilihan "Semua / IPO / Dividen" dan ringkasan "minggu ini"
+- **Cepat menemukan acara yang dicari** — fitur, usaha kecil–sedang
+- Masalah: saat acara bertambah (rutin harian Raka), daftar dividen bisa panjang dan IPO tenggelam di bawahnya.
+- Ide: (a) tombol pilihan Semua / IPO / Dividen di atas daftar (tanpa muat ulang, alamat ikut berubah `?jenis=ipo` agar bisa dibagikan); (b) satu kalimat ringkasan di atas: "Minggu ini: 2 cum date, 1 pembayaran dividen, 0 IPO", dihitung dari data yang sama.
+- Acuan tren: filter chip dan ringkasan pekan di aplikasi kalender pasar.
+- Dampak bagi pemula: tahu sekilas apa yang terjadi minggu ini.
+- Batasan: ringkasan hanya menghitung, tanpa kata ajakan. **Catatan:** pemberitahuan lewat email berlangganan TIDAK diusulkan sekarang karena butuh server pengirim email dan menyimpan alamat email pengguna (data pribadi); itu perlu keputusan Rafinza. Tombol "Tambahkan ke kalender" sudah menjadi pengingat tanpa data pribadi.
+- Usaha: kecil–sedang (Arif + Dewi). Menunggu antrean setelah #34.
+- Status: diusulkan Kirana 20 Nov 10.xx.
+
 ### Tinjauan Kirana, 9 Nov 10.09: hero & kartu beranda setelah teks diubah
 - 390px: kalimat hero 5 baris, rata-rata ±37 huruf per baris (nyaman dibaca di HP); istilah bergaris tetap terbaca, tombol "Mulai belajar" & "Lihat peringkat saham" masih di layar pertama 390×844.
 - 1280px: 4 baris, ±47 huruf per baris. Tanpa scroll horizontal di kedua lebar (juga Radar, Peringkat, profil ANTM).

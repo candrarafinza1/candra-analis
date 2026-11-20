@@ -7171,6 +7171,68 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
   ok(/id="agenda-beranda"[^>]*hidden/.test(readFileSync("index.html", "utf8")), 'index.html: wadah <section id="agenda-beranda" hidden> wajib ada');
 }
 
+// 2f-4. Halaman Agenda: kerangka, batas 14 hari, urutan, dan "Baru saja lewat" (Nina, 20 Nov 2026).
+// susunAgenda dijalankan sungguhan dengan tanggal palsu (data contoh dan data/agenda.js asli) + uji balik.
+{
+  const app = readFileSync("assets/app.js", "utf8");
+  const potong = (dari, sampai) => { const i = app.indexOf(dari), j = app.indexOf(sampai, i); return i < 0 || j < 0 ? "" : app.slice(i, j); };
+  const hAg = readFileSync("agenda.html", "utf8");
+  const iData = hAg.indexOf('<script src="data/agenda.js"></script>'), iApp = hAg.indexOf('<script src="assets/app.js"></script>');
+  ok(iData >= 0 && iData < iApp, "agenda.html: wajib memuat data/agenda.js sebelum assets/app.js");
+  ok(/<div id="agenda"><\/div>/.test(hAg), 'agenda.html: wadah <div id="agenda"></div> wajib ada');
+  const blokS = potong("  var AGENDA_LEWAT_MAKS", "  function kartuAgenda(");
+  ok(/var AGENDA_LEWAT_MAKS = 14;/.test(blokS), "app.js: AGENDA_LEWAT_MAKS harus 14 hari");
+  const fRender = potong("  function renderAgenda()", "\n  }\n");
+  ok(/susunAgenda\(kini\)/.test(fRender) && /"Baru saja lewat"/.test(fRender) && /AGENDA_LEWAT_MAKS/.test(fRender) && /bukan saran membeli atau menjual/.test(fRender),
+    "renderAgenda: wajib memakai susunAgenda, bagian \"Baru saja lewat\", AGENDA_LEWAT_MAKS, dan kalimat bukan saran");
+  const jalanS = (kodeJs, data) => {
+    const c = { window: data }; vm.createContext(c);
+    try { vm.runInContext(kodeJs + "\n;globalThis.susunAgenda = susunAgenda;", c); } catch (e) { return null; }
+    return c.susunAgenda;
+  };
+  const dv = (kode, cum, bayar) => ({ kode, jenis: "interim", tahunBuku: 2026, dps: 10, mataUang: "IDR", tanggal: { cum, ex: null, recording: null, pembayaran: bayar } });
+  const contoh = {
+    AGENDA_IPO: [{ nama: "PT Masa Tawar", kode: null, tanggal: { penawaranUmum: { mulai: "2026-11-18", selesai: "2026-11-22" }, penjatahan: "2026-11-24", pencatatan: "2026-11-26" } }],
+    AGENDA_DIVIDEN: [dv("JAUH", "2026-12-10", "2026-12-28"), dv("DEKA", "2026-11-23", "2026-12-05"), dv("LW05", "2026-11-01", "2026-11-15"),
+      dv("LW14", "2026-10-20", "2026-11-06"), dv("LW15", "2026-10-20", "2026-11-05"), dv("LW02", "2026-11-05", "2026-11-18")]
+  };
+  const kode = (d) => d.map((x) => x.data.kode || x.data.nama).join(",");
+  const cekS = (f) => {
+    if (!f) return ["susunAgenda gagal dijalankan"];
+    const s = [], r = f(new Date(2026, 10, 20, 9, 0, 0));
+    if (kode(r.depan) !== "PT Masa Tawar,DEKA,JAUH") s.push(`urutan depan harus terdekat dulu, IPO di masa penawaran ikut (dapat ${kode(r.depan)})`);
+    if (kode(r.lewat) !== "LW02,LW05,LW14") s.push(`"Baru saja lewat" harus terbaru dulu, maks. 14 hari (dapat ${kode(r.lewat)})`);
+    if (r.depan[0] && (!r.depan[0].berikut || r.depan[0].berikut.kunci !== "penawaranUmum")) s.push("IPO di masa penawaran harus menunjuk penawaran umum");
+    return s;
+  };
+  const sS = cekS(jalanS(blokS, contoh));
+  ok(!sS.length, "susunAgenda: " + sS.join("; "));
+  for (const [rusak, pesan] of [
+    [blokS.replace("AGENDA_LEWAT_MAKS = 14", "AGENDA_LEWAT_MAKS = 15"), "maks. 14 hari"],
+    [blokS.replace("return a.kunciUrut < b.kunciUrut ? -1 : a.kunciUrut > b.kunciUrut ? 1 : 0;", "return 0;"), "terdekat dulu"],
+    [blokS.replace("return a.kunciUrut < b.kunciUrut ? 1 : a.kunciUrut > b.kunciUrut ? -1 : 0;", "return 0;"), "terbaru dulu"],
+    [blokS.replace("hariDari(d.sampai || d.tanggal, kini) >= 0", "hariDari(d.tanggal, kini) >= 0"), "masa penawaran"],
+  ]) ok(cekS(jalanS(rusak, contoh)).some((x) => x.includes(pesan)), `uji balik susunAgenda: "${pesan}" harus tertangkap`);
+  // Data asli: setiap acara tampil tepat di satu tempat; jauh setelah tanggal terakhir + 14 hari semuanya tersembunyi.
+  const ctxAsli = { window: {} }; vm.createContext(ctxAsli);
+  vm.runInContext(readFileSync("data/agenda.js", "utf8"), ctxAsli);
+  const fAsli = jalanS(blokS, ctxAsli.window), jumlahAsli = (ctxAsli.window.AGENDA_IPO || []).length + (ctxAsli.window.AGENDA_DIVIDEN || []).length;
+  if (fAsli) {
+    const semuaT = [];
+    for (const x of [...(ctxAsli.window.AGENDA_IPO || []), ...(ctxAsli.window.AGENDA_DIVIDEN || [])]) JSON.stringify(x.tanggal || {}, (k, v) => { if (typeof v === "string" && /^\d{4}-\d{2}-\d{2}$/.test(v)) semuaT.push(v); return v; });
+    if (semuaT.length) {
+      const awal = semuaT.sort()[0], akhir = semuaT[semuaT.length - 1];
+      const tgl = (t, tambah) => { const [y, m, d] = t.split("-").map(Number); return new Date(y, m - 1, d + tambah, 9, 0, 0); };
+      const a = fAsli(tgl(awal, -1));
+      ok(a.depan.length === jumlahAsli && !a.lewat.length, `susunAgenda data asli: sehari sebelum tanggal pertama, semua ${jumlahAsli} acara harus di depan (dapat ${a.depan.length})`);
+      const b = fAsli(tgl(akhir, 1));
+      ok(!b.depan.length && b.lewat.length >= 1, "susunAgenda data asli: sehari setelah tanggal terakhir, acara terakhir harus di \"Baru saja lewat\"");
+      const c = fAsli(tgl(akhir, 15));
+      ok(!c.depan.length && !c.lewat.length, "susunAgenda data asli: 15 hari setelah tanggal terakhir, semua acara harus tersembunyi");
+    }
+  } else ok(false, "susunAgenda gagal dijalankan dengan data/agenda.js");
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);
 
