@@ -2030,3 +2030,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Hana + Raka: IPO ANDA dicari lagi; hanya muncul sumber yang sudah dicek, tidak ada yang menyebut status syariah → tetap tidak dicatat.
 - Bima memilih IDE.md #38 (contoh hitungan dividen per lot) untuk Dewi + Sari + Hana + Nina; Kirana meninjau setelahnya.
 - `node tests/cek.mjs` lolos (11 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 20 Nov 2026, 18.11 WIB — sesi kerja (Bima)
+- Proyek prioritas Agenda, IDE.md #38 selesai (Dewi + Sari + Hana + Nina): setiap kartu dividen kini punya baris "Contoh hitungan: 1 lot (100 saham) × Rp10 = Rp1.000 sebelum pajak.", dihitung dari `dps` yang sama dengan baris di atasnya (US$ tetap US$, tanpa kurs). Kata "lot" bisa diketuk di tiap kartu. Hana: hanya contoh hitungan, netral, tanpa ajakan. Nina: cek 2f-10 + 4 kasus hitungan (Rp10, Rp19,5, Rp2,75, US$0,0123) + 5 uji balik. Dicek 390/1280px terang/gelap tanpa scroll horizontal & galat JS; kartu dividen 390px 483→542px.
+- Kirana: tinjau baris aksi (#37 lanjutan) & contoh #38 di 390px terang/gelap → rapi, tanpa perbaikan.
+- Bima memilih IDE.md #39 (istilah tanggal bisa diketuk di pita beranda) untuk Dewi + Nina.
+- KMDS/TOTL (cek DES) dan IPO ANDA tetap dijadwalkan dicoba lagi sesi 07.xx besok. `node tests/cek.mjs` lolos (11 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

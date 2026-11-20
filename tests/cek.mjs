@@ -7448,6 +7448,50 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
   ]) ok(rusakJ + rusakC !== app + css && uji(rusakJ, rusakC).some((x) => x.includes(pesan)), `uji balik Agenda baris aksi: "${pesan}" harus tertangkap`);
 }
 
+// 2f-10. Agenda: contoh hitungan dividen per lot di kartu (Nina, 20 Nov 2026, IDE.md #38).
+// Dihitung dari dps yang sama, 1 lot = 100 saham, US$ tanpa konversi kurs, "sebelum pajak", istilah "lot" bisa diketuk, tanpa kata ajakan.
+{
+  const app = readFileSync("assets/app.js", "utf8");
+  const uji = (js) => {
+    const salah = [];
+    const i = js.indexOf("  function contohDividenLot("), j = js.indexOf("\n  }\n", i), f = i < 0 ? "" : js.slice(i, j);
+    if (!f) return ["fungsi contohDividenLot wajib ada"];
+    if (!/var LEMBAR_PER_LOT = 100;/.test(js)) salah.push("1 lot wajib 100 saham");
+    if (!/a\.dps \* LEMBAR_PER_LOT/.test(f)) salah.push("total wajib dps × lembar per lot");
+    if (!/a\.mataUang === "USD"/.test(f) || !/"US\$"/.test(f)) salah.push("dolar AS wajib ditulis US$ tanpa konversi kurs");
+    if (/kurs|\* *1[56]\d{3}/i.test(f.replace(/\/\/[^\n]*/g, ""))) salah.push("dilarang konversi kurs di contoh");
+    if (!/sebelum pajak/.test(f)) salah.push('contoh wajib menyebut "sebelum pajak"');
+    if (!/t\.istilah === "Lot"/.test(f) || !/pasangIstilah\(p, sudah\)/.test(f)) salah.push('istilah "lot" wajib bisa diketuk');
+    if (/untung|cuan|buruan|ketinggalan|pasti|beli|jual/i.test(f.replace(/\/\/[^\n]*/g, "").replace(/\/\*[\s\S]*?\*\//g, ""))) salah.push("kalimat contoh tanpa kata ajakan");
+    const k = js.indexOf("  function kartuAgenda("), kj = js.indexOf("\n  }\n", k), kartu = k < 0 ? "" : js.slice(k, kj);
+    if (!/ipo \? null : contohDividenLot\(a\)/.test(kartu)) salah.push("kartu dividen (bukan IPO) wajib memanggil contohDividenLot");
+    return salah;
+  };
+  const s10 = uji(app);
+  ok(!s10.length, "Agenda contoh hitungan dividen: " + s10.join("; "));
+  // Hitungan nyata: jalankan fungsi dengan el() tiruan untuk dps di data/agenda.js.
+  {
+    const i = app.indexOf("  function contohDividenLot("), j = app.indexOf("\n  }\n", i);
+    const kode = app.slice(i, j + 4);
+    const teksDari = (n) => typeof n === "string" ? n : (n.isi || []).map(teksDari).join("");
+    const f = new Function("el", "ISTILAH", "pasangIstilah", "var LEMBAR_PER_LOT = 100; var angkaContoh = new Intl.NumberFormat('id-ID', { maximumFractionDigits: 4 });" + kode + "; return contohDividenLot;")(
+      (tag, attrs, isi) => ({ tag, attrs, isi: isi || [(attrs && attrs.text) || ""] }), [{ istilah: "Lot" }], () => {});
+    const kasus = [[{ dps: 10, mataUang: "IDR" }, "1 lot (100 saham) × Rp10 = Rp1.000 sebelum pajak."],
+                   [{ dps: 19.5, mataUang: "IDR" }, "× Rp19,5 = Rp1.950 sebelum pajak."],
+                   [{ dps: 2.75, mataUang: "IDR" }, "= Rp275 sebelum pajak."],
+                   [{ dps: 0.0123, mataUang: "USD" }, "× US$0,0123 = US$1,23 sebelum pajak."]];
+    for (const [a, harap] of kasus) { const t = teksDari(f(a)); ok(t.includes(harap), `contoh hitungan dps ${a.dps} ${a.mataUang}: "${t}" harus memuat "${harap}"`); }
+    ok(f({ dps: 0, mataUang: "IDR" }) === null && f({ dps: null, mataUang: "IDR" }) === null, "contoh hitungan tidak tampil bila dps kosong/0");
+  }
+  for (const [rusak, pesan] of [
+    [app.replace("var LEMBAR_PER_LOT = 100;", "var LEMBAR_PER_LOT = 10;"), "100 saham"],
+    [app.replace('var usd = a.mataUang === "USD", awal = usd ? "US$" : "Rp";', 'var awal = "Rp";'), "US$"],
+    [app.replace('" sebelum pajak."', '"."'), "sebelum pajak"],
+    [app.replace("ipo ? null : contohDividenLot(a),", ""), "wajib memanggil"],
+    [app.replace('" sebelum pajak."', '" sebelum pajak, jangan sampai ketinggalan."'), "ajakan"],
+  ]) ok(rusak !== app && uji(rusak).some((x) => x.includes(pesan)), `uji balik Agenda contoh hitungan: "${pesan}" harus tertangkap`);
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);
 

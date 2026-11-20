@@ -863,6 +863,9 @@ button.istilah:hover, button.istilah[aria-expanded="true"] { color: var(--aksen)
 /* Agenda IPO & Dividen (Dewi + Arif, 19 Nov 2026) */
 .agenda-mundur { font-weight: 700; color: var(--tinta); }
 .agenda-lewat { color: var(--tinta-2); font-weight: 600; }
+/* Dewi (20 Nov 2026, IDE.md #38): contoh hitungan dividen per lot, satu baris tenang di bawah angka dividen. */
+.agenda-contoh { margin: 8px 0 0; font-size: 0.95em; color: var(--tinta); overflow-wrap: anywhere; }
+.agenda-contoh-label { font-weight: 600; }
 .agenda-tanggal { list-style: none; padding: 0; margin: 12px 0 0; display: grid; gap: 8px; border-left: 3px solid var(--garis); padding-left: 12px; }
 .agenda-tanggal li { margin: 0; }
 .agenda-t-kepala { margin: 0; overflow-wrap: anywhere; }

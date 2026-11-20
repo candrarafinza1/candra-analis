@@ -1687,6 +1687,22 @@
     });
     return el("div", { class: "salin-profil salin-kartu" }, [tombol, kotak, info]);
   }
+  /* Dewi + Sari (20 Nov 2026, IDE.md #38): satu baris contoh hitungan dividen per lot di kartu Agenda, dihitung dari `dps`
+     yang sama dengan baris di atasnya. Dolar AS tetap US$ (tanpa konversi kurs). Hanya contoh hitungan, bukan perkiraan
+     keuntungan dan bukan ajakan (ditinjau Hana). Kata "lot" dijadikan tombol istilah di setiap kartu. */
+  var LEMBAR_PER_LOT = 100;
+  var angkaContoh = new Intl.NumberFormat("id-ID", { maximumFractionDigits: 4 });
+  function contohDividenLot(a) {
+    if (typeof a.dps !== "number" || !(a.dps > 0)) return null;
+    var usd = a.mataUang === "USD", awal = usd ? "US$" : "Rp";
+    var total = Math.round(a.dps * LEMBAR_PER_LOT * 1e6) / 1e6;
+    var p = el("p", { class: "agenda-contoh" }, [el("span", { class: "agenda-contoh-label", text: "Contoh hitungan:" }),
+      " 1 lot (" + LEMBAR_PER_LOT + " saham) \u00d7 " + awal + angkaContoh.format(a.dps) + " = " + awal + angkaContoh.format(total) + " sebelum pajak."]);
+    // Hanya istilah "lot" yang ditandai di baris ini; istilah lain sudah ditandai di bagian kartu yang lain.
+    var iLot = ISTILAH.findIndex(function (t) { return t.istilah === "Lot"; }), sudah = {};
+    if (iLot >= 0) { ISTILAH.forEach(function (t, i) { if (i !== iLot) sudah[i] = true; }); pasangIstilah(p, sudah); }
+    return p;
+  }
   function kartuAgenda(x, kini, idK) {
     var a = x.data, ipo = x.jenis === "ipo";
     idK = idK || idKartuAgenda(x);
@@ -1733,6 +1749,7 @@
       el("p", { class: "kabar-kepala" }, kepala),
       el("h3", { class: "kabar-judul" }, judul),
       el("p", { class: "kabar-isi", text: info.join(" ") }),
+      ipo ? null : contohDividenLot(a),
       ul,
       /* Dewi + Kirana (20 Nov 2026, temuan tinjauan #37): kalender, "Salin tautan", dan "Sumber (n)" dalam satu baris aksi
          yang boleh turun baris (flex-wrap). Di layar lebar ketiganya sebaris; di 390px tombol kalender penuh satu baris lalu

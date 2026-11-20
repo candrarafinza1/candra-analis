@@ -580,7 +580,7 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Dampak bagi pemula: paham besar dividen per lot tanpa kalkulator.
 - Batasan: hanya contoh hitungan, bukan perkiraan keuntungan; tanpa kata ajakan (Hana meninjau); USD ditulis dalam US$ tanpa konversi kurs.
 - Usaha: kecil (Dewi + Sari; Nina menambah cek).
-- Status: diusulkan Kirana 20 Nov 15.xx; **dipilih Bima 20 Nov 17.xx** (masuk BACKLOG.md).
+- Status: diusulkan Kirana 20 Nov 15.xx; **dipilih Bima 20 Nov 17.xx**; **selesai 20 Nov 18.11** (Dewi + Sari, cek Nina 2f-10). Tinjauan Kirana 390px terang/gelap: rapi, tanpa perbaikan.
 
 ### 39. Beranda: pita "Agenda terdekat" menampilkan hitung mundur dengan istilah yang bisa diketuk
 - **Istilah tanggal langsung terjelaskan di beranda** — tampilan, usaha kecil
@@ -590,7 +590,7 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Dampak bagi pemula: belajar istilah tepat saat melihatnya.
 - Batasan: tanpa pustaka baru, bisa keyboard, ringan.
 - Usaha: kecil (Dewi; Nina menyesuaikan cek).
-- Status: diusulkan Kirana 20 Nov 15.xx.
+- Status: diusulkan Kirana 20 Nov 15.xx; **dipilih Bima 20 Nov 18.11** (masuk BACKLOG.md).
 
 ### Tinjauan Kirana, 9 Nov 10.09: hero & kartu beranda setelah teks diubah
 - 390px: kalimat hero 5 baris, rata-rata ±37 huruf per baris (nyaman dibaca di HP); istilah bergaris tetap terbaca, tombol "Mulai belajar" & "Lihat peringkat saham" masih di layar pertama 390×844.
