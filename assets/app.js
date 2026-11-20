@@ -1592,7 +1592,7 @@
   /* ---------- Agenda IPO & Dividen (Arif + Dewi, 19 Nov 2026; proyek prioritas Rafinza) ----------
      Data dari data/agenda.js. Kartu diurutkan dari tanggal penting berikutnya yang paling dekat.
      Acara yang semua tanggalnya sudah lewat pindah ke "Baru saja lewat" (maks. 14 hari), lebih lama disembunyikan.
-     Hitung mundur memakai tanggal perangkat. Tanpa simpanan, tanpa kirim data. Agenda = jadwal, bukan saran. */
+     Hitung mundur memakai tanggal perangkat. Tanpa kirim data (tanda "baru" di menu memakai localStorage, lihat tandaAgendaBaru). Agenda = jadwal, bukan saran. */
   var AGENDA_LEWAT_MAKS = 14;
   var PENJELASAN_AGENDA = {
     penawaranAwal: ["Penawaran awal (bookbuilding)", "Calon investor menyampaikan minat dan harga yang diinginkan, dalam kisaran harga yang ditetapkan. Belum membayar."],
@@ -1693,10 +1693,127 @@
       el("h3", { class: "kabar-judul" }, judul),
       el("p", { class: "kabar-isi", text: info.join(" ") }),
       ul,
+      tombolKalender(x, kini),
       el("p", { class: "agenda-sumber-judul", text: "Sumber:" }),
       sumber
     ]);
   }
+  /* ---------- Tambahkan ke kalender (Arif + Tegar, 20 Nov 2026; proyek prioritas Agenda) ----------
+     Berkas .ics dibuat di peramban (Blob) dan langsung diunduh: tidak ada data yang dikirim ke mana pun, tanpa server,
+     tanpa akun. Satu acara sehari penuh untuk tiap tanggal penting yang belum lewat, dengan pengingat sehari sebelumnya
+     pukul 09.00 (waktu perangkat), sehingga aplikasi kalender di HP yang mengingatkan.
+     Tegar: semua teks melewati escIcs() (RFC 5545: \ ; , dan baris baru di-escape, karakter kendali dibuang) dan setiap
+     baris dilipat ≤75 oktet, sehingga isi data tidak bisa menyisipkan baris atau properti baru. UID hanya huruf/angka/-. */
+  var ICS_ALAMAT = "https://candra-analis.vercel.app/agenda";
+  function escIcs(s) {
+    return String(s == null ? "" : s)
+      .replace(/[\u0000-\u0009\u000b\u000c\u000e-\u001f\u007f]/g, "")
+      .replace(/\\/g, "\\\\").replace(/;/g, "\\;").replace(/,/g, "\\,")
+      .replace(/\r\n|\r|\n/g, "\\n");
+  }
+  // Lipat satu baris konten menjadi potongan ≤75 oktet UTF-8 (baris lanjutan diawali satu spasi).
+  function lipatIcs(baris) {
+    var hasil = [], kini = "", oktet = 0, batas = 75;
+    Array.from(baris).forEach(function (ch) {
+      var c = ch.codePointAt(0), n = c < 0x80 ? 1 : c < 0x800 ? 2 : c < 0x10000 ? 3 : 4;
+      if (oktet + n > batas) { hasil.push(kini); kini = " "; oktet = 1; batas = 75; }
+      kini += ch; oktet += n;
+    });
+    hasil.push(kini);
+    return hasil.join("\r\n");
+  }
+  function tglIcs(t, tambah) {
+    var p = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(t));
+    if (!p) return null;
+    var d = new Date(Date.UTC(+p[1], +p[2] - 1, +p[3] + (tambah || 0)));
+    return d.getUTCFullYear() + ("0" + (d.getUTCMonth() + 1)).slice(-2) + ("0" + d.getUTCDate()).slice(-2);
+  }
+  function uidIcs(s) { return String(s).replace(/[^A-Za-z0-9-]/g, "-"); }
+  // Susun isi berkas .ics untuk satu kartu agenda (x dari susunAgenda). Hanya tanggal yang belum lewat.
+  function buatIcs(x, kini) {
+    var a = x.data, ipo = x.jenis === "ipo", h = kini || new Date();
+    var nama = ipo ? (a.kode ? a.kode + " (" + a.nama + ")" : a.nama) : a.kode;
+    var cap = h.toISOString().replace(/[-:]/g, "").replace(/\.\d+Z$/, "Z");
+    var sumber = (ipo ? [a.buktiSyariah].concat(a.sumber || []) : a.sumber || [])
+      .filter(function (s) { return s && /^https:\/\//.test(s.url); }).map(function (s) { return s.judul + ": " + s.url; });
+    var b = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//Candra Analis//Agenda IPO dan Dividen//ID", "CALSCALE:GREGORIAN", "METHOD:PUBLISH"];
+    x.tgl.forEach(function (d) {
+      if (hariDari(d.sampai || d.tanggal, h) < 0) return;
+      var p = PENJELASAN_AGENDA[d.kunci], mulai = tglIcs(d.tanggal), akhir = tglIcs(d.sampai || d.tanggal, 1);
+      if (!p || !mulai || !akhir) return;
+      var judul = nama + ": " + p[0] + (ipo ? " IPO" : " dividen " + a.jenis + " " + a.tahunBuku);
+      var isi = p[1] + "\n\nSumber:\n" + sumber.join("\n") +
+        "\n\nAgenda adalah jadwal, bukan saran membeli atau menjual. Cek ulang tanggalnya di sumber dan di " + ICS_ALAMAT;
+      b.push("BEGIN:VEVENT",
+        "UID:" + uidIcs([x.jenis, a.kode || a.nama, a.tahunBuku || "", d.kunci, mulai].join("-")) + "@candra-analis.vercel.app",
+        "DTSTAMP:" + cap,
+        "DTSTART;VALUE=DATE:" + mulai,
+        "DTEND;VALUE=DATE:" + akhir,
+        "SUMMARY:" + escIcs(judul),
+        "DESCRIPTION:" + escIcs(isi),
+        "URL:" + ICS_ALAMAT,
+        "TRANSP:TRANSPARENT",
+        "BEGIN:VALARM", "ACTION:DISPLAY", "DESCRIPTION:" + escIcs("Besok: " + judul), "TRIGGER:-PT15H", "END:VALARM",
+        "END:VEVENT");
+    });
+    b.push("END:VCALENDAR");
+    return b.map(lipatIcs).join("\r\n") + "\r\n";
+  }
+  function namaBerkasIcs(x) {
+    var a = x.data;
+    return ("agenda-" + (a.kode || a.nama) + "-" + (x.jenis === "ipo" ? "ipo" : "dividen-" + a.jenis + "-" + a.tahunBuku))
+      .toLowerCase().replace(/[^a-z0-9-]+/g, "-").replace(/-+/g, "-").replace(/-$/, "") + ".ics";
+  }
+  function tombolKalender(x, kini) {
+    var sisa = x.tgl.filter(function (d) { return hariDari(d.sampai || d.tanggal, kini) >= 0; }).length;
+    if (!sisa) return null;
+    var label = x.jenis === "ipo" ? (x.data.kode || x.data.nama) : x.data.kode;
+    var info = el("p", { class: "kalender-info", role: "status", "aria-live": "polite" });
+    var tombol = el("button", { type: "button", class: "tombol tombol-gelap tombol-kalender",
+      text: "Tambahkan ke kalender (" + sisa + " tanggal)",
+      "aria-label": "Tambahkan ke kalender (" + sisa + " tanggal): " + label + ", berkas .ics" });
+    var urlLama = null;
+    tombol.addEventListener("click", function () {
+      try {
+        var blob = new Blob([buatIcs(x, new Date())], { type: "text/calendar;charset=utf-8" });
+        // URL berkas sebelumnya dilepas saat tombol ditekan lagi (tanpa pengatur waktu).
+        if (urlLama) URL.revokeObjectURL(urlLama);
+        var url = urlLama = URL.createObjectURL(blob), t = document.createElement("a");
+        t.href = url; t.download = namaBerkasIcs(x); t.hidden = true;
+        document.body.appendChild(t); t.click(); t.remove();
+        info.textContent = "Berkas " + namaBerkasIcs(x) + " diunduh. Buka berkasnya agar tanggal masuk ke aplikasi kalender.";
+      } catch (err) {
+        info.textContent = "Berkas kalender belum bisa dibuat di peramban ini. Tanggalnya tetap bisa dicatat manual dari kartu ini.";
+      }
+    });
+    return el("div", { class: "agenda-kalender" }, [
+      tombol,
+      el("p", { class: "agenda-t-isi", text: "Berkas .ics untuk aplikasi kalender di HP atau komputer, dengan pengingat sehari sebelumnya pukul 09.00. Dibuat di perangkat Anda; tidak ada data yang dikirim." }),
+      info
+    ]);
+  }
+
+  /* Tanda "baru" di menu Agenda (Arif + Tegar, 20 Nov 2026): hanya kenyamanan. Daftar acara yang sudah dilihat disimpan
+     di localStorage peramban ini (dibungkus try/catch; bila tidak bisa, tanda tidak muncul). Tanpa server, tanpa data pribadi. */
+  var KUNCI_AGENDA_DILIHAT = "candra-agenda-dilihat";
+  function idAgenda(x) { return [x.jenis, x.data.kode || x.data.nama, x.data.jenis || "", x.data.tahunBuku || ""].join(":"); }
+  function tandaAgendaBaru() {
+    if (!window.AGENDA_IPO && !window.AGENDA_DIVIDEN) return;
+    var ids = susunAgenda(new Date()).depan.map(idAgenda), dilihat = null;
+    try { dilihat = JSON.parse(localStorage.getItem(KUNCI_AGENDA_DILIHAT) || "null"); } catch (e) { return; }
+    if (document.getElementById("agenda")) {
+      try { localStorage.setItem(KUNCI_AGENDA_DILIHAT, JSON.stringify(ids)); } catch (e) { /* abaikan */ }
+      return;
+    }
+    if (!Array.isArray(dilihat)) dilihat = [];
+    var baru = ids.filter(function (i) { return dilihat.indexOf(i) < 0; }).length;
+    if (!baru) return;
+    document.querySelectorAll('.nav a[href="agenda.html"]').forEach(function (a) {
+      a.appendChild(el("span", { class: "titik-baru", "aria-hidden": "true" }));
+      a.appendChild(el("span", { class: "khusus-pembaca-layar", text: " (ada " + baru + " agenda baru)" }));
+    });
+  }
+
   function renderAgenda() {
     var akar = document.getElementById("agenda");
     if (!akar) return;
@@ -1737,6 +1854,7 @@
   renderProfil();
   renderKabar();
   renderAgenda();
+  tandaAgendaBaru();
   renderKabarBeranda();
   istilahBeranda();
   renderRujukan();

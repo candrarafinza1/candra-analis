@@ -7055,6 +7055,77 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
   for (const [a, au, pesan] of rusakK) ok(cekKb(a, au).some((x) => x.includes(pesan)), `uji balik keyboard: "${pesan}" harus tertangkap`);
 }
 
+// 2f-2. Tombol "Tambahkan ke kalender" (.ics) & tanda "baru" di menu Agenda (Tegar + Nina, 20 Nov 2026).
+// Fungsi pembuat .ics dijalankan sungguhan: data jahat (baris baru, ; , \ karakter kendali) tidak boleh menyisipkan
+// baris/properti baru; setiap baris ≤75 oktet & diakhiri CRLF; hanya tanggal yang belum lewat; pengingat sehari sebelumnya.
+// Tanda "baru": localStorage dibungkus try/catch, dan semua halaman bermenu memuat data/agenda.js sebelum app.js.
+{
+  const app = readFileSync("assets/app.js", "utf8");
+  const potong = (dari, sampai) => { const i = app.indexOf(dari), j = app.indexOf(sampai, i); return i < 0 || j < 0 ? "" : app.slice(i, j); };
+  const kodeIcs = [potong("  var PENJELASAN_AGENDA", "  function teksMundur("), potong("  var ICS_ALAMAT", "  function tombolKalender(")];
+  ok(kodeIcs.every(Boolean) && /function buatIcs\(/.test(kodeIcs[1]), "app.js: PENJELASAN_AGENDA, hariDari, escIcs, lipatIcs, buatIcs harus bisa diambil untuk diuji");
+  const ctxK = {};
+  vm.createContext(ctxK);
+  try { vm.runInContext(kodeIcs.join("\n") + "\n;globalThis.buatIcs = buatIcs; globalThis.escIcs = escIcs; globalThis.namaBerkasIcs = namaBerkasIcs;", ctxK); } catch (e) { ok(false, "kode .ics gagal dijalankan: " + e.message); }
+  const cekIcs = (isi) => {
+    const s = [];
+    if (!isi.endsWith("\r\n")) s.push("tidak diakhiri CRLF");
+    if (/\r(?!\n)|(?<!\r)\n/.test(isi)) s.push("ada baris baru tanpa CRLF");
+    const fisik = isi.slice(0, -2).split("\r\n");
+    fisik.forEach((b) => { if (Buffer.byteLength(b, "utf8") > 75) s.push("baris > 75 oktet"); if (/[\u0000-\u0008\u000b-\u001f\u007f]/.test(b)) s.push("karakter kendali"); });
+    const logis = isi.slice(0, -2).replace(/\r\n /g, "").split("\r\n");
+    const izin = /^(BEGIN|END|VERSION|PRODID|CALSCALE|METHOD|UID|DTSTAMP|DTSTART;VALUE=DATE|DTEND;VALUE=DATE|SUMMARY|DESCRIPTION|URL|TRANSP|ACTION|TRIGGER)[:]/;
+    logis.forEach((b) => { if (!izin.test(b)) s.push("properti asing: " + b.slice(0, 40)); });
+    logis.filter((b) => /^(SUMMARY|DESCRIPTION):/.test(b)).forEach((b) => { if (/(^|[^\\])(\\\\)*[;,]/.test(b.replace(/^[A-Z]+:/, ""))) s.push("; atau , tidak di-escape"); });
+    if (logis[0] !== "BEGIN:VCALENDAR" || logis[logis.length - 1] !== "END:VCALENDAR") s.push("kerangka VCALENDAR");
+    const nEv = logis.filter((b) => b === "BEGIN:VEVENT").length;
+    if (nEv !== logis.filter((b) => b === "BEGIN:VALARM").length || nEv !== logis.filter((b) => b === "TRIGGER:-PT15H").length) s.push("tiap acara wajib pengingat -PT15H");
+    if (logis.filter((b) => b.startsWith("UID:")).some((b) => !/^UID:[A-Za-z0-9-]+@candra-analis\.vercel\.app$/.test(b))) s.push("UID");
+    return { s, logis, nEv };
+  };
+  const kini = new Date(2026, 10, 25, 10, 0, 0);
+  const contoh = { jenis: "dividen", data: { kode: "TOTO", jenis: "interim", tahunBuku: 2026, dps: 10, mataUang: "IDR",
+      tanggal: { cum: "2026-11-24", ex: "2026-11-25", recording: "2026-11-26", pembayaran: "2026-12-15" },
+      sumber: [{ judul: "Sumber, 17 Nov 2026: judul; pakai koma, dan \\ garis", url: "https://contoh.id/a" }] } };
+  contoh.tgl = ["cum", "ex", "recording", "pembayaran"].map((k) => ({ kunci: k, tanggal: contoh.data.tanggal[k] }));
+  const h1 = cekIcs(ctxK.buatIcs ? ctxK.buatIcs(contoh, kini) : "");
+  ok(!h1.s.length, "buatIcs contoh: " + h1.s.join("; "));
+  ok(h1.nEv === 3, `buatIcs: hanya tanggal yang belum lewat (harap 3 acara pada 25 Nov, dapat ${h1.nEv})`);
+  ok(h1.logis.includes("DTSTART;VALUE=DATE:20261215") && h1.logis.includes("DTEND;VALUE=DATE:20261216"), "buatIcs: acara sehari penuh (DTEND = hari berikutnya)");
+  ok(h1.logis.some((b) => b.startsWith("DESCRIPTION:") && b.includes("bukan saran membeli atau menjual")), "buatIcs: keterangan memuat 'bukan saran membeli atau menjual'");
+  // Data jahat: mencoba menyisipkan properti/acara baru lewat judul sumber & kode.
+  const jahat = JSON.parse(JSON.stringify(contoh));
+  jahat.tgl = contoh.tgl;
+  jahat.data.kode = "TO\r\nATTACH:https://jahat.id/x";
+  jahat.data.sumber = [{ judul: "a\nEND:VEVENT\r\nBEGIN:VEVENT\nSUMMARY:palsu;x,y\\\u0007\u0000ééééééééééééééééééééééééééééééééééééééééééééé😀😀😀", url: "https://contoh.id/a" },
+    { judul: "tidak aman", url: "javascript:alert(1)" }];
+  const isiJ = ctxK.buatIcs ? ctxK.buatIcs(jahat, kini) : "";
+  const h2 = cekIcs(isiJ);
+  ok(!h2.s.length && h2.nEv === 3, "buatIcs data jahat: " + h2.s.join("; "));
+  ok(!isiJ.includes("javascript:"), "buatIcs: sumber tanpa https tidak boleh ikut");
+  const nb = ctxK.namaBerkasIcs ? ctxK.namaBerkasIcs(jahat) : "";
+  ok(/^[a-z0-9-]+\.ics$/.test(nb), "namaBerkasIcs harus hanya huruf kecil/angka/-: " + nb);
+  // Uji balik: cek .ics harus menangkap kerusakan.
+  const baik = ctxK.buatIcs ? ctxK.buatIcs(contoh, kini) : "";
+  for (const [rusak, pesan] of [
+    [baik.replace("SUMMARY:", "SUMMARY:x\r\nATTACH:y\r\nX:"), "properti asing"],
+    [baik.replace(/\r\n/, "\n"), "CRLF"],
+    [baik.replace("TRIGGER:-PT15H", "TRIGGER:-PT1H"), "pengingat"],
+    [baik.replace(/SUMMARY:([^\r]*)/, "SUMMARY:$1;x"), "escape"],
+    [baik.replace("PRODID:", "PRODID:" + "x".repeat(80)), "75 oktet"],
+  ]) ok(cekIcs(rusak).s.length > 0, `uji balik .ics: "${pesan}" harus tertangkap`);
+  ok(ctxK.escIcs && ctxK.escIcs("a;b,c\\d\ne") === "a\\;b\\,c\\\\d\\ne", "escIcs: ; , \\ dan baris baru harus di-escape");
+  // Tanda "baru" & pemuatan data.
+  const fTanda = potong("  function tandaAgendaBaru()", "\n  }\n");
+  ok(/try \{[^}]*localStorage\.getItem/.test(fTanda) && /try \{[^}]*localStorage\.setItem/.test(fTanda), "tandaAgendaBaru: localStorage wajib dibungkus try/catch");
+  ok(/tandaAgendaBaru\(\);/.test(app) && /khusus-pembaca-layar/.test(fTanda), "tandaAgendaBaru dipanggil dan punya teks untuk pembaca layar");
+  ok(/tombolKalender\(x, kini\)/.test(app), "kartuAgenda harus memasang tombolKalender");
+  for (const f of readdirSync(".").filter((n) => n.endsWith(".html") && n !== "404.html")) {
+    const h = readFileSync(f, "utf8"), a = h.indexOf('<script src="data/agenda.js"></script>'), b = h.indexOf('<script src="assets/app.js"></script>');
+    ok(a >= 0 && a < b, `${f}: harus memuat data/agenda.js sebelum assets/app.js (tanda "baru" di menu Agenda)`);
+  }
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);
 
