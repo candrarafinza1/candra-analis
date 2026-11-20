@@ -1910,7 +1910,10 @@
       });
       return el("div", { class: "agenda-arti-kelompok" }, [el("p", { class: "agenda-arti-judul", text: judul }), dl]);
     }
-    return el("details", { class: "agenda-arti", id: "arti-tanggal" }, [
+    // Terbuka di kunjungan pertama ke Agenda, tertutup sesudahnya (localStorage dalam try/catch; gagal = tertutup).
+    var pertama = false;
+    try { pertama = !localStorage.getItem("ca-arti-agenda"); localStorage.setItem("ca-arti-agenda", "1"); } catch (e) { pertama = false; }
+    return el("details", pertama ? { class: "agenda-arti", id: "arti-tanggal", open: "" } : { class: "agenda-arti", id: "arti-tanggal" }, [
       el("summary", { text: "Arti tanggal-tanggal ini" }),
       kelompok("Tahap IPO", ["penawaranAwal", "penawaranUmum", "penjatahan", "pencatatan"]),
       kelompok("Tanggal dividen", ["cum", "ex", "recording", "pembayaran"])

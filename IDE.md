@@ -531,7 +531,7 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Dampak bagi pemula: melihat lebih banyak acara sekaligus tanpa kehilangan penjelasan.
 - Batasan: tanpa pustaka baru, `<details>` bisa dibuka keyboard, tidak ada animasi wajib (hormati prefers-reduced-motion), teks penjelasan tidak berubah (sudah ditinjau Hana).
 - Usaha: kecil (Dewi; Nina menyesuaikan cek 2f-4 dan menambah cek tinggi halaman).
-- Status: diusulkan Kirana 20 Nov 10.xx; dipilih Bima 20 Nov 10.xx untuk Dewi, masuk BACKLOG.md.
+- Status: diusulkan Kirana 20 Nov 10.xx; dipilih Bima 20 Nov 10.xx untuk Dewi, masuk BACKLOG.md. **Selesai 20 Nov 13.xx** (Dewi + Arif, cek Nina 2f-5): kotak terbuka di kunjungan pertama, tertutup sesudahnya; tinggi 390px ±6.100px → 5.094px saat tertutup.
 
 ### 35. Agenda: pilihan "Semua / IPO / Dividen" dan ringkasan "minggu ini"
 - **Cepat menemukan acara yang dicari** — fitur, usaha kecil–sedang
@@ -541,7 +541,7 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Dampak bagi pemula: tahu sekilas apa yang terjadi minggu ini.
 - Batasan: ringkasan hanya menghitung, tanpa kata ajakan. **Catatan:** pemberitahuan lewat email berlangganan TIDAK diusulkan sekarang karena butuh server pengirim email dan menyimpan alamat email pengguna (data pribadi); itu perlu keputusan Rafinza. Tombol "Tambahkan ke kalender" sudah menjadi pengingat tanpa data pribadi.
 - Usaha: kecil–sedang (Arif + Dewi). Menunggu antrean setelah #34.
-- Status: diusulkan Kirana 20 Nov 10.xx.
+- Status: diusulkan Kirana 20 Nov 10.xx; dipilih Bima 20 Nov 13.xx untuk Dewi + Arif, masuk BACKLOG.md.
 
 ### Tinjauan Kirana, 9 Nov 10.09: hero & kartu beranda setelah teks diubah
 - 390px: kalimat hero 5 baris, rata-rata ±37 huruf per baris (nyaman dibaca di HP); istilah bergaris tetap terbaca, tombol "Mulai belajar" & "Lihat peringkat saham" masih di layar pertama 390×844.
