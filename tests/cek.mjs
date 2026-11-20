@@ -7233,6 +7233,35 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
   } else ok(false, "susunAgenda gagal dijalankan dengan data/agenda.js");
 }
 
+// 2f-5. Kartu Agenda ringkas (Nina, 20 Nov 2026, IDE.md #34): penjelasan tanggal hanya sekali di kotak
+// <details> "Arti tanggal-tanggal ini" di atas daftar, tidak diulang di kartu. Semua 8 penjelasan tetap ada.
+{
+  const app = readFileSync("assets/app.js", "utf8");
+  const potong = (dari, sampai) => { const i = app.indexOf(dari), j = app.indexOf(sampai, i); return i < 0 || j < 0 ? "" : app.slice(i, j); };
+  const cekRingkas = (kartu, kotak, render) => {
+    const s = [];
+    if (/PENJELASAN_AGENDA\[[^\]]+\]\[1\]|\bp\[1\]/.test(kartu)) s.push("kartu tidak boleh memuat teks penjelasan tanggal");
+    if (!/el\("details"/.test(kotak) || !/"Arti tanggal-tanggal ini"/.test(kotak)) s.push("kotak <details> \"Arti tanggal-tanggal ini\" wajib ada");
+    for (const k of ["penawaranAwal", "penawaranUmum", "penjatahan", "pencatatan", "cum", "ex", "recording", "pembayaran"])
+      if (!new RegExp('"' + k + '"').test(kotak)) { s.push("kotak arti wajib memuat " + k); break; }
+    if (!/PENJELASAN_AGENDA\[k\]\[1\]/.test(kotak)) s.push("kotak arti wajib memakai teks PENJELASAN_AGENDA");
+    const iP = render.indexOf("pasangIstilah(akar)"), iK = render.indexOf("kotakArtiAgenda()");
+    if (iP < 0 || iK < 0 || iK < iP) s.push("istilah dipasang di kartu dulu, baru kotak arti disisipkan (agar nama tanggal di kartu bisa diketuk)");
+    if (!/insertBefore\(kotakArtiAgenda\(\), akar\.querySelector\("h2"\)\)/.test(render)) s.push("kotak arti wajib di atas daftar (sebelum h2 pertama)");
+    return s;
+  };
+  const kartu = potong("  function kartuAgenda(", "  /* ---------- Tambahkan ke kalender");
+  const kotak = potong("  function kotakArtiAgenda()", "\n  }\n");
+  const render = potong("  function renderAgenda()", "  function kotakArtiAgenda()");
+  const sR = cekRingkas(kartu, kotak, render);
+  ok(!sR.length, "Agenda ringkas: " + sR.join("; "));
+  for (const [rusak, pesan] of [
+    [[kartu.replace("el(\"strong\", { text: p[0] }),", "el(\"strong\", { text: p[0] }), p[1],"), kotak, render], "kartu tidak boleh"],
+    [[kartu, kotak.replace('"recording", ', ""), render], "recording"],
+    [[kartu, kotak, render.replace("pasangIstilah(akar);\n", "").replace("akar.querySelector(\"h2\"));", "akar.querySelector(\"h2\")); pasangIstilah(akar);")], "istilah dipasang"],
+  ]) ok(cekRingkas(...rusak).some((x) => x.includes(pesan)), `uji balik Agenda ringkas: "${pesan}" harus tertangkap`);
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);
 

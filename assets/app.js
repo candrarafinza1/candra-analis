@@ -1686,8 +1686,7 @@
           el("strong", { text: p[0] }), " ",
           el("time", { datetime: d.tanggal, text: teksT }),
           el("span", { class: "agenda-t-mundur", text: " · " + (n < 0 ? "sudah lewat" : hariDari(d.tanggal, kini) < 0 ? "sedang berjalan" : teksMundur(hariDari(d.tanggal, kini))) })
-        ]),
-        el("p", { class: "agenda-t-isi", text: p[1] })
+        ])
       ]));
     });
     var sumber = el("ul", { class: "agenda-sumber" });
@@ -1896,7 +1895,26 @@
     if (s.lewat.length) bagian("agenda-lewat", "Baru saja lewat", "", s.lewat);
     akar.appendChild(el("p", { class: "catatan-metode" }, ["Acara yang sudah lewat lebih dari " + AGENDA_LEWAT_MAKS +
       " hari tidak ditampilkan. Cara tim memilih data dijelaskan di ", el("a", { href: "metodologi.html", text: "halaman metodologi" }), "."]));
+    // Istilah dipasang lebih dulu di kartu (nama tanggal bisa diketuk), baru kotak arti disisipkan di atas daftar.
     pasangIstilah(akar);
+    akar.insertBefore(kotakArtiAgenda(), akar.querySelector("h2"));
+  }
+  /* Dewi + Arif (20 Nov 2026, IDE.md #34): penjelasan tiap tanggal ditulis sekali di kotak <details> di atas daftar,
+     tidak diulang di setiap kartu, agar halaman lebih pendek di HP. Teks dari PENJELASAN_AGENDA, tidak diubah. */
+  function kotakArtiAgenda() {
+    function kelompok(judul, kunci) {
+      var dl = el("dl", { class: "agenda-arti-daftar" });
+      kunci.forEach(function (k) {
+        dl.appendChild(el("dt", { text: PENJELASAN_AGENDA[k][0] }));
+        dl.appendChild(el("dd", { text: PENJELASAN_AGENDA[k][1] }));
+      });
+      return el("div", { class: "agenda-arti-kelompok" }, [el("p", { class: "agenda-arti-judul", text: judul }), dl]);
+    }
+    return el("details", { class: "agenda-arti", id: "arti-tanggal" }, [
+      el("summary", { text: "Arti tanggal-tanggal ini" }),
+      kelompok("Tahap IPO", ["penawaranAwal", "penawaranUmum", "penjatahan", "pencatatan"]),
+      kelompok("Tanggal dividen", ["cum", "ex", "recording", "pembayaran"])
+    ]);
   }
 
   tandaiMenu();

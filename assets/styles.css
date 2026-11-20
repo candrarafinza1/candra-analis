@@ -867,6 +867,18 @@ button.istilah:hover, button.istilah[aria-expanded="true"] { color: var(--aksen)
 .agenda-tanggal li { margin: 0; }
 .agenda-t-kepala { margin: 0; overflow-wrap: anywhere; }
 .agenda-t-isi { margin: 2px 0 0; font-size: .9rem; color: var(--tinta-2); }
+/* Kotak "Arti tanggal-tanggal ini" (Dewi, 20 Nov 2026, IDE.md #34) */
+.agenda-arti { margin: 16px 0 0; background: var(--putih); border: 1px solid var(--garis); border-radius: var(--radius-kecil); padding: 0 14px; }
+.agenda-arti summary { cursor: pointer; font-weight: 700; min-height: 44px; display: flex; align-items: center; }
+.agenda-arti summary::-webkit-details-marker { display: none; }
+.agenda-arti summary::before { content: "+"; display: inline-block; width: 1.2em; font-weight: 800; color: var(--tinta-2); }
+.agenda-arti[open] summary::before { content: "−"; }
+.agenda-arti[open] { padding-bottom: 12px; }
+.agenda-arti-kelompok { display: grid; gap: 4px; margin-top: 8px; }
+.agenda-arti-judul { margin: 0; font-size: .88rem; font-weight: 700; color: var(--tinta-2); }
+.agenda-arti-daftar { margin: 0; }
+.agenda-arti-daftar dt { font-weight: 700; margin-top: 6px; }
+.agenda-arti-daftar dd { margin: 2px 0 0; font-size: .92rem; color: var(--tinta-2); }
 .agenda-t-mundur { color: var(--tinta-2); }
 .agenda-t-lewat .agenda-t-kepala strong { font-weight: 600; }
 .agenda-t-lewat .agenda-t-kepala { color: var(--tinta-2); }
