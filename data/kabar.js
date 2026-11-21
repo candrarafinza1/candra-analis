@@ -55,10 +55,10 @@ window.KABAR = [
   { kode: "CTRA", tanggal: "2026-11-01", jenis: "Laporan keuangan",
     ringkas: "Ciputra Development merilis laporan 9 bulan 2026: laba bersih Rp1,32 triliun, turun 18,5%. Penjualan dan pendapatan usaha Rp7,48 triliun, turun 10,79% dari Rp8,39 triliun.",
     sumber: { judul: "Kontan, 1 Nov 2026: Laba Ciputra Development (CTRA) susut jadi Rp1,32 triliun di kuartal III-2026", url: "https://investasi.kontan.co.id/news/laba-ciputra-development-ctra-susut-jadi-rp-132-triliun-di-kuartal-iii-2026" } },
-  // Laporan 9 bulan ICBP — IDX Channel, 30 Okt 2026
-  { kode: "ICBP", tanggal: "2026-10-30", jenis: "Laporan keuangan",
-    ringkas: "Indofood CBP merilis laporan 9 bulan 2026: laba yang diatribusikan kepada pemilik entitas induk Rp6,1 triliun, turun sekitar 14,1% dari Rp7,1 triliun.",
-    sumber: { judul: "IDX Channel, 30 Okt 2026: Laba ICBP turun 14 persen jadi Rp6,1 triliun hingga kuartal III", url: "https://www.idxchannel.com/market-news/laba-produsen-indomie-icbp-turun-14-persen-jadi-rp61-triliun-hingga-kuartal-iii" } },
+  // Laporan 9 bulan ICBP — Fortune IDN, 2 Nov 2026 (angka sama dengan laba9b; IDX Channel 30 Okt menulis Rp6,1 T vs Rp7,1 T, pembulatan). Sari + Hana, 21 Nov 19.xx
+  { kode: "ICBP", tanggal: "2026-11-02", jenis: "Laporan keuangan",
+    ringkas: "Indofood CBP merilis laporan Januari–September 2026: laba yang diatribusikan kepada pemilik entitas induk Rp6,16 triliun, dibandingkan Rp7,10 triliun pada periode yang sama 2025. Penjualan naik 15%.",
+    sumber: { judul: "Fortune IDN, 2 Nov 2026: Penjualan ICBP naik 15%, laba Rp6,16 triliun hingga September 2026", url: "https://www.fortuneidn.com/business/penjualan-icbp-naik-15-biaya-produksi-tekan-margin-00-4pj81-1dd5zr" } },
   // Pembelian kembali saham (buyback) — Kontan, 3 Okt 2026
   { kode: "UNTR", tanggal: "2026-10-03", jenis: "Pembelian kembali saham",
     ringkas: "United Tractors menyiapkan dana hingga Rp2 triliun untuk membeli kembali sahamnya sendiri (buyback).",
