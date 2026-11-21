@@ -1703,6 +1703,15 @@
     if (iLot >= 0) { ISTILAH.forEach(function (t, i) { if (i !== iLot) sudah[i] = true; }); pasangIstilah(p, sudah); }
     return p;
   }
+  /* Arif + Dewi (21 Nov 2026, IDE.md #44): label teks "Baru ditambahkan <tanggal>" untuk entri yang field opsional
+     `ditambahkan`-nya 0–AGENDA_BARU_HARI hari lalu. Tanggal tidak sah atau masa depan diabaikan (tanpa label).
+     Label berupa teks (bukan hanya warna) agar terbaca pembaca layar dan mode gelap. */
+  var AGENDA_BARU_HARI = 3;
+  function teksBaruAgenda(t, kini) {
+    var n = hariDari(t, kini);
+    if (n == null || n > 0 || -n > AGENDA_BARU_HARI) return "";
+    return "Baru ditambahkan " + tanggalId(t);
+  }
   function kartuAgenda(x, kini, idK) {
     var a = x.data, ipo = x.jenis === "ipo";
     idK = idK || idKartuAgenda(x);
@@ -1713,6 +1722,8 @@
            : el("span", { class: "kode", text: a.kode }),
          el("span", { class: "nama-emiten", text: "Dividen " + a.jenis + " tahun buku " + a.tahunBuku })];
     var kepala = [el("span", { class: "kabar-jenis", text: ipo ? "IPO syariah" : "Dividen" })];
+    var baru = teksBaruAgenda(a.ditambahkan, kini);
+    if (baru) kepala.push(el("span", { class: "agenda-baru", text: baru }));
     if (x.berikut) {
       var n = hariDari(x.berikut.tanggal, kini);
       var namaB = PENJELASAN_AGENDA[x.berikut.kunci][0];

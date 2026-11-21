@@ -31,6 +31,11 @@
      sumber: [{ judul, url }]
    }]
 
+   Field opsional untuk IPO & dividen (Arif, 21 Nov 2026, IDE.md #44):
+     ditambahkan: "YYYY-MM-DD"   // tanggal entri dimasukkan tim; kartu ≤3 hari sejak tanggal ini diberi label
+                                 // "Baru ditambahkan <tanggal>". Diisi Fajar HANYA untuk entri baru mulai rutin
+                                 // berikutnya; entri lama tidak diberi tanggal karangan.
+
    Catatan Hana: DES periode II 2026 biasanya terbit akhir November dan berlaku 1 Desember.
    Setelah terbit, nomor baris setiap kode di sini dicek ulang ke DES baru. */
 

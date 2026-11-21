@@ -2068,3 +2068,8 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Proyek prioritas Agenda, IDE.md #43 selesai (Sari + Laras + Hana): pelajaran Praktik kini punya bagian "Mengapa harga saham biasanya bergerak di ex date?" (pembeli mulai ex date tidak berhak atas dividen, harga sering turun, besar turunnya tidak tetap, ada pajak, membeli demi dividen belum tentu memberi hasil lebih). Aturan BEI soal penyesuaian harga acuan tetap tidak ditemukan, jadi klaim itu tidak ditulis (keputusan Hana); sumber: IDX Channel 30 Sep 2024. Arti "Ex date" di kamus diselaraskan. PDF modul dibuat ulang. Dicek 390/1280px tanpa scroll horizontal & galat JS.
 - Hana + Raka: IPO ANDA tetap tanpa bukti status syariah, tidak dicatat; dicoba lagi sesi 13.xx.
 - `node tests/cek.mjs` lolos (11 halaman, 8 pelajaran, 32 emiten). Masalah berat: tidak ada baru (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 21 Nov 2026, 10.08 WIB — sesi kerja (Bima)
+- Proyek prioritas Agenda, IDE.md #44 selesai (Arif + Dewi + Nina): kartu Agenda yang punya field opsional `ditambahkan` ≤3 hari lalu kini memberi label teks "Baru ditambahkan <tanggal>"; tanggal tidak sah/masa depan diabaikan. Entri lama sengaja tidak diberi tanggal (tidak mengarang); Fajar mengisinya untuk entri baru mulai rutin 13.xx. Nina: cek 2f-15 + 4 uji balik. Dicek 390px terang/gelap & 1280px dengan data uji, tanpa scroll horizontal & galat JS; Kirana: rapi.
+- IPO ANDA & dividen KMDS/calon Katadata tetap menunggu bukti syariah/baris DES (dicoba lagi rutin 13.xx).
+- `node tests/cek.mjs` lolos (11 halaman, 8 pelajaran, 32 emiten). Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

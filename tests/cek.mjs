@@ -7668,6 +7668,53 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
   }
 }
 
+// 2f-15. Agenda: label "Baru ditambahkan <tanggal>" (Nina, 21 Nov 2026; Arif + Dewi, IDE.md #44).
+{
+  const app = readFileSync("assets/app.js", "utf8");
+  const ag = readFileSync("data/agenda.js", "utf8");
+  const potongF = (js, awal) => { const i = js.indexOf(awal), j = js.indexOf("\n  }\n", i); return i < 0 ? "" : js.slice(i, j); };
+  // Data: bila ada `ditambahkan`, wajib "YYYY-MM-DD" sah dan bukan masa depan (tidak ada tanggal karangan ke depan).
+  for (const m of ag.replace(/\/\*[\s\S]*?\*\//g, "").replace(/^\s*\/\/.*$/gm, "").matchAll(/ditambahkan:\s*("[^"]*"|[^,}\s]+)/g)) {
+    const v = m[1].replace(/"/g, ""), d = new Date(v + "T00:00:00+07:00");
+    ok(/^\d{4}-\d{2}-\d{2}$/.test(v) && !isNaN(d) && d.getTime() <= Date.now() + 86400000, "agenda.js: ditambahkan wajib YYYY-MM-DD dan bukan masa depan: " + v);
+  }
+  const uji = (js) => {
+    const salah = [];
+    const f = potongF(js, "  function teksBaruAgenda(");
+    if (!f) return ["fungsi teksBaruAgenda wajib ada"];
+    const fn = new Function("hariDari", "tanggalId", "AGENDA_BARU_HARI", f.replace("function teksBaruAgenda", "return function") + "\n  }");
+    const hariDari = (t, kini) => { const p = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(t)); if (!p) return null;
+      const h = new Date(kini.getFullYear(), kini.getMonth(), kini.getDate()); return Math.round((new Date(+p[1], +p[2] - 1, +p[3]) - h) / 86400000); };
+    const BUL = ["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Agu","Sep","Okt","Nov","Des"];
+    const tanggalId = (t) => { const p = String(t).split("-"); return parseInt(p[2], 10) + " " + BUL[+p[1] - 1] + " " + p[0]; };
+    const bh = /var AGENDA_BARU_HARI = (\d+);/.exec(js);
+    if (!bh || +bh[1] !== 3) salah.push("AGENDA_BARU_HARI wajib 3");
+    const t = fn(hariDari, tanggalId, bh ? +bh[1] : 3);
+    const kini = new Date(2026, 10, 21);
+    if (t("2026-11-21", kini) !== "Baru ditambahkan 21 Nov 2026") salah.push("hari ini wajib berlabel");
+    if (t("2026-11-18", kini) !== "Baru ditambahkan 18 Nov 2026") salah.push("3 hari lalu wajib berlabel");
+    if (t("2026-11-17", kini) !== "") salah.push("4 hari lalu tanpa label");
+    if (t("2026-11-22", kini) !== "") salah.push("tanggal masa depan diabaikan");
+    if (t("salah", kini) !== "" || t(undefined, kini) !== "" || t(null, kini) !== "") salah.push("tanggal tidak sah diabaikan");
+    if (/buruan|pasti untung|jangan sampai ketinggalan|rekomendasi beli/i.test(f)) salah.push("kata ajakan dilarang");
+    const k = potongF(js, "  function kartuAgenda(");
+    if (!/var baru = teksBaruAgenda\(a\.ditambahkan, kini\);/.test(k) || !/el\("span", \{ class: "agenda-baru", text: baru \}\)/.test(k))
+      salah.push("kartuAgenda wajib menampilkan label teks .agenda-baru lewat text");
+    if (/innerHTML/.test(f)) salah.push("tanpa innerHTML");
+    return salah;
+  };
+  const s15 = uji(app);
+  ok(!s15.length, "Agenda label baru ditambahkan: " + s15.join("; "));
+  const css = readFileSync("assets/styles.css", "utf8");
+  ok(/\.agenda-baru \{[^}]*border: 1px solid/.test(css) && !/\.agenda-baru[^{]*\{[^}]*animation/.test(css), "label .agenda-baru wajib bergaris tepi dan tanpa animasi");
+  for (const [rusak, pesan] of [
+    [app.replace("|| -n > AGENDA_BARU_HARI) return", ") return"), "4 hari lalu"],
+    [app.replace("if (n == null || n > 0 || -n", "if (n == null || -n"), "masa depan"],
+    [app.replace("var AGENDA_BARU_HARI = 3;", "var AGENDA_BARU_HARI = 7;"), "wajib 3"],
+    [app.replace('    if (baru) kepala.push(el("span", { class: "agenda-baru", text: baru }));\n', ""), "kartuAgenda wajib"],
+  ]) ok(rusak !== app && uji(rusak).some((x) => x.includes(pesan)), `uji balik label baru: "${pesan}" harus tertangkap`);
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);
 
