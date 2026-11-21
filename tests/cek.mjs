@@ -7624,6 +7624,50 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
   ]) ok(rusak !== app && uji(rusak).some((x) => x.includes(pesan)), `uji balik baris terakhir diperiksa: "${pesan}" harus tertangkap`);
 }
 
+// 2f-14. Agenda: kartu dividen menaut ke profil bila kode ada di data emiten (Nina, 21 Nov 2026; Arif + Dewi, IDE.md #42).
+{
+  const app = readFileSync("assets/app.js", "utf8");
+  const potongF = (js, awal) => { const i = js.indexOf(awal), j = js.indexOf("\n  }\n", i); return i < 0 ? "" : js.slice(i, j); };
+  const uji = (js) => {
+    const salah = [];
+    const f = potongF(js, "  function kartuAgenda(");
+    if (!f) return ["fungsi kartuAgenda wajib ada"];
+    if (!/var e = !ipo && \(typeof EMITEN !== "undefined"\) && EMITEN\.find\(function \(z\) \{ return z\.kode === a\.kode; \}\);/.test(f))
+      salah.push("profil hanya untuk dividen yang kodenya ada di EMITEN");
+    const iAksi = f.indexOf('el("div", { class: "agenda-aksi" }');
+    const iKal = f.indexOf("tombolKalender(x, kini)", iAksi), iSalin = f.indexOf("tombolSalinKartu(", iAksi);
+    const iProf = f.indexOf("tautan-profil-kartu", iAksi), iSumber = f.indexOf('class: "agenda-sumber-lipat"', iAksi);
+    if (iAksi < 0 || iProf < 0) salah.push("tautan profil wajib di baris aksi");
+    else if (!(iKal < iSalin && iSalin < iProf && iProf < iSumber)) salah.push("urutan Tab kalender → Salin → profil → Sumber");
+    if (!/e \? el\("a", \{ class: "[^"]*tautan-profil-kartu", href: "emiten\.html\?kode=" \+ e\.kode,/.test(f))
+      salah.push("tautan profil wajib dijaga e ? … : null dan memakai emiten.html?kode=");
+    if (!/text: "Profil " \+ e\.kode/.test(f)) salah.push('teks tautan wajib "Profil <KODE>"');
+    if (/buruan|pasti untung|jangan sampai ketinggalan|rekomendasi beli/i.test(f)) salah.push("kata ajakan dilarang");
+    return salah;
+  };
+  const s14 = uji(app);
+  ok(!s14.length, "Agenda tautan profil: " + s14.join("; "));
+  const css = readFileSync("assets/styles.css", "utf8");
+  ok(/\.agenda-aksi > \.tautan-profil-kartu \{[^}]*min-height: 44px/.test(css), "tautan profil kartu wajib target sentuh 44px");
+  // Data uji: kode yang ada & tidak ada di EMITEN (kini belum ada kode Agenda di 32 emiten, jadi diuji dengan data buatan).
+  const ASLI_K = new Set(ASLI.map((x) => x.kode));
+  const cari = (kode) => ASLI.find((z) => z.kode === kode);
+  ok(cari([...ASLI_K][0]) && !cari("ZZZZ"), "data uji tautan profil: kode ada → tautan, kode tidak ada → tanpa tautan");
+  for (const [rusak, pesan] of [
+    [app.replace("e ? el(\"a\", { class: \"tombol tombol-salin tautan-profil-kartu\"", "el(\"a\", { class: \"tombol tombol-salin tautan-profil-kartu\""), "dijaga e ?"],
+    [app.replace('text: "Profil " + e.kode', 'text: "Lihat " + e.kode'), "Profil <KODE>"],
+    [app.replace('return z.kode === a.kode; });\n    var judul', 'return true; });\n    var judul'), "kodenya ada di EMITEN"],
+  ]) ok(rusak !== app && uji(rusak).some((x) => x.includes(pesan)), `uji balik tautan profil: "${pesan}" harus tertangkap`);
+  // Uji balik urutan: pindahkan tautan profil ke depan kalender.
+  const fK = potongF(app, "  function kartuAgenda(");
+  const mP = /\n        \/\* Arif \+ Dewi \(21 Nov 2026, IDE\.md #42\)[\s\S]*?: null,\n/.exec(fK);
+  ok(mP, "blok tautan profil ditemukan untuk uji balik urutan");
+  if (mP) {
+    const rusak = app.replace(mP[0], "\n").replace("        tombolKalender(x, kini),\n", mP[0].slice(1) + "        tombolKalender(x, kini),\n");
+    ok(rusak !== app && uji(rusak).some((x) => x.includes("urutan Tab")), 'uji balik tautan profil: "urutan Tab" harus tertangkap');
+  }
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);
 

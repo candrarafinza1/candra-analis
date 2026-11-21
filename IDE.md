@@ -624,7 +624,7 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Dampak bagi pemula: satu ketukan dari jadwal ke data bersumber, belajar melihat konteks sebelum mengambil keputusan sendiri.
 - Batasan: tautan biasa (keyboard), tanpa animasi, tanpa pustaka, tanpa kata ajakan; urutan Tab tetap kalender → Salin → profil → Sumber.
 - Usaha: kecil (Arif + Dewi; Nina menambah cek). Catatan: per 21 Nov belum ada kode Agenda yang ada di 32 emiten kami, jadi Nina menguji dengan data uji.
-- Status: diusulkan Kirana 21 Nov 07.xx.
+- Status: diusulkan Kirana 21 Nov 07.xx; dipilih Bima 21 Nov 07.xx; **selesai 21 Nov 08.xx** (Arif + Dewi, cek Nina 2f-14 + 4 uji balik). Hanya tautan "Profil <KODE>"; tautan Radar terpisah tidak ditambah karena profil sudah memuat bagian Radar Risiko (satu tautan lebih ringkas di HP).
 
 ### 43. Pelajaran: "Mengapa harga saham biasanya bergerak di ex date?"
 - **Menjawab pertanyaan pemula yang paling sering muncul di musim dividen** — konten, usaha kecil

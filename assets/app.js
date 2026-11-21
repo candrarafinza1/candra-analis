@@ -1758,6 +1758,10 @@
         tombolKalender(x, kini),
         tombolSalinKartu(dasarAlamatAgenda() + "#" + idK, papanKlipAgenda(),
           ipo ? (a.kode || a.nama) : a.kode + " dividen " + a.jenis + " " + a.tahunBuku),
+        /* Arif + Dewi (21 Nov 2026, IDE.md #42): bila kode dividen ada di data 32 emiten kami, satu tautan biasa ke profil
+           (laba, DPS tahun lalu, Radar Risiko). Bila tidak ada, tidak ditampilkan agar tidak ada tautan mati. */
+        e ? el("a", { class: "tombol tombol-salin tautan-profil-kartu", href: "emiten.html?kode=" + e.kode,
+          text: "Profil " + e.kode, "aria-label": "Profil emiten " + e.kode + (e.nama ? ", " + e.nama : "") }) : null,
         // Dewi (20 Nov 2026, IDE.md #36): daftar sumber dilipat agar kartu lebih pendek; jumlah sumber tetap terlihat.
         el("details", { class: "agenda-sumber-lipat" }, [
           el("summary", { class: "agenda-sumber-judul", text: "Sumber (" + sumber.children.length + ")" }),

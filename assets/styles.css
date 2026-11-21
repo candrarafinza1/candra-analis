@@ -913,6 +913,7 @@ button.istilah:hover, button.istilah[aria-expanded="true"] { color: var(--aksen)
 .agenda-aksi > .agenda-kalender, .agenda-aksi > .salin-kartu, .agenda-aksi > .agenda-sumber-lipat { margin: 0; }
 .agenda-aksi > .salin-kartu { flex: 0 1 auto; max-width: 100%; }
 .agenda-aksi > .agenda-sumber-lipat { flex: 0 1 auto; }
+.agenda-aksi > .tautan-profil-kartu { flex: 0 0 auto; min-height: 44px; padding: 0 16px; font-size: .92rem; display: inline-flex; align-items: center; text-decoration: none; }
 .agenda-aksi > .agenda-sumber-lipat[open] { flex-basis: 100%; }
 .agenda-aksi > .salin-kartu:has(.alamat-salin:not([hidden])) { flex-basis: 100%; }
 .kabar.agenda, .agenda-arti { scroll-margin-top: 16px; }
