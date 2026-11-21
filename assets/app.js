@@ -1937,10 +1937,20 @@
       el("p", { class: "agenda-pita-tautan" }, [el("a", { href: "agenda.html", text: "Semua agenda IPO & dividen" }),
         el("a", { href: "agenda.html#arti-tanggal", text: "Arti tanggal" })])
     ]));
-    // Dewi + Nina (20 Nov 2026, IDE.md #39): nama tanggal di tiap baris (Cum date, Penawaran umum, dll.) bisa diketuk.
+  // Dewi + Nina (20 Nov 2026, IDE.md #39): nama tanggal di tiap baris (Cum date, Penawaran umum, dll.) bisa diketuk.
     // Hanya nama tanggal yang ditandai (nama emiten & jenis dividen tidak), di setiap baris agar tiap acara terjelaskan.
     ul.querySelectorAll(".agenda-pita-tanggal").forEach(function (s) { pasangIstilah(s); });
     wadah.hidden = false;
+  }
+  /* Arif + Dewi (21 Nov 2026): satu baris "Terakhir diperiksa tim" agar pengguna tahu seberapa baru Agenda.
+     Bila pemeriksaan terakhir lebih dari AGENDA_BASI_HARI hari lalu, diberi catatan jujur bahwa jadwal mungkin berubah. */
+  var AGENDA_BASI_HARI = 3;
+  function teksDiperiksaAgenda(t, kini) {
+    var n = hariDari(t, kini);
+    if (n == null || n > 0) return "";
+    var teks = "Terakhir diperiksa tim: " + tanggalId(t) + ".";
+    if (-n > AGENDA_BASI_HARI) teks += " Sudah lebih dari " + AGENDA_BASI_HARI + " hari; jadwal di bawah mungkin sudah berubah, periksa juga sumbernya.";
+    return teks;
   }
   var CATATAN_ICS = "Tombol \u201cTambahkan ke kalender\u201d di tiap kartu membuat berkas .ics untuk aplikasi kalender di HP atau komputer, dengan pengingat sehari sebelumnya pukul 09.00. Berkas dibuat di perangkat Anda; tidak ada data yang dikirim.";
   function dasarAlamatAgenda() {
@@ -1996,6 +2006,8 @@
         el("strong", { text: "Agenda adalah jadwal, bukan saran membeli atau menjual." })])
     ]));
     akar.appendChild(el("p", { class: "agenda-ringkas", id: "agenda-ringkas" }, [el("strong", { text: "Minggu ini" }), " " + ringkasMingguIni(s, kini)]));
+    var diperiksa = teksDiperiksaAgenda(window.AGENDA_DIPERIKSA, kini);
+    if (diperiksa) akar.appendChild(el("p", { class: "agenda-diperiksa", id: "agenda-diperiksa", text: diperiksa }));
     var saring = kotakSaringAgenda(akar);
     akar.appendChild(saring);
     var dipakai = {};

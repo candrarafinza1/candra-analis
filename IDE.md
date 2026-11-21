@@ -614,6 +614,39 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Usaha: kecil (Dewi; Nina menyesuaikan cek 2f-11).
 - Status: diusulkan Kirana 20 Nov 20.xx; dipilih Bima 20 Nov 20.xx untuk sesi berikutnya (masuk BACKLOG.md) **Selesai 20 Nov 21.xx** (Dewi, cek Nina 2f-11 + 2 uji balik). Tinjauan Kirana 390/1280px terang/gelap: rapi, tanpa scroll horizontal; di 390px kalimat 3 baris, tinggi pita 669px (sebelumnya ±600px).
 
+### Usulan mingguan Kirana, 21 Nov 07.xx (minggu 30 Nov – 6 Des)
+
+### 42. Agenda: kartu dividen menaut ke profil & Radar bila emiten ada di data kami ★ paling berdampak
+- **Dari jadwal langsung ke data emiten** — fitur, usaha kecil
+- Masalah: kartu dividen hanya berisi tanggal dan sumber. Pemula yang ingin tahu emiten itu (laba, DPS tahun lalu, tanda Radar) harus mencari sendiri.
+- Ide: bila kode kartu ada di `data/emiten-asli.js`, tambahkan tautan kecil "Profil TOTO" (emiten.html?kode=…) dan "Radar" di baris aksi; bila tidak ada, tidak ditampilkan (tanpa tautan mati).
+- Acuan tren: kalender pasar di aplikasi investasi yang menaut ke halaman saham.
+- Dampak bagi pemula: satu ketukan dari jadwal ke data bersumber, belajar melihat konteks sebelum mengambil keputusan sendiri.
+- Batasan: tautan biasa (keyboard), tanpa animasi, tanpa pustaka, tanpa kata ajakan; urutan Tab tetap kalender → Salin → profil → Sumber.
+- Usaha: kecil (Arif + Dewi; Nina menambah cek). Catatan: per 21 Nov belum ada kode Agenda yang ada di 32 emiten kami, jadi Nina menguji dengan data uji.
+- Status: diusulkan Kirana 21 Nov 07.xx.
+
+### 43. Pelajaran: "Mengapa harga saham biasanya bergerak di ex date?"
+- **Menjawab pertanyaan pemula yang paling sering muncul di musim dividen** — konten, usaha kecil
+- Masalah: Agenda kini menampilkan banyak ex date, tetapi pemula belum dijelaskan bahwa pada ex date harga acuan disesuaikan sebesar dividen, sehingga "dapat dividen" bukan uang gratis.
+- Ide: satu bagian pendek di pelajaran Praktik + istilah "penyesuaian harga ex date" di kamus, dengan contoh hitungan netral dari data Agenda (tanpa angka harga karangan; hanya pola hitungan).
+- Dampak bagi pemula: tidak terjebak anggapan "beli sebelum cum date pasti untung".
+- Batasan: Hana meninjau bahasa (tanpa ajakan), sumber aturan bursa wajib ada; PDF modul dibuat ulang.
+- Usaha: kecil (Sari + Laras + Hana).
+- Status: diusulkan Kirana 21 Nov 07.xx.
+
+### 44. Agenda: tanda "Baru ditambahkan" di kartu yang masuk 3 hari terakhir
+- **Tahu mana yang baru tanpa membandingkan sendiri** — tampilan, usaha kecil
+- Masalah: titik "baru" di menu hanya memberi tahu ada perubahan, bukan kartu mana yang baru.
+- Ide: field opsional `ditambahkan: "YYYY-MM-DD"` di tiap entri; kartu yang ditambahkan ≤3 hari lalu diberi label teks kecil "Baru ditambahkan 21 Nov" (bukan hanya warna).
+- Dampak bagi pemula: pengunjung harian langsung melihat jadwal baru.
+- Batasan: teks, bukan animasi; tidak memakai localStorage; tanpa ajakan.
+- Usaha: kecil (Dewi; Nina menambah cek).
+- Status: diusulkan Kirana 21 Nov 07.xx.
+
+### Tinjauan Kirana, 21 Nov 07.xx: baris "Terakhir diperiksa tim" di Agenda
+- 390px & 1280px terang/gelap: satu baris di bawah "Minggu ini", warna teks sekunder (sama dengan kesegaran data di profil), terbaca di mode gelap, tanpa scroll horizontal & galat JS. Tidak ada perbaikan.
+
 ### Tinjauan Kirana, 9 Nov 10.09: hero & kartu beranda setelah teks diubah
 - 390px: kalimat hero 5 baris, rata-rata ±37 huruf per baris (nyaman dibaca di HP); istilah bergaris tetap terbaca, tombol "Mulai belajar" & "Lihat peringkat saham" masih di layar pertama 390×844.
 - 1280px: 4 baris, ±47 huruf per baris. Tanpa scroll horizontal di kedua lebar (juga Radar, Peringkat, profil ANTM).

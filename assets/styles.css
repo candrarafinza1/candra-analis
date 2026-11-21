@@ -944,6 +944,7 @@ button.istilah:hover, button.istilah[aria-expanded="true"] { color: var(--aksen)
 
 /* Agenda: ringkasan "Minggu ini" dan tombol pilihan Semua / IPO / Dividen (Dewi + Arif, 20 Nov 2026, IDE.md #35) */
 .agenda-ringkas { margin: 16px 0 0; }
+.agenda-diperiksa { margin: 4px 0 0; font-size: .92rem; color: var(--tinta-2); max-width: var(--lebar-teks); overflow-wrap: anywhere; }
 /* Dewi (20 Nov 2026, IDE.md #41): di pita beranda ringkasan berada di atas daftar, beri jarak ke bawah. */
 #agenda-beranda .agenda-ringkas { margin: 0 0 12px; overflow-wrap: anywhere; }
 #agenda [hidden] { display: none; }
