@@ -297,7 +297,7 @@ window.ISTILAH = [
     arti: "Hari terakhir membeli saham di pasar reguler agar tercatat sebagai pemegang saham yang berhak atas dividen tertentu.",
     pelajaran: "praktik-beli-pertama" },
   { istilah: "Ex date", pola: ["ex date"],
-    arti: "Hari bursa sesudah cum date. Pembeli saham mulai hari ini tidak lagi berhak atas dividen itu, dan harga saham biasanya menyesuaikan.",
+    arti: "Hari bursa sesudah cum date. Pembeli saham mulai hari ini tidak lagi berhak atas dividen itu, sehingga harga saham sering turun. Besar turunnya tidak tetap.",
     pelajaran: "praktik-beli-pertama" },
   { istilah: "Recording date", pola: ["recording date"],
     arti: "Tanggal pencatatan daftar pemegang saham yang berhak menerima dividen. Karena penyelesaian transaksi T+2, tanggal ini biasanya dua hari bursa sesudah cum date.",

@@ -440,11 +440,15 @@ window.MODUL = [
       <p><strong>Membaca jadwal dividen</strong></p>
       <ol>
         <li><strong>Cum date</strong>: hari terakhir membeli saham di pasar reguler agar berhak atas dividen.</li>
-        <li><strong>Ex date</strong>: hari bursa berikutnya; pembeli mulai hari ini tidak lagi berhak atas dividen itu. Harga saham biasanya menyesuaikan.</li>
+        <li><strong>Ex date</strong>: hari bursa berikutnya; pembeli mulai hari ini tidak lagi berhak atas dividen itu, sehingga harga saham sering turun.</li>
         <li><strong>Recording date</strong>: daftar pemegang saham yang berhak dicatat, biasanya dua hari bursa sesudah cum date karena penyelesaian T+2.</li>
         <li><strong>Tanggal pembayaran</strong>: dividen masuk ke RDN Anda setelah dipotong pajak bila ada. Cek mutasi RDN dan AKSes KSEI.</li>
       </ol>
       <p>Contoh hitungan: dividen Rp40 per saham dan Anda memegang 2 lot (200 lembar) pada recording date, maka dividen sebelum pajak = Rp40 × 200 = Rp8.000.</p>
+      <p><strong>Mengapa harga saham biasanya bergerak di ex date?</strong></p>
+      <p>Mulai ex date, orang yang membeli saham tidak lagi berhak atas dividen yang akan dibagikan. Hak atas dividen itu sudah tidak ikut lagi bersama saham, sehingga harga saham sering turun pada ex date atau sesudahnya. Sebagian investor yang membeli demi dividen juga mulai menjual sahamnya setelah haknya tercatat, sehingga tekanan jual bisa bertambah.</p>
+      <p>Besar penurunannya tidak tetap. Harga juga dipengaruhi kabar perusahaan dan keadaan pasar hari itu, jadi penurunannya bisa lebih kecil atau lebih besar daripada dividen. Dividen yang diterima juga masih dipotong pajak bila ada. Karena itu, membeli saham menjelang cum date hanya demi dividen belum tentu memberi hasil lebih.</p>
+      <p><em>Sumber: IDX Channel, "Harga Saham Turun Setelah Dividen Dibagikan? Ini Penyebab dan Cara Mengatasinya", 30 Sep 2024, di situs idxchannel.com.</em></p>
       <div class="kotak-penting">Sisi syariah (Hana): Agenda Candra Analis hanya memuat IPO yang terbukti efek syariah dan dividen dari saham yang tercatat di Daftar Efek Syariah. Dividen bukan janji keuntungan tetap: jumlahnya diputuskan perusahaan dan bisa berubah setiap tahun, sedangkan harga saham bisa turun lebih besar daripada dividen yang diterima.</div>
 
       <div class="kotak-penting">Tujuan pembelian pertama adalah belajar prosesnya, bukan mencari untung besar. Mulai kecil, catat semuanya.</div>
