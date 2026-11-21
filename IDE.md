@@ -644,6 +644,28 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Usaha: kecil (Dewi; Nina menambah cek).
 - Status: diusulkan Kirana 21 Nov 07.xx.
 
+### 45. Agenda: tombol "Semua jadwal ke kalender" (satu berkas .ics) ★ paling berdampak
+- **Satu ketukan untuk semua tanggal** — fitur, usaha kecil
+- Masalah: dengan 5 kartu dividen, pemula harus menekan 5 tombol kalender dan membuka 5 berkas.
+- Ide: satu tombol di atas daftar membuat satu berkas .ics berisi semua tanggal yang belum lewat, memakai pembuat .ics yang sama (escape & pengingat sama). Muncul hanya bila ≥2 kartu masih punya tanggal.
+- Tren: aplikasi jadwal (kalender rilis, jadwal pertandingan) menyediakan "langganan/unduh semua".
+- Dampak bagi pemula: semua jadwal masuk kalender HP sekaligus, tanpa akun dan tanpa server.
+- Batasan: tanpa biaya, tanpa data dikirim, bisa keyboard, tanpa animasi, tanpa ajakan.
+- Usaha: kecil (Arif + Dewi; Nina menambah cek).
+- Status: diusulkan Kirana 21 Nov 13.xx; **dipilih Bima & selesai 21 Nov 13.xx.**
+
+### 46. Agenda: garis waktu mini 4 tanggal di kartu dividen
+- **Melihat urutan cum → ex → recording → bayar sekilas** — tampilan, usaha sedang
+- Masalah: empat tanggal ditulis sebagai daftar; pemula sulit melihat jarak antartanggal dan posisi "hari ini".
+- Ide: garis horizontal tipis dengan 4 titik berlabel teks (tanggal tetap tertulis), titik yang sudah lewat diberi tanda teks "lewat", bukan hanya warna. Di 390px tetap satu baris atau turun jadi daftar biasa.
+- Dampak bagi pemula: memahami urutan tanggal dividen tanpa membaca kotak arti.
+- Batasan: CSS saja, tanpa animasi (atau hanya bila prefers-reduced-motion: no-preference), teks tetap terbaca pembaca layar, tanpa ajakan.
+- Usaha: sedang (Dewi; Nina menambah cek; Kirana meninjau 390px).
+- Status: diusulkan Kirana 21 Nov 13.xx.
+
+### Tinjauan Kirana, 21 Nov 13.xx: tombol "Semua jadwal ke kalender"
+- 390px & 1280px terang/gelap: tombol sama gaya dengan tombol kalender kartu, teks turun 2 baris di 390px tetap di dalam tombol, berada di bawah catatan .ics dan di atas "IPO saham syariah"; tanpa scroll horizontal & galat JS. Tidak ada perbaikan.
+
 ### Tinjauan Kirana, 21 Nov 07.xx: baris "Terakhir diperiksa tim" di Agenda
 - 390px & 1280px terang/gelap: satu baris di bawah "Minggu ini", warna teks sekunder (sama dengan kesegaran data di profil), terbaca di mode gelap, tanpa scroll horizontal & galat JS. Tidak ada perbaikan.
 

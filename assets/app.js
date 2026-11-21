@@ -1606,7 +1606,7 @@
     penjatahan: ["Penjatahan", "Saham dibagikan kepada pemesan. Bila pesanan melebihi saham yang ditawarkan, pemesan bisa mendapat lebih sedikit dari yang dipesan; sisa dana dikembalikan."],
     pencatatan: ["Pencatatan di bursa", "Hari pertama saham bisa diperdagangkan di Bursa Efek Indonesia."],
     cum: ["Cum date", "Hari terakhir membeli saham di pasar reguler agar tercatat berhak atas dividen ini."],
-    ex: ["Ex date", "Mulai hari ini, pembeli saham tidak lagi berhak atas dividen ini. Harga saham biasanya menyesuaikan."],
+    ex: ["Ex date", "Mulai hari ini, pembeli saham tidak lagi berhak atas dividen ini. Harga saham sering turun; besar turunnya tidak tetap."],
     recording: ["Recording date", "Tanggal pencatatan pemegang saham yang berhak menerima dividen."],
     pembayaran: ["Tanggal pembayaran", "Dividen dikirim ke RDN pemegang saham yang berhak, setelah dipotong pajak."]
   };
@@ -1847,6 +1847,48 @@
     return ("agenda-" + (a.kode || a.nama) + "-" + (x.jenis === "ipo" ? "ipo" : "dividen-" + a.jenis + "-" + a.tahunBuku))
       .toLowerCase().replace(/[^a-z0-9-]+/g, "-").replace(/-+/g, "-").replace(/-$/, "") + ".ics";
   }
+  /* Arif + Dewi (21 Nov 2026, IDE.md #45): satu berkas .ics berisi semua tanggal yang belum lewat dari semua kartu.
+     Memakai buatIcs() per kartu (escape & lipat baris yang sama), lalu acaranya digabung dalam satu VCALENDAR. */
+  function buatIcsSemua(daftar, kini) {
+    var awal = "METHOD:PUBLISH\r\n", akhir = "END:VCALENDAR\r\n", kepala = null, isi = "";
+    (daftar || []).forEach(function (x) {
+      var t = buatIcs(x, kini), i = t.indexOf(awal), j = t.lastIndexOf(akhir);
+      if (i < 0 || j < 0) return;
+      if (kepala == null) kepala = t.slice(0, i + awal.length);
+      isi += t.slice(i + awal.length, j);
+    });
+    if (kepala == null || !isi) return "";
+    return kepala + isi + akhir;
+  }
+  function sisaTanggal(x, kini) {
+    return x.tgl.filter(function (d) { return hariDari(d.sampai || d.tanggal, kini) >= 0; }).length;
+  }
+  // Tombol "Semua jadwal ke kalender" di atas daftar; hanya bila minimal 2 kartu masih punya tanggal yang belum lewat.
+  function tombolKalenderSemua(depan, kini) {
+    var daftar = (depan || []).filter(function (x) { return sisaTanggal(x, kini) > 0; });
+    if (daftar.length < 2) return null;
+    var n = daftar.reduce(function (j, x) { return j + sisaTanggal(x, kini); }, 0);
+    var info = el("p", { class: "kalender-info", role: "status", "aria-live": "polite" });
+    var tombol = el("button", { type: "button", class: "tombol tombol-gelap tombol-kalender tombol-kalender-semua",
+      text: "Semua jadwal ke kalender (" + n + " tanggal dari " + daftar.length + " kartu)",
+      "aria-label": "Semua jadwal ke kalender: " + n + " tanggal dari " + daftar.length + " kartu, satu berkas .ics" });
+    var urlLama = null;
+    tombol.addEventListener("click", function () {
+      try {
+        var teks = buatIcsSemua(daftar, new Date());
+        if (!teks) throw new Error("kosong");
+        var blob = new Blob([teks], { type: "text/calendar;charset=utf-8" });
+        if (urlLama) URL.revokeObjectURL(urlLama);
+        var url = urlLama = URL.createObjectURL(blob), t = document.createElement("a");
+        t.href = url; t.download = "agenda-candra-analis-semua.ics"; t.hidden = true;
+        document.body.appendChild(t); t.click(); t.remove();
+        info.textContent = "Berkas agenda-candra-analis-semua.ics diunduh. Buka berkasnya agar semua tanggal masuk ke aplikasi kalender.";
+      } catch (err) {
+        info.textContent = "Berkas kalender belum bisa dibuat di peramban ini. Tanggalnya tetap bisa dicatat manual dari tiap kartu.";
+      }
+    });
+    return el("div", { class: "agenda-kalender agenda-kalender-semua", id: "kalender-semua" }, [tombol, info]);
+  }
   function tombolKalender(x, kini) {
     var sisa = x.tgl.filter(function (d) { return hariDari(d.sampai || d.tanggal, kini) >= 0; }).length;
     if (!sisa) return null;
@@ -2058,6 +2100,8 @@
     var h2Awal = akar.querySelector("h2");
     // Penjelasan berkas .ics ditulis sekali di atas daftar, hanya bila ada tombol kalender (IDE.md #36).
     if (akar.querySelector(".tombol-kalender")) akar.insertBefore(el("p", { class: "agenda-catatan-ics", id: "catatan-ics", text: CATATAN_ICS }), h2Awal);
+    var semuaKal = tombolKalenderSemua(s.depan, kini);
+    if (semuaKal) akar.insertBefore(semuaKal, h2Awal);
     saring.terapkan(jenisAwalAgenda());
     sorotKartuAgenda(akar, saring);
     bukaArtiTanggal(akar);

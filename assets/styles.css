@@ -906,6 +906,7 @@ button.istilah:hover, button.istilah[aria-expanded="true"] { color: var(--aksen)
 /* Tambahkan ke kalender & tanda "baru" di menu Agenda (Dewi + Arif, 20 Nov 2026) */
 .agenda-kalender { margin-top: 14px; }
 .tombol-kalender { border-color: #7b82d6; min-height: 44px; padding: 0 18px; font-size: .95rem; max-width: 100%; text-align: center; }
+.agenda-kalender-semua { margin: 10px 0 4px; }
 .kalender-info { margin: 4px 0 0; font-size: .9rem; font-weight: 600; }
 /* Tautan per kartu Agenda (Arif + Dewi, 20 Nov 2026, IDE.md #37) */
 .salin-kartu { margin: 10px 0 0; }

@@ -7715,6 +7715,57 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
   ]) ok(rusak !== app && uji(rusak).some((x) => x.includes(pesan)), `uji balik label baru: "${pesan}" harus tertangkap`);
 }
 
+// 2f-16. Agenda: tombol "Semua jadwal ke kalender" (Nina, 21 Nov 2026; Arif + Dewi, IDE.md #45).
+// buatIcsSemua dijalankan sungguhan: satu VCALENDAR, acara = jumlah acara tiap kartu, UID unik, tiap acara berpengingat,
+// baris ≤75 oktet & CRLF; daftar kosong → "". Tombol hanya bila ≥2 kartu masih punya tanggal; dibuat tanpa innerHTML.
+{
+  const app = readFileSync("assets/app.js", "utf8");
+  const uji = (js) => {
+    const salah = [];
+    const potong = (dari, sampai) => { const i = js.indexOf(dari), j = js.indexOf(sampai, i); return i < 0 || j < 0 ? "" : js.slice(i, j); };
+    const kode = [potong("  var PENJELASAN_AGENDA", "  function teksMundur("), potong("  var ICS_ALAMAT", "  function tombolKalender(")];
+    if (!kode.every(Boolean) || !/function buatIcsSemua\(/.test(kode[1])) return ["fungsi buatIcsSemua wajib ada sebelum tombolKalender"];
+    const ctx = {}; vm.createContext(ctx);
+    try { vm.runInContext(kode.join("\n") + "\n;globalThis.buatIcsSemua = buatIcsSemua; globalThis.buatIcs = buatIcs;", ctx); } catch (e) { return ["kode gagal dijalankan: " + e.message]; }
+    const kartu = (kode, t) => { const x = { jenis: "dividen", data: { kode, jenis: "interim", tahunBuku: 2026, dps: 10, mataUang: "IDR", tanggal: t,
+      sumber: [{ judul: "Sumber, 17 Nov 2026: judul; koma, garis", url: "https://contoh.id/" + kode }] } };
+      x.tgl = ["cum", "ex", "recording", "pembayaran"].map((k) => ({ kunci: k, tanggal: t[k] })); return x; };
+    const a = kartu("TOTO", { cum: "2026-11-24", ex: "2026-11-25", recording: "2026-11-26", pembayaran: "2026-12-15" });
+    const b = kartu("DGWG", { cum: "2026-11-27", ex: "2026-11-28", recording: "2026-11-29", pembayaran: "2026-12-18" });
+    const kini = new Date(2026, 10, 25, 10, 0, 0);
+    let isi = "";
+    try { isi = ctx.buatIcsSemua([a, b], kini) || ""; } catch (e) { salah.push("buatIcsSemua galat: " + e.message); }
+    const logis = isi.replace(/\r\n$/, "").replace(/\r\n /g, "").split("\r\n");
+    if (!isi.endsWith("\r\n") || /\r(?!\n)|(?<!\r)\n/.test(isi)) salah.push("CRLF");
+    if (isi.replace(/\r\n$/, "").split("\r\n").some((x) => Buffer.byteLength(x, "utf8") > 75)) salah.push("baris > 75 oktet");
+    if (logis.filter((x) => x === "BEGIN:VCALENDAR").length !== 1 || logis.filter((x) => x === "END:VCALENDAR").length !== 1 ||
+        logis[0] !== "BEGIN:VCALENDAR" || logis[logis.length - 1] !== "END:VCALENDAR") salah.push("wajib satu VCALENDAR");
+    const nEv = logis.filter((x) => x === "BEGIN:VEVENT").length;
+    if (nEv !== 3 + 4) salah.push(`jumlah acara harap 7 (3 TOTO + 4 DGWG), dapat ${nEv}`);
+    if (logis.filter((x) => x === "TRIGGER:-PT15H").length !== nEv) salah.push("tiap acara wajib pengingat");
+    const uid = logis.filter((x) => x.startsWith("UID:"));
+    if (new Set(uid).size !== uid.length || uid.length !== nEv) salah.push("UID wajib unik");
+    if (!logis.includes("METHOD:PUBLISH") || !logis.includes("VERSION:2.0")) salah.push("kepala VCALENDAR");
+    let kosong = "x";
+    try { kosong = ctx.buatIcsSemua([], kini); } catch (e) { salah.push("daftar kosong galat"); }
+    if (kosong !== "") salah.push("daftar kosong wajib menghasilkan teks kosong");
+    const t = potong("  function tombolKalenderSemua(", "  function tombolKalender(");
+    if (!/if \(daftar\.length < 2\) return null;/.test(t)) salah.push("tombol hanya bila ≥2 kartu");
+    if (/innerHTML/.test(t)) salah.push("tanpa innerHTML");
+    if (/buruan|pasti untung|jangan sampai ketinggalan|rekomendasi beli/i.test(t)) salah.push("kata ajakan dilarang");
+    if (!/var semuaKal = tombolKalenderSemua\(s\.depan, kini\);/.test(js)) salah.push("renderAgenda wajib memasang tombolKalenderSemua(s.depan, kini)");
+    return salah;
+  };
+  const s16 = uji(app);
+  ok(!s16.length, "Agenda semua jadwal ke kalender: " + s16.join("; "));
+  for (const [rusak, pesan] of [
+    [app.replace("if (kepala == null) kepala = t.slice(0, i + awal.length);", "kepala = (kepala || \"\") + t.slice(0, i + awal.length);"), "satu VCALENDAR"],
+    [app.replace("    if (daftar.length < 2) return null;\n", ""), "≥2 kartu"],
+    [app.replace("      isi += t.slice(i + awal.length, j);", "      isi = t.slice(i + awal.length, j);"), "jumlah acara"],
+    [app.replace("    if (semuaKal) akar.insertBefore(semuaKal, h2Awal);\n", "").replace("var semuaKal = tombolKalenderSemua(s.depan, kini);", ""), "renderAgenda wajib"],
+  ]) ok(rusak !== app && uji(rusak).some((x) => x.includes(pesan)), `uji balik semua ke kalender: "${pesan}" harus tertangkap`);
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);
 

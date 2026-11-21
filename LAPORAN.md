@@ -2073,3 +2073,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Proyek prioritas Agenda, IDE.md #44 selesai (Arif + Dewi + Nina): kartu Agenda yang punya field opsional `ditambahkan` ≤3 hari lalu kini memberi label teks "Baru ditambahkan <tanggal>"; tanggal tidak sah/masa depan diabaikan. Entri lama sengaja tidak diberi tanggal (tidak mengarang); Fajar mengisinya untuk entri baru mulai rutin 13.xx. Nina: cek 2f-15 + 4 uji balik. Dicek 390px terang/gelap & 1280px dengan data uji, tanpa scroll horizontal & galat JS; Kirana: rapi.
 - IPO ANDA & dividen KMDS/calon Katadata tetap menunggu bukti syariah/baris DES (dicoba lagi rutin 13.xx).
 - `node tests/cek.mjs` lolos (11 halaman, 8 pelajaran, 32 emiten). Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 21 Nov 2026, 13.08 WIB — sesi kerja siang (Bima)
+- Laporan masuk kerja siang dikirim ke Rafinza (12 karyawan siap, tugas per karyawan, cek lolos).
+- Agenda (rutin 13.xx): +0 IPO, +0 dividen, −0 kedaluwarsa. Raka: tidak ada IPO/dividen baru di luar calon yang sudah dicatat. Hana + Fajar: berkas DES di idx.id tetap gagal dibuka (izin unduh tidak terjawab), KMDS & calon Katadata tetap menunggu baris DES. Hana + Raka: IPO ANDA tetap tanpa bukti status syariah, tidak dicatat.
+- Kirana: usulan #45 ★ (semua jadwal ke kalender) dan #46 (garis waktu mini). Bima memilih #45. Arif + Dewi + Nina: tombol "Semua jadwal ke kalender" di Agenda (satu berkas .ics, 20 tanggal dari 5 kartu), cek 2f-16 + 4 uji balik, dicek 390/1280px terang/gelap tanpa scroll horizontal & galat JS. Tegar: tanpa innerHTML, 0 pola kunci API.
+- Sari + Hana: penjelasan "Ex date" di kotak arti Agenda diselaraskan dengan kamus (tidak lagi "biasanya menyesuaikan").
+- Belum sempat: Galih (laba 9 bulan) dan Sari + Laras (sisir teks Bandingkan & Kabar), dibawa ke sesi berikutnya. `node tests/cek.mjs` lolos (11 halaman, 8 pelajaran, 32 emiten). Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
