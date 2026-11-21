@@ -11,6 +11,10 @@
 window.KABAR_JENIS = ["Laporan keuangan", "Pembelian kembali saham", "Dividen", "Rapat umum pemegang saham", "Aksi korporasi lain"];
 
 window.KABAR = [
+  // Laporan 9 bulan KLBF — Investortrust, 13 Nov 2026; angka sama di ringkasan Quartr 30 Okt 2026 (Raka, ditinjau Hana)
+  { kode: "KLBF", tanggal: "2026-11-13", jenis: "Laporan keuangan",
+    ringkas: "Kalbe Farma mencatat laba bersih Rp2,74 triliun pada Januari–September 2026, tumbuh 4%. Pada Januari–September 2025 laba yang diatribusikan kepada pemilik entitas induk Rp2,63 triliun (BCA Sekuritas, 27 Okt 2025).",
+    sumber: { judul: "Investortrust, 13 Nov 2026: Prospek dan target harga saham Kalbe (KLBF) direvisi naik, intip katalis ini", url: "https://investortrust.id/market/122429/prospek-dan-target-harga-saham-kalbe-klbf-direvisi-naik-intip-katalis-ini" } },
   // Laporan 9 bulan MBMA — Investor Daily, 20 Nov 2026; angka sama di Investortrust 21 Nov 2026 (Raka, ditinjau Hana)
   { kode: "MBMA", tanggal: "2026-11-20", jenis: "Laporan keuangan",
     ringkas: "Merdeka Battery Materials mencatat laba yang diatribusikan kepada pemilik entitas induk US$146 juta pada Januari–September 2026, dibandingkan US$25 juta pada periode yang sama 2025. Pendapatan naik 90% menjadi US$1,78 miliar.",

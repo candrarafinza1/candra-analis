@@ -52,7 +52,11 @@ window.EMITEN_ASLI = [
     labaTahun: { 2024: 3240, 2025: 3660 },
     pendapatan: { 2024: 32630, 2025: 35320 },
     liabilitas2025: 5970.85, ekuitas2025: 24728.50,
-    laba9b: { 2025: null, 2026: null },
+    // laba9b (Fajar & Galih, 21 Nov 2026): Investortrust 13 Nov 2026 menulis laba bersih 9 bulan 2026 Rp2,74 T (+4% YoY);
+    // Quartr 30 Okt 2026 menulis laba atribusi Rp2.736.895 juta (+4,0%), laba periode berjalan Rp2.837.405 juta, jadi Rp2,74 T = atribusi.
+    // Pembanding: BCA Sekuritas (IQPlus) 27 Okt 2025 "laba periode berjalan yang diatribusikan ke pemilik entitas induk" Rp2,63 T.
+    laba9b: { 2025: 2630, 2026: 2740 },
+    catatan9b: "Laba 9 bulan = laba diatribusikan kepada pemilik entitas induk: Rp2,74 T (Jan–Sep 2026) vs Rp2,63 T (Jan–Sep 2025). Angka 2026 dari Investortrust 13 Nov 2026 (laba bersih Rp2,74 T, tumbuh 4%), sama dengan ringkasan Quartr 30 Okt 2026 (diatribusikan Rp2.736.895 juta, +4,0%; laba periode berjalan Rp2.837.405 juta, tidak dipakai). Angka 2025 dari BCA Sekuritas (IQPlus) 27 Okt 2025. Sumber tidak menyebut pos sekali-waktu.",
     // dps: Rp20 (total Rp936.267.830.800, RUPST 21 Mei 2026) dari BCA Sekuritas & Stockwatch (mengutip risalah RUPS).
     // Bareksa 26 Mei 2026 menulis Rp21 (mengutip riset Ciptadana); tidak dipakai karena dua sumber lain sama-sama Rp20.
     dps: 20, harga: null,
@@ -64,7 +68,13 @@ window.EMITEN_ASLI = [
       { judul: "BCA Sekuritas, 25 Mei 2026: KLBF bagikan dividen Rp20 per saham (tahun buku 2025) pada 24 Juni 2026",
         url: "https://bcasekuritas.co.id/latest-news/news/klbf-akan-bagikan-dividen-pada-24-juni-2026" },
       { judul: "Stockwatch, 25 Mei 2026: Selain dividen Rp20 per saham, KLBF rombak jajaran pengurus",
-        url: "https://stockwatch.id/selain-dividen-rp20-per-saham-klbf-juga-rombak-jajaran-pengurus/" }]
+        url: "https://stockwatch.id/selain-dividen-rp20-per-saham-klbf-juga-rombak-jajaran-pengurus/" },
+      { judul: "Investortrust, 13 Nov 2026: Prospek dan target harga saham Kalbe (KLBF) direvisi naik (laba bersih 9 bulan 2026 Rp2,74 triliun, tumbuh 4%)",
+        url: "https://investortrust.id/market/122429/prospek-dan-target-harga-saham-kalbe-klbf-direvisi-naik-intip-katalis-ini" },
+      { judul: "Quartr, 30 Okt 2026: PT Kalbe Farma Tbk (KLBF) Q3 2026 earnings summary (laba atribusi Rp2.736.895 juta, +4,0%)",
+        url: "https://quartr.com/events/pt-kalbe-farma-tbk-klbf-q3-2026_FRwrHnmr" },
+      { judul: "BCA Sekuritas (IQPlus), 27 Okt 2025: Kalbe Farma raih penjualan neto Rp25,98 triliun hingga September 2025 (laba atribusi Rp2,63 triliun)",
+        url: "https://bcasekuritas.co.id/en/latest-news/news/kalbe-farma-raih-penjualan-neto-rp2598-triliun-hingga-september-2025" }]
   },
   {
     kode: "ICBP", nama: "PT Indofood CBP Sukses Makmur Tbk", sektor: "Barang konsumen primer",
