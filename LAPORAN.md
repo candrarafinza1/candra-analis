@@ -2090,3 +2090,8 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Galih + Fajar: sejak 19 Nov belum ada laba 9 bulan baru, jadi 7 emiten yang kosong dicari. **EXCL masuk** (rugi atribusi Jan–Sep 2026 Rp1,60 T vs Rp2,60 T, EmitenNews 18 Nov & Databoks 19 Nov); kini 26 dari 32. Raka + Hana: kabar EXCL. KLBF, MIKA, BRIS, BSSR, MDKA, MBMA belum bersumber.
 - Galih: perubahan laba 9 bulan yang melibatkan rugi kini ditulis "rugi menyusut/membesar/berbalik", bukan persen (sebelumnya akan tampil "+38,5%" untuk rugi). Nina: cek kabar rugi + contoh Radar baru + uji balik tertangkap. Dicek 390/1280px tanpa scroll horizontal & galat JS.
 - Belum sempat: Sari + Laras (sisir teks Bandingkan & Kabar). `node tests/cek.mjs` lolos (11 halaman, 8 pelajaran, 32 emiten). Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 21 Nov 2026, 16.08 WIB — sesi kerja (Bima)
+- Fajar + Galih: **MDKA masuk** — laba diatribusikan kepada pemilik entitas induk Jan–Sep 2026 US$157 juta, berbalik dari rugi US$35 juta (SWA 20 Nov & Investor Daily 21 Nov; cocok dengan semester I US$102 juta + kuartal III US$56 juta). Kini 26 → 27 dari 32. Profil menulis "berbalik dari rugi ke laba". Raka + Hana: kabar MDKA 20 Nov.
+- MBMA belum dicatat: hanya SWA, dan angka 9 bulan 2025 tidak disebut (hanya "naik 478%"; tidak dihitung sendiri). KLBF (hanya persen), MIKA (belum ada sumber kedua), BRIS & BSSR (belum ada berita) tetap kosong.
+- Nina: `node tests/cek.mjs` lolos (11 halaman, 8 pelajaran, 32 emiten); profil MDKA, Kabar, Radar, beranda dicek 390/1280px tanpa scroll horizontal & galat JS. Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

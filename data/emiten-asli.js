@@ -744,13 +744,20 @@ window.EMITEN_ASLI = [
     labaTahun: { 2024: -55.76, 2025: -62.06 },
     pendapatan: { 2024: 2240, 2025: 1890 },
     liabilitas2025: 2780, ekuitas2025: 2920,
-    laba9b: { 2025: null, 2026: null },
+    // laba9b (Fajar & Galih, 21 Nov 2026): laba diatribusikan kepada pemilik entitas induk Jan–Sep 2026 US$157 juta vs rugi US$35 juta (Jan–Sep 2025),
+    // SWA 20 Nov 2026 (menyebut "diatribusikan kepada pemilik entitas induk") dan Investor Daily 21 Nov 2026 (angka sama). Cocok dengan semester I US$102 juta + kuartal III US$56 juta.
+    laba9b: { 2025: -35, 2026: 157 },
+    catatan9b: "Angka 9 bulan = laba diatribusikan kepada pemilik entitas induk, juta US$: laba US$157 juta (Jan–Sep 2026), berbalik dari rugi US$35 juta (Jan–Sep 2025); SWA 20 Nov 2026 dan Investor Daily 21 Nov 2026 sama. Sumber menyebut pendorongnya pendapatan naik 76% menjadi sekitar US$2,3 miliar dari bisnis nikel dan emas; sumber tidak menyebut pos sekali-waktu.",
     dps: null, harga: null,
     catatan: "Melapor dalam dolar AS; angka dalam juta US$ sesuai laporan, tidak dikonversi ke rupiah. Rugi diatribusikan kepada pemilik entitas induk US$62,06 juta (2025) vs US$55,76 juta (2024), menurut Bisnis; Kabar Bursa menulis angka yang sama dan mencatat laba untuk kepentingan nonpengendali US$78,21 juta (cocok: grup rugi, anak usaha seperti MBMA laba). Pendapatan dibulatkan sumber (US$1,89 miliar vs US$2,24 miliar). Cek neraca: liabilitas US$2,78 miliar + ekuitas US$2,92 miliar = US$5,70 miliar, aset US$5,71 miliar (selisih pembulatan).",
     sumber: [{ judul: "Bisnis, 31 Mar 2026: Merdeka Copper Gold (MDKA) cetak pendapatan US$1,89 miliar pada 2025, rugi membengkak",
       url: "https://market.bisnis.com/read/20260331/192/1963203/merdeka-copper-gold-mdka-cetak-pendapatan-us189-miliar-pada-2025-rugi-membengkak" },
       { judul: "Kabar Bursa, 31 Mar 2026: Rugi MDKA membesar",
-        url: "https://www.kabarbursa.com/syariah/rugi-mdka-membesar-bos-ikut-jual-saham-ada-sinyal-apa" }]
+        url: "https://www.kabarbursa.com/syariah/rugi-mdka-membesar-bos-ikut-jual-saham-ada-sinyal-apa" },
+      { judul: "SWA, 20 Nov 2026: MDKA berbalik laba US$157 juta (Jan–Sep 2026), ditopang bisnis nikel dan emas",
+        url: "https://swa.co.id/read/479889/mdka-berbalik-laba-us157-juta-ditopang-bisnis-nikel-dan-emas" },
+      { judul: "Investor Daily, 21 Nov 2026: Grup Merdeka tampil perkasa (MDKA laba US$157 juta pada 9M26 vs rugi US$35 juta)",
+        url: "https://investor.id/market/462791/grup-merdeka-tampil-perkasa" }]
   },
   {
     kode: "MBMA", nama: "PT Merdeka Battery Materials Tbk", sektor: "Bahan baku",

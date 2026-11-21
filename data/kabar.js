@@ -11,6 +11,10 @@
 window.KABAR_JENIS = ["Laporan keuangan", "Pembelian kembali saham", "Dividen", "Rapat umum pemegang saham", "Aksi korporasi lain"];
 
 window.KABAR = [
+  // Laporan 9 bulan MDKA — SWA, 20 Nov 2026; angka sama di Investor Daily 21 Nov 2026 (Raka, ditinjau Hana)
+  { kode: "MDKA", tanggal: "2026-11-20", jenis: "Laporan keuangan",
+    ringkas: "Merdeka Copper Gold mencatat laba yang diatribusikan kepada pemilik entitas induk US$157 juta pada Januari–September 2026, berbalik dari rugi US$35 juta pada periode yang sama 2025. Pendapatan naik 76% menjadi sekitar US$2,3 miliar.",
+    sumber: { judul: "SWA, 20 Nov 2026: MDKA berbalik laba US$157 juta, ditopang bisnis nikel dan emas", url: "https://swa.co.id/read/479889/mdka-berbalik-laba-us157-juta-ditopang-bisnis-nikel-dan-emas" } },
   // Laporan 9 bulan EXCL — EmitenNews, 18 Nov 2026; angka sama di Databoks 19 Nov 2026 (Raka, ditinjau Hana)
   { kode: "EXCL", tanggal: "2026-11-18", jenis: "Laporan keuangan",
     ringkas: "Laporan Januari–September 2026 terbit. XLSmart masih mencatat rugi yang diatribusikan kepada pemilik entitas induk Rp1,60 triliun, menyusut dari rugi Rp2,60 triliun pada periode yang sama 2025.",
