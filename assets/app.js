@@ -758,7 +758,7 @@
         syariahAktif(x) ? "Baris " + x.desBaris : "Tidak tercatat"
       ];
     }
-    var POS = ["Laba bersih 2025", "Pendapatan 2025", "ROE 2025", "DER akhir 2025", "Laba Jan–Sep 2026 (perubahan dari 2025)", "Daftar Efek Syariah"];
+    var POS = ["Laba bersih 2025", "Pendapatan 2025", "ROE 2025", "DER akhir 2025", "Laba Januari–September 2026 (perubahan dari Januari–September 2025)", "Daftar Efek Syariah"];
 
     pilih.addEventListener("change", function () {
       // Arif (7 Nov 18.08): kotak istilah yang terbuka di hasil lama ditutup dulu; hasil baru ikut ditandai istilah.
@@ -780,6 +780,10 @@
       ])]));
       if (usd(e) !== usd(x)) hasil.appendChild(el("p", { class: "catatan-metode", text:
         "Satu emiten melapor dalam dolar AS dan yang lain dalam rupiah. Angka uangnya tidak sebanding langsung karena tidak kami konversi; ROE dan DER (persen dan kali) tetap bisa dibaca berdampingan." }));
+      // Sari + Laras + Hana (21 Nov 18.xx): tanda "–" dijelaskan, selaras dengan Metodologi (kosong = belum bersumber,
+      // atau sengaja tidak dihitung seperti DER bank syariah).
+      if (a.concat(b).indexOf("–") !== -1) hasil.appendChild(el("p", { class: "catatan-metode", text:
+        "Tanda \"–\" berarti angkanya belum bersumber atau sengaja tidak kami hitung (misalnya DER bank syariah). Alasannya ada di catatan profil emiten dan halaman Cara kami mengolah data." }));
       // IDE.md #18 (2 Nov): sebut kode emitennya agar pemula tahu catatan mana yang harus dibaca.
       var bertanda = [e, x].filter(function (y) { return y.periksaUlang || y.sekaliWaktu; }).map(function (y) { return y.kode; });
       if (bertanda.length) hasil.appendChild(el("p", { class: "catatan-metode", text:

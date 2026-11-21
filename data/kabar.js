@@ -33,7 +33,7 @@ window.KABAR = [
     sumber: { judul: "Fortune IDN, 11 Nov 2026: Produksi dan harga batu bara dongkrak laba ITMG 24,7% hingga Q3 2026", url: "https://www.fortuneidn.com/market/produksi-dan-harga-batu-bara-dongkrak-laba-itmg-24-7-hingga-q3-2026-00-3dhnm-h3zhhy" } },
   // Laporan 9 bulan AADI — depok24jam, 2 Nov 2026
   { kode: "AADI", tanggal: "2026-11-02", jenis: "Laporan keuangan",
-    ringkas: "Adaro Andalan Indonesia merilis laporan 9 bulan 2026: laba yang diatribusikan kepada pemilik entitas induk US$683,34 juta, naik dari US$587,32 juta. Pendapatan usaha US$3,96 miliar, naik 9,70%.",
+    ringkas: "Adaro Andalan Indonesia merilis laporan Januari–September 2026: laba yang diatribusikan kepada pemilik entitas induk US$683,34 juta, naik dari US$587,32 juta. Pendapatan usaha US$3,96 miliar, naik 9,70%.",
     sumber: { judul: "depok24jam, 2 Nov 2026: Laba Adaro Andalan Indonesia (AADI) naik 16% kuartal III 2026", url: "https://www.depok24jam.com/2026/11/02/laba-adaro-andalan-indonesia-aadi-kuartal-iii-2026/" } },
   // Laporan 9 bulan ACES — IDX Channel, 2 Nov 2026
   { kode: "ACES", tanggal: "2026-11-02", jenis: "Laporan keuangan",

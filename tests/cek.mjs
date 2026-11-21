@@ -183,7 +183,7 @@ ok(istilahKembar([{ istilah: "A", pola: ["laba"] }, { istilah: "B", pola: ["Laba
     ok(pilih(bangun(contoh), "laba bersih naik", {}).teks === "laba bersih", "uji negatif: pilihIstilah harus berbeda dari versi lama");
     // Nina + Arif (7 Nov 21.10): judul profil "Laba Januari–September" dan kolom Bandingkan "Laba Jan–Sep 2026"
     // ditandai sebagai istilah "Laba 9 bulan"; "Laporan Januari–September" (bukan laba) tidak ikut ditandai.
-    for (const teks of ["Laba Januari–September: Rp1 T (2025)", "Laba Jan–Sep 2026 (perubahan dari 2025)", "Laba 9 bulan naik"]) {
+    for (const teks of ["Laba Januari–September: Rp1 T (2025)", "Laba Jan–Sep 2026 (perubahan dari 2025)", "Laba Januari–September 2026 (perubahan dari Januari–September 2025)", "Laba 9 bulan naik"]) {
       const r = pilih(POLA, teks, {});
       ok(nama(r) === "Laba 9 bulan" && r.mulai === 0, `cek 2m: "${teks}" harus ditandai sebagai "Laba 9 bulan", didapat: ${nama(r)}`);
     }
@@ -399,6 +399,9 @@ ok(/function posisi\(kunci[\s\S]{0,900}peserta\(kunci\)/.test(readFileSync("asse
   ok(!/lebih baik|lebih unggul|pemenang|terbaik/i.test(f), "banding: dilarang kata penilaian (lebih baik/unggul/terbaik)");
   ok(!/localStorage|sessionStorage/.test(f), "banding: tidak boleh menyimpan apa pun");
   ok(/aria-live/.test(f), "banding: hasil harus diumumkan ke pembaca layar (aria-live)");
+  // Nina (21 Nov 18.xx): istilah kolom sama dengan Metodologi, dan tanda "–" wajib dijelaskan.
+  ok(/"Laba Januari–September 2026 \(perubahan dari Januari–September 2025\)"/.test(f), "banding: kolom laba 9 bulan wajib memakai istilah Metodologi (Januari–September)");
+  ok(/indexOf\("–"\) !== -1/.test(f) && /belum bersumber atau sengaja tidak kami hitung/.test(f), "banding: catatan arti tanda \"–\" wajib ada");
 }
 
 // 2b. Ringkasan usaha (Raka & Sari, 30 Okt): bila diisi, wajib bersumber, singkat, tanpa ajakan
@@ -2998,7 +3001,7 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
   ok(kode.every(Boolean) && posLabel && banding, "app.js: fungsi Bandingkan (" + nama.filter((n, i) => !kode[i]).join(", ") + ") atau daftar POS tidak ditemukan, sesuaikan tes ini");
   if (kode.every(Boolean) && posLabel && banding) {
     const r = vm.runInNewContext(`(function () { ${fmt}\n${kode.join("\n")}\n${posLabel}\n return { nilaiPos: nilaiPos, POS: POS }; })()`);
-    ok(r.POS.join("|") === "Laba bersih 2025|Pendapatan 2025|ROE 2025|DER akhir 2025|Laba Jan–Sep 2026 (perubahan dari 2025)|Daftar Efek Syariah",
+    ok(r.POS.join("|") === "Laba bersih 2025|Pendapatan 2025|ROE 2025|DER akhir 2025|Laba Januari–September 2026 (perubahan dari Januari–September 2025)|Daftar Efek Syariah",
       "app.js: baris Bandingkan berubah (" + r.POS.join(", ") + "); sesuaikan tes & Metodologi");
     const dasar = { desBaris: 7, labaTahun: { 2024: 100, 2025: 120 }, pendapatan: { 2024: 1000, 2025: 1500 }, ekuitas2025: 1000, liabilitas2025: 500, laba9b: { 2025: 80, 2026: 100 } };
     const v = x => r.nilaiPos(Object.assign({ kode: "C" }, dasar, x));
