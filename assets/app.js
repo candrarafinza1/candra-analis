@@ -44,6 +44,9 @@
   // Perubahan (naik/turun): tanda "+" bila naik, "−" bila turun. ROE tetap memakai persen() (temuan Kirana 30 Okt 16.10).
   function ubah(p) { return (p > 0 ? "+" : "") + persen(p); }
   function ada(v) { return typeof v === "number" && isFinite(v); }
+  // Galih (21 Nov): bila salah satu angka laba 9 bulan adalah rugi, persen naik/turun membingungkan pemula
+  // (rugi −2,6 T → −1,6 T tertulis "+38,5%"). Tulis arah perubahannya dengan kata, tanpa persen.
+  function ubah9(a, b) { return !ada(a) || !ada(b) ? null : (a >= 0 && b >= 0) ? (ada(tumbuh(a, b)) ? ubah(tumbuh(a, b)) : null) : (a < 0 && b < 0) ? (b > a ? "rugi menyusut" : b < a ? "rugi membesar" : "rugi tidak berubah") : (a < 0 ? "berbalik dari rugi ke laba" : "berbalik dari laba ke rugi"); }
   function tumbuh(a, b) { return ada(a) && ada(b) && a !== 0 ? (b - a) / Math.abs(a) * 100 : null; }
   // Rumus tim Galih: semua dari angka tahun buku 2025 di sumber
   function laba25(e) { return e.labaTahun ? e.labaTahun[2025] : null; }
@@ -523,7 +526,7 @@
     // Laba 9 bulan (Januari–September) 2026 dibanding periode yang sama 2025.
     var N = e.laba9b || {}, g9 = tumbuh(N[2025], N[2026]);
     if (ada(g9)) {
-      var bukti9 = "Laba Januari–September: " + rp(N[2025]) + " (2025) → " + rp(N[2026]) + " (2026), " + ubah(g9) + ".";
+      var bukti9 = "Laba Januari–September: " + rp(N[2025]) + " (2025) → " + rp(N[2026]) + " (2026), " + ubah9(N[2025], N[2026]) + ".";
       if (ada(N[2026]) && N[2026] < 0) s.push({ tingkat: "tinggi", judul: "Merugi dalam 9 bulan pertama 2026",
         isi: "Perusahaan mencatat rugi bersih untuk periode Januari–September 2026.", bukti: bukti9 });
       else if (g9 <= -50) s.push({ tingkat: "tinggi", judul: "Laba 9 bulan 2026 turun lebih dari separuh",
@@ -751,7 +754,7 @@
         strip(P[2025], rp),
         strip(roe(x), persen),
         strip(der(x), function (v) { return angka.format(v) + "x"; }),
-        ada(N[2026]) ? rp(N[2026]) + (ada(g9) ? " (" + ubah(g9) + ")" : "") : "belum ada",
+        ada(N[2026]) ? rp(N[2026]) + (ada(g9) ? " (" + ubah9(N[2025], N[2026]) + ")" : "") : "belum ada",
         syariahAktif(x) ? "Baris " + x.desBaris : "Tidak tercatat"
       ];
     }
@@ -963,7 +966,7 @@
       tbody
     ])]));
     akar.appendChild(el("p", { class: "catatan-metode", text: ada(g9)
-      ? "Laba Januari–September: " + rp(N[2025]) + " (2025) → " + rp(N[2026]) + " (2026), " + ubah(g9) + ". Laporan kuartalan umumnya belum diaudit."
+      ? "Laba Januari–September: " + rp(N[2025]) + " (2025) → " + rp(N[2026]) + " (2026), " + ubah9(N[2025], N[2026]) + ". Laporan kuartalan umumnya belum diaudit."
       : "Laba Januari–September 2026 belum kami masukkan: laporan kuartal III belum rilis atau angkanya belum bisa dipastikan." }));
     var sw9p = sekaliWaktu9b(e);
     if (sw9p) akar.appendChild(el("p", { class: "catatan-metode" }, [sw9p + " ", el("a", { href: "metodologi.html#sekali-waktu", text: "Baca aturannya" }), "."]));

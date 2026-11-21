@@ -11,6 +11,10 @@
 window.KABAR_JENIS = ["Laporan keuangan", "Pembelian kembali saham", "Dividen", "Rapat umum pemegang saham", "Aksi korporasi lain"];
 
 window.KABAR = [
+  // Laporan 9 bulan EXCL — EmitenNews, 18 Nov 2026; angka sama di Databoks 19 Nov 2026 (Raka, ditinjau Hana)
+  { kode: "EXCL", tanggal: "2026-11-18", jenis: "Laporan keuangan",
+    ringkas: "Laporan Januari–September 2026 terbit. XLSmart masih mencatat rugi yang diatribusikan kepada pemilik entitas induk Rp1,60 triliun, menyusut dari rugi Rp2,60 triliun pada periode yang sama 2025.",
+    sumber: { judul: "EmitenNews, 18 Nov 2026: EXCL catat perbaikan kinerja, pendapatan Q3 2026 tembus Rp35,7 triliun", url: "https://emitennews.com/news/excl-catat-perbaikan-kinerja-pendapatan-q3-2026-tembus-rp357-triliun" } },
   // Laporan 9 bulan HRUM — Kontan, 6 Nov 2026 (Raka, ditinjau Hana)
   { kode: "HRUM", tanggal: "2026-11-06", jenis: "Laporan keuangan",
     ringkas: "Harum Energy mencatat laba tahun berjalan yang diatribusikan kepada pemilik entitas induk US$ 70,74 juta pada Januari–September 2026, naik 89,63% dari US$ 37,31 juta pada periode yang sama 2025.",

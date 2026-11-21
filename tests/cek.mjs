@@ -515,13 +515,25 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
     const [a26, a25] = angkaKabar(k.ringkas);
     if (!a26 || !a25 || !e.laba9b) return ["angka laba 9 bulan tidak terbaca"];
     const s = [];
-    if (Math.abs(a26.nilai - e.laba9b[2026]) > a26.toleransi) s.push(`laba 2026 di kabar (${a26.nilai}) beda dengan data (${e.laba9b[2026]})`);
-    if (Math.abs(a25.nilai - e.laba9b[2025]) > a25.toleransi) s.push(`laba 2025 di kabar (${a25.nilai}) beda dengan data (${e.laba9b[2025]})`);
+    // Nina (21 Nov): kabar emiten yang merugi menulis "rugi Rp1,60 triliun" (tanpa tanda minus); data menyimpan -1600.
+    // Angka di kabar dibandingkan dengan besaran data hanya bila kabar menyebut "rugi" dan data memang negatif.
+    const rugi = /\brugi\b/i.test(k.ringkas);
+    const besar = (v) => (rugi && typeof v === "number" && v < 0 ? -v : v);
+    if (!rugi && (e.laba9b[2026] < 0 || e.laba9b[2025] < 0)) s.push("data laba 9 bulan negatif (rugi), tetapi kabar tidak menyebut rugi");
+    if (Math.abs(a26.nilai - besar(e.laba9b[2026])) > a26.toleransi) s.push(`laba 2026 di kabar (${a26.nilai}) beda dengan data (${e.laba9b[2026]})`);
+    if (Math.abs(a25.nilai - besar(e.laba9b[2025])) > a25.toleransi) s.push(`laba 2025 di kabar (${a25.nilai}) beda dengan data (${e.laba9b[2025]})`);
     return s;
   };
   for (const k of KABAR || []) for (const s of salahAngka9b(k, emitenByKode.get(k.kode))) ok(false, `kabar ${k.kode} ${k.tanggal}: ${s}`);
   ok(salahAngka9b({ ringkas: "Laporan Januari–September 2026 terbit. Laba Rp5,20 triliun, dibanding Rp3,36 triliun." }, { laba9b: { 2025: 3360, 2026: 5180 } }).length === 1,
     "cek angka kabar 9 bulan tidak menangkap angka yang berbeda");
+  // uji balik rugi (Nina, 21 Nov): rugi yang cocok lolos, rugi yang beda tertangkap, data rugi tanpa kata "rugi" tertangkap
+  ok(salahAngka9b({ ringkas: "Laporan Januari–September 2026 terbit. Rugi Rp1,60 triliun, dibanding rugi Rp2,60 triliun." }, { laba9b: { 2025: -2600, 2026: -1600 } }).length === 0,
+    "cek angka kabar 9 bulan menolak rugi yang cocok");
+  ok(salahAngka9b({ ringkas: "Laporan Januari–September 2026 terbit. Rugi Rp1,70 triliun, dibanding rugi Rp2,60 triliun." }, { laba9b: { 2025: -2600, 2026: -1600 } }).length === 1,
+    "cek angka kabar 9 bulan tidak menangkap rugi yang berbeda");
+  ok(salahAngka9b({ ringkas: "Laporan Januari–September 2026 terbit. Laba Rp1,60 triliun, dibanding Rp2,60 triliun." }, { laba9b: { 2025: -2600, 2026: -1600 } }).length >= 1,
+    "cek angka kabar 9 bulan tidak menangkap rugi yang ditulis sebagai laba");
   // Arif & Nina (3 Nov): setiap emiten yang laba9b 2026-nya terisi wajib punya kabar "Laporan keuangan",
   // agar halaman Kabar tidak tertinggal dari data Peringkat.
   const tanpaKabarLaporan = (emiten, kabar) => {
@@ -2747,7 +2759,7 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
 {
   const app = readFileSync("assets/app.js", "utf8");
   const metod = readFileSync("metodologi.html", "utf8");
-  ok(/"Laba Januari–September: " \+ rp\(N\[2025\]\) \+ " \(2025\) → " \+ rp\(N\[2026\]\) \+ " \(2026\), " \+ ubah\(g9\) \+ "\. Laporan kuartalan umumnya belum diaudit\."/.test(app), "app.js: kalimat laba 9 bulan di profil tidak lagi 'Laba Januari–September: … (2025) → … (2026)' + 'belum diaudit', sesuaikan Metodologi");
+  ok(/"Laba Januari–September: " \+ rp\(N\[2025\]\) \+ " \(2025\) → " \+ rp\(N\[2026\]\) \+ " \(2026\), " \+ ubah9\(N\[2025\], N\[2026\]\) \+ "\. Laporan kuartalan umumnya belum diaudit\."/.test(app), "app.js: kalimat laba 9 bulan di profil tidak lagi 'Laba Januari–September: … (2025) → … (2026)' + 'belum diaudit', sesuaikan Metodologi");
   ok(/"Laba Januari–September 2026 belum kami masukkan: laporan kuartal III belum rilis atau angkanya belum bisa dipastikan\."/.test(app), "app.js: kalimat 'belum kami masukkan' laba 9 bulan di profil berubah, cek Metodologi bagian jadwal");
   ok(/"Jan–Sep " \+ th/.test(app) && /\[2025, 2026\]\.forEach\(function \(th\)/.test(app), "app.js: label batang 9 bulan harus 'Jan–Sep 2025' dan 'Jan–Sep 2026'");
   ok(/Laba 9 bulan \(Januari–September\) mulai ditambahkan bertahap/.test(metod) && /Radar Risiko membandingkannya dengan periode yang sama tahun lalu\. Laporan kuartalan biasanya belum diaudit\./.test(metod), "metodologi.html: kalimat jadwal laba 9 bulan (Januari–September, periode sama tahun lalu, belum diaudit) hilang");
@@ -2773,7 +2785,7 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
   const batas = Number((aturan.match(/turun (\d+)% atau lebih/) || [])[1]);
   const mulai = app.indexOf("// Laba 9 bulan (Januari–September) 2026");
   const akhir = app.indexOf("var sw9", mulai);
-  const helper = ["ubah", "ada", "tumbuh"].map(n => (app.match(new RegExp("function " + n + "\\([^\\n]*")) || [""])[0]).join("\n");
+  const helper = ["ubah", "ada", "tumbuh", "ubah9"].map(n => (app.match(new RegExp("function " + n + "\\([^\\n]*")) || [""])[0]).join("\n");
   ok(mulai >= 0 && akhir > mulai && helper.split("\n").every(Boolean), "app.js: blok Radar laba 9 bulan atau fungsi bantu (ubah/ada/tumbuh) tidak ditemukan, sesuaikan tes ini");
   if (mulai >= 0 && akhir > mulai && batas) {
     const sinyal9 = vm.runInNewContext(`(function (e) {
@@ -2794,7 +2806,7 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
     for (const [nama, laba9b, harap] of contoh) {
       const s = sinyal9({ laba9b });
       ok(s.length === 1 && s[0].tingkat === harap, `app.js: Radar laba 9 bulan contoh "${nama}" memberi tingkat ${s.map(x => x.tingkat).join(",") || "(tidak ada)"}, Metodologi mengatur ${harap}`);
-      ok(s[0] && /^Laba Januari–September: Rp\S+ \(2025\) → Rp\S+ \(2026\), [+-]?\S+%\.$/.test(s[0].bukti), `app.js: bukti Radar laba 9 bulan contoh "${nama}" tidak berbentuk 'Laba Januari–September: … (2025) → … (2026), …%.' (${s[0] && s[0].bukti})`);
+      ok(s[0] && /^Laba Januari–September: Rp\S+ \(2025\) → Rp\S+ \(2026\), ([+-]?\S+%|rugi menyusut|rugi membesar|rugi tidak berubah|berbalik dari rugi ke laba|berbalik dari laba ke rugi)\.$/.test(s[0].bukti), `app.js: bukti Radar laba 9 bulan contoh "${nama}" tidak berbentuk 'Laba Januari–September: … (2025) → … (2026), …%.' (${s[0] && s[0].bukti})`);
       ok(s[0] && /Januari–September 2026/.test(s[0].isi), `app.js: isi sinyal Radar laba 9 bulan contoh "${nama}" tidak menyebut periode Januari–September 2026`);
     }
     ok(sinyal9({ laba9b: { 2026: 50 } }).length === 0, "app.js: Radar laba 9 bulan muncul tanpa pembanding 2025, padahal Metodologi membandingkan dengan periode yang sama tahun lalu");
@@ -2823,7 +2835,7 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
     for (let j = k; j < app.length; j++) { if (app[j] === "{") d++; else if (app[j] === "}" && --d === 0) return app.slice(i, j + 1); }
     return "";
   };
-  const nama = ["uang", "rupiahMiliar", "dolarJuta", "usd", "persen", "ubah", "ada", "tumbuh", "tumbuhLaba", "tumbuhPendapatan", "der", "sekaliWaktu9b", "periksa"];
+  const nama = ["uang", "rupiahMiliar", "dolarJuta", "usd", "persen", "ubah", "ada", "tumbuh", "ubah9", "tumbuhLaba", "tumbuhPendapatan", "der", "sekaliWaktu9b", "periksa"];
   const kode = nama.map(fungsi);
   const des = (app.match(/var DES_LABEL = [^\n]*/) || [""])[0];
   const fmt = ["angka", "angka2"].map(n => (app.match(new RegExp("var " + n + " = [^\\n]*")) || [""])[0]).join("\n");
@@ -2880,7 +2892,7 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
     for (let j = k; j < app.length; j++) { if (app[j] === "{") d++; else if (app[j] === "}" && --d === 0) return app.slice(i, j + 1) + ";"; }
     return "";
   };
-  const nama = ["uang", "rupiahMiliar", "dolarJuta", "usd", "persen", "ubah", "ada", "tumbuh", "laba25", "tumbuhLaba", "tumbuhPendapatan", "roe", "syariahAktif", "diluarPeringkat", "peserta", "urutkan"];
+  const nama = ["uang", "rupiahMiliar", "dolarJuta", "usd", "persen", "ubah", "ada", "tumbuh", "ubah9", "laba25", "tumbuhLaba", "tumbuhPendapatan", "roe", "syariahAktif", "diluarPeringkat", "peserta", "urutkan"];
   const kode = nama.map(n => blok("function " + n + "("));
   const krit = blok("var KRITERIA = {");
   const fmt = ["angka", "angka2"].map(n => (app.match(new RegExp("var " + n + " = [^\\n]*")) || [""])[0]).join("\n");
@@ -2922,7 +2934,7 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
     for (let j = k; j < app.length; j++) { if (app[j] === "{") d++; else if (app[j] === "}" && --d === 0) return app.slice(i, j + 1) + ";"; }
     return "";
   };
-  const nama = ["uang", "rupiahMiliar", "dolarJuta", "usd", "persen", "ubah", "ada", "tumbuh", "laba25", "tumbuhLaba", "tumbuhPendapatan", "roe", "syariahAktif", "diluarPeringkat", "peserta", "urutkan", "posisi"];
+  const nama = ["uang", "rupiahMiliar", "dolarJuta", "usd", "persen", "ubah", "ada", "tumbuh", "ubah9", "laba25", "tumbuhLaba", "tumbuhPendapatan", "roe", "syariahAktif", "diluarPeringkat", "peserta", "urutkan", "posisi"];
   const kode = nama.map(n => blok("function " + n + "("));
   const krit = blok("var KRITERIA = {");
   const fmt = ["angka", "angka2"].map(n => (app.match(new RegExp("var " + n + " = [^\\n]*")) || [""])[0]).join("\n");
@@ -2978,7 +2990,7 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
     for (let j = k; j < app.length; j++) { if (app[j] === "{") d++; else if (app[j] === "}" && --d === 0) return app.slice(i, j + 1) + ";"; }
     return "";
   };
-  const nama = ["rupiahMiliar", "dolarJuta", "usd", "uang", "persen", "ubah", "ada", "tumbuh", "laba25", "roe", "der", "syariahAktif", "strip", "nilaiPos"];
+  const nama = ["rupiahMiliar", "dolarJuta", "usd", "uang", "persen", "ubah", "ada", "tumbuh", "ubah9", "laba25", "roe", "der", "syariahAktif", "strip", "nilaiPos"];
   const kode = nama.map(n => blok("function " + n + "("));
   const posLabel = (app.match(/var POS = \[[^\n]*\];/) || [""])[0];
   const fmt = ["angka", "angka2"].map(n => (app.match(new RegExp("var " + n + " = [^\\n]*")) || [""])[0]).join("\n");
@@ -3033,7 +3045,7 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
     for (let j = k; j < app.length; j++) { if (app[j] === "{") d++; else if (app[j] === "}" && --d === 0) return app.slice(i, j + 1); }
     return "";
   };
-  const nama = ["uang", "rupiahMiliar", "dolarJuta", "usd", "persen", "ubah", "ada", "tumbuh", "tumbuhLaba", "tumbuhPendapatan", "der", "sekaliWaktu9b", "periksa"];
+  const nama = ["uang", "rupiahMiliar", "dolarJuta", "usd", "persen", "ubah", "ada", "tumbuh", "ubah9", "tumbuhLaba", "tumbuhPendapatan", "der", "sekaliWaktu9b", "periksa"];
   const kode = nama.map(fungsi);
   const des = (app.match(/var DES_LABEL = [^\n]*/) || [""])[0];
   const fmt = ["angka", "angka2"].map(n => (app.match(new RegExp("var " + n + " = [^\\n]*")) || [""])[0]).join("\n");
@@ -3044,7 +3056,8 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
     const dasar = { kode: "CONTOH", labaTahun: { 2024: 100, 2025: 100 }, pendapatan: { 2024: 1000, 2025: 1000 }, ekuitas2025: 100, liabilitas2025: 100 };
     const tanda = e => periksa(Object.assign({}, dasar, e));
     const sinyal9 = s => s.filter(x => /9 bulan/.test(x.judul) && !/sebanding|^Catatan/.test(x.judul));
-    const B9 = /^Laba Januari–September: .+ \(2025\) → .+ \(2026\), [+−]?\S+%\.$/;
+    // Galih (21 Nov): bila ada rugi, arah ditulis dengan kata (ubah9), bukan persen.
+    const B9 = /^Laba Januari–September: .+ \(2025\) → .+ \(2026\), ([+−]?\S+%|rugi menyusut|rugi membesar|rugi tidak berubah|berbalik dari rugi ke laba|berbalik dari laba ke rugi)\.$/;
     const contoh = [
       ["naik", { 2025: 100, 2026: 120 }, /^Laba 9 bulan 2026 naik$/, "info"],
       ["sama", { 2025: 100, 2026: 100 }, /^Laba 9 bulan 2026 tidak berubah$/, "info"],
@@ -3053,7 +3066,13 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
       ["turun tepat batas", { 2025: 100, 2026: 100 - batas }, /^Laba 9 bulan 2026 turun lebih dari separuh$/, "tinggi"],
       ["rugi 2026", { 2025: 100, 2026: -5 }, /^Merugi dalam 9 bulan pertama 2026$/, "tinggi"],
       ["rugi 2025 → laba 2026", { 2025: -50, 2026: 30 }, /^Laba 9 bulan 2026 naik$/, "info"],
+      ["rugi menyusut (EXCL)", { 2025: -2600, 2026: -1600 }, /^Merugi dalam 9 bulan pertama 2026$/, "tinggi"],
     ];
+    // Nina (21 Nov): bila ada rugi, bukti tidak boleh memuat persen (mis. "+38,5%" untuk rugi yang menyusut)
+    for (const [nm, l9] of contoh) if (l9[2025] < 0 || l9[2026] < 0) {
+      const b = (sinyal9(tanda({ laba9b: l9 }))[0] || {}).bukti || "";
+      ok(!/%/.test(b), `app.js: bukti Radar laba 9 bulan contoh "${nm}" memakai persen padahal ada rugi (${b})`);
+    }
     for (const [nm, l9, judul, harap] of contoh) {
       const s = tanda({ laba9b: l9 }), x9 = sinyal9(s);
       ok(x9.length === 1 && judul.test(x9[0].judul) && x9[0].tingkat === harap,

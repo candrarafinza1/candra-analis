@@ -2085,3 +2085,8 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Proyek prioritas Agenda, IDE.md #46 selesai (Dewi + Nina): kartu dividen kini punya garis waktu mini cum → ex → recording → pembayaran (HP: garis tegak; layar lebar: 4 titik sebaris). Tanggal tetap tertulis, "sudah lewat" tetap teks, titik tanggal berikutnya diberi warna aksen dan teks untuk pembaca layar; CSS saja tanpa animasi. Nina: cek 2f-17 + 4 uji balik. Dicek 390/1280px terang/gelap (juga dengan jam uji 25 Nov) tanpa scroll horizontal & galat JS; Kirana: rapi.
 - Galih (laba 9 bulan) dan Sari + Laras (sisir teks Bandingkan & Kabar) dibawa ke sesi berikutnya. IPO ANDA & dividen KMDS/calon Katadata tetap menunggu bukti syariah/baris DES.
 - `node tests/cek.mjs` lolos (11 halaman, 8 pelajaran, 32 emiten). Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 21 Nov 2026, 15.09 WIB — sesi kerja (Bima)
+- Galih + Fajar: sejak 19 Nov belum ada laba 9 bulan baru, jadi 7 emiten yang kosong dicari. **EXCL masuk** (rugi atribusi Jan–Sep 2026 Rp1,60 T vs Rp2,60 T, EmitenNews 18 Nov & Databoks 19 Nov); kini 26 dari 32. Raka + Hana: kabar EXCL. KLBF, MIKA, BRIS, BSSR, MDKA, MBMA belum bersumber.
+- Galih: perubahan laba 9 bulan yang melibatkan rugi kini ditulis "rugi menyusut/membesar/berbalik", bukan persen (sebelumnya akan tampil "+38,5%" untuk rugi). Nina: cek kabar rugi + contoh Radar baru + uji balik tertangkap. Dicek 390/1280px tanpa scroll horizontal & galat JS.
+- Belum sempat: Sari + Laras (sisir teks Bandingkan & Kabar). `node tests/cek.mjs` lolos (11 halaman, 8 pelajaran, 32 emiten). Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

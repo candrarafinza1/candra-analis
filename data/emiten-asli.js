@@ -571,7 +571,10 @@ window.EMITEN_ASLI = [
     labaTahun: { 2024: 1810, 2025: -4420 },
     pendapatan: { 2024: 34390, 2025: 42440 },
     liabilitas2025: 85300, ekuitas2025: 30000,
-    laba9b: { 2025: null, 2026: null },
+    // laba9b (Fajar & Galih, 21 Nov 2026): rugi diatribusikan kepada pemilik entitas induk Jan–Sep 2026 Rp1,60 T vs Rp2,60 T (Jan–Sep 2025),
+    // sama di EmitenNews 18 Nov 2026 dan Databoks 19 Nov 2026. Industry.co.id 19 Nov menulis "laba bersih dinormalisasi" Rp3,59 T (ukuran lain, tidak dipakai).
+    laba9b: { 2025: -2600, 2026: -1600 },
+    catatan9b: "Angka 9 bulan = rugi diatribusikan kepada pemilik entitas induk: rugi Rp1,60 T (Jan–Sep 2026) vs rugi Rp2,60 T (Jan–Sep 2025), jadi ruginya menyusut, tetapi perusahaan masih merugi. Kedua periode sudah setelah penggabungan dengan Smartfren. Sebagian berita menulis \"laba bersih yang dinormalisasi\" Rp3,59 T; itu ukuran lain buatan perusahaan, tidak kami pakai.",
     dps: null, harga: null,
     catatan: "Rugi diatribusikan kepada pemilik entitas induk 2025 Rp4,42 T (2024 laba Rp1,81 T). Angka 2025 sudah termasuk penggabungan XL Axiata dengan Smartfren; angka 2024 sebelum penggabungan, jadi perbandingan tidak setara. Cek: liabilitas + ekuitas = aset Rp115,3 T. Dividen tahun buku 2025: tidak dibagikan karena perusahaan mencatat rugi pada 2025 (paparan publik & RUPS Mei 2026; Okezone 20 Mei 2026, Kabar Bursa 25 Mei 2026). Karena tidak ada dividen yang dibagikan, profil tidak menampilkan baris dividen.",
     sumber: [{ judul: "Warta Ekonomi, 13 Feb 2026: Pendapatan naik tapi EXCL justru rugi Rp4,42 triliun pada 2025",
@@ -579,7 +582,11 @@ window.EMITEN_ASLI = [
       { judul: "Okezone, 20 Mei 2026: Rugi Rp4,4 triliun, EXCL absen bagi dividen (tahun buku 2025)",
         url: "https://economy.okezone.com/read/2026/05/20/278/3219608/rugi-rp4-4-triliun-excl-absen-bagi-dividen" },
       { judul: "Kabar Bursa, 25 Mei 2026: Tak bagi dividen karena rugi (EXCL, tahun buku 2025)",
-        url: "https://www.kabarbursa.com/syariah/tak-bagi-dividen-karena-rugi-excl-melesat-ke-2800" }]
+        url: "https://www.kabarbursa.com/syariah/tak-bagi-dividen-karena-rugi-excl-melesat-ke-2800" },
+      { judul: "EmitenNews, 18 Nov 2026: EXCL catat perbaikan kinerja, rugi atribusi Jan–Sep 2026 Rp1,60 triliun (2025: Rp2,60 triliun)",
+        url: "https://emitennews.com/news/excl-catat-perbaikan-kinerja-pendapatan-q3-2026-tembus-rp357-triliun" },
+      { judul: "Databoks, 19 Nov 2026: Meski pendapatan naik, XLSmart (EXCL) masih cetak rugi per kuartal III 2026 (Rp1,6 triliun)",
+        url: "https://databoks.katadata.co.id/pasar/statistik/6afd41c6e05c8/meski-pendapatan-naik-xlsmart-excl-masih-cetak-rugi-per-kuartal-iii-2026" }]
   },
   {
     kode: "BRIS", nama: "PT Bank Syariah Indonesia Tbk", sektor: "Keuangan",
