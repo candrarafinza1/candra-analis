@@ -1740,11 +1740,17 @@
       info.push("Dividen " + (a.mataUang === "USD" ? "US$" + angka2.format(a.dps) : "Rp" + angka2.format(a.dps)) +
         " per saham (sebelum pajak). Tercatat di Daftar Efek Syariah periode berjalan, baris " + a.desBaris + ".");
     }
-    var ul = el("ol", { class: "agenda-tanggal" });
+    /* Dewi + Nina (21 Nov 2026, IDE.md #46): kartu dividen memakai garis waktu mini (.agenda-garis): titik di garis,
+       tanggal tetap tertulis, "sudah lewat" tetap teks. Di layar lebar 4 titik sebaris; di HP garis tegak. CSS saja, tanpa animasi.
+       Titik tanggal berikutnya ditandai .agenda-t-berikut (warna aksen) dan teks "berikutnya" untuk pembaca layar. */
+    var garis = !ipo && x.tgl.length > 1;
+    var ul = el("ol", garis ? { class: "agenda-tanggal agenda-garis", "aria-label": "Urutan tanggal dividen" } : { class: "agenda-tanggal" });
     x.tgl.forEach(function (d) {
       var p = PENJELASAN_AGENDA[d.kunci], n = hariDari(d.sampai || d.tanggal, kini);
       var teksT = tanggalId(d.tanggal) + (d.sampai && d.sampai !== d.tanggal ? " – " + tanggalId(d.sampai) : "");
-      ul.appendChild(el("li", { class: n < 0 ? "agenda-t-lewat" : null }, [
+      var kelas = n < 0 ? "agenda-t-lewat" : garis && d === x.berikut ? "agenda-t-berikut" : null;
+      ul.appendChild(el("li", { class: kelas }, [
+        kelas === "agenda-t-berikut" ? el("span", { class: "khusus-pembaca-layar", text: "Tanggal berikutnya: " }) : null,
         el("p", { class: "agenda-t-kepala" }, [
           el("strong", { text: p[0] }), " ",
           el("time", { datetime: d.tanggal, text: teksT }),

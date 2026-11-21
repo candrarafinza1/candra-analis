@@ -7766,6 +7766,38 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
   ]) ok(rusak !== app && uji(rusak).some((x) => x.includes(pesan)), `uji balik semua ke kalender: "${pesan}" harus tertangkap`);
 }
 
+// 2f-17. Agenda: garis waktu mini di kartu dividen (Nina, 21 Nov 2026; Dewi, IDE.md #46).
+// Hanya kartu dividen; tanggal tetap tertulis; "sudah lewat" tetap teks; titik berikutnya punya teks pembaca layar;
+// CSS tanpa animasi/transisi; ada tata letak HP (tegak) dan ≥640px (4 kolom); tanpa innerHTML.
+{
+  const app = readFileSync("assets/app.js", "utf8");
+  const css = readFileSync("assets/styles.css", "utf8");
+  const uji = (js, cs) => {
+    const salah = [];
+    const i = js.indexOf("  function kartuAgenda("), j = js.indexOf("\n  }\n", i), k = i < 0 ? "" : js.slice(i, j);
+    if (!/var garis = !ipo && x\.tgl\.length > 1;/.test(k)) salah.push("garis waktu hanya untuk kartu dividen");
+    if (!/class: "agenda-tanggal agenda-garis", "aria-label": "Urutan tanggal dividen"/.test(k)) salah.push("ol garis wajib berlabel");
+    if (!/el\("time", \{ datetime: d\.tanggal, text: teksT \}\)/.test(k)) salah.push("tanggal wajib tetap tertulis");
+    if (!/n < 0 \? "sudah lewat"/.test(k)) salah.push("lewat wajib berupa teks");
+    if (!/garis && d === x\.berikut \? "agenda-t-berikut"/.test(k) || !/text: "Tanggal berikutnya: "/.test(k)) salah.push("titik berikutnya wajib bertanda teks");
+    if (/innerHTML/.test(k)) salah.push("tanpa innerHTML");
+    const blok = (cs.match(/\.agenda-garis[^{]*\{[^}]*\}/g) || []).join("\n");
+    if (!blok) salah.push("CSS .agenda-garis wajib ada");
+    if (/animation|transition/.test(blok)) salah.push("CSS garis tanpa animasi");
+    if (!/@media \(min-width: 640px\) \{\s*\.agenda-garis \{ grid-template-columns: repeat\(4, minmax\(0, 1fr\)\)/.test(cs)) salah.push("≥640px wajib 4 kolom minmax(0,1fr)");
+    if (!/\.agenda-garis \.agenda-t-lewat::before/.test(cs) || !/\.agenda-garis \.agenda-t-berikut::before/.test(cs)) salah.push("titik lewat & berikutnya wajib dibedakan");
+    return salah;
+  };
+  const s17 = uji(app, css);
+  ok(!s17.length, "Agenda garis waktu mini: " + s17.join("; "));
+  for (const [rusakJs, rusakCss, pesan] of [
+    [app.replace("var garis = !ipo && x.tgl.length > 1;", "var garis = x.tgl.length > 1;"), css, "hanya untuk kartu dividen"],
+    [app.replace('text: "Tanggal berikutnya: "', 'text: ""'), css, "bertanda teks"],
+    [app, css.replace(".agenda-garis li { position: relative;", ".agenda-garis li { transition: all .3s; position: relative;"), "tanpa animasi"],
+    [app, css.replace("grid-template-columns: repeat(4, minmax(0, 1fr))", "grid-template-columns: repeat(4, 1fr)"), "4 kolom"],
+  ]) ok((rusakJs !== app || rusakCss !== css) && uji(rusakJs, rusakCss).some((x) => x.includes(pesan)), `uji balik garis waktu: "${pesan}" harus tertangkap`);
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);
 

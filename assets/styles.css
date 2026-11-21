@@ -872,6 +872,30 @@ button.istilah:hover, button.istilah[aria-expanded="true"] { color: var(--aksen)
 .agenda-tanggal li { margin: 0; }
 .agenda-t-kepala { margin: 0; overflow-wrap: anywhere; }
 .agenda-t-isi { margin: 2px 0 0; font-size: .9rem; color: var(--tinta-2); }
+/* Dewi + Nina (21 Nov 2026, IDE.md #46): garis waktu mini 4 tanggal di kartu dividen. CSS saja, tanpa animasi.
+   HP: garis tegak di kiri dengan titik per tanggal. ≥640px: 4 titik sebaris di atas garis mendatar.
+   Titik lewat = terisi abu (teks "sudah lewat" tetap ada); titik berikutnya = terisi aksen + teks pembaca layar. */
+.agenda-garis { border-left: 0; padding-left: 0; gap: 10px; }
+.agenda-garis li { position: relative; padding-left: 24px; }
+.agenda-garis li::before { content: ""; position: absolute; left: 0; top: .3em; width: 14px; height: 14px; box-sizing: border-box;
+  border-radius: 50%; border: 2px solid var(--garis-kontrol); background: var(--putih); z-index: 1; }
+.agenda-garis li:not(:last-child)::after { content: ""; position: absolute; left: 6px; top: calc(.3em + 14px);
+  height: calc(100% - 4px); width: 2px; background: var(--garis); }
+.agenda-garis .agenda-t-lewat::before { background: var(--garis-kontrol); border-color: var(--garis-kontrol); }
+.agenda-garis .agenda-t-berikut::before { background: var(--aksen); border-color: var(--aksen); }
+.agenda-garis .agenda-t-berikut .agenda-t-kepala strong { color: var(--tinta); }
+@media (min-width: 640px) {
+  .agenda-garis { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0 12px; }
+  .agenda-garis li { padding-left: 0; padding-top: 24px; }
+  .agenda-garis li::before { top: 0; left: 0; }
+  .agenda-garis li:not(:last-child)::after { left: 14px; right: -12px; top: 6px; bottom: auto; width: auto; height: 2px; }
+  .agenda-garis .agenda-t-kepala strong { display: block; }
+}
+@media (forced-colors: active) {
+  .agenda-garis li::before { border-color: CanvasText; }
+  .agenda-garis .agenda-t-lewat::before, .agenda-garis .agenda-t-berikut::before { background: CanvasText; }
+  .agenda-garis li:not(:last-child)::after { background: CanvasText; }
+}
 /* Kotak "Arti tanggal-tanggal ini" (Dewi, 20 Nov 2026, IDE.md #34) */
 .agenda-arti { margin: 16px 0 0; background: var(--putih); border: 1px solid var(--garis); border-radius: var(--radius-kecil); padding: 0 14px; }
 .agenda-arti summary { cursor: pointer; font-weight: 700; min-height: 44px; display: flex; align-items: center; }

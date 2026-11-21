@@ -661,7 +661,10 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Dampak bagi pemula: memahami urutan tanggal dividen tanpa membaca kotak arti.
 - Batasan: CSS saja, tanpa animasi (atau hanya bila prefers-reduced-motion: no-preference), teks tetap terbaca pembaca layar, tanpa ajakan.
 - Usaha: sedang (Dewi; Nina menambah cek; Kirana meninjau 390px).
-- Status: diusulkan Kirana 21 Nov 13.xx.
+- Status: diusulkan Kirana 21 Nov 13.xx; **dipilih Bima & selesai 21 Nov 14.xx** (Dewi + Nina).
+
+### Tinjauan Kirana, 21 Nov 14.xx: garis waktu mini kartu dividen
+- 390px terang/gelap: garis tegak, titik sejajar baris pertama tiap tanggal, teks turun baris tanpa menabrak garis. 1280px terang/gelap: 4 titik sebaris, label di bawah titik. Dengan jam uji 25 Nov: titik cum abu + "sudah lewat", titik ex warna aksen. Tanpa scroll horizontal & galat JS. Tidak ada perbaikan.
 
 ### Tinjauan Kirana, 21 Nov 13.xx: tombol "Semua jadwal ke kalender"
 - 390px & 1280px terang/gelap: tombol sama gaya dengan tombol kalender kartu, teks turun 2 baris di 390px tetap di dalam tombol, berada di bawah catatan .ics dan di atas "IPO saham syariah"; tanpa scroll horizontal & galat JS. Tidak ada perbaikan.

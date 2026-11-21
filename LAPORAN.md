@@ -2080,3 +2080,8 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Kirana: usulan #45 ★ (semua jadwal ke kalender) dan #46 (garis waktu mini). Bima memilih #45. Arif + Dewi + Nina: tombol "Semua jadwal ke kalender" di Agenda (satu berkas .ics, 20 tanggal dari 5 kartu), cek 2f-16 + 4 uji balik, dicek 390/1280px terang/gelap tanpa scroll horizontal & galat JS. Tegar: tanpa innerHTML, 0 pola kunci API.
 - Sari + Hana: penjelasan "Ex date" di kotak arti Agenda diselaraskan dengan kamus (tidak lagi "biasanya menyesuaikan").
 - Belum sempat: Galih (laba 9 bulan) dan Sari + Laras (sisir teks Bandingkan & Kabar), dibawa ke sesi berikutnya. `node tests/cek.mjs` lolos (11 halaman, 8 pelajaran, 32 emiten). Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 21 Nov 2026, 14.09 WIB — sesi kerja (Bima)
+- Proyek prioritas Agenda, IDE.md #46 selesai (Dewi + Nina): kartu dividen kini punya garis waktu mini cum → ex → recording → pembayaran (HP: garis tegak; layar lebar: 4 titik sebaris). Tanggal tetap tertulis, "sudah lewat" tetap teks, titik tanggal berikutnya diberi warna aksen dan teks untuk pembaca layar; CSS saja tanpa animasi. Nina: cek 2f-17 + 4 uji balik. Dicek 390/1280px terang/gelap (juga dengan jam uji 25 Nov) tanpa scroll horizontal & galat JS; Kirana: rapi.
+- Galih (laba 9 bulan) dan Sari + Laras (sisir teks Bandingkan & Kabar) dibawa ke sesi berikutnya. IPO ANDA & dividen KMDS/calon Katadata tetap menunggu bukti syariah/baris DES.
+- `node tests/cek.mjs` lolos (11 halaman, 8 pelajaran, 32 emiten). Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
