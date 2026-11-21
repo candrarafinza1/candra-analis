@@ -11,6 +11,10 @@
 window.KABAR_JENIS = ["Laporan keuangan", "Pembelian kembali saham", "Dividen", "Rapat umum pemegang saham", "Aksi korporasi lain"];
 
 window.KABAR = [
+  // Laporan 9 bulan MBMA — Investor Daily, 20 Nov 2026; angka sama di Investortrust 21 Nov 2026 (Raka, ditinjau Hana)
+  { kode: "MBMA", tanggal: "2026-11-20", jenis: "Laporan keuangan",
+    ringkas: "Merdeka Battery Materials mencatat laba yang diatribusikan kepada pemilik entitas induk US$146 juta pada Januari–September 2026, dibandingkan US$25 juta pada periode yang sama 2025. Pendapatan naik 90% menjadi US$1,78 miliar.",
+    sumber: { judul: "Investor Daily, 20 Nov 2026: Cuan nikel mengalir deras, laba MBMA melonjak 484%", url: "https://investor.id/market/462771/cuan-nikel-mengalir-deras-laba-mbma-melonjak-484" } },
   // Laporan 9 bulan MDKA — SWA, 20 Nov 2026; angka sama di Investor Daily 21 Nov 2026 (Raka, ditinjau Hana)
   { kode: "MDKA", tanggal: "2026-11-20", jenis: "Laporan keuangan",
     ringkas: "Merdeka Copper Gold mencatat laba yang diatribusikan kepada pemilik entitas induk US$157 juta pada Januari–September 2026, berbalik dari rugi US$35 juta pada periode yang sama 2025. Pendapatan naik 76% menjadi sekitar US$2,3 miliar.",

@@ -767,13 +767,20 @@ window.EMITEN_ASLI = [
     labaTahun: { 2024: 22.78, 2025: 29.56 },
     pendapatan: { 2024: 1840, 2025: 1430 },
     liabilitas2025: 1380, ekuitas2025: 2340,
-    laba9b: { 2025: null, 2026: null },
+    // laba9b (Fajar & Galih, 21 Nov 2026): laba diatribusikan kepada pemilik entitas induk Jan–Sep 2026 US$146 juta vs US$25 juta (Jan–Sep 2025),
+    // Investor Daily 20 Nov 2026 dan Investortrust 21 Nov 2026 (keduanya menyebut "diatribusikan kepada pemilik entitas induk", angka sama).
+    laba9b: { 2025: 25, 2026: 146 },
+    catatan9b: "Angka 9 bulan = laba diatribusikan kepada pemilik entitas induk, juta US$: US$146 juta (Jan–Sep 2026) vs US$25 juta (Jan–Sep 2025); Investor Daily 20 Nov 2026 menulis naik 484%, Investortrust 21 Nov 2026 menulis angka yang sama. Angka 2025 dibulatkan sumber. Sumber menyebut pendapatan naik 90% menjadi US$1,78 miliar; sumber tidak menyebut pos sekali-waktu.",
     dps: null, harga: null,
     catatan: "Melapor dalam dolar AS; angka dalam juta US$ sesuai laporan, tidak dikonversi ke rupiah. Laba diatribusikan kepada pemilik entitas induk US$29,56 juta (2025) vs US$22,78 juta (2024); Warta Ekonomi dan BCA Sekuritas (IQPlus) menulis angka yang sama. Pendapatan dibulatkan sumber. Ekuitas ditulis Warta Ekonomi 'di kisaran' US$2,34 miliar. Cek neraca: liabilitas US$1,38 miliar + ekuitas US$2,34 miliar = US$3,72 miliar, aset US$3,73 miliar (selisih pembulatan).",
     sumber: [{ judul: "Warta Ekonomi, 31 Mar 2026: Laba emiten Boy Thohir (MBMA) naik 29,77% meski pendapatan menyusut di 2025",
       url: "https://wartaekonomi.co.id/read606161/laba-emiten-boy-thohir-mbma-naik-2977-meski-pendapatan-menyusut-di-2025" },
       { judul: "BCA Sekuritas (IQPlus), 31 Mar 2026: Pendapatan MBMA capai US$1,43 miliar hingga Desember 2025",
-        url: "https://bcasekuritas.co.id/latest-news/news/pendapatan-mbma-capai-usd143-miliar-hingga-desember-2025" }]
+        url: "https://bcasekuritas.co.id/latest-news/news/pendapatan-mbma-capai-usd143-miliar-hingga-desember-2025" },
+      { judul: "Investor Daily, 20 Nov 2026: Cuan nikel mengalir deras, laba MBMA melonjak 484% (US$146 juta pada Jan–Sep 2026 vs US$25 juta)",
+        url: "https://investor.id/market/462771/cuan-nikel-mengalir-deras-laba-mbma-melonjak-484" },
+      { judul: "Investortrust, 21 Nov 2026: Laba Merdeka Battery Materials (MBMA) pecahkan rekor, ini penopangnya",
+        url: "https://investortrust.id/market/123254/laba-merdeka-battery-materials-mbma-pecahkan-rekor-ini-penopangnya" }]
   },
   {
     kode: "TPIA", nama: "PT Chandra Asri Pacific Tbk", sektor: "Bahan baku",

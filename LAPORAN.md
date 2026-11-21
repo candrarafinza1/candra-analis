@@ -2095,3 +2095,8 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar + Galih: **MDKA masuk** — laba diatribusikan kepada pemilik entitas induk Jan–Sep 2026 US$157 juta, berbalik dari rugi US$35 juta (SWA 20 Nov & Investor Daily 21 Nov; cocok dengan semester I US$102 juta + kuartal III US$56 juta). Kini 26 → 27 dari 32. Profil menulis "berbalik dari rugi ke laba". Raka + Hana: kabar MDKA 20 Nov.
 - MBMA belum dicatat: hanya SWA, dan angka 9 bulan 2025 tidak disebut (hanya "naik 478%"; tidak dihitung sendiri). KLBF (hanya persen), MIKA (belum ada sumber kedua), BRIS & BSSR (belum ada berita) tetap kosong.
 - Nina: `node tests/cek.mjs` lolos (11 halaman, 8 pelajaran, 32 emiten); profil MDKA, Kabar, Radar, beranda dicek 390/1280px tanpa scroll horizontal & galat JS. Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 21 Nov 2026, 17.08 WIB — sesi kerja (Bima)
+- Fajar + Galih: **MBMA masuk** — laba diatribusikan kepada pemilik entitas induk Jan–Sep 2026 US$146 juta vs US$25 juta (Investor Daily 20 Nov & Investortrust 21 Nov, angka sama; +484% sesuai sumber). Kini 27 → 28 dari 32. Raka + Hana: kabar MBMA 20 Nov. Sumber tidak menyebut pos sekali-waktu.
+- KLBF (hanya persen), MIKA (belum ada sumber kedua), BRIS & BSSR (belum ada berita 9 bulan) tetap kosong. ANDA, KMDS & calon Katadata tetap menunggu bukti syariah/baris DES.
+- Nina: `node tests/cek.mjs` lolos (11 halaman, 8 pelajaran, 32 emiten); profil MBMA, Kabar, Radar, Peringkat, beranda dicek 390/1280px tanpa scroll horizontal & galat JS. Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
