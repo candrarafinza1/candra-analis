@@ -2128,3 +2128,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Dewi + Kirana: Agenda diuji dengan jam 24 & 25 Nov di 390/1280px terang/gelap: benar, tanpa scroll horizontal & galat JS.
 - Catatan: cabang `main` lokal di lingkungan kerja ternyata tertinggal/bercabang dari GitHub; tim bekerja dari `origin/main` terbaru (tidak ada yang dihapus). Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel).
 - Belum dikerjakan sesi ini (lanjut sesi 08.xx): Fajar + Galih laba Jan–Sep 2026 MIKA/BRIS/BSSR (tetap 29 dari 32), Sari + Laras sisir teks Bandingkan/Kabar. Tegar: pindai pola kunci API → 0 temuan. Nina: `node tests/cek.mjs` lolos.
+
+## 22 Nov 2026, 08.08 WIB — sesi kerja (Bima)
+- Fajar: **UNVR diperjelas** — Fortune IDN 23 Okt 2026 menegaskan laba Jan–Sep 2026 Rp4,2 T adalah laba yang diatribusikan kepada pemilik entitas induk (vs Rp3,33 T). Angka data tidak berubah; catatan & sumber profil diperbarui. Sumbangan operasi yang dihentikan Rp887,9 M (≈21%) di bawah batas 25%, jadi tidak ditandai pos sekali-waktu.
+- Fajar + Galih: laba Jan–Sep 2026 BRIS, MIKA, BSSR dicari lagi, 0 masuk (tetap 29 dari 32), tidak ada angka tebakan.
+- Hana + Fajar: halaman OJK DES periode I 2026 terbuka dan memuat tautan lampiran Excel daftar saham, tetapi unduhannya gagal (izin tidak terjawab). Tautan dicatat di BACKLOG untuk dicoba sesi berikutnya. KMDS dkk. tetap belum dicatat.
+- Sari + Hana: kabar ACES & CTRA tetap "laporan 9 bulan 2026" — dicoba diganti "Januari–September", tetapi cek angka kabar vs data menuntut laba 2025 dari sumber; dibatalkan, tidak ada perubahan.
+- Nina: `node tests/cek.mjs` lolos (11 halaman, 8 pelajaran, 32 emiten); profil UNVR 390/1280px tanpa scroll horizontal & galat JS. Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

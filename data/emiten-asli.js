@@ -190,7 +190,7 @@ window.EMITEN_ASLI = [
     pendapatan: { 2024: 30620, 2025: 31940 },
     liabilitas2025: 15540, ekuitas2025: 4470,
     laba9b: { 2025: 3330, 2026: 4200 },
-    catatan9b: "Laba 9 bulan Rp4,20 T (Jan–Sep 2026) vs Rp3,33 T (Jan–Sep 2025), EmitenNews; Databoks menulis Rp3,34 T (pembulatan). Laba dari operasi yang dilanjutkan Rp3,31 T vs Rp2,99 T; sisanya dari operasi yang dihentikan (bisnis es krim). Databoks (23 Okt 2026) hanya menulis laba perseroan, tanpa menyebut apakah angka ini laba yang diatribusikan kepada pemilik entitas induk (dicek 9 Nov 2026).",
+    catatan9b: "Laba 9 bulan Rp4,20 T (Jan–Sep 2026) vs Rp3,33 T (Jan–Sep 2025), EmitenNews; Databoks menulis Rp3,34 T (pembulatan). Laba dari operasi yang dilanjutkan Rp3,31 T vs Rp2,99 T; sisanya dari operasi yang dihentikan (bisnis es krim). Fortune IDN (23 Okt 2026) menegaskan Rp4,2 T adalah laba bersih yang dapat diatribusikan kepada pemilik entitas induk, dibandingkan Rp3,33 T; sumbangan operasi yang dihentikan Rp887,9 miliar (sekitar 21%, di bawah batas 25%, jadi tidak ditandai sebagai pos sekali-waktu) (dicek 22 Nov 2026).",
     // dps: Rp201 = total tahun buku 2025 (interim Rp87 dibayar 30 Des 2025 + final Rp114 dibayar 30 Jun 2026; total sekitar Rp7,63 T), Metro TV & Republika 4 Jun 2026 (Fajar, 3 Nov 15.20).
     dps: 201, harga: null,
     dpsSumber: { judul: "Metro TV, 4 Jun 2026: Unilever bagi dividen Rp201 per saham tahun buku 2025 (interim Rp87 + final Rp114), total Rp7,63 T", url: "https://www.metrotvnews.com/read/NP6CL21j-unilever-bagi-dividen-rp201-per-saham-total-rp7-63-triliun" },
@@ -202,7 +202,9 @@ window.EMITEN_ASLI = [
       { judul: "EmitenNews, 23 Okt 2026: Aset drop, laba UNVR kuartal III tumbuh 26,12 persen",
         url: "https://emitennews.com/news/aset-drop-laba-unvr-kuartal-iii-tumbuh-2612-persen" },
       { judul: "Databoks Katadata, 23 Okt 2026: Penjualan dan laba Unilever Indonesia meningkat pada kuartal III 2026",
-        url: "https://databoks.katadata.co.id/pasar/statistik/6adaae8e7366d/penjualan-dan-laba-unilever-indonesia-unvr-meningkat-pada-kuartal-iii-2026" }]
+        url: "https://databoks.katadata.co.id/pasar/statistik/6adaae8e7366d/penjualan-dan-laba-unilever-indonesia-unvr-meningkat-pada-kuartal-iii-2026" },
+      { judul: "Fortune IDN, 23 Okt 2026: Laba Unilever tembus Rp4,2 triliun, ini pendorong pertumbuhannya",
+        url: "https://www.fortuneidn.com/business/laba-unilever-tembus-rp4-2-triliun-ini-pendorong-pertumbuhannya-00-lflgw-gwm4q5" }]
   },
   {
     kode: "PTBA", nama: "PT Bukit Asam (Persero) Tbk", sektor: "Energi",
