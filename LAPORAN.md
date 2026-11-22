@@ -2149,3 +2149,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Sari + Hana: kabar ACES & CTRA dicoba lagi, halaman sumber tidak bisa dibuka → 0 perbaikan, ditahan.
 - Hana + Raka: IPO ANDA dijadwalkan dicari lagi sesi 13.xx (sesuai backlog).
 - Nina: `node tests/cek.mjs` lolos (11 halaman, 8 pelajaran, 32 emiten). Data & tampilan tidak berubah. Masalah berat baru: tidak ada (DES tidak terbuka = keterbatasan alat, bukan masalah berat; Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 22 Nov 2026, 13.08 WIB — sesi kerja siang (Bima)
+- Laporan masuk kerja siang dikirim ke Rafinza (12 karyawan siap, cek lolos).
+- Agenda (rutin 13.xx, Raka + Fajar + Hana): +0 IPO, +0 dividen, −0 kedaluwarsa. Pencarian dividen baru hanya memunculkan BBCA (bukan saham syariah) dan PSGO (sudah ada). ANDA: belum ada sumber yang menyebut status syariah, tidak dicatat. DES periode II 2026 belum terlihat terbit; KMDS dkk. tetap menunggu baris DES.
+- Kirana: 3 usulan mingguan baru di IDE.md (#47 ★ hitung lot, #48 pajak dividen, #49 riwayat dividen di profil). Bima memilih #47 untuk sesi ini, #48 & #49 masuk BACKLOG.
+- Arif + Dewi: **fitur baru di Agenda** — kotak "Hitung contoh dividen untuk jumlah lot Anda": isi jumlah lot, hasil per kode dari dividen per saham di kartu, sebelum pajak, tidak dijumlahkan, tidak disimpan. Nina: cek 2f-18 + 5 uji balik; 390/1280px tanpa scroll horizontal & galat JS. Tegar: textContent saja, pola kunci API 0 temuan. Kirana meninjau: rapi.
+- Nina: `node tests/cek.mjs` lolos (11 halaman, 8 pelajaran, 32 emiten). Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

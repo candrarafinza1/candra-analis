@@ -7820,6 +7820,48 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
   ]) ok((rusakJs !== app || rusakCss !== css) && uji(rusakJs, rusakCss).some((x) => x.includes(pesan)), `uji balik garis waktu: "${pesan}" harus tertangkap`);
 }
 
+// 2f-18. Agenda: kotak "Hitung contoh dividen untuk jumlah lot Anda" (Nina, 22 Nov 2026; Arif + Dewi, IDE.md #47).
+// Bilangan bulat 1–100.000 lot, 1 lot = 100 saham, hasil per kode (tidak dijumlahkan), "sebelum pajak", US$ tanpa kurs,
+// tanpa penyimpanan, tanpa kata ajakan, kotak ikut tersembunyi saat pilihan IPO (data-jenis="dividen").
+{
+  const app = readFileSync("assets/app.js", "utf8");
+  const potong = (js, nama) => { const i = js.indexOf("  function " + nama + "("), j = js.indexOf("\n  }\n", i); return i < 0 ? "" : js.slice(i, j + 4); };
+  const uji = (js) => {
+    const salah = [], h = potong(js, "hitungDividenLot"), t = potong(js, "teksHitungLot"), k = potong(js, "kotakHitungLot");
+    if (!h || !t || !k) return ["fungsi hitungDividenLot, teksHitungLot, kotakHitungLot wajib ada"];
+    if (!/var LOT_HITUNG_MAKS = 100000;/.test(js)) salah.push("batas 100.000 lot wajib ada");
+    if (!/Number\.isInteger\(n\)/.test(h)) salah.push("jumlah lot wajib bilangan bulat");
+    if (!/LEMBAR_PER_LOT/.test(h)) salah.push("hitungan wajib memakai LEMBAR_PER_LOT");
+    if (!/sebelum pajak/.test(t)) salah.push('hasil wajib menyebut "sebelum pajak"');
+    if (!/"US\$"/.test(t) || /kurs/i.test(t)) salah.push("dolar AS wajib US$ tanpa konversi kurs");
+    if (/localStorage|sessionStorage|fetch\(|XMLHttpRequest|innerHTML/.test(k)) salah.push("kotak hitung tidak boleh menyimpan/mengirim/innerHTML");
+    if (/reduce\(|total \+=|jumlah \+=/.test(k)) salah.push("hasil tidak boleh dijumlahkan antar-emiten");
+    if (!/"data-jenis": "dividen"/.test(k)) salah.push("kotak wajib data-jenis dividen");
+    if (!/for: "hitung-lot-isian"/.test(k) || !/aria-invalid/.test(k)) salah.push("isian wajib berlabel & menandai salah isian");
+    if (/untung|cuan|buruan|ketinggalan|pasti|beli|jual|rekomendasi/i.test((h + t + k).replace(/\/\/[^\n]*/g, "").replace(/\/\*[\s\S]*?\*\//g, ""))) salah.push("tanpa kata ajakan");
+    if (!/kotakHitungLot\(divDepan\)/.test(potong(js, "renderAgenda"))) salah.push("renderAgenda wajib memasang kotak hitung");
+    return salah;
+  };
+  const s18 = uji(app);
+  ok(!s18.length, "Agenda hitung lot: " + s18.join("; "));
+  {
+    const f = new Function("var LEMBAR_PER_LOT = 100; var LOT_HITUNG_MAKS = 100000; var angkaContoh = new Intl.NumberFormat('id-ID', { maximumFractionDigits: 4 });" +
+      potong(app, "hitungDividenLot") + potong(app, "teksHitungLot") + "; return [hitungDividenLot, teksHitungLot];")();
+    const [h, t] = f;
+    ok(t({ kode: "TOTO", dps: 10, mataUang: "IDR" }, 25) === "TOTO: 25 lot (2.500 saham) × Rp10 = Rp25.000 sebelum pajak.", "hitung lot TOTO 25 lot");
+    ok(t({ kode: "DGWG", dps: 19.5, mataUang: "IDR" }, 3) === "DGWG: 3 lot (300 saham) × Rp19,5 = Rp5.850 sebelum pajak.", "hitung lot desimal");
+    ok(t({ kode: "XXXX", dps: 0.0123, mataUang: "USD" }, 2) === "XXXX: 2 lot (200 saham) × US$0,0123 = US$2,46 sebelum pajak.", "hitung lot US$");
+    ok(h(10, 0) === null && h(10, 1.5) === null && h(10, 100001) === null && h(0, 5) === null && h(10, "abc") === null, "hitung lot menolak isian tidak sah");
+  }
+  for (const [rusak, pesan] of [
+    [app.replace("var LOT_HITUNG_MAKS = 100000;", "var LOT_HITUNG_MAKS = 1e9;"), "100.000"],
+    [app.replace("Number.isInteger(n) || n < 1", "n < 1"), "bilangan bulat"],
+    [app.replace('" sebelum pajak."', '"."').replace('" sebelum pajak."', '"."'), "sebelum pajak"],
+    [app.replace('"data-jenis": "dividen" },\n      [el("summary", { text: "Hitung', '},\n      [el("summary", { text: "Hitung'), "data-jenis"],
+    [app.replace("var hitungLot = kotakHitungLot(divDepan);", "var hitungLot = null;"), "renderAgenda"],
+  ]) ok(rusak !== app && uji(rusak).some((x) => x.includes(pesan)), `uji balik Agenda hitung lot: "${pesan}" harus tertangkap`);
+}
+
 // 2g. Nina + Arif (22 Nov 07.xx): alat pencocok DES (tools/cek-des.mjs) untuk DES periode II 2026.
 // Diuji dengan teks DES tiruan (bukan data asli): baris biasa, bertitik, bergaris tegak, kode ganda,
 // kode tidak ada, dan baris judul/sampah yang wajib diabaikan.

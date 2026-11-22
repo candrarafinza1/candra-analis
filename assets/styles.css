@@ -907,6 +907,13 @@ button.istilah:hover, button.istilah[aria-expanded="true"] { color: var(--aksen)
 .agenda-arti-judul { margin: 0; font-size: .88rem; font-weight: 700; color: var(--tinta-2); }
 .agenda-arti-daftar { margin: 0; }
 .agenda-cara-ipo { margin: 12px 0 0; }
+/* Hitung contoh dividen per jumlah lot (Arif + Dewi, IDE.md #47) */
+.agenda-hitung .cari-kamus { margin: 8px 0 0; }
+.agenda-hitung .cari-kamus input { max-width: 200px; }
+.agenda-hitung-info { font-size: .9rem; color: var(--tinta-2); }
+.agenda-hitung-hasil { margin: 6px 0 0; padding-left: 1.3em; overflow-wrap: anywhere; }
+.agenda-hitung-hasil li + li { margin-top: 4px; }
+#hitung-lot { margin-bottom: 12px; }
 .agenda-cara-isi .tanpa-putus { white-space: nowrap; }
 .agenda-cara-isi p { margin: 8px 0 0; }
 .agenda-cara-isi ol { margin: 8px 0 0; padding-left: 1.3em; }

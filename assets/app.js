@@ -1710,6 +1710,52 @@
     if (iLot >= 0) { ISTILAH.forEach(function (t, i) { if (i !== iLot) sudah[i] = true; }); pasangIstilah(p, sudah); }
     return p;
   }
+  /* Arif + Dewi (22 Nov 2026, IDE.md #47): kotak lipat "Hitung contoh dividen untuk jumlah lot Anda" di atas daftar
+     dividen. Satu kotak isian jumlah lot (bilangan bulat 1–LOT_HITUNG_MAKS), hasil per kode dari `dps` di kartu yang sama.
+     Tidak dijumlahkan antar-emiten, tidak disimpan (tanpa localStorage), tidak dikirim ke mana pun. Dolar AS tetap US$. */
+  var LOT_HITUNG_MAKS = 100000;
+  function hitungDividenLot(dps, lot) {
+    if (typeof dps !== "number" || !(dps > 0)) return null;
+    var n = Number(lot);
+    if (!Number.isInteger(n) || n < 1 || n > LOT_HITUNG_MAKS) return null;
+    return { saham: n * LEMBAR_PER_LOT, total: Math.round(dps * n * LEMBAR_PER_LOT * 1e6) / 1e6 };
+  }
+  function teksHitungLot(a, lot) {
+    var h = hitungDividenLot(a.dps, lot);
+    if (!h) return "";
+    var awal = a.mataUang === "USD" ? "US$" : "Rp";
+    return a.kode + ": " + angkaContoh.format(lot) + " lot (" + angkaContoh.format(h.saham) + " saham) × " + awal +
+      angkaContoh.format(a.dps) + " = " + awal + angkaContoh.format(h.total) + " sebelum pajak.";
+  }
+  function kotakHitungLot(divDepan) {
+    var daftar = (divDepan || []).filter(function (x) { return hitungDividenLot(x.data.dps, 1); });
+    if (!daftar.length) return null;
+    var hasil = el("ul", { class: "agenda-hitung-hasil", id: "hitung-lot-hasil" });
+    var info = el("p", { class: "agenda-hitung-info", id: "hitung-lot-info", role: "status", "aria-live": "polite" });
+    var isian = el("input", { type: "number", id: "hitung-lot-isian", inputmode: "numeric", min: "1", max: String(LOT_HITUNG_MAKS),
+      step: "1", value: "1", "aria-describedby": "hitung-lot-info" });
+    function hitung() {
+      var v = String(isian.value || "").trim(), n = Number(v);
+      hasil.textContent = "";
+      if (!/^\d+$/.test(v) || !hitungDividenLot(1, n)) {
+        isian.setAttribute("aria-invalid", "true");
+        info.textContent = "Isi jumlah lot dengan bilangan bulat 1 sampai " + angkaContoh.format(LOT_HITUNG_MAKS) + ".";
+        return;
+      }
+      isian.removeAttribute("aria-invalid");
+      daftar.forEach(function (x) { hasil.appendChild(el("li", { text: teksHitungLot(x.data, n) })); });
+      info.textContent = "Contoh untuk " + angkaContoh.format(n) + " lot di " + daftar.length + " jadwal dividen.";
+    }
+    isian.addEventListener("input", hitung);
+    hitung();
+    var isi = el("div", { class: "agenda-cara-isi agenda-hitung" }, [
+      el("div", { class: "cari-kamus" }, [el("label", { for: "hitung-lot-isian", text: "Jumlah lot" }), isian]),
+      info, hasil,
+      el("p", { text: "1 lot = 100 saham. Angka dividen per saham diambil dari kartu di bawah. Hasilnya contoh hitungan sebelum pajak, bukan perkiraan hasil investasi; harga saham juga bisa berubah, terutama di ex date. Angka tidak disimpan dan tidak dikirim." })
+    ]);
+    return el("details", { class: "agenda-arti agenda-cara-ipo", id: "hitung-lot", "data-jenis": "dividen" },
+      [el("summary", { text: "Hitung contoh dividen untuk jumlah lot Anda" }), isi]);
+  }
   /* Arif + Dewi (21 Nov 2026, IDE.md #44): label teks "Baru ditambahkan <tanggal>" untuk entri yang field opsional
      `ditambahkan`-nya 0–AGENDA_BARU_HARI hari lalu. Tanggal tidak sah atau masa depan diabaikan (tanpa label).
      Label berupa teks (bukan hanya warna) agar terbaca pembaca layar dan mode gelap. */
@@ -2110,6 +2156,9 @@
     var caraIpo = kotakCaraIpo(ipoDepan.length > 0), judulDiv = akar.querySelector("#agenda-dividen");
     akar.insertBefore(caraIpo, judulDiv);
     pasangIstilah(caraIpo.querySelector(".agenda-cara-isi"));
+    // Kotak hitung lot (IDE.md #47) tepat di bawah judul "Dividen saham syariah", hanya bila ada dps.
+    var hitungLot = kotakHitungLot(divDepan);
+    if (hitungLot && judulDiv) akar.insertBefore(hitungLot, judulDiv.nextSibling);
     var h2Awal = akar.querySelector("h2");
     // Penjelasan berkas .ics ditulis sekali di atas daftar, hanya bila ada tombol kalender (IDE.md #36).
     if (akar.querySelector(".tombol-kalender")) akar.insertBefore(el("p", { class: "agenda-catatan-ics", id: "catatan-ics", text: CATATAN_ICS }), h2Awal);

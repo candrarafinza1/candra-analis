@@ -663,6 +663,37 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Usaha: sedang (Dewi; Nina menambah cek; Kirana meninjau 390px).
 - Status: diusulkan Kirana 21 Nov 13.xx; **dipilih Bima & selesai 21 Nov 14.xx** (Dewi + Nina).
 
+### 47. Agenda: kotak "Hitung contoh dividen untuk jumlah lot Anda" ★ paling berdampak
+- **Pemula bisa mengganti "1 lot" dengan jumlah lot sendiri** — fitur, usaha kecil
+- Masalah: contoh hitungan di kartu selalu 1 lot; pemula yang punya 5 atau 30 lot harus menghitung sendiri per kartu.
+- Ide: satu kotak lipat di atas daftar dividen berisi isian jumlah lot; hasil ditulis per kode dari `dps` kartu yang sama, "sebelum pajak". Tidak dijumlahkan antar-emiten (agar tidak terbaca sebagai ajakan memborong semua).
+- Tren: kalkulator kecil di aplikasi investasi (kalkulator dividen/kalkulator lot) yang langsung menjawab "berapa yang saya terima".
+- Dampak bagi pemula: memahami besar dividen dalam rupiah untuk kepemilikannya sendiri, tanpa akun dan tanpa server.
+- Batasan: tanpa biaya, tanpa penyimpanan/pengiriman data, isian berlabel + pesan salah isian, tanpa animasi, tanpa kata ajakan.
+- Usaha: kecil (Arif + Dewi; Nina menambah cek).
+- Status: diusulkan Kirana 22 Nov 13.xx; **dipilih Bima & selesai 22 Nov 13.xx** (Arif + Dewi, cek Nina 2f-18 + 5 uji balik).
+
+### 48. Pelajaran & kamus: "Pajak dividen" untuk pemula
+- **Menjawab "kenapa uang yang masuk lebih kecil dari hitungan?"** — konten, usaha kecil
+- Masalah: Agenda selalu menulis "sebelum pajak", tetapi belum ada penjelasan pajak dividen untuk investor perorangan.
+- Ide: satu bagian pendek di pelajaran Praktik + istilah "pajak dividen" di kamus, hanya dari sumber resmi (UU HPP & aturan turunannya, situs DJP/KSEI), tanpa angka tebakan.
+- Dampak bagi pemula: tidak kaget saat dividen yang diterima di RDN berbeda dari contoh hitungan.
+- Batasan: Hana meninjau sumber & bahasa; tanpa saran pajak pribadi; PDF modul dibuat ulang.
+- Usaha: kecil (Sari + Laras + Hana).
+- Status: diusulkan Kirana 22 Nov 13.xx; dipilih Bima untuk sesi berikutnya (masuk BACKLOG.md).
+
+### 49. Profil emiten: riwayat dividen singkat
+- **Melihat pola pembagian dividen satu emiten di satu tempat** — fitur, usaha sedang
+- Masalah: DPS tahun buku 2025 ada di profil, dividen interim 2026 hanya di Agenda; pemula tidak melihat keduanya bersama.
+- Ide: tabel kecil "Dividen per saham" (tahun buku, jenis, DPS, sumber) di profil dari data yang sudah ada (emiten-asli.js + agenda.js), tanpa angka baru dan tanpa proyeksi.
+- Dampak bagi pemula: memahami bahwa dividen bisa berbeda tiap tahun dan ada interim/final.
+- Batasan: hanya data bersumber; kolom kosong ditulis "belum ada data"; tanpa kata ajakan; ringan di HP.
+- Usaha: sedang (Arif + Dewi; Galih memastikan runtut; Nina menambah cek).
+- Status: diusulkan Kirana 22 Nov 13.xx.
+
+### Tinjauan Kirana, 22 Nov 13.xx: kotak hitung lot
+- 390px gelap & 1280px terang: kotak lipat tepat di bawah judul "Dividen saham syariah", isian 48px berlabel "Jumlah lot", hasil per kode turun baris rapi, catatan di bawah terbaca. Pilihan "IPO" menyembunyikan kotak. Isian 0 → pesan salah isian + aria-invalid. Tanpa scroll horizontal & galat JS. Tidak ada perbaikan.
+
 ### Tinjauan Kirana, 21 Nov 14.xx: garis waktu mini kartu dividen
 - 390px terang/gelap: garis tegak, titik sejajar baris pertama tiap tanggal, teks turun baris tanpa menabrak garis. 1280px terang/gelap: 4 titik sebaris, label di bawah titik. Dengan jam uji 25 Nov: titik cum abu + "sudah lewat", titik ex warna aksen. Tanpa scroll horizontal & galat JS. Tidak ada perbaikan.
 
