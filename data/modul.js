@@ -442,13 +442,21 @@ window.MODUL = [
         <li><strong>Cum date</strong>: hari terakhir membeli saham di pasar reguler agar berhak atas dividen.</li>
         <li><strong>Ex date</strong>: hari bursa berikutnya; pembeli mulai hari ini tidak lagi berhak atas dividen itu, sehingga harga saham sering turun.</li>
         <li><strong>Recording date</strong>: daftar pemegang saham yang berhak dicatat, biasanya dua hari bursa sesudah cum date karena penyelesaian T+2.</li>
-        <li><strong>Tanggal pembayaran</strong>: dividen masuk ke RDN Anda setelah dipotong pajak bila ada. Cek mutasi RDN dan AKSes KSEI.</li>
+        <li><strong>Tanggal pembayaran</strong>: dividen masuk ke RDN Anda. Cek mutasi RDN dan AKSes KSEI. Soal pajaknya, lihat bagian "Pajak dividen" di bawah.</li>
       </ol>
       <p>Contoh hitungan: dividen Rp40 per saham dan Anda memegang 2 lot (200 lembar) pada recording date, maka dividen sebelum pajak = Rp40 × 200 = Rp8.000.</p>
       <p><strong>Mengapa harga saham biasanya bergerak di ex date?</strong></p>
       <p>Mulai ex date, orang yang membeli saham tidak lagi berhak atas dividen yang akan dibagikan. Hak atas dividen itu sudah tidak ikut lagi bersama saham, sehingga harga saham sering turun pada ex date atau sesudahnya. Sebagian investor yang membeli demi dividen juga mulai menjual sahamnya setelah haknya tercatat, sehingga tekanan jual bisa bertambah.</p>
-      <p>Besar penurunannya tidak tetap. Harga juga dipengaruhi kabar perusahaan dan keadaan pasar hari itu, jadi penurunannya bisa lebih kecil atau lebih besar daripada dividen. Dividen yang diterima juga masih dipotong pajak bila ada. Karena itu, membeli saham menjelang cum date hanya demi dividen belum tentu memberi hasil lebih.</p>
+      <p>Besar penurunannya tidak tetap. Harga juga dipengaruhi kabar perusahaan dan keadaan pasar hari itu, jadi penurunannya bisa lebih kecil atau lebih besar daripada dividen. Dividen yang diterima juga bisa terkena pajak. Karena itu, membeli saham menjelang cum date hanya demi dividen belum tentu memberi hasil lebih.</p>
       <p><em>Sumber: IDX Channel, "Harga Saham Turun Setelah Dividen Dibagikan? Ini Penyebab dan Cara Mengatasinya", 30 Sep 2024, di situs idxchannel.com.</em></p>
+      <p><strong>Pajak dividen</strong></p>
+      <p>Dividen termasuk penghasilan. Menurut penjelasan Direktorat Jenderal Pajak (DJP), untuk wajib pajak orang pribadi dalam negeri yang menerima dividen dari perusahaan di Indonesia ada dua kemungkinan:</p>
+      <ol>
+        <li><strong>Diinvestasikan di Indonesia</strong>: dividen dikecualikan dari pajak penghasilan (PPh) bila diinvestasikan di Indonesia dalam bentuk yang diatur, paling lambat akhir bulan ketiga setelah tahun pajak berakhir, dan ditahan minimal 3 tahun pajak. Penerima wajib melaporkan realisasi investasinya ke DJP setiap tahun sampai tahun ketiga.</li>
+        <li><strong>Tidak diinvestasikan</strong>: dividen dikenai PPh final 10% dari nilai dividen. Pajak ini disetor sendiri oleh penerima, paling lambat tanggal 15 bulan berikutnya setelah dividen diterima.</li>
+      </ol>
+      <p>Dasar aturan yang disebut DJP: UU Pajak Penghasilan sebagaimana diubah UU Cipta Kerja (UU 11/2020) dan UU Harmonisasi Peraturan Perpajakan (UU 7/2021), serta PMK-18/PMK.03/2021. Aturan pajak bisa berubah dan keadaan tiap orang berbeda. Candra Analis tidak memberi saran pajak pribadi; untuk keadaan Anda sendiri, periksa pajak.go.id atau tanyakan ke kantor pajak.</p>
+      <p><em>Sumber: DJP, "Dividen, Hari Raya, dan Coretax", 20 Mar 2025; DJP, "Agar Pak Boy Bebas PPh Dividen Dalam Negeri", 2 Jun 2021; keduanya artikel pegawai DJP di situs pajak.go.id.</em></p>
       <div class="kotak-penting">Sisi syariah (Hana): Agenda Candra Analis hanya memuat IPO yang terbukti efek syariah dan dividen dari saham yang tercatat di Daftar Efek Syariah. Dividen bukan janji keuntungan tetap: jumlahnya diputuskan perusahaan dan bisa berubah setiap tahun, sedangkan harga saham bisa turun lebih besar daripada dividen yang diterima.</div>
 
       <div class="kotak-penting">Tujuan pembelian pertama adalah belajar prosesnya, bukan mencari untung besar. Mulai kecil, catat semuanya.</div>

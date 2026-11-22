@@ -303,7 +303,11 @@ window.ISTILAH = [
     arti: "Tanggal pencatatan daftar pemegang saham yang berhak menerima dividen. Karena penyelesaian transaksi T+2, tanggal ini biasanya dua hari bursa sesudah cum date.",
     pelajaran: "praktik-beli-pertama" },
   { istilah: "Tanggal pembayaran (dividen)", pola: ["tanggal pembayaran"],
-    arti: "Tanggal dividen dikirim ke RDN pemegang saham yang berhak, setelah dipotong pajak bila ada. Biasanya beberapa minggu sesudah recording date.",
+    arti: "Tanggal dividen dikirim ke RDN pemegang saham yang berhak. Biasanya beberapa minggu sesudah recording date. Aturan pajaknya dijelaskan di istilah Pajak dividen.",
+    pelajaran: "praktik-beli-pertama" },
+  // Sari + Laras + Hana (22 Nov 14.xx, IDE.md #48): sumber artikel DJP di pajak.go.id (20 Mar 2025 & 2 Jun 2021); bukan saran pajak pribadi
+  { istilah: "Pajak dividen", pola: ["pajak dividen", "PPh dividen"],
+    arti: "Untuk orang pribadi dalam negeri yang menerima dividen dari perusahaan di Indonesia, menurut penjelasan DJP: dividen bebas pajak penghasilan bila diinvestasikan di Indonesia paling lambat akhir bulan ketiga setelah tahun pajak berakhir, ditahan minimal 3 tahun pajak, dan realisasinya dilaporkan ke DJP. Bila tidak diinvestasikan, dikenai PPh final 10% yang disetor sendiri paling lambat tanggal 15 bulan berikutnya. Aturan bisa berubah; periksa pajak.go.id untuk keadaan Anda.",
     pelajaran: "praktik-beli-pertama" },
   { istilah: "Dividen final", pola: ["dividen final"],
     arti: "Dividen yang ditetapkan RUPS Tahunan setelah laporan tahunan diaudit. Bila perusahaan sudah membayar dividen interim untuk tahun buku yang sama, dividen final adalah sisanya.",

@@ -2156,3 +2156,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Kirana: 3 usulan mingguan baru di IDE.md (#47 ★ hitung lot, #48 pajak dividen, #49 riwayat dividen di profil). Bima memilih #47 untuk sesi ini, #48 & #49 masuk BACKLOG.
 - Arif + Dewi: **fitur baru di Agenda** — kotak "Hitung contoh dividen untuk jumlah lot Anda": isi jumlah lot, hasil per kode dari dividen per saham di kartu, sebelum pajak, tidak dijumlahkan, tidak disimpan. Nina: cek 2f-18 + 5 uji balik; 390/1280px tanpa scroll horizontal & galat JS. Tegar: textContent saja, pola kunci API 0 temuan. Kirana meninjau: rapi.
 - Nina: `node tests/cek.mjs` lolos (11 halaman, 8 pelajaran, 32 emiten). Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 22 Nov 2026, 14.08 WIB — sesi kerja (Bima)
+- Sari + Laras + Hana (IDE.md #48): **bagian baru "Pajak dividen"** di pelajaran Praktik + istilah "Pajak dividen" di kamus, dari artikel DJP di pajak.go.id (20 Mar 2025 & 2 Jun 2021): dividen bebas PPh bila diinvestasikan di Indonesia ≥3 tahun pajak dan dilaporkan; bila tidak, PPh final 10% disetor sendiri. Ditulis "tidak memberi saran pajak pribadi". PDF modul dibuat ulang.
+- Hana: kalimat lama "setelah dipotong pajak" (kotak arti Agenda, kamus, pelajaran) diluruskan agar selaras dengan penjelasan DJP.
+- Nina: `node tests/cek.mjs` lolos (11 halaman, 8 pelajaran, 32 emiten); pelajaran & kamus 390/1280px tanpa scroll horizontal & galat JS.
+- Berikutnya: Arif + Dewi + Galih + Nina tabel "Dividen per saham" di profil (#49). Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

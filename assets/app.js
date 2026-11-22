@@ -1615,7 +1615,7 @@
     cum: ["Cum date", "Hari terakhir membeli saham di pasar reguler agar tercatat berhak atas dividen ini."],
     ex: ["Ex date", "Mulai hari ini, pembeli saham tidak lagi berhak atas dividen ini. Harga saham sering turun; besar turunnya tidak tetap."],
     recording: ["Recording date", "Tanggal pencatatan pemegang saham yang berhak menerima dividen."],
-    pembayaran: ["Tanggal pembayaran", "Dividen dikirim ke RDN pemegang saham yang berhak, setelah dipotong pajak."]
+    pembayaran: ["Tanggal pembayaran", "Dividen dikirim ke RDN pemegang saham yang berhak. Aturan pajaknya ada di kamus, istilah Pajak dividen."]
   };
   function hariDari(t, kini) {
     var p = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(t));
