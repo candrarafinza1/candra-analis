@@ -2174,3 +2174,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Kirana: di HP 390px nama media terbelah di tengah kata ("Infobankne|ws"). Dewi: kolom Sumber dilebarkan dan kata hanya dipotong bila memang tidak muat. 22 profil bertabel dicek di 390px gelap: rapi, tanpa scroll horizontal & galat JS; 1280px tidak berubah.
 - Nina: cek CSS baru + uji balik tertangkap; `node tests/cek.mjs` lolos (11 halaman, 8 pelajaran, 32 emiten).
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 22 Nov 2026, 17.08 WIB — sesi kerja (Bima)
+- Tugas Agenda teratas (status syariah IPO ANDA) dijadwalkan Senin 07.xx; DES periode I/II tetap macet (unduh idx.id diblokir proxy, 403). Pencarian DES periode II: belum terbit (masih KEP-21/D.04/2026). Diambil tugas pendukung Hana + Laras (cek aturan pajak dividen yang lebih baru).
+- Hana + Laras: PMK Nomor 81 Tahun 2024 (Coretax, berlaku 1 Jan 2025) mencabut Pasal 37–41 PMK-18/PMK.03/2021 (bukti: halaman depan PDF resmi jdih.kemenkeu.go.id). Kalimat "Dasar aturan" & sumber di bagian "Pajak dividen" pelajaran Praktik diperbarui; isi dua jalan pajak tidak diubah. Klaim wajib lapor SPT Masa PPh Unifikasi (DDTCNews) ditahan sampai teks Pasal 373 resmi terbaca → tugas baru.
+- Fajar + Galih: BRIS dicari lagi, hasil hanya BBRI (bukan BRIS) → 0 masuk, tetap 29 dari 32.
+- Nina: PDF modul dibuat ulang, `node tests/cek.mjs` lolos; pelajaran dicek 390/1280px tanpa scroll horizontal & galat JS.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
