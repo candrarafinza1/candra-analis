@@ -2405,8 +2405,52 @@ ok(/\.form-tanya textarea::placeholder\s*\{[^}]*color:\s*var\(--tinta-2\)/.test(
   const m = app.match(/function dividenTampil[\s\S]*?\n  }\n/);
   ok(!!m, "app.js: dividenTampil() tidak ada");
   ok(/maximumFractionDigits: 2/.test(m ? m[0] : ""), "dividenTampil() harus menampilkan dua desimal agar angka DPS tidak dibulatkan");
-  ok(/Dividen tunai tahun buku 2025/.test(app) && /e\.dpsSumber\.url/.test(app), "profil harus menampilkan dividen beserta sumbernya");
-  ok(/tidak menjamin dividen tahun berikutnya/.test(app), "baris dividen harus memuat catatan bahwa dividen tidak dijamin");
+  ok(/sumber: e\.dpsSumber/.test(app) && /href: b\.sumber\.url/.test(app), "profil harus menampilkan dividen beserta sumbernya");
+  ok(/tidak menjamin dividen berikutnya/.test(app), "baris dividen harus memuat catatan bahwa dividen tidak dijamin");
+  // Nina + Galih (22 Nov 2026, IDE.md #49): tabel "Dividen per saham" di profil. riwayatDividen dijalankan dengan data uji:
+  // baris emiten-asli 2025, baris Agenda kode yang sama, baris Agenda kode lain/tanpa sumber https/dps 0 dilewati,
+  // baris kembar (tahun buku + DPS sama) tidak ditulis dua kali, urut tahun buku terbaru, US$ tidak dikonversi.
+  {
+    const ambilR = (awal) => { const i = app.indexOf("  " + awal); const j = app.indexOf("\n  }\n", i); return i < 0 || j < 0 ? "" : app.slice(i, j + 5); };
+    const kodeR = [ambilR("function dividenTampil("), ambilR("function riwayatDividen("), ambilR("function sumberPendek(")];
+    ok(kodeR.every(Boolean), "app.js: dividenTampil/riwayatDividen/sumberPendek harus ada untuk tabel Dividen per saham");
+    const S = { judul: "Media, 1 Jun 2026: contoh", url: "https://contoh.id/a" };
+    const E = { kode: "AAAA", dps: 25, dpsSumber: S };
+    const AG = [
+      { kode: "AAAA", jenis: "interim", tahunBuku: 2026, dps: 10, mataUang: "IDR", sumber: [{ judul: "x", url: "http://tidak-aman" }, S] },
+      { kode: "AAAA", jenis: "final", tahunBuku: 2025, dps: 25, mataUang: "IDR", sumber: [S] },
+      { kode: "AAAA", jenis: "interim", tahunBuku: 2027, dps: 1.5, mataUang: "USD", sumber: [S] },
+      { kode: "AAAA", jenis: "final", tahunBuku: 2026, dps: 0, mataUang: "IDR", sumber: [S] },
+      { kode: "AAAA", jenis: "final", tahunBuku: 2026, dps: 7, mataUang: "IDR", sumber: [{ judul: "y", url: "http://x" }] },
+      { kode: "BBBB", jenis: "interim", tahunBuku: 2026, dps: 9, mataUang: "IDR", sumber: [S] },
+    ];
+    const ujiR = (blok) => {
+      const salah = [];
+      let f;
+      try { const c = { Intl }; vm.runInNewContext(blok.join("\n") + "\n;globalThis.r = riwayatDividen; globalThis.p = sumberPendek;", c); f = c; }
+      catch (err) { return ["galat: " + err.message]; }
+      const r = f.r(E, AG);
+      const teks = r.map((b) => b.tahunBuku + " " + b.jenis + " " + b.dps).join(" | ");
+      if (teks !== "2027 Interim US$1,5 | 2026 Interim Rp10 | 2025 Tahun buku Rp25") salah.push("baris salah: " + teks);
+      if (r.some((b) => !/^https:\/\//.test(b.sumber.url))) salah.push("ada sumber bukan https");
+      if (f.r({ kode: "BBBB" }, []).length !== 0) salah.push("emiten tanpa data harus 0 baris");
+      if (f.r({ kode: "CCCC", dps: 5, dpsSumber: { judul: "z", url: "http://x" } }, null).length !== 0) salah.push("DPS tanpa sumber https harus dilewati");
+      if (f.p("Media, 1 Jun 2026: contoh") !== "Media, 1 Jun 2026" || f.p("Tanpa titik dua") !== "Tanpa titik dua") salah.push("sumberPendek salah");
+      return salah;
+    };
+    const sR = ujiR(kodeR);
+    ok(sR.length === 0, `tabel Dividen per saham: ${sR.join("; ")}`);
+    const gantiR = (dari, ke) => kodeR.map((k) => k.split(dari).join(ke));
+    const rusakR = [
+      [gantiR("a.kode !== e.kode || ", ""), "baris salah"],
+      [gantiR("/^https:\\/\\//.test(x.url || \"\")", "true"), "ada sumber bukan https"],
+      [gantiR("return y.tahunBuku - x.tahunBuku;", "return x.tahunBuku - y.tahunBuku;"), "baris salah"],
+      [gantiR('(rupiah ? "Rp" : "US$")', '"Rp"'), "baris salah"],
+      [gantiR("if (baris.some(", "if (false && baris.some("), "baris salah"],
+    ];
+    for (const [b, pesan] of rusakR)
+      ok(b.join() !== kodeR.join() && ujiR(b).some((s) => s.includes(pesan)), `uji balik tabel Dividen per saham: "${pesan}" harus tertangkap`);
+  }
   ok(!/imbal hasil|yield/i.test(m ? m[0] : ""), "baris dividen tidak boleh menghitung imbal hasil");
 }
 
@@ -3721,7 +3765,7 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
     const iB = app.indexOf("  var BULAN = ["), jB = app.indexOf("];", iB);
     const kodeProfil = [iU < 0 || jU < iU ? "" : app.slice(iU, jU), iB < 0 ? "" : app.slice(iB, jB + 2), ambilP("function tanggalId("),
       ambilP("function daftarKabar("), ambilP("function kabarBaru("), ambilP("function kartuKabar("), ambilP("function cocokEmiten("), ambilP("function kotakKetik("), ambilP("function bagianBanding("),
-      ambilP("function dividenTampil("), ambilP("function tombolSalin("), ambilP("function kesegaran9b("), ambilP("function labelTingkat("), ambilP("function kartuSinyal("), ambilP("function renderProfil()")];
+      ambilP("function dividenTampil("), ambilP("function riwayatDividen("), ambilP("function sumberPendek("), ambilP("function tombolSalin("), ambilP("function kesegaran9b("), ambilP("function labelTingkat("), ambilP("function kartuSinyal("), ambilP("function renderProfil()")];
     ok(kodeProfil.every(Boolean), "app.js: utilitas/BULAN/tanggalId/daftarKabar/kabarBaru/kartuKabar/bagianBanding/dividenTampil/renderProfil harus bisa diambil untuk uji urutan judul");
     const emitenHtml = readFileSync("emiten.html", "utf8");
     const mainE = (emitenHtml.match(/<main[\s>][\s\S]*?<\/main>/) || [""])[0], iProfil = mainE.indexOf('id="profil"');
@@ -3750,7 +3794,7 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
       for (const [nama, kode] of keadaan) {
         const wadah = { profil: simpul("div"), "judul-profil": simpul("h1"), "sub-profil": simpul("p") };
         const document = { title: "", createElement: simpul, createTextNode: () => ({ tag: "#text", anak: [] }), getElementById: (id) => wadah[id] || null };
-        const ctxP = { document, EMITEN, window: { KABAR }, location: { search: kode ? "?kode=" + kode : "" }, URLSearchParams, Date, Intl, Math,
+        const ctxP = { document, EMITEN, window: { KABAR, AGENDA_DIVIDEN: [{ kode: "AAAA", jenis: "interim", tahunBuku: 2026, dps: 5, mataUang: "IDR", sumber: [sumber[0]] }] }, location: { search: kode ? "?kode=" + kode : "" }, URLSearchParams, Date, Intl, Math,
           DES_LABEL: "DES", KRITERIA: { tumbuhLaba: { nilai: () => null, tampil: String }, roe: { nilai: () => null, tampil: String } },
           peserta: () => [], sekaliWaktu9b: () => null, pasangIstilah() {}, tutupIstilah() {}, infoAgendaEmiten: () => null,
           periksa: () => [{ tingkat: "sedang", judul: "Tanda", isi: "Isi", bukti: "Bukti" }] };

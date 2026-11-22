@@ -689,7 +689,7 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Dampak bagi pemula: memahami bahwa dividen bisa berbeda tiap tahun dan ada interim/final.
 - Batasan: hanya data bersumber; kolom kosong ditulis "belum ada data"; tanpa kata ajakan; ringan di HP.
 - Usaha: sedang (Arif + Dewi; Galih memastikan runtut; Nina menambah cek).
-- Status: diusulkan Kirana 22 Nov 13.xx.
+- Status: diusulkan Kirana 22 Nov 13.xx; dipilih Bima; **selesai 22 Nov 15.xx** (Arif + Dewi + Galih + Nina), lihat BACKLOG.md.
 
 ### Tinjauan Kirana, 22 Nov 13.xx: kotak hitung lot
 - 390px gelap & 1280px terang: kotak lipat tepat di bawah judul "Dividen saham syariah", isian 48px berlabel "Jumlah lot", hasil per kode turun baris rapi, catatan di bawah terbaca. Pilihan "IPO" menyembunyikan kotak. Isian 0 → pesan salah isian + aria-invalid. Tanpa scroll horizontal & galat JS. Tidak ada perbaikan.

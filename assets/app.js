@@ -805,6 +805,32 @@
     return "Rp" + new Intl.NumberFormat("id-ID", { maximumFractionDigits: 2 }).format(e.dps);
   }
 
+  /* Arif + Dewi + Galih (22 Nov 2026, IDE.md #49): baris tabel "Dividen per saham" di profil, hanya dari data yang sudah
+     ada: DPS tahun buku 2025 di data/emiten-asli.js (lewat dividenTampil) + dividen kode ini di data/agenda.js.
+     Tanpa angka baru, tanpa proyeksi, tanpa konversi kurs. Baris agenda tanpa dps > 0 atau tanpa sumber https dilewati;
+     baris agenda yang tahun buku & DPS-nya sama dengan baris emiten-asli tidak ditulis dua kali. Urut tahun buku terbaru. */
+  function riwayatDividen(e, agenda) {
+    var fmt = new Intl.NumberFormat("id-ID", { maximumFractionDigits: 2 });
+    var baris = [];
+    var dps = dividenTampil(e);
+    if (dps) baris.push({ tahunBuku: 2025, jenis: "Tahun buku", dps: dps, nilai: e.dps, rupiah: true, sumber: e.dpsSumber });
+    (agenda || []).forEach(function (a) {
+      if (!a || a.kode !== e.kode || typeof a.dps !== "number" || !(a.dps > 0) || typeof a.tahunBuku !== "number") return;
+      var s = (a.sumber || []).filter(function (x) { return x && x.judul && /^https:\/\//.test(x.url || ""); })[0];
+      if (!s) return;
+      var rupiah = a.mataUang !== "USD";
+      if (baris.some(function (b) { return b.tahunBuku === a.tahunBuku && b.rupiah === rupiah && b.nilai === a.dps; })) return;
+      baris.push({ tahunBuku: a.tahunBuku, jenis: a.jenis === "interim" ? "Interim" : "Final", dps: (rupiah ? "Rp" : "US$") + fmt.format(a.dps),
+        nilai: a.dps, rupiah: rupiah, sumber: s });
+    });
+    return baris.sort(function (x, y) { return y.tahunBuku - x.tahunBuku; });
+  }
+  // Teks tautan sumber yang pendek: bagian judul sebelum ":" ("Media, 9 Jun 2026"); judul utuh tetap di aria-label.
+  function sumberPendek(judul) {
+    var i = String(judul).indexOf(":");
+    return i > 0 ? String(judul).slice(0, i) : String(judul);
+  }
+
   // Arif & Dewi (14 Nov, IDE.md #29): tombol "Salin tautan profil". Memakai Clipboard API bawaan peramban bila ada;
   // bila tidak ada atau ditolak, alamat ditampilkan di kotak teks yang sudah terpilih agar bisa disalin manual.
   // Tanpa simpanan, tanpa layanan luar. Pesan di role=status.
@@ -992,16 +1018,41 @@
 
     // Dividen tunai tahun buku 2025 (Galih & Hana, Arif, 3 Nov): hanya angka bersumber, tanpa imbal hasil
     // (harga acuan belum ada). Kalimat netral: dividen lalu tidak menjamin dividen berikutnya.
+    // IDE.md #49 (22 Nov 2026): kini berupa tabel kecil "Dividen per saham" (riwayatDividen), juga memuat dividen di Agenda.
     var dps = dividenTampil(e);
-    if (dps) {
-      akar.appendChild(el("p", { class: "catatan-metode baris-dividen" }, [
-        el("strong", { text: "Dividen tunai tahun buku 2025: " + dps + " per saham. " }),
-        "Sumber: ", el("a", { href: e.dpsSumber.url, target: "_blank", rel: "noopener", text: e.dpsSumber.judul, "aria-label": e.dpsSumber.judul + " (tab baru)" }), ". ",
-        // Sari & Laras (4 Nov): emiten berlaporan dolar AS → jelaskan kenapa dividen tertulis dalam rupiah
-        e.dpsRupiah ? "Dividen ini dibayar dalam rupiah; angkanya ditulis oleh sumber, bukan hasil konversi kami dari dolar AS. " : "",
-        "Dividen yang sudah dibagikan tidak menjamin dividen tahun berikutnya. Ini data, bukan saran membeli atau menjual."
-      ]));
+    akar.appendChild(el("h3", { class: "judul-dividen", id: "dividen-per-saham", text: "Dividen per saham" }));
+    var rDiv = riwayatDividen(e, typeof window !== "undefined" ? window.AGENDA_DIVIDEN : null);
+    if (rDiv.length) {
+      var tbDiv = el("tbody");
+      rDiv.forEach(function (b) {
+        tbDiv.appendChild(el("tr", null, [
+          el("th", { scope: "row", text: String(b.tahunBuku) }),
+          el("td", { text: b.jenis }),
+          el("td", { class: "angka", text: b.dps }),
+          el("td", { class: "sel-sumber" }, [el("a", { href: b.sumber.url, target: "_blank", rel: "noopener",
+            text: sumberPendek(b.sumber.judul), "aria-label": b.sumber.judul + " (tab baru)" })])
+        ]));
+      });
+      akar.appendChild(el("div", { class: "tabel-wadah" }, [el("table", { class: "tabel-profil tabel-dividen" }, [
+        el("caption", { class: "keterangan-tabel", text: "Dividen tunai per saham, sebelum pajak, seperti ditulis sumber." }),
+        el("thead", null, [el("tr", null, [el("th", { scope: "col", text: "Tahun buku" }), el("th", { scope: "col", text: "Jenis" }),
+          el("th", { scope: "col", class: "angka", text: "Dividen per saham" }), el("th", { scope: "col", text: "Sumber" })])]),
+        tbDiv
+      ])]));
+    } else {
+      akar.appendChild(el("p", { class: "catatan-metode", text: "Dividen per saham: belum ada data bersumber untuk emiten ini." }));
     }
+    akar.appendChild(el("p", { class: "catatan-metode baris-dividen" }, [
+      rDiv.some(function (b) { return b.jenis === "Tahun buku"; })
+        ? "Jenis “Tahun buku” = dividen tunai tahun buku 2025 menurut sumber (bisa gabungan interim dan final). " : "",
+      rDiv.some(function (b) { return b.jenis !== "Tahun buku"; })
+        ? "Baris interim/final berasal dari Agenda; jadwalnya ada di " : "",
+      rDiv.some(function (b) { return b.jenis !== "Tahun buku"; }) ? el("a", { href: "agenda.html", text: "Agenda IPO & Dividen" }) : null,
+      rDiv.some(function (b) { return b.jenis !== "Tahun buku"; }) ? ". " : "",
+      // Sari & Laras (4 Nov): emiten berlaporan dolar AS → jelaskan kenapa dividen tertulis dalam rupiah
+      dps && e.dpsRupiah ? "Dividen tahun buku 2025 ini dibayar dalam rupiah; angkanya ditulis oleh sumber, bukan hasil konversi kami dari dolar AS. " : "",
+      "Dividen bisa berbeda tiap tahun; dividen yang sudah dibagikan tidak menjamin dividen berikutnya. Ini data, bukan saran membeli atau menjual."
+    ]));
 
     akar.appendChild(bagianBanding(e));
 

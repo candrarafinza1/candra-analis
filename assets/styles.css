@@ -995,3 +995,14 @@ button.istilah:hover, button.istilah[aria-expanded="true"] { color: var(--aksen)
   .agenda-saring { display: grid; grid-template-columns: repeat(3, 1fr); }
   .agenda-saring-tombol { padding: 8px 6px; font-size: .9rem; }
 }
+
+/* Arif + Dewi (22 Nov 2026, IDE.md #49): tabel kecil "Dividen per saham" di profil emiten */
+.judul-dividen { font-size: 1.1rem; margin: 28px 0 8px; }
+.tabel-dividen { width: 100%; }
+.tabel-dividen th, .tabel-dividen td { vertical-align: top; }
+.tabel-dividen .sel-sumber a { overflow-wrap: anywhere; display: inline-block; padding: 2px 0; }
+@media (max-width: 600px) {
+  .tabel-dividen { table-layout: fixed; }
+  .tabel-dividen th, .tabel-dividen td { white-space: normal; overflow-wrap: anywhere; }
+  .tabel-dividen col, .tabel-dividen th:nth-child(1) { width: 22%; }
+}

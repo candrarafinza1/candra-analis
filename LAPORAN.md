@@ -2162,3 +2162,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Hana: kalimat lama "setelah dipotong pajak" (kotak arti Agenda, kamus, pelajaran) diluruskan agar selaras dengan penjelasan DJP.
 - Nina: `node tests/cek.mjs` lolos (11 halaman, 8 pelajaran, 32 emiten); pelajaran & kamus 390/1280px tanpa scroll horizontal & galat JS.
 - Berikutnya: Arif + Dewi + Galih + Nina tabel "Dividen per saham" di profil (#49). Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 22 Nov 2026, 15.08 WIB — sesi kerja (Bima)
+- Arif + Dewi (IDE.md #49): **fitur baru di profil emiten** — tabel kecil "Dividen per saham" (tahun buku, jenis, dividen per saham, sumber) dari data yang sudah ada: DPS tahun buku 2025 di data emiten + dividen interim/final kode yang sama di Agenda. Tanpa angka baru, tanpa proyeksi, tanpa konversi kurs. Emiten tanpa data: "belum ada data bersumber".
+- Galih: angka di tabel runtut dengan data (UNTR Rp1.663, TLKM Rp222,08). Kini belum ada kode Agenda yang juga ada di 32 emiten, jadi baris interim baru terlihat dengan data uji.
+- Nina: cek tabel dengan data uji + 5 uji balik; `node tests/cek.mjs` lolos (11 halaman, 8 pelajaran, 32 emiten). Dewi: 390/1280px terang/gelap tanpa scroll horizontal & galat JS.
+- Catatan: cabang `main` lokal di lingkungan kerja masih bercabang dari GitHub; tim bekerja dari `origin/main` terbaru. Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
