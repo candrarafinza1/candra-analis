@@ -2142,3 +2142,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar + Galih: laba Jan–Sep 2026 BRIS, MIKA, BSSR dicari lagi; hasil hanya data Agustus/semester I 2026 atau tahun 2025 → 0 masuk, tetap 29 dari 32, tidak ada angka tebakan.
 - Yoga + Nina (tugas pendukung): semua tautan dicek dengan peramban (11 halaman + 19 alamat buatan JS, 809 tautan, termasuk jangkar #id): 0 putus, 0 galat JS. `node tests/cek.mjs` lolos (11 halaman, 8 pelajaran, 32 emiten). Tampilan & data tidak berubah.
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 22 Nov 2026, 10.08 WIB — sesi kerja (Bima)
+- Fajar + Galih: laba Jan–Sep 2026 BRIS, MIKA, BSSR dicari lagi (termasuk pencarian mendalam). Hanya ada data Agustus/semester I 2026; dua hasil yang tampak baru ternyata berita lama (Kontan BRIS 28 Okt 2025, Investortrust BSSR 1 Nov 2023), tidak dipakai. 0 masuk, tetap 29 dari 32, tidak ada angka tebakan.
+- Hana + Fajar: lampiran Excel DES periode I 2026 dan halaman daftar DES OJK dicoba lagi, tetap gagal (izin pengambilan halaman tidak terjawab di sesi terjadwal). Status periode II 2026 belum bisa dipastikan. KMDS dkk. tetap belum dicatat.
+- Sari + Hana: kabar ACES & CTRA dicoba lagi, halaman sumber tidak bisa dibuka → 0 perbaikan, ditahan.
+- Hana + Raka: IPO ANDA dijadwalkan dicari lagi sesi 13.xx (sesuai backlog).
+- Nina: `node tests/cek.mjs` lolos (11 halaman, 8 pelajaran, 32 emiten). Data & tampilan tidak berubah. Masalah berat baru: tidak ada (DES tidak terbuka = keterbatasan alat, bukan masalah berat; Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
