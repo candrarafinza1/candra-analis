@@ -2135,3 +2135,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Hana + Fajar: halaman OJK DES periode I 2026 terbuka dan memuat tautan lampiran Excel daftar saham, tetapi unduhannya gagal (izin tidak terjawab). Tautan dicatat di BACKLOG untuk dicoba sesi berikutnya. KMDS dkk. tetap belum dicatat.
 - Sari + Hana: kabar ACES & CTRA tetap "laporan 9 bulan 2026" — dicoba diganti "Januari–September", tetapi cek angka kabar vs data menuntut laba 2025 dari sumber; dibatalkan, tidak ada perubahan.
 - Nina: `node tests/cek.mjs` lolos (11 halaman, 8 pelajaran, 32 emiten); profil UNVR 390/1280px tanpa scroll horizontal & galat JS. Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 22 Nov 2026, 09.08 WIB — sesi kerja (Bima)
+- Hana + Fajar: lampiran Excel DES periode I 2026 di OJK dicoba lagi, tetap gagal (izin tidak terjawab di sesi terjadwal). DES periode II 2026 belum terlihat terbit. KMDS dkk. tetap belum dicatat.
+- Hana + Raka: dicari pengumuman OJK penetapan efek syariah untuk IPO ANDA: belum ada. Tetap tidak dicatat; dicoba lagi 13.xx.
+- Fajar + Galih: laba Jan–Sep 2026 BRIS, MIKA, BSSR dicari lagi; hasil hanya data Agustus/semester I 2026 atau tahun 2025 → 0 masuk, tetap 29 dari 32, tidak ada angka tebakan.
+- Yoga + Nina (tugas pendukung): semua tautan dicek dengan peramban (11 halaman + 19 alamat buatan JS, 809 tautan, termasuk jangkar #id): 0 putus, 0 galat JS. `node tests/cek.mjs` lolos (11 halaman, 8 pelajaran, 32 emiten). Tampilan & data tidak berubah.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
