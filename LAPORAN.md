@@ -2181,3 +2181,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar + Galih: BRIS dicari lagi, hasil hanya BBRI (bukan BRIS) → 0 masuk, tetap 29 dari 32.
 - Nina: PDF modul dibuat ulang, `node tests/cek.mjs` lolos; pelajaran dicek 390/1280px tanpa scroll horizontal & galat JS.
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 22 Nov 2026, 18.08 WIB — sesi kerja (Bima)
+- Tugas Agenda teratas (status syariah IPO ANDA) tetap dijadwalkan Senin 07.xx; DES periode I/II tetap macet. Diambil tugas berikutnya yang bisa dikerjakan.
+- Hana + Laras: teks Pasal 370–374 PMK 81/2024 dicoba lagi lewat PDF resmi jdih.kemenkeu.go.id (hanya halaman depan terbaca) dan Wikisource (halaman tidak ada) → pelajaran tidak diubah, klaim SPT Masa tetap ditahan.
+- Fajar + Galih: BRIS & MIKA dicari lagi, belum ada laba Januari–September 2026 bersumber (judul Kontan Rp5,69 T tanpa tahun, tidak dipakai) → 0 masuk, tetap 29 dari 32.
+- Nina: `node tests/cek.mjs` lolos; tidak ada perubahan tampilan.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
