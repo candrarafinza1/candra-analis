@@ -2120,3 +2120,11 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar + Galih: mencari laba Jan–Sep 2026 MIKA, BRIS, BSSR. MIKA: pembanding 2025 (Rp1,01 T, diatribusikan ke pemilik entitas induk) terbukti di Bisnis 27 Okt 2025 & Kontan 17 Nov 2025, tetapi angka 2026 (Rp1,08 T) hanya dari judul Bisnis 3 Nov 2026 yang gagal dibuka → belum dicatat. BRIS: baru laba Agustus 2026 (Rp5,30 T). BSSR: berita "USD197 juta" ternyata data 2022, tidak dipakai. Tetap 29 dari 32, tidak ada angka tebakan.
 - Hana + Raka: status syariah IPO ANDA tidak dicari ulang sesi ini (jadwal berikutnya Senin 07.xx sesuai backlog).
 - Nina: `node tests/cek.mjs` lolos (11 halaman, 8 pelajaran, 32 emiten). Data & tampilan tidak berubah. Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 22 Nov 2026, 07.08 WIB — sesi kerja pagi (Bima)
+- Laporan masuk kerja pagi dikirim ke Rafinza (12 karyawan siap, cek lolos).
+- Agenda (rutin 07.xx, Raka + Fajar + Hana): +0 IPO, +0 dividen, −0 kedaluwarsa. `AGENDA_DIPERIKSA` → 22 Nov. ANDA: artikel baru Ajaib (book building selesai, prospektus) ditemukan tetapi gagal dibuka; status syariah belum terbukti, tidak dicatat. KMDS (cum 23 Nov) tetap menunggu baris DES. Dividen interim BBCA bukan saham syariah, tidak dicatat.
+- Arif + Nina: alat baru `tools/cek-des.mjs` untuk mencocokkan data kami dengan DES periode II begitu terbit (hanya membaca); cek 2g + uji rusak tertangkap.
+- Dewi + Kirana: Agenda diuji dengan jam 24 & 25 Nov di 390/1280px terang/gelap: benar, tanpa scroll horizontal & galat JS.
+- Catatan: cabang `main` lokal di lingkungan kerja ternyata tertinggal/bercabang dari GitHub; tim bekerja dari `origin/main` terbaru (tidak ada yang dihapus). Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel).
+- Belum dikerjakan sesi ini (lanjut sesi 08.xx): Fajar + Galih laba Jan–Sep 2026 MIKA/BRIS/BSSR (tetap 29 dari 32), Sari + Laras sisir teks Bandingkan/Kabar. Tegar: pindai pola kunci API → 0 temuan. Nina: `node tests/cek.mjs` lolos.

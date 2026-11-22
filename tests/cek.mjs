@@ -7820,6 +7820,39 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
   ]) ok((rusakJs !== app || rusakCss !== css) && uji(rusakJs, rusakCss).some((x) => x.includes(pesan)), `uji balik garis waktu: "${pesan}" harus tertangkap`);
 }
 
+// 2g. Nina + Arif (22 Nov 07.xx): alat pencocok DES (tools/cek-des.mjs) untuk DES periode II 2026.
+// Diuji dengan teks DES tiruan (bukan data asli): baris biasa, bertitik, bergaris tegak, kode ganda,
+// kode tidak ada, dan baris judul/sampah yang wajib diabaikan.
+{
+  const { bacaDes, cocokkanDes } = await import("../tools/cek-des.mjs");
+  const tiruan = [
+    "LAMPIRAN I DAFTAR EFEK SYARIAH",
+    "No.  Kode   Nama Efek",
+    "  1   AAAA   PT Contoh Satu Tbk",
+    " 12.  BBBB   PT Contoh Dua Tbk",
+    "123 | CCCC | PT Contoh Tiga Tbk",
+    " 40   DDDD   PT Ganda A Tbk",
+    " 41   DDDD   PT Ganda B Tbk",
+    "Halaman 2 dari 30",
+    " 7    EEEEE  bukan kode empat huruf",
+    " 0    FFFF   nomor nol diabaikan",
+  ].join("\n");
+  const des = bacaDes(tiruan);
+  ok(des.get("AAAA")?.[0].no === 1 && des.get("BBBB")?.[0].no === 12 && des.get("CCCC")?.[0].no === 123, "cek-des: nomor baris biasa/bertitik/bergaris tegak terbaca");
+  ok(des.get("CCCC")?.[0].nama === "PT Contoh Tiga Tbk", "cek-des: nama efek dibersihkan dari garis tegak");
+  ok(!des.has("EEEE") && !des.has("FFFF") && !des.has("HALA"), "cek-des: kode 5 huruf, nomor nol, dan baris judul diabaikan");
+  const r = cocokkanDes(tiruan, ["AAAA", "DDDD", "ZZZZ", "AAAA"], { AAAA: 5, ZZZZ: 9 });
+  const st = Object.fromEntries(r.hasil.map(h => [h.kode, h]));
+  ok(r.hasil.length === 3, "cek-des: kode kembar di daftar hanya diperiksa sekali");
+  ok(st.AAAA?.status === "ada" && st.AAAA.baris === 1 && st.AAAA.barisLama === 5, "cek-des: kode ada → nomor baris baru + baris lama");
+  ok(st.DDDD?.status === "ganda" && st.DDDD.baris.join() === "40,41", "cek-des: kode ganda dilaporkan, tidak dipilih sendiri");
+  ok(st.ZZZZ?.status === "tidak-ditemukan" && st.ZZZZ.barisLama === 9, "cek-des: kode tidak ada dilaporkan");
+  ok(r.jumlahBarisDes === 5, "cek-des: jumlah baris DES terbaca = 5");
+  // Uji balik: alat tidak boleh menulis ke data (hanya membaca & melapor).
+  const src = readFileSync("tools/cek-des.mjs", "utf8");
+  ok(!/writeFileSync|appendFileSync|createWriteStream/.test(src), "cek-des: alat tidak boleh menulis berkas");
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);
 
