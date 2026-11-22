@@ -1003,6 +1003,12 @@ button.istilah:hover, button.istilah[aria-expanded="true"] { color: var(--aksen)
 .tabel-dividen .sel-sumber a { overflow-wrap: anywhere; display: inline-block; padding: 2px 0; }
 @media (max-width: 600px) {
   .tabel-dividen { table-layout: fixed; }
-  .tabel-dividen th, .tabel-dividen td { white-space: normal; overflow-wrap: anywhere; }
-  .tabel-dividen col, .tabel-dividen th:nth-child(1) { width: 22%; }
+  /* Kirana + Dewi (22 Nov 16.xx): kata dipotong hanya bila satu kata tidak muat (break-word, bukan anywhere),
+     kolom Sumber diberi ruang terlebar agar nama media tidak terbelah ("Infobankne|ws"). */
+  .tabel-dividen th, .tabel-dividen td { white-space: normal; overflow-wrap: break-word; }
+  .tabel-dividen .sel-sumber a { overflow-wrap: break-word; }
+  .tabel-dividen thead th:nth-child(1) { width: 19%; }
+  .tabel-dividen thead th:nth-child(2) { width: 21%; }
+  .tabel-dividen thead th:nth-child(3) { width: 24%; }
+  .tabel-dividen thead th:nth-child(4) { width: 36%; }
 }

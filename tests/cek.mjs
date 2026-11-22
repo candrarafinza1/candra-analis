@@ -7943,3 +7943,14 @@ if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);
 
 
+
+// Nina (22 Nov 16.xx, tinjauan Kirana): tabel "Dividen per saham" di HP tidak boleh memotong kata di sembarang huruf
+// ("Infobankne|ws"); kolom Sumber diberi ruang terlebar.
+{
+  const css = readFileSync("assets/styles.css", "utf8");
+  const blok = (css.match(/\/\* Arif \+ Dewi \(22 Nov 2026, IDE\.md #49\)[\s\S]*?\n\}\n/) || [""])[0];
+  ok(blok && !/\.tabel-dividen[^{]*\{[^}]*overflow-wrap:\s*anywhere/.test(blok),
+    "styles.css: .tabel-dividen tidak boleh memakai overflow-wrap:anywhere (kata nama media terbelah di 390px)");
+  ok(/\.tabel-dividen thead th:nth-child\(4\)\s*\{\s*width:\s*3\d%/.test(blok),
+    "styles.css: kolom Sumber tabel dividen di HP harus diberi lebar ±36%");
+}

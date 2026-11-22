@@ -2168,3 +2168,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Galih: angka di tabel runtut dengan data (UNTR Rp1.663, TLKM Rp222,08). Kini belum ada kode Agenda yang juga ada di 32 emiten, jadi baris interim baru terlihat dengan data uji.
 - Nina: cek tabel dengan data uji + 5 uji balik; `node tests/cek.mjs` lolos (11 halaman, 8 pelajaran, 32 emiten). Dewi: 390/1280px terang/gelap tanpa scroll horizontal & galat JS.
 - Catatan: cabang `main` lokal di lingkungan kerja masih bercabang dari GitHub; tim bekerja dari `origin/main` terbaru. Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 22 Nov 2026, 16.08 WIB — sesi kerja (Bima)
+- Tugas teratas Agenda (Hana + Raka, status syariah IPO ANDA) dijadwalkan dicoba lagi sesi 07.xx Senin; DES periode I/II tetap macet. Jadi diambil tugas berikutnya: tinjauan Kirana atas tabel "Dividen per saham".
+- Kirana: di HP 390px nama media terbelah di tengah kata ("Infobankne|ws"). Dewi: kolom Sumber dilebarkan dan kata hanya dipotong bila memang tidak muat. 22 profil bertabel dicek di 390px gelap: rapi, tanpa scroll horizontal & galat JS; 1280px tidak berubah.
+- Nina: cek CSS baru + uji balik tertangkap; `node tests/cek.mjs` lolos (11 halaman, 8 pelajaran, 32 emiten).
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
