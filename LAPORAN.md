@@ -2200,3 +2200,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar + Galih: MIKA Jan–Sep 2026 — sumber kedua belum ditemukan (pencarian hanya memunculkan semester I/2026 dan kuartal III/2025; Bisnis 3 Nov & siaran pers IDX gagal dibuka) → belum dimasukkan. Pembanding Jan–Sep 2025 dipastikan: laba diatribusikan Rp1,01 T (Kontan & CNBC Indonesia). Tetap 29 dari 32.
 - Yoga: run "Periksa sebelum rilis" commit 1a113cc hijau. Nina: `node tests/cek.mjs` lolos. Tampilan tidak berubah.
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 22 Nov 2026, 21.11 WIB — sesi kerja (Bima)
+- Tugas Agenda teratas (status syariah IPO ANDA) tetap dijadwalkan Senin 07.xx; pencarian cepat hanya memunculkan sumber yang sudah dicek, belum ada bukti efek syariah → tidak dicatat. DES periode I/II tetap macet.
+- Fajar + Galih: MIKA Jan–Sep 2026 dicari lagi; Kontan Insight yang terbuka ternyata 18 Nov 2025 (data 2025), Bisnis 3 Nov 2026 tetap gagal dibuka → belum dimasukkan, tetap 29 dari 32.
+- Nina: `node tests/cek.mjs` lolos (11 halaman, 8 pelajaran, 32 emiten). Tampilan tidak berubah.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
