@@ -2164,6 +2164,26 @@
     if (!adaIpo) a.open = "";
     return el("details", a, [el("summary", { text: "Cara memeriksa status syariah sebuah IPO" }), isi]);
   }
+  // Kotak "Mengapa sebuah dividen tidak ada di Agenda?" (Sari + Hana + Dewi, 23 Nov 2026, IDE.md #50).
+  // Menjelaskan aturan pencatatan dengan jujur; tanpa nama emiten non-syariah, tanpa kata ajakan. Selalu tertutup.
+  var URL_KETERBUKAAN_BEI = "https://www.idx.co.id/id/perusahaan-tercatat/keterbukaan-informasi/";
+  function kotakTidakAdaDividen() {
+    var isi = el("div", { class: "agenda-cara-isi" }, [
+      el("p", { text: "Berita sering memuat daftar saham yang akan membagi dividen. Bila salah satunya tidak ada di sini, biasanya karena salah satu alasan berikut:" }),
+      el("ol", null, [
+        el("li", null, ["Sahamnya tidak tercatat di ",
+          el("a", { href: URL_DES_OJK, rel: "noopener", text: "Daftar Efek Syariah (DES) dari OJK" }),
+          " periode berjalan. Agenda hanya memuat saham syariah."]),
+        el("li", { text: "Tim belum bisa memeriksa barisnya di DES, atau tanggal dan angkanya belum ditemukan di sumber yang bisa dibuka. Pengumuman seperti ini ditahan dulu sampai terbukti, bukan ditebak." }),
+        el("li", { text: "Jadwalnya sudah lewat lebih dari " + AGENDA_LEWAT_MAKS + " hari, sehingga tidak ditampilkan lagi." })
+      ]),
+      el("p", null, ["Anda bisa memeriksa sendiri: cocokkan kode saham dengan pengumuman DES OJK, lalu baca pengumuman dividen emiten di ",
+        el("a", { href: URL_KETERBUKAAN_BEI, rel: "noopener", text: "keterbukaan informasi BEI" }),
+        ". Tidak tercantum di Agenda bukan penilaian baik atau buruk atas saham itu."])
+    ]);
+    return el("details", { class: "agenda-arti agenda-tidak-ada", id: "tidak-ada-di-agenda", "data-jenis": "dividen" },
+      [el("summary", { text: "Mengapa sebuah dividen tidak ada di Agenda?" }), isi]);
+  }
   function renderAgenda() {
     var akar = document.getElementById("agenda");
     if (!akar) return;
@@ -2208,6 +2228,10 @@
     akar.insertBefore(caraIpo, judulDiv);
     pasangIstilah(caraIpo.querySelector(".agenda-cara-isi"));
     // Kotak hitung lot (IDE.md #47) tepat di bawah judul "Dividen saham syariah", hanya bila ada dps.
+    // Kotak "Mengapa sebuah dividen tidak ada di Agenda?" (IDE.md #50) sesudah daftar/keterangan kosong bagian Dividen.
+    var tidakAda = kotakTidakAdaDividen(), sesudahDiv = akar.querySelector("#agenda-lewat") || akar.querySelector(".catatan-metode");
+    akar.insertBefore(tidakAda, sesudahDiv);
+    pasangIstilah(tidakAda.querySelector(".agenda-cara-isi"));
     var hitungLot = kotakHitungLot(divDepan);
     if (hitungLot && judulDiv) akar.insertBefore(hitungLot, judulDiv.nextSibling);
     var h2Awal = akar.querySelector("h2");

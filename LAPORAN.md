@@ -2214,3 +2214,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Arif + Nina: alat baru `tools/cek-kedaluwarsa.mjs` (mendaftar entri Agenda yang lewat >14 hari, tidak mengubah berkas) + cek 2g-2 dengan uji balik. Per hari ini 0 entri kedaluwarsa.
 - Tegar: pindai rahasia bersih. Nina: `node tests/cek.mjs` lolos. Tampilan tidak berubah.
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 23 Nov 2026, 08.09 WIB — sesi kerja (Bima)
+- Tugas Agenda teratas (status syariah IPO ANDA) sudah dicek 07.xx, berikutnya 13.xx; DES periode I/II tetap macet; MIKA/BRIS, PMK 81/2024 masih menunggu sumber terbuka. Diambil tugas Kirana (usulan mingguan).
+- Kirana: 3 usulan baru di IDE.md (#50 ★ kotak "Mengapa sebuah dividen tidak ada di Agenda?", #51 tampilan cetak Agenda, #52 latihan urutkan tanggal dividen). Bima memilih #50 dan #51 (masuk BACKLOG untuk Dewi).
+- Sari + Hana + Dewi: #50 selesai — kotak lipat di bawah daftar Dividen menjelaskan alasan sebuah dividen tidak tercantum (bukan saham DES, belum terbukti sehingga ditahan, sudah lewat >14 hari) dan cara memeriksa sendiri lewat pengumuman DES OJK & keterbukaan informasi BEI. Tanpa nama emiten, tanpa ajakan.
+- Nina: cek 2f-19 + 5 uji balik; `node tests/cek.mjs` lolos. Dicek 390/1280px terang/gelap: tanpa scroll horizontal & galat JS.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

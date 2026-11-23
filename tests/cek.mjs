@@ -7906,6 +7906,41 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
   ]) ok(rusak !== app && uji(rusak).some((x) => x.includes(pesan)), `uji balik Agenda hitung lot: "${pesan}" harus tertangkap`);
 }
 
+// 2f-19. Agenda: kotak "Mengapa sebuah dividen tidak ada di Agenda?" (Nina, 23 Nov 2026; Sari + Hana + Dewi, IDE.md #50).
+{
+  const app = readFileSync("assets/app.js", "utf8");
+  const css = readFileSync("assets/styles.css", "utf8");
+  const potongF = (js, awal) => { const i = js.indexOf(awal), j = js.indexOf("\n  }\n", i); return i < 0 ? "" : js.slice(i, j); };
+  const uji = (js) => {
+    const salah = [];
+    const f = potongF(js, "  function kotakTidakAdaDividen(");
+    if (!f) return ["fungsi kotakTidakAdaDividen wajib ada"];
+    if (!/\[el\("summary", \{ text: "Mengapa sebuah dividen tidak ada di Agenda\?" \}\), isi\]\)/.test(f)) salah.push("kotak wajib <details> dengan summary tetap");
+    if (!/id: "tidak-ada-di-agenda", "data-jenis": "dividen"/.test(f)) salah.push("kotak wajib ikut tombol pilihan (data-jenis dividen)");
+    if (/\bopen\b/.test(f)) salah.push("kotak wajib tertutup (tanpa open)");
+    if (!/href: URL_DES_OJK/.test(f)) salah.push("tautan pengumuman DES OJK wajib ada");
+    if (!/href: URL_KETERBUKAAN_BEI/.test(f) || !/var URL_KETERBUKAAN_BEI = "https:\/\/www\.idx\.co\.id\//.test(js)) salah.push("tautan keterbukaan informasi BEI (https) wajib ada");
+    if (!/AGENDA_LEWAT_MAKS/.test(f)) salah.push("batas hari wajib memakai AGENDA_LEWAT_MAKS (bukan angka tetap)");
+    if (!/bukan ditebak/.test(f) || !/bukan penilaian baik atau buruk/.test(f)) salah.push("kalimat jujur (ditahan, bukan penilaian) wajib ada");
+    if (/buruan|pasti untung|pasti naik|jangan sampai ketinggalan|rekomendasi beli|segera beli/i.test(f)) salah.push("kata ajakan dilarang");
+    if (/\b(BBCA|BBRI|BMRI|BBNI)\b/.test(f)) salah.push("nama emiten non-syariah dilarang di kotak");
+    const r = potongF(js, "  function renderAgenda(");
+    if (!/var tidakAda = kotakTidakAdaDividen\(\)/.test(r)) salah.push("renderAgenda wajib memanggil kotakTidakAdaDividen");
+    if (!/pasangIstilah\(tidakAda\.querySelector\("\.agenda-cara-isi"\)\)/.test(r)) salah.push("istilah wajib dipasang di isi, bukan summary");
+    return salah;
+  };
+  const s19 = uji(app);
+  ok(!s19.length, "Agenda kotak tidak ada di Agenda: " + s19.join("; "));
+  ok(/\.agenda-tidak-ada\b[^{]*\{ margin: 12px 0 0; \}/.test(css), "CSS .agenda-tidak-ada wajib ada");
+  for (const [rusak, pesan] of [
+    [app.replace('id: "tidak-ada-di-agenda", "data-jenis": "dividen" }', 'id: "tidak-ada-di-agenda" }'), "data-jenis dividen"],
+    [app.replace("bukan penilaian baik atau buruk atas saham itu", "saham itu tetap layak, segera beli"), "kata ajakan"],
+    [app.replace('pasangIstilah(tidakAda.querySelector(".agenda-cara-isi"));', "pasangIstilah(tidakAda);"), "bukan summary"],
+    [app.replace('"Jadwalnya sudah lewat lebih dari " + AGENDA_LEWAT_MAKS + " hari', '"Jadwalnya sudah lewat lebih dari 14 hari'), "AGENDA_LEWAT_MAKS"],
+    [app.replace('el("a", { href: URL_KETERBUKAAN_BEI,', 'el("a", { href: "#",'), "keterbukaan informasi BEI"],
+  ]) ok(rusak !== app && uji(rusak).some((x) => x.includes(pesan)), `uji balik kotak tidak ada di Agenda: "${pesan}" harus tertangkap`);
+}
+
 // 2g. Nina + Arif (22 Nov 07.xx): alat pencocok DES (tools/cek-des.mjs) untuk DES periode II 2026.
 // Diuji dengan teks DES tiruan (bukan data asli): baris biasa, bertitik, bergaris tegak, kode ganda,
 // kode tidak ada, dan baris judul/sampah yang wajib diabaikan.

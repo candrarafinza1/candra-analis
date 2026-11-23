@@ -691,6 +691,33 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Usaha: sedang (Arif + Dewi; Galih memastikan runtut; Nina menambah cek).
 - Status: diusulkan Kirana 22 Nov 13.xx; dipilih Bima; **selesai 22 Nov 15.xx** (Arif + Dewi + Galih + Nina), lihat BACKLOG.md.
 
+## Usulan Kirana — 23 Nov 2026, 08.xx WIB (minggu 7–13 Des)
+
+### 50. Agenda: kotak "Mengapa sebuah dividen tidak ada di Agenda?" ★ paling berdampak
+- **Menjawab kebingungan pemula yang membaca berita dividen tetapi tidak menemukannya di Agenda** — konten, usaha kecil
+- Masalah: berita sering memuat daftar "saham tebar dividen" (mis. Katadata 16 Nov, 11 saham); sebagian bukan saham syariah, sebagian belum bisa diperiksa barisnya di DES. Pemula bisa mengira Agenda tertinggal atau rusak.
+- Ide: satu kotak lipat di bawah daftar dividen yang menjelaskan alasan dengan jujur: (1) hanya saham di DES OJK periode berjalan, (2) tanggal & angka wajib bersumber dan baris DES wajib diperiksa dulu, jadi pengumuman yang belum terbukti ditahan, (3) acara lewat >14 hari disembunyikan; plus cara memeriksa sendiri (pengumuman DES OJK, keterbukaan informasi BEI).
+- Tren: halaman "kenapa data ini tidak ada?" / transparansi metodologi di aplikasi data keuangan.
+- Dampak bagi pemula: paham bahwa tidak tercantum ≠ salah, dan belajar memeriksa status syariah sendiri.
+- Batasan: teks saja, pola `<details>` yang sudah ada, ikut tombol pilihan (data-jenis dividen), tanpa nama emiten non-syariah, tanpa kata ajakan; Hana meninjau.
+- Usaha: kecil (Sari + Hana menulis, Dewi memasang, Nina menambah cek).
+
+### 51. Agenda: tampilan cetak yang rapi
+- **Pemula yang suka mencatat di kertas bisa mencetak jadwal** — fitur, usaha kecil
+- Masalah: saat dicetak, menu, tombol kalender/salin, dan kotak lipat ikut tercetak; sumber tersembunyi di dalam `<details>`.
+- Ide: `@media print` saja: sembunyikan menu, tombol, dan kotak hitung lot; daftar sumber ditampilkan sebagai teks alamat; tanpa warna latar.
+- Dampak bagi pemula: satu lembar jadwal yang tetap menyebut sumber.
+- Batasan: CSS saja, tanpa pustaka, tanpa mengubah tampilan layar.
+- Usaha: kecil (Dewi; Nina menambah cek CSS).
+
+### 52. Pelajaran Praktik: latihan "urutkan 4 tanggal dividen"
+- **Latihan aktif setelah membaca arti cum/ex/recording/pembayaran** — konten belajar, usaha sedang
+- Masalah: kuis pelajaran tetap 3 soal pilihan ganda; urutan tanggal dividen paling sering tertukar oleh pemula.
+- Ide: latihan kecil dengan tombol naik/turun (bukan seret, agar bisa keyboard) untuk mengurutkan 4 tanggal, lalu tombol "Periksa" yang menjelaskan urutan benar; tanpa skor disimpan.
+- Dampak bagi pemula: mengingat urutan tanggal lewat praktik.
+- Batasan: bisa keyboard, pesan hasil lewat aria-live, tanpa animasi, tanpa data tersimpan; PDF modul tidak berubah (latihan hanya di web).
+- Usaha: sedang (Arif + Laras; Nina menambah cek).
+
 ### Tinjauan Kirana, 22 Nov 13.xx: kotak hitung lot
 - 390px gelap & 1280px terang: kotak lipat tepat di bawah judul "Dividen saham syariah", isian 48px berlabel "Jumlah lot", hasil per kode turun baris rapi, catatan di bawah terbaca. Pilihan "IPO" menyembunyikan kotak. Isian 0 → pesan salah isian + aria-invalid. Tanpa scroll horizontal & galat JS. Tidak ada perbaikan.
 
