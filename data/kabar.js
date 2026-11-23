@@ -39,9 +39,9 @@ window.KABAR = [
   { kode: "AADI", tanggal: "2026-11-02", jenis: "Laporan keuangan",
     ringkas: "Adaro Andalan Indonesia merilis laporan Januari–September 2026: laba yang diatribusikan kepada pemilik entitas induk US$683,34 juta, naik dari US$587,32 juta. Pendapatan usaha US$3,96 miliar, naik 9,70%.",
     sumber: { judul: "depok24jam, 2 Nov 2026: Laba Adaro Andalan Indonesia (AADI) naik 16% kuartal III 2026", url: "https://www.depok24jam.com/2026/11/02/laba-adaro-andalan-indonesia-aadi-kuartal-iii-2026/" } },
-  // Laporan 9 bulan ACES — IDX Channel, 2 Nov 2026
+  // Laporan 9 bulan ACES — IDX Channel, 2 Nov 2026; angka 2026 sama di Fortune IDN 2 Nov 2026; pembanding 2025 dari Bisnis 1 Nov 2025 (Sari + Hana, 23 Nov 18.xx)
   { kode: "ACES", tanggal: "2026-11-02", jenis: "Laporan keuangan",
-    ringkas: "Aspirasi Hidup Indonesia merilis laporan 9 bulan 2026: laba bersih yang dapat diatribusikan kepada pemilik entitas induk tumbuh 25,7% menjadi Rp604,7 miliar. Penjualan bersih Rp6,9 triliun, naik 8,3%.",
+    ringkas: "Aspirasi Hidup Indonesia merilis laporan Januari–September 2026: laba yang diatribusikan kepada pemilik entitas induk Rp604,7 miliar, tumbuh 25,7% dari Rp481,09 miliar pada periode yang sama 2025 (Bisnis, 1 Nov 2025). Penjualan bersih Rp6,9 triliun, naik 8,3%.",
     sumber: { judul: "IDX Channel, 2 Nov 2026: ACES cetak laba bersih Rp604,7 miliar hingga kuartal III-2026", url: "https://www.idxchannel.com/market-news/aces-cetak-laba-bersih-rp6047-miliar-hingga-kuartal-iii-2026-tumbuh-26-persen" } },
   // Laporan 9 bulan INTP — IDX Channel, 4 Nov 2026 (Raka, ditinjau Hana)
   { kode: "INTP", tanggal: "2026-11-04", jenis: "Laporan keuangan",
@@ -55,9 +55,9 @@ window.KABAR = [
   { kode: "JPFA", tanggal: "2026-10-28", jenis: "Dividen",
     ringkas: "Japfa Comfeed Indonesia menetapkan dividen interim tahun buku 2026 sebesar Rp90 per saham, total Rp1.052.780.364.090. Tanggal pencatatan 9 November 2026, pembayaran 12 November 2026.",
     sumber: { judul: "BCA Sekuritas, 28 Okt 2026: JPFA akan bagikan dividen interim Rp90 per saham (tahun buku 2026) pada 12 November 2026", url: "https://bcasekuritas.co.id/latest-news/news/jpfa-akan-bagikan-dividen-interim-12-november-2026" } },
-  // Laporan 9 bulan CTRA — Kontan, 1 Nov 2026
+  // Laporan 9 bulan CTRA — Kontan, 1 Nov 2026; Rp1,32 T vs Rp1,62 T & pendapatan Rp7,48 T vs Rp8,39 T sama di Katadata 16 Nov 2026 (Sari + Hana, 23 Nov 18.xx)
   { kode: "CTRA", tanggal: "2026-11-01", jenis: "Laporan keuangan",
-    ringkas: "Ciputra Development merilis laporan 9 bulan 2026: laba bersih Rp1,32 triliun, turun 18,5%. Penjualan dan pendapatan usaha Rp7,48 triliun, turun 10,79% dari Rp8,39 triliun.",
+    ringkas: "Ciputra Development merilis laporan Januari–September 2026: laba bersih Rp1,32 triliun, turun 18,5% dari Rp1,62 triliun pada periode yang sama 2025 (Katadata, 16 Nov 2026). Penjualan dan pendapatan usaha Rp7,48 triliun, turun 10,79% dari Rp8,39 triliun.",
     sumber: { judul: "Kontan, 1 Nov 2026: Laba Ciputra Development (CTRA) susut jadi Rp1,32 triliun di kuartal III-2026", url: "https://investasi.kontan.co.id/news/laba-ciputra-development-ctra-susut-jadi-rp-132-triliun-di-kuartal-iii-2026" } },
   // Laporan 9 bulan ICBP — Fortune IDN, 2 Nov 2026 (angka sama dengan laba9b; IDX Channel 30 Okt menulis Rp6,1 T vs Rp7,1 T, pembulatan). Sari + Hana, 21 Nov 19.xx
   { kode: "ICBP", tanggal: "2026-11-02", jenis: "Laporan keuangan",

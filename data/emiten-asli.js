@@ -440,7 +440,7 @@ window.EMITEN_ASLI = [
     pendapatan: { 2024: 11180, 2025: 12610 },
     liabilitas2025: 21060, ekuitas2025: 26910,
     laba9b: { 2025: 1620, 2026: 1320 },
-    catatan9b: "Laba 9 bulan = laba diatribusikan kepada pemilik entitas induk: Rp1,32 T (Jan–Sep 2026) vs Rp1,62 T (Jan–Sep 2025), turun 18,5% (Kontan 1 Nov 2026 & Bisnis 2 Nov 2026; pembanding Bisnis 31 Okt 2025). Cek runtut: laba per saham dasar Rp71 vs Rp88 (Kontan), sejalan dengan Rp1,32 T dan Rp1,62 T. Rp1.433,19 M vs Rp1.750,59 M yang ditulis PintarSaham lebih besar, kemungkinan laba periode berjalan, tidak dipakai. Sumber tidak menyebut pos sekali-waktu.",
+    catatan9b: "Laba 9 bulan = laba diatribusikan kepada pemilik entitas induk: Rp1,32 T (Jan–Sep 2026) vs Rp1,62 T (Jan–Sep 2025), turun 18,5% (Kontan 1 Nov 2026 & Bisnis 2 Nov 2026; pembanding Bisnis 31 Okt 2025; Katadata 16 Nov 2026 menulis kedua angka, Rp1,32 T dari Rp1,62 T). Cek runtut: laba per saham dasar Rp71 vs Rp88 (Kontan), sejalan dengan Rp1,32 T dan Rp1,62 T. Rp1.433,19 M vs Rp1.750,59 M yang ditulis PintarSaham lebih besar, kemungkinan laba periode berjalan, tidak dipakai. Sumber tidak menyebut pos sekali-waktu.",
     // dps: Rp36 (tahun buku 2025, total Rp667.285.029.180, RUPST 26 Jun 2026, dibayar 24 Juli 2026; tanpa interim disebut) dari StockWatch 29 Jun 2026 & PintarSaham 30 Jun 2026 (Fajar, 3 Nov 17.09).
     dps: 36, harga: null,
     dpsSumber: { judul: "StockWatch, 29 Jun 2026: Ciputra Development (CTRA) sepakati dividen Rp36 per saham (tahun buku 2025), dibayar 24 Juli 2026", url: "https://stockwatch.id/ciputra-development-ctra-sepakati-dividen-rp36-per-saham-dan-pengesahan-laporan-keuangan/" },
@@ -450,7 +450,9 @@ window.EMITEN_ASLI = [
       { judul: "Kontan, 1 Nov 2026: Laba Ciputra Development (CTRA) susut jadi Rp1,32 triliun di kuartal III-2026",
         url: "https://investasi.kontan.co.id/news/laba-ciputra-development-ctra-susut-jadi-rp-132-triliun-di-kuartal-iii-2026" },
       { judul: "Bisnis, 31 Okt 2025: Ciputra (CTRA) catat laba bersih naik 27% jadi Rp1,62 triliun kuartal III/2025",
-        url: "https://market.bisnis.com/read/20251031/192/1925047/ciputra-ctra-catat-laba-bersih-naik-27-jadi-rp162-triliun-kuartal-iii2025" }]
+        url: "https://market.bisnis.com/read/20251031/192/1925047/ciputra-ctra-catat-laba-bersih-naik-27-jadi-rp162-triliun-kuartal-iii2025" },
+      { judul: "Katadata, 16 Nov 2026: Adu kinerja emiten properti kuartal III 2026 (CTRA Rp1,32 triliun vs Rp1,62 triliun)",
+        url: "https://katadata.co.id/finansial/bursa/6afaa7f75f1b2/adu-kinerja-emiten-properti-kuartal-iii-2026-pani-dan-dmas-cetak-lonjakan-laba" }]
   },
   {
     kode: "BSDE", nama: "PT Bumi Serpong Damai Tbk", sektor: "Properti & real estat",
