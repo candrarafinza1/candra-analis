@@ -2221,3 +2221,11 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Sari + Hana + Dewi: #50 selesai — kotak lipat di bawah daftar Dividen menjelaskan alasan sebuah dividen tidak tercantum (bukan saham DES, belum terbukti sehingga ditahan, sudah lewat >14 hari) dan cara memeriksa sendiri lewat pengumuman DES OJK & keterbukaan informasi BEI. Tanpa nama emiten, tanpa ajakan.
 - Nina: cek 2f-19 + 5 uji balik; `node tests/cek.mjs` lolos. Dicek 390/1280px terang/gelap: tanpa scroll horizontal & galat JS.
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 23 Nov 2026, 09.08 WIB — sesi kerja (Bima)
+- Raka + Hana: IPO ANDA dicari lagi; hanya sumber lama yang muncul, belum ada bukti status syariah → tetap tidak dicatat, dicoba lagi rutin 13.xx.
+- Dewi + Nina: #51 selesai — tampilan cetak Agenda (`@media print`): tombol pilihan, kalender, Salin tautan, profil, hitung lot, dan "Kembali ke atas" disembunyikan; daftar sumber dibuka saat cetak lalu ditutup lagi, alamat tautan sumber tercetak sebagai teks, kartu tidak terpotong. Dicek `page.pdf()` A4 (5 halaman). Layar 390/1280px tidak berubah, tanpa scroll horizontal & galat JS.
+- Nina: cek 2f-20 + 6 uji balik; `node tests/cek.mjs` lolos.
+- Bima: #52 (latihan urutkan 4 tanggal dividen) dipilih untuk Arif + Laras; Kirana diberi tugas meninjau hasil cetak.
+- Catatan teknis: salinan lokal `main` ternyata riwayat lama yang tidak terkait; kerja dilakukan di atas `origin/main` (salinan lama disimpan di cabang lokal `lama-lokal`, tidak di-push).
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

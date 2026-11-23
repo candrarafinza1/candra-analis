@@ -1012,3 +1012,19 @@ button.istilah:hover, button.istilah[aria-expanded="true"] { color: var(--aksen)
   .tabel-dividen thead th:nth-child(3) { width: 24%; }
   .tabel-dividen thead th:nth-child(4) { width: 36%; }
 }
+
+/* Tampilan cetak Agenda (Dewi + Nina, 23 Nov 2026, IDE.md #51). Hanya berlaku saat dicetak; layar tidak berubah.
+   Yang disembunyikan: tombol pilihan, tombol kalender (per kartu & semua) beserta catatannya, "Salin tautan",
+   tautan profil, kotak hitung lot, dan "Kembali ke atas". Daftar sumber tetap tercetak (dibuka saat cetak) dan
+   alamat setiap tautan sumber ditulis sebagai teks. Kartu tidak dipotong di tengah halaman. */
+@media print {
+  #agenda .agenda-saring-wadah, #agenda .agenda-catatan-ics, #agenda .agenda-kalender, #agenda .salin-kartu,
+  #agenda .tautan-profil-kartu, #agenda #hitung-lot, .ke-atas-baris { display: none !important; }
+  #agenda .agenda-aksi { display: block; margin-top: 8px; }
+  #agenda .agenda-sumber-lipat::details-content { content-visibility: visible; display: block; }
+  #agenda .agenda-sumber-judul { list-style: none; font-weight: 700; }
+  #agenda .agenda-sumber-judul::before, #agenda .agenda-sumber-judul::-webkit-details-marker { content: none; display: none; }
+  #agenda .agenda-sumber a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 9pt; word-break: break-all; }
+  #agenda .kabar.agenda { break-inside: avoid; page-break-inside: avoid; border: 1px solid #999 !important; background: #fff !important; }
+  #agenda h2 { break-after: avoid; page-break-after: avoid; }
+}

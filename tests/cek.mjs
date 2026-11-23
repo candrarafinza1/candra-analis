@@ -7941,6 +7941,51 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
   ]) ok(rusak !== app && uji(rusak).some((x) => x.includes(pesan)), `uji balik kotak tidak ada di Agenda: "${pesan}" harus tertangkap`);
 }
 
+// 2f-20. Agenda: tampilan cetak (Nina, 23 Nov 2026; Dewi, IDE.md #51). Hanya @media print; layar tidak berubah.
+{
+  const app = readFileSync("assets/app.js", "utf8");
+  const css = readFileSync("assets/styles.css", "utf8");
+  const ambilCetak = (c) => (c.match(/\/\* Tampilan cetak Agenda \(Dewi \+ Nina, 23 Nov 2026, IDE\.md #51\)[\s\S]*?\n@media print \{([\s\S]*?)\n\}\n/) || [, ""])[1];
+  const ujiCss = (c) => {
+    const salah = [], b = ambilCetak(c);
+    if (!b) return ["blok @media print Agenda wajib ada"];
+    const sembunyi = (b.match(/([^{}]*)\{ display: none !important; \}/) || [, ""])[1];
+    for (const k of ["#agenda .agenda-saring-wadah", "#agenda .agenda-catatan-ics", "#agenda .agenda-kalender", "#agenda .salin-kartu", "#agenda .tautan-profil-kartu", "#agenda #hitung-lot"])
+      if (!sembunyi.includes(k)) salah.push("saat cetak wajib disembunyikan: " + k);
+    if (/agenda-sumber/.test(sembunyi)) salah.push("daftar sumber tidak boleh disembunyikan saat cetak");
+    if (!/\.agenda-sumber-lipat::details-content \{ content-visibility: visible; display: block; \}/.test(b)) salah.push("isi sumber wajib dibuka lewat ::details-content");
+    if (!/\.agenda-sumber a\[href\^="http"\]::after \{ content: " \(" attr\(href\) "\)"/.test(b)) salah.push("alamat tautan sumber wajib ditulis sebagai teks");
+    if (!/\.kabar\.agenda \{ break-inside: avoid;/.test(b)) salah.push("kartu tidak boleh terpotong (break-inside: avoid)");
+    // Layar tidak berubah: aturan cetak Agenda hanya boleh ada di dalam @media print.
+    const luar = c.replace(/@media print \{[\s\S]*?\n\}\n/g, "");
+    if (/::details-content/.test(luar)) salah.push("::details-content tidak boleh berlaku di layar");
+    return salah;
+  };
+  const ujiJs = (js) => {
+    const salah = [];
+    const i = js.indexOf("  function pasangCetakAgenda("), f = i < 0 ? "" : js.slice(i, js.indexOf("\n  }\n", i));
+    if (!f) return ["fungsi pasangCetakAgenda wajib ada"];
+    if (!/addEventListener\("beforeprint"/.test(f) || !/details\.agenda-sumber-lipat:not\(\[open\]\)/.test(f)) salah.push("sumber yang tertutup wajib dibuka saat beforeprint");
+    if (!/addEventListener\("afterprint"/.test(f) || !/d\.open = false/.test(f)) salah.push("sesudah cetak sumber wajib ditutup lagi");
+    if (/localStorage|sessionStorage/.test(f)) salah.push("tanpa simpanan");
+    if (!/\n    pasangCetakAgenda\(akar\);\n  \}\n/.test(js)) salah.push("renderAgenda wajib memanggil pasangCetakAgenda");
+    return salah;
+  };
+  const sc = ujiCss(css), sj = ujiJs(app);
+  ok(!sc.length, "Agenda cetak (CSS): " + sc.join("; "));
+  ok(!sj.length, "Agenda cetak (JS): " + sj.join("; "));
+  for (const [rusak, pesan] of [
+    [css.replace("#agenda .agenda-kalender, #agenda .salin-kartu,", "#agenda .salin-kartu,"), "#agenda .agenda-kalender"],
+    [css.replace('  #agenda .agenda-sumber a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 9pt; word-break: break-all; }\n', ""), "alamat tautan"],
+    [css.replace("#agenda #hitung-lot, .ke-atas-baris {", "#agenda #hitung-lot, .ke-atas-baris, #agenda .agenda-sumber-lipat {"), "tidak boleh disembunyikan"],
+    [css + "\n.agenda-sumber-lipat::details-content { display: block; }\n", "tidak boleh berlaku di layar"],
+  ]) ok(rusak !== css && ujiCss(rusak).some((x) => x.includes(pesan)), `uji balik cetak Agenda (CSS): "${pesan}" harus tertangkap`);
+  for (const [rusak, pesan] of [
+    [app.replace("      dibuka.forEach(function (d) { d.open = false; });\n", ""), "ditutup lagi"],
+    [app.replace("\n    pasangCetakAgenda(akar);\n  }\n", "\n  }\n"), "wajib memanggil"],
+  ]) ok(rusak !== app && ujiJs(rusak).some((x) => x.includes(pesan)), `uji balik cetak Agenda (JS): "${pesan}" harus tertangkap`);
+}
+
 // 2g. Nina + Arif (22 Nov 07.xx): alat pencocok DES (tools/cek-des.mjs) untuk DES periode II 2026.
 // Diuji dengan teks DES tiruan (bukan data asli): baris biasa, bertitik, bergaris tegak, kode ganda,
 // kode tidak ada, dan baris judul/sampah yang wajib diabaikan.

@@ -2243,6 +2243,21 @@
     sorotKartuAgenda(akar, saring);
     bukaArtiTanggal(akar);
     window.addEventListener("hashchange", function () { sorotKartuAgenda(akar, saring); bukaArtiTanggal(akar); });
+    pasangCetakAgenda(akar);
+  }
+  /* Dewi + Nina (23 Nov 2026, IDE.md #51): tampilan cetak Agenda. Saat dicetak, daftar sumber tiap kartu dibuka agar
+     tautan sumbernya ikut tercetak, lalu dikembalikan seperti semula sesudah cetak (yang tadinya tertutup ditutup lagi).
+     Tampilan layar tidak berubah; tanpa simpanan. CSS @media print juga membuka isinya (::details-content) sebagai cadangan. */
+  function pasangCetakAgenda(akar) {
+    var dibuka = [];
+    window.addEventListener("beforeprint", function () {
+      dibuka = [];
+      akar.querySelectorAll("details.agenda-sumber-lipat:not([open])").forEach(function (d) { d.open = true; dibuka.push(d); });
+    });
+    window.addEventListener("afterprint", function () {
+      dibuka.forEach(function (d) { d.open = false; });
+      dibuka = [];
+    });
   }
   // Dewi + Nina (20 Nov 2026, IDE.md #39): tautan "Arti tanggal" dari beranda (agenda.html#arti-tanggal) membuka kotak arti
   // walau biasanya tertutup sesudah kunjungan pertama, lalu menggulir ke sana (tanpa gulir halus bila gerak dikurangi).

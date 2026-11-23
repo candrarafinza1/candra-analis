@@ -709,6 +709,7 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Dampak bagi pemula: satu lembar jadwal yang tetap menyebut sumber.
 - Batasan: CSS saja, tanpa pustaka, tanpa mengubah tampilan layar.
 - Usaha: kecil (Dewi; Nina menambah cek CSS).
+- Status: dipilih Bima 23 Nov 08.xx; **selesai 23 Nov 09.xx** (Dewi + Nina), lihat BACKLOG.md.
 
 ### 52. Pelajaran Praktik: latihan "urutkan 4 tanggal dividen"
 - **Latihan aktif setelah membaca arti cum/ex/recording/pembayaran** — konten belajar, usaha sedang
@@ -717,6 +718,7 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Dampak bagi pemula: mengingat urutan tanggal lewat praktik.
 - Batasan: bisa keyboard, pesan hasil lewat aria-live, tanpa animasi, tanpa data tersimpan; PDF modul tidak berubah (latihan hanya di web).
 - Usaha: sedang (Arif + Laras; Nina menambah cek).
+- Status: dipilih Bima 23 Nov 09.xx, masuk BACKLOG.md.
 
 ### Tinjauan Kirana, 22 Nov 13.xx: kotak hitung lot
 - 390px gelap & 1280px terang: kotak lipat tepat di bawah judul "Dividen saham syariah", isian 48px berlabel "Jumlah lot", hasil per kode turun baris rapi, catatan di bawah terbaca. Pilihan "IPO" menyembunyikan kotak. Isian 0 → pesan salah isian + aria-invalid. Tanpa scroll horizontal & galat JS. Tidak ada perbaikan.
