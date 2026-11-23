@@ -729,6 +729,22 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Batasan: tanpa skor, tanpa animasi, pesan tetap lewat aria-live, bisa keyboard.
 - Usaha: kecil (Arif; Nina memperbarui cek 2f-21). **Dipilih Bima 23 Nov 15.xx, selesai sesi yang sama** (Arif + Nina).
 
+### 54. Latihan urutkan tanggal: kalimat "coba lagi" lebih jelas + satu petunjuk
+- **Usulan kecil dari tinjauan #53 (Kirana + Laras, 23 Nov 16.xx)** — konten belajar, usaha kecil
+- Masalah: pesan salah pertama "0 dari 4 tanggal sudah di tempat yang benar. Coba lagi, atau pilih Lihat urutan yang benar." Nama tombol tidak diberi tanda kutip sehingga terbaca menyatu dengan kalimat; urutan awal latihan membuat banyak pemula mendapat "0 dari 4", yang terasa buntu tanpa arah.
+- Ide: (1) beri tanda kutip pada nama tombol: … atau pilih "Lihat urutan yang benar".; (2) pada salah pertama tambahkan satu petunjuk umum yang tidak membuka jawaban, mis. "Petunjuk: urutkan dari tanggal paling awal. Cum date adalah hari terakhir membeli agar tercatat berhak atas dividen." (kalimat definisi yang sudah ada di daftar "Membaca jadwal dividen").
+- Tren: petunjuk bertahap di aplikasi belajar.
+- Dampak bagi pemula: tahu harus mulai dari mana tanpa diberi jawaban.
+- Batasan: teks saja, tetap lewat aria-live, tanpa skor/animasi; Hana memastikan petunjuk tidak berbunyi ajakan.
+- Usaha: kecil (Arif + Laras; Nina memperbarui cek 2f-21).
+
+### Tinjauan Kirana + Laras, 23 Nov 16.xx: alur baru latihan urut (#53), keyboard saja
+- 390px gelap: Tab ±48 langkah sampai "Periksa urutan"; Enter → pesan aria-live "0 dari 4 … Coba lagi, atau pilih Lihat urutan yang benar."; fokus tetap di "Periksa urutan", Tab berikutnya tepat ke "Lihat urutan yang benar". Salah kedua → "Urutan yang benar kini dibuka di bawah." Alur benar; usulan kejelasan kalimat di #54.
+
+### Tinjauan Kirana, 23 Nov 16.xx: cetak Agenda (#51) & tanggal uji 26–27 Nov
+- Cetak A4 (6 halaman) dan kertas HP 390px (15 halaman): menu, tombol, kotak hitung lot tidak tercetak; kartu tidak terpotong; alamat sumber tercetak. Temuan: teks "(tab baru)" ikut tercetak di setiap sumber → **diperbaiki sesi ini** (Dewi; Nina cek 2f-22). Kotak lipat "Arti tanggal-tanggal ini" terpotong antarhalaman di kertas HP (wajar, isinya panjang; tidak perlu diubah).
+- Tanggal uji 26 & 27 Nov (390/1280px terang/gelap): urutan kartu mengikuti tanggal berikutnya, "sudah lewat"/"hari ini"/"besok" benar untuk TOTO, DGWG, BOBA, JTPE, PSGO; 27 Nov TOTO turun ke bawah (tinggal pembayaran 15 Des). Tanpa scroll horizontal & galat JS. Tidak ada usulan.
+
 ### Tinjauan Kirana & Hana, 23 Nov 13.xx: latihan "Urutkan 4 tanggal dividen" (#52)
 - Kirana, keyboard saja: Tab sampai ke tombol pertama latihan (±41 langkah dari atas halaman), Enter/Spasi memindah baris, fokus tetap di baris yang dipindah, tombol ujung nonaktif dan dilewati. Garis fokus kuning terlihat jelas di mode gelap.
 - 390px & 1280px terang/gelap: tanpa scroll horizontal & galat JS; tombol Naik/Turun ≥44px; setelah Periksa, kotak 1.261px di 390px karena penjelasan terbuka (wajar).

@@ -8061,6 +8061,8 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
     const lihat = semua.find((n) => n.tag === "button" && n.textContent === "Lihat urutan yang benar");
     if (!lihat) return [...salah, "tombol Lihat urutan yang benar wajib ada"];
     if (!jelas.hidden || lihat.hidden || !/Coba lagi/.test(hasil.textContent)) salah.push("salah pertama: penjelasan tetap tertutup, tombol Lihat muncul");
+    // IDE.md #54: petunjuk umum + nama tombol berkutip; petunjuk tidak boleh menyebut urutan lengkap (Ex date/Recording date).
+    if (!/Petunjuk: urutkan dari tanggal paling awal; cum date adalah hari terakhir membeli/.test(hasil.textContent) || !/\u201cLihat urutan yang benar\u201d\.$/.test(hasil.textContent) || /Ex date|Recording date|pembayaran/i.test(hasil.textContent)) salah.push("salah pertama: petunjuk umum tanpa membuka jawaban");
     periksa.d.click();
     if (jelas.hidden || !lihat.hidden) salah.push("salah kedua: penjelasan dibuka otomatis");
     ulang.d.click();
@@ -8085,6 +8087,8 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
     [app.replace("      if (salahKe === 1) {", "      if (false) {"), "salah pertama"],
     [app.replace("        bukaJelas();\n      }\n    });", "      }\n    });"), "salah kedua"],
     [app.replace("      salahKe = 0;\n", ""), "hitungan salah mulai lagi"],
+    [app.replace("Petunjuk: urutkan dari tanggal paling awal; ", ""), "petunjuk umum"],
+    [app.replace("cum date adalah hari terakhir membeli saham di pasar reguler agar berhak atas dividen.", "urutannya cum date, ex date, recording date, lalu pembayaran."), "petunjuk umum"],
     [app.replace("      periksa.focus();\n", ""), "tombol Lihat"],
     [app.replace("    pasangLatihanUrut(wadah, m);\n", ""), "wajib memanggil"],
     [app.replace("  var LATIHAN_URUT_AWAL = [2, 3, 1, 0];", "  var LATIHAN_URUT_AWAL = [0, 1, 2, 3];"), "tidak boleh sudah benar"],
@@ -8185,6 +8189,17 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
   ok(cariKedaluwarsa([], div, "2026-11-23", 13).some(x => x.nama === "BBBB"), "uji balik cek-kedaluwarsa: batas 13 hari harus menangkap BBBB");
   const src = readFileSync("tools/cek-kedaluwarsa.mjs", "utf8");
   ok(!/writeFileSync|appendFileSync|createWriteStream/.test(src), "cek-kedaluwarsa: alat tidak boleh menulis berkas");
+}
+
+// Nina (23 Nov 16.xx, temuan cetak Kirana): sumber Agenda tidak mencetak "(tab baru)", tetapi nama aksesibel tetap menyebutnya.
+{
+  const js = readFileSync("assets/app.js", "utf8"), css = readFileSync("assets/styles.css", "utf8");
+  const periksa = (j, c) => /sumber\.appendChild\(el\("li", null, \[el\("a", \{ href: s\.url, target: "_blank", rel: "noopener", "aria-label": s\.judul \+ " \(tab baru\)" \},\s*\[s\.judul, el\("span", \{ class: "tanda-tab-baru"/.test(j)
+    && /@media print \{[^@]*#agenda \.tanda-tab-baru \{ display: none; \}/.test(c);
+  ok(periksa(js, css), "cek 2f-22: tautan sumber Agenda wajib aria-label \"(tab baru)\" + span .tanda-tab-baru yang disembunyikan saat cetak");
+  // Uji balik: tanpa aturan cetak, atau "(tab baru)" kembali di teks tautan → harus gagal.
+  ok(!periksa(js, css.replace("#agenda .tanda-tab-baru { display: none; }", "")), "uji balik 2f-22: aturan cetak hilang harus tertangkap");
+  ok(!periksa(js.replace('"aria-label": s.judul + " (tab baru)" },', 'text: s.judul + " (tab baru)" },'), css), "uji balik 2f-22: teks lama harus tertangkap");
 }
 
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }

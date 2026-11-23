@@ -1039,4 +1039,5 @@ button.istilah:hover, button.istilah[aria-expanded="true"] { color: var(--aksen)
   #agenda .agenda-sumber a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 9pt; word-break: break-all; }
   #agenda .kabar.agenda { break-inside: avoid; page-break-inside: avoid; border: 1px solid #999 !important; background: #fff !important; }
   #agenda h2 { break-after: avoid; page-break-after: avoid; }
+  #agenda .tanda-tab-baru { display: none; } /* "(tab baru)" tidak berarti di kertas (Kirana, 23 Nov 16.xx) */
 }

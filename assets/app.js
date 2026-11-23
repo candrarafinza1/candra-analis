@@ -362,6 +362,7 @@
     var jelas = el("ol", { class: "latihan-urut-jelas", hidden: "" });
     // IDE.md #53 (Arif, 23 Nov 2026): percobaan salah pertama hanya memberi petunjuk; penjelasan
     // dibuka pada percobaan salah kedua, saat urutan benar, atau lewat tombol "Lihat urutan yang benar".
+    // IDE.md #54 (Arif + Laras, 23 Nov 16.xx): salah pertama memberi satu petunjuk umum (definisi cum date dari pelajaran) tanpa membuka jawaban.
     var salahKe = 0;
     function bukaJelas() { jelas.hidden = false; lihat.hidden = true; }
     periksa.addEventListener("click", function () {
@@ -373,7 +374,7 @@
       }
       salahKe++;
       if (salahKe === 1) {
-        hasil.textContent = tepat + " dari " + urut.length + " tanggal sudah di tempat yang benar. Coba lagi, atau pilih Lihat urutan yang benar.";
+        hasil.textContent = tepat + " dari " + urut.length + " tanggal sudah di tempat yang benar. Petunjuk: urutkan dari tanggal paling awal; cum date adalah hari terakhir membeli saham di pasar reguler agar berhak atas dividen. Coba lagi, atau pilih \u201cLihat urutan yang benar\u201d.";
         lihat.hidden = false;
       } else {
         hasil.textContent = tepat + " dari " + urut.length + " tanggal sudah di tempat yang benar. Urutan yang benar kini dibuka di bawah.";
@@ -1967,7 +1968,9 @@
     });
     var sumber = el("ul", { class: "agenda-sumber" });
     (ipo ? [a.buktiSyariah].concat(a.sumber || []) : a.sumber || []).forEach(function (s) {
-      if (s && s.url) sumber.appendChild(el("li", null, [el("a", { href: s.url, target: "_blank", rel: "noopener", text: s.judul + " (tab baru)" })]));
+      // Dewi (23 Nov 16.xx, tinjauan cetak Kirana): "(tab baru)" di span tersendiri agar tidak ikut tercetak; nama aksesibel tetap lewat aria-label.
+      if (s && s.url) sumber.appendChild(el("li", null, [el("a", { href: s.url, target: "_blank", rel: "noopener", "aria-label": s.judul + " (tab baru)" },
+        [s.judul, el("span", { class: "tanda-tab-baru", text: " (tab baru)" })])]));
     });
     return el("li", { class: "kabar agenda" + (x.berikut ? "" : " agenda-sudah"), id: idK, tabindex: "-1" }, [
       el("p", { class: "kabar-kepala" }, kepala),
