@@ -311,6 +311,87 @@
     return form;
   }
 
+  /* ---------- Latihan "Urutkan 4 tanggal dividen" (Arif + Laras, 23 Nov 2026, IDE.md #52) ----------
+     Hanya di web (PDF modul tidak berubah). Tombol naik/turun, bukan seret, agar bisa dengan keyboard.
+     Tanpa skor tersimpan, tanpa animasi. Ditaruh sesudah daftar "Membaca jadwal dividen". */
+  var LATIHAN_URUT = [
+    { nama: "Cum date", jelas: "hari terakhir membeli saham di pasar reguler agar berhak atas dividen." },
+    { nama: "Ex date", jelas: "hari bursa sesudah cum date; pembeli mulai hari ini tidak lagi berhak atas dividen itu." },
+    { nama: "Recording date", jelas: "daftar pemegang saham yang berhak dicatat, biasanya dua hari bursa sesudah cum date (T+2)." },
+    { nama: "Tanggal pembayaran", jelas: "dividen masuk ke RDN pemegang saham yang tercatat." }
+  ];
+  var LATIHAN_URUT_AWAL = [2, 3, 1, 0];
+  function buatLatihanUrut() {
+    var urut = LATIHAN_URUT_AWAL.slice();
+    var kotak = el("section", { class: "kuis latihan-urut", "aria-labelledby": "judul-latihan-urut" });
+    kotak.appendChild(el("h2", { id: "judul-latihan-urut", text: "Latihan: urutkan 4 tanggal dividen" }));
+    kotak.appendChild(el("p", { class: "kuis-pengantar", text: "Susun tanggal dari yang paling awal sampai yang paling akhir. Pakai tombol Naik dan Turun, lalu periksa. Tidak dinilai dan tidak disimpan." }));
+    var daftar = el("ol", { class: "latihan-urut-daftar" });
+    var hasil = el("p", { class: "kuis-hasil", role: "status", "aria-live": "polite" });
+    function gambar(fokusNama, arah) {
+      daftar.innerHTML = "";
+      urut.forEach(function (k, i) {
+        var nama = LATIHAN_URUT[k].nama;
+        var naik = el("button", { type: "button", class: "tombol latihan-urut-tombol", "aria-label": "Naik: " + nama, text: "↑ Naik" });
+        var turun = el("button", { type: "button", class: "tombol latihan-urut-tombol", "aria-label": "Turun: " + nama, text: "↓ Turun" });
+        if (i === 0) naik.disabled = true;
+        if (i === urut.length - 1) turun.disabled = true;
+        naik.addEventListener("click", function () { pindah(i, -1); });
+        turun.addEventListener("click", function () { pindah(i, 1); });
+        daftar.appendChild(el("li", { class: "latihan-urut-baris" }, [
+          el("span", { class: "latihan-urut-nama", text: nama }),
+          el("span", { class: "latihan-urut-aksi" }, [naik, turun])
+        ]));
+        if (nama === fokusNama) {
+          var t = arah < 0 ? (naik.disabled ? turun : naik) : (turun.disabled ? naik : turun);
+          t.focus();
+        }
+      });
+    }
+    function pindah(i, arah) {
+      var j = i + arah;
+      if (j < 0 || j >= urut.length) return;
+      var k = urut[i]; urut[i] = urut[j]; urut[j] = k;
+      var nama = LATIHAN_URUT[k].nama;
+      gambar(nama, arah);
+      hasil.textContent = nama + " kini di urutan " + (j + 1) + " dari " + urut.length + ".";
+    }
+    var periksa = el("button", { type: "button", class: "tombol tombol-gelap", text: "Periksa urutan" });
+    var ulang = el("button", { type: "button", class: "tombol kuis-ulang", text: "Ulangi latihan" });
+    var jelas = el("ol", { class: "latihan-urut-jelas", hidden: "" });
+    periksa.addEventListener("click", function () {
+      var tepat = urut.filter(function (k, i) { return k === i; }).length;
+      hasil.textContent = tepat === urut.length
+        ? "Urutan sudah benar: " + LATIHAN_URUT.map(function (x) { return x.nama; }).join(", lalu ") + "."
+        : tepat + " dari " + urut.length + " tanggal sudah di tempat yang benar. Lihat urutan yang benar di bawah, lalu coba lagi.";
+      jelas.hidden = false;
+    });
+    ulang.addEventListener("click", function () {
+      urut = LATIHAN_URUT_AWAL.slice();
+      jelas.hidden = true;
+      gambar();
+      hasil.textContent = "Latihan diulang dari awal.";
+      daftar.querySelector("button:not([disabled])").focus();
+    });
+    LATIHAN_URUT.forEach(function (x) {
+      jelas.appendChild(el("li", {}, [el("strong", { text: x.nama }), ": " + x.jelas]));
+    });
+    gambar();
+    kotak.appendChild(daftar);
+    kotak.appendChild(el("div", { class: "kuis-aksi" }, [periksa, ulang]));
+    kotak.appendChild(hasil);
+    kotak.appendChild(jelas);
+    return kotak;
+  }
+  function pasangLatihanUrut(wadah, m) {
+    if (m.id !== "praktik-beli-pertama") return;
+    var judul = [].slice.call(wadah.querySelectorAll("p > strong")).filter(function (s) { return s.textContent === "Membaca jadwal dividen"; })[0];
+    var daftar = judul && judul.parentNode.nextElementSibling;
+    var latihan = buatLatihanUrut();
+    if (daftar && daftar.nodeName === "OL") daftar.parentNode.insertBefore(latihan, daftar.nextSibling);
+    else wadah.insertBefore(latihan, wadah.querySelectorAll("form.kuis")[0] || null);
+  }
+
   /* ---------- Halaman pelajaran ---------- */
   function renderPelajaran() {
     var wadah = document.getElementById("isi-pelajaran");
@@ -329,6 +410,7 @@
     pasangIstilah(wadah);
     if (m.kuis && m.kuis.length) wadah.appendChild(buatKuis(m));
     wadah.appendChild(buatTandaiSelesai(m));
+    pasangLatihanUrut(wadah, m);
 
     var nav = el("nav", { class: "navigasi-pelajaran", "aria-label": "Pelajaran lain" });
     nav.appendChild(idx > 0

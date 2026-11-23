@@ -424,6 +424,18 @@ tbody tr:hover { background: var(--hover-baris); }
 .kuis-hasil { font-weight: 700; margin: 14px 0 0; }
 
 @media (min-width: 720px) { .kuis { padding: 24px 28px; } }
+/* Latihan urutkan tanggal dividen (Arif + Laras + Dewi, 23 Nov 2026, IDE.md #52). Tanpa animasi. */
+.latihan-urut { margin: 28px 0; }
+.latihan-urut-daftar { list-style: none; padding: 0; margin: 0 0 16px; counter-reset: urut; }
+.latihan-urut-baris { counter-increment: urut; }
+.latihan-urut-nama::before { content: counter(urut) ". "; }
+.latihan-urut-baris { display: flex; align-items: center; justify-content: space-between; gap: 8px 12px; flex-wrap: wrap; padding: 8px 0; border-bottom: 1px solid var(--garis); }
+.latihan-urut-nama { flex: 1 1 10em; font-weight: 700; overflow-wrap: anywhere; }
+.latihan-urut-aksi { display: flex; gap: 8px; }
+.latihan-urut-tombol { min-height: 44px; min-width: 44px; padding: 8px 12px; background: transparent; border-color: var(--aksen); color: var(--aksen); }
+.latihan-urut-tombol:disabled { opacity: .45; cursor: not-allowed; }
+.latihan-urut-jelas { margin: 12px 0 0; padding-left: 1.4em; }
+.latihan-urut-jelas[hidden] { display: none; }
 
 /* Judul halaman dalam */
 .judul-halaman { background: var(--malam); color: #fff; padding: 48px 0 40px; }

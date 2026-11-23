@@ -3847,7 +3847,8 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
       const simpul = (tag) => ({ tag, anak: [], atribut: {}, className: "", value: "", hidden: false, _dengar: {},
         appendChild(c) { this.anak.push(c); return c; }, setAttribute(k, v) { this.atribut[k] = String(v); },
         getAttribute(k) { return k in this.atribut ? this.atribut[k] : null; },
-        addEventListener(n, f) { this._dengar[n] = f; }, querySelector() { return null; }, reset() {}, focus() {},
+        addEventListener(n, f) { this._dengar[n] = f; }, querySelector() { return null; }, querySelectorAll() { return []; }, reset() {}, focus() {},
+        insertBefore(c, r) { const i = r ? this.anak.indexOf(r) : -1; if (i < 0) this.anak.push(c); else this.anak.splice(i, 0, c); return c; },
         // innerHTML tiruan: hanya judul (h1–h6) dari HTML kurikulum yang dijadikan simpul, urut seperti aslinya.
         set innerHTML(v) { this.anak = [...String(v).replace(/<!--[\s\S]*?-->/g, "").matchAll(/<h([1-6])[\s>]/g)].map((m) => simpul("h" + m[1])); },
         set textContent(v) { this.anak = []; this._teks = String(v); } });
@@ -7984,6 +7985,88 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
     [app.replace("      dibuka.forEach(function (d) { d.open = false; });\n", ""), "ditutup lagi"],
     [app.replace("\n    pasangCetakAgenda(akar);\n  }\n", "\n  }\n"), "wajib memanggil"],
   ]) ok(rusak !== app && ujiJs(rusak).some((x) => x.includes(pesan)), `uji balik cetak Agenda (JS): "${pesan}" harus tertangkap`);
+}
+
+// 2f-21. Pelajaran Praktik: latihan "Urutkan 4 tanggal dividen" (Nina, 23 Nov 2026; Arif + Laras, IDE.md #52).
+// Dijalankan dengan DOM tiruan: tombol Naik/Turun memindah baris & menjaga fokus, tombol ujung nonaktif,
+// Periksa memberi pesan lewat aria-live, Ulangi kembali ke awal. Tanpa simpanan, tanpa animasi, PDF tidak berubah.
+{
+  const app = readFileSync("assets/app.js", "utf8");
+  const modulJs = readFileSync("data/modul.js", "utf8");
+  const ujiLatihan = (js) => {
+    const salah = [];
+    const iE = js.indexOf("  function el("), jE = js.indexOf("\n  }\n", iE);
+    const i = js.indexOf("  var LATIHAN_URUT = ["), j = js.indexOf("  function pasangLatihanUrut(");
+    if (i < 0 || j < i) return ["blok LATIHAN_URUT / buatLatihanUrut wajib ada"];
+    const kode = js.slice(iE, jE + 5) + js.slice(i, j);
+    if (/localStorage|sessionStorage|indexedDB/.test(kode)) salah.push("latihan tanpa simpanan");
+    if (/animation|transition|draggable|dragstart/.test(kode)) salah.push("latihan tanpa animasi/seret");
+    const p = js.slice(j, js.indexOf("\n  }\n", j));
+    if (!/m\.id !== "praktik-beli-pertama"/.test(p)) salah.push("latihan hanya di pelajaran praktik-beli-pertama");
+    if (!/\n    wadah\.appendChild\(buatTandaiSelesai\(m\)\);\n    pasangLatihanUrut\(wadah, m\);\n/.test(js)) salah.push("renderPelajaran wajib memanggil pasangLatihanUrut sesudah istilah dipasang");
+    let fokus = null;
+    const El = class {
+      constructor(t) { this.tag = t; this.anak = []; this.atribut = {}; this.className = ""; this.hidden = false; this.disabled = false; this.d = {}; this._t = ""; }
+      setAttribute(k, v) { this.atribut[k] = String(v); if (k === "hidden") this.hidden = true; }
+      appendChild(c) { this.anak.push(c); c.induk = this; return c; }
+      set innerHTML(v) { this.anak = []; }
+      set textContent(v) { this.anak = []; this._t = String(v); }
+      get textContent() { return this._t + this.anak.map((c) => c.textContent).join(""); }
+      addEventListener(n, f) { this.d[n] = f; }
+      focus() { fokus = this; }
+      semua() { return [this, ...this.anak.flatMap((c) => c.semua ? c.semua() : [])]; }
+      querySelector(sel) { return sel === "button:not([disabled])" ? this.semua().find((n) => n.tag === "button" && !n.disabled) || null : null; }
+    };
+    const document = { createElement: (t) => new El(t), createTextNode: (t) => ({ textContent: String(t) }) };
+    const ctx = { document };
+    try { vm.runInNewContext(kode + "\n;globalThis.buat = buatLatihanUrut; globalThis.L = LATIHAN_URUT;", ctx); } catch (e) { return ["galat: " + e.message]; }
+    const kotak = ctx.buat(), semua = kotak.semua();
+    const namaL = ctx.L.map((x) => x.nama);
+    if (namaL.join("|") !== "Cum date|Ex date|Recording date|Tanggal pembayaran") salah.push("urutan benar wajib Cum date, Ex date, Recording date, Tanggal pembayaran");
+    const daftar = semua.find((n) => n.tag === "ol" && n.className === "latihan-urut-daftar");
+    const hasil = semua.find((n) => n.atribut["aria-live"] === "polite" && n.atribut.role === "status");
+    if (!daftar || !hasil) return [...salah, "daftar & pesan aria-live wajib ada"];
+    const urutan = () => daftar.anak.map((li) => li.anak[0].textContent);
+    const tombol = (aria) => daftar.semua().find((n) => n.tag === "button" && n.atribut["aria-label"] === aria);
+    const awal = urutan();
+    if (awal.join() === namaL.join()) salah.push("urutan awal tidak boleh sudah benar");
+    if (!tombol("Naik: " + awal[0])?.disabled || !tombol("Turun: " + awal[3])?.disabled) salah.push("tombol ujung wajib nonaktif");
+    if (daftar.semua().some((n) => n.tag === "button" && n.atribut.type !== "button")) salah.push("tombol wajib type=button");
+    // Susun urutan benar dengan tombol saja (seperti pengguna keyboard).
+    for (let langkah = 0; langkah < 12 && urutan().join() !== namaL.join(); langkah++) {
+      const u = urutan(), k = u.findIndex((x, i) => x !== namaL[i]), dari = u.indexOf(namaL[k]);
+      const b = tombol("Naik: " + u[dari]); b.d.click();
+      if (fokus?.atribut["aria-label"] !== (dari - 1 === 0 ? "Turun: " : "Naik: ") + u[dari]) salah.push("fokus wajib tetap di tombol baris yang dipindah");
+      if (!new RegExp("^" + u[dari] + " kini di urutan " + dari + " dari 4\\.$").test(hasil.textContent)) salah.push("pindah wajib diumumkan lewat aria-live");
+    }
+    if (urutan().join() !== namaL.join()) salah.push("tombol Naik tidak bisa menyusun urutan benar");
+    const periksa = semua.find((n) => n.tag === "button" && n.textContent === "Periksa urutan");
+    const ulang = semua.find((n) => n.tag === "button" && n.textContent === "Ulangi latihan");
+    const jelas = semua.find((n) => n.className === "latihan-urut-jelas");
+    if (!periksa || !ulang || !jelas) return [...salah, "tombol Periksa urutan / Ulangi latihan & penjelasan wajib ada"];
+    if (!jelas.hidden) salah.push("penjelasan tertutup sebelum Periksa");
+    periksa.d.click();
+    if (!/^Urutan sudah benar: Cum date, lalu Ex date/.test(hasil.textContent) || jelas.hidden) salah.push("Periksa (benar) wajib memberi pesan & penjelasan");
+    ulang.d.click();
+    if (urutan().join() !== awal.join() || !jelas.hidden) salah.push("Ulangi wajib kembali ke urutan awal");
+    periksa.d.click();
+    if (!/^\d dari 4 tanggal sudah di tempat yang benar\./.test(hasil.textContent)) salah.push("Periksa (salah) wajib menyebut jumlah yang benar");
+    if (/buruan|pasti untung|pasti naik|rekomendasi beli|segera beli/i.test(kode)) salah.push("kata ajakan dilarang");
+    return salah;
+  };
+  const s21 = ujiLatihan(app);
+  ok(!s21.length, "latihan urutkan tanggal dividen: " + s21.join("; "));
+  ok(!/LATIHAN_URUT|Urutkan 4 tanggal/.test(modulJs), "latihan hanya di web: data/modul.js (dan PDF) tidak berubah");
+  ok(/\.latihan-urut-tombol \{ min-height: 44px; min-width: 44px;/.test(readFileSync("assets/styles.css", "utf8")), "tombol latihan minimal 44px");
+  for (const [rusak, pesan] of [
+    [app.replace("        if (i === 0) naik.disabled = true;\n", ""), "tombol ujung"],
+    [app.replace("          t.focus();\n", ""), "fokus wajib tetap"],
+    [app.replace('      hasil.textContent = nama + " kini di urutan "', '      hasil.textContent = "" + " kini di urutan "'), "diumumkan"],
+    [app.replace("      urut = LATIHAN_URUT_AWAL.slice();\n", ""), "Ulangi wajib"],
+    [app.replace("      jelas.hidden = false;\n", ""), "Periksa (benar)"],
+    [app.replace("    pasangLatihanUrut(wadah, m);\n", ""), "wajib memanggil"],
+    [app.replace("  var LATIHAN_URUT_AWAL = [2, 3, 1, 0];", "  var LATIHAN_URUT_AWAL = [0, 1, 2, 3];"), "tidak boleh sudah benar"],
+  ]) ok(rusak !== app && ujiLatihan(rusak).some((x) => x.includes(pesan)), `uji balik latihan urut: "${pesan}" harus tertangkap`);
 }
 
 // 2g. Nina + Arif (22 Nov 07.xx): alat pencocok DES (tools/cek-des.mjs) untuk DES periode II 2026.

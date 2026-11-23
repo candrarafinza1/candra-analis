@@ -2229,3 +2229,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Bima: #52 (latihan urutkan 4 tanggal dividen) dipilih untuk Arif + Laras; Kirana diberi tugas meninjau hasil cetak.
 - Catatan teknis: salinan lokal `main` ternyata riwayat lama yang tidak terkait; kerja dilakukan di atas `origin/main` (salinan lama disimpan di cabang lokal `lama-lokal`, tidak di-push).
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 23 Nov 2026, 10.08 WIB — sesi kerja (Bima)
+- Tugas Agenda teratas (status syariah IPO ANDA) sudah dicek 09.xx, berikutnya rutin 13.xx; DES periode I/II tetap macet. Diambil tugas berikutnya: #52.
+- Arif + Laras: #52 selesai — latihan "Urutkan 4 tanggal dividen" di pelajaran Praktik (hanya di web), tepat di bawah daftar "Membaca jadwal dividen": tombol Naik/Turun (bukan seret), tombol ujung nonaktif, fokus tetap di baris yang dipindah, pesan lewat aria-live, "Periksa urutan" + penjelasan urutan benar, "Ulangi latihan". Tanpa skor/data tersimpan, tanpa animasi, disembunyikan saat cetak seperti kuis. `data/modul.js` dan PDF modul tidak berubah.
+- Nina: cek 2f-21 (DOM tiruan menjalankan latihan) + 7 uji balik; DOM tiruan uji urutan judul ditambah `querySelectorAll`/`insertBefore`. `node tests/cek.mjs` lolos. Dicek 390/1280px terang/gelap: tanpa scroll horizontal & galat JS; nomor urut dibuat dengan penghitung CSS agar terlihat.
+- Bima: tugas tinjauan latihan dicatat untuk Kirana + Hana.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
