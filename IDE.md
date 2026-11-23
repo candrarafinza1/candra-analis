@@ -1085,3 +1085,9 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Acuan: pola umpan balik formulir modern (ringkasan tebal + penjelasan biasa). Tanpa animasi, tanpa biaya, tetap ringan.
 - Dampak bagi pemula: hasil terbaca sekilas, petunjuk tidak terasa seperti teguran.
 - Status: dipilih Bima, dikerjakan Dewi + Arif sesi yang sama; Nina menambah cek 2f-21.
+
+### Hasil audit pintasan satu huruf (WCAG 2.1.4) — Dewi & Nina, 23 Nov 21.xx
+- Kode: hanya tombol bernama yang dipakai (Escape menutup kotak istilah & tautan "Langsung ke isi", Enter mengirim pertanyaan Asisten, panah kiri/kanan hanya saat tab Peringkat terfokus). Tidak ada pintasan huruf/angka/tanda baca, tidak ada `accesskey`.
+- Uji di peramban: 11 halaman × 390/1280px, mengetik a–z, 0–9, dan / ? . , - = tanpa fokus di kotak isian: alamat, isi halaman, dan fokus tidak berubah; tanpa galat JS & scroll horizontal. Uji balik (pintasan "/" disisipkan) tertangkap di 22 dari 22 kasus.
+- Penjaga: `tests/cek.mjs` cek 2.1.4 menolak pintasan karakter, keyCode/which, dan accesskey; dua uji balik ("/" dan accesskey) tertangkap.
+- Status: tuntas, tidak perlu perubahan tampilan.

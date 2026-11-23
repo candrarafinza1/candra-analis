@@ -2291,3 +2291,8 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Sari + Hana: kabar KLBF & ITMG kini menulis "laba yang diatribusikan kepada pemilik entitas induk" (bukti dari sumber yang tercatat di data: Quartr 30 Okt 2026 untuk KLBF, IDX Channel 12 Nov 2026 untuk ITMG); angka tidak berubah. INTP & JPFA dibiarkan "laba bersih" karena sumbernya tidak menyebut atribusi secara tegas. Halaman sumber berita tetap tidak bisa dibuka alat tim (izin tidak terjawab).
 - Nina: `node tests/cek.mjs` lolos; uji balik angka 2025 ITMG tertangkap. Kabar dicek 390/1280px: tanpa scroll horizontal & galat JS.
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 23 Nov 2026, 21.14 WIB — sesi kerja (Bima)
+- Tugas Agenda teratas (IPO ANDA) menunggu rutin 07.xx Selasa; DES periode I/II, PMK 81/2024, MIKA & BRIS, istilah kabar INTP & JPFA tetap menunggu sumber. Diambil tugas pendukung yang bisa tuntas sebelum 22.00.
+- Dewi + Nina: audit pintasan satu huruf (WCAG 2.1.4) tuntas: situs hanya memakai Escape, Enter (Asisten), dan panah (tab Peringkat terfokus); tidak ada pintasan huruf/angka atau accesskey. Uji ketik 11 halaman × 390/1280px: alamat, isi, fokus tidak berubah, tanpa galat JS & scroll horizontal; uji balik tertangkap 22/22. Nina menambah cek 2.1.4 + 2 uji balik; `node tests/cek.mjs` lolos. Tampilan tidak berubah.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

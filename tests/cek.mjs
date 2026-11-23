@@ -8208,5 +8208,25 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
   ok(!periksa(js.replace('"aria-label": s.judul + " (tab baru)" },', 'text: s.judul + " (tab baru)" },'), css), "uji balik 2f-22: teks lama harus tertangkap");
 }
 
+// Dewi + Nina (23 Nov 21.xx, WCAG 2.1.4 pintasan satu huruf): situs hanya boleh memakai tombol bernama
+// (Escape, Enter, panah, Tab, Home, End). Pintasan huruf/angka/tanda baca dan atribut accesskey dilarang,
+// supaya mengetik di kotak Asisten, cari istilah, atau Radar tidak pernah memicu aksi tak terduga.
+{
+  const BOLEH = new Set(["Escape", "Enter", "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Tab", "Home", "End"]);
+  const periksa = (teks) => {
+    const salah = [];
+    for (const m of teks.matchAll(/\.key\s*[!=]==?\s*["']([^"']*)["']/g)) if (!BOLEH.has(m[1])) salah.push(`tombol "${m[1]}"`);
+    if (/\.(keyCode|which|charCode)\b/.test(teks)) salah.push("keyCode/which/charCode");
+    if (/\.code\s*[!=]==?\s*["']Key/.test(teks)) salah.push("ev.code Key…");
+    if (/accesskey\s*=/i.test(teks)) salah.push("accesskey");
+    return salah;
+  };
+  const sumber = ["assets/app.js", ...readdirSync(".").filter((f) => f.endsWith(".html"))].map((f) => readFileSync(f, "utf8")).join("\n");
+  const s = periksa(sumber);
+  ok(s.length === 0, `cek 2.1.4: pintasan satu huruf/angka tidak boleh ada (${s.join(", ")})`);
+  ok(periksa(sumber + '\ndocument.addEventListener("keydown", function (e) { if (e.key === "/") cari.focus(); });').length > 0, "uji balik 2.1.4: pintasan \"/\" harus tertangkap");
+  ok(periksa(sumber + '\n<a href="radar.html" accesskey="r">Radar</a>').length > 0, "uji balik 2.1.4: accesskey harus tertangkap");
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);
