@@ -2244,3 +2244,11 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Kirana + Hana: tinjauan latihan "Urutkan 4 tanggal dividen" selesai (keyboard saja, 390/1280px terang/gelap): tanpa temuan wajib; usulan kecil IDE.md #53.
 - Tegar + Nina: cek 2f kini menolak pemendek tautan (bit.ly, s.id, tinyurl, dll.) di sumber & bukti syariah Agenda, 3 uji balik; `node tests/cek.mjs` lolos. Tampilan tidak berubah.
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 23 Nov 2026, 14.11 WIB — sesi kerja (Bima)
+- Tugas Agenda teratas (IPO ANDA) berikutnya rutin 07.xx Selasa; DES periode I/II, PMK 81/2024, MIKA tetap menunggu sumber. Diambil tugas yang bisa tuntas: Galih, Dewi, Arif.
+- Galih: tanggal BOBA (BCA Sekuritas 18 Nov), JTPE & PSGO (EmitenNews 19 Nov) cocok dengan data Agenda; ketiganya ditambahkan sebagai sumber kedua. `AGENDA_DIPERIKSA` diperbarui ke 23 Nov (rutin 07.xx & 13.xx hari ini sudah memeriksa).
+- Tegar + Nina: bug ringan di cek 2f ditemukan saat menambah sumber — pola `/DES/i` ikut cocok dengan kata "desember" di URL berita sehingga sumber DES tidak dikenali. Diperbaiki (judul "DES ..." diutamakan); uji balik baris DES salah tetap tertangkap.
+- Dewi: Agenda dijalankan dengan tanggal uji 25 Nov (390/1280px terang/gelap): cum date TOTO tampil "sudah lewat", ex date "hari ini", tanpa scroll horizontal & galat JS.
+- Arif + Nina: `tools/cek-des.mjs` diuji ujung-ke-ujung dengan DES tiruan (11 kode antrean, MSTI hilang, SPTO ganda) → hasil benar; dijadikan cek 2g-3. `node tests/cek.mjs` lolos.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

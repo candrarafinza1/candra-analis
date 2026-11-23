@@ -595,7 +595,8 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
     if (!x || !/^[A-Z]{4}$/.test(x.kode || "")) return ["kode harus 4 huruf kapital"];
     if (!Number.isInteger(x.desBaris) || x.desBaris < 1) s.push("desBaris wajib (bilangan bulat)");
     if (desAsli.has(x.kode) && desAsli.get(x.kode) !== x.desBaris) s.push(`desBaris beda dengan data/emiten-asli.js (${desAsli.get(x.kode)})`);
-    const des = (x.sumber || []).find((y) => /des-|Daftar-Efek-Syariah|DES/i.test((y && y.url) || "") || /^DES /.test((y && y.judul) || ""));
+    // Tegar + Nina (23 Nov 14.xx): judul "DES ..." diutamakan; pola URL tidak lagi peka huruf agar kata "desember" di URL berita tidak dikira sumber DES.
+    const des = (x.sumber || []).find((y) => /^DES /.test((y && y.judul) || "")) || (x.sumber || []).find((y) => /des-mei|Daftar-Efek-Syariah|\bDES\b/.test((y && y.url) || ""));
     if (!des || !new RegExp(`baris ${x.desBaris}: ${x.kode}\\b`).test(des.judul || "")) s.push("sumber DES yang mengutip baris & kode wajib ada");
     if (!["interim", "final"].includes(x.jenis)) s.push("jenis harus interim/final");
     if (!Number.isInteger(x.tahunBuku) || x.tahunBuku < 2020) s.push("tahunBuku tidak valid");
@@ -8105,6 +8106,34 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
   // Uji balik: alat tidak boleh menulis ke data (hanya membaca & melapor).
   const src = readFileSync("tools/cek-des.mjs", "utf8");
   ok(!/writeFileSync|appendFileSync|createWriteStream/.test(src), "cek-des: alat tidak boleh menulis berkas");
+
+  // 2g-3. Arif + Nina (23 Nov 14.xx): uji ujung-ke-ujung lewat baris perintah dengan DES tiruan berisi
+  // semua kode data kami + 11 kode antrean Agenda (MSTI sengaja dihilangkan, SPTO sengaja ganda)
+  // dan 120 baris pengisi, persis seperti yang akan dijalankan Hana + Fajar saat DES periode II terbit.
+  const fs2 = await import("node:fs"), os2 = await import("node:os"), path2 = await import("node:path");
+  const ctxD = { window: {} }; vm.createContext(ctxD);
+  for (const f of ["data/emiten-asli.js", "data/agenda.js"]) vm.runInContext(readFileSync(f, "utf8"), ctxD);
+  const antrean = ["KMDS", "PORT", "YUPI", "ULTJ", "EAST", "KINO", "TGKA", "SKBM", "POWR", "MSTI", "SPTO"];
+  const semua = [...new Set([...ctxD.window.EMITEN_ASLI.map(e => e.kode), ...ctxD.window.AGENDA_DIVIDEN.map(d => d.kode), ...antrean])].filter(k => k !== "MSTI");
+  const L = ["DAFTAR EFEK SYARIAH (TIRUAN UJI)", "No.  Kode  Nama Efek"]; let n = 0;
+  for (const k of semua) L.push(`  ${++n}   ${k}   PT Uji ${k} Tbk`);
+  for (let i = 0; i < 120; i++) L.push(`  ${++n}   Q${String(i).padStart(3, "0")}   PT Pengisi ${i} Tbk`);
+  L.push(`  ${++n}.  SPTO | PT Uji SPTO Kedua Tbk`);
+  const dir = fs2.mkdtempSync(path2.join(os2.tmpdir(), "cekdes-"));
+  const berkasDes = path2.join(dir, "des-tiruan.txt");
+  fs2.writeFileSync(berkasDes, L.join("\n"));
+  const jalan = spawnSync(process.execPath, ["tools/cek-des.mjs", berkasDes, "--json", "--kode", antrean.join(",")], { encoding: "utf8" });
+  let hasilCli = null; try { hasilCli = JSON.parse(jalan.stdout); } catch {}
+  const stc = Object.fromEntries((hasilCli?.hasil || []).map(h => [h.kode, h]));
+  ok(jalan.status === 0 && hasilCli, "cek-des CLI: berjalan dengan DES tiruan dan mengeluarkan JSON");
+  ok(hasilCli?.jumlahBarisDes === n, "cek-des CLI: semua baris DES tiruan terbaca");
+  ok(antrean.every(k => stc[k]), "cek-des CLI: ke-11 kode antrean Agenda ikut diperiksa");
+  ok(stc.MSTI?.status === "tidak-ditemukan", "cek-des CLI: kode yang tidak ada dilaporkan TIDAK ADA");
+  ok(stc.SPTO?.status === "ganda" && stc.SPTO.baris.length === 2, "cek-des CLI: kode ganda dilaporkan, tidak dipilih sendiri");
+  ok((hasilCli?.hasil || []).filter(h => h.status === "ada").length === semua.length - 1, "cek-des CLI: kode lain semuanya ADA");
+  const tanpaBerkas = spawnSync(process.execPath, ["tools/cek-des.mjs"], { encoding: "utf8" });
+  ok(tanpaBerkas.status === 2, "cek-des CLI: tanpa berkas → keluar dengan kode 2 dan petunjuk pakai");
+  fs2.rmSync(dir, { recursive: true, force: true });
 }
 
 

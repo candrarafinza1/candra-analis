@@ -43,7 +43,7 @@ var DES_2026_I = "https://idx.id/media/nbkfn2sd/des-mei-2026.pdf";
 
 // Tanggal terakhir tim memeriksa sumber Agenda (rutin sesi 07.xx dan 13.xx), "YYYY-MM-DD".
 // Diperbarui setiap pemeriksaan rutin, walau tidak ada data baru. Ditampilkan di agenda.html (Arif + Dewi, 21 Nov 2026).
-window.AGENDA_DIPERIKSA = "2026-11-22";
+window.AGENDA_DIPERIKSA = "2026-11-23";
 
 // IPO: per 19 Nov 2026 belum ada IPO yang sumbernya menyebut sahamnya efek syariah.
 // Dicek Raka & Hana 19 Nov: Andalan Artha Primanusa (ANDA, penawaran umum 24–27 Nov 2026) — prospektus ringkas
@@ -71,6 +71,7 @@ window.AGENDA_DIVIDEN = [
     tanggal: { cum: "2026-11-26", ex: "2026-11-27", recording: "2026-11-30", pembayaran: "2026-12-18" },
     sumber: [
       { judul: "PortalMadura, 19 Nov 2026: BOBA bagikan dividen interim Rp2,31 miliar tahun buku 2026", url: "https://portalmadura.com/boba-bagikan-dividen-interim-rp231-miliar-tahun-buku-2026-cek-jadwal-lengkap-pencairannya-347753" },
+      { judul: "BCA Sekuritas, 18 Nov 2026: BOBA akan bagikan dividen interim 18 Desember 2026", url: "https://bcasekuritas.co.id/latest-news/news/boba-akan-bagikan-dividen-interim-18-desember-2026" },
       { judul: "DES periode I 2026 (KEP-21/D.04/2026) baris 211: BOBA PT Formosa Ingredient Factory Tbk", url: DES_2026_I }
     ] },
   // JTPE — interim 2026 (Raka; Fajar: Kontan 19 Nov; Hana: DES baris 173)
@@ -78,6 +79,7 @@ window.AGENDA_DIVIDEN = [
     tanggal: { cum: "2026-11-27", ex: "2026-11-30", recording: "2026-12-01", pembayaran: "2026-12-17" },
     sumber: [
       { judul: "Kontan, 19 Nov 2026: Jasuindo Tiga (JTPE) bagikan dividen interim Rp10 per saham, simak jadwalnya", url: "https://investasi.kontan.co.id/news/jasuindo-tiga-jtpe-bagikan-dividen-interim-rp-10-per-saham-simak-jadwalnya" },
+      { judul: "EmitenNews, 19 Nov 2026: Jasuindo (JTPE) tebar dividen interim Rp67,73 miliar, distribusi 17 Desember", url: "https://emitennews.com/news/jasuindo-jtpe-tebar-dividen-interim-rp6773m-distribusi-17-desember" },
       { judul: "DES periode I 2026 (KEP-21/D.04/2026) baris 173: JTPE PT Jasuindo Tiga Perkasa Tbk", url: DES_2026_I }
     ] },
   // PSGO — interim 2026 (Raka; Fajar: Kontan 19 Nov; Hana: DES baris 269)
@@ -85,6 +87,7 @@ window.AGENDA_DIVIDEN = [
     tanggal: { cum: "2026-11-27", ex: "2026-11-30", recording: "2026-12-01", pembayaran: "2026-12-18" },
     sumber: [
       { judul: "Kontan, 19 Nov 2026: Palma Serasih (PSGO) tebar dividen interim Rp113,1 miliar, catat jadwalnya", url: "https://investasi.kontan.co.id/news/palma-serasih-psgo-tebar-dividen-interim-rp-1131-miliar-catat-jadwalnya" },
+      { judul: "EmitenNews, 19 Nov 2026: PSGO jadwal dividen Rp113,1 miliar, cum date 27 November", url: "https://emitennews.com/news/psgo-jadwal-dividen-rp1131-miliar-cum-date-27-november" },
       { judul: "DES periode I 2026 (KEP-21/D.04/2026) baris 269: PSGO PT Palma Serasih Tbk", url: DES_2026_I }
     ] }
 ];
