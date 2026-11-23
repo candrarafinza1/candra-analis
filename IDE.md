@@ -1078,3 +1078,10 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Elemen dengan pendengar klik yang tidak bisa difokus: 0. Fitur utama dicoba hanya dengan keyboard (pilihan Radar, tab Peringkat dengan panah, istilah Enter/Esc, kuis Spasi/Enter, Bandingkan, salin tautan, saringan Kabar): semua bekerja. Hasil 0 temuan.
 - Uji balik UJI-JEBAK (Tab ditahan) tertangkap 8 dan UJI-KLIK (kotak klik tanpa fokus) tertangkap 4. Uji coba tambahan: panah tab Peringkat dimatikan sementara → tertangkap di 4 ukuran.
 - Kirana: tinjau. Usul berikutnya: audit pintasan tombol satu huruf (WCAG 2.1.4).
+
+### #55 Pesan salah pertama latihan urut dipecah dua baris (Kirana, 23 Nov 2026, 17.xx WIB) — kecil
+- Masalah: di 390px pesan salah pertama (#54) tampil 7 baris huruf tebal dalam satu blok (37 kata); pemula sulit memisahkan "berapa yang sudah tepat" dari petunjuknya.
+- Ide: jangan memendekkan isi (frasa "di pasar reguler" perlu, kata Hana), tetapi pisahkan: baris pertama tebal "n dari 4 tanggal sudah di tempat yang benar.", lalu petunjuk di baris sendiri dengan huruf biasa. Teks yang dibacakan pembaca layar sama.
+- Acuan: pola umpan balik formulir modern (ringkasan tebal + penjelasan biasa). Tanpa animasi, tanpa biaya, tetap ringan.
+- Dampak bagi pemula: hasil terbaca sekilas, petunjuk tidak terasa seperti teguran.
+- Status: dipilih Bima, dikerjakan Dewi + Arif sesi yang sama; Nina menambah cek 2f-21.

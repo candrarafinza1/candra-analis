@@ -8063,6 +8063,9 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
     if (!jelas.hidden || lihat.hidden || !/Coba lagi/.test(hasil.textContent)) salah.push("salah pertama: penjelasan tetap tertutup, tombol Lihat muncul");
     // IDE.md #54: petunjuk umum + nama tombol berkutip; petunjuk tidak boleh menyebut urutan lengkap (Ex date/Recording date).
     if (!/Petunjuk: urutkan dari tanggal paling awal; cum date adalah hari terakhir membeli/.test(hasil.textContent) || !/\u201cLihat urutan yang benar\u201d\.$/.test(hasil.textContent) || /Ex date|Recording date|pembayaran/i.test(hasil.textContent)) salah.push("salah pertama: petunjuk umum tanpa membuka jawaban");
+    // IDE.md #55: petunjuk di baris sendiri (huruf biasa), jumlah tetap di bagian pertama.
+    const petunjuk = hasil.anak.find((n) => n.className === "latihan-urut-petunjuk");
+    if (!petunjuk || !/^Petunjuk: /.test(petunjuk.textContent) || !/^\d dari 4 tanggal sudah di tempat yang benar\.$/.test(hasil.anak[0]?.textContent || "")) salah.push("salah pertama: petunjuk di baris sendiri");
     periksa.d.click();
     if (jelas.hidden || !lihat.hidden) salah.push("salah kedua: penjelasan dibuka otomatis");
     ulang.d.click();
@@ -8078,6 +8081,7 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
   ok(!s21.length, "latihan urutkan tanggal dividen: " + s21.join("; "));
   ok(!/LATIHAN_URUT|Urutkan 4 tanggal/.test(modulJs), "latihan hanya di web: data/modul.js (dan PDF) tidak berubah");
   ok(/\.latihan-urut-tombol \{ min-height: 44px; min-width: 44px;/.test(readFileSync("assets/styles.css", "utf8")), "tombol latihan minimal 44px");
+  ok(/\.latihan-urut-petunjuk \{ display: block; margin-top: 6px; font-weight: 400; \}/.test(readFileSync("assets/styles.css", "utf8")), "petunjuk latihan di baris sendiri, huruf biasa (IDE.md #55)");
   for (const [rusak, pesan] of [
     [app.replace("        if (i === 0) naik.disabled = true;\n", ""), "tombol ujung"],
     [app.replace("          t.focus();\n", ""), "fokus wajib tetap"],
@@ -8090,6 +8094,7 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
     [app.replace("Petunjuk: urutkan dari tanggal paling awal; ", ""), "petunjuk umum"],
     [app.replace("cum date adalah hari terakhir membeli saham di pasar reguler agar berhak atas dividen.", "urutannya cum date, ex date, recording date, lalu pembayaran."), "petunjuk umum"],
     [app.replace("      periksa.focus();\n", ""), "tombol Lihat"],
+    [app.replace('{ class: "latihan-urut-petunjuk", text: "Petunjuk', '{ text: "Petunjuk'), "baris sendiri"],
     [app.replace("    pasangLatihanUrut(wadah, m);\n", ""), "wajib memanggil"],
     [app.replace("  var LATIHAN_URUT_AWAL = [2, 3, 1, 0];", "  var LATIHAN_URUT_AWAL = [0, 1, 2, 3];"), "tidak boleh sudah benar"],
   ]) ok(rusak !== app && ujiLatihan(rusak).some((x) => x.includes(pesan)), `uji balik latihan urut: "${pesan}" harus tertangkap`);

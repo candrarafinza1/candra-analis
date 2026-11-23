@@ -435,6 +435,7 @@ tbody tr:hover { background: var(--hover-baris); }
 .latihan-urut-tombol { min-height: 44px; min-width: 44px; padding: 8px 12px; background: transparent; border-color: var(--aksen); color: var(--aksen); }
 .latihan-urut-tombol:disabled { opacity: .45; cursor: not-allowed; }
 .latihan-urut-jelas { margin: 12px 0 0; padding-left: 1.4em; }
+.latihan-urut-petunjuk { display: block; margin-top: 6px; font-weight: 400; }
 .latihan-urut-jelas[hidden] { display: none; }
 
 /* Judul halaman dalam */

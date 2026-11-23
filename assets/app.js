@@ -374,7 +374,12 @@
       }
       salahKe++;
       if (salahKe === 1) {
-        hasil.textContent = tepat + " dari " + urut.length + " tanggal sudah di tempat yang benar. Petunjuk: urutkan dari tanggal paling awal; cum date adalah hari terakhir membeli saham di pasar reguler agar berhak atas dividen. Coba lagi, atau pilih \u201cLihat urutan yang benar\u201d.";
+        // IDE.md #55 (Kirana \u2192 Dewi + Arif, 23 Nov 17.xx): di 390px pesan ini 7 baris tebal; jumlah tetap tebal,
+        // petunjuk dipisah ke baris sendiri dengan huruf biasa agar mudah dibaca. Teks yang diumumkan tidak berubah.
+        hasil.textContent = "";
+        hasil.appendChild(el("span", { text: tepat + " dari " + urut.length + " tanggal sudah di tempat yang benar." }));
+        hasil.appendChild(document.createTextNode(" "));
+        hasil.appendChild(el("span", { class: "latihan-urut-petunjuk", text: "Petunjuk: urutkan dari tanggal paling awal; cum date adalah hari terakhir membeli saham di pasar reguler agar berhak atas dividen. Coba lagi, atau pilih \u201cLihat urutan yang benar\u201d." }));
         lihat.hidden = false;
       } else {
         hasil.textContent = tepat + " dari " + urut.length + " tanggal sudah di tempat yang benar. Urutan yang benar kini dibuka di bawah.";
