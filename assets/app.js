@@ -358,16 +358,37 @@
     }
     var periksa = el("button", { type: "button", class: "tombol tombol-gelap", text: "Periksa urutan" });
     var ulang = el("button", { type: "button", class: "tombol kuis-ulang", text: "Ulangi latihan" });
+    var lihat = el("button", { type: "button", class: "tombol kuis-ulang", text: "Lihat urutan yang benar", hidden: "" });
     var jelas = el("ol", { class: "latihan-urut-jelas", hidden: "" });
+    // IDE.md #53 (Arif, 23 Nov 2026): percobaan salah pertama hanya memberi petunjuk; penjelasan
+    // dibuka pada percobaan salah kedua, saat urutan benar, atau lewat tombol "Lihat urutan yang benar".
+    var salahKe = 0;
+    function bukaJelas() { jelas.hidden = false; lihat.hidden = true; }
     periksa.addEventListener("click", function () {
       var tepat = urut.filter(function (k, i) { return k === i; }).length;
-      hasil.textContent = tepat === urut.length
-        ? "Urutan sudah benar: " + LATIHAN_URUT.map(function (x) { return x.nama; }).join(", lalu ") + "."
-        : tepat + " dari " + urut.length + " tanggal sudah di tempat yang benar. Lihat urutan yang benar di bawah, lalu coba lagi.";
-      jelas.hidden = false;
+      if (tepat === urut.length) {
+        hasil.textContent = "Urutan sudah benar: " + LATIHAN_URUT.map(function (x) { return x.nama; }).join(", lalu ") + ".";
+        bukaJelas();
+        return;
+      }
+      salahKe++;
+      if (salahKe === 1) {
+        hasil.textContent = tepat + " dari " + urut.length + " tanggal sudah di tempat yang benar. Coba lagi, atau pilih Lihat urutan yang benar.";
+        lihat.hidden = false;
+      } else {
+        hasil.textContent = tepat + " dari " + urut.length + " tanggal sudah di tempat yang benar. Urutan yang benar kini dibuka di bawah.";
+        bukaJelas();
+      }
+    });
+    lihat.addEventListener("click", function () {
+      bukaJelas();
+      hasil.textContent = "Urutan yang benar dibuka di bawah.";
+      periksa.focus();
     });
     ulang.addEventListener("click", function () {
       urut = LATIHAN_URUT_AWAL.slice();
+      salahKe = 0;
+      lihat.hidden = true;
       jelas.hidden = true;
       gambar();
       hasil.textContent = "Latihan diulang dari awal.";
@@ -378,7 +399,7 @@
     });
     gambar();
     kotak.appendChild(daftar);
-    kotak.appendChild(el("div", { class: "kuis-aksi" }, [periksa, ulang]));
+    kotak.appendChild(el("div", { class: "kuis-aksi" }, [periksa, lihat, ulang]));
     kotak.appendChild(hasil);
     kotak.appendChild(jelas);
     return kotak;

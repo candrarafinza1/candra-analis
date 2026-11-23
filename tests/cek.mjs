@@ -8057,6 +8057,18 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
     if (urutan().join() !== awal.join() || !jelas.hidden) salah.push("Ulangi wajib kembali ke urutan awal");
     periksa.d.click();
     if (!/^\d dari 4 tanggal sudah di tempat yang benar\./.test(hasil.textContent)) salah.push("Periksa (salah) wajib menyebut jumlah yang benar");
+    // IDE.md #53: salah pertama → petunjuk saja + tombol "Lihat urutan yang benar"; salah kedua → penjelasan dibuka.
+    const lihat = semua.find((n) => n.tag === "button" && n.textContent === "Lihat urutan yang benar");
+    if (!lihat) return [...salah, "tombol Lihat urutan yang benar wajib ada"];
+    if (!jelas.hidden || lihat.hidden || !/Coba lagi/.test(hasil.textContent)) salah.push("salah pertama: penjelasan tetap tertutup, tombol Lihat muncul");
+    periksa.d.click();
+    if (jelas.hidden || !lihat.hidden) salah.push("salah kedua: penjelasan dibuka otomatis");
+    ulang.d.click();
+    if (!jelas.hidden || !lihat.hidden) salah.push("Ulangi wajib menutup penjelasan & tombol Lihat");
+    periksa.d.click();
+    if (!jelas.hidden) salah.push("sesudah Ulangi, hitungan salah mulai lagi dari nol");
+    lihat.d.click();
+    if (jelas.hidden || !lihat.hidden || fokus !== periksa || !/dibuka/.test(hasil.textContent)) salah.push("tombol Lihat membuka penjelasan, fokus ke Periksa, diumumkan");
     if (/buruan|pasti untung|pasti naik|rekomendasi beli|segera beli/i.test(kode)) salah.push("kata ajakan dilarang");
     return salah;
   };
@@ -8069,7 +8081,11 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
     [app.replace("          t.focus();\n", ""), "fokus wajib tetap"],
     [app.replace('      hasil.textContent = nama + " kini di urutan "', '      hasil.textContent = "" + " kini di urutan "'), "diumumkan"],
     [app.replace("      urut = LATIHAN_URUT_AWAL.slice();\n", ""), "Ulangi wajib"],
-    [app.replace("      jelas.hidden = false;\n", ""), "Periksa (benar)"],
+    [app.replace("    function bukaJelas() { jelas.hidden = false; lihat.hidden = true; }", "    function bukaJelas() { lihat.hidden = true; }"), "Periksa (benar)"],
+    [app.replace("      if (salahKe === 1) {", "      if (false) {"), "salah pertama"],
+    [app.replace("        bukaJelas();\n      }\n    });", "      }\n    });"), "salah kedua"],
+    [app.replace("      salahKe = 0;\n", ""), "hitungan salah mulai lagi"],
+    [app.replace("      periksa.focus();\n", ""), "tombol Lihat"],
     [app.replace("    pasangLatihanUrut(wadah, m);\n", ""), "wajib memanggil"],
     [app.replace("  var LATIHAN_URUT_AWAL = [2, 3, 1, 0];", "  var LATIHAN_URUT_AWAL = [0, 1, 2, 3];"), "tidak boleh sudah benar"],
   ]) ok(rusak !== app && ujiLatihan(rusak).some((x) => x.includes(pesan)), `uji balik latihan urut: "${pesan}" harus tertangkap`);

@@ -2252,3 +2252,11 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Dewi: Agenda dijalankan dengan tanggal uji 25 Nov (390/1280px terang/gelap): cum date TOTO tampil "sudah lewat", ex date "hari ini", tanpa scroll horizontal & galat JS.
 - Arif + Nina: `tools/cek-des.mjs` diuji ujung-ke-ujung dengan DES tiruan (11 kode antrean, MSTI hilang, SPTO ganda) → hasil benar; dijadikan cek 2g-3. `node tests/cek.mjs` lolos.
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 23 Nov 2026, 15.11 WIB — sesi kerja (Bima)
+- Tugas Agenda teratas (IPO ANDA) berikutnya rutin 07.xx Selasa; DES periode I/II, PMK 81/2024, MIKA tetap menunggu sumber. Bima memilih usulan IDE.md #53 (kecil, konten belajar).
+- Arif: #53 selesai — latihan "Urutkan 4 tanggal dividen" kini memberi satu kesempatan lagi: salah pertama hanya menyebut berapa yang sudah tepat + tombol "Lihat urutan yang benar"; penjelasan dibuka otomatis pada salah kedua atau saat benar. Tanpa skor, tanpa animasi, pesan lewat aria-live.
+- Nina: cek 2f-21 diperluas + 5 uji balik; `node tests/cek.mjs` lolos. Dicek 390/1280px terang/gelap: tanpa scroll horizontal & galat JS. `data/modul.js` & PDF tidak berubah.
+- Tugas baru: Kirana + Laras meninjau alur baru dengan keyboard.
+- Catatan teknis: salinan lokal `main` masih riwayat lama; kerja tetap di atas `origin/main`.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

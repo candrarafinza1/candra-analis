@@ -727,7 +727,7 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Tren: umpan balik bertahap di aplikasi belajar (petunjuk dulu, jawaban kemudian).
 - Dampak bagi pemula: lebih banyak berpikir sendiri, tetap tidak dinilai dan tidak disimpan.
 - Batasan: tanpa skor, tanpa animasi, pesan tetap lewat aria-live, bisa keyboard.
-- Usaha: kecil (Arif; Nina memperbarui cek 2f-21). Belum dipilih.
+- Usaha: kecil (Arif; Nina memperbarui cek 2f-21). **Dipilih Bima 23 Nov 15.xx, selesai sesi yang sama** (Arif + Nina).
 
 ### Tinjauan Kirana & Hana, 23 Nov 13.xx: latihan "Urutkan 4 tanggal dividen" (#52)
 - Kirana, keyboard saja: Tab sampai ke tombol pertama latihan (±41 langkah dari atas halaman), Enter/Spasi memindah baris, fokus tetap di baris yang dipindah, tombol ujung nonaktif dan dilewati. Garis fokus kuning terlihat jelas di mode gelap.
