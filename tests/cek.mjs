@@ -7954,5 +7954,25 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
     "styles.css: kolom Sumber tabel dividen di HP harus diberi lebar ±36%");
 }
 
+// 2g-2. Nina + Arif (23 Nov 07.xx): alat tools/cek-kedaluwarsa.mjs untuk rutin Agenda (hapus yang lewat > 14 hari).
+// Diuji dengan entri tiruan (bukan data asli) + uji balik batas 14 hari.
+{
+  const { cariKedaluwarsa, tanggalAkhir } = await import("../tools/cek-kedaluwarsa.mjs");
+  const div = [
+    { kode: "AAAA", tanggal: { cum: "2026-11-01", ex: "2026-11-02", recording: "2026-11-03", pembayaran: "2026-11-08" } },
+    { kode: "BBBB", tanggal: { cum: "2026-11-01", ex: "2026-11-02", recording: "2026-11-03", pembayaran: "2026-11-09" } },
+    { kode: "CCCC", tanggal: { cum: "2026-11-01", ex: null, recording: null, pembayaran: null } },
+    { kode: "DDDD", tanggal: {} },
+  ];
+  const ipo = [{ nama: "PT Contoh", kode: null, tanggal: { penawaranUmum: { mulai: "2026-10-01", selesai: "2026-10-03" }, penjatahan: "2026-10-03", pencatatan: "2026-10-07" } }];
+  ok(tanggalAkhir(div[0]) === "2026-11-08" && tanggalAkhir(ipo[0]) === "2026-10-07" && tanggalAkhir(div[3]) === null, "cek-kedaluwarsa: tanggal terakhir terbaca");
+  const h = cariKedaluwarsa(ipo, div, "2026-11-23").map(x => x.nama).join();
+  ok(h === "PT Contoh,AAAA,CCCC", `cek-kedaluwarsa: yang lewat > 14 hari = PT Contoh, AAAA, CCCC (dapat: ${h})`);
+  // Uji balik: tepat 14 hari (BBBB) belum dihapus; batas diubah ke 13 → BBBB tertangkap.
+  ok(cariKedaluwarsa([], div, "2026-11-23", 13).some(x => x.nama === "BBBB"), "uji balik cek-kedaluwarsa: batas 13 hari harus menangkap BBBB");
+  const src = readFileSync("tools/cek-kedaluwarsa.mjs", "utf8");
+  ok(!/writeFileSync|appendFileSync|createWriteStream/.test(src), "cek-kedaluwarsa: alat tidak boleh menulis berkas");
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);

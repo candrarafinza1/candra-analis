@@ -2206,3 +2206,11 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar + Galih: MIKA Jan–Sep 2026 dicari lagi; Kontan Insight yang terbuka ternyata 18 Nov 2025 (data 2025), Bisnis 3 Nov 2026 tetap gagal dibuka → belum dimasukkan, tetap 29 dari 32.
 - Nina: `node tests/cek.mjs` lolos (11 halaman, 8 pelajaran, 32 emiten). Tampilan tidak berubah.
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 23 Nov 2026, 07.08 WIB — sesi kerja pagi (Bima)
+- Laporan masuk kerja pagi dikirim ke Rafinza (12 karyawan, tugas per orang). Tugas pendukung baru dicatat untuk Arif, Dewi, Tegar, Kirana.
+- Agenda: +0 IPO, +0 dividen, −0 kedaluwarsa. Raka + Hana: IPO ANDA (efektif hari ini, penawaran umum 24–27 Nov) dicek di StockWatch, Infobanknews, Investortrust: tidak menyebut status syariah → tetap tidak dicatat. Pada IPO Juli 2026 status syariah baru diumumkan setelah pencatatan, jadi bukti ANDA kemungkinan baru ada setelah 1 Des. Pengumuman dividen baru yang muncul (BBCA) bukan emiten syariah.
+- Hana + Fajar: DES periode I 2026 tetap macet; salinan di KSEI dicoba, belum ketemu berkas 2026.
+- Arif + Nina: alat baru `tools/cek-kedaluwarsa.mjs` (mendaftar entri Agenda yang lewat >14 hari, tidak mengubah berkas) + cek 2g-2 dengan uji balik. Per hari ini 0 entri kedaluwarsa.
+- Tegar: pindai rahasia bersih. Nina: `node tests/cek.mjs` lolos. Tampilan tidak berubah.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
