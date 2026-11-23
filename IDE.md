@@ -720,6 +720,20 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Usaha: sedang (Arif + Laras; Nina menambah cek).
 - Status: dipilih Bima 23 Nov 09.xx, masuk BACKLOG.md. **Selesai 23 Nov 10.xx** (Arif + Laras + Nina); menunggu tinjauan Kirana.
 
+### 53. Latihan urutkan tanggal: beri satu kesempatan lagi sebelum jawaban dibuka
+- **Usulan kecil dari tinjauan #52** — konten belajar, usaha kecil
+- Masalah: saat urutan belum benar, penjelasan urutan benar langsung terbuka, jadi pemula tidak sempat mencoba sendiri lagi.
+- Ide: pada percobaan salah pertama, tampilkan hanya "n dari 4 sudah tepat, coba lagi" dan tombol "Lihat urutan yang benar"; penjelasan dibuka otomatis pada percobaan salah kedua atau saat benar.
+- Tren: umpan balik bertahap di aplikasi belajar (petunjuk dulu, jawaban kemudian).
+- Dampak bagi pemula: lebih banyak berpikir sendiri, tetap tidak dinilai dan tidak disimpan.
+- Batasan: tanpa skor, tanpa animasi, pesan tetap lewat aria-live, bisa keyboard.
+- Usaha: kecil (Arif; Nina memperbarui cek 2f-21). Belum dipilih.
+
+### Tinjauan Kirana & Hana, 23 Nov 13.xx: latihan "Urutkan 4 tanggal dividen" (#52)
+- Kirana, keyboard saja: Tab sampai ke tombol pertama latihan (±41 langkah dari atas halaman), Enter/Spasi memindah baris, fokus tetap di baris yang dipindah, tombol ujung nonaktif dan dilewati. Garis fokus kuning terlihat jelas di mode gelap.
+- 390px & 1280px terang/gelap: tanpa scroll horizontal & galat JS; tombol Naik/Turun ≥44px; setelah Periksa, kotak 1.261px di 390px karena penjelasan terbuka (wajar).
+- Hana: 4 penjelasan sama dengan daftar "Membaca jadwal dividen" di pelajaran (recording date T+2, dividen masuk RDN); tanpa ajakan. Tidak ada perbaikan wajib; satu usulan kecil di #53.
+
 ### Tinjauan Kirana, 22 Nov 13.xx: kotak hitung lot
 - 390px gelap & 1280px terang: kotak lipat tepat di bawah judul "Dividen saham syariah", isian 48px berlabel "Jumlah lot", hasil per kode turun baris rapi, catatan di bawah terbaca. Pilihan "IPO" menyembunyikan kotak. Isian 0 → pesan salah isian + aria-invalid. Tanpa scroll horizontal & galat JS. Tidak ada perbaikan.
 

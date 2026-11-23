@@ -2236,3 +2236,11 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Nina: cek 2f-21 (DOM tiruan menjalankan latihan) + 7 uji balik; DOM tiruan uji urutan judul ditambah `querySelectorAll`/`insertBefore`. `node tests/cek.mjs` lolos. Dicek 390/1280px terang/gelap: tanpa scroll horizontal & galat JS; nomor urut dibuat dengan penghitung CSS agar terlihat.
 - Bima: tugas tinjauan latihan dicatat untuk Kirana + Hana.
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 23 Nov 2026, 13.09 WIB — sesi kerja siang (Bima)
+- Laporan masuk kerja siang dikirim ke Rafinza (12 karyawan, tugas per orang). Tugas pendukung baru dicatat untuk Galih, Dewi, Arif, Tegar.
+- Agenda (rutin 13.xx): +0 IPO, +0 dividen, −0 kedaluwarsa. Raka + Hana: IPO ANDA dicari lagi (10 sumber), tetap tidak menyebut status syariah → tidak dicatat. Raka: calon dividen baru SPTO (Rp35, cum reguler 24 Nov; Kontan 18 Nov) masuk antrean menunggu baris DES bersama KMDS dkk. Hana + Fajar: lampiran DES periode I di ojk.go.id dicoba lagi, izin unduh tidak terjawab; DES periode II 2026 belum terbit.
+- Galih: tanggal TOTO & DGWG di Agenda cocok dengan Kontan 18 Nov.
+- Kirana + Hana: tinjauan latihan "Urutkan 4 tanggal dividen" selesai (keyboard saja, 390/1280px terang/gelap): tanpa temuan wajib; usulan kecil IDE.md #53.
+- Tegar + Nina: cek 2f kini menolak pemendek tautan (bit.ly, s.id, tinyurl, dll.) di sumber & bukti syariah Agenda, 3 uji balik; `node tests/cek.mjs` lolos. Tampilan tidak berubah.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

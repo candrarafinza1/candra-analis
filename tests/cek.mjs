@@ -564,7 +564,9 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
   const { AGENDA_IPO, AGENDA_DIVIDEN } = ctxA.window;
   const ajakanAgenda = /\b(wajib beli|pasti (naik|untung|cuan)|buruan|jangan sampai ketinggalan|dijamin untung|rekomendasi (beli|jual)|layak (dibeli|dikoleksi)|prospek cerah|saatnya (beli|masuk|jual)|target harga|cuan)\b/i;
   const tgl = (t) => t === null || (typeof t === "string" && /^\d{4}-\d{2}-\d{2}$/.test(t) && !isNaN(Date.parse(t)) && new Date(t).toISOString().slice(0, 10) === t);
-  const sumberOk = (s) => Array.isArray(s) && s.length > 0 && s.every((x) => x && typeof x.judul === "string" && x.judul.length > 5 && /^https:\/\//.test(x.url || ""));
+  // Tegar (23 Nov 13.xx): sumber harus alamat asli, bukan pemendek tautan (tujuannya tidak terlihat & bisa diganti diam-diam).
+  const pemendek = /^https:\/\/(www\.)?(bit\.ly|s\.id|tinyurl\.com|t\.co|goo\.gl|cutt\.ly|shorturl\.at|lnkd\.in|rebrand\.ly|ow\.ly|is\.gd|v\.gd|t\.ly)(\/|$)/i;
+  const sumberOk = (s) => Array.isArray(s) && s.length > 0 && s.every((x) => x && typeof x.judul === "string" && x.judul.length > 5 && /^https:\/\//.test(x.url || "") && !pemendek.test(x.url));
   const urut = (...t) => { const a = t.filter(Boolean); return a.every((x, i) => i === 0 || a[i - 1] <= x); };
   const teksSemua = (o) => JSON.stringify(o);
   const hariIniA = new Date(Date.now() + 7 * 3600e3).toISOString().slice(0, 10);
@@ -575,7 +577,7 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
     const s = [];
     if (!x || typeof x.nama !== "string" || !x.nama) return ["nama wajib"];
     if (!(x.kode === null || /^[A-Z]{4}$/.test(x.kode))) s.push("kode harus 4 huruf kapital atau null");
-    if (!x.buktiSyariah || !x.buktiSyariah.judul || !/^https:\/\//.test(x.buktiSyariah.url || "")) s.push("buktiSyariah (judul + https) wajib");
+    if (!x.buktiSyariah || !x.buktiSyariah.judul || !/^https:\/\//.test(x.buktiSyariah.url || "") || pemendek.test(x.buktiSyariah.url)) s.push("buktiSyariah (judul + https) wajib");
     const t = x.tanggal || {};
     const pa = t.penawaranAwal || {}, pu = t.penawaranUmum || {};
     for (const v of [pa.mulai, pa.selesai, pu.mulai, pu.selesai, t.penjatahan, t.pencatatan]) if (v === undefined || !tgl(v)) s.push(`tanggal tidak valid: ${v}`);
@@ -631,6 +633,8 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
     [{ ...baikDiv, tanggal: { ...baikDiv.tanggal, cum: "2026-13-01" } }, "tanggal.cum"],
     [{ ...baikDiv, tanggal: { cum: "2026-11-27", ex: "2026-11-26", recording: null, pembayaran: null } }, "urutan"],
     [{ ...baikDiv, sumber: [{ judul: "Berita contoh", url: "http://contoh.id" }, baikDiv.sumber[1]] }, "https"],
+    [{ ...baikDiv, sumber: [{ judul: "Berita contoh", url: "https://bit.ly/abc123" }, baikDiv.sumber[1]] }, "https"],
+    [{ ...baikDiv, sumber: [{ judul: "Berita contoh", url: "https://s.id/dividen" }, baikDiv.sumber[1]] }, "https"],
     [{ ...baikDiv, catatan: "Buruan beli sebelum cum date" }, "ajakan"],
     [{ ...baikDiv, tanggal: { cum: "2020-01-02", ex: "2020-01-03", recording: null, pembayaran: null } }, "60 hari"],
     [{ ...baikDiv, kode: "TLKM", desBaris: 5, sumber: [baikDiv.sumber[0], { judul: "DES periode I 2026 baris 5: TLKM", url: baikDiv.sumber[1].url }] }, "emiten-asli"],
@@ -642,6 +646,7 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
   ok(salahIpo(baikIpo).length === 0, `uji balik agenda: contoh IPO benar ditolak (${salahIpo(baikIpo).join("; ")})`);
   const rusakIpo = [
     [{ ...baikIpo, buktiSyariah: undefined }, "buktiSyariah"],
+    [{ ...baikIpo, buktiSyariah: { judul: "Prospektus", url: "https://tinyurl.com/ipo-x" } }, "buktiSyariah"],
     [{ ...baikIpo, harga: { kisaranBawah: 150, kisaranAtas: 120, final: null } }, "terbalik"],
     [{ ...baikIpo, nama: "IPO pasti untung Tbk" }, "ajakan"],
     [{ ...baikIpo, tanggal: { ...baikIpo.tanggal, penjatahan: "2000-01-01" } }, "urutan"],
