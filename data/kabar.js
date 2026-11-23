@@ -11,9 +11,9 @@
 window.KABAR_JENIS = ["Laporan keuangan", "Pembelian kembali saham", "Dividen", "Rapat umum pemegang saham", "Aksi korporasi lain"];
 
 window.KABAR = [
-  // Laporan 9 bulan KLBF — Investortrust, 13 Nov 2026; angka sama di ringkasan Quartr 30 Okt 2026 (Raka, ditinjau Hana)
+  // Laporan 9 bulan KLBF — Investortrust, 13 Nov 2026; angka sama di ringkasan Quartr 30 Okt 2026 (Raka, ditinjau Hana); istilah "diatribusikan" dari Quartr (Sari + Hana, 23 Nov 20.xx)
   { kode: "KLBF", tanggal: "2026-11-13", jenis: "Laporan keuangan",
-    ringkas: "Kalbe Farma mencatat laba bersih Rp2,74 triliun pada Januari–September 2026, tumbuh 4%. Pada Januari–September 2025 laba yang diatribusikan kepada pemilik entitas induk Rp2,63 triliun (BCA Sekuritas, 27 Okt 2025).",
+    ringkas: "Laporan Januari–September 2026 terbit. Laba yang diatribusikan kepada pemilik entitas induk Rp2,74 triliun, tumbuh 4% dari Rp2,63 triliun pada periode yang sama 2025 (BCA Sekuritas, 27 Okt 2025).",
     sumber: { judul: "Investortrust, 13 Nov 2026: Prospek dan target harga saham Kalbe (KLBF) direvisi naik, intip katalis ini", url: "https://investortrust.id/market/122429/prospek-dan-target-harga-saham-kalbe-klbf-direvisi-naik-intip-katalis-ini" } },
   // Laporan 9 bulan MBMA — Investor Daily, 20 Nov 2026; angka sama di Investortrust 21 Nov 2026 (Raka, ditinjau Hana)
   { kode: "MBMA", tanggal: "2026-11-20", jenis: "Laporan keuangan",
@@ -31,9 +31,9 @@ window.KABAR = [
   { kode: "HRUM", tanggal: "2026-11-06", jenis: "Laporan keuangan",
     ringkas: "Harum Energy mencatat laba tahun berjalan yang diatribusikan kepada pemilik entitas induk US$70,74 juta pada Januari–September 2026, naik 89,63% dari US$37,31 juta pada periode yang sama 2025.",
     sumber: { judul: "Kontan Insight, 6 Nov 2026: Bedah prospek HRUM: lonjakan laba, beban sulfur, tekanan MHP", url: "https://insight.kontan.co.id/news/bedah-prospek-hrum-lonjakan-laba-beban-sulfur-tekanan-mhp-dan-rekomendasi-saham" } },
-  // Laporan 9 bulan ITMG — Fortune IDN, 11 Nov 2026 (Raka, ditinjau Hana)
+  // Laporan 9 bulan ITMG — Fortune IDN, 11 Nov 2026 (Raka, ditinjau Hana); istilah "diatribusikan" dari IDX Channel 12 Nov 2026: atribusi US$163 juta, laba periode berjalan US$168 juta (Sari + Hana, 23 Nov 20.xx)
   { kode: "ITMG", tanggal: "2026-11-11", jenis: "Laporan keuangan",
-    ringkas: "Indo Tambangraya Megah merilis laporan Januari–September 2026: laba bersih US$162,93 juta, naik dari US$130,59 juta pada periode yang sama 2025. IDX Channel menulis pendapatan US$1,60 miliar, naik 17%.",
+    ringkas: "Laporan Januari–September 2026 terbit. Laba yang diatribusikan kepada pemilik entitas induk US$162,93 juta, naik dari US$130,59 juta pada periode yang sama 2025. IDX Channel menulis pendapatan US$1,60 miliar, naik 17%.",
     sumber: { judul: "Fortune IDN, 11 Nov 2026: Produksi dan harga batu bara dongkrak laba ITMG 24,7% hingga Q3 2026", url: "https://www.fortuneidn.com/market/produksi-dan-harga-batu-bara-dongkrak-laba-itmg-24-7-hingga-q3-2026-00-3dhnm-h3zhhy" } },
   // Laporan 9 bulan AADI — depok24jam, 2 Nov 2026
   { kode: "AADI", tanggal: "2026-11-02", jenis: "Laporan keuangan",
