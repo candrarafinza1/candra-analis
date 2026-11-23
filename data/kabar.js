@@ -29,7 +29,7 @@ window.KABAR = [
     sumber: { judul: "EmitenNews, 18 Nov 2026: EXCL catat perbaikan kinerja, pendapatan Q3 2026 tembus Rp35,7 triliun", url: "https://emitennews.com/news/excl-catat-perbaikan-kinerja-pendapatan-q3-2026-tembus-rp357-triliun" } },
   // Laporan 9 bulan HRUM — Kontan, 6 Nov 2026 (Raka, ditinjau Hana)
   { kode: "HRUM", tanggal: "2026-11-06", jenis: "Laporan keuangan",
-    ringkas: "Harum Energy mencatat laba tahun berjalan yang diatribusikan kepada pemilik entitas induk US$ 70,74 juta pada Januari–September 2026, naik 89,63% dari US$ 37,31 juta pada periode yang sama 2025.",
+    ringkas: "Harum Energy mencatat laba tahun berjalan yang diatribusikan kepada pemilik entitas induk US$70,74 juta pada Januari–September 2026, naik 89,63% dari US$37,31 juta pada periode yang sama 2025.",
     sumber: { judul: "Kontan Insight, 6 Nov 2026: Bedah prospek HRUM: lonjakan laba, beban sulfur, tekanan MHP", url: "https://insight.kontan.co.id/news/bedah-prospek-hrum-lonjakan-laba-beban-sulfur-tekanan-mhp-dan-rekomendasi-saham" } },
   // Laporan 9 bulan ITMG — Fortune IDN, 11 Nov 2026 (Raka, ditinjau Hana)
   { kode: "ITMG", tanggal: "2026-11-11", jenis: "Laporan keuangan",

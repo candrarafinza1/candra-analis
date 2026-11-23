@@ -494,6 +494,7 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
     if (!(KABAR_JENIS || []).includes(k.jenis)) s.push("jenis tidak dikenal");
     if (typeof k.ringkas !== "string" || k.ringkas.length < 20 || k.ringkas.length > 260) s.push("ringkas harus 20–260 karakter");
     if (ajakan.test(k.ringkas || "")) s.push("ringkas memuat kalimat ajakan");
+    if (/US\$\s+\d/.test(k.ringkas || "")) s.push("tulis US$ menempel pada angka (US$70,74), seperti Metodologi");
     if (!k.sumber || !k.sumber.judul || !/^https:\/\//.test(k.sumber.url || "")) s.push("sumber wajib judul + https");
     return s;
   };
