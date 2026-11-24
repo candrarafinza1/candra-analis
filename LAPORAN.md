@@ -2324,3 +2324,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - AADI ditahan: final Rp463,32 (BCA Sekuritas) vs Rp453 (EmitenNews, kurs asumsi), interim Rp538 hanya satu sumber.
 - Nina: `node tests/cek.mjs` lolos; tabel "Dividen per saham" profil MDKA dicek 390/1280px tanpa scroll horizontal & galat JS. Tegar: hanya data, tanpa rahasia.
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 24 Nov 2026, 13.08 WIB — sesi kerja (Bima)
+- Laporan masuk kerja siang dikirim ke Rafinza (12 karyawan, tugas per orang; cek lolos).
+- Raka + Hana + Fajar (rutin Agenda 13.xx): +0 IPO, +0 dividen, −0 kedaluwarsa. ANDA & BUAT: 10+ sumber dicek lagi, tidak ada yang menyebut status syariah, tidak ada pengumuman OJK → tidak dicatat. Jadwal 5 dividen di Agenda (TOTO, DGWG, BOBA, JTPE, PSGO) dicocokkan dengan Receh.in 23 Nov: sama semua. Calon baru BFIN (interim Rp35, cum 30 Nov) masuk daftar tunggu cek DES. DES periode II 2026 belum terbit di OJK.
+- Fajar + Hana: TPIA dicari untuk DPS tahun buku 2025: interim Rp3,8427 (BCA Sekuritas & CNBC 31 Okt 2025) + final Rp6,07341 (Bareksa 20 Mei 2026; IDX Channel "Rp6,07"). Sempat diisi Rp9,92, lalu dibatalkan sebelum commit: tidak ada sumber yang menulis angka jumlahnya, padahal tabel profil berlabel "seperti ditulis sumber". Bima menetapkan aturan baru (rincian interim + final boleh dijumlah dengan label "dihitung tim"), dicatat sebagai tugas Arif + Fajar + Hana + Nina. Tetap 24 dari 32.
+- Nina: `node tests/cek.mjs` lolos; profil TPIA dicek 390/1280px tanpa scroll horizontal & galat JS (saat uji). Tegar: hanya teks backlog/laporan, tanpa rahasia.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
