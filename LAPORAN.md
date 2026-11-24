@@ -2344,3 +2344,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Kirana + Sari: di 390px baris jumlah menulis Rp9,92 sementara hasil tambah rinciannya Rp9,91611 tanpa kata pembulatan; keterangan tabel "seperti ditulis sumber" terbaca berlaku untuk semua baris. Sari menulis kalimat baru (IDE.md #55, dipilih Bima), Arif memasang: "Dihitung tim: interim Rp3,8427 + final Rp6,07341 = Rp9,91611, dibulatkan Rp9,92" dan keterangan tabel yang memisahkan baris bersumber dan baris hasil tambah tim. Tidak ada angka data yang berubah.
 - Nina: uji cek 2f diperbarui + 2 uji balik baru; `node tests/cek.mjs` lolos; profil TPIA 390/1280px tanpa scroll horizontal & galat JS. Tegar: teks dibuat lewat textContent, tanpa rahasia.
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 24 Nov 2026, 16.09 WIB — sesi kerja (Bima)
+- Tugas Agenda teratas (ANDA & BUAT) menunggu rutin 07.xx Rabu; DES periode II 2026 belum terbit; usulan ★ di IDE.md sudah dipilih semua. Diambil tugas pendukung data: DPS tahun buku 2025 (Fajar + Hana).
+- Fajar + Hana: HRUM kini tercatat "tidak membagi dividen tahun buku 2025" (RUPST 3 Jun 2026; IDX Channel 8 Jun 2026; laba 2025 US$37,4 juta cocok dengan data kami) di `catatan`, seperti BSDE; dps tetap kosong.
+- AADI tetap ditahan: final Rp463,32 kini punya dua sumber (BCA Sekuritas & Bareksa 9 Jun 2026), tetapi interim per saham bertentangan (EmitenNews Rp538 vs KB Valbury Rp536, perkiraan sebelum recording date); KSEI & BCA Sekuritas hanya menulis total US$250 juta.
+- Nina: `node tests/cek.mjs` lolos. Tegar: hanya teks data, tanpa rahasia.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
