@@ -2364,3 +2364,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar + Hana: ITMG kini punya DPS tahun buku 2025 Rp1.730 (dihitung tim) = interim Rp738 (BCA Sekuritas & Investortrust 5 Nov 2025) + final Rp992 (surat resmi KSEI 29 Apr 2026 & IDX Channel 29 Apr 2026). Selisih lama antarsumber ternyata karena Bareksa memakai perkiraan kurs (Rp978); surat KSEI menetapkan Rp992. Kini 27 dari 32 emiten punya DPS. Petunjuk baru untuk AADI: cari surat kurs tengah dividen di KSEI.
 - Nina: `node tests/cek.mjs` lolos; profil ITMG dicek 390/1280px: tabel 3 baris (Jumlah, Interim, Final) rapi, tanpa scroll horizontal & galat JS. Tegar: hanya data, tanpa rahasia. Yoga: push ke main.
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 24 Nov 2026, 19.11 WIB — sesi kerja (Bima)
+- Tugas Agenda teratas (ANDA & BUAT) tetap menunggu rutin 07.xx Rabu; DES periode II 2026 belum terbit. Diambil tugas pendukung data: DPS tahun buku 2025 (Fajar + Hana).
+- Fajar + Hana: AADI kini punya DPS tahun buku 2025 Rp1.001,40 (dihitung tim) = interim Rp538,08 (surat resmi KSEI-27780/JKU/1125 19 Nov 2025, kurs BI Rp16.760; total US$250 juta, bayar 27 Nov 2025) + final Rp463,32 (BCA Sekuritas & Bareksa 9 Jun 2026, kurs BI Rp18.039). Pertentangan lama Rp538 vs Rp536 selesai: keduanya perkiraan sebelum recording date, surat KSEI menetapkan Rp538,08. Kini 28 dari 32 emiten punya DPS (3 lainnya memang tidak membagi: BSDE, EXCL, HRUM).
+- MBMA masih kosong: berita RUPST 23 Jun 2026 (Kontan, Investortrust) tidak menyebut dividen; artikel EmitenNews "tak bagi dividen" ternyata tahun buku 2024 → tidak dicatat.
+- Nina: `node tests/cek.mjs` lolos; profil AADI dicek 390/1280px: tabel 3 baris (Jumlah, Interim, Final) rapi, tanpa scroll horizontal & galat JS. Tegar: hanya data, tanpa rahasia. Yoga: push ke main.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

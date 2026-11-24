@@ -708,7 +708,18 @@ window.EMITEN_ASLI = [
     liabilitas2025: 2050, ekuitas2025: 3640,
     laba9b: { 2025: 587.32, 2026: 683.34 },
     catatan9b: "Laba 9 bulan = laba diatribusikan kepada pemilik entitas induk, juta US$: US$683,34 juta (Jan–Sep 2026) vs US$587,32 juta (Jan–Sep 2025), naik ±16,4% (depok24jam 2 Nov 2026, yang juga menulis laba periode berjalan US$760,63 juta vs US$654,87 juta terpisah; angka Rp12,2 triliun di Bisnis = konversi laba periode berjalan, tidak dipakai). Cek: pembanding cocok dengan laba bersih 9 bulan 2025 US$587 juta (Kontan 6 Nov 2025); laba semester I 2026 US$474 juta (Kabar Bursa 31 Agu 2026) + laba kuartal III 2026 US$209 juta (IDX Channel 2 Nov 2026) = US$683 juta, runtut. Sumber tidak menyebut pos sekali-waktu.",
-    dps: null, harga: null,
+    // dps tahun buku 2025 = interim Rp538,08 + final Rp463,32 = Rp1.001,40, dihitung tim (Fajar + Hana, 24 Nov 19.xx).
+    // Interim: surat KSEI-27780/JKU/1125 19 Nov 2025 (resmi, kurs BI 19 Nov 2025 Rp16.760, Rp538,08 per saham dibayar rupiah);
+    // jadwal KSEI-26870/JKU/1125 10 Nov 2025 (US$250 juta, recording 19 Nov, bayar 27 Nov 2025). Cek: 7.786.891.760 saham x Rp538,08 = Rp4,19 T.
+    // Rp538 (EmitenNews) & Rp536 (KB Valbury) = perkiraan sebelum recording date, tidak dipakai.
+    // Final: BCA Sekuritas & Bareksa 9 Jun 2026 (kurs BI 8 Jun 2026 Rp18.039, Rp463,32 x 7.786.891.760 saham = Rp3,61 T).
+    dpsRincian: [
+      { jenis: "interim", dps: 538.08, sumber: { judul: "KSEI, 19 Nov 2025: Kurs dividen interim tunai AADI (kurs BI Rp16.760) — dibagikan dalam rupiah Rp538,08 per saham (surat KSEI-27780/JKU/1125)",
+        url: "https://web.ksei.co.id/Announcement/Files/187782_ksei_27780_jku_1125_202511211445.pdf" } },
+      { jenis: "final", dps: 463.32, sumber: { judul: "BCA Sekuritas (IQPlus), 9 Jun 2026: AADI siap bagikan dividen tunai Rp463,32 per lembar saham (kurs BI 8 Juni 2026 Rp18.039)",
+        url: "https://bcasekuritas.co.id/latest-news/news/aadi-siap-bagikan-dividen-tunai-rp46332-per-lembar-saham" } }
+    ],
+    dps: 1001.4, dpsRupiah: true, harga: null,
     catatan: "Melapor dalam dolar AS; angka dalam juta US$ sesuai laporan, tidak dikonversi ke rupiah. Laba = laba tahun berjalan yang diatribusikan kepada pemilik entitas induk (disebut tegas oleh Warta Ekonomi dan EmitenNews). Laba 2024 dan pendapatan hanya tersedia dibulatkan sumber ke 2 desimal miliar US$ (laba 2024 US$1,21 miliar; turun 37,17% menurut EmitenNews, cocok). Cek neraca: liabilitas US$2,05 miliar + ekuitas US$3,64 miliar = US$5,69 miliar, aset US$5,70 miliar (selisih pembulatan). Pecahan dari Adaro (ADRO), tercatat di bursa Desember 2024.",
     sumber: [{ judul: "Warta Ekonomi, 9 Mar 2026: Adaro Andalan (AADI) raih laba USD760,18 juta pada 2025, turun 37%",
       url: "https://wartaekonomi.co.id/read603598/adaro-andalan-aadi-raih-laba-usd76018-juta-pada-2025-turun-37" },
@@ -721,7 +732,11 @@ window.EMITEN_ASLI = [
       { judul: "IDX Channel, 2 Nov 2026: Saham Adaro Andalan (AADI) turun 6 persen usai rilis kinerja Q3-2026",
         url: "https://www.idxchannel.com/market-news/saham-adaro-andalan-aadi-turun-6-persen-usai-rilis-kinerja-q3-2026" },
       { judul: "Kontan, 6 Nov 2025: Laba bersih Adaro Andalan (AADI) kuartal III turun, tapi prospeknya masih positif",
-        url: "https://investasi.kontan.co.id/news/laba-bersih-adaro-andalan-aadi-kuartal-iii-turun-tapi-prospeknya-masih-positif" }]
+        url: "https://investasi.kontan.co.id/news/laba-bersih-adaro-andalan-aadi-kuartal-iii-turun-tapi-prospeknya-masih-positif" },
+      { judul: "KSEI, 10 Nov 2025: Jadwal dividen interim AADI tahun buku 2025 US$250 juta, recording date 19 Nov 2025 (surat KSEI-26870/JKU/1125)",
+        url: "https://web.ksei.co.id/Announcement/Files/AADI_DIV_20251119_ID.pdf" },
+      { judul: "Bareksa, 9 Jun 2026: AADI tetapkan kurs konversi dividen, nilainya Rp463,32 per saham",
+        url: "https://www.bareksa.com/berita/saham/2026-06-09/emiten-terafiliasi-boy-thohir-aadi-tetapkan-kurs-konversi-dividen-nilainya-rp46332-per-saham" }]
   },
   {
     kode: "HRUM", nama: "PT Harum Energy Tbk", sektor: "Energi",
