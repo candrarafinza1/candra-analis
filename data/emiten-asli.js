@@ -315,7 +315,11 @@ window.EMITEN_ASLI = [
     liabilitas2025: 20041.47, ekuitas2025: 20018.96,
     laba9b: { 2025: 2410, 2026: 3230 },
     catatan9b: "Laba 9 bulan = laba diatribusikan kepada pemilik entitas induk: Rp3,23 T (Jan–Sep 2026, naik 34%, Kontan 2 Nov 2026) vs Rp2,41 T (Jan–Sep 2025; EmitenNews menulis laba bersih Rp2,41 T dan laba periode berjalan Rp2,63 T terpisah). Cek runtut: kuartal I 2026 laba atribusi Rp1,816 T (Katadata) + kuartal III Rp756 M (naik 15% dari kuartal II, Kontan) → kuartal II sekitar Rp657 M, total sekitar Rp3,23 T; Rp3,23 T / Rp2,41 T = +34%, sama dengan sumber. Sumber tidak menyebut pos sekali-waktu (Fajar, 4 Nov 07.09).",
-    dps: null, harga: null,
+    // dps: Rp140 (tahun buku 2025, total Rp1.627.873.786.140, RUPST 29 Apr 2026, dibayar 19 Mei 2026) dari EmitenNews 4 Mei 2026
+    // (kutipan manajemen: "dividen tunai tahun buku 2025 ... adalah sebesar Rp140 per saham", payout 40,68%), BCA Sekuritas & Bareksa 4 Mei 2026.
+    // Tidak ada sumber yang menyebut dividen interim tahun buku 2025; total Rp1,63 T ÷ laba 2025 Rp4,00 T ≈ 40,7% = payout yang ditulis sumber (Fajar, 24 Nov 08.xx).
+    dps: 140, harga: null,
+    dpsSumber: { judul: "EmitenNews, 4 Mei 2026: Info lengkap dividen JPFA Rp140 per saham (tahun buku 2025), dibayar 19 Mei 2026", url: "https://www.emitennews.com/news/info-lengkap-dividen-jpfa-rp140-per-saham-yield-555-persen" },
     sumber: [{ judul: "Kontan, 2 Nov 2026: Segmen DOC dan livebird topang kinerja Japfa (JPFA) — laba bersih 9 bulan 2026 Rp3,23 triliun, naik 34%",
       url: "https://investasi.kontan.co.id/news/segmen-doc-dan-livebird-topang-kinerja-japfa-jpfa-di-tengah-tekanan-beban-bunga" },
       { judul: "EmitenNews: Kuartal III 2025, laba dan pendapatan JPFA kompak melejit (laba bersih Rp2,41 T, laba periode berjalan Rp2,63 T)",
@@ -327,7 +331,11 @@ window.EMITEN_ASLI = [
       { judul: "PintarSaham, 10 Apr 2026: Kinerja keuangan JPFA 2025 melesat (neraca 31 Des 2025, juta Rp)",
         url: "https://pintarsaham.id/kinerja-keuangan-jpfa-2025-melesat-laba-bersih-tumbuh-32-persen/" },
       { judul: "BCA Sekuritas, 2 Mar 2026: Laba Japfa Comfeed Indonesia Rp4 triliun hingga Desember 2025",
-        url: "https://bcasekuritas.co.id/latest-news/news/laba-japfa-comfeed-indonesia-rp4-triliun-hingga-desember-2025" }],
+        url: "https://bcasekuritas.co.id/latest-news/news/laba-japfa-comfeed-indonesia-rp4-triliun-hingga-desember-2025" },
+      { judul: "BCA Sekuritas, 4 Mei 2026: JPFA akan bagikan dividen Rp140 per saham (tahun buku 2025) pada 19 Mei 2026",
+        url: "https://bcasekuritas.co.id/latest-news/news/jpfa-akan-bagikan-dividen-pada-19-mei-2026" },
+      { judul: "Bareksa, 4 Mei 2026: JPFA bagikan dividen Rp140 per saham (tahun buku 2025)",
+        url: "https://www.bareksa.com/berita/saham/2026-05-04/jpfa-bagikan-dividen-rp140-per-saham-yield-diperkirakan-565" }],
     catatan: "Neraca 31 Des 2025 dari tabel PintarSaham (juta Rp): liabilitas 20.041.473 + ekuitas 20.018.957 = aset 40.060.430 (cocok). BCA Sekuritas menulis aset Rp40,06 T dan liabilitas Rp20,04 T. Angka ekuitas Rp20,12 T di Bisnis (31 Mar 2026) tidak dipakai karena tidak cocok dengan total aset."
   },
   {
