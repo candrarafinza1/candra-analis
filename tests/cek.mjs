@@ -2396,8 +2396,8 @@ ok(/\.form-tanya textarea::placeholder\s*\{[^}]*color:\s*var\(--tinta-2\)/.test(
   const app = readFileSync("assets/app.js", "utf8");
   const fmtRp = v => "Rp" + new Intl.NumberFormat("id-ID", { maximumFractionDigits: 2 }).format(v);
   // Nina (24 Nov 2026): dpsRincian (interim + final dijumlah tim) → ≥2 bagian, tiap bagian https & judulnya memuat
-  // angka bagian itu (hingga 5 desimal, persis sumber), jumlah = dps (toleransi 0,01), dpsSumber dikosongkan.
-  const fmtRp5 = v => "Rp" + new Intl.NumberFormat("id-ID", { maximumFractionDigits: 5 }).format(v);
+  // angka bagian itu (hingga 6 desimal sejak 24 Nov 17.xx untuk BSSR, persis sumber), jumlah = dps (toleransi 0,01), dpsSumber dikosongkan.
+  const fmtRp5 = v => "Rp" + new Intl.NumberFormat("id-ID", { maximumFractionDigits: 6 }).format(v);
   const cekRincian = e => Array.isArray(e.dpsRincian) && e.dpsRincian.length >= 2 && !e.dpsSumber
     && e.dpsRincian.every(b => b && (b.jenis === "interim" || b.jenis === "final") && typeof b.dps === "number" && b.dps > 0
       && b.sumber && /^https:\/\//.test(b.sumber.url || "") && (b.sumber.judul || "").includes(fmtRp5(b.dps)))
@@ -2465,6 +2465,10 @@ ok(/\.form-tanya textarea::placeholder\s*\{[^}]*color:\s*var\(--tinta-2\)/.test(
       const rr = f.r({ kode: "DDDD", dps: 9.91611, dpsRincian: RS }, []);
       const tr = rr.map((b) => b.jenis + " " + b.dps + (b.dihitung ? " [" + b.ket + "]" : "")).join(" | ");
       if (tr !== "Jumlah tahun buku Rp9,92 [dihitung tim: interim Rp3,8427 + final Rp6,07341 = Rp9,91611, dibulatkan Rp9,92] | Interim Rp3,8427 | Final Rp6,07341") salah.push("baris rincian salah: " + tr);
+      // Nina (24 Nov 17.xx): dua interim + final (pola BSSR) → interim diberi nomor I/II, angka 6 desimal tampil utuh
+      const RS3 = [{ jenis: "interim", dps: 222.587426, sumber: S }, { jenis: "interim", dps: 127.41448, sumber: S }, { jenis: "final", dps: 486.13, sumber: S }];
+      const tr3 = f.r({ kode: "EEEE", dps: 836.131906, dpsRincian: RS3 }, []).map((b) => b.jenis + " " + b.dps + (b.dihitung ? " [" + b.ket + "]" : "")).join(" | ");
+      if (tr3 !== "Jumlah tahun buku Rp836,13 [dihitung tim: interim I Rp222,587426 + interim II Rp127,41448 + final Rp486,13 = Rp836,131906, dibulatkan Rp836,13] | Interim I Rp222,587426 | Interim II Rp127,41448 | Final Rp486,13") salah.push("baris rincian 3 bagian salah: " + tr3);
       if (f.r({ kode: "DDDD", dps: 9.95, dpsRincian: RS }, []).length !== 0) salah.push("rincian yang jumlahnya tidak cocok harus dilewati");
       if (f.r({ kode: "DDDD", dps: 9.91611, dpsRincian: [RS[0], { jenis: "final", dps: 6.07341, sumber: { judul: "y", url: "http://x" } }] }, []).length !== 0) salah.push("rincian tanpa sumber https harus dilewati");
       if (f.r({ kode: "BBBB" }, []).length !== 0) salah.push("emiten tanpa data harus 0 baris");

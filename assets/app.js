@@ -939,13 +939,21 @@
     var rinci = dps ? rincianDps(e) : null;
     if (rinci) {
       // Baris jumlah tanpa satu sumber: keterangannya menyebut rincian; rincian tampil persis seperti ditulis sumber.
-      var fmtR = new Intl.NumberFormat("id-ID", { maximumFractionDigits: 5 });
+      // Arif (24 Nov 17.xx): hingga 6 desimal, karena pengumuman BSSR menulis interim Rp222,587426 per saham.
+      var fmtR = new Intl.NumberFormat("id-ID", { maximumFractionDigits: 6 });
+      // Bila interim lebih dari satu (BSSR: interim I & II), diberi nomor urut sesuai urutan di data.
+      var nInterim = rinci.filter(function (b) { return b.jenis === "interim"; }).length, ke = 0;
+      var namaR = rinci.map(function (b) {
+        if (b.jenis !== "interim") return "Final";
+        ke++;
+        return nInterim > 1 ? "Interim " + ["I", "II", "III", "IV"][ke - 1] : "Interim";
+      });
       baris.push({ tahunBuku: 2025, jenis: "Jumlah tahun buku", dps: dps, nilai: e.dps, rupiah: true, sumber: null, dihitung: true,
         // Sari + Kirana (24 Nov 15.xx): tulis hasil tambah persis lalu pembulatannya, agar pemula bisa mengecek sendiri.
-        ket: "dihitung tim: " + rinci.map(function (b) { return (b.jenis === "interim" ? "interim" : "final") + " Rp" + fmtR.format(b.dps); }).join(" + ") +
+        ket: "dihitung tim: " + rinci.map(function (b, i) { return namaR[i].replace(/^I/, "i").replace(/^F/, "f") + " Rp" + fmtR.format(b.dps); }).join(" + ") +
           " = Rp" + fmtR.format(e.dps) + (("Rp" + fmtR.format(e.dps)) !== dps ? ", dibulatkan " + dps : "") });
-      rinci.forEach(function (b) {
-        baris.push({ tahunBuku: 2025, jenis: b.jenis === "interim" ? "Interim" : "Final", dps: "Rp" + fmtR.format(b.dps), nilai: b.dps, rupiah: true, sumber: b.sumber });
+      rinci.forEach(function (b, i) {
+        baris.push({ tahunBuku: 2025, jenis: namaR[i], dps: "Rp" + fmtR.format(b.dps), nilai: b.dps, rupiah: true, sumber: b.sumber });
       });
     } else if (dps) baris.push({ tahunBuku: 2025, jenis: "Tahun buku", dps: dps, nilai: e.dps, rupiah: true, sumber: e.dpsSumber });
     (agenda || []).forEach(function (a) {

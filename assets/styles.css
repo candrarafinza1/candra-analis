@@ -1021,11 +1021,13 @@ button.istilah:hover, button.istilah[aria-expanded="true"] { color: var(--aksen)
   .tabel-dividen th, .tabel-dividen td { white-space: normal; overflow-wrap: break-word; }
   .tabel-dividen .sel-sumber a { overflow-wrap: break-word; }
   /* Dewi (24 Nov 2026): kolom angka dilebarkan agar DPS lima desimal (TPIA "Rp6,07341") tidak terbelah dua baris. */
-  .tabel-dividen thead th:nth-child(1) { width: 17%; }
-  .tabel-dividen thead th:nth-child(2) { width: 20%; }
-  .tabel-dividen thead th:nth-child(3) { width: 28%; }
+  /* Dewi (24 Nov 17.xx): DPS enam desimal (BSSR "Rp222,587426") menabrak kolom Sumber di 390px → kolom tahun
+     dipersempit, kolom angka dilebarkan, dan angka di sel memakai huruf sedikit lebih kecil dengan lebar digit sama. */
+  .tabel-dividen thead th:nth-child(1) { width: 15%; }
+  .tabel-dividen thead th:nth-child(2) { width: 18%; }
+  .tabel-dividen thead th:nth-child(3) { width: 32%; }
   .tabel-dividen thead th:nth-child(4) { width: 35%; }
-  .tabel-dividen td.angka { white-space: nowrap; }
+  .tabel-dividen td.angka { white-space: nowrap; font-size: 0.9em; font-variant-numeric: tabular-nums; }
 }
 
 /* Tampilan cetak Agenda (Dewi + Nina, 23 Nov 2026, IDE.md #51). Hanya berlaku saat dicetak; layar tidak berubah.

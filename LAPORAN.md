@@ -2351,3 +2351,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - AADI tetap ditahan: final Rp463,32 kini punya dua sumber (BCA Sekuritas & Bareksa 9 Jun 2026), tetapi interim per saham bertentangan (EmitenNews Rp538 vs KB Valbury Rp536, perkiraan sebelum recording date); KSEI & BCA Sekuritas hanya menulis total US$250 juta.
 - Nina: `node tests/cek.mjs` lolos. Tegar: hanya teks data, tanpa rahasia.
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 24 Nov 2026, 17.09 WIB — sesi kerja (Bima)
+- Tugas Agenda teratas (ANDA & BUAT) menunggu rutin 07.xx Rabu; DES periode II 2026 belum terbit. Diambil tugas pendukung data: DPS tahun buku 2025 (Fajar + Hana).
+- Fajar + Hana: BSSR kini punya DPS tahun buku 2025 Rp836,13 (dihitung tim) = interim I Rp222,587426 (BCA Sekuritas/IQPlus 4 Nov 2025) + interim II Rp127,41448 (BCA Sekuritas/IQPlus 19 Des 2025) + final Rp486,13 (StockWatch 19 Jun 2026; IDX Channel/RCTI+ 16 Jun 2026 angka sama, kurs BI 9 Jun Rp18.171). Total US$125 juta cocok dengan IDX Channel. Kini 26 dari 32 emiten punya DPS. Bima mengoreksi catatan lama bahwa Rp486,13 "hitungan media" (keputusan ringan).
+- Arif: rincian DPS kini mendukung dua interim (baris "Interim I/II") dan angka sampai 6 desimal. Dewi: kolom angka tabel dividen di 390px dilebarkan + huruf angka sedikit lebih kecil agar "Rp222,587426" tidak menabrak kolom Sumber.
+- Nina: uji baru pola 3 bagian (2 interim + final); `node tests/cek.mjs` lolos; profil BSSR, TPIA, JPFA dicek 390/1280px tanpa scroll horizontal, angka tidak meluap, tanpa galat JS. Tegar: hanya data & tampilan, tanpa rahasia.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
