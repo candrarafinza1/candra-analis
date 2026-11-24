@@ -738,6 +738,14 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Batasan: teks saja, tetap lewat aria-live, tanpa skor/animasi; Hana memastikan petunjuk tidak berbunyi ajakan.
 - Usaha: kecil (Arif + Laras; Nina memperbarui cek 2f-21).
 
+### 55. Profil: baris "Jumlah" DPS menulis hasil tambah persis dan pembulatannya
+- **Usulan kecil dari tinjauan Kirana + Sari, 24 Nov 15.xx (profil TPIA, 390px)** — konten, usaha kecil
+- Masalah: baris "Jumlah tahun buku Rp9,92" bertuliskan "interim Rp3,8427 + final Rp6,07341, dihitung tim", padahal hasil tambahnya Rp9,91611; pemula yang menghitung sendiri bisa bingung. Keterangan tabel "seperti ditulis sumber" juga terbaca berlaku untuk baris jumlah.
+- Ide (Sari): "Dihitung tim: interim Rp3,8427 + final Rp6,07341 = Rp9,91611, dibulatkan Rp9,92"; keterangan tabel memisahkan baris bersumber dan baris hasil tambah tim.
+- Dampak bagi pemula: bisa mengecek hitungan sendiri dan tahu angka mana yang dari sumber.
+- Batasan: teks saja, tanpa kata ajakan; Nina memperbarui cek 2f.
+- Status: dipilih Bima 24 Nov 15.xx, **selesai sesi yang sama** (Sari + Arif + Nina).
+
 ### Tinjauan Kirana + Laras, 23 Nov 16.xx: alur baru latihan urut (#53), keyboard saja
 - 390px gelap: Tab ±48 langkah sampai "Periksa urutan"; Enter → pesan aria-live "0 dari 4 … Coba lagi, atau pilih Lihat urutan yang benar."; fokus tetap di "Periksa urutan", Tab berikutnya tepat ke "Lihat urutan yang benar". Salah kedua → "Urutan yang benar kini dibuka di bawah." Alur benar; usulan kejelasan kalimat di #54.
 

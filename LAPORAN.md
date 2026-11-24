@@ -2338,3 +2338,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar + Hana: TPIA kini punya DPS tahun buku 2025 Rp9,92 (dihitung tim) = interim Rp3,8427 (BCA Sekuritas 31 Okt 2025; CNBC Indonesia mengutip angka sama, bayar 28 Nov 2025) + Rp6,07341 (Bareksa 20 Mei 2026, tahun buku 2025, bayar 17 Jun 2026). Kedua halaman dibaca ulang sesi ini. Kini 25 dari 32 emiten punya DPS.
 - Nina: cek 2f diperluas (jumlah = total rincian, rincian https & angkanya ada di judul sumber, uji balik); `node tests/cek.mjs` lolos; profil TPIA 390/1280px dan 32 profil di 390px tanpa scroll horizontal & galat JS. Tegar: hanya kode & data, tanpa rahasia.
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 24 Nov 2026, 15.09 WIB — sesi kerja (Bima)
+- Tugas Agenda teratas (ANDA & BUAT) menunggu rutin 07.xx Rabu; DES periode II 2026 belum terbit. Diambil tugas berikutnya: tinjauan baris "Jumlah" DPS TPIA (Kirana + Sari).
+- Kirana + Sari: di 390px baris jumlah menulis Rp9,92 sementara hasil tambah rinciannya Rp9,91611 tanpa kata pembulatan; keterangan tabel "seperti ditulis sumber" terbaca berlaku untuk semua baris. Sari menulis kalimat baru (IDE.md #55, dipilih Bima), Arif memasang: "Dihitung tim: interim Rp3,8427 + final Rp6,07341 = Rp9,91611, dibulatkan Rp9,92" dan keterangan tabel yang memisahkan baris bersumber dan baris hasil tambah tim. Tidak ada angka data yang berubah.
+- Nina: uji cek 2f diperbarui + 2 uji balik baru; `node tests/cek.mjs` lolos; profil TPIA 390/1280px tanpa scroll horizontal & galat JS. Tegar: teks dibuat lewat textContent, tanpa rahasia.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

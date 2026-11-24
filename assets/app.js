@@ -941,7 +941,9 @@
       // Baris jumlah tanpa satu sumber: keterangannya menyebut rincian; rincian tampil persis seperti ditulis sumber.
       var fmtR = new Intl.NumberFormat("id-ID", { maximumFractionDigits: 5 });
       baris.push({ tahunBuku: 2025, jenis: "Jumlah tahun buku", dps: dps, nilai: e.dps, rupiah: true, sumber: null, dihitung: true,
-        ket: rinci.map(function (b) { return (b.jenis === "interim" ? "interim" : "final") + " Rp" + fmtR.format(b.dps); }).join(" + ") + ", dihitung tim" });
+        // Sari + Kirana (24 Nov 15.xx): tulis hasil tambah persis lalu pembulatannya, agar pemula bisa mengecek sendiri.
+        ket: "dihitung tim: " + rinci.map(function (b) { return (b.jenis === "interim" ? "interim" : "final") + " Rp" + fmtR.format(b.dps); }).join(" + ") +
+          " = Rp" + fmtR.format(e.dps) + (("Rp" + fmtR.format(e.dps)) !== dps ? ", dibulatkan " + dps : "") });
       rinci.forEach(function (b) {
         baris.push({ tahunBuku: 2025, jenis: b.jenis === "interim" ? "Interim" : "Final", dps: "Rp" + fmtR.format(b.dps), nilai: b.dps, rupiah: true, sumber: b.sumber });
       });
@@ -1168,7 +1170,7 @@
       });
       akar.appendChild(el("div", { class: "tabel-wadah" }, [el("table", { class: "tabel-profil tabel-dividen" }, [
         el("caption", { class: "keterangan-tabel", text: rDiv.some(function (b) { return b.dihitung; })
-          ? "Dividen tunai per saham, sebelum pajak, seperti ditulis sumber; baris “Jumlah” dihitung tim dari baris interim + final di bawahnya."
+          ? "Dividen tunai per saham, sebelum pajak. Baris interim dan final ditulis persis seperti sumber; baris “Jumlah” adalah hasil tambah tim, bukan angka dari sumber."
           : "Dividen tunai per saham, sebelum pajak, seperti ditulis sumber." }),
         el("thead", null, [el("tr", null, [el("th", { scope: "col", text: "Tahun buku" }), el("th", { scope: "col", text: "Jenis" }),
           el("th", { scope: "col", class: "angka", text: "Dividen per saham" }), el("th", { scope: "col", text: "Sumber" })])]),

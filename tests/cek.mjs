@@ -2464,7 +2464,7 @@ ok(/\.form-tanya textarea::placeholder\s*\{[^}]*color:\s*var\(--tinta-2\)/.test(
       const RS = [{ jenis: "interim", dps: 3.8427, sumber: S }, { jenis: "final", dps: 6.07341, sumber: S }];
       const rr = f.r({ kode: "DDDD", dps: 9.91611, dpsRincian: RS }, []);
       const tr = rr.map((b) => b.jenis + " " + b.dps + (b.dihitung ? " [" + b.ket + "]" : "")).join(" | ");
-      if (tr !== "Jumlah tahun buku Rp9,92 [interim Rp3,8427 + final Rp6,07341, dihitung tim] | Interim Rp3,8427 | Final Rp6,07341") salah.push("baris rincian salah: " + tr);
+      if (tr !== "Jumlah tahun buku Rp9,92 [dihitung tim: interim Rp3,8427 + final Rp6,07341 = Rp9,91611, dibulatkan Rp9,92] | Interim Rp3,8427 | Final Rp6,07341") salah.push("baris rincian salah: " + tr);
       if (f.r({ kode: "DDDD", dps: 9.95, dpsRincian: RS }, []).length !== 0) salah.push("rincian yang jumlahnya tidak cocok harus dilewati");
       if (f.r({ kode: "DDDD", dps: 9.91611, dpsRincian: [RS[0], { jenis: "final", dps: 6.07341, sumber: { judul: "y", url: "http://x" } }] }, []).length !== 0) salah.push("rincian tanpa sumber https harus dilewati");
       if (f.r({ kode: "BBBB" }, []).length !== 0) salah.push("emiten tanpa data harus 0 baris");
@@ -2482,7 +2482,8 @@ ok(/\.form-tanya textarea::placeholder\s*\{[^}]*color:\s*var\(--tinta-2\)/.test(
       [gantiR('(rupiah ? "Rp" : "US$")', '"Rp"'), "baris salah"],
       [gantiR("if (baris.some(", "if (false && baris.some("), "baris salah"],
       [gantiR("Math.abs(total - e.dps) <= 0.01 ? r : null", "r"), "rincian yang jumlahnya tidak cocok"],
-      [gantiR(", dihitung tim\"", "\""), "baris rincian salah"],
+      [gantiR("\"dihitung tim: \" + ", ""), "baris rincian salah"],
+      [gantiR("\", dibulatkan \" + dps", "\"\""), "baris rincian salah"],
     ];
     for (const [b, pesan] of rusakR)
       ok(b.join() !== kodeR.join() && ujiR(b).some((s) => s.includes(pesan)), `uji balik tabel Dividen per saham: "${pesan}" harus tertangkap`);
