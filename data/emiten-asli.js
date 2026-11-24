@@ -770,7 +770,11 @@ window.EMITEN_ASLI = [
     // SWA 20 Nov 2026 (menyebut "diatribusikan kepada pemilik entitas induk") dan Investor Daily 21 Nov 2026 (angka sama). Cocok dengan semester I US$102 juta + kuartal III US$56 juta.
     laba9b: { 2025: -35, 2026: 157 },
     catatan9b: "Angka 9 bulan = laba diatribusikan kepada pemilik entitas induk, juta US$: laba US$157 juta (Jan–Sep 2026), berbalik dari rugi US$35 juta (Jan–Sep 2025); SWA 20 Nov 2026 dan Investor Daily 21 Nov 2026 sama. Sumber menyebut pendorongnya pendapatan naik 76% menjadi sekitar US$2,3 miliar dari bisnis nikel dan emas; sumber tidak menyebut pos sekali-waktu.",
-    dps: null, harga: null,
+    // dps (Fajar + Hana, 24 Nov 2026): dividen tunai tahun buku 2025 maksimal Rp300 miliar, dibayar dalam rupiah (dividen pertama sejak IPO).
+    // Rp12,28 per saham (setelah dikurangi saham treasuri) ditulis Investortrust 25 Jun 2026; IDX Channel (RCTI+) 27 Jun 2026 menulis "diperkirakan Rp12,28".
+    // Pengumuman resmi perseroan 25 Jun 2026 hanya menyebut total maksimal Rp300 miliar, recording date 3 Juli 2026, pembayaran 25 Juli 2026 (media menulis 24 Juli).
+    dps: 12.28, dpsRupiah: true, harga: null,
+    dpsSumber: { judul: "Investortrust, 25 Jun 2026: MDKA tebar dividen perdana Rp300 miliar, setara Rp12,28 per saham (tahun buku 2025)", url: "https://investortrust.id/market/107540/merdeka-copper-mdka-tebar-dividen-perdana-rp-300-miliar-nilai-per-saham-segini" },
     catatan: "Melapor dalam dolar AS; angka dalam juta US$ sesuai laporan, tidak dikonversi ke rupiah. Rugi diatribusikan kepada pemilik entitas induk US$62,06 juta (2025) vs US$55,76 juta (2024), menurut Bisnis; Kabar Bursa menulis angka yang sama dan mencatat laba untuk kepentingan nonpengendali US$78,21 juta (cocok: grup rugi, anak usaha seperti MBMA laba). Pendapatan dibulatkan sumber (US$1,89 miliar vs US$2,24 miliar). Cek neraca: liabilitas US$2,78 miliar + ekuitas US$2,92 miliar = US$5,70 miliar, aset US$5,71 miliar (selisih pembulatan).",
     sumber: [{ judul: "Bisnis, 31 Mar 2026: Merdeka Copper Gold (MDKA) cetak pendapatan US$1,89 miliar pada 2025, rugi membengkak",
       url: "https://market.bisnis.com/read/20260331/192/1963203/merdeka-copper-gold-mdka-cetak-pendapatan-us189-miliar-pada-2025-rugi-membengkak" },
@@ -779,7 +783,11 @@ window.EMITEN_ASLI = [
       { judul: "SWA, 20 Nov 2026: MDKA berbalik laba US$157 juta (Jan–Sep 2026), ditopang bisnis nikel dan emas",
         url: "https://swa.co.id/read/479889/mdka-berbalik-laba-us157-juta-ditopang-bisnis-nikel-dan-emas" },
       { judul: "Investor Daily, 21 Nov 2026: Grup Merdeka tampil perkasa (MDKA laba US$157 juta pada 9M26 vs rugi US$35 juta)",
-        url: "https://investor.id/market/462791/grup-merdeka-tampil-perkasa" }]
+        url: "https://investor.id/market/462791/grup-merdeka-tampil-perkasa" },
+      { judul: "Merdeka Copper Gold, 25 Jun 2026: Pengumuman jadwal dan tata cara pembagian dividen tunai tahun buku 2025 (maksimal Rp300 miliar, dibayar 25 Juli 2026)",
+        url: "https://merdekacoppergold.com/wp-content/uploads/2026/06/MDKA_2026-06-25_Pengumuman-Jadwal-Tata-Cara-Pembagian-Dividen.pdf" },
+      { judul: "IDX Channel (RCTI+), 27 Jun 2026: Jadwal pencairan dividen perdana MDKA Rp300 miliar (diperkirakan Rp12,28 per saham)",
+        url: "https://www.rctiplus.com/news/detail/ekonomi/5415567/ini-jadwal-lengkap-pencairan-dividen-perdana-mdka-rp300-miliar" }]
   },
   {
     kode: "MBMA", nama: "PT Merdeka Battery Materials Tbk", sektor: "Bahan baku",

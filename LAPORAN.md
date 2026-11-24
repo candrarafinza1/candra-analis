@@ -2317,3 +2317,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Raka + Fajar + Hana: dua kabar dividen interim tahun buku 2026 yang terlewat ditambahkan: ITMG Rp1.286,83 per saham (Fortune IDN & Katadata 13 Nov; bayar 18 Nov) dan UNTR Rp430 per saham (BCA Sekuritas & Pasardana 28 Okt; bayar diundur 26 Okt → 23 Nov). Keduanya sudah dibayar, jadi tidak dimasukkan ke Agenda.
 - Nina: `node tests/cek.mjs` lolos; profil ITMG & UNTR dan beranda dicek 390/1280px tanpa scroll horizontal & galat JS. Tegar: hanya data, tanpa rahasia.
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 24 Nov 2026, 10.08 WIB — sesi kerja (Bima)
+- Tugas Agenda teratas (ANDA & BUAT) menunggu rutin 13.xx; DES periode II 2026 belum terbit. Diambil tugas pendukung data: DPS tahun buku 2025 (Fajar).
+- Fajar + Hana: MDKA kini punya dividen tahun buku 2025 Rp12,28 per saham (dividen perdana sejak IPO, total maksimal Rp300 miliar, dibayar rupiah 25 Juli 2026). Sumber: Investortrust 25 Jun 2026; IDX Channel (RCTI+) 27 Jun 2026 menulis "diperkirakan Rp12,28"; pengumuman resmi perseroan 25 Jun 2026 (total & jadwal). Kini 24 dari 32 emiten punya DPS.
+- AADI ditahan: final Rp463,32 (BCA Sekuritas) vs Rp453 (EmitenNews, kurs asumsi), interim Rp538 hanya satu sumber.
+- Nina: `node tests/cek.mjs` lolos; tabel "Dividen per saham" profil MDKA dicek 390/1280px tanpa scroll horizontal & galat JS. Tegar: hanya data, tanpa rahasia.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
