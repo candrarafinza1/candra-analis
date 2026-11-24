@@ -55,6 +55,14 @@ window.KABAR = [
   { kode: "JPFA", tanggal: "2026-10-28", jenis: "Dividen",
     ringkas: "Japfa Comfeed Indonesia menetapkan dividen interim tahun buku 2026 sebesar Rp90 per saham, total Rp1.052.780.364.090. Tanggal pencatatan 9 November 2026, pembayaran 12 November 2026.",
     sumber: { judul: "BCA Sekuritas, 28 Okt 2026: JPFA akan bagikan dividen interim Rp90 per saham (tahun buku 2026) pada 12 November 2026", url: "https://bcasekuritas.co.id/latest-news/news/jpfa-akan-bagikan-dividen-interim-12-november-2026" } },
+  // Dividen interim ITMG tahun buku 2026 — Fortune IDN 13 Nov 2026; Rp1.286,83 sama di Katadata 13 Nov 2026, tanggal sama di Kontan 3 Nov 2026 (Raka + Fajar, ditinjau Hana, 24 Nov 09.xx)
+  { kode: "ITMG", tanggal: "2026-11-13", jenis: "Dividen",
+    ringkas: "Indo Tambangraya Megah menetapkan dividen interim tahun buku 2026 sebesar Rp1.286,83 per saham. Tanggal pencatatan 12 November 2026, pembayaran 18 November 2026.",
+    sumber: { judul: "Fortune IDN, 13 Nov 2026: ITMG tetapkan dividen interim Rp1.286,83 per saham", url: "https://www.fortuneidn.com/market/itmg-tetapkan-dividen-interim-rp1-286-83-per-saham-00-3dhnm-6jq0tx" } },
+  // Dividen interim UNTR tahun buku 2026 — BCA Sekuritas 28 Okt 2026; jadwal sama di Pasardana 28 Okt 2026 (jadwal lama: bayar 26 Okt, diundur; EmitenNews) (Raka + Fajar, ditinjau Hana, 24 Nov 09.xx)
+  { kode: "UNTR", tanggal: "2026-10-28", jenis: "Dividen",
+    ringkas: "United Tractors membagikan dividen interim tahun buku 2026 sebesar Rp430 per saham (sekitar Rp1,478 triliun). Jadwal pembayaran diundur dari 26 Oktober menjadi 23 November 2026, tanggal pencatatan 9 November 2026.",
+    sumber: { judul: "BCA Sekuritas, 28 Okt 2026: UNTR akan bagikan dividen interim Rp430 per saham pada 23 November 2026", url: "https://bcasekuritas.co.id/latest-news/news/untr-akan-bagikan-dividen-interim-23-november-2026" } },
   // Laporan 9 bulan CTRA — Kontan, 1 Nov 2026; Rp1,32 T vs Rp1,62 T & pendapatan Rp7,48 T vs Rp8,39 T sama di Katadata 16 Nov 2026 (Sari + Hana, 23 Nov 18.xx)
   { kode: "CTRA", tanggal: "2026-11-01", jenis: "Laporan keuangan",
     ringkas: "Ciputra Development merilis laporan Januari–September 2026: laba bersih Rp1,32 triliun, turun 18,5% dari Rp1,62 triliun pada periode yang sama 2025 (Katadata, 16 Nov 2026). Penjualan dan pendapatan usaha Rp7,48 triliun, turun 10,79% dari Rp8,39 triliun.",

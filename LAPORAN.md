@@ -2310,3 +2310,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar + Hana: JPFA kini punya dividen tahun buku 2025 Rp140 per saham (RUPST 29 Apr 2026, dibayar 19 Mei 2026; EmitenNews, BCA Sekuritas, Bareksa 4 Mei 2026). Keraguan lama soal interim tahun buku 2025 diselesaikan: manajemen menyebut dividen tahun buku 2025 = Rp140, dan total Rp1,63 T cocok dengan payout 40,7% dari laba Rp4,00 T. Kini 23 dari 32 emiten punya DPS.
 - Nina: `node tests/cek.mjs` lolos; tabel "Dividen per saham" profil JPFA dicek 390/1280px tanpa scroll horizontal & galat JS. Tegar: hanya data, tanpa rahasia.
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 24 Nov 2026, 09.08 WIB — sesi kerja (Bima)
+- Tugas Agenda teratas (ANDA & BUAT) menunggu rutin 13.xx; pencarian cepat BUAT tetap tanpa bukti syariah. Diambil tugas pendukung.
+- Fajar: HRUM & ITMG dicari lagi untuk DPS tahun buku 2025, belum ada sumber yang memenuhi aturan (tetap 23 dari 32).
+- Raka + Fajar + Hana: dua kabar dividen interim tahun buku 2026 yang terlewat ditambahkan: ITMG Rp1.286,83 per saham (Fortune IDN & Katadata 13 Nov; bayar 18 Nov) dan UNTR Rp430 per saham (BCA Sekuritas & Pasardana 28 Okt; bayar diundur 26 Okt → 23 Nov). Keduanya sudah dibayar, jadi tidak dimasukkan ke Agenda.
+- Nina: `node tests/cek.mjs` lolos; profil ITMG & UNTR dan beranda dicek 390/1280px tanpa scroll horizontal & galat JS. Tegar: hanya data, tanpa rahasia.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
