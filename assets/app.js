@@ -907,9 +907,23 @@
   }
 
   // Dividen per saham untuk profil: hanya bila dps angka > 0 dan dpsSumber https ada; selalu dalam rupiah.
+  /* Arif (24 Nov 2026, keputusan Bima 13.xx): dpsRincian sah = ≥2 bagian interim/final, tiap bagian dps > 0 dan
+     bersumber https, jumlahnya sama dengan dps (selisih ≤ 0,01). Baris jumlah ditulis "dihitung tim". */
+  function rincianDps(e) {
+    var r = e && e.dpsRincian;
+    if (!Array.isArray(r) || r.length < 2 || typeof e.dps !== "number") return null;
+    var total = 0;
+    for (var i = 0; i < r.length; i++) {
+      var b = r[i];
+      if (!b || (b.jenis !== "interim" && b.jenis !== "final") || typeof b.dps !== "number" || !(b.dps > 0)) return null;
+      if (!b.sumber || !b.sumber.judul || !/^https:\/\//.test(b.sumber.url || "")) return null;
+      total += b.dps;
+    }
+    return Math.abs(total - e.dps) <= 0.01 ? r : null;
+  }
   function dividenTampil(e) {
     if (typeof e.dps !== "number" || !(e.dps > 0)) return null;
-    if (!e.dpsSumber || !e.dpsSumber.judul || !/^https:\/\//.test(e.dpsSumber.url || "")) return null;
+    if (!rincianDps(e) && (!e.dpsSumber || !e.dpsSumber.judul || !/^https:\/\//.test(e.dpsSumber.url || ""))) return null;
     // DPS bisa berdesimal dua (mis. SMGR Rp28,33), jadi tidak dibulatkan ke satu desimal
     return "Rp" + new Intl.NumberFormat("id-ID", { maximumFractionDigits: 2 }).format(e.dps);
   }
@@ -922,7 +936,16 @@
     var fmt = new Intl.NumberFormat("id-ID", { maximumFractionDigits: 2 });
     var baris = [];
     var dps = dividenTampil(e);
-    if (dps) baris.push({ tahunBuku: 2025, jenis: "Tahun buku", dps: dps, nilai: e.dps, rupiah: true, sumber: e.dpsSumber });
+    var rinci = dps ? rincianDps(e) : null;
+    if (rinci) {
+      // Baris jumlah tanpa satu sumber: keterangannya menyebut rincian; rincian tampil persis seperti ditulis sumber.
+      var fmtR = new Intl.NumberFormat("id-ID", { maximumFractionDigits: 5 });
+      baris.push({ tahunBuku: 2025, jenis: "Jumlah tahun buku", dps: dps, nilai: e.dps, rupiah: true, sumber: null, dihitung: true,
+        ket: rinci.map(function (b) { return (b.jenis === "interim" ? "interim" : "final") + " Rp" + fmtR.format(b.dps); }).join(" + ") + ", dihitung tim" });
+      rinci.forEach(function (b) {
+        baris.push({ tahunBuku: 2025, jenis: b.jenis === "interim" ? "Interim" : "Final", dps: "Rp" + fmtR.format(b.dps), nilai: b.dps, rupiah: true, sumber: b.sumber });
+      });
+    } else if (dps) baris.push({ tahunBuku: 2025, jenis: "Tahun buku", dps: dps, nilai: e.dps, rupiah: true, sumber: e.dpsSumber });
     (agenda || []).forEach(function (a) {
       if (!a || a.kode !== e.kode || typeof a.dps !== "number" || !(a.dps > 0) || typeof a.tahunBuku !== "number") return;
       var s = (a.sumber || []).filter(function (x) { return x && x.judul && /^https:\/\//.test(x.url || ""); })[0];
@@ -930,7 +953,7 @@
       var rupiah = a.mataUang !== "USD";
       if (baris.some(function (b) { return b.tahunBuku === a.tahunBuku && b.rupiah === rupiah && b.nilai === a.dps; })) return;
       baris.push({ tahunBuku: a.tahunBuku, jenis: a.jenis === "interim" ? "Interim" : "Final", dps: (rupiah ? "Rp" : "US$") + fmt.format(a.dps),
-        nilai: a.dps, rupiah: rupiah, sumber: s });
+        nilai: a.dps, rupiah: rupiah, sumber: s, dariAgenda: true });
     });
     return baris.sort(function (x, y) { return y.tahunBuku - x.tahunBuku; });
   }
@@ -1138,12 +1161,15 @@
           el("th", { scope: "row", text: String(b.tahunBuku) }),
           el("td", { text: b.jenis }),
           el("td", { class: "angka", text: b.dps }),
-          el("td", { class: "sel-sumber" }, [el("a", { href: b.sumber.url, target: "_blank", rel: "noopener",
+          b.dihitung ? el("td", { class: "sel-sumber", text: b.ket.charAt(0).toUpperCase() + b.ket.slice(1) })
+            : el("td", { class: "sel-sumber" }, [el("a", { href: b.sumber.url, target: "_blank", rel: "noopener",
             text: sumberPendek(b.sumber.judul), "aria-label": b.sumber.judul + " (tab baru)" })])
         ]));
       });
       akar.appendChild(el("div", { class: "tabel-wadah" }, [el("table", { class: "tabel-profil tabel-dividen" }, [
-        el("caption", { class: "keterangan-tabel", text: "Dividen tunai per saham, sebelum pajak, seperti ditulis sumber." }),
+        el("caption", { class: "keterangan-tabel", text: rDiv.some(function (b) { return b.dihitung; })
+          ? "Dividen tunai per saham, sebelum pajak, seperti ditulis sumber; baris “Jumlah” dihitung tim dari baris interim + final di bawahnya."
+          : "Dividen tunai per saham, sebelum pajak, seperti ditulis sumber." }),
         el("thead", null, [el("tr", null, [el("th", { scope: "col", text: "Tahun buku" }), el("th", { scope: "col", text: "Jenis" }),
           el("th", { scope: "col", class: "angka", text: "Dividen per saham" }), el("th", { scope: "col", text: "Sumber" })])]),
         tbDiv
@@ -1154,10 +1180,12 @@
     akar.appendChild(el("p", { class: "catatan-metode baris-dividen" }, [
       rDiv.some(function (b) { return b.jenis === "Tahun buku"; })
         ? "Jenis “Tahun buku” = dividen tunai tahun buku 2025 menurut sumber (bisa gabungan interim dan final). " : "",
-      rDiv.some(function (b) { return b.jenis !== "Tahun buku"; })
+      rDiv.some(function (b) { return b.dihitung; })
+        ? "Untuk emiten ini tidak ada sumber yang menulis jumlah dividen tahun buku 2025, jadi tim menjumlahkan interim dan final yang masing-masing ditulis sumber. " : "",
+      rDiv.some(function (b) { return b.dariAgenda; })
         ? "Baris interim/final berasal dari Agenda; jadwalnya ada di " : "",
-      rDiv.some(function (b) { return b.jenis !== "Tahun buku"; }) ? el("a", { href: "agenda.html", text: "Agenda IPO & Dividen" }) : null,
-      rDiv.some(function (b) { return b.jenis !== "Tahun buku"; }) ? ". " : "",
+      rDiv.some(function (b) { return b.dariAgenda; }) ? el("a", { href: "agenda.html", text: "Agenda IPO & Dividen" }) : null,
+      rDiv.some(function (b) { return b.dariAgenda; }) ? ". " : "",
       // Sari & Laras (4 Nov): emiten berlaporan dolar AS → jelaskan kenapa dividen tertulis dalam rupiah
       dps && e.dpsRupiah ? "Dividen tahun buku 2025 ini dibayar dalam rupiah; angkanya ditulis oleh sumber, bukan hasil konversi kami dari dolar AS. " : "",
       "Dividen bisa berbeda tiap tahun; dividen yang sudah dibagikan tidak menjamin dividen berikutnya. Ini data, bukan saran membeli atau menjual."

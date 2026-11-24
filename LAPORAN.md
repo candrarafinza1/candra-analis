@@ -2331,3 +2331,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar + Hana: TPIA dicari untuk DPS tahun buku 2025: interim Rp3,8427 (BCA Sekuritas & CNBC 31 Okt 2025) + final Rp6,07341 (Bareksa 20 Mei 2026; IDX Channel "Rp6,07"). Sempat diisi Rp9,92, lalu dibatalkan sebelum commit: tidak ada sumber yang menulis angka jumlahnya, padahal tabel profil berlabel "seperti ditulis sumber". Bima menetapkan aturan baru (rincian interim + final boleh dijumlah dengan label "dihitung tim"), dicatat sebagai tugas Arif + Fajar + Hana + Nina. Tetap 24 dari 32.
 - Nina: `node tests/cek.mjs` lolos; profil TPIA dicek 390/1280px tanpa scroll horizontal & galat JS (saat uji). Tegar: hanya teks backlog/laporan, tanpa rahasia.
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 24 Nov 2026, 14.09 WIB — sesi kerja (Bima)
+- Tugas Agenda teratas (ANDA & BUAT) menunggu rutin 07.xx Rabu; DES periode II 2026 belum terbit. Diambil tugas Arif dari keputusan 13.xx (aturan penjumlahan DPS).
+- Arif: field `dpsRincian` di skema `data/emiten-asli.js`; profil kini menampilkan baris "Jumlah tahun buku" berketerangan "interim Rp… + final Rp…, dihitung tim" ditambah baris interim & final dengan sumbernya; keterangan tabel ikut berubah. Jumlah hanya tampil bila selisih dengan total rincian ≤ 0,01 dan semua rincian bersumber https. Dewi: kolom angka di 390px dilebarkan agar "Rp6,07341" tidak terbelah.
+- Fajar + Hana: TPIA kini punya DPS tahun buku 2025 Rp9,92 (dihitung tim) = interim Rp3,8427 (BCA Sekuritas 31 Okt 2025; CNBC Indonesia mengutip angka sama, bayar 28 Nov 2025) + Rp6,07341 (Bareksa 20 Mei 2026, tahun buku 2025, bayar 17 Jun 2026). Kedua halaman dibaca ulang sesi ini. Kini 25 dari 32 emiten punya DPS.
+- Nina: cek 2f diperluas (jumlah = total rincian, rincian https & angkanya ada di judul sumber, uji balik); `node tests/cek.mjs` lolos; profil TPIA 390/1280px dan 32 profil di 390px tanpa scroll horizontal & galat JS. Tegar: hanya kode & data, tanpa rahasia.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

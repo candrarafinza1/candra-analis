@@ -19,6 +19,9 @@
      Emiten mataUang "USD" hanya boleh punya dps bila sumber menulis angka per saham dalam rupiah
      (dibayar dalam rupiah); tandai dpsRupiah: true. Tim tidak mengonversi sendiri (Bima, 3 Nov 19.10).
      = sumber yang ditampilkan di profil, judulnya wajib memuat angka Rp per saham (Galih & Hana, 3 Nov).
+   - dpsRincian: [{ jenis: "interim"|"final", dps, sumber { judul, url } }] dipakai bila tidak ada sumber yang
+     menulis DPS tahun buku 2025 sebagai satu angka, tetapi tiap bagian (interim & final) ditulis sumber dalam rupiah.
+     dps = jumlah rincian (selisih ≤ 0,01), dpsSumber dikosongkan; profil menulis "dihitung tim" (Bima, 24 Nov 13.xx).
    - catatan: keterangan bila definisi angka berbeda dari biasanya. */
 window.EMITEN_ASLI = [
   {
@@ -824,7 +827,15 @@ window.EMITEN_ASLI = [
     laba9b: { 2025: 1300, 2026: 279.81 },
     sekaliWaktu9b: { tahun: 2025, nilai: 1810, jenis: "keuntungan", ket: "keuntungan pembelian dengan diskon ±US$1,81 miliar dari transaksi Aster menurut PintarSaham" },
     catatan9b: "Laba 9 bulan = laba diatribusikan kepada pemilik entitas induk, juta US$: US$279,81 juta (Jan–Sep 2026) vs US$1,30 miliar (Jan–Sep 2025), turun ±78%; CNBC Indonesia 30 Okt 2026 dan PintarSaham sama. Angka 2025 dibulatkan sumber. Penurunan terutama karena keuntungan pembelian dengan diskon ±US$1,81 miliar (transaksi Aster) tercatat di 9 bulan 2025 dan tidak berulang (PintarSaham). Laba periode berjalan US$394,93 juta vs US$1,65 miliar sengaja tidak dipakai.",
-    dps: null, harga: null,
+    // dps tahun buku 2025 = interim Rp3,8427 + final Rp6,07341 = Rp9,91611, dihitung tim (Fajar + Hana, 24 Nov 14.xx).
+    // Tidak ada sumber yang menulis jumlahnya; tiap bagian ditulis sumber dalam rupiah. Total final US$30 juta (Bareksa).
+    dps: 9.91611, dpsRupiah: true, harga: null,
+    dpsRincian: [
+      { jenis: "interim", dps: 3.8427, sumber: { judul: "BCA Sekuritas, 31 Okt 2025: TPIA tetapkan dividen interim tahun buku 2025 Rp3,8427 per saham, dibayar 28 November 2025",
+        url: "https://bcasekuritas.co.id/latest-news/news/tpia-tetapkan-dividen-interim-rp384-per-saham-dibayar-28-november-2025" } },
+      { jenis: "final", dps: 6.07341, sumber: { judul: "Bareksa, 20 Mei 2026: Chandra Asri Pacific (TPIA) bagikan dividen tahun buku 2025 US$30 juta atau Rp6,07341 per saham, dibayar 17 Juni 2026",
+        url: "https://www.bareksa.com/berita/saham/2026-05-20/chandra-asri-pacific-tpia-bagikan-dividen-us30-juta-ini-estimasi-yield-dan-jadwalnya" } }
+    ],
     catatan: "Melapor dalam dolar AS; angka dalam juta US$ sesuai laporan, tidak dikonversi ke rupiah. Laba diatribusikan kepada pemilik entitas induk US$1,09 miliar (2025) vs rugi US$68,61 juta (2024), menurut Investortrust; laba tahun berjalan US$1,44–1,45 miliar (Investortrust, Warta Ekonomi) sengaja tidak dipakai. Laba 2025 ditopang keuntungan akuntansi sekali-waktu dari transaksi Aster (rilis resmi perusahaan kuartal III 2025 via MarketScreener; nilainya tidak disebut), dan pendapatan naik karena akuisisi. Karena itu TPIA tidak ikut Peringkat, sama seperti UNVR (aturan laba sekali-waktu Galih & Hana, 30 Okt). Neraca dikosongkan: sumber menyebut aset US$12,32 miliar dan liabilitas US$7,66 miliar, tetapi tidak menyebut ekuitas.",
     sumber: [{ judul: "Investortrust, 26 Mar 2026: Laba Chandra Asri (TPIA) melonjak ke US$1,44 miliar di 2025",
       url: "https://investortrust.id/market/98088/laba-chandra-asri-tpia-melonjak-ke-us1-44-miliar-di-2025-pendapatan-tumbuh-293" },
