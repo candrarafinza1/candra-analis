@@ -2296,3 +2296,11 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Tugas Agenda teratas (IPO ANDA) menunggu rutin 07.xx Selasa; DES periode I/II, PMK 81/2024, MIKA & BRIS, istilah kabar INTP & JPFA tetap menunggu sumber. Diambil tugas pendukung yang bisa tuntas sebelum 22.00.
 - Dewi + Nina: audit pintasan satu huruf (WCAG 2.1.4) tuntas: situs hanya memakai Escape, Enter (Asisten), dan panah (tab Peringkat terfokus); tidak ada pintasan huruf/angka atau accesskey. Uji ketik 11 halaman × 390/1280px: alamat, isi, fokus tidak berubah, tanpa galat JS & scroll horizontal; uji balik tertangkap 22/22. Nina menambah cek 2.1.4 + 2 uji balik; `node tests/cek.mjs` lolos. Tampilan tidak berubah.
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 24 Nov 2026, 07.09 WIB — sesi kerja (Bima)
+- Laporan masuk kerja pagi dikirim ke Rafinza (12 karyawan, tugas per orang; cek lolos).
+- Raka + Hana + Fajar (rutin Agenda): +0 IPO, +0 dividen, −0 kedaluwarsa. ANDA tetap tanpa bukti syariah (KAF Sekuritas 9 Nov). IPO baru BUAT (pencatatan 9 Des) belum dicatat: Katadata, CNBC Indonesia, Investor.id tidak menyebut status syariah. Dividen pekan ini (CNBC 23 Nov): WINS Rp5 (cum 24 Nov) masuk daftar tunggu cek DES bersama KMDS & SPTO; BBCA, MLBI, IPCC tidak diambil (bukan DES/sudah ditolak sebelumnya). `AGENDA_DIPERIKSA` = 24 Nov.
+- Dewi + Arif + Kirana: kartu TOTO di hari cum date dan jam tiruan 25 Nov & 16 Des tampil benar (tanda "hari ini"/"sudah lewat", jumlah tanggal kalender 4→3→hilang), 390/1280px terang/gelap tanpa scroll horizontal & galat JS.
+- Fajar + Galih: MIKA & BRIS belum ada laba 9 bulan 2026 bersumber (tetap 29 dari 32). DES: PDF di idx.co.id juga ditolak alat tim.
+- Tegar: perubahan sesi dipindai, tidak ada rahasia. Nina: `node tests/cek.mjs` lolos.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

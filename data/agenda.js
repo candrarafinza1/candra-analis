@@ -43,11 +43,14 @@ var DES_2026_I = "https://idx.id/media/nbkfn2sd/des-mei-2026.pdf";
 
 // Tanggal terakhir tim memeriksa sumber Agenda (rutin sesi 07.xx dan 13.xx), "YYYY-MM-DD".
 // Diperbarui setiap pemeriksaan rutin, walau tidak ada data baru. Ditampilkan di agenda.html (Arif + Dewi, 21 Nov 2026).
-window.AGENDA_DIPERIKSA = "2026-11-23";
+window.AGENDA_DIPERIKSA = "2026-11-24";
 
 // IPO: per 19 Nov 2026 belum ada IPO yang sumbernya menyebut sahamnya efek syariah.
 // Dicek Raka & Hana 19 Nov: Andalan Artha Primanusa (ANDA, penawaran umum 24–27 Nov 2026) — prospektus ringkas
 // dan berita (CNBC Indonesia 6 Nov, Investortrust 5 Nov, Investasiku) tidak menyebut status syariah → belum dicatat.
+// 24 Nov 2026 (Raka & Hana): ANDA masih tanpa bukti syariah (KAF Sekuritas 9 Nov juga tidak menyebut). IPO baru
+// Bumi Atsiri Prima (BUAT, penawaran umum 1–7 Des, pencatatan 9 Des): Katadata, CNBC Indonesia, Investor.id 23 Nov
+// tidak menyebut status syariah → belum dicatat.
 window.AGENDA_IPO = [];
 
 window.AGENDA_DIVIDEN = [
