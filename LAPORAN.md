@@ -2371,3 +2371,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - MBMA masih kosong: berita RUPST 23 Jun 2026 (Kontan, Investortrust) tidak menyebut dividen; artikel EmitenNews "tak bagi dividen" ternyata tahun buku 2024 → tidak dicatat.
 - Nina: `node tests/cek.mjs` lolos; profil AADI dicek 390/1280px: tabel 3 baris (Jumlah, Interim, Final) rapi, tanpa scroll horizontal & galat JS. Tegar: hanya data, tanpa rahasia. Yoga: push ke main.
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 24 Nov 2026, 20.13 WIB — sesi kerja (Bima)
+- Tugas Agenda teratas (ANDA & BUAT) tetap menunggu rutin 07.xx Rabu; DES periode II 2026 belum terbit. Diambil tugas pendukung data: DPS tahun buku 2025 MBMA (Fajar + Hana), emiten terakhir yang belum tercatat.
+- Fajar + Hana: MBMA tetap kosong. Katadata 24 Jun 2026 (RUPST Grup Merdeka) hanya menyebut MBMA merombak direksi, tidak menyebut dividen; IDX Channel "Tak Bagi Dividen" ternyata 26 Jun 2024 untuk tahun buku 2023 → tidak dipakai. Tidak ada data yang berubah; tetap 28 dari 32.
+- Nina: `node tests/cek.mjs` lolos. Tegar: hanya catatan, tanpa rahasia.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
