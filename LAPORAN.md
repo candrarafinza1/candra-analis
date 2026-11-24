@@ -2358,3 +2358,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Arif: rincian DPS kini mendukung dua interim (baris "Interim I/II") dan angka sampai 6 desimal. Dewi: kolom angka tabel dividen di 390px dilebarkan + huruf angka sedikit lebih kecil agar "Rp222,587426" tidak menabrak kolom Sumber.
 - Nina: uji baru pola 3 bagian (2 interim + final); `node tests/cek.mjs` lolos; profil BSSR, TPIA, JPFA dicek 390/1280px tanpa scroll horizontal, angka tidak meluap, tanpa galat JS. Tegar: hanya data & tampilan, tanpa rahasia.
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 24 Nov 2026, 18.09 WIB — sesi kerja (Bima)
+- Tugas Agenda teratas (ANDA & BUAT) tetap menunggu rutin 07.xx Rabu; DES periode II 2026 belum terbit. Diambil tugas pendukung data: DPS tahun buku 2025 (Fajar + Hana).
+- Fajar + Hana: ITMG kini punya DPS tahun buku 2025 Rp1.730 (dihitung tim) = interim Rp738 (BCA Sekuritas & Investortrust 5 Nov 2025) + final Rp992 (surat resmi KSEI 29 Apr 2026 & IDX Channel 29 Apr 2026). Selisih lama antarsumber ternyata karena Bareksa memakai perkiraan kurs (Rp978); surat KSEI menetapkan Rp992. Kini 27 dari 32 emiten punya DPS. Petunjuk baru untuk AADI: cari surat kurs tengah dividen di KSEI.
+- Nina: `node tests/cek.mjs` lolos; profil ITMG dicek 390/1280px: tabel 3 baris (Jumlah, Interim, Final) rapi, tanpa scroll horizontal & galat JS. Tegar: hanya data, tanpa rahasia. Yoga: push ke main.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

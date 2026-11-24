@@ -669,7 +669,17 @@ window.EMITEN_ASLI = [
     liabilitas2025: null, ekuitas2025: null,
     laba9b: { 2025: 130.59, 2026: 162.93 },
     catatan9b: "Laba 9 bulan = laba diatribusikan kepada pemilik entitas induk, juta US$: US$162,93 juta (Jan–Sep 2026) vs US$130,59 juta (Jan–Sep 2025), naik ±24,8% (Fortune IDN 11 Nov 2026 menulis naik 24,7%). IDX Channel (12 Nov 2026) menulis atribusi US$163 juta vs US$130 juta (pembulatan) dan laba periode berjalan US$168 juta vs US$134 juta (tidak dipakai); judul IDX Channel 'USD138 juta' tidak cocok dengan isinya, tidak dipakai. Pembanding cocok dengan US$131 juta di Warta Ekonomi (12 Nov 2025). Rp2,93 triliun di Bisnis = angka rupiah, tidak dipakai. Sumber tidak menyebut pos sekali-waktu.",
-    dps: null, harga: null,
+    // dps tahun buku 2025 = interim Rp738 + final Rp992 = Rp1.730, dihitung tim (Fajar + Hana, 24 Nov 18.xx).
+    // Interim: BCA Sekuritas & Investortrust 5 Nov 2025, Warta Ekonomi 21 Apr 2026 (US$50.041.086, dibayar 26 Nov 2025).
+    // Final: surat KSEI-9408/JKU/0426 29 Apr 2026 (resmi, Rp992 per saham dibayar rupiah) & IDX Channel 29 Apr 2026
+    // (US$64,54 juta, dibayar 19 Mei 2026). Rp978 di Bareksa 21 Apr 2026 = perkiraan kurs, tidak dipakai. Total US$114,58 juta (Warta Ekonomi).
+    dpsRincian: [
+      { jenis: "interim", dps: 738, sumber: { judul: "BCA Sekuritas (IQPlus), 5 Nov 2025: ITMG bagikan dividen interim tahun buku 2025 US$50.041.086 atau Rp738 per saham, dibayar 26 November 2025",
+        url: "https://bcasekuritas.co.id/latest-news/news/itmg-akan-bagikan-dividen-interim-pada-26-november-2025" } },
+      { jenis: "final", dps: 992, sumber: { judul: "IDX Channel, 29 Apr 2026: ITMG bagikan dividen final tahun buku 2025 US$64,54 juta atau setara Rp992 per saham, dibayar 19 Mei 2026",
+        url: "https://www.idxchannel.com/market-news/itmg-bagikan-dividen-final-rp992-per-saham-yield-379-persen/all" } }
+    ],
+    dps: 1730, dpsRupiah: true, harga: null,
     catatan: "Melapor dalam dolar AS; angka dalam juta US$ sesuai laporan, tidak dikonversi ke rupiah. Laba = laba diatribusikan kepada pemilik entitas induk (Bisnis menulis 2024 US$374,12 juta, selisih pembulatan). Neraca belum diisi: sumber hanya memberi ekuitas yang dibulatkan (US$1,9 miliar), jadi ROE dan DER belum dihitung.",
     sumber: [{ judul: "Fortune IDN, 11 Nov 2026: Produksi dan harga batu bara dongkrak laba ITMG 24,7% hingga Q3 2026 (US$162,93 juta)",
       url: "https://www.fortuneidn.com/market/produksi-dan-harga-batu-bara-dongkrak-laba-itmg-24-7-hingga-q3-2026-00-3dhnm-h3zhhy" },
@@ -677,6 +687,10 @@ window.EMITEN_ASLI = [
       url: "https://www.idxchannel.com/market-news/itmg-raup-laba-bersih-usd138-juta-hingga-september-2026-naik-25-persen" },
       { judul: "Warta Ekonomi, 12 Nov 2025: Harga batubara turun, ITMG tetap catat laba US$134 juta hingga kuartal III 2025 (atribusi US$131 juta)",
       url: "https://wartaekonomi.co.id/read589760/harga-batubara-turun-itmg-tetap-catat-laba-us-134-juta-hingga-kuartal-iii-2025" },
+      { judul: "KSEI, 29 Apr 2026: Kurs tengah pelaksanaan dividen tunai ITMG — dividen tunai final dibagikan dalam rupiah Rp992 per saham (surat KSEI-9408/JKU/0426)",
+        url: "https://web.ksei.co.id/Announcement/Files/193510_ksei_9408_jku_0426_202604291722.pdf" },
+      { judul: "Investortrust, 5 Nov 2025: Indo Tambangraya (ITMG) tebar dividen interim tahun buku 2025 Rp738 per saham",
+        url: "https://investortrust.id/market/84531/indo-tambangraya-itmg-tebar-dividen-interim-rp-738-per-saham-simak-jadwal-ini" },
       { judul: "BCA Sekuritas (IQPlus), 26 Feb 2026: Pendapatan ITMG capai USD1,88 miliar hingga Desember 2025",
       url: "https://bcasekuritas.co.id/latest-news/news/pendapatan-itmg-capai-usd188-miliar-hingga-desember-2025" },
       { judul: "Bisnis, 26 Feb 2026: Indo Tambangraya (ITMG) raih laba US$190,94 juta pada 2025, turun 48,96%",
