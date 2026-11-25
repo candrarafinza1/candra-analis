@@ -8309,5 +8309,43 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
   ]) ok(rusak !== appL && uji(rusak).some((x) => x.includes(pesan)), `uji balik latihan laba: "${pesan}" harus tertangkap`);
 }
 
+// 2f-24. Latihan "Hitung modal untuk membeli saham" (Nina, 25 Nov 2026; Arif + Laras + Dewi).
+// Rumus = harga × 100 × lot; biaya hanya dari isian pengguna (tanpa angka biaya bawaan); batas isian; hanya di
+// pelajaran lot-dan-transaksi; tanpa kata ajakan.
+{
+  const appM = readFileSync("assets/app.js", "utf8");
+  const ujiM = (t) => {
+    const salah = [];
+    const a = t.indexOf("  var MODAL_LEMBAR_LOT"), b = t.indexOf("  function buatLatihanModal("), c = t.indexOf("  function pasangLatihanModal("), d = t.indexOf("  /* ---------- Halaman pelajaran");
+    if (a < 0 || b < 0 || c < 0 || d < 0) return ["fungsi latihan modal tidak ada"];
+    let f;
+    try { f = vm.runInNewContext(`${t.slice(a, b)}; hitungModalLot`); } catch (e) { return ["galat: " + e.message]; }
+    const r1 = f("1250", "2", "");
+    if (!r1 || r1.modal !== 250000 || r1.total !== 250000 || r1.lembar !== 200 || r1.biaya !== null) salah.push("rumus modal (Rp1.250 × 100 × 2 = Rp250.000)");
+    const r2 = f("500", "3", "0,25");
+    if (!r2 || r2.modal !== 150000 || r2.biaya !== 375 || r2.total !== 150375) salah.push("biaya dari isian pengguna (0,25% × Rp150.000 = Rp375)");
+    for (const [h, l, bi, g] of [["0", "1", "", "harga"], ["1250", "0", "", "lot"], ["1250", "1,5", "", "lot"], ["1250", "1", "6", "biaya"], ["1250", "1", "abc", "biaya"], ["1250", "100001", "", "lot"]]) {
+      const r = f(h, l, bi);
+      if (!r || r.galat !== g) salah.push(`isian tidak sah harus ditolak (${h}/${l}/${bi} → ${g})`);
+    }
+    const ui = t.slice(b, c);
+    if (!/isian\("latihan-modal-biaya"[^\n]*value: "" \}/.test(ui)) salah.push("isian biaya wajib kosong (tanpa angka biaya bawaan)");
+    if (!/m\.id !== "lot-dan-transaksi"/.test(t.slice(c, d))) salah.push("hanya di pelajaran lot-dan-transaksi");
+    if (!/pasangLatihanModal\(wadah, m\);/.test(t)) salah.push("renderPelajaran wajib memasang latihan modal");
+    if (/buruan|pasti (naik|untung)|rekomendasi beli|layak dibeli|saatnya beli|untung/i.test(t.slice(b, d).replace(/\/\*[\s\S]*?\*\//g, ""))) salah.push("kata ajakan dilarang");
+    return salah;
+  };
+  const sM = ujiM(appM);
+  ok(!sM.length, "Latihan modal: " + sM.join("; "));
+  for (const [rusak, pesan] of [
+    [appM.replace("var modal = h * MODAL_LEMBAR_LOT * jml;", "var modal = h * jml;"), "rumus modal"],
+    [appM.replace("var rp = Math.round(modal * b / 100);", "var rp = Math.round(modal * b);"), "biaya dari isian"],
+    [appM.replace("|| jml > MODAL_LOT_MAKS)", ")"), "isian tidak sah"],
+    [appM.replace('autocomplete: "off", value: "" }', 'autocomplete: "off", value: "0,15" }'), "tanpa angka biaya bawaan"],
+    [appM.replace('if (m.id !== "lot-dan-transaksi") return;', ""), "lot-dan-transaksi"],
+    [appM.replace("    pasangLatihanModal(wadah, m);\n", ""), "renderPelajaran"],
+  ]) ok(rusak !== appM && ujiM(rusak).some((x) => x.includes(pesan)), `uji balik latihan modal: "${pesan}" harus tertangkap`);
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);

@@ -437,6 +437,12 @@ tbody tr:hover { background: var(--hover-baris); }
 .latihan-urut-tombol { min-height: 44px; min-width: 44px; padding: 8px 12px; background: transparent; border-color: var(--aksen); color: var(--aksen); }
 .latihan-urut-tombol:disabled { opacity: .45; cursor: not-allowed; }
 .latihan-urut-jelas { margin: 12px 0 0; padding-left: 1.4em; }
+/* Latihan "Hitung modal untuk membeli saham" (Dewi, 25 Nov 2026) */
+.latihan-modal { margin: 28px 0; }
+.latihan-modal-isian .cari-kamus label { flex: 1 1 100%; }
+.latihan-modal-isian .cari-kamus { margin-bottom: 12px; }
+.latihan-modal-hasil { margin: 8px 0 12px; padding-left: 1.2em; overflow-wrap: anywhere; }
+.latihan-modal-catatan { font-size: .9rem; color: var(--tinta-2); }
 .latihan-urut-petunjuk { display: block; margin-top: 6px; font-weight: 400; }
 .latihan-urut-jelas[hidden] { display: none; }
 

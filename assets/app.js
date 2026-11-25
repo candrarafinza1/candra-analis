@@ -510,6 +510,77 @@
     if (latihan) wadah.insertBefore(latihan, wadah.querySelectorAll("form.kuis")[0] || null);
   }
 
+  /* ---------- Latihan "Hitung modal untuk membeli saham" (Arif + Laras + Dewi, 25 Nov 2026) ----------
+     Di pelajaran "Lot, harga, dan biaya transaksi", sebelum kuis. Rumus sama dengan kotak rumus pelajaran:
+     modal = harga per lembar × 100 × jumlah lot. Persen biaya beli DIISI PENGGUNA dari tabel biaya aplikasinya
+     (boleh kosong); tim tidak menaruh angka biaya bawaan karena biaya berbeda tiap sekuritas. Tidak menilai saham
+     apa pun, tidak disimpan, tidak dikirim. */
+  var MODAL_LEMBAR_LOT = 100, angkaModal = new Intl.NumberFormat("id-ID", { maximumFractionDigits: 4 });
+  var MODAL_HARGA_MAKS = 1000000, MODAL_LOT_MAKS = 100000, MODAL_BIAYA_MAKS = 5;
+  function hitungModalLot(harga, lot, biaya) {
+    var h = Number(harga), jml = Number(lot);
+    if (!Number.isInteger(h) || h < 1 || h > MODAL_HARGA_MAKS) return { galat: "harga" };
+    if (!Number.isInteger(jml) || jml < 1 || jml > MODAL_LOT_MAKS) return { galat: "lot" };
+    var modal = h * MODAL_LEMBAR_LOT * jml;
+    if (biaya == null || biaya === "") return { lembar: jml * MODAL_LEMBAR_LOT, modal: modal, biaya: null, total: modal };
+    var b = Number(String(biaya).trim().replace(",", "."));
+    if (!/^\d+([.,]\d{1,4})?$/.test(String(biaya).trim()) || !(b >= 0) || b > MODAL_BIAYA_MAKS) return { galat: "biaya" };
+    var rp = Math.round(modal * b / 100);
+    return { lembar: jml * MODAL_LEMBAR_LOT, modal: modal, persen: b, biaya: rp, total: modal + rp };
+  }
+  function buatLatihanModal() {
+    var rp = function (x) { return "Rp" + angkaModal.format(x); };
+    var kotak = el("section", { class: "kuis latihan-modal", "aria-labelledby": "judul-latihan-modal" });
+    kotak.appendChild(el("h2", { id: "judul-latihan-modal", text: "Hitung sendiri: modal untuk membeli saham" }));
+    kotak.appendChild(el("p", { class: "kuis-pengantar", text: "Isi harga per lembar dan jumlah lot. Persen biaya beli boleh dikosongkan, atau isi dari tabel biaya di aplikasi sekuritas Anda (besarnya berbeda tiap sekuritas). Ini alat berhitung, bukan saran membeli saham apa pun. Angka tidak disimpan dan tidak dikirim." }));
+    var info = el("p", { class: "kuis-hasil", id: "latihan-modal-info", role: "status", "aria-live": "polite" });
+    var hasil = el("ul", { class: "latihan-modal-hasil" });
+    function isian(id, label, attrs) {
+      var inp = el("input", Object.assign({ id: id, "aria-describedby": "latihan-modal-info" }, attrs));
+      return { inp: inp, baris: el("div", { class: "cari-kamus" }, [el("label", { for: id, text: label }), inp]) };
+    }
+    var iHarga = isian("latihan-modal-harga", "Harga per lembar (Rp)", { type: "number", inputmode: "numeric", min: "1", max: String(MODAL_HARGA_MAKS), step: "1", value: "1250" });
+    var iLot = isian("latihan-modal-lot", "Jumlah lot", { type: "number", inputmode: "numeric", min: "1", max: String(MODAL_LOT_MAKS), step: "1", value: "2" });
+    var iBiaya = isian("latihan-modal-biaya", "Biaya beli dari aplikasi Anda (%, boleh kosong)", { type: "text", inputmode: "decimal", autocomplete: "off", value: "" });
+    var PESAN = {
+      harga: "Isi harga per lembar dengan bilangan bulat Rp1 sampai " + rp(MODAL_HARGA_MAKS) + ".",
+      lot: "Isi jumlah lot dengan bilangan bulat 1 sampai " + angkaModal.format(MODAL_LOT_MAKS) + ".",
+      biaya: "Isi persen biaya beli 0 sampai " + MODAL_BIAYA_MAKS + " (contoh penulisan: 0,25), atau kosongkan."
+    };
+    var masukan = { harga: iHarga.inp, lot: iLot.inp, biaya: iBiaya.inp };
+    function hitung() {
+      var vH = String(iHarga.inp.value || "").trim(), vL = String(iLot.inp.value || "").trim();
+      var r = (/^\d+$/.test(vH) && /^\d+$/.test(vL)) ? hitungModalLot(vH, vL, iBiaya.inp.value)
+        : { galat: /^\d+$/.test(vH) ? "lot" : "harga" };
+      hasil.textContent = "";
+      Object.keys(masukan).forEach(function (k) {
+        masukan[k].setAttribute("aria-invalid", r.galat === k ? "true" : "false");
+      });
+      if (r.galat) { info.textContent = PESAN[r.galat]; return; }
+      var h = Number(vH), n = Number(vL);
+      hasil.appendChild(el("li", { text: angkaModal.format(n) + " lot = " + angkaModal.format(r.lembar) + " lembar saham." }));
+      hasil.appendChild(el("li", { text: "Modal: " + rp(h) + " × 100 × " + angkaModal.format(n) + " = " + rp(r.modal) + "." }));
+      if (r.biaya == null) {
+        info.textContent = "Modal " + rp(r.modal) + ", belum termasuk biaya beli.";
+      } else {
+        hasil.appendChild(el("li", { text: "Biaya beli: " + angkaModal.format(r.persen) + "% × " + rp(r.modal) + " ≈ " + rp(r.biaya) + " (dibulatkan ke rupiah terdekat)." }));
+        info.textContent = "Perkiraan uang yang dibutuhkan: " + rp(r.total) + " (modal + biaya beli).";
+      }
+    }
+    [iHarga.inp, iLot.inp, iBiaya.inp].forEach(function (x) { x.addEventListener("input", hitung); });
+    kotak.appendChild(el("div", { class: "kotak-rumus", text: "Modal = harga per lembar × 100 × jumlah lot" }));
+    kotak.appendChild(el("div", { class: "latihan-modal-isian" }, [iHarga.baris, iLot.baris, iBiaya.baris]));
+    kotak.appendChild(info);
+    kotak.appendChild(hasil);
+    kotak.appendChild(el("p", { class: "latihan-modal-catatan", text: "Aplikasi sekuritas bisa membulatkan biaya sedikit berbeda, dan harga yang Anda masukkan disesuaikan dengan fraksi harga. Saat menjual, biaya biasanya sedikit lebih tinggi karena ada pajak penjualan saham." }));
+    hitung();
+    return kotak;
+  }
+  function pasangLatihanModal(wadah, m) {
+    if (m.id !== "lot-dan-transaksi") return;
+    wadah.insertBefore(buatLatihanModal(), wadah.querySelectorAll("form.kuis")[0] || null);
+  }
+
   /* ---------- Halaman pelajaran ---------- */
   function renderPelajaran() {
     var wadah = document.getElementById("isi-pelajaran");
@@ -530,6 +601,7 @@
     wadah.appendChild(buatTandaiSelesai(m));
     pasangLatihanUrut(wadah, m);
     pasangLatihanLaba(wadah, m);
+    pasangLatihanModal(wadah, m);
 
     var nav = el("nav", { class: "navigasi-pelajaran", "aria-label": "Pelajaran lain" });
     nav.appendChild(idx > 0
