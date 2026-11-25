@@ -2383,3 +2383,11 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar + Galih: dua pencarian baru masih hanya memunculkan MIKA semester I/2026 dan BRIS kuartal II/2026. Tidak ada data yang berubah; tetap 29 dari 32.
 - Nina: `node tests/cek.mjs` lolos. Tegar: hanya catatan, tanpa rahasia.
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 25 Nov 2026, 07.09 WIB — sesi kerja (Bima)
+- Email masuk kerja pagi terkirim ke Rafinza (12 karyawan, tugas per orang, status situs).
+- Agenda (rutin pagi Raka + Fajar + Hana): +0 IPO, +0 dividen, −0 kedaluwarsa. ANDA & BUAT: belum ada sumber yang menyebut status syariah → tetap tidak dicatat. Calon baru MEDC (interim US$30 juta, bayar paling lambat 2 Des; EmitenNews 2 Nov) ditambah ke antrean cek DES; PDF DES tetap ditolak alat tim, DES periode II 2026 belum terbit. `AGENDA_DIPERIKSA` → 25 Nov.
+- Fajar + Galih: laba 9 bulan MIKA & BRIS belum ada sumber; tetap 29 dari 32.
+- Arif: jadwal hapus entri Agenda dihitung (TOTO 30 Des, DGWG/JTPE 1 Jan, BOBA/PSGO 2 Jan). Dewi + Kirana: Agenda & pita beranda dengan jam asli 25 Nov benar, 390/1280px terang/gelap tanpa scroll horizontal & galat JS.
+- Nina: `node tests/cek.mjs` lolos. Tegar: hanya data tanggal & catatan, tanpa rahasia. Yoga: push ke main.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
