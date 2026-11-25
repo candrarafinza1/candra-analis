@@ -120,6 +120,23 @@ window.MODUL = [
 
       <h2>Cara bertransaksi yang syariah</h2>
       <p>Selain memilih sahamnya, cara transaksinya juga perlu diperhatikan. Gunakan sekuritas yang menyediakan <strong>Sharia Online Trading System (SOTS)</strong>. Sistem ini dirancang mengikuti fatwa DSN-MUI, antara lain tidak memakai pembiayaan berbunga (margin) dan tidak melayani transaksi short selling.</p>
+
+      <h2>Zakat saham</h2>
+      <p>Saham termasuk harta yang bisa terkena zakat. Ada dua rujukan resmi yang bisa dibaca pemula.</p>
+      <p><strong>1. Ijtima Ulama Komisi Fatwa MUI ke-7 (9–11 November 2021)</strong></p>
+      <ul>
+        <li>Yang wajib mengeluarkan zakat saham adalah <strong>pemegang saham</strong>. Syaratnya: pemiliknya muslim, kepemilikannya penuh, nilainya mencapai nisab, dan sudah dimiliki satu tahun (haul) menurut kalender hijriah.</li>
+        <li>Pemegang saham boleh mewakilkan pembayarannya kepada perusahaan. Bila perusahaan sudah mengeluarkan zakatnya, kewajiban pemegang saham dianggap gugur.</li>
+        <li>Cara menghitungnya bergantung pada tujuan memiliki saham. Saham yang diperjualbelikan mengikuti zakat perdagangan dan dihitung dari nilai pasar saham saat haul. Saham yang disimpan sebagai investasi jangka panjang di perusahaan industri atau jasa dihitung dari keuntungan bersih saham, dengan nisab dan kadar mengikuti zakat emas.</li>
+      </ul>
+      <p><strong>2. Peraturan Menteri Agama Nomor 52 Tahun 2014</strong></p>
+      <ul>
+        <li>Peraturan ini memakai istilah "surat berharga". Pasal 9: zakat surat berharga wajib bila kepemilikannya mencapai nisab senilai <strong>85 gram emas</strong>, dengan kadar <strong>2,5%</strong> dari nilai surat berharga yang dimiliki.</li>
+        <li>Pasal 10: zakat ditunaikan setelah mencapai haul dan dibayarkan melalui amil zakat resmi.</li>
+      </ul>
+      <p>Pola hitungannya (bukan angka sungguhan): bila nilai yang dihitung sudah sama dengan atau lebih dari harga 85 gram emas saat haul, zakatnya 2,5% × nilai itu. Harga emas berubah setiap hari, jadi nilai nisab dalam rupiah juga berubah.</p>
+      <p><em>Sumber: MUI, "Hukum Zakat Saham dan Cara Menunaikannya", hasil Ijtima Ulama Komisi Fatwa MUI ke-7, di situs mui.or.id; IDX Channel, "Ijtima Ulama VII MUI di 2021", di situs idxchannel.com (tahun penyelenggaraan); Peraturan Menteri Agama Nomor 52 Tahun 2014 Pasal 1 angka 9, Pasal 9, dan Pasal 10 (ditetapkan 27 Nov 2014), di situs peraturan.go.id. Perubahan PMA 69/2015 (tabel zakat ternak) dan PMA 31/2019 (zakat pendapatan) yang kami baca tidak mengubah pasal-pasal ini.</em></p>
+      <div class="kotak-penting">Sisi syariah (Hana): Candra Analis tidak menghitung zakat pribadi Anda dan tidak menentukan cara mana yang berlaku untuk saham Anda. Untuk keadaan Anda sendiri, tanyakan ke BAZNAS atau lembaga amil zakat resmi.</div>
     `
   },
   {

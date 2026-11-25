@@ -2434,3 +2434,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Nina: `node tests/cek.mjs` lolos + cek 2f-23 dengan 4 uji balik (sempat bentrok dengan uji balik kalender karena baris `daftar.length < 2` sama → nama variabel diganti). Dicek 390px gelap & 1280px terang tanpa scroll horizontal & galat JS. Tegar: tanpa innerHTML berisi data, tanpa rahasia. Yoga: push ke main.
 - Hana + Sari: bahan "zakat saham" dicari; baru satu sumber terbaca (IDX Channel 2024) → ditahan, dicatat di BACKLOG.
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 25 Nov 2026, 16.09 WIB — sesi kerja (Bima)
+- Tugas Agenda (ANDA & BUAT) tetap dijadwalkan Kamis 07.xx; MIKA/BSSR & DES periode II sudah dicari hari ini tanpa sumber baru. Diambil tugas konten tertahan sesi 15.xx: "Zakat saham".
+- Hana + Sari + Laras: dua sumber resmi kini terbaca: MUI (hasil Ijtima Ulama Komisi Fatwa ke-7, 9–11 Nov 2021) dan PMA 52/2014 Pasal 9–10 (nisab 85 gram emas, kadar 2,5%, haul, amil resmi); PMA 69/2015 & 31/2019 dicek tidak mengubah pasal itu. → Bagian "Zakat saham" di pelajaran Saham syariah + istilah di kamus. Tanpa hitungan pribadi; pembaca dirujuk ke BAZNAS/LAZ resmi. PDF modul dibuat ulang.
+- Nina: `node tests/cek.mjs` lolos; pelajaran dicek 390px gelap & 1280px terang tanpa scroll horizontal & galat JS. Tegar: hanya teks, tanpa rahasia. Yoga: push ke main.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

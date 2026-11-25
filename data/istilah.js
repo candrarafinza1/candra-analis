@@ -309,6 +309,10 @@ window.ISTILAH = [
   { istilah: "Pajak dividen", pola: ["pajak dividen", "PPh dividen"],
     arti: "Untuk orang pribadi dalam negeri yang menerima dividen dari perusahaan di Indonesia, menurut penjelasan DJP: dividen bebas pajak penghasilan bila diinvestasikan di Indonesia paling lambat akhir bulan ketiga setelah tahun pajak berakhir, ditahan minimal 3 tahun pajak, dan realisasinya dilaporkan ke DJP. Bila tidak diinvestasikan, dikenai PPh final 10% yang disetor sendiri paling lambat tanggal 15 bulan berikutnya. Aturan bisa berubah; periksa pajak.go.id untuk keadaan Anda.",
     pelajaran: "praktik-beli-pertama" },
+  // Hana + Sari + Laras (25 Nov 16.xx): sumber MUI (Ijtima Ulama Komisi Fatwa ke-7, 2021) & PMA 52/2014 Pasal 9–10; bukan hitungan zakat pribadi
+  { istilah: "Zakat saham", pola: ["zakat saham"],
+    arti: "Zakat atas saham yang dimiliki. Menurut Ijtima Ulama Komisi Fatwa MUI 2021, yang wajib mengeluarkannya adalah pemegang saham muslim bila nilainya mencapai nisab dan sudah satu tahun hijriah (haul). Peraturan Menteri Agama 52/2014 menyebut nisab surat berharga senilai 85 gram emas dan kadar 2,5%. Untuk keadaan Anda sendiri, tanyakan ke BAZNAS atau lembaga amil zakat resmi.",
+    pelajaran: "saham-syariah" },
   { istilah: "Dividen final", pola: ["dividen final"],
     arti: "Dividen yang ditetapkan RUPS Tahunan setelah laporan tahunan diaudit. Bila perusahaan sudah membayar dividen interim untuk tahun buku yang sama, dividen final adalah sisanya.",
     pelajaran: "praktik-beli-pertama" },
