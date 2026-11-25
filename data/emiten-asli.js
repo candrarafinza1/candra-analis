@@ -621,7 +621,10 @@ window.EMITEN_ASLI = [
     labaTahun: { 2024: 7000, 2025: 7560 },
     pendapatan: { 2024: null, 2025: null },
     liabilitas2025: null, ekuitas2025: 51950,
-    laba9b: { 2025: null, 2026: null },
+    // laba9b (Fajar & Galih, 25 Nov 2026): laba bersih Jan–Sep 2026 Rp6,13 T, tumbuh 10,02% (Investortrust, Katadata, Infobanknews,
+    // Warta Ekonomi, semua 24 Nov 2026); pembanding Jan–Sep 2025 Rp5,57 T (Bisnis 29 Okt 2025). Cek: 6,13 / 5,57 = +10,05%, cocok dengan 10,02% (pembulatan).
+    laba9b: { 2025: 5570, 2026: 6130 },
+    catatan9b: "Laba 9 bulan = laba bersih seperti ditulis sumber: Rp6,13 T (Jan–Sep 2026) vs Rp5,57 T (Jan–Sep 2025), tumbuh 10,02%. Sama seperti angka tahunan, sumber tidak menulis apakah ini laba diatribusikan kepada pemilik entitas induk. Angka 2026 sama di Investortrust, Katadata, Infobanknews, dan Warta Ekonomi (24 Nov 2026); pembanding 2025 dari Bisnis.com (29 Okt 2025). Sumber tidak menyebut pos sekali-waktu.",
     // dps: Rp32,81 (tahun buku 2025, total Rp1,51 T = 20% laba 2025, RUPST 5 Mei 2026, dibayar 5 Juni 2026; tahun buku 2024 Rp22,78) dari BCA Sekuritas 5 Jun 2026 & Bisnis.com 5 Mei 2026 (Fajar, 3 Nov 20.10).
     dps: 32.81, harga: null,
     dpsSumber: { judul: "BCA Sekuritas, 5 Jun 2026: BSI cairkan dividen Rp32,81 per saham (tahun buku 2025, total Rp1,51 T) hari ini", url: "https://bcasekuritas.co.id/latest-news/news/bsi-cairkan-dividen-rp151-triliun-ke-pemegang-saham-hari-ini" },
@@ -629,7 +632,13 @@ window.EMITEN_ASLI = [
     sumber: [{ judul: "Emitennews, 7 Feb 2026: Tumbuh minimalis, BRIS 2025 tabulasi laba Rp7,56 triliun",
       url: "https://emitennews.com/news/tumbuh-minimalis-bris-2025-tabulasi-laba-rp756-triliun" },
       { judul: "BCA Sekuritas, 6 Feb 2026: Bank Syariah Indonesia raih laba Rp7,56 triliun hingga Desember 2025",
-        url: "https://bcasekuritas.co.id/latest-news/news/bank-syariah-indonesia-raih-laba-rp756-triliun-hingga-desember-2025" }]
+        url: "https://bcasekuritas.co.id/latest-news/news/bank-syariah-indonesia-raih-laba-rp756-triliun-hingga-desember-2025" },
+      { judul: "Bisnis.com, 29 Okt 2025: BSI (BRIS) raup laba Rp5,57 triliun pada kuartal III/2025, tumbuh 9,03%",
+        url: "https://finansial.bisnis.com/read/20251029/231/1924213/bsi-bris-raup-laba-rp557-triliun-pada-kuartal-iii2025-tumbuh-903" },
+      { judul: "Investortrust, 24 Nov 2026: Laba bersih BSI (BRIS) Rp6,13 triliun hingga kuartal III 2026, tumbuh 10,02%",
+        url: "https://investortrust.id/financial/123522/laba-bersih-bsi-bris-naik-10-2-jadi-rp-6-13-triliun-di-kuartal-iii-2026" },
+      { judul: "Katadata, 24 Nov 2026: BSI (BRIS) cetak laba Rp6,13 triliun di kuartal III, pembiayaan tumbuh 15,6%",
+        url: "https://katadata.co.id/finansial/bursa/6b055a6d45aaf/bsi-bris-cetak-laba-rp-6-13-triliun-di-kuartal-iii-pembiayaan-tumbuh-15-6" }]
     },
   {
     kode: "PGAS", nama: "PT Perusahaan Gas Negara Tbk", sektor: "Energi",

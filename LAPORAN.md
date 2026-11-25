@@ -2398,3 +2398,11 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Galih: ITMG ROE 10%, DER 0,3x (urutan ROE 19 dari 29); TPIA ROE 23,4%, DER 1,6x, tetap di luar Peringkat (laba sekali-waktu) dan catatan profil menjelaskan ROE-nya tidak menggambarkan kinerja biasa.
 - Nina: `node tests/cek.mjs` lolos; profil ITMG & TPIA dicek 390/1280px tanpa scroll horizontal & galat JS. Tegar: hanya data, tanpa rahasia. Yoga: push ke main.
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 25 Nov 2026, 09.08 WIB — sesi kerja (Bima)
+- Tugas Agenda teratas (ANDA & BUAT) tetap dijadwalkan di rutin 13.xx; DES periode II 2026 belum terbit. Diambil tugas data: sumber kedua pendapatan 2025 BSSR (Fajar), lalu laba 9 bulan BRIS yang ternyata baru terbit kemarin.
+- Fajar + Galih: **BRIS laba bersih Jan–Sep 2026 Rp6,13 T vs Rp5,57 T (+10,02%)**; angka 2026 sama di Investortrust, Katadata, Infobanknews & Warta Ekonomi (24 Nov 2026), pembanding dari Bisnis.com 29 Okt 2025; cek hitung 6,13/5,57 = +10,05% (pembulatan). Sumber hanya menulis "laba bersih" (sama seperti angka tahunan) dan tidak menyebut pos sekali-waktu. Laba 9 bulan kini 30 dari 32 (sisa MIKA & BSSR).
+- Raka + Hana: kabar BRIS 24 Nov (laporan keuangan) ditambah, bahasa netral.
+- Fajar: BSSR pendapatan 2025 sumber kedua belum ketemu (Investortrust, RCTI+, EmitenNews hanya menyebut laba).
+- Nina: `node tests/cek.mjs` lolos (sempat gagal karena angka aset di ringkasan kabar terbaca sebagai laba → kalimat aset dihapus); profil BRIS, Kabar, Peringkat, Radar dicek 390/1280px tanpa scroll horizontal & galat JS. Tegar: hanya data, tanpa rahasia. Yoga: push ke main.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

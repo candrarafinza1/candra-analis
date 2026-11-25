@@ -11,6 +11,10 @@
 window.KABAR_JENIS = ["Laporan keuangan", "Pembelian kembali saham", "Dividen", "Rapat umum pemegang saham", "Aksi korporasi lain"];
 
 window.KABAR = [
+  // Laporan 9 bulan BRIS — Investortrust, 24 Nov 2026; angka sama di Katadata, Infobanknews, Warta Ekonomi 24 Nov 2026 (Raka, ditinjau Hana)
+  { kode: "BRIS", tanggal: "2026-11-24", jenis: "Laporan keuangan",
+    ringkas: "Laporan Januari–September 2026 terbit. Bank Syariah Indonesia mencatat laba bersih Rp6,13 triliun, tumbuh 10,02% dari Rp5,57 triliun pada periode yang sama 2025 (Bisnis.com, 29 Okt 2025).",
+    sumber: { judul: "Investortrust, 24 Nov 2026: Laba bersih BSI (BRIS) naik 10,2% jadi Rp6,13 triliun di kuartal III 2026", url: "https://investortrust.id/financial/123522/laba-bersih-bsi-bris-naik-10-2-jadi-rp-6-13-triliun-di-kuartal-iii-2026" } },
   // Laporan 9 bulan KLBF — Investortrust, 13 Nov 2026; angka sama di ringkasan Quartr 30 Okt 2026 (Raka, ditinjau Hana); istilah "diatribusikan" dari Quartr (Sari + Hana, 23 Nov 20.xx)
   { kode: "KLBF", tanggal: "2026-11-13", jenis: "Laporan keuangan",
     ringkas: "Laporan Januari–September 2026 terbit. Laba yang diatribusikan kepada pemilik entitas induk Rp2,74 triliun, tumbuh 4% dari Rp2,63 triliun pada periode yang sama 2025 (BCA Sekuritas, 27 Okt 2025).",
