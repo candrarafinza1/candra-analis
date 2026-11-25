@@ -1118,3 +1118,9 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Batasan: tanpa menambah isi di luar sumber; Hana meninjau; PDF modul dibuat ulang.
 - Usaha: kecil (Sari + Hana + Laras).
 - Status: dipilih Bima 25 Nov 17.xx; **selesai 25 Nov 18.xx** (Sari + Hana + Laras, Dewi untuk gaya butir). Kirana meninjau di HP sungguhan begitu bisa.
+
+### 58. Kotak "Hitung sendiri: modal": isian harga & lot menerima "1.250", koma ditolak dengan jelas (Kirana + Laras, 25 Nov 2026, 20.xx WIB) — kecil, langsung dikerjakan
+- Masalah (tinjauan keyboard 390px gelap & 1280px terang): isian harga dan lot bertipe angka (`type=number`). Di Chrome, mengetik "1250,5" diam-diam terbaca 12505 sehingga modal tampil 10× lipat tanpa pesan salah; penulisan ribuan ala Indonesia "1.250" ditolak dengan pesan yang tidak menyebut sebabnya.
+- Ide: isian teks dengan papan angka (`inputmode="numeric"`), menerima "1250" atau ribuan bertitik ("1.250", "1.000.000"), menolak koma & titik yang bukan ribuan dengan pesan "tanpa koma (contoh: 1250 atau 1.250)".
+- Dampak bagi pemula: tidak ada lagi hasil salah yang terlihat benar. Usaha: kecil. Lolos aturan: tanpa biaya, tanpa animasi, keyboard tetap bisa (tombol panah naik/turun hilang, tidak dipakai di pelajaran).
+- Status: selesai 25 Nov 20.xx (Arif + Laras; Nina: cek 2f-24 diperluas + 3 uji balik). Papan angka di HP sungguhan tetap perlu dicek.

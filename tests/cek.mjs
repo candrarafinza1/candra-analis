@@ -8328,7 +8328,15 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
       const r = f(h, l, bi);
       if (!r || r.galat !== g) salah.push(`isian tidak sah harus ditolak (${h}/${l}/${bi} → ${g})`);
     }
+    // Penulisan ribuan bertitik diterima; koma & titik yang bukan ribuan ditolak (Kirana + Laras, 25 Nov 20.xx).
+    const r3 = f("1.250", "2", "");
+    if (!r3 || r3.modal !== 250000) salah.push("harga bertitik ribuan (1.250 = Rp1.250)");
+    for (const [h, l, g] of [["1250,5", "1", "harga"], ["1.25", "1", "harga"], ["12.50", "1", "harga"], ["1250", "2,5", "lot"]]) {
+      const r = f(h, l, "");
+      if (!r || r.galat !== g) salah.push(`koma/titik bukan ribuan harus ditolak (${h}/${l} → ${g})`);
+    }
     const ui = t.slice(b, c);
+    if (/isian\("latihan-modal-(harga|lot)"[^\n]*type: "number"/.test(ui)) salah.push("isian harga & lot bukan type=number (koma diam-diam hilang)");
     if (!/isian\("latihan-modal-biaya"[^\n]*value: "" \}/.test(ui)) salah.push("isian biaya wajib kosong (tanpa angka biaya bawaan)");
     if (!/m\.id !== "lot-dan-transaksi"/.test(t.slice(c, d))) salah.push("hanya di pelajaran lot-dan-transaksi");
     if (!/pasangLatihanModal\(wadah, m\);/.test(t)) salah.push("renderPelajaran wajib memasang latihan modal");
@@ -8344,6 +8352,9 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
     [appM.replace('autocomplete: "off", value: "" }', 'autocomplete: "off", value: "0,15" }'), "tanpa angka biaya bawaan"],
     [appM.replace('if (m.id !== "lot-dan-transaksi") return;', ""), "lot-dan-transaksi"],
     [appM.replace("    pasangLatihanModal(wadah, m);\n", ""), "renderPelajaran"],
+    [appM.replace('if (/^\\d{1,3}(\\.\\d{3})+$/.test(s))', 'if (/^[\\d.,]+$/.test(s))'), "koma/titik bukan ribuan"],
+    [appM.replace('isian("latihan-modal-harga", "Harga per lembar (Rp)", { type: "text"', 'isian("latihan-modal-harga", "Harga per lembar (Rp)", { type: "number"'), "bukan type=number"],
+    [appM.replace('    if (/^\\d{1,3}(\\.\\d{3})+$/.test(s)) return Number(s.replace(/\\./g, ""));\n', ""), "harga bertitik ribuan"],
   ]) ok(rusak !== appM && ujiM(rusak).some((x) => x.includes(pesan)), `uji balik latihan modal: "${pesan}" harus tertangkap`);
 }
 

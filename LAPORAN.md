@@ -2459,3 +2459,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Arif + Laras + Dewi (tugas pendukung, manfaat langsung bagi pemula): kotak "Hitung sendiri: modal untuk membeli saham" di pelajaran Lot, harga, dan biaya transaksi. Rumus sama dengan pelajaran; persen biaya beli diisi pengguna dari aplikasinya (bawaan kosong, tim tidak menaruh angka biaya karena berbeda tiap sekuritas).
 - Nina: `node tests/cek.mjs` lolos, cek baru 2f-24 + 6 uji balik tertangkap; 390px gelap & 1280px terang tanpa scroll horizontal dan tanpa galat JS. Tegar: tanpa rahasia, teks lewat textContent, angka tidak disimpan. Yoga: push ke main.
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### Rabu, 25 Nov 2026, sesi 20.xx WIB (Bima)
+- Proyek prioritas Agenda: tidak ada langkah baru sesi ini (ANDA & BUAT dicek lagi Kamis 07.xx; sumber MIKA/BSSR, DES periode II, PMK 81/2024 sudah dicari hari ini). Tidak ada usulan IDE.md yang menunggu dipilih.
+- Kirana + Laras: kotak "Hitung sendiri: modal" ditinjau dengan keyboard (390px gelap & 1280px terang). Temuan (IDE.md #58): di isian angka, "1250,5" diam-diam terbaca 12505 (modal 10× lipat tanpa pesan); "1.250" ditolak tanpa alasan.
+- Arif + Laras: isian harga & lot jadi isian teks berpapan angka; "1250" dan "1.250" diterima, koma ditolak dengan pesan "tanpa koma (contoh: 1250 atau 1.250)".
+- Nina: `node tests/cek.mjs` lolos, cek 2f-24 diperluas + 3 uji balik tertangkap; 390/1280px tanpa scroll horizontal & galat JS. Tegar: tanpa rahasia, teks lewat textContent. Yoga: push ke main.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

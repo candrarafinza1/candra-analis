@@ -517,8 +517,16 @@
      apa pun, tidak disimpan, tidak dikirim. */
   var MODAL_LEMBAR_LOT = 100, angkaModal = new Intl.NumberFormat("id-ID", { maximumFractionDigits: 4 });
   var MODAL_HARGA_MAKS = 1000000, MODAL_LOT_MAKS = 100000, MODAL_BIAYA_MAKS = 5;
+  // Bilangan bulat dari isian: "1250" atau penulisan ribuan bertitik "1.250" / "1.000.000". Koma ditolak
+  // (temuan Kirana + Laras 25 Nov 20.xx: di isian type=number Chrome, "1250,5" diam-diam terbaca 12505).
+  function bacaBulat(teks) {
+    var s = String(teks == null ? "" : teks).trim();
+    if (/^\d+$/.test(s)) return Number(s);
+    if (/^\d{1,3}(\.\d{3})+$/.test(s)) return Number(s.replace(/\./g, ""));
+    return NaN;
+  }
   function hitungModalLot(harga, lot, biaya) {
-    var h = Number(harga), jml = Number(lot);
+    var h = bacaBulat(harga), jml = bacaBulat(lot);
     if (!Number.isInteger(h) || h < 1 || h > MODAL_HARGA_MAKS) return { galat: "harga" };
     if (!Number.isInteger(jml) || jml < 1 || jml > MODAL_LOT_MAKS) return { galat: "lot" };
     var modal = h * MODAL_LEMBAR_LOT * jml;
@@ -539,25 +547,24 @@
       var inp = el("input", Object.assign({ id: id, "aria-describedby": "latihan-modal-info" }, attrs));
       return { inp: inp, baris: el("div", { class: "cari-kamus" }, [el("label", { for: id, text: label }), inp]) };
     }
-    var iHarga = isian("latihan-modal-harga", "Harga per lembar (Rp)", { type: "number", inputmode: "numeric", min: "1", max: String(MODAL_HARGA_MAKS), step: "1", value: "1250" });
-    var iLot = isian("latihan-modal-lot", "Jumlah lot", { type: "number", inputmode: "numeric", min: "1", max: String(MODAL_LOT_MAKS), step: "1", value: "2" });
+    var iHarga = isian("latihan-modal-harga", "Harga per lembar (Rp)", { type: "text", inputmode: "numeric", autocomplete: "off", value: "1250" });
+    var iLot = isian("latihan-modal-lot", "Jumlah lot", { type: "text", inputmode: "numeric", autocomplete: "off", value: "2" });
     var iBiaya = isian("latihan-modal-biaya", "Biaya beli dari aplikasi Anda (%, boleh kosong)", { type: "text", inputmode: "decimal", autocomplete: "off", value: "" });
     var PESAN = {
-      harga: "Isi harga per lembar dengan bilangan bulat Rp1 sampai " + rp(MODAL_HARGA_MAKS) + ".",
-      lot: "Isi jumlah lot dengan bilangan bulat 1 sampai " + angkaModal.format(MODAL_LOT_MAKS) + ".",
+      harga: "Isi harga per lembar dengan bilangan bulat Rp1 sampai " + rp(MODAL_HARGA_MAKS) + ", tanpa koma (contoh: 1250 atau 1.250).",
+      lot: "Isi jumlah lot dengan bilangan bulat 1 sampai " + angkaModal.format(MODAL_LOT_MAKS) + ", tanpa koma (contoh: 2).",
       biaya: "Isi persen biaya beli 0 sampai " + MODAL_BIAYA_MAKS + " (contoh penulisan: 0,25), atau kosongkan."
     };
     var masukan = { harga: iHarga.inp, lot: iLot.inp, biaya: iBiaya.inp };
     function hitung() {
-      var vH = String(iHarga.inp.value || "").trim(), vL = String(iLot.inp.value || "").trim();
-      var r = (/^\d+$/.test(vH) && /^\d+$/.test(vL)) ? hitungModalLot(vH, vL, iBiaya.inp.value)
-        : { galat: /^\d+$/.test(vH) ? "lot" : "harga" };
+      var vH = iHarga.inp.value, vL = iLot.inp.value;
+      var r = hitungModalLot(vH, vL, iBiaya.inp.value);
       hasil.textContent = "";
       Object.keys(masukan).forEach(function (k) {
         masukan[k].setAttribute("aria-invalid", r.galat === k ? "true" : "false");
       });
       if (r.galat) { info.textContent = PESAN[r.galat]; return; }
-      var h = Number(vH), n = Number(vL);
+      var h = bacaBulat(vH), n = bacaBulat(vL);
       hasil.appendChild(el("li", { text: angkaModal.format(n) + " lot = " + angkaModal.format(r.lembar) + " lembar saham." }));
       hasil.appendChild(el("li", { text: "Modal: " + rp(h) + " × 100 × " + angkaModal.format(n) + " = " + rp(r.modal) + "." }));
       if (r.biaya == null) {
