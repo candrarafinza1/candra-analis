@@ -1117,4 +1117,4 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Dampak bagi pemula: perbedaan dua cara terlihat sekilas.
 - Batasan: tanpa menambah isi di luar sumber; Hana meninjau; PDF modul dibuat ulang.
 - Usaha: kecil (Sari + Hana + Laras).
-- Status: dipilih Bima 25 Nov 17.xx, masuk BACKLOG.md untuk sesi berikutnya.
+- Status: dipilih Bima 25 Nov 17.xx; **selesai 25 Nov 18.xx** (Sari + Hana + Laras, Dewi untuk gaya butir). Kirana meninjau di HP sungguhan begitu bisa.

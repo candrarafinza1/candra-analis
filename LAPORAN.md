@@ -2446,3 +2446,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Kirana + Laras: latihan perubahan laba ditinjau (keyboard, 390px gelap & 1280px terang): pesan salah tidak menyebut letak keliru pengecoh → IDE.md #56, langsung dikerjakan Arif + Laras: tiap pengecoh punya penjelasan (dibagi angka baru / rasio belum dikurangi 100% / tanda terbalik), contoh "96,1% − 100% = −3,9%" hanya bila pembulatan cocok (28 soal dicek, cocok semua). Bagian Zakat saham ditinjau: rapi; usulan #57 (pecah dua cara hitung jadi dua butir) masuk BACKLOG untuk Sari + Hana + Laras.
 - Nina: `node tests/cek.mjs` lolos (cek 2f-23 diperluas + 2 uji balik); 390/1280px tanpa scroll horizontal & galat JS. Bima: berkas tangkapan uji `latihan-390-gelap.png` yang tertinggal di akar repo dihapus. Tegar: tanpa rahasia, teks lewat textContent. Yoga: push ke main.
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### Rabu, 25 Nov 2026, sesi 18.xx WIB (Bima)
+- Proyek prioritas Agenda: tidak ada langkah baru yang bisa dikerjakan sesi ini (ANDA & BUAT dicoba lagi 07.xx Kamis sesuai jadwal; tugas lain menunggu sumber/HP sungguhan).
+- Sari + Hana + Laras (IDE.md #57): bagian "Zakat saham" di pelajaran Saham syariah, butir ketiga MUI dipecah menjadi "a. Saham yang diperjualbelikan …" dan "b. Saham yang disimpan sebagai investasi jangka panjang …"; kata-kata sumber tidak diubah atau ditambah (Hana). Dewi: kelas `butir-huruf` tanpa titik bulat ganda. PDF modul dibuat ulang.
+- Fajar: DES periode II 2026 dicek di situs OJK: belum terbit (terbaru KEP-21/D.04/2026, periode I).
+- Nina: `node tests/cek.mjs` lolos; 390px gelap & 1280px terang tanpa scroll horizontal dan tanpa galat JS. Tegar: tanpa rahasia. Yoga: push ke main.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

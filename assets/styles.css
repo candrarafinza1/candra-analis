@@ -385,6 +385,8 @@ tbody tr:hover { background: var(--hover-baris); }
 .artikel h2 { font-size: 1.5rem; margin-top: 1.8em; }
 .artikel ul, .artikel ol { padding-left: 1.3em; }
 .artikel li { margin-bottom: .4em; }
+/* Sari, Laras & Dewi (25 Nov 18.xx, IDE.md #57): butir bertanda huruf (a., b.) tanpa titik bulat ganda */
+.artikel ul.butir-huruf { list-style: none; padding-left: .6em; margin-top: .4em; }
 .kotak-rumus {
   background: var(--putih); border: 1px solid var(--garis); border-radius: var(--radius-kecil);
   padding: 14px 16px; margin: 0 0 1em; font-variant-numeric: tabular-nums;

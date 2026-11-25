@@ -127,7 +127,12 @@ window.MODUL = [
       <ul>
         <li>Yang wajib mengeluarkan zakat saham adalah <strong>pemegang saham</strong>. Syaratnya: pemiliknya muslim, kepemilikannya penuh, nilainya mencapai nisab, dan sudah dimiliki satu tahun (haul) menurut kalender hijriah.</li>
         <li>Pemegang saham boleh mewakilkan pembayarannya kepada perusahaan. Bila perusahaan sudah mengeluarkan zakatnya, kewajiban pemegang saham dianggap gugur.</li>
-        <li>Cara menghitungnya bergantung pada tujuan memiliki saham. Saham yang diperjualbelikan mengikuti zakat perdagangan dan dihitung dari nilai pasar saham saat haul. Saham yang disimpan sebagai investasi jangka panjang di perusahaan industri atau jasa dihitung dari keuntungan bersih saham, dengan nisab dan kadar mengikuti zakat emas.</li>
+        <li>Cara menghitungnya bergantung pada tujuan memiliki saham:
+          <ul class="butir-huruf">
+            <li><strong>a. Saham yang diperjualbelikan</strong> mengikuti zakat perdagangan dan dihitung dari nilai pasar saham saat haul.</li>
+            <li><strong>b. Saham yang disimpan sebagai investasi jangka panjang</strong> di perusahaan industri atau jasa dihitung dari keuntungan bersih saham, dengan nisab dan kadar mengikuti zakat emas.</li>
+          </ul>
+        </li>
       </ul>
       <p><strong>2. Peraturan Menteri Agama Nomor 52 Tahun 2014</strong></p>
       <ul>
