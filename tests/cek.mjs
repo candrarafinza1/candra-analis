@@ -8262,5 +8262,41 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
   ok(periksa(sumber + '\n<a href="radar.html" accesskey="r">Radar</a>').length > 0, "uji balik 2.1.4: accesskey harus tertangkap");
 }
 
+// 2f-23. Latihan "Hitung perubahan laba dengan angka asli" (Nina, 25 Nov 2026; Arif + Laras + Galih).
+// Hanya di pelajaran laporan-keuangan; pembagi = angka lama; jawaban benar selalu ada & unik di 3 pilihan;
+// hanya laba positif dari emiten di DES; tanpa kata ajakan; tautan profil dari kode data.
+{
+  const appL = readFileSync("assets/app.js", "utf8");
+  const uji = (t) => {
+    const salah = [];
+    const a = t.indexOf("  function pilihanLatihanLaba("), b = t.indexOf("  function buatLatihanLaba(");
+    if (a < 0 || b < 0) return ["fungsi latihan laba tidak ada"];
+    const ubahF = "function persen(p){return (p<0?'−':'')+new Intl.NumberFormat('id-ID',{maximumFractionDigits:1}).format(Math.abs(p))+'%';}function ubah(p){return (p>0?'+':'')+persen(p);}";
+    let f;
+    try { f = vm.runInNewContext(`${ubahF}(${t.slice(a, b).trim().replace(/^function pilihanLatihanLaba/, "function")})`); } catch (e) { return ["galat: " + e.message]; }
+    for (const [x, y, harap] of [[1390, 4410, "+217,3%"], [15030, 14440, "−3,9%"], [100, 110, "+10%"], [1000, 2000, "+100%"]]) {
+      const r = f(x, y);
+      if (r.benar !== harap) salah.push(`pembagi harus angka lama (${x}→${y} harap ${harap}, dapat ${r.benar})`);
+      if (r.pilihan.length !== 3 || new Set(r.pilihan).size !== 3 || !r.pilihan.includes(r.benar)) salah.push(`3 pilihan unik berisi jawaban (${x}→${y})`);
+    }
+    const s = t.slice(t.indexOf("  function soalLatihanLaba("), t.indexOf("  function pilihanLatihanLaba("));
+    if (!/syariahAktif\(e\)/.test(s)) salah.push("hanya emiten di DES");
+    if (!/e\.laba9b\[2025\] > 0 && e\.laba9b\[2026\] > 0/.test(s)) salah.push("hanya laba positif");
+    const p = t.slice(t.indexOf("  function pasangLatihanLaba("), t.indexOf("  /* ---------- Halaman pelajaran"));
+    if (!/m\.id !== "laporan-keuangan"/.test(p)) salah.push("hanya di pelajaran laporan-keuangan");
+    if (!/pasangLatihanLaba\(wadah, m\);/.test(t)) salah.push("renderPelajaran wajib memasang latihan");
+    if (/buruan|pasti (naik|untung)|rekomendasi beli|layak dibeli|saatnya beli/i.test(t.slice(a, b) + s + t.slice(b, t.indexOf("  function pasangLatihanLaba(")))) salah.push("kata ajakan dilarang");
+    return salah;
+  };
+  const sL = uji(appL);
+  ok(!sL.length, "Latihan perubahan laba: " + sL.join("; "));
+  for (const [rusak, pesan] of [
+    [appL.replace("var benar = ubah((b - a) / a * 100);", "var benar = ubah((b - a) / b * 100);"), "pembagi"],
+    [appL.replace("e.laba9b[2025] > 0 && e.laba9b[2026] > 0", "true"), "laba positif"],
+    [appL.replace("    pasangLatihanLaba(wadah, m);\n", ""), "renderPelajaran"],
+    [appL.replace('if (m.id !== "laporan-keuangan") return;', ""), "laporan-keuangan"],
+  ]) ok(rusak !== appL && uji(rusak).some((x) => x.includes(pesan)), `uji balik latihan laba: "${pesan}" harus tertangkap`);
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);

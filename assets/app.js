@@ -419,6 +419,87 @@
     else wadah.insertBefore(latihan, wadah.querySelectorAll("form.kuis")[0] || null);
   }
 
+  /* ---------- Latihan "Hitung perubahan laba dengan angka asli" (Arif + Laras + Galih, 25 Nov 2026) ----------
+     Di pelajaran "Membaca laporan keuangan", sebelum kuis. Memakai laba Januari–September 2025 & 2026 yang
+     sudah bersumber di data/emiten-asli.js (tanpa angka baru). Hanya pasangan laba positif (rugi tidak
+     memakai persen, aturan Galih 21 Nov) dari emiten yang masih di DES. Tidak dinilai, tidak disimpan. */
+  function soalLatihanLaba() {
+    if (typeof EMITEN_ASLI === "undefined") return [];
+    return EMITEN_ASLI.filter(function (e) {
+      return syariahAktif(e) && e.laba9b && ada(e.laba9b[2025]) && ada(e.laba9b[2026]) &&
+        e.laba9b[2025] > 0 && e.laba9b[2026] > 0 && e.laba9b[2025] !== e.laba9b[2026];
+    });
+  }
+  // Tiga pilihan: rumus benar, salah bagi (dibagi angka baru), dan rasio tanpa dikurangi 100%.
+  function pilihanLatihanLaba(a, b) {
+    var benar = ubah((b - a) / a * 100);
+    var calon = [ubah((b - a) / b * 100), persen(b / a * 100), ubah((a - b) / a * 100)];
+    var pil = [benar];
+    calon.forEach(function (c) { if (pil.length < 3 && pil.indexOf(c) < 0) pil.push(c); });
+    return { pilihan: pil, benar: benar };
+  }
+  function buatLatihanLaba() {
+    var soalAda = soalLatihanLaba();
+    if (soalAda.length < 2) return null;
+    var ke = 0, giliran = 0;
+    var kotak = el("section", { class: "kuis latihan-laba", "aria-labelledby": "judul-latihan-laba" });
+    kotak.appendChild(el("h2", { id: "judul-latihan-laba", text: "Latihan: hitung perubahan laba dengan angka asli" }));
+    kotak.appendChild(el("p", { class: "kuis-pengantar", text: "Angka diambil dari data " + soalAda.length + " emiten di Candra Analis (laba bersih diatribusikan ke pemilik entitas induk, Januari–September). Ini latihan berhitung, bukan penilaian atau saran tentang sahamnya. Tidak dinilai dan tidak disimpan." }));
+    var fs = el("fieldset", { class: "kuis-soal" });
+    var hasil = el("p", { class: "kuis-hasil", role: "status", "aria-live": "polite" });
+    var periksa = el("button", { type: "button", class: "tombol tombol-gelap", text: "Periksa jawaban" });
+    var lain = el("button", { type: "button", class: "tombol kuis-ulang", text: "Soal lain" });
+    var masukan = [], soal = null;
+    function gambar() {
+      var e = soalAda[ke], a = e.laba9b[2025], b = e.laba9b[2026], f = uang(e);
+      soal = pilihanLatihanLaba(a, b);
+      // Urutan pilihan bergeser tiap soal agar jawaban benar tidak selalu di atas.
+      var geser = giliran % soal.pilihan.length;
+      var urut = soal.pilihan.slice(geser).concat(soal.pilihan.slice(0, geser));
+      fs.innerHTML = "";
+      masukan = [];
+      fs.appendChild(el("legend", { text: e.kode + ": laba Januari–September 2025 " + f(a) + ", Januari–September 2026 " + f(b) + ". Berapa perubahannya?" }));
+      urut.forEach(function (p, j) {
+        var idIn = "latihan-laba-" + j;
+        var inp = el("input", { type: "radio", name: "latihan-laba", id: idIn, value: p });
+        masukan.push(inp);
+        fs.appendChild(el("div", { class: "kuis-pilihan" }, [inp, el("label", { for: idIn, text: p })]));
+      });
+      fs.appendChild(el("p", { class: "latihan-laba-sumber" }, [
+        "Sumber angka: ", el("a", { href: "emiten.html?kode=" + e.kode, text: "profil " + e.kode })
+      ]));
+    }
+    periksa.addEventListener("click", function () {
+      var pilih = masukan.filter(function (m) { return m.checked; })[0];
+      var e = soalAda[ke], a = e.laba9b[2025], b = e.laba9b[2026], f = uang(e);
+      if (!pilih) { hasil.textContent = "Pilih satu jawaban dulu."; return; }
+      var cara = "(" + f(b) + " − " + f(a) + ") ÷ " + f(a) + " × 100% = " + soal.benar + ".";
+      if (pilih.value === soal.benar) {
+        hasil.textContent = "Tepat. " + cara + " Pembaginya selalu angka lama (tahun lalu).";
+      } else {
+        hasil.textContent = "Belum tepat. Jawabannya " + soal.benar + ": " + cara + " Angka baru dikurangi angka lama, lalu dibagi angka lama (tahun lalu).";
+      }
+    });
+    lain.addEventListener("click", function () {
+      ke = (ke + 1) % soalAda.length;
+      giliran++;
+      gambar();
+      hasil.textContent = "Soal baru: " + soalAda[ke].kode + ".";
+      masukan[0].focus();
+    });
+    gambar();
+    kotak.appendChild(el("div", { class: "kotak-rumus", text: "Perubahan = (angka baru − angka lama) ÷ angka lama × 100%" }));
+    kotak.appendChild(fs);
+    kotak.appendChild(el("div", { class: "kuis-aksi" }, [periksa, lain]));
+    kotak.appendChild(hasil);
+    return kotak;
+  }
+  function pasangLatihanLaba(wadah, m) {
+    if (m.id !== "laporan-keuangan") return;
+    var latihan = buatLatihanLaba();
+    if (latihan) wadah.insertBefore(latihan, wadah.querySelectorAll("form.kuis")[0] || null);
+  }
+
   /* ---------- Halaman pelajaran ---------- */
   function renderPelajaran() {
     var wadah = document.getElementById("isi-pelajaran");
@@ -438,6 +519,7 @@
     if (m.kuis && m.kuis.length) wadah.appendChild(buatKuis(m));
     wadah.appendChild(buatTandaiSelesai(m));
     pasangLatihanUrut(wadah, m);
+    pasangLatihanLaba(wadah, m);
 
     var nav = el("nav", { class: "navigasi-pelajaran", "aria-label": "Pelajaran lain" });
     nav.appendChild(idx > 0
