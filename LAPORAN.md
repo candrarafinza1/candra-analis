@@ -2420,3 +2420,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar + Galih: laba 9 bulan MIKA & BSSR belum ada sumber 2026 → tetap 30 dari 32. Fajar: DPS MBMA tahun buku 2025, empat sumber dibuka, tidak ada yang menyebut dividen → tetap 28 dari 32.
 - Nina: `node tests/cek.mjs` lolos. Tegar: hanya catatan, tanpa rahasia. Yoga: push ke main. Tampilan tidak berubah.
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 25 Nov 2026, 14.09 WIB — sesi kerja (Bima)
+- Tugas Agenda teratas (ANDA & BUAT) dijadwalkan ulang Kamis 07.xx; DES periode II 2026 belum terbit; MIKA/BSSR sudah dicari sesi 13.xx. Diambil tugas berikutnya yang bisa dikerjakan.
+- Hana + Laras: PMK 81/2024 Pasal 370–374 dicari lagi; hanya sumber sekunder (DDTCNews, Pajakku, panduan Coretax DJP), batang tubuh resmi belum terbaca → klaim SPT Masa PPh Unifikasi tetap ditahan.
+- Sari + Hana: sisir istilah kabar — ITMG sudah beres; INTP & JPFA: halaman sumber tidak bisa dibuka alat tim → 0 perbaikan, tidak diubah tanpa bukti.
+- Nina: `node tests/cek.mjs` lolos. Yoga: run GitHub Actions "Periksa sebelum rilis" #417 (commit 13.09) hijau. Tegar: hanya catatan, tanpa rahasia. Tampilan tidak berubah.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
