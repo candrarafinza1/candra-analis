@@ -2391,3 +2391,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Arif: jadwal hapus entri Agenda dihitung (TOTO 30 Des, DGWG/JTPE 1 Jan, BOBA/PSGO 2 Jan). Dewi + Kirana: Agenda & pita beranda dengan jam asli 25 Nov benar, 390/1280px terang/gelap tanpa scroll horizontal & galat JS.
 - Nina: `node tests/cek.mjs` lolos. Tegar: hanya data tanggal & catatan, tanpa rahasia. Yoga: push ke main.
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 25 Nov 2026, 08.08 WIB — sesi kerja (Bima)
+- Tugas Agenda teratas (ANDA & BUAT) dijadwalkan dicek lagi di rutin 13.xx; DES periode II 2026 belum terbit. Diambil tugas data yang lama tertunda sejak 8 Nov: neraca 2025 ITMG & TPIA (Fajar + Galih).
+- Fajar: ITMG liabilitas US$497,73 juta (Investortrust) & total ekuitas US$1.908 juta (Antara), sama dengan StockAnalysis; jumlahnya cocok dengan aset US$2.406 juta. TPIA liabilitas 7.665.809 & ekuitas 4.656.915 ribu US$ (PintarSaham 10 Apr 2026; jumlah = aset persis), sama dengan EmitenNews & StockAnalysis. Kini neraca lengkap 31 dari 32 (sisa BRIS liabilitas).
+- Galih: ITMG ROE 10%, DER 0,3x (urutan ROE 19 dari 29); TPIA ROE 23,4%, DER 1,6x, tetap di luar Peringkat (laba sekali-waktu) dan catatan profil menjelaskan ROE-nya tidak menggambarkan kinerja biasa.
+- Nina: `node tests/cek.mjs` lolos; profil ITMG & TPIA dicek 390/1280px tanpa scroll horizontal & galat JS. Tegar: hanya data, tanpa rahasia. Yoga: push ke main.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

@@ -666,7 +666,10 @@ window.EMITEN_ASLI = [
       sumber: { judul: "Indonesia Investments: Indo Tambangraya Megah (dibaca 31 Okt 2026)", url: "https://www.indonesia-investments.com/id/bisnis/profil-perusahaan/indo-tambangraya-megah/item394" } },
     labaTahun: { 2024: 374.11, 2025: 190.94 },
     pendapatan: { 2024: 2300, 2025: 1880 },
-    liabilitas2025: null, ekuitas2025: null,
+    // Neraca 31 Des 2025 (Fajar + Galih, 25 Nov 08.xx): liabilitas US$497,73 juta (Investortrust 26 Feb 2026 & StockAnalysis 497,73),
+    // ekuitas US$1.908 juta (Antara 27 Feb 2026 "1.908 juta dolar AS" & StockAnalysis 1.908; PintarSaham US$1,91 miliar).
+    // Cek: 497,73 + 1.908 = 2.405,73 ≈ aset US$2.406 juta (Antara). Ekuitas = total ekuitas (termasuk kepentingan nonpengendali), sama seperti emiten lain.
+    liabilitas2025: 497.73, ekuitas2025: 1908,
     laba9b: { 2025: 130.59, 2026: 162.93 },
     catatan9b: "Laba 9 bulan = laba diatribusikan kepada pemilik entitas induk, juta US$: US$162,93 juta (Jan–Sep 2026) vs US$130,59 juta (Jan–Sep 2025), naik ±24,8% (Fortune IDN 11 Nov 2026 menulis naik 24,7%). IDX Channel (12 Nov 2026) menulis atribusi US$163 juta vs US$130 juta (pembulatan) dan laba periode berjalan US$168 juta vs US$134 juta (tidak dipakai); judul IDX Channel 'USD138 juta' tidak cocok dengan isinya, tidak dipakai. Pembanding cocok dengan US$131 juta di Warta Ekonomi (12 Nov 2025). Rp2,93 triliun di Bisnis = angka rupiah, tidak dipakai. Sumber tidak menyebut pos sekali-waktu.",
     // dps tahun buku 2025 = interim Rp738 + final Rp992 = Rp1.730, dihitung tim (Fajar + Hana, 24 Nov 18.xx).
@@ -680,7 +683,7 @@ window.EMITEN_ASLI = [
         url: "https://www.idxchannel.com/market-news/itmg-bagikan-dividen-final-rp992-per-saham-yield-379-persen/all" } }
     ],
     dps: 1730, dpsRupiah: true, harga: null,
-    catatan: "Melapor dalam dolar AS; angka dalam juta US$ sesuai laporan, tidak dikonversi ke rupiah. Laba = laba diatribusikan kepada pemilik entitas induk (Bisnis menulis 2024 US$374,12 juta, selisih pembulatan). Neraca belum diisi: sumber hanya memberi ekuitas yang dibulatkan (US$1,9 miliar), jadi ROE dan DER belum dihitung.",
+    catatan: "Melapor dalam dolar AS; angka dalam juta US$ sesuai laporan, tidak dikonversi ke rupiah. Laba = laba diatribusikan kepada pemilik entitas induk (Bisnis menulis 2024 US$374,12 juta, selisih pembulatan). Neraca 31 Des 2025: liabilitas US$497,73 juta (Investortrust) dan total ekuitas US$1.908 juta (Antara), keduanya sama dengan StockAnalysis; jumlahnya cocok dengan aset US$2.406 juta.",
     sumber: [{ judul: "Fortune IDN, 11 Nov 2026: Produksi dan harga batu bara dongkrak laba ITMG 24,7% hingga Q3 2026 (US$162,93 juta)",
       url: "https://www.fortuneidn.com/market/produksi-dan-harga-batu-bara-dongkrak-laba-itmg-24-7-hingga-q3-2026-00-3dhnm-h3zhhy" },
       { judul: "IDX Channel, 12 Nov 2026: ITMG raup laba bersih hingga September 2026, naik 25 persen (atribusi US$163 juta)",
@@ -695,8 +698,12 @@ window.EMITEN_ASLI = [
       url: "https://bcasekuritas.co.id/latest-news/news/pendapatan-itmg-capai-usd188-miliar-hingga-desember-2025" },
       { judul: "Bisnis, 26 Feb 2026: Indo Tambangraya (ITMG) raih laba US$190,94 juta pada 2025, turun 48,96%",
         url: "https://market.bisnis.com/read/20260226/192/1955916/indo-tambangraya-itmg-raih-laba-us19094-juta-pada-2025-turun-4896" },
-      { judul: "Investortrust, 26 Feb 2026: Laba Indo Tambangraya (ITMG) tergerus jadi US$190,94 juta di 2025",
-        url: "https://investortrust.id/market/95529/laba-indo-tambangraya-itmg-tergerus-jadi-us-190-94-juta-di-2025" }]
+      { judul: "Investortrust, 26 Feb 2026: Laba Indo Tambangraya (ITMG) tergerus jadi US$190,94 juta di 2025 (liabilitas US$497,73 juta)",
+        url: "https://investortrust.id/market/95529/laba-indo-tambangraya-itmg-tergerus-jadi-us-190-94-juta-di-2025" },
+      { judul: "Antara, 27 Feb 2026: Indo Tambangraya cetak laba bersih 190,94 juta dolar AS di 2025 (aset 2.406 juta, ekuitas 1.908 juta dolar AS)",
+        url: "https://www.antaranews.com/berita/5441622/indo-tambangraya-cetak-laba-bersih-19094-juta-dolar-as-di-2025/" },
+      { judul: "StockAnalysis: Neraca ITMG 31 Des 2025, juta US$ (dibaca 25 Nov 2026)",
+        url: "https://stockanalysis.com/quote/idx/ITMG/financials/balance-sheet/" }]
   },
   {
     kode: "AADI", nama: "PT Adaro Andalan Indonesia Tbk", sektor: "Energi",
@@ -862,7 +869,10 @@ window.EMITEN_ASLI = [
     sekaliWaktu: "Laba 2025 berbalik dari rugi berkat keuntungan akuntansi sekali-waktu dari transaksi Aster; nilainya tidak disebut sumber.",
     labaTahun: { 2024: -68.61, 2025: 1090 },
     pendapatan: { 2024: 1780, 2025: 7020 },
-    liabilitas2025: null, ekuitas2025: null,
+    // Neraca 31 Des 2025 (Fajar + Galih, 25 Nov 08.xx): PintarSaham 10 Apr 2026 (ribu US$): aset 12.322.724, liabilitas 7.665.809,
+    // ekuitas 4.656.915 (liabilitas + ekuitas = aset persis). Pembanding: EmitenNews 26 Mar 2026 (liabilitas US$7,66 miliar, ekuitas US$4,65 miliar),
+    // StockAnalysis (7.666 & 4.657). Ekuitas = total ekuitas (termasuk kepentingan nonpengendali ±US$927 juta menurut StockAnalysis).
+    liabilitas2025: 7665.81, ekuitas2025: 4656.92,
     laba9b: { 2025: 1300, 2026: 279.81 },
     sekaliWaktu9b: { tahun: 2025, nilai: 1810, jenis: "keuntungan", ket: "keuntungan pembelian dengan diskon ±US$1,81 miliar dari transaksi Aster menurut PintarSaham" },
     catatan9b: "Laba 9 bulan = laba diatribusikan kepada pemilik entitas induk, juta US$: US$279,81 juta (Jan–Sep 2026) vs US$1,30 miliar (Jan–Sep 2025), turun ±78%; CNBC Indonesia 30 Okt 2026 dan PintarSaham sama. Angka 2025 dibulatkan sumber. Penurunan terutama karena keuntungan pembelian dengan diskon ±US$1,81 miliar (transaksi Aster) tercatat di 9 bulan 2025 dan tidak berulang (PintarSaham). Laba periode berjalan US$394,93 juta vs US$1,65 miliar sengaja tidak dipakai.",
@@ -875,7 +885,7 @@ window.EMITEN_ASLI = [
       { jenis: "final", dps: 6.07341, sumber: { judul: "Bareksa, 20 Mei 2026: Chandra Asri Pacific (TPIA) bagikan dividen tahun buku 2025 US$30 juta atau Rp6,07341 per saham, dibayar 17 Juni 2026",
         url: "https://www.bareksa.com/berita/saham/2026-05-20/chandra-asri-pacific-tpia-bagikan-dividen-us30-juta-ini-estimasi-yield-dan-jadwalnya" } }
     ],
-    catatan: "Melapor dalam dolar AS; angka dalam juta US$ sesuai laporan, tidak dikonversi ke rupiah. Laba diatribusikan kepada pemilik entitas induk US$1,09 miliar (2025) vs rugi US$68,61 juta (2024), menurut Investortrust; laba tahun berjalan US$1,44–1,45 miliar (Investortrust, Warta Ekonomi) sengaja tidak dipakai. Laba 2025 ditopang keuntungan akuntansi sekali-waktu dari transaksi Aster (rilis resmi perusahaan kuartal III 2025 via MarketScreener; nilainya tidak disebut), dan pendapatan naik karena akuisisi. Karena itu TPIA tidak ikut Peringkat, sama seperti UNVR (aturan laba sekali-waktu Galih & Hana, 30 Okt). Neraca dikosongkan: sumber menyebut aset US$12,32 miliar dan liabilitas US$7,66 miliar, tetapi tidak menyebut ekuitas.",
+    catatan: "Melapor dalam dolar AS; angka dalam juta US$ sesuai laporan, tidak dikonversi ke rupiah. Laba diatribusikan kepada pemilik entitas induk US$1,09 miliar (2025) vs rugi US$68,61 juta (2024), menurut Investortrust; laba tahun berjalan US$1,44–1,45 miliar (Investortrust, Warta Ekonomi) sengaja tidak dipakai. Laba 2025 ditopang keuntungan akuntansi sekali-waktu dari transaksi Aster (rilis resmi perusahaan kuartal III 2025 via MarketScreener; nilainya tidak disebut), dan pendapatan naik karena akuisisi. Karena itu TPIA tidak ikut Peringkat, sama seperti UNVR (aturan laba sekali-waktu Galih & Hana, 30 Okt). Neraca 31 Des 2025: aset US$12,32 miliar, liabilitas US$7,67 miliar, total ekuitas US$4,66 miliar (PintarSaham; sama dengan EmitenNews dan StockAnalysis). Total ekuitas memuat kepentingan nonpengendali yang besar, dan laba 2025 ditopang keuntungan sekali-waktu, jadi ROE 2025 tidak menggambarkan kinerja biasa.",
     sumber: [{ judul: "Investortrust, 26 Mar 2026: Laba Chandra Asri (TPIA) melonjak ke US$1,44 miliar di 2025",
       url: "https://investortrust.id/market/98088/laba-chandra-asri-tpia-melonjak-ke-us1-44-miliar-di-2025-pendapatan-tumbuh-293" },
       { judul: "Warta Ekonomi, 26 Mar 2026: Balik rugi jadi cuan, emiten Prajogo (TPIA) cetak laba US$1,45 miliar di 2025",
@@ -884,6 +894,10 @@ window.EMITEN_ASLI = [
         url: "https://www.marketscreener.com/news/pt-chandra-asri-pacific-tbk-cap-results-for-the-quarter-3-ended-september-30-2025-ce7d5cdbd98df52d" },
       { judul: "CNBC Indonesia, 30 Okt 2026: Laba Chandra Asri (TPIA) anjlok 78% di kuartal III-2026",
         url: "https://www.cnbcindonesia.com/market/20261030112319-17-780872/laba-chandra-asri--tpia--anjlok-78-di-kuartal-iii-2026-ini-sebabnya" },
+      { judul: "PintarSaham, 10 Apr 2026: Analisis kinerja keuangan TPIA 2025 (aset 12.322.724, liabilitas 7.665.809, ekuitas 4.656.915 ribu US$)",
+        url: "https://pintarsaham.id/analisis-kinerja-keuangan-tpia-2025-laba-bersih-melesat-berkat-akuisisi-strategis/" },
+      { judul: "EmitenNews, 26 Mar 2026: Turnaround kinerja TPIA, balikkan rugi jadi laba di 2025 (liabilitas US$7,66 miliar, ekuitas US$4,65 miliar)",
+        url: "https://emitennews.com/news/turnaround-kinerja-tpia-balikkan-rugi-jadi-laba-di-2025" },
       { judul: "PintarSaham: Analisis saham TPIA, pendapatan naik 60,50% hingga September 2026, laba bersih turun",
         url: "https://pintarsaham.id/analisis-saham-tpia-pendapatan-naik-6050-hingga-september-2026-tetapi-laba-bersih-turun/" }]
   }
