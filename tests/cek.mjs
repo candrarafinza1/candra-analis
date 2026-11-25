@@ -8267,6 +8267,10 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
 // hanya laba positif dari emiten di DES; tanpa kata ajakan; tautan profil dari kode data.
 {
   const appL = readFileSync("assets/app.js", "utf8");
+  const x0 = (t) => {
+    const blok = t.slice(t.indexOf("  var PENJELASAN_PENGECOH = {"), t.indexOf("  function pilihanLatihanLaba("));
+    return !["bagiBaru:", "rasio:", "terbalik:"].every((k) => blok.includes(k)) || !/PENJELASAN_PENGECOH\[soal\.jenis\[pilih\.value\]\]/.test(t);
+  };
   const uji = (t) => {
     const salah = [];
     const a = t.indexOf("  function pilihanLatihanLaba("), b = t.indexOf("  function buatLatihanLaba(");
@@ -8278,7 +8282,12 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
       const r = f(x, y);
       if (r.benar !== harap) salah.push(`pembagi harus angka lama (${x}→${y} harap ${harap}, dapat ${r.benar})`);
       if (r.pilihan.length !== 3 || new Set(r.pilihan).size !== 3 || !r.pilihan.includes(r.benar)) salah.push(`3 pilihan unik berisi jawaban (${x}→${y})`);
+      // Tinjauan Kirana + Laras 25 Nov 17.xx: setiap pengecoh punya jenis kesalahan yang dijelaskan.
+      const pengecoh = r.pilihan.filter((v) => v !== r.benar);
+      if (!r.jenis || pengecoh.some((v) => !["bagiBaru", "rasio", "terbalik"].includes(r.jenis[v]))) salah.push(`tiap pengecoh wajib punya jenis kesalahan (${x}→${y})`);
+      if (r.jenis && r.jenis[r.benar]) salah.push(`jawaban benar tidak boleh bertanda kesalahan (${x}→${y})`);
     }
+    if (x0(t)) salah.push("penjelasan pengecoh wajib dipakai saat jawaban salah");
     const s = t.slice(t.indexOf("  function soalLatihanLaba("), t.indexOf("  function pilihanLatihanLaba("));
     if (!/syariahAktif\(e\)/.test(s)) salah.push("hanya emiten di DES");
     if (!/e\.laba9b\[2025\] > 0 && e\.laba9b\[2026\] > 0/.test(s)) salah.push("hanya laba positif");
@@ -8295,6 +8304,8 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
     [appL.replace("e.laba9b[2025] > 0 && e.laba9b[2026] > 0", "true"), "laba positif"],
     [appL.replace("    pasangLatihanLaba(wadah, m);\n", ""), "renderPelajaran"],
     [appL.replace('if (m.id !== "laporan-keuangan") return;', ""), "laporan-keuangan"],
+    [appL.replace('jenis[c[0]] = c[1];', ""), "jenis kesalahan"],
+    [appL.replace("PENJELASAN_PENGECOH[soal.jenis[pilih.value]]", "null"), "penjelasan pengecoh"],
   ]) ok(rusak !== appL && uji(rusak).some((x) => x.includes(pesan)), `uji balik latihan laba: "${pesan}" harus tertangkap`);
 }
 

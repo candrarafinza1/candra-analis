@@ -1099,3 +1099,22 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Uji di peramban: 11 halaman × 390/1280px, mengetik a–z, 0–9, dan / ? . , - = tanpa fokus di kotak isian: alamat, isi halaman, dan fokus tidak berubah; tanpa galat JS & scroll horizontal. Uji balik (pintasan "/" disisipkan) tertangkap di 22 dari 22 kasus.
 - Penjaga: `tests/cek.mjs` cek 2.1.4 menolak pintasan karakter, keyCode/which, dan accesskey; dua uji balik ("/" dan accesskey) tertangkap.
 - Status: tuntas, tidak perlu perubahan tampilan.
+
+### 56. Latihan perubahan laba: jelaskan letak keliru tiap pengecoh
+- **Usulan dari tinjauan Kirana + Laras, 25 Nov 17.xx (390px gelap, keyboard saja)** — konten belajar, usaha kecil
+- Masalah: memilih pengecoh rasio (mis. TLKM "96,1%") hanya dijawab "Belum tepat" + rumus; pemula tidak tahu bahwa 96,1% adalah rasio yang belum dikurangi 100%.
+- Ide: setiap pengecoh membawa jenis kesalahannya (dibagi angka baru / rasio / tanda terbalik), dan pesan salah menyebutnya dalam satu kalimat; untuk rasio ditambah contoh "96,1% − 100% = −3,9%" (hanya bila pembulatannya cocok).
+- Tren: umpan balik per pilihan salah di aplikasi belajar.
+- Dampak bagi pemula: paham sumber kekeliruannya, bukan hanya jawaban benarnya.
+- Batasan: teks saja, tetap lewat aria-live, tanpa skor/simpanan, tanpa ajakan.
+- Usaha: kecil (Arif + Laras; Nina memperluas cek 2f-23).
+- Status: dipilih Bima 25 Nov 17.xx; **selesai sesi yang sama** (Arif + Laras + Nina).
+
+### 57. Zakat saham: pisahkan dua cara hitung menjadi dua butir
+- **Usulan dari tinjauan Kirana + Laras, 25 Nov 17.xx (390px gelap)** — konten belajar, usaha kecil
+- Masalah: di 390px, butir ketiga rujukan MUI memuat dua cara hitung dalam satu paragraf 10 baris; pemula mudah melewatkan bahwa caranya berbeda.
+- Ide: dua butir bertanda "a." (diperjualbelikan: nilai pasar saat haul, seperti zakat perdagangan) dan "b." (investasi jangka panjang di perusahaan industri/jasa: dari keuntungan bersih, nisab & kadar seperti zakat emas), kalimat tetap dari sumber MUI, tanpa angka harga karangan.
+- Dampak bagi pemula: perbedaan dua cara terlihat sekilas.
+- Batasan: tanpa menambah isi di luar sumber; Hana meninjau; PDF modul dibuat ulang.
+- Usaha: kecil (Sari + Hana + Laras).
+- Status: dipilih Bima 25 Nov 17.xx, masuk BACKLOG.md untuk sesi berikutnya.

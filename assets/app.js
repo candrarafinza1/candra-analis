@@ -431,12 +431,19 @@
     });
   }
   // Tiga pilihan: rumus benar, salah bagi (dibagi angka baru), dan rasio tanpa dikurangi 100%.
+  // `jenis` mencatat kesalahan di balik tiap pengecoh, agar penjelasan saat salah menyebut letak kelirunya
+  // (tinjauan Kirana + Laras 25 Nov 17.xx: pengecoh rasio "104,2%" belum dijelaskan).
+  var PENJELASAN_PENGECOH = {
+    bagiBaru: "Pilihan itu dibagi angka baru (2026), padahal pembaginya harus angka lama (2025).",
+    rasio: "Pilihan itu adalah angka baru ÷ angka lama (rasio), belum dikurangi 100%. Rasio di atas 100% berarti naik, di bawah 100% berarti turun; jarak dari 100% itulah perubahannya.",
+    terbalik: "Pilihan itu memakai angka lama dikurangi angka baru, jadi tandanya terbalik: naik terbaca turun, turun terbaca naik."
+  };
   function pilihanLatihanLaba(a, b) {
     var benar = ubah((b - a) / a * 100);
-    var calon = [ubah((b - a) / b * 100), persen(b / a * 100), ubah((a - b) / a * 100)];
-    var pil = [benar];
-    calon.forEach(function (c) { if (pil.length < 3 && pil.indexOf(c) < 0) pil.push(c); });
-    return { pilihan: pil, benar: benar };
+    var calon = [[ubah((b - a) / b * 100), "bagiBaru"], [persen(b / a * 100), "rasio"], [ubah((a - b) / a * 100), "terbalik"]];
+    var pil = [benar], jenis = {};
+    calon.forEach(function (c) { if (pil.length < 3 && pil.indexOf(c[0]) < 0) { pil.push(c[0]); jenis[c[0]] = c[1]; } });
+    return { pilihan: pil, benar: benar, jenis: jenis };
   }
   function buatLatihanLaba() {
     var soalAda = soalLatihanLaba();
@@ -477,7 +484,10 @@
       if (pilih.value === soal.benar) {
         hasil.textContent = "Tepat. " + cara + " Pembaginya selalu angka lama (tahun lalu).";
       } else {
-        hasil.textContent = "Belum tepat. Jawabannya " + soal.benar + ": " + cara + " Angka baru dikurangi angka lama, lalu dibagi angka lama (tahun lalu).";
+        var kenapa = PENJELASAN_PENGECOH[soal.jenis[pilih.value]];
+        // Contoh "rasio − 100%" hanya ditulis bila pembulatannya cocok dengan jawaban (hindari selisih 0,1 karena pembulatan).
+        if (soal.jenis[pilih.value] === "rasio" && ubah(Math.round(b / a * 1000) / 10 - 100) === soal.benar) kenapa += " Di soal ini: " + pilih.value + " − 100% = " + soal.benar + ".";
+        hasil.textContent = "Belum tepat. " + (kenapa ? kenapa + " " : "") + "Jawabannya " + soal.benar + ": " + cara + " Angka baru dikurangi angka lama, lalu dibagi angka lama (tahun lalu).";
       }
     });
     lain.addEventListener("click", function () {

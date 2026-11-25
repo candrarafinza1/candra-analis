@@ -2440,3 +2440,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Hana + Sari + Laras: dua sumber resmi kini terbaca: MUI (hasil Ijtima Ulama Komisi Fatwa ke-7, 9–11 Nov 2021) dan PMA 52/2014 Pasal 9–10 (nisab 85 gram emas, kadar 2,5%, haul, amil resmi); PMA 69/2015 & 31/2019 dicek tidak mengubah pasal itu. → Bagian "Zakat saham" di pelajaran Saham syariah + istilah di kamus. Tanpa hitungan pribadi; pembaca dirujuk ke BAZNAS/LAZ resmi. PDF modul dibuat ulang.
 - Nina: `node tests/cek.mjs` lolos; pelajaran dicek 390px gelap & 1280px terang tanpa scroll horizontal & galat JS. Tegar: hanya teks, tanpa rahasia. Yoga: push ke main.
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 25 Nov 2026, 17.09 WIB — sesi kerja (Bima)
+- Tugas Agenda (ANDA & BUAT) tetap dijadwalkan Kamis 07.xx; sumber MIKA/BSSR, DES periode II, PMK 81/2024 sudah dicari hari ini tanpa hasil baru. Diambil dua tugas tinjauan Kirana + Laras.
+- Kirana + Laras: latihan perubahan laba ditinjau (keyboard, 390px gelap & 1280px terang): pesan salah tidak menyebut letak keliru pengecoh → IDE.md #56, langsung dikerjakan Arif + Laras: tiap pengecoh punya penjelasan (dibagi angka baru / rasio belum dikurangi 100% / tanda terbalik), contoh "96,1% − 100% = −3,9%" hanya bila pembulatan cocok (28 soal dicek, cocok semua). Bagian Zakat saham ditinjau: rapi; usulan #57 (pecah dua cara hitung jadi dua butir) masuk BACKLOG untuk Sari + Hana + Laras.
+- Nina: `node tests/cek.mjs` lolos (cek 2f-23 diperluas + 2 uji balik); 390/1280px tanpa scroll horizontal & galat JS. Bima: berkas tangkapan uji `latihan-390-gelap.png` yang tertinggal di akar repo dihapus. Tegar: tanpa rahasia, teks lewat textContent. Yoga: push ke main.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
