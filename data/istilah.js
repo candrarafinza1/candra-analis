@@ -348,5 +348,16 @@ window.ISTILAH = [
     pelajaran: "saham-syariah" },
   { istilah: "Pertumbuhan pendapatan", pola: ["pertumbuhan pendapatan"],
     arti: "Perubahan pendapatan dibanding periode yang sama tahun sebelumnya, dalam persen. Pendapatan yang naik dari Rp1 triliun menjadi Rp1,2 triliun berarti pertumbuhan pendapatan 20%; bila turun, angkanya negatif.",
-    pelajaran: "laporan-keuangan" }
+    pelajaran: "laporan-keuangan" },
+  /* Sari + Hana + Laras (25 Nov 21.xx): tiga kata di pelajaran "Saham syariah" yang belum ada di kamus.
+     Isi mengikuti pelajaran itu (kriteria DES; Ijtima Ulama Komisi Fatwa MUI ke-7 2021; PMA 52/2014 Pasal 9 & 10). */
+  { istilah: "Nisab", pola: ["nisab"],
+    arti: "Batas nilai harta paling sedikit agar zakat menjadi wajib. Untuk surat berharga, termasuk saham, Peraturan Menteri Agama 52/2014 menyebut nisab senilai 85 gram emas, sehingga nilainya dalam rupiah ikut berubah mengikuti harga emas.",
+    pelajaran: "saham-syariah" },
+  { istilah: "Haul", pola: ["haul"],
+    arti: "Masa kepemilikan harta selama satu tahun menurut kalender hijriah. Zakat saham ditunaikan setelah saham dimiliki selama satu haul dan nilainya mencapai nisab.",
+    pelajaran: "saham-syariah" },
+  { istilah: "Jasa keuangan ribawi", pola: ["jasa keuangan ribawi", "ribawi"],
+    arti: "Jasa keuangan yang mengandung riba, misalnya meminjamkan uang dengan bunga. Perusahaan yang kegiatan usahanya jasa keuangan ribawi tidak memenuhi kriteria Daftar Efek Syariah.",
+    pelajaran: "saham-syariah" }
 ];

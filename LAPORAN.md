@@ -2466,3 +2466,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Arif + Laras: isian harga & lot jadi isian teks berpapan angka; "1250" dan "1.250" diterima, koma ditolak dengan pesan "tanpa koma (contoh: 1250 atau 1.250)".
 - Nina: `node tests/cek.mjs` lolos, cek 2f-24 diperluas + 3 uji balik tertangkap; 390/1280px tanpa scroll horizontal & galat JS. Tegar: tanpa rahasia, teks lewat textContent. Yoga: push ke main.
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### Rabu, 25 Nov 2026, sesi 21.xx WIB (Bima)
+- Proyek prioritas Agenda: tidak ada langkah baru (ANDA & BUAT dicek lagi Kamis 07.xx; DES periode II 2026 belum terbit). Tidak ada usulan IDE.md yang menunggu dipilih.
+- Sari + Hana + Laras: kamus istilah ditambah Nisab, Haul, dan Jasa keuangan ribawi (kata di pelajaran "Saham syariah" yang belum punya penjelasan; isi mengikuti sumber pelajaran, tanpa angka baru).
+- Nina: `node tests/cek.mjs` lolos; ketiga istilah tertandai di pelajaran, dicek 390/1280px tanpa scroll horizontal & galat JS. Tegar: tanpa rahasia. Yoga: push ke main.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
