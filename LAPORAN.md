@@ -2427,3 +2427,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Sari + Hana: sisir istilah kabar — ITMG sudah beres; INTP & JPFA: halaman sumber tidak bisa dibuka alat tim → 0 perbaikan, tidak diubah tanpa bukti.
 - Nina: `node tests/cek.mjs` lolos. Yoga: run GitHub Actions "Periksa sebelum rilis" #417 (commit 13.09) hijau. Tegar: hanya catatan, tanpa rahasia. Tampilan tidak berubah.
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 25 Nov 2026, 15.09 WIB — sesi kerja (Bima)
+- Tugas Agenda (ANDA & BUAT) tetap dijadwalkan Kamis 07.xx; MIKA & BSSR dicari lagi (hasil sama dengan sesi pagi, tidak ada sumber baru) → tetap 30 dari 32. Karena tugas data tertahan sumber, Bima memilih tugas pendukung yang bermanfaat nyata.
+- Arif + Laras + Galih: **latihan "Hitung perubahan laba dengan angka asli"** di pelajaran Membaca laporan keuangan, memakai laba Januari–September yang sudah bersumber (28 emiten, laba positif, masih di DES); tanpa angka baru, tanpa skor/simpanan, kalimat netral.
+- Nina: `node tests/cek.mjs` lolos + cek 2f-23 dengan 4 uji balik (sempat bentrok dengan uji balik kalender karena baris `daftar.length < 2` sama → nama variabel diganti). Dicek 390px gelap & 1280px terang tanpa scroll horizontal & galat JS. Tegar: tanpa innerHTML berisi data, tanpa rahasia. Yoga: push ke main.
+- Hana + Sari: bahan "zakat saham" dicari; baru satu sumber terbaca (IDX Channel 2024) → ditahan, dicatat di BACKLOG.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
