@@ -2413,3 +2413,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Raka + Fajar + Hana: ditemukan **dividen interim I tahun buku 2026 BSSR** US$60 juta / Rp406,16090 per saham, pencatatan 1 Okt, bayar 9 Okt 2026 (EmitenNews 21 Sep; jadwal & Rp406 sama di KabarBursa 22 Sep; total sama di Kontan 23 Sep) → dicatat di Kabar (sudah lewat, jadi bukan entri Agenda). Bahasa netral.
 - Nina: `node tests/cek.mjs` lolos; profil BSSR dicek 390/1280px tanpa scroll horizontal & galat JS. Tegar: hanya data, tanpa rahasia. Yoga: push ke main.
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 25 Nov 2026, 13.09 WIB — sesi kerja (Bima)
+- Email masuk kerja siang terkirim ke Rafinza (12 karyawan, tugas per orang, status situs).
+- Agenda (rutin siang Raka + Fajar + Hana): +0 IPO, +0 dividen, −0 kedaluwarsa. ANDA & BUAT: tetap tidak ada sumber yang menyebut status syariah (e-IPO id=346 ternyata emiten lain, Des 2025) → tidak dicatat. Kabar dividen baru BBCA tidak dicatat karena bukan saham di DES; daftar "11 saham dividen akhir November" (ULTJ, KINO, dll.) tetap di antrean cek DES. `AGENDA_DIPERIKSA` sudah 25 Nov.
+- Fajar + Galih: laba 9 bulan MIKA & BSSR belum ada sumber 2026 → tetap 30 dari 32. Fajar: DPS MBMA tahun buku 2025, empat sumber dibuka, tidak ada yang menyebut dividen → tetap 28 dari 32.
+- Nina: `node tests/cek.mjs` lolos. Tegar: hanya catatan, tanpa rahasia. Yoga: push ke main. Tampilan tidak berubah.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
