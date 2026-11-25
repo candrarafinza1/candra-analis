@@ -2406,3 +2406,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar: BSSR pendapatan 2025 sumber kedua belum ketemu (Investortrust, RCTI+, EmitenNews hanya menyebut laba).
 - Nina: `node tests/cek.mjs` lolos (sempat gagal karena angka aset di ringkasan kabar terbaca sebagai laba → kalimat aset dihapus); profil BRIS, Kabar, Peringkat, Radar dicek 390/1280px tanpa scroll horizontal & galat JS. Tegar: hanya data, tanpa rahasia. Yoga: push ke main.
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+## 25 Nov 2026, 10.09 WIB — sesi kerja (Bima)
+- Tugas Agenda teratas (ANDA & BUAT) tetap dijadwalkan di rutin 13.xx; DES periode II 2026 belum terbit. Diambil tugas data: laba 9 bulan MIKA & BSSR (Fajar + Galih).
+- Fajar + Galih: MIKA & BSSR belum ada sumber Jan–Sep 2026 yang bisa dibuka (dua artikel "Rapor Kinerja" Bisnis 19 & 23 Nov gagal dibuka alat tim) → tetap 30 dari 32.
+- Raka + Fajar + Hana: ditemukan **dividen interim I tahun buku 2026 BSSR** US$60 juta / Rp406,16090 per saham, pencatatan 1 Okt, bayar 9 Okt 2026 (EmitenNews 21 Sep; jadwal & Rp406 sama di KabarBursa 22 Sep; total sama di Kontan 23 Sep) → dicatat di Kabar (sudah lewat, jadi bukan entri Agenda). Bahasa netral.
+- Nina: `node tests/cek.mjs` lolos; profil BSSR dicek 390/1280px tanpa scroll horizontal & galat JS. Tegar: hanya data, tanpa rahasia. Yoga: push ke main.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

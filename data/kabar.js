@@ -67,6 +67,10 @@ window.KABAR = [
   { kode: "UNTR", tanggal: "2026-10-28", jenis: "Dividen",
     ringkas: "United Tractors membagikan dividen interim tahun buku 2026 sebesar Rp430 per saham (sekitar Rp1,478 triliun). Jadwal pembayaran diundur dari 26 Oktober menjadi 23 November 2026, tanggal pencatatan 9 November 2026.",
     sumber: { judul: "BCA Sekuritas, 28 Okt 2026: UNTR akan bagikan dividen interim Rp430 per saham pada 23 November 2026", url: "https://bcasekuritas.co.id/latest-news/news/untr-akan-bagikan-dividen-interim-23-november-2026" } },
+  // Dividen interim I BSSR tahun buku 2026 — EmitenNews 21 Sep 2026; Rp406 per saham & jadwal sama di KabarBursa 22 Sep 2026; total US$60 juta sama di Kontan 23 Sep 2026 (Raka + Fajar, ditinjau Hana, 25 Nov 10.xx)
+  { kode: "BSSR", tanggal: "2026-09-21", jenis: "Dividen",
+    ringkas: "Baramulti Suksessarana menetapkan dividen interim I tahun buku 2026 sebesar US$60 juta, atau Rp406,16090 per saham. Tanggal pencatatan 1 Oktober 2026, pembayaran 9 Oktober 2026.",
+    sumber: { judul: "EmitenNews, 21 Sep 2026: Baramulti (BSSR) tebar dividen interim Rp406 per saham, cek jadwalnya", url: "https://emitennews.com/news/baramulti-bssr-tebar-dividen-interim-rp406-per-saham-cek-jadwalnya" } },
   // Laporan 9 bulan CTRA — Kontan, 1 Nov 2026; Rp1,32 T vs Rp1,62 T & pendapatan Rp7,48 T vs Rp8,39 T sama di Katadata 16 Nov 2026 (Sari + Hana, 23 Nov 18.xx)
   { kode: "CTRA", tanggal: "2026-11-01", jenis: "Laporan keuangan",
     ringkas: "Ciputra Development merilis laporan Januari–September 2026: laba bersih Rp1,32 triliun, turun 18,5% dari Rp1,62 triliun pada periode yang sama 2025 (Katadata, 16 Nov 2026). Penjualan dan pendapatan usaha Rp7,48 triliun, turun 10,79% dari Rp8,39 triliun.",
