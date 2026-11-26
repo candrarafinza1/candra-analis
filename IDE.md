@@ -1148,3 +1148,20 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Bahasa: pengantar dan arti hasil ("setiap Rp100 modal pemilik menghasilkan laba bersih sekitar Rp…") mudah dipahami pemula; tidak ada penilaian baik/buruk; catatan bank & dana syirkah temporer netral.
 - Keyboard: tiga isian berurutan dengan label, hasil dibacakan lewat `role=status`; pesan salah menyebut contoh angka.
 - Usul: profil emiten sudah menampilkan ubin ROE & DER, jadi perlu tautan seperti #61 agar pemula bisa menghitung ulang sendiri. **Disetujui Bima, langsung dikerjakan Dewi + Nina (26 Nov 13.xx):** kalimat "Ingin tahu dari mana ROE dan DER dihitung? Coba hitung ROE & DER sendiri …" di bawah ubin Angka utama, menuju `#judul-latihan-roeder`; angka tidak diisi otomatis. Dicek 390px gelap & 1280px terang: judul kotak terfokus di atas layar, tanpa scroll horizontal.
+
+### 62. Pelajaran Saham syariah: kotak "Hitung sendiri: dua rasio keuangan syariah" (Kirana, 26 Nov 2026, 14.xx WIB) ★ paling berdampak — kecil
+- Masalah: pelajaran menyebut batas utang berbasis bunga 45% dan pendapatan tidak halal 10%, tetapi pemula belum pernah melihat cara angka itu dihitung; padahal ini inti website saham syariah.
+- Ide: empat isian (utang berbasis bunga, total aset, pendapatan tidak halal, total pendapatan; dua terakhir boleh kosong berdua) → rumus lengkap dan kalimat "tidak lebih dari / melewati batas … dalam kriteria DES". Wajib kalimat: hasil latihan bukan status syariah, status resmi hanya dari DES OJK (yang juga menilai kegiatan usaha); catatan bahwa angka perlu dipilah dari catatan atas laporan keuangan.
+- Tren: kalkulator kecil di dalam materi belajar (#59, #60, ROE/DER terbukti mudah dipakai).
+- Dampak bagi pemula: paham mengapa status syariah bisa berubah tiap periode. Batasan: tanpa vonis halal/haram, tanpa ajakan, tanpa simpan/kirim data, tanpa animasi, keyboard penuh.
+- Status: dipilih Bima 26 Nov 14.xx; **selesai sesi yang sama** (Arif + Laras + Hana; Nina: cek 2f-30 + 10 uji balik; dicek 390px gelap & 1280px terang).
+
+### 63. Pelajaran Lot & biaya: kotak "Hitung sendiri: hasil bersih setelah biaya beli dan jual" (Kirana, 26 Nov 2026) — kecil
+- Masalah: kotak modal (#58) hanya menghitung biaya beli; pemula sering lupa bahwa menjual juga kena biaya (termasuk pajak penjualan 0,1% yang sudah ada di pelajaran), sehingga selisih harga kecil bisa habis oleh biaya.
+- Ide: isian harga beli, harga jual, jumlah lot, persen biaya beli dan biaya jual DIISI PENGGUNA dari aplikasinya (tanpa angka bawaan karangan) → selisih kotor, total biaya, selisih bersih dalam rupiah.
+- Dampak: memahami biaya transaksi sebagai bagian hitungan. Batasan: contoh angka bulat, tanpa kata untung pasti/ajakan, tanpa simpan data. Usaha: kecil (Arif + Laras; Hana meninjau).
+
+### 64. Halaman Belajar: "Lembar rumus" satu halaman berisi semua rumus pelajaran (Kirana, 26 Nov 2026) — kecil
+- Masalah: rumus (perubahan laba, modal per lot, PER, dividend yield, porsi, ROE, DER, rasio syariah) tersebar di 6 pelajaran; pemula yang ingin mengulang harus membuka satu per satu.
+- Ide: bagian ringkas di belajar.html: daftar rumus + tautan "Coba hitung" ke jangkar `#judul-latihan-*` masing-masing (guliran jangkar sudah ada dari #61). Bisa ikut tercetak di PDF modul.
+- Dampak: tempat mengulang cepat sebelum membaca laporan keuangan. Batasan: teks biasa, tanpa animasi. Usaha: kecil (Dewi + Laras; Nina memastikan semua jangkar ada).

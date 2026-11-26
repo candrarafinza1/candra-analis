@@ -803,6 +803,92 @@
     wadah.insertBefore(buatLatihanRoeDer(), wadah.querySelectorAll("form.kuis")[0] || null);
   }
 
+  /* ---------- Latihan "Hitung sendiri: dua rasio keuangan syariah" (Arif + Laras + Hana, 26 Nov 2026; IDE.md #62) ----------
+     Di pelajaran "Saham syariah dan Daftar Efek Syariah", sebelum kuis. Batas sama dengan isi pelajaran:
+     utang berbasis bunga ÷ total aset tidak lebih dari 45%; pendapatan tidak halal ÷ total pendapatan tidak lebih dari 10%.
+     Hasil hanya membandingkan angka dengan batas; status syariah resmi tetap dari DES OJK (yang juga menilai kegiatan usaha).
+     Angka bawaan hanya contoh bulat. Tidak disimpan, tidak dikirim. */
+  var SYARIAH_MAKS = 1000000000000, BATAS_UTANG_BUNGA = 45, BATAS_TIDAK_HALAL = 10;
+  function hitungRasioSyariah(utang, aset, tidakHalal, pendapatan) {
+    var u = bacaDesimal(utang), a = bacaDesimal(aset);
+    if (!isFinite(u) || u < 0 || u > SYARIAH_MAKS) return { galat: "utang" };
+    if (!isFinite(a) || a > SYARIAH_MAKS) return { galat: "aset" };
+    if (!(a > 0)) return { galat: "aset-nol" };
+    var r = { utang: u, aset: a, rUtang: u / a * 100, tidakHalal: null, pendapatan: null, rHalal: null };
+    r.lewatUtang = r.rUtang > BATAS_UTANG_BUNGA;
+    var kosongH = tidakHalal == null || String(tidakHalal).trim() === "", kosongP = pendapatan == null || String(pendapatan).trim() === "";
+    if (kosongH && kosongP) return r;
+    if (kosongH || kosongP) return { galat: "pasangan" };
+    var h = bacaDesimal(tidakHalal), p = bacaDesimal(pendapatan);
+    if (!isFinite(h) || h < 0 || h > SYARIAH_MAKS) return { galat: "tidak-halal" };
+    if (!isFinite(p) || p > SYARIAH_MAKS) return { galat: "pendapatan" };
+    if (!(p > 0)) return { galat: "pendapatan-nol" };
+    if (h > p) return { galat: "tidak-halal-lebih" };
+    r.tidakHalal = h; r.pendapatan = p; r.rHalal = h / p * 100;
+    r.lewatHalal = r.rHalal > BATAS_TIDAK_HALAL;
+    return r;
+  }
+  function buatLatihanSyariah() {
+    var ang = function (x) { return angkaRasio.format(x); };
+    // Bila rasio sedikit di atas batas (mis. 45,001%), pembulatan 2 angka akan tertulis "45%"; tampilkan 4 angka agar tidak membingungkan.
+    var persen = function (x, batas) { var t = ang(x); return (x > batas && t === ang(batas)) ? angkaRinci.format(x) : t; };
+    var angkaRinci = new Intl.NumberFormat("id-ID", { maximumFractionDigits: 4 });
+    var kotak = el("section", { class: "kuis latihan-modal latihan-syariah", "aria-labelledby": "judul-latihan-syariah" });
+    kotak.appendChild(el("h2", { id: "judul-latihan-syariah", text: "Hitung sendiri: dua rasio keuangan syariah" }));
+    kotak.appendChild(el("p", { class: "kuis-pengantar", text: "Coba hitung dua rasio keuangan yang dipakai dalam kriteria DES. Angka yang sudah terisi hanya contoh bulat, bukan perusahaan mana pun. Isi dalam satuan yang sama (misalnya semuanya miliar rupiah). Hasil latihan ini bukan status syariah: status resmi hanya dari Daftar Efek Syariah yang ditetapkan OJK, yang juga menilai kegiatan usaha. Angka tidak disimpan dan tidak dikirim." }));
+    var info = el("p", { class: "kuis-hasil", id: "latihan-syariah-info", role: "status", "aria-live": "polite" });
+    var hasil = el("ul", { class: "latihan-modal-hasil" });
+    function isian(id, label, nilai) {
+      var inp = el("input", { id: id, "aria-describedby": "latihan-syariah-info", type: "text", inputmode: "decimal", autocomplete: "off", value: nilai });
+      return { inp: inp, baris: el("div", { class: "cari-kamus" }, [el("label", { for: id, text: label }), inp]) };
+    }
+    var iUtang = isian("latihan-syariah-utang", "Total utang berbasis bunga", "300");
+    var iAset = isian("latihan-syariah-aset", "Total aset", "1.000");
+    var iHalal = isian("latihan-syariah-tidakhalal", "Pendapatan tidak halal, termasuk bunga (boleh kosong)", "20");
+    var iPend = isian("latihan-syariah-pendapatan", "Total pendapatan (boleh kosong)", "500");
+    var PESAN = {
+      utang: "Isi total utang berbasis bunga dengan angka nol atau lebih, desimal memakai koma (contoh: 300 atau 1.250,5).",
+      aset: "Isi total aset dengan angka, desimal memakai koma (contoh: 1.000).",
+      "aset-nol": "Total aset harus lebih dari nol.",
+      pasangan: "Isi pendapatan tidak halal dan total pendapatan bersama-sama, atau kosongkan keduanya.",
+      "tidak-halal": "Isi pendapatan tidak halal dengan angka nol atau lebih, desimal memakai koma (contoh: 20).",
+      pendapatan: "Isi total pendapatan dengan angka, desimal memakai koma (contoh: 500).",
+      "pendapatan-nol": "Total pendapatan harus lebih dari nol.",
+      "tidak-halal-lebih": "Pendapatan tidak halal tidak bisa lebih besar dari total pendapatan. Periksa lagi angkanya."
+    };
+    var KENA = { utang: ["utang"], aset: ["aset"], "aset-nol": ["aset"], pasangan: ["tidakHalal", "pendapatan"], "tidak-halal": ["tidakHalal"], pendapatan: ["pendapatan"], "pendapatan-nol": ["pendapatan"], "tidak-halal-lebih": ["tidakHalal", "pendapatan"] };
+    var masukan = { utang: iUtang.inp, aset: iAset.inp, tidakHalal: iHalal.inp, pendapatan: iPend.inp };
+    function hitung() {
+      var r = hitungRasioSyariah(iUtang.inp.value, iAset.inp.value, iHalal.inp.value, iPend.inp.value);
+      hasil.textContent = "";
+      var kena = r.galat ? KENA[r.galat] : [];
+      Object.keys(masukan).forEach(function (k) { masukan[k].setAttribute("aria-invalid", kena.indexOf(k) >= 0 ? "true" : "false"); });
+      if (r.galat) { info.textContent = PESAN[r.galat]; return; }
+      hasil.appendChild(el("li", { text: "Utang berbasis bunga: " + ang(r.utang) + " ÷ " + ang(r.aset) + " × 100% = " + persen(r.rUtang, BATAS_UTANG_BUNGA) + "% dari total aset. " + (r.lewatUtang ? "Angka ini melewati batas " + BATAS_UTANG_BUNGA + "% dalam kriteria DES." : "Angka ini tidak lebih dari batas " + BATAS_UTANG_BUNGA + "% dalam kriteria DES.") }));
+      var teks = ["utang berbasis bunga " + persen(r.rUtang, BATAS_UTANG_BUNGA) + "% (batas " + BATAS_UTANG_BUNGA + "%)"];
+      if (r.rHalal != null) {
+        hasil.appendChild(el("li", { text: "Pendapatan tidak halal: " + ang(r.tidakHalal) + " ÷ " + ang(r.pendapatan) + " × 100% = " + persen(r.rHalal, BATAS_TIDAK_HALAL) + "% dari total pendapatan. " + (r.lewatHalal ? "Angka ini melewati batas " + BATAS_TIDAK_HALAL + "% dalam kriteria DES." : "Angka ini tidak lebih dari batas " + BATAS_TIDAK_HALAL + "% dalam kriteria DES.") }));
+        teks.push("pendapatan tidak halal " + persen(r.rHalal, BATAS_TIDAK_HALAL) + "% (batas " + BATAS_TIDAK_HALAL + "%)");
+      }
+      info.textContent = "Hasil: " + teks.join(", ") + " (dibulatkan).";
+    }
+    [iUtang.inp, iAset.inp, iHalal.inp, iPend.inp].forEach(function (x) { x.addEventListener("input", hitung); });
+    kotak.appendChild(el("div", { class: "kotak-rumus" }, [
+      el("div", { text: "Utang berbasis bunga ÷ total aset × 100% (batas: tidak lebih dari 45%)" }),
+      el("div", { text: "Pendapatan tidak halal ÷ total pendapatan × 100% (batas: tidak lebih dari 10%)" })
+    ]));
+    kotak.appendChild(el("div", { class: "latihan-modal-isian" }, [iUtang.baris, iAset.baris, iHalal.baris, iPend.baris]));
+    kotak.appendChild(info);
+    kotak.appendChild(hasil);
+    kotak.appendChild(el("p", { class: "latihan-modal-catatan", text: "Laporan keuangan biasanya tidak menulis \"utang berbasis bunga\" dan \"pendapatan tidak halal\" dalam satu baris. Keduanya perlu dipilah dari catatan atas laporan keuangan (misalnya pinjaman bank konvensional, obligasi konvensional, pendapatan bunga), jadi hasil hitungan sendiri bisa berbeda dengan hitungan OJK. Karena itu, untuk mengetahui status sebuah saham, selalu periksa DES periode terbaru." }));
+    hitung();
+    return kotak;
+  }
+  function pasangLatihanSyariah(wadah, m) {
+    if (m.id !== "saham-syariah") return;
+    wadah.insertBefore(buatLatihanSyariah(), wadah.querySelectorAll("form.kuis")[0] || null);
+  }
+
   /* ---------- Halaman pelajaran ---------- */
   // Jangkar pelajaran (Dewi + Nina, 26 Nov 2026; IDE.md #61): isi pelajaran dibuat JS setelah halaman dimuat,
   // jadi peramban tidak bisa menggulir sendiri ke "#judul-..." di alamat. Setelah isi siap, judul kotak itu
@@ -843,6 +929,7 @@
     pasangLatihanRasio(wadah, m);
     pasangLatihanPorsi(wadah, m);
     pasangLatihanRoeDer(wadah, m);
+    pasangLatihanSyariah(wadah, m);
     gulirJangkarPelajaran(wadah);
 
     var nav = el("nav", { class: "navigasi-pelajaran", "aria-label": "Pelajaran lain" });

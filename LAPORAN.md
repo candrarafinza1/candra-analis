@@ -2510,3 +2510,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Dewi: tautan "Coba hitung ROE & DER sendiri" di bawah ubin Angka utama profil emiten → kotak ROE/DER pelajaran Praktik analisis (angka tidak diisi otomatis).
 - Nina: `node tests/cek.mjs` lolos, cek baru 2f-29 + 6 uji balik; cek 2f-27 dipersempit ke tautan PER agar tidak bentrok; profil ICBP → klik → judul kotak terfokus di atas layar, 390px gelap & 1280px terang, tanpa scroll horizontal & galat JS. Tegar: teks lewat el(), tanpa rahasia. Yoga: push ke main.
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 26 Nov 2026, sesi 14.xx WIB (Bima)
+- Agenda: tidak dicek di sesi ini (rutin 07.xx/13.xx).
+- Kirana: tiga usulan mingguan di IDE.md (#62 ★ kotak dua rasio keuangan syariah, #63 hasil bersih setelah biaya beli & jual, #64 lembar rumus di Belajar). Bima memilih ketiganya; #62 dikerjakan sekarang, #63 & #64 masuk backlog.
+- Arif + Laras + Hana: kotak "Hitung sendiri: dua rasio keuangan syariah" di pelajaran Saham syariah dan DES (utang berbasis bunga ÷ total aset, batas 45%; pendapatan tidak halal ÷ total pendapatan, batas 10%). Tertulis jelas bahwa hasil latihan bukan status syariah; status resmi hanya dari DES OJK. Tanpa vonis, tanpa simpan/kirim data.
+- Nina: `node tests/cek.mjs` lolos, cek baru 2f-30 + 10 uji balik; 390px gelap & 1280px terang tanpa scroll horizontal & galat JS; jangkar `#judul-latihan-syariah` terfokus. Masalah ringan ditemukan & diperbaiki: rasio 45,001% akan tertulis "45%" padahal melewati batas → kini ditampilkan sampai 4 angka desimal. Tegar: teks lewat el(), tanpa rahasia. Yoga: push ke main.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

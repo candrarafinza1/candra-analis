@@ -8565,5 +8565,59 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
   ]) ok(rusak !== appK && ujiK(rusak).some((x) => x.includes(pesan)), `uji balik tautan hitung ROE/DER: "${pesan}" harus tertangkap`);
 }
 
+// 2f-30. Latihan "Hitung sendiri: dua rasio keuangan syariah" (Nina, 26 Nov 2026 14.xx; Arif + Laras + Hana, IDE.md #62).
+// Rasio utang berbasis bunga ÷ total aset (batas 45%) dan pendapatan tidak halal ÷ total pendapatan (batas 10%),
+// batas "tidak lebih dari" (tepat 45% / 10% tidak melewati); hanya di pelajaran saham-syariah; wajib menyebut bahwa
+// status resmi hanya dari DES OJK; tanpa vonis halal/haram, tanpa kata ajakan, tanpa simpan/kirim data.
+{
+  const appS = readFileSync("assets/app.js", "utf8");
+  const ujiS = (t) => {
+    const salah = [];
+    const a0 = t.indexOf("  function bacaDesimal("), a1 = t.indexOf("  function hitungRasio(");
+    const a = t.indexOf("  var SYARIAH_MAKS"), b = t.indexOf("  function buatLatihanSyariah("), c = t.indexOf("  function pasangLatihanSyariah("), d = t.indexOf("  /* ---------- Halaman pelajaran");
+    if (a0 < 0 || a1 < 0 || a < 0 || b < 0 || c < 0 || d < 0 || !(a < b && b < c && c < d)) return ["fungsi latihan rasio syariah tidak ada"];
+    let f;
+    try { f = vm.runInNewContext(`${t.slice(a0, a1)}; ${t.slice(a, b)}; hitungRasioSyariah`); } catch (e) { return ["galat: " + e.message]; }
+    const r1 = f("300", "1.000", "20", "500");
+    if (!r1 || Math.abs(r1.rUtang - 30) > 1e-9 || Math.abs(r1.rHalal - 4) > 1e-9 || r1.lewatUtang || r1.lewatHalal) salah.push("rumus rasio syariah (300/1.000 = 30%, 20/500 = 4%)");
+    const r2 = f("450", "1.000", "50", "500");
+    if (!r2 || r2.lewatUtang !== false || r2.lewatHalal !== false) salah.push("batas tidak lebih dari: tepat 45% dan 10% tidak melewati");
+    const r3 = f("451", "1.000", "51", "500");
+    if (!r3 || r3.lewatUtang !== true || r3.lewatHalal !== true) salah.push("batas terlewati harus terbaca (45,1% dan 10,2%)");
+    const r4 = f("0", "1.250,5", "", "");
+    if (!r4 || r4.rHalal !== null || r4.rUtang !== 0) salah.push("pendapatan boleh kosong berdua");
+    for (const [v, g] of [[["abc", "100", "", ""], "utang"], [["-1", "100", "", ""], "utang"], [["10", "0", "", ""], "aset-nol"], [["10", "", "", ""], "aset"], [["10", "100", "5", ""], "pasangan"], [["10", "100", "", "5"], "pasangan"], [["10", "100", "6", "5"], "tidak-halal-lebih"], [["10", "100", "1", "0"], "pendapatan-nol"], [["10", "100", "-1", "5"], "tidak-halal"], [["10.5", "100", "", ""], "utang"]]) {
+      const r = f(...v);
+      if (!r || r.galat !== g) salah.push(`isian tidak sah harus ditolak (${v.join("/")} → ${g})`);
+    }
+    if (!/BATAS_UTANG_BUNGA = 45, BATAS_TIDAK_HALAL = 10;/.test(t.slice(a, b))) salah.push("batas harus 45% dan 10% seperti isi pelajaran");
+    if (!/m\.id !== "saham-syariah"/.test(t.slice(c, d))) salah.push("hanya di pelajaran saham-syariah");
+    const r0 = t.indexOf("  function renderPelajaran(");
+    const ren = t.slice(r0, t.indexOf("\n  function ", r0 + 10));
+    const iR = ren.indexOf("pasangLatihanSyariah(wadah, m);"), iG = ren.indexOf("gulirJangkarPelajaran(wadah);");
+    if (iR < 0) salah.push("renderPelajaran wajib memasang latihan rasio syariah");
+    else if (iG >= 0 && iG < iR) salah.push("guliran jangkar harus setelah latihan rasio syariah");
+    const badan = t.slice(a, d).replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/[^\n]*/g, "");
+    if (!/status resmi hanya dari Daftar Efek Syariah/.test(badan)) salah.push("wajib menyebut status resmi hanya dari DES OJK");
+    if (/buruan|pasti (naik|untung)|rekomendasi|layak dibeli|saatnya (beli|jual)|sehat|murah|mahal|haram|lolos syariah|dijamin/i.test(badan)) salah.push("kata ajakan atau vonis dilarang");
+    if (/localStorage|sessionStorage|fetch\(|XMLHttpRequest|innerHTML/.test(badan)) salah.push("tanpa simpan/kirim data dan tanpa innerHTML");
+    return salah;
+  };
+  const sS = ujiS(appS);
+  ok(!sS.length, "Latihan rasio syariah: " + sS.join("; "));
+  for (const [rusak, pesan] of [
+    [appS.replace("rUtang: u / a * 100,", "rUtang: u / a,"), "rumus rasio syariah"],
+    [appS.replace("r.rHalal = h / p * 100;", "r.rHalal = p / h * 100;"), "rumus rasio syariah"],
+    [appS.replace("r.lewatUtang = r.rUtang > BATAS_UTANG_BUNGA;", "r.lewatUtang = r.rUtang >= BATAS_UTANG_BUNGA;"), "tidak lebih dari"],
+    [appS.replace("BATAS_UTANG_BUNGA = 45, BATAS_TIDAK_HALAL = 10;", "BATAS_UTANG_BUNGA = 45, BATAS_TIDAK_HALAL = 15;"), "batas harus"],
+    [appS.replace("    if (h > p) return { galat: \"tidak-halal-lebih\" };\n", ""), "isian tidak sah"],
+    [appS.replace("    if (kosongH || kosongP) return { galat: \"pasangan\" };\n", ""), "isian tidak sah"],
+    [appS.replace('    if (m.id !== "saham-syariah") return;\n', ""), "saham-syariah"],
+    [appS.replace("    pasangLatihanSyariah(wadah, m);\n", ""), "renderPelajaran"],
+    [appS.replace("Hasil latihan ini bukan status syariah: status resmi hanya dari Daftar Efek Syariah", "Hasil latihan ini menentukan status syariah: saham lolos syariah bila di bawah batas, bukan hanya dari Daftar Efek Syariah"), "status resmi"],
+    [appS.replace("dalam kriteria DES.\") }));\n      var teks", "dalam kriteria DES. Saham ini haram.\") }));\n      var teks"), "vonis"],
+  ]) ok(rusak !== appS && ujiS(rusak).some((x) => x.includes(pesan)), `uji balik latihan rasio syariah: "${pesan}" harus tertangkap`);
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);
