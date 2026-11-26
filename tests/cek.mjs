@@ -8291,7 +8291,7 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
     const s = t.slice(t.indexOf("  function soalLatihanLaba("), t.indexOf("  function pilihanLatihanLaba("));
     if (!/syariahAktif\(e\)/.test(s)) salah.push("hanya emiten di DES");
     if (!/e\.laba9b\[2025\] > 0 && e\.laba9b\[2026\] > 0/.test(s)) salah.push("hanya laba positif");
-    const p = t.slice(t.indexOf("  function pasangLatihanLaba("), t.indexOf("  /* ---------- Halaman pelajaran"));
+    const p = t.slice(t.indexOf("  function pasangLatihanLaba("), t.indexOf("  /* ---------- Latihan \"Hitung modal"));
     if (!/m\.id !== "laporan-keuangan"/.test(p)) salah.push("hanya di pelajaran laporan-keuangan");
     if (!/pasangLatihanLaba\(wadah, m\);/.test(t)) salah.push("renderPelajaran wajib memasang latihan");
     if (/buruan|pasti (naik|untung)|rekomendasi beli|layak dibeli|saatnya beli/i.test(t.slice(a, b) + s + t.slice(b, t.indexOf("  function pasangLatihanLaba(")))) salah.push("kata ajakan dilarang");
@@ -8316,7 +8316,7 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
   const appM = readFileSync("assets/app.js", "utf8");
   const ujiM = (t) => {
     const salah = [];
-    const a = t.indexOf("  var MODAL_LEMBAR_LOT"), b = t.indexOf("  function buatLatihanModal("), c = t.indexOf("  function pasangLatihanModal("), d = t.indexOf("  /* ---------- Halaman pelajaran");
+    const a = t.indexOf("  var MODAL_LEMBAR_LOT"), b = t.indexOf("  function buatLatihanModal("), c = t.indexOf("  function pasangLatihanModal("), d = t.indexOf("  /* ---------- Latihan \"Hitung PER");
     if (a < 0 || b < 0 || c < 0 || d < 0) return ["fungsi latihan modal tidak ada"];
     let f;
     try { f = vm.runInNewContext(`${t.slice(a, b)}; hitungModalLot`); } catch (e) { return ["galat: " + e.message]; }
@@ -8356,6 +8356,47 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
     [appM.replace('isian("latihan-modal-harga", "Harga per lembar (Rp)", { type: "text"', 'isian("latihan-modal-harga", "Harga per lembar (Rp)", { type: "number"'), "bukan type=number"],
     [appM.replace('    if (/^\\d{1,3}(\\.\\d{3})+$/.test(s)) return Number(s.replace(/\\./g, ""));\n', ""), "harga bertitik ribuan"],
   ]) ok(rusak !== appM && ujiM(rusak).some((x) => x.includes(pesan)), `uji balik latihan modal: "${pesan}" harus tertangkap`);
+}
+
+// 2f-25. Latihan "Hitung PER dan dividend yield" (Nina, 26 Nov 2026; Arif + Laras + Dewi, IDE.md #59).
+// Rumus sama dengan kotak rumus pelajaran; EPS nol/negatif → PER tidak dibaca; desimal pakai koma; hanya di
+// pelajaran laporan-keuangan; tanpa kata ajakan atau vonis murah/mahal.
+{
+  const appR = readFileSync("assets/app.js", "utf8");
+  const ujiR = (t) => {
+    const salah = [];
+    const a0 = t.indexOf("  function bacaBulat("), a1 = t.indexOf("  function hitungModalLot(");
+    const a = t.indexOf("  var RASIO_HARGA_MAKS"), b = t.indexOf("  function buatLatihanRasio("), c = t.indexOf("  function pasangLatihanRasio("), d = t.indexOf("  /* ---------- Halaman pelajaran");
+    if (a0 < 0 || a1 < 0 || a < 0 || b < 0 || c < 0 || d < 0) return ["fungsi latihan rasio tidak ada"];
+    let f;
+    try { f = vm.runInNewContext(`${t.slice(a0, a1)}; ${t.slice(a, b)}; hitungRasio`); } catch (e) { return ["galat: " + e.message]; }
+    const r1 = f("1250", "125", "50");
+    if (!r1 || r1.per !== 10 || Math.abs(r1.yield - 4) > 1e-9) salah.push("rumus PER & yield (1250 ÷ 125 = 10 kali; 50 ÷ 1250 = 4%)");
+    const r2 = f("1.000", "12,5", "");
+    if (!r2 || r2.per !== 80 || r2.yield !== null) salah.push("desimal koma & yield kosong (1.000 ÷ 12,5 = 80 kali)");
+    const r3 = f("500", "-20", "5");
+    if (!r3 || r3.per !== null || Math.abs(r3.yield - 1) > 1e-9) salah.push("EPS negatif: PER tidak dibaca");
+    const r4 = f("500", "0", "");
+    if (!r4 || r4.per !== null) salah.push("EPS nol: PER tidak dibaca");
+    for (const [h, e, dv, g] of [["0", "10", "", "harga"], ["12,5", "10", "", "harga"], ["500", "12.5", "", "eps"], ["500", "abc", "", "eps"], ["500", "10", "-1", "dps"], ["500", "10", "2.5", "dps"]]) {
+      const r = f(h, e, dv);
+      if (!r || r.galat !== g) salah.push(`isian tidak sah harus ditolak (${h}/${e}/${dv} → ${g})`);
+    }
+    if (!/m\.id !== "laporan-keuangan"/.test(t.slice(c, d))) salah.push("hanya di pelajaran laporan-keuangan");
+    if (!/pasangLatihanRasio\(wadah, m\);/.test(t)) salah.push("renderPelajaran wajib memasang latihan rasio");
+    if (/buruan|pasti (naik|untung)|rekomendasi beli|layak dibeli|saatnya beli|untung|undervalue|kemurahan|terlalu mahal/i.test(t.slice(b, d).replace(/\/\*[\s\S]*?\*\//g, ""))) salah.push("kata ajakan/vonis dilarang");
+    return salah;
+  };
+  const sR = ujiR(appR);
+  ok(!sR.length, "Latihan rasio: " + sR.join("; "));
+  for (const [rusak, pesan] of [
+    [appR.replace("per: e > 0 ? h / e : null", "per: h / e"), "EPS negatif"],
+    [appR.replace("r.dps = d; r.yield = d / h * 100;", "r.dps = d; r.yield = d / h;"), "rumus PER & yield"],
+    [appR.replace("if (!isFinite(d) || d < 0 ||", "if (!isFinite(d) ||"), "isian tidak sah"],
+    [appR.replace('(,\\d{1,2})?$/.test(s)) return NaN;', '([.,]\\d{1,2})?$/.test(s)) return NaN;'), "isian tidak sah"],
+    [appR.replace('    if (m.id !== "laporan-keuangan") return;\n    wadah.insertBefore(buatLatihanRasio()', '    wadah.insertBefore(buatLatihanRasio()'), "laporan-keuangan"],
+    [appR.replace("    pasangLatihanRasio(wadah, m);\n", ""), "renderPelajaran"],
+  ]) ok(rusak !== appR && ujiR(rusak).some((x) => x.includes(pesan)), `uji balik latihan rasio: "${pesan}" harus tertangkap`);
 }
 
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }

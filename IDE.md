@@ -1124,3 +1124,22 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Ide: isian teks dengan papan angka (`inputmode="numeric"`), menerima "1250" atau ribuan bertitik ("1.250", "1.000.000"), menolak koma & titik yang bukan ribuan dengan pesan "tanpa koma (contoh: 1250 atau 1.250)".
 - Dampak bagi pemula: tidak ada lagi hasil salah yang terlihat benar. Usaha: kecil. Lolos aturan: tanpa biaya, tanpa animasi, keyboard tetap bisa (tombol panah naik/turun hilang, tidak dipakai di pelajaran).
 - Status: selesai 25 Nov 20.xx (Arif + Laras; Nina: cek 2f-24 diperluas + 3 uji balik). Papan angka di HP sungguhan tetap perlu dicek.
+
+### 59. Pelajaran Laporan keuangan: kotak "Hitung sendiri: PER dan dividend yield" (Kirana, 26 Nov 2026, 07.xx WIB) ★ paling berdampak — kecil
+- Masalah: pelajaran sudah memberi rumus PER dan dividend yield, tetapi pemula belum bisa langsung mencoba dengan angka dari profil emiten; dua latihan lain (perubahan laba, modal per lot) terbukti membantu.
+- Ide: kotak isian harga per lembar, EPS setahun, dan dividen per saham setahun (boleh kosong). Hasil menulis rumus lengkap ("Rp1.250 ÷ Rp125 = 10 kali"). EPS nol/negatif → "PER tidak bisa dibaca". Desimal pakai koma, titik hanya ribuan (pelajaran dari #58).
+- Tren yang diacu: kalkulator kecil di dalam materi belajar (gaya aplikasi edukasi investasi), tanpa akun dan tanpa simpan data.
+- Dampak bagi pemula: bisa memeriksa sendiri angka PER/yield yang mereka baca di media. Batasan: angka bawaan hanya contoh bulat (bukan saham mana pun), tanpa kata murah/mahal/ajakan, tanpa animasi, keyboard penuh.
+- Status: dipilih Bima 26 Nov 07.xx; **selesai sesi yang sama** (Arif + Laras + Dewi; Nina: cek 2f-25 + 6 uji balik). Kirana meninjau di HP sungguhan begitu bisa.
+
+### 60. Pelajaran Mengelola risiko: kotak "Hitung sendiri: porsi tiap saham di portofolio" (Kirana, 26 Nov 2026) — kecil
+- Masalah: pelajaran menjelaskan diversifikasi, tetapi pemula sulit membayangkan "terlalu banyak di satu saham" dalam angka.
+- Ide: isi nilai (Rp) 2–5 saham milik sendiri tanpa nama emiten → tampil porsi masing-masing dalam persen dan batang teks sederhana. Tanpa batas "ideal" karangan; hanya angka porsi dan kalimat netral dari pelajaran.
+- Dampak bagi pemula: melihat sendiri bila satu saham memegang sebagian besar uangnya. Batasan: tanpa simpan/kirim data, tanpa ajakan, prefers-reduced-motion (tanpa animasi), keyboard.
+- Usaha: kecil (Arif + Laras; Hana meninjau bahasa). Status: diusulkan Kirana 26 Nov 07.xx.
+
+### 61. Profil emiten: tautan "Coba hitung sendiri" di samping PER/DPS (Kirana, 26 Nov 2026) — kecil
+- Masalah: profil menampilkan DPS dan angka laba, tetapi tidak menunjukkan cara pemula menghitung rasio sendiri.
+- Ide: satu tautan teks kecil ke kotak #59 di pelajaran Laporan keuangan (jangkar `#judul-latihan-rasio`), tanpa mengisi angka otomatis agar pengguna menyalin sendiri dari sumber.
+- Dampak bagi pemula: jalur belajar dari data ke rumus. Batasan: teks biasa, tanpa ajakan. Usaha: kecil (Dewi; Nina menambah cek tautan).
+- Status: diusulkan Kirana 26 Nov 07.xx.

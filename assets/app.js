@@ -588,6 +588,84 @@
     wadah.insertBefore(buatLatihanModal(), wadah.querySelectorAll("form.kuis")[0] || null);
   }
 
+  /* ---------- Latihan "Hitung PER dan dividend yield" (Arif + Laras + Dewi, 26 Nov 2026; IDE.md #59) ----------
+     Di pelajaran "Membaca laporan keuangan", sebelum kuis. Rumus sama dengan kotak rumus pelajaran:
+     PER = harga ÷ EPS; dividend yield = DPS ÷ harga × 100%. Angka bawaan hanya contoh bulat (bukan saham mana pun);
+     pengguna mengisi angka dari laporan atau profil emiten. Tidak menilai murah/mahal, tidak disimpan, tidak dikirim. */
+  var RASIO_HARGA_MAKS = 1000000, RASIO_RP_MAKS = 1000000, angkaRasio = new Intl.NumberFormat("id-ID", { maximumFractionDigits: 2 });
+  // Angka rupiah per saham: "125", "1.250", "12,5", "1.250,75", boleh diawali "-" (EPS rugi). Titik desimal ("12.5") ditolak.
+  function bacaDesimal(teks) {
+    var s = String(teks == null ? "" : teks).trim().replace(/^−/, "-");
+    if (!/^-?(\d+|\d{1,3}(\.\d{3})+)(,\d{1,2})?$/.test(s)) return NaN;
+    return Number(s.replace(/\./g, "").replace(",", "."));
+  }
+  function hitungRasio(harga, eps, dps) {
+    var h = bacaBulat(harga), e = bacaDesimal(eps);
+    if (!Number.isInteger(h) || h < 1 || h > RASIO_HARGA_MAKS) return { galat: "harga" };
+    if (!isFinite(e) || Math.abs(e) > RASIO_RP_MAKS) return { galat: "eps" };
+    var r = { harga: h, eps: e, per: e > 0 ? h / e : null, dps: null, yield: null };
+    if (dps != null && String(dps).trim() !== "") {
+      var d = bacaDesimal(dps);
+      if (!isFinite(d) || d < 0 || d > RASIO_RP_MAKS) return { galat: "dps" };
+      r.dps = d; r.yield = d / h * 100;
+    }
+    return r;
+  }
+  function buatLatihanRasio() {
+    var rp = function (x) { return (x < 0 ? "−Rp" : "Rp") + angkaRasio.format(Math.abs(x)); };
+    var kotak = el("section", { class: "kuis latihan-modal latihan-rasio", "aria-labelledby": "judul-latihan-rasio" });
+    kotak.appendChild(el("h2", { id: "judul-latihan-rasio", text: "Hitung sendiri: PER dan dividend yield" }));
+    kotak.appendChild(el("p", { class: "kuis-pengantar", text: "Angka yang sudah terisi hanya contoh bulat, bukan saham mana pun. Ganti dengan harga saham, EPS setahun, dan dividen per saham setahun dari laporan atau profil emiten. Ini alat berhitung, bukan penilaian murah atau mahal. Angka tidak disimpan dan tidak dikirim." }));
+    var info = el("p", { class: "kuis-hasil", id: "latihan-rasio-info", role: "status", "aria-live": "polite" });
+    var hasil = el("ul", { class: "latihan-modal-hasil" });
+    function isian(id, label, attrs) {
+      var inp = el("input", Object.assign({ id: id, "aria-describedby": "latihan-rasio-info" }, attrs));
+      return { inp: inp, baris: el("div", { class: "cari-kamus" }, [el("label", { for: id, text: label }), inp]) };
+    }
+    var iHarga = isian("latihan-rasio-harga", "Harga per lembar (Rp)", { type: "text", inputmode: "numeric", autocomplete: "off", value: "1250" });
+    var iEps = isian("latihan-rasio-eps", "EPS setahun (Rp per saham)", { type: "text", inputmode: "decimal", autocomplete: "off", value: "125" });
+    var iDps = isian("latihan-rasio-dps", "Dividen per saham setahun (Rp, boleh kosong)", { type: "text", inputmode: "decimal", autocomplete: "off", value: "50" });
+    var PESAN = {
+      harga: "Isi harga per lembar dengan bilangan bulat Rp1 sampai " + rp(RASIO_HARGA_MAKS) + " (contoh: 1250 atau 1.250).",
+      eps: "Isi EPS dalam rupiah per saham, desimal memakai koma (contoh: 125 atau 12,5). EPS rugi ditulis dengan tanda minus.",
+      dps: "Isi dividen per saham dalam rupiah, desimal memakai koma (contoh: 50 atau 2,5), atau kosongkan."
+    };
+    var masukan = { harga: iHarga.inp, eps: iEps.inp, dps: iDps.inp };
+    function hitung() {
+      var r = hitungRasio(iHarga.inp.value, iEps.inp.value, iDps.inp.value);
+      hasil.textContent = "";
+      Object.keys(masukan).forEach(function (k) {
+        masukan[k].setAttribute("aria-invalid", r.galat === k ? "true" : "false");
+      });
+      if (r.galat) { info.textContent = PESAN[r.galat]; return; }
+      var teks = [];
+      if (r.per == null) {
+        hasil.appendChild(el("li", { text: "EPS " + rp(r.eps) + ": perusahaan tidak mencatat laba per saham (impas atau rugi), jadi PER tidak bisa dibaca." }));
+        teks.push("PER tidak bisa dibaca karena EPS nol atau negatif");
+      } else {
+        hasil.appendChild(el("li", { text: "PER: " + rp(r.harga) + " ÷ " + rp(r.eps) + " = " + angkaRasio.format(r.per) + " kali. Artinya harga saham sama dengan " + angkaRasio.format(r.per) + " kali laba per sahamnya setahun." }));
+        teks.push("PER " + angkaRasio.format(r.per) + " kali");
+      }
+      if (r.yield != null) {
+        hasil.appendChild(el("li", { text: "Dividend yield: " + rp(r.dps) + " ÷ " + rp(r.harga) + " × 100% = " + angkaRasio.format(r.yield) + "%." }));
+        teks.push("dividend yield " + angkaRasio.format(r.yield) + "%");
+      }
+      info.textContent = "Hasil: " + teks.join(", ") + " (dibulatkan 2 angka di belakang koma).";
+    }
+    [iHarga.inp, iEps.inp, iDps.inp].forEach(function (x) { x.addEventListener("input", hitung); });
+    kotak.appendChild(el("div", { class: "kotak-rumus" }, [el("div", { text: "PER = harga saham ÷ EPS" }), el("div", { text: "Dividend yield = dividen per saham ÷ harga saham × 100%" })]));
+    kotak.appendChild(el("div", { class: "latihan-modal-isian" }, [iHarga.baris, iEps.baris, iDps.baris]));
+    kotak.appendChild(info);
+    kotak.appendChild(hasil);
+    kotak.appendChild(el("p", { class: "latihan-modal-catatan", text: "Pakai EPS dan dividen untuk satu tahun penuh yang sama. Satu angka saja tidak pernah cukup: bandingkan dengan tahun-tahun sebelumnya dan dengan perusahaan sejenis." }));
+    hitung();
+    return kotak;
+  }
+  function pasangLatihanRasio(wadah, m) {
+    if (m.id !== "laporan-keuangan") return;
+    wadah.insertBefore(buatLatihanRasio(), wadah.querySelectorAll("form.kuis")[0] || null);
+  }
+
   /* ---------- Halaman pelajaran ---------- */
   function renderPelajaran() {
     var wadah = document.getElementById("isi-pelajaran");
@@ -609,6 +687,7 @@
     pasangLatihanUrut(wadah, m);
     pasangLatihanLaba(wadah, m);
     pasangLatihanModal(wadah, m);
+    pasangLatihanRasio(wadah, m);
 
     var nav = el("nav", { class: "navigasi-pelajaran", "aria-label": "Pelajaran lain" });
     nav.appendChild(idx > 0

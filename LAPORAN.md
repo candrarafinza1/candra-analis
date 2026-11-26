@@ -2472,3 +2472,11 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Sari + Hana + Laras: kamus istilah ditambah Nisab, Haul, dan Jasa keuangan ribawi (kata di pelajaran "Saham syariah" yang belum punya penjelasan; isi mengikuti sumber pelajaran, tanpa angka baru).
 - Nina: `node tests/cek.mjs` lolos; ketiga istilah tertandai di pelajaran, dicek 390/1280px tanpa scroll horizontal & galat JS. Tegar: tanpa rahasia. Yoga: push ke main.
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### Kamis, 26 Nov 2026, sesi 07.xx WIB (Bima)
+- Laporan masuk kerja pagi dikirim ke Rafinza (07.1x).
+- Agenda: +0 IPO, +0 dividen, −0 kedaluwarsa. Raka + Hana: ANDA & BUAT dicari lagi, tetap tidak ada sumber yang menyebut status syariah → tidak dicatat (dicoba lagi 13.xx). Pengumuman dividen baru yang muncul (mis. BBCA) bukan emiten DES. Fajar: DES periode II 2026 belum terbit (terbaru KEP-21/D.04/2026). Fajar + Galih: laba 9 bulan MIKA & BSSR tetap belum ada sumber baru.
+- Kirana: 3 usulan baru di IDE.md (#59 ★ kotak PER & dividend yield, #60 porsi portofolio, #61 tautan dari profil). Bima memilih #59.
+- Arif + Laras + Dewi: kotak "Hitung sendiri: PER dan dividend yield" di pelajaran Membaca laporan keuangan (angka bawaan hanya contoh bulat; EPS nol/negatif → PER tidak dibaca; desimal pakai koma). #60 dan #61 masuk BACKLOG sebagai tugas pendukung berikutnya.
+- Nina: `node tests/cek.mjs` lolos, cek baru 2f-25 + 6 uji balik; batas potongan cek 2f-23/2f-24 disesuaikan; 390px gelap & 1280px terang tanpa scroll horizontal & galat JS. Tegar: tanpa rahasia, teks lewat textContent, angka tidak disimpan. Yoga: push ke main.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
