@@ -2543,3 +2543,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Arif: satu fungsi `bacaPersen` untuk kedua kotak (koma atau titik desimal, tanda % boleh ikut; huruf, dua pemisah, minus, >5% tetap ditolak); contoh di pesan salah menyebut "0,15%".
 - Nina: `node tests/cek.mjs` lolos, cek baru 2f-33 + 3 uji balik (uji balik dicoba merusak kode: tertangkap); cek 2f-31 disesuaikan. 390px gelap & 1280px terang tanpa scroll horizontal & galat JS. Tegar: tanpa skrip/rahasia baru. Yoga: push ke main.
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 26 Nov 2026, sesi 19.xx WIB (Bima)
+- Agenda: tidak dicek di sesi ini (rutin 07.xx/13.xx; ANDA & BUAT dicari lagi 07.xx Jumat). Proyek prioritas lain masih menunggu DES/sumber, jadi tim mengerjakan tugas pendukung.
+- Kirana + Laras: tinjau Lembar rumus #64 di web (390px gelap & 1280px terang) dan lampiran PDF hal. 22–23. Temuan IDE.md #66: rasio syariah (pelajaran 2) tampil paling akhir, PDF jadi berurutan "Pelajaran 4, 4, 5, 5, 6, 8, 2". Alur tautan → kotak latihan → Kembali baik untuk ketujuh tautan.
+- Laras + Dewi: kelompok diurutkan sesuai urutan pelajaran, pengantar menyebut "urut sesuai urutan pelajaran"; PDF dibuat ulang (urutan ikut).
+- Nina: `node tests/cek.mjs` lolos, cek 2f-32 kini memeriksa urutan + 1 uji balik; 390px & 1280px tanpa scroll horizontal. Catatan kecil (tidak diperbaiki): alamat dengan `#lembar-rumus` kadang membuat Kembali bergeser di Chromium; belum ada tautan yang memakainya, dicatat di backlog. Tegar: tanpa skrip/rahasia baru. Yoga: push ke main.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

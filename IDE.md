@@ -1177,3 +1177,11 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Ide: satu fungsi `bacaPersen` untuk kedua kotak: desimal koma atau titik (batas 5% membuat titik tidak mungkin berarti ribuan), tanda % di akhir boleh ikut; huruf, dua pemisah, angka minus, dan lebih dari 5% tetap ditolak. Contoh di pesan salah menyebut "0,15 atau 0,15%".
 - Hana: kalimat "uang yang kembali lebih banyak/sedikit daripada uang yang keluar" netral dan jelas; pesan isian berpasangan jelas. Tidak ada kata ajakan.
 - **Status:** dikerjakan Arif sesi yang sama; Nina cek 2f-33 (5 tulisan diterima, 8 ditolak, di kedua kotak) + 3 uji balik; 390px gelap & 1280px terang tanpa scroll horizontal & galat JS. Tinggal: papan angka desimal di HP sungguhan.
+
+### 66. Lembar rumus: kelompok diurutkan sesuai urutan pelajaran (Kirana + Laras, 26 Nov 2026, 19.xx WIB) — kecil, langsung dikerjakan
+- Tinjauan Lembar rumus #64 di salinan lokal (situs tayang belum bisa dijangkau alat tim), 390px gelap & 1280px terang, plus lampiran PDF hal. 22–23.
+- Masalah: "Dua rasio keuangan syariah" berasal dari pelajaran 2, tetapi tampil paling akhir, sesudah rumus pelajaran 4–8. Di PDF urutannya jadi "Pelajaran 4, 4, 5, 5, 6, 8, 2", membingungkan pemula yang mengulang berurutan. Padahal saringan syariah adalah langkah pertama di situs ini.
+- Ide: urutkan kelompok sesuai urutan pelajaran (rasio syariah di depan); kalimat pengantar menyebut "urut sesuai urutan pelajaran". PDF ikut berubah karena dibaca dari belajar.html.
+- Alur tautan → kotak latihan → tombol Kembali: ketujuh tautan memfokus judul kotak di atas layar (390px & 1280px); Kembali mengembalikan posisi gulir semula. Catatan kecil: bila alamat dibuka dengan `#lembar-rumus` (belum ada tautan yang memakainya), Chromium kadang mengembalikan posisi lebih ke bawah karena daftar pelajaran di atasnya dibuat JS setelah halaman dimuat (penambatan gulir). Tidak diperbaiki sekarang; dicatat bila kelak ada tautan ke `#lembar-rumus`.
+- PDF hal. 22–23: kotak rumus terbaca, baris "Latihan: Pelajaran N, …" jelas tanpa tautan. Tidak ada temuan lain.
+- **Status:** dikerjakan Laras + Dewi sesi yang sama; Nina menambah pemeriksaan urutan di cek 2f-32 + 1 uji balik; PDF dibuat ulang; 390px & 1280px tanpa scroll horizontal.

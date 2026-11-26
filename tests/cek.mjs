@@ -8760,6 +8760,9 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
       if (!/^Coba hitung /.test(teks)) salah.push(`teks tautan harus diawali "Coba hitung": ${teks}`);
       dipakai.add(jangkar);
     }
+    // urut sesuai urutan pelajaran (Kirana + Laras, 26 Nov 19.xx, IDE.md #66): rasio syariah (pelajaran 2) di depan.
+    const urutM = (MODUL || []).map((m) => m.id), noUrut = tautan.map(([, modul]) => urutM.indexOf(modul));
+    if (noUrut.some((n, i) => i > 0 && n < noUrut[i - 1])) salah.push("kelompok lembar rumus tidak urut sesuai urutan pelajaran");
     for (const j of pasang.keys()) if (j !== "judul-latihan-urut" && !dipakai.has(j)) salah.push(`kotak ${j} belum masuk lembar rumus`);
     // rumus sama persis dengan app.js
     const rumus = [...isi.matchAll(/<div class="kotak-rumus">([\s\S]*?)<\/div>\s*(?=<a|<p)/g)].flatMap(([, x]) => {
@@ -8782,6 +8785,7 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
     [belR.replace("Hasil hitungan sendiri bukan status syariah.", "Hasil hitungan ini menentukan status syariah."), appR, "bukan status syariah"],
     [belR, appR.replace('    if (m.id !== "saham-syariah") return;', '    if (m.id !== "laporan-keuangan") return;'), "bukan saham-syariah"],
     [belR.replace('id="lembar-rumus"', 'id="rumus"'), appR, "tidak ada di belajar.html"],
+    [belR.replace(/(\s*<li>\s*<p class="lembar-rumus-nama">Dua rasio[\s\S]*?<\/li>)([\s\S]*?)(\s*<\/ul>)/, "$2$1$3"), appR, "tidak urut sesuai urutan pelajaran"],
   ]) ok((bel !== belR || app !== appR) && ujiLembar(bel, app).some((x) => x.includes(pesan)), `uji balik lembar rumus: "${pesan}" harus tertangkap`);
 }
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
