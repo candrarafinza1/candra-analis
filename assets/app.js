@@ -986,6 +986,20 @@
     wadah.insertBefore(buatLatihanBersih(), acuan);
   }
 
+  // Tautan ke Lembar rumus (Arif + Laras, 26 Nov 2026; IDE.md #67): setiap kotak latihan yang rumusnya ada di
+  // belajar.html#lembar-rumus diberi satu tautan teks di bagian bawah. Latihan urut tanggal tidak punya rumus.
+  // Posisi saat Kembali dijaga jagaGulirKembali() di kedua halaman (cek 2f-34).
+  function pasangTautanLembar(wadah) {
+    var judul = wadah.querySelectorAll('h2[id^="judul-latihan-"]');
+    for (var i = 0; i < judul.length; i++) {
+      if (judul[i].id === "judul-latihan-urut") continue;
+      var kotak = judul[i].parentNode;
+      if (!kotak || kotak.querySelector(".latihan-lembar")) continue;
+      kotak.appendChild(el("p", { class: "latihan-lembar" }, [
+        el("a", { href: "belajar.html#lembar-rumus", text: "Lihat semua rumus di Lembar rumus" })
+      ]));
+    }
+  }
   /* ---------- Halaman pelajaran ---------- */
   // Jangkar pelajaran (Dewi + Nina, 26 Nov 2026; IDE.md #61): isi pelajaran dibuat JS setelah halaman dimuat,
   // jadi peramban tidak bisa menggulir sendiri ke "#judul-..." di alamat. Setelah isi siap, judul kotak itu
@@ -1028,6 +1042,7 @@
     pasangLatihanRoeDer(wadah, m);
     pasangLatihanSyariah(wadah, m);
     pasangLatihanBersih(wadah, m);
+    pasangTautanLembar(wadah);
     gulirJangkarPelajaran(wadah);
 
     var nav = el("nav", { class: "navigasi-pelajaran", "aria-label": "Pelajaran lain" });
@@ -3114,11 +3129,35 @@
     ]);
   }
 
+  // Posisi gulir saat Kembali ke halaman Belajar (Kirana + Arif, 26 Nov 2026; IDE.md #67): daftar pelajaran
+  // dibuat JS, jadi Chromium kadang memulihkan posisi sebelum daftar ada lalu mendorongnya ±1.500px ke bawah
+  // (terbukti di 390px dengan skrip lambat, alamat #lembar-rumus). Yang disimpan hanya satu angka posisi gulir
+  // di sessionStorage tab ini (bukan data pribadi, tidak dikirim); dipakai hanya saat kembali (back_forward).
+  function jagaGulirKembali(wadahId) {
+    if (!document.getElementById(wadahId)) return;
+    var kunci = "candra-gulir:" + location.pathname + location.hash;
+    try {
+      window.addEventListener("pagehide", function () {
+        try { sessionStorage.setItem(kunci, String(Math.round(window.scrollY || 0))); } catch (e) { /* abaikan */ }
+      });
+    } catch (e) { return; }
+    var nav = null;
+    try { nav = performance.getEntriesByType("navigation")[0]; } catch (e) { nav = null; }
+    if (!nav || nav.type !== "back_forward") return;
+    var y = NaN;
+    try { y = parseInt(sessionStorage.getItem(kunci), 10); } catch (e) { return; }
+    if (!(y >= 0)) return;
+    var pulih = function () { try { window.scrollTo(0, y); } catch (e) { /* abaikan */ } };
+    pulih();
+    window.addEventListener("load", pulih, { once: true });
+  }
+
   tandaiMenu();
   renderJalur("jalur-ringkas", false);
   renderLanjutkan();
   renderIstilahHari();
   renderJalur("jalur-lengkap", true);
+  jagaGulirKembali("jalur-lengkap");
   renderKamus();
   renderPelajaran();
   renderMini();

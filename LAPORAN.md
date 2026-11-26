@@ -2550,3 +2550,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Laras + Dewi: kelompok diurutkan sesuai urutan pelajaran, pengantar menyebut "urut sesuai urutan pelajaran"; PDF dibuat ulang (urutan ikut).
 - Nina: `node tests/cek.mjs` lolos, cek 2f-32 kini memeriksa urutan + 1 uji balik; 390px & 1280px tanpa scroll horizontal. Catatan kecil (tidak diperbaiki): alamat dengan `#lembar-rumus` kadang membuat Kembali bergeser di Chromium; belum ada tautan yang memakainya, dicatat di backlog. Tegar: tanpa skrip/rahasia baru. Yoga: push ke main.
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 26 Nov 2026, sesi 20.xx WIB (Bima)
+- Agenda: tidak dicek di sesi ini (rutin 07.xx/13.xx; ANDA & BUAT dicari lagi 07.xx Jumat). Proyek prioritas lain masih menunggu DES/sumber; semua usulan Kirana di IDE.md sudah dikerjakan, jadi tim mengambil tugas pendukung di backlog.
+- Kirana + Arif: geseran tombol Kembali di `belajar.html#lembar-rumus` (catatan #66) dibuktikan dulu: 390px, skrip lambat → posisi turun 1.525px. Arif menambah `jagaGulirKembali()` (satu angka posisi di sessionStorage, hanya saat Kembali/Maju, dalam try/catch, tidak dikirim). Setelah diperbaiki posisi sama persis di 390px & 1280px, skrip cepat maupun lambat.
+- Arif + Laras: 7 kotak latihan (rasio syariah, modal, hasil bersih, perubahan laba, PER & dividend yield, porsi, ROE & DER) kini punya tautan "Lihat semua rumus di Lembar rumus" (IDE.md #67).
+- Nina: `node tests/cek.mjs` lolos, cek baru 2f-34 + 7 uji balik; 390px & 1280px tanpa scroll horizontal, Lembar rumus terbuka di atas layar, Kembali ke posisi semula. Catatan ringan: uji Kembali cepat memunculkan "Transition was aborted" dari `@view-transition` lama (animasi dibatalkan peramban, halaman benar); tidak diubah. Tegar: tanpa rahasia; simpanan hanya angka posisi. Yoga: push ke main.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

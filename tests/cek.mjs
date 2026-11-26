@@ -8788,5 +8788,46 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
     [belR.replace(/(\s*<li>\s*<p class="lembar-rumus-nama">Dua rasio[\s\S]*?<\/li>)([\s\S]*?)(\s*<\/ul>)/, "$2$1$3"), appR, "tidak urut sesuai urutan pelajaran"],
   ]) ok((bel !== belR || app !== appR) && ujiLembar(bel, app).some((x) => x.includes(pesan)), `uji balik lembar rumus: "${pesan}" harus tertangkap`);
 }
+// 2f-34. Tautan Lembar rumus dari kotak latihan & posisi saat Kembali (Nina, 26 Nov 2026 20.xx; IDE.md #67).
+// (a) pasangTautanLembar dipanggil di renderPelajaran sebelum gulirJangkarPelajaran, menuju belajar.html#lembar-rumus,
+//     melewati latihan urut; (b) #lembar-rumus ada di belajar.html; (c) jagaGulirKembali dipasang untuk daftar pelajaran,
+//     hanya memulihkan saat back_forward, simpanan hanya angka posisi di sessionStorage dalam try/catch, tanpa fetch.
+{
+  const appR = readFileSync("assets/app.js", "utf8"), belR = readFileSync("belajar.html", "utf8");
+  const ambil = (src, nama) => { const a = src.indexOf("function " + nama + "("); if (a < 0) return ""; const b = src.indexOf("\n  }\n", a); return src.slice(a, b); };
+  const uji = (app, bel) => {
+    const salah = [];
+    const t = ambil(app, "pasangTautanLembar"), g = ambil(app, "jagaGulirKembali"), r = ambil(app, "renderPelajaran");
+    if (!t) salah.push("pasangTautanLembar tidak ada");
+    else {
+      if (!t.includes('href: "belajar.html#lembar-rumus"')) salah.push("tautan harus menuju belajar.html#lembar-rumus");
+      if (!t.includes('"judul-latihan-urut") continue')) salah.push("latihan urut tidak punya rumus, harus dilewati");
+      if (!t.includes('text: "Lihat semua rumus di Lembar rumus"')) salah.push("teks tautan berubah");
+    }
+    const iT = r.indexOf("pasangTautanLembar(wadah)"), iB = r.indexOf("pasangLatihanBersih(wadah, m)"), iG = r.indexOf("gulirJangkarPelajaran(wadah)");
+    if (iT < 0 || !(iT > iB && iT < iG)) salah.push("pasangTautanLembar harus dipanggil setelah semua kotak dipasang dan sebelum gulirJangkarPelajaran");
+    if (!/id="lembar-rumus"/.test(bel)) salah.push("#lembar-rumus tidak ada di belajar.html");
+    if (!g) salah.push("jagaGulirKembali tidak ada");
+    else {
+      if (!/nav\.type !== "back_forward"\) return;/.test(g)) salah.push("pemulihan gulir hanya boleh saat back_forward");
+      for (const b of g.split("\n").filter((x) => /sessionStorage\./.test(x))) if (!/try\s*\{/.test(b)) salah.push("sessionStorage di luar try: " + b.trim());
+      if (/localStorage|fetch\(|XMLHttpRequest/.test(g)) salah.push("jagaGulirKembali hanya boleh menyimpan posisi di sessionStorage, tanpa kirim");
+      if (!/String\(Math\.round\(window\.scrollY/.test(g)) salah.push("yang disimpan harus hanya angka posisi gulir");
+    }
+    if (!/renderJalur\("jalur-lengkap", true\);\n  jagaGulirKembali\("jalur-lengkap"\);/.test(app)) salah.push("jagaGulirKembali harus dipanggil tepat setelah daftar pelajaran dibuat");
+    return salah;
+  };
+  const sT = uji(appR, belR);
+  ok(!sT.length, "Tautan Lembar rumus & gulir Kembali: " + sT.join("; "));
+  for (const [app, bel, pesan] of [
+    [appR.replace('href: "belajar.html#lembar-rumus"', 'href: "belajar.html"'), belR, "menuju belajar.html#lembar-rumus"],
+    [appR.replace('"judul-latihan-urut") continue', '"judul-latihan-x") continue'), belR, "harus dilewati"],
+    [appR.replace("    pasangTautanLembar(wadah);\n", ""), belR, "harus dipanggil setelah"],
+    [appR.replace('nav.type !== "back_forward") return;', 'nav.type === "reload") return;'), belR, "hanya boleh saat back_forward"],
+    [appR.replace('        try { sessionStorage.setItem(kunci', '        sessionStorage.setItem(kunci').replace('String(Math.round(window.scrollY || 0))); } catch (e) { /* abaikan */ }', 'String(Math.round(window.scrollY || 0)));'), belR, "di luar try"],
+    [appR, belR.replace('id="lembar-rumus"', 'id="rumus"'), "tidak ada di belajar.html"],
+    [appR.replace('  jagaGulirKembali("jalur-lengkap");\n', ""), belR, "tepat setelah daftar pelajaran"],
+  ]) ok((app !== appR || bel !== belR) && uji(app, bel).some((x) => x.includes(pesan)), `uji balik tautan Lembar rumus: "${pesan}" harus tertangkap`);
+}
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);
