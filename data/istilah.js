@@ -95,6 +95,10 @@ window.ISTILAH = [
   { istilah: "Diversifikasi", pola: ["diversifikasi"],
     arti: "Menyebar modal ke beberapa saham dan sektor yang berbeda, supaya masalah di satu perusahaan tidak menghabiskan seluruh modal. Diversifikasi mengurangi risiko, tetapi tidak menghilangkannya.",
     pelajaran: "mengelola-risiko" },
+  // Sari + Laras + Hana (26 Nov 21.xx): kata "portofolio" dipakai kotak latihan porsi (#60) tetapi belum ada di kamus.
+  { istilah: "Portofolio", pola: ["portofolio"],
+    arti: "Kumpulan semua saham (dan investasi lain) yang dimiliki seseorang. Porsi satu saham di portofolio dihitung dari nilai saham itu dibagi nilai seluruh portofolio, dikali 100%. Angka porsi menunjukkan seberapa besar modal bergantung pada satu saham, bukan penilaian baik atau buruk.",
+    pelajaran: "mengelola-risiko" },
   { istilah: "SOTS (Sharia Online Trading System)", pola: ["SOTS", "Sharia Online Trading System"], besarKecil: true,
     arti: "Sistem transaksi saham online di sekuritas yang dirancang mengikuti fatwa DSN-MUI. Sistem ini tidak memakai pembiayaan berbunga (margin) dan tidak melayani short selling, yaitu menjual saham yang belum dimiliki.",
     pelajaran: "saham-syariah" },

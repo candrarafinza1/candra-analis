@@ -135,6 +135,14 @@ function istilahKembar(daftar) {
 for (const s of istilahKembar(ISTILAH)) ok(false, `kamus istilah: ${s}`);
 ok(istilahKembar([{ istilah: "A", pola: ["laba"] }, { istilah: "B", pola: ["Laba"] }, { istilah: "a", pola: ["x"] }]).length === 2,
   "uji negatif istilahKembar harus menangkap pola kembar dan nama kembar");
+// Nina (26 Nov 21.xx): kata kunci yang dipakai judul kotak latihan harus bisa dicari di kamus.
+{
+  const appTeks = readFileSync("assets/app.js", "utf8");
+  for (const kata of ["portofolio"]) {
+    if (!new RegExp(kata, "i").test(appTeks)) continue;
+    ok(ISTILAH.some((t) => t.pola.some((p) => p.toLowerCase() === kata)), `kamus istilah: "${kata}" dipakai kotak latihan tetapi belum ada di kamus`);
+  }
+}
 // Nina + Arif (6 Nov 07.08): penanda istilah memilih istilah yang muncul paling awal; bila mulai di tempat
 // yang sama, istilah yang lebih panjang menang ("Pendapatan tidak halal" > "Pendapatan").
 {

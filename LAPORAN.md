@@ -2557,3 +2557,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Arif + Laras: 7 kotak latihan (rasio syariah, modal, hasil bersih, perubahan laba, PER & dividend yield, porsi, ROE & DER) kini punya tautan "Lihat semua rumus di Lembar rumus" (IDE.md #67).
 - Nina: `node tests/cek.mjs` lolos, cek baru 2f-34 + 7 uji balik; 390px & 1280px tanpa scroll horizontal, Lembar rumus terbuka di atas layar, Kembali ke posisi semula. Catatan ringan: uji Kembali cepat memunculkan "Transition was aborted" dari `@view-transition` lama (animasi dibatalkan peramban, halaman benar); tidak diubah. Tegar: tanpa rahasia; simpanan hanya angka posisi. Yoga: push ke main.
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 26 Nov 2026, sesi 21.xx WIB (Bima)
+- Agenda: tidak dicek di sesi ini (rutin 07.xx/13.xx). Proyek prioritas lain masih menunggu DES/sumber.
+- Raka + Fajar: MIKA & BSSR dicari lagi. Bisnis (3 Nov, 23 Nov, 19 Nov) tetap gagal dibuka alat tim; Kontan 12 Agu 2026 terbuka tetapi hanya semester I/2026 → tidak ada angka baru, tetap 30 dari 32.
+- Sari + Laras + Hana: istilah "Portofolio" masuk kamus (kata ini dipakai kotak latihan porsi tetapi belum bisa dicari pemula); arti umum, tanpa angka "ideal", tanpa penilaian.
+- Nina: `node tests/cek.mjs` lolos, cek baru "kata kunci kotak latihan ada di kamus" + uji balik tertangkap; kamus 390px & 1280px tanpa scroll horizontal & galat JS. Yoga: run Actions commit sesi 20.xx hijau; push ke main. Tegar: tanpa rahasia/skrip baru.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
