@@ -1157,6 +1157,7 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Status: dipilih Bima 26 Nov 14.xx; **selesai sesi yang sama** (Arif + Laras + Hana; Nina: cek 2f-30 + 10 uji balik; dicek 390px gelap & 1280px terang).
 
 ### 63. Pelajaran Lot & biaya: kotak "Hitung sendiri: hasil bersih setelah biaya beli dan jual" (Kirana, 26 Nov 2026) — kecil
+- **Status:** dipilih Bima 26 Nov 14.xx, tayang 26 Nov 15.xx (Arif + Laras + Hana; Nina cek 2f-31).
 - Masalah: kotak modal (#58) hanya menghitung biaya beli; pemula sering lupa bahwa menjual juga kena biaya (termasuk pajak penjualan 0,1% yang sudah ada di pelajaran), sehingga selisih harga kecil bisa habis oleh biaya.
 - Ide: isian harga beli, harga jual, jumlah lot, persen biaya beli dan biaya jual DIISI PENGGUNA dari aplikasinya (tanpa angka bawaan karangan) → selisih kotor, total biaya, selisih bersih dalam rupiah.
 - Dampak: memahami biaya transaksi sebagai bagian hitungan. Batasan: contoh angka bulat, tanpa kata untung pasti/ajakan, tanpa simpan data. Usaha: kecil (Arif + Laras; Hana meninjau).

@@ -889,6 +889,97 @@
     wadah.insertBefore(buatLatihanSyariah(), wadah.querySelectorAll("form.kuis")[0] || null);
   }
 
+  /* ---------- Latihan "Hasil bersih setelah biaya beli dan jual" (Arif + Laras + Hana, 26 Nov 2026; IDE.md #63) ----------
+     Di pelajaran "Lot, harga, dan biaya transaksi", tepat setelah kotak modal. Nilai = harga × 100 × lot;
+     biaya = persen dari aplikasi pengguna × nilai (dibulatkan ke rupiah). Persen biaya TIDAK punya angka bawaan
+     (besarnya berbeda tiap sekuritas); keduanya harus diisi bersama atau dikosongkan bersama. Tidak disimpan/dikirim. */
+  function hitungHasilBersih(beli, jual, lot, biayaBeli, biayaJual) {
+    var hb = bacaBulat(beli), hj = bacaBulat(jual), jml = bacaBulat(lot);
+    if (!Number.isInteger(hb) || hb < 1 || hb > MODAL_HARGA_MAKS) return { galat: "beli" };
+    if (!Number.isInteger(hj) || hj < 1 || hj > MODAL_HARGA_MAKS) return { galat: "jual" };
+    if (!Number.isInteger(jml) || jml < 1 || jml > MODAL_LOT_MAKS) return { galat: "lot" };
+    var nilaiBeli = hb * MODAL_LEMBAR_LOT * jml, nilaiJual = hj * MODAL_LEMBAR_LOT * jml;
+    var r = { nilaiBeli: nilaiBeli, nilaiJual: nilaiJual, kotor: nilaiJual - nilaiBeli, biayaBeli: null, biayaJual: null, totalBiaya: null, bersih: null };
+    var sB = String(biayaBeli == null ? "" : biayaBeli).trim(), sJ = String(biayaJual == null ? "" : biayaJual).trim();
+    if (sB === "" && sJ === "") return r;
+    var persen = function (s) { return /^\d+(,\d{1,4})?$/.test(s) ? Number(s.replace(",", ".")) : NaN; };
+    var pB = persen(sB), pJ = persen(sJ);
+    if (sB !== "" && !(pB <= MODAL_BIAYA_MAKS)) return { galat: "biaya-beli" };
+    if (sJ !== "" && !(pJ <= MODAL_BIAYA_MAKS)) return { galat: "biaya-jual" };
+    if (sB === "" || sJ === "") return { galat: "pasangan" };
+    r.persenBeli = pB; r.persenJual = pJ;
+    r.biayaBeli = Math.round(nilaiBeli * pB / 100);
+    r.biayaJual = Math.round(nilaiJual * pJ / 100);
+    r.totalBiaya = r.biayaBeli + r.biayaJual;
+    r.bersih = r.kotor - r.totalBiaya;
+    return r;
+  }
+  function buatLatihanBersih() {
+    var rp = function (x) { return (x < 0 ? "−Rp" : "Rp") + angkaModal.format(Math.abs(x)); };
+    var tanda = function (x) { return (x > 0 ? "+" : "") + rp(x); };
+    var kotak = el("section", { class: "kuis latihan-modal latihan-bersih", "aria-labelledby": "judul-latihan-bersih" });
+    kotak.appendChild(el("h2", { id: "judul-latihan-bersih", text: "Hitung sendiri: hasil bersih setelah biaya beli dan jual" }));
+    kotak.appendChild(el("p", { class: "kuis-pengantar", text: "Isi harga beli, harga jual, dan jumlah lot. Lalu isi persen biaya beli dan biaya jual dari tabel biaya di aplikasi sekuritas Anda (besarnya berbeda tiap sekuritas, jadi kotak ini tidak memberi angka bawaan). Ini alat berhitung, bukan saran membeli atau menjual saham apa pun. Angka tidak disimpan dan tidak dikirim." }));
+    var info = el("p", { class: "kuis-hasil", id: "latihan-bersih-info", role: "status", "aria-live": "polite" });
+    var hasil = el("ul", { class: "latihan-modal-hasil" });
+    function isian(id, label, attrs) {
+      var inp = el("input", Object.assign({ id: id, "aria-describedby": "latihan-bersih-info" }, attrs));
+      return { inp: inp, baris: el("div", { class: "cari-kamus" }, [el("label", { for: id, text: label }), inp]) };
+    }
+    var iBeli = isian("latihan-bersih-beli", "Harga beli per lembar (Rp)", { type: "text", inputmode: "numeric", autocomplete: "off", value: "1250" });
+    var iJual = isian("latihan-bersih-jual", "Harga jual per lembar (Rp)", { type: "text", inputmode: "numeric", autocomplete: "off", value: "1275" });
+    var iLot = isian("latihan-bersih-lot", "Jumlah lot", { type: "text", inputmode: "numeric", autocomplete: "off", value: "2" });
+    var iBB = isian("latihan-bersih-biaya-beli", "Biaya beli dari aplikasi Anda (%)", { type: "text", inputmode: "decimal", autocomplete: "off", value: "" });
+    var iBJ = isian("latihan-bersih-biaya-jual", "Biaya jual dari aplikasi Anda (%)", { type: "text", inputmode: "decimal", autocomplete: "off", value: "" });
+    var PESAN = {
+      beli: "Isi harga beli dengan bilangan bulat Rp1 sampai " + rp(MODAL_HARGA_MAKS) + ", tanpa koma (contoh: 1250 atau 1.250).",
+      jual: "Isi harga jual dengan bilangan bulat Rp1 sampai " + rp(MODAL_HARGA_MAKS) + ", tanpa koma (contoh: 1275).",
+      lot: "Isi jumlah lot dengan bilangan bulat 1 sampai " + angkaModal.format(MODAL_LOT_MAKS) + ", tanpa koma (contoh: 2).",
+      "biaya-beli": "Isi persen biaya beli 0 sampai " + MODAL_BIAYA_MAKS + " dengan koma untuk desimal (contoh penulisan: 0,15).",
+      "biaya-jual": "Isi persen biaya jual 0 sampai " + MODAL_BIAYA_MAKS + " dengan koma untuk desimal (contoh penulisan: 0,25).",
+      pasangan: "Isi persen biaya beli dan biaya jual bersama-sama (keduanya dari aplikasi Anda), atau kosongkan keduanya."
+    };
+    var masukan = { beli: iBeli.inp, jual: iJual.inp, lot: iLot.inp, "biaya-beli": iBB.inp, "biaya-jual": iBJ.inp };
+    function hitung() {
+      var r = hitungHasilBersih(iBeli.inp.value, iJual.inp.value, iLot.inp.value, iBB.inp.value, iBJ.inp.value);
+      hasil.textContent = "";
+      Object.keys(masukan).forEach(function (k) {
+        var salah = r.galat === k || (r.galat === "pasangan" && masukan[k].value.trim() === "" && (k === "biaya-beli" || k === "biaya-jual"));
+        masukan[k].setAttribute("aria-invalid", salah ? "true" : "false");
+      });
+      if (r.galat) { info.textContent = PESAN[r.galat]; return; }
+      var n = bacaBulat(iLot.inp.value);
+      hasil.appendChild(el("li", { text: "Nilai beli: " + rp(bacaBulat(iBeli.inp.value)) + " × 100 × " + angkaModal.format(n) + " = " + rp(r.nilaiBeli) + "." }));
+      hasil.appendChild(el("li", { text: "Nilai jual: " + rp(bacaBulat(iJual.inp.value)) + " × 100 × " + angkaModal.format(n) + " = " + rp(r.nilaiJual) + "." }));
+      hasil.appendChild(el("li", { text: "Selisih sebelum biaya: " + rp(r.nilaiJual) + " − " + rp(r.nilaiBeli) + " = " + tanda(r.kotor) + "." }));
+      if (r.bersih == null) {
+        info.textContent = "Selisih sebelum biaya " + tanda(r.kotor) + ". Isi persen biaya beli dan jual dari aplikasi Anda untuk melihat hasil bersih.";
+        return;
+      }
+      hasil.appendChild(el("li", { text: "Biaya beli: " + angkaModal.format(r.persenBeli) + "% × " + rp(r.nilaiBeli) + " ≈ " + rp(r.biayaBeli) + "." }));
+      hasil.appendChild(el("li", { text: "Biaya jual: " + angkaModal.format(r.persenJual) + "% × " + rp(r.nilaiJual) + " ≈ " + rp(r.biayaJual) + "." }));
+      hasil.appendChild(el("li", { text: "Hasil bersih: " + tanda(r.kotor) + " − " + rp(r.totalBiaya) + " = " + tanda(r.bersih) + "." }));
+      var arti = r.bersih > 0 ? "uang yang kembali lebih banyak daripada uang yang keluar"
+        : r.bersih < 0 ? "uang yang kembali lebih sedikit daripada uang yang keluar"
+        : "uang yang kembali sama dengan uang yang keluar";
+      info.textContent = "Hasil bersih " + tanda(r.bersih) + " setelah biaya " + rp(r.totalBiaya) + ": " + arti + ".";
+    }
+    Object.keys(masukan).forEach(function (k) { masukan[k].addEventListener("input", hitung); });
+    kotak.appendChild(el("div", { class: "kotak-rumus", text: "Hasil bersih = (nilai jual − nilai beli) − biaya beli − biaya jual" }));
+    kotak.appendChild(el("div", { class: "latihan-modal-isian" }, [iBeli.baris, iJual.baris, iLot.baris, iBB.baris, iBJ.baris]));
+    kotak.appendChild(info);
+    kotak.appendChild(hasil);
+    kotak.appendChild(el("p", { class: "latihan-modal-catatan", text: "Biaya dibayar saat membeli dan saat menjual, jadi selisih harga yang kecil bisa habis oleh biaya. Biaya jual biasanya sedikit lebih tinggi karena ada pajak penjualan saham. Aplikasi sekuritas bisa membulatkan biaya sedikit berbeda, dan hitungan ini belum memasukkan dividen yang mungkin diterima selama memegang saham." }));
+    hitung();
+    return kotak;
+  }
+  function pasangLatihanBersih(wadah, m) {
+    if (m.id !== "lot-dan-transaksi") return;
+    var modal = wadah.querySelector("section.latihan-modal");
+    var acuan = modal && modal.nextSibling ? modal.nextSibling : (wadah.querySelectorAll("form.kuis")[0] || null);
+    wadah.insertBefore(buatLatihanBersih(), acuan);
+  }
+
   /* ---------- Halaman pelajaran ---------- */
   // Jangkar pelajaran (Dewi + Nina, 26 Nov 2026; IDE.md #61): isi pelajaran dibuat JS setelah halaman dimuat,
   // jadi peramban tidak bisa menggulir sendiri ke "#judul-..." di alamat. Setelah isi siap, judul kotak itu
@@ -930,6 +1021,7 @@
     pasangLatihanPorsi(wadah, m);
     pasangLatihanRoeDer(wadah, m);
     pasangLatihanSyariah(wadah, m);
+    pasangLatihanBersih(wadah, m);
     gulirJangkarPelajaran(wadah);
 
     var nav = el("nav", { class: "navigasi-pelajaran", "aria-label": "Pelajaran lain" });

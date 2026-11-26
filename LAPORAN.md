@@ -2517,3 +2517,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Arif + Laras + Hana: kotak "Hitung sendiri: dua rasio keuangan syariah" di pelajaran Saham syariah dan DES (utang berbasis bunga ÷ total aset, batas 45%; pendapatan tidak halal ÷ total pendapatan, batas 10%). Tertulis jelas bahwa hasil latihan bukan status syariah; status resmi hanya dari DES OJK. Tanpa vonis, tanpa simpan/kirim data.
 - Nina: `node tests/cek.mjs` lolos, cek baru 2f-30 + 10 uji balik; 390px gelap & 1280px terang tanpa scroll horizontal & galat JS; jangkar `#judul-latihan-syariah` terfokus. Masalah ringan ditemukan & diperbaiki: rasio 45,001% akan tertulis "45%" padahal melewati batas → kini ditampilkan sampai 4 angka desimal. Tegar: teks lewat el(), tanpa rahasia. Yoga: push ke main.
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 26 Nov 2026, sesi 15.xx WIB (Bima)
+- Agenda: tidak dicek di sesi ini (rutin 07.xx/13.xx).
+- Arif + Laras + Hana: kotak "Hitung sendiri: hasil bersih setelah biaya beli dan jual" (IDE.md #63) di pelajaran Lot, harga, dan biaya transaksi, tepat setelah kotak modal. Nilai beli/jual = harga × 100 × lot; persen biaya beli & jual diisi pengguna dari aplikasinya (tanpa angka bawaan, wajib berpasangan); hasil bersih = selisih − biaya beli − biaya jual. Bahasa netral ("uang yang kembali lebih banyak/sedikit daripada uang yang keluar"), tertulis bukan saran membeli atau menjual, tanpa simpan/kirim data.
+- Nina: `node tests/cek.mjs` lolos, cek baru 2f-31 + 8 uji balik; 390px gelap & 1280px terang tanpa scroll horizontal & galat JS; jangkar `#judul-latihan-bersih` terfokus. Masalah ringan diperbaiki: nama variabel `n` di fungsi baru membuat uji balik Agenda hitung lot salah sasaran → diganti `jml`. Tegar: teks lewat el(), tanpa rahasia. Yoga: push ke main.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

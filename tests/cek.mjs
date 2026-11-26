@@ -8619,5 +8619,57 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
   ]) ok(rusak !== appS && ujiS(rusak).some((x) => x.includes(pesan)), `uji balik latihan rasio syariah: "${pesan}" harus tertangkap`);
 }
 
+// 2f-31. Latihan "Hitung sendiri: hasil bersih setelah biaya beli dan jual" (Nina, 26 Nov 2026 15.xx; Arif + Laras + Hana, IDE.md #63).
+// Nilai = harga × 100 × lot; biaya beli & jual dari isian pengguna (tanpa angka bawaan, diisi berpasangan);
+// hasil bersih = selisih − biaya; hanya di pelajaran lot-dan-transaksi, setelah kotak modal; tanpa kata ajakan.
+{
+  const appB = readFileSync("assets/app.js", "utf8");
+  const ujiB = (t) => {
+    const salah = [];
+    const a0 = t.indexOf("  function bacaBulat("), a1 = t.indexOf("  function hitungModalLot(");
+    const k0 = t.indexOf("  var MODAL_LEMBAR_LOT"), k1 = t.indexOf("  function bacaBulat(");
+    const a = t.indexOf("  function hitungHasilBersih("), b = t.indexOf("  function buatLatihanBersih("), c = t.indexOf("  function pasangLatihanBersih("), d = t.indexOf("  /* ---------- Halaman pelajaran");
+    if (a0 < 0 || a1 < 0 || k0 < 0 || k1 < 0 || a < 0 || b < 0 || c < 0 || d < 0 || !(a < b && b < c && c < d)) return ["fungsi latihan hasil bersih tidak ada"];
+    let f;
+    try { f = vm.runInNewContext(`${t.slice(k0, k1)}; ${t.slice(a0, a1)}; ${t.slice(a, b)}; hitungHasilBersih`); } catch (e) { return ["galat: " + e.message]; }
+    const r1 = f("1250", "1275", "2", "", "");
+    if (!r1 || r1.nilaiBeli !== 250000 || r1.nilaiJual !== 255000 || r1.kotor !== 5000 || r1.bersih !== null) salah.push("rumus nilai & selisih (1.250 → 1.275 × 100 × 2 = +Rp5.000)");
+    const r2 = f("1250", "1275", "2", "0,15", "0,25");
+    if (!r2 || r2.biayaBeli !== 375 || r2.biayaJual !== 638 || r2.totalBiaya !== 1013 || r2.bersih !== 3987) salah.push("biaya dari isian pengguna (0,15% × 250.000 = 375; 0,25% × 255.000 ≈ 638; bersih 3.987)");
+    const r3 = f("1.000", "1.005", "1", "0,15", "0,25");
+    if (!r3 || r3.kotor !== 500 || r3.bersih !== 500 - 150 - 251) salah.push("selisih kecil bisa habis oleh biaya (hasil bersih negatif)");
+    for (const [v, g] of [[["0", "1", "1", "", ""], "beli"], [["1", "0", "1", "", ""], "jual"], [["1", "1", "1,5", "", ""], "lot"], [["1250,5", "1", "1", "", ""], "beli"], [["1", "1", "1", "6", "1"], "biaya-beli"], [["1", "1", "1", "1", "abc"], "biaya-jual"], [["1", "1", "1", "0.15", "1"], "biaya-beli"], [["1", "1", "1", "0,15", ""], "pasangan"], [["1", "1", "1", "", "0,25"], "pasangan"]]) {
+      const r = f(...v);
+      if (!r || r.galat !== g) salah.push(`isian tidak sah harus ditolak (${v.join("/")} → ${g})`);
+    }
+    const ui = t.slice(b, c);
+    if (!/isian\("latihan-bersih-biaya-beli"[^\n]*value: "" \}/.test(ui) || !/isian\("latihan-bersih-biaya-jual"[^\n]*value: "" \}/.test(ui)) salah.push("isian biaya wajib kosong (tanpa angka biaya bawaan)");
+    if (/type: "number"/.test(ui)) salah.push("isian bukan type=number (koma diam-diam hilang)");
+    if (!/m\.id !== "lot-dan-transaksi"/.test(t.slice(c, d))) salah.push("hanya di pelajaran lot-dan-transaksi");
+    const r0 = t.indexOf("  function renderPelajaran(");
+    const ren = t.slice(r0, t.indexOf("\n  function ", r0 + 10));
+    const iB = ren.indexOf("pasangLatihanBersih(wadah, m);"), iM = ren.indexOf("pasangLatihanModal(wadah, m);"), iG = ren.indexOf("gulirJangkarPelajaran(wadah);");
+    if (iB < 0) salah.push("renderPelajaran wajib memasang latihan hasil bersih");
+    else if ((iM >= 0 && iB < iM) || (iG >= 0 && iG < iB)) salah.push("urutan: setelah kotak modal, sebelum guliran jangkar");
+    const badan = t.slice(a, d).replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/[^\n]*/g, "");
+    if (/buruan|pasti (naik|untung)|rekomendasi|layak dibeli|saatnya (beli|jual)|untung|\bcuan\b|dijamin|murah|mahal/i.test(badan)) salah.push("kata ajakan dilarang");
+    if (!/bukan saran membeli atau menjual/.test(badan)) salah.push("wajib menyebut bukan saran membeli atau menjual");
+    if (/localStorage|sessionStorage|fetch\(|XMLHttpRequest|innerHTML/.test(badan)) salah.push("tanpa simpan/kirim data dan tanpa innerHTML");
+    return salah;
+  };
+  const sB = ujiB(appB);
+  ok(!sB.length, "Latihan hasil bersih: " + sB.join("; "));
+  for (const [rusak, pesan] of [
+    [appB.replace("nilaiJual = hj * MODAL_LEMBAR_LOT * jml;", "nilaiJual = hj * jml;"), "rumus nilai"],
+    [appB.replace("r.biayaJual = Math.round(nilaiJual * pJ / 100);", "r.biayaJual = Math.round(nilaiBeli * pJ / 100);"), "biaya dari isian"],
+    [appB.replace("r.bersih = r.kotor - r.totalBiaya;", "r.bersih = r.kotor - r.biayaBeli;"), "biaya dari isian"],
+    [appB.replace('    if (sB === "" || sJ === "") return { galat: "pasangan" };\n', ""), "isian tidak sah"],
+    [appB.replace('"Biaya jual dari aplikasi Anda (%)", { type: "text", inputmode: "decimal", autocomplete: "off", value: "" }', '"Biaya jual dari aplikasi Anda (%)", { type: "text", inputmode: "decimal", autocomplete: "off", value: "0,25" }'), "tanpa angka biaya bawaan"],
+    [appB.replace('  function pasangLatihanBersih(wadah, m) {\n    if (m.id !== "lot-dan-transaksi") return;\n', "  function pasangLatihanBersih(wadah, m) {\n"), "lot-dan-transaksi"],
+    [appB.replace("    pasangLatihanBersih(wadah, m);\n", ""), "renderPelajaran"],
+    [appB.replace("Angka tidak disimpan dan tidak dikirim.\" }));\n    var info = el(\"p\", { class: \"kuis-hasil\", id: \"latihan-bersih-info\"", "Jual saat untung.\" }));\n    var info = el(\"p\", { class: \"kuis-hasil\", id: \"latihan-bersih-info\""), "kata ajakan"],
+  ]) ok(rusak !== appB && ujiB(rusak).some((x) => x.includes(pesan)), `uji balik latihan hasil bersih: "${pesan}" harus tertangkap`);
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);
