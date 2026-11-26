@@ -1142,4 +1142,4 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Masalah: profil menampilkan DPS dan angka laba, tetapi tidak menunjukkan cara pemula menghitung rasio sendiri.
 - Ide: satu tautan teks kecil ke kotak #59 di pelajaran Laporan keuangan (jangkar `#judul-latihan-rasio`), tanpa mengisi angka otomatis agar pengguna menyalin sendiri dari sumber.
 - Dampak bagi pemula: jalur belajar dari data ke rumus. Batasan: teks biasa, tanpa ajakan. Usaha: kecil (Dewi; Nina menambah cek tautan).
-- Status: diusulkan Kirana 26 Nov 07.xx.
+- Status: diusulkan Kirana 26 Nov 07.xx; dipilih Bima 07.xx; **dikerjakan Dewi + Nina 26 Nov 09.xx** (tautan di bawah tabel dividen profil; pelajaran menggulir ke jangkar setelah kotak dibuat JS; cek 2f-27). Menunggu tinjauan Kirana + Laras.

@@ -8442,5 +8442,46 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
   ]) ok(rusak !== appP && ujiP(rusak).some((x) => x.includes(pesan)), `uji balik latihan porsi: "${pesan}" harus tertangkap`);
 }
 
+// 2f-27. Tautan "Coba hitung PER & dividend yield sendiri" dari profil emiten (Nina, 26 Nov 2026; Dewi, IDE.md #61).
+// Profil menautkan ke jangkar kotak rasio; jangkar itu harus ada; pelajaran menggulir ke jangkar setelah isi dibuat JS,
+// menghormati reduced-motion; tautan tidak mengisi angka otomatis (tanpa parameter angka di alamat); tanpa kata ajakan.
+{
+  const appJ = readFileSync("assets/app.js", "utf8");
+  const ujiJ = (t) => {
+    const salah = [];
+    const p0 = t.indexOf("  function renderProfil("), g0 = t.indexOf("  function gulirJangkarPelajaran("), r0 = t.indexOf("  function renderPelajaran(");
+    if (p0 < 0 || g0 < 0 || r0 < 0) return ["fungsi profil/jangkar tidak ada"];
+    const prof = t.slice(p0, t.indexOf("\n  function ", p0 + 10));
+    const m = prof.match(/href: "pelajaran\.html\?m=([a-z-]+)#([a-z-]+)", text: "([^"]+)"/);
+    if (!m) salah.push("tautan profil ke kotak rasio tidak ada");
+    else {
+      if (m[1] !== "laporan-keuangan") salah.push("tautan harus ke pelajaran laporan-keuangan");
+      if (!t.includes(`id: "${m[2]}"`)) salah.push("jangkar tautan tidak ada di kotak latihan");
+      if (!/PER/.test(m[3]) || !/sendiri/.test(m[3])) salah.push("teks tautan harus jelas");
+    }
+    if (/pelajaran\.html\?m=laporan-keuangan&/.test(prof)) salah.push("tanpa mengisi angka otomatis lewat alamat");
+    const gul = t.slice(g0, r0);
+    if (!/judul-latihan-/.test(gul) || !/scrollIntoView/.test(gul)) salah.push("pelajaran wajib menggulir ke jangkar latihan");
+    if (!/prefers-reduced-motion/.test(gul)) salah.push("guliran wajib menghormati reduced-motion");
+    if (!/"tabindex", "-1"/.test(gul) || !/focus\(/.test(gul)) salah.push("judul jangkar wajib difokus");
+    const ren = t.slice(r0, t.indexOf("\n  function ", r0 + 10));
+    const iP = ren.indexOf("pasangLatihanPorsi(wadah, m);"), iG = ren.indexOf("gulirJangkarPelajaran(wadah);");
+    if (iG < 0 || iG < iP) salah.push("guliran harus setelah semua kotak latihan dibuat");
+    const teks = (prof.match(/tautan-hitung-rasio[\s\S]*?\]\)\);/) || [""])[0];
+    if (/buruan|pasti (naik|untung)|rekomendasi|layak dibeli|saatnya (beli|jual)|murah|mahal/i.test(teks)) salah.push("kata ajakan dilarang");
+    return salah;
+  };
+  const sJ = ujiJ(appJ);
+  ok(!sJ.length, "Tautan hitung rasio: " + sJ.join("; "));
+  for (const [rusak, pesan] of [
+    [appJ.replace('href: "pelajaran.html?m=laporan-keuangan#judul-latihan-rasio"', 'href: "pelajaran.html?m=laporan-keuangan#judul-latihan-rasioo"'), "jangkar tautan"],
+    [appJ.replace('href: "pelajaran.html?m=laporan-keuangan#judul-latihan-rasio"', 'href: "pelajaran.html?m=dasar-saham#judul-latihan-rasio"'), "laporan-keuangan"],
+    [appJ.replace("    gulirJangkarPelajaran(wadah);\n", ""), "setelah semua kotak"],
+    [appJ.replace('try { tenang = window.matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) { /* anggap boleh bergerak */ }\n    j.setAttribute', 'j.setAttribute'), "reduced-motion"],
+    [appJ.replace('    j.setAttribute("tabindex", "-1");\n', ""), "difokus"],
+    [appJ.replace("Ingin tahu cara menghitung rasio dari angka seperti ini? ", "Saham ini murah? "), "kata ajakan"],
+  ]) ok(rusak !== appJ && ujiJ(rusak).some((x) => x.includes(pesan)), `uji balik tautan hitung rasio: "${pesan}" harus tertangkap`);
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);

@@ -735,6 +735,22 @@
   }
 
   /* ---------- Halaman pelajaran ---------- */
+  // Jangkar pelajaran (Dewi + Nina, 26 Nov 2026; IDE.md #61): isi pelajaran dibuat JS setelah halaman dimuat,
+  // jadi peramban tidak bisa menggulir sendiri ke "#judul-..." di alamat. Setelah isi siap, judul kotak itu
+  // digulir ke layar dan difokus (tabindex -1) agar Tab berlanjut dari kotak itu. Tanpa gerak bila reduced-motion.
+  function gulirJangkarPelajaran(wadah) {
+    var id = "";
+    try { id = decodeURIComponent(String(location.hash || "").slice(1)); } catch (e) { return null; }
+    if (!/^judul-latihan-[a-z-]+$/.test(id)) return null;
+    var j = document.getElementById(id);
+    if (!j || !wadah.contains(j)) return null;
+    var tenang = false;
+    try { tenang = window.matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) { /* anggap boleh bergerak */ }
+    j.setAttribute("tabindex", "-1");
+    try { j.scrollIntoView({ block: "start", behavior: tenang ? "auto" : "smooth" }); } catch (e) { j.scrollIntoView(); }
+    try { j.focus({ preventScroll: true }); } catch (e) { j.focus(); }
+    return j;
+  }
   function renderPelajaran() {
     var wadah = document.getElementById("isi-pelajaran");
     if (!wadah) return;
@@ -757,6 +773,7 @@
     pasangLatihanModal(wadah, m);
     pasangLatihanRasio(wadah, m);
     pasangLatihanPorsi(wadah, m);
+    gulirJangkarPelajaran(wadah);
 
     var nav = el("nav", { class: "navigasi-pelajaran", "aria-label": "Pelajaran lain" });
     nav.appendChild(idx > 0
@@ -1518,6 +1535,13 @@
       // Sari & Laras (4 Nov): emiten berlaporan dolar AS → jelaskan kenapa dividen tertulis dalam rupiah
       dps && e.dpsRupiah ? "Dividen tahun buku 2025 ini dibayar dalam rupiah; angkanya ditulis oleh sumber, bukan hasil konversi kami dari dolar AS. " : "",
       "Dividen bisa berbeda tiap tahun; dividen yang sudah dibagikan tidak menjamin dividen berikutnya. Ini data, bukan saran membeli atau menjual."
+    ]));
+    // Dewi + Nina (26 Nov 2026; IDE.md #61 Kirana): jalur belajar dari data ke rumus. Angka tidak diisi otomatis,
+    // pengguna menyalin sendiri dari sumber agar terbiasa membaca laporan.
+    akar.appendChild(el("p", { class: "catatan-metode tautan-hitung-rasio" }, [
+      "Ingin tahu cara menghitung rasio dari angka seperti ini? ",
+      el("a", { href: "pelajaran.html?m=laporan-keuangan#judul-latihan-rasio", text: "Coba hitung PER & dividend yield sendiri" }),
+      " di pelajaran Membaca laporan keuangan, dengan angka yang Anda salin dari sumber."
     ]));
 
     akar.appendChild(bagianBanding(e));

@@ -2487,3 +2487,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Nina: `node tests/cek.mjs` lolos, cek baru 2f-26 + 8 uji balik; 390px gelap & 1280px terang tanpa scroll horizontal & galat JS. Tegar: teks lewat textContent, tanpa penyimpanan. Yoga: push ke main.
 - Berikutnya: Dewi + Nina tautan #61 dari profil emiten; Kirana + Hana meninjau kotak porsi.
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 26 Nov 2026, sesi 09.xx (Bima)
+- Agenda: tidak dicek di sesi ini (rutin 07.xx/13.xx; ANDA & BUAT dicek lagi 13.xx).
+- Dewi: tautan "Coba hitung PER & dividend yield sendiri" di profil emiten, di bawah tabel dividen (IDE.md #61), menuju kotak rasio pelajaran Membaca laporan keuangan. Angka tidak diisi otomatis. Karena isi pelajaran dibuat JS, pelajaran kini menggulir ke judul `#judul-latihan-*` dan memfokusnya (tanpa gerak bila reduced-motion).
+- Nina: `node tests/cek.mjs` lolos, cek baru 2f-27 + 6 uji balik; profil ICBP → klik tautan → judul kotak di atas layar & terfokus, di 390px gelap & 1280px terang, tanpa scroll horizontal & galat JS. Tegar: tanpa rahasia, teks lewat el(). Yoga: push ke main.
+- Berikutnya: Kirana + Laras meninjau tautan #61; Kirana + Hana meninjau kotak porsi #60.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
