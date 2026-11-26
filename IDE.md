@@ -1167,3 +1167,13 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Ide: bagian ringkas di belajar.html: daftar rumus + tautan "Coba hitung" ke jangkar `#judul-latihan-*` masing-masing (guliran jangkar sudah ada dari #61). Bisa ikut tercetak di PDF modul.
 - Dampak: tempat mengulang cepat sebelum membaca laporan keuangan. Batasan: teks biasa, tanpa animasi. Usaha: kecil (Dewi + Laras; Nina memastikan semua jangkar ada).
 - **Status:** dipilih Bima 26 Nov 14.xx; **tayang 26 Nov 16.xx** (Dewi + Laras; Nina cek 2f-32: tautan harus menuju pelajaran yang memasang kotak itu, rumus sama persis dengan app.js). **26 Nov 17.xx: ikut PDF modul** sebagai lampiran "Lembar rumus" (Laras + Arif; dibaca dari belajar.html, masuk sidik data; Nina: uji ujung-ke-ujung memastikan setiap rumus tampil di halaman lampiran). Kirana + Laras meninjau setelah tayang.
+
+### Tinjauan kotak rasio syariah #62 (Kirana + Hana, 26 Nov 2026, 18.xx WIB)
+- Dibaca di salinan lokal (situs tayang belum bisa dijangkau alat tim). Kalimat "tidak lebih dari batas … / melewati batas … dalam kriteria DES" sama dengan isi pelajaran (data/modul.js) dan kamus "Pendapatan tidak halal" → tidak perlu diubah.
+- Hana: catatan pemilahan (pinjaman bank konvensional, obligasi konvensional, pendapatan bunga) dan kalimat "hasil latihan ini bukan status syariah, status resmi hanya dari DES OJK" sudah jelas dan netral, tanpa vonis halal/haram atas perusahaan mana pun. Tidak ada temuan.
+
+### 65. Kotak modal & hasil bersih: persen biaya dibaca dengan aturan yang sama, "0,15%" diterima (Kirana + Hana, 26 Nov 2026, 18.xx WIB) — kecil, langsung dikerjakan
+- Masalah (dari tinjauan kotak hasil bersih #63): dua kotak di pelajaran Lot, harga, dan biaya transaksi membaca persen biaya berbeda. Kotak modal menerima "0.15", kotak hasil bersih menolaknya. Keduanya menolak "0,15%" padahal tabel biaya di aplikasi sekuritas biasa menulis tanda persen, jadi pemula yang menyalin angka apa adanya mendapat pesan salah.
+- Ide: satu fungsi `bacaPersen` untuk kedua kotak: desimal koma atau titik (batas 5% membuat titik tidak mungkin berarti ribuan), tanda % di akhir boleh ikut; huruf, dua pemisah, angka minus, dan lebih dari 5% tetap ditolak. Contoh di pesan salah menyebut "0,15 atau 0,15%".
+- Hana: kalimat "uang yang kembali lebih banyak/sedikit daripada uang yang keluar" netral dan jelas; pesan isian berpasangan jelas. Tidak ada kata ajakan.
+- **Status:** dikerjakan Arif sesi yang sama; Nina cek 2f-33 (5 tulisan diterima, 8 ditolak, di kedua kotak) + 3 uji balik; 390px gelap & 1280px terang tanpa scroll horizontal & galat JS. Tinggal: papan angka desimal di HP sungguhan.

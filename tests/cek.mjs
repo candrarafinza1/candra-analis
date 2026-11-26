@@ -8663,7 +8663,7 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
     if (!r2 || r2.biayaBeli !== 375 || r2.biayaJual !== 638 || r2.totalBiaya !== 1013 || r2.bersih !== 3987) salah.push("biaya dari isian pengguna (0,15% × 250.000 = 375; 0,25% × 255.000 ≈ 638; bersih 3.987)");
     const r3 = f("1.000", "1.005", "1", "0,15", "0,25");
     if (!r3 || r3.kotor !== 500 || r3.bersih !== 500 - 150 - 251) salah.push("selisih kecil bisa habis oleh biaya (hasil bersih negatif)");
-    for (const [v, g] of [[["0", "1", "1", "", ""], "beli"], [["1", "0", "1", "", ""], "jual"], [["1", "1", "1,5", "", ""], "lot"], [["1250,5", "1", "1", "", ""], "beli"], [["1", "1", "1", "6", "1"], "biaya-beli"], [["1", "1", "1", "1", "abc"], "biaya-jual"], [["1", "1", "1", "0.15", "1"], "biaya-beli"], [["1", "1", "1", "0,15", ""], "pasangan"], [["1", "1", "1", "", "0,25"], "pasangan"]]) {
+    for (const [v, g] of [[["0", "1", "1", "", ""], "beli"], [["1", "0", "1", "", ""], "jual"], [["1", "1", "1,5", "", ""], "lot"], [["1250,5", "1", "1", "", ""], "beli"], [["1", "1", "1", "6", "1"], "biaya-beli"], [["1", "1", "1", "1", "abc"], "biaya-jual"], [["1", "1", "1", "0,1,5", "1"], "biaya-beli"], [["1", "1", "1", "0,15", ""], "pasangan"], [["1", "1", "1", "", "0,25"], "pasangan"]]) {
       const r = f(...v);
       if (!r || r.galat !== g) salah.push(`isian tidak sah harus ditolak (${v.join("/")} → ${g})`);
     }
@@ -8694,6 +8694,41 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
     [appB.replace("    pasangLatihanBersih(wadah, m);\n", ""), "renderPelajaran"],
     [appB.replace("Angka tidak disimpan dan tidak dikirim.\" }));\n    var info = el(\"p\", { class: \"kuis-hasil\", id: \"latihan-bersih-info\"", "Jual saat untung.\" }));\n    var info = el(\"p\", { class: \"kuis-hasil\", id: \"latihan-bersih-info\""), "kata ajakan"],
   ]) ok(rusak !== appB && ujiB(rusak).some((x) => x.includes(pesan)), `uji balik latihan hasil bersih: "${pesan}" harus tertangkap`);
+}
+
+
+// 2f-33. Persen biaya sama di kotak modal & kotak hasil bersih (Nina, 26 Nov 2026 18.xx; temuan Kirana + Hana, IDE.md #65).
+// Dua kotak di pelajaran yang sama wajib membaca persen biaya dengan aturan yang sama: koma atau titik desimal,
+// tanda % di akhir boleh ikut; huruf, dua pemisah, atau lebih dari 5% tetap ditolak.
+{
+  const appP = readFileSync("assets/app.js", "utf8");
+  const ujiP = (t) => {
+    const salah = [];
+    const k0 = t.indexOf("  var MODAL_LEMBAR_LOT"), k1 = t.indexOf("  function buatLatihanModal(");
+    const a = t.indexOf("  function hitungHasilBersih("), b = t.indexOf("  function buatLatihanBersih(");
+    if (k0 < 0 || k1 < 0 || a < 0 || b < 0 || t.indexOf("  function bacaPersen(") < 0) return ["fungsi bacaPersen tidak ada"];
+    let fm, fb;
+    try { fm = vm.runInNewContext(`${t.slice(k0, k1)}; hitungModalLot`); fb = vm.runInNewContext(`${t.slice(k0, k1)}; ${t.slice(a, b)}; hitungHasilBersih`); } catch (e) { return ["galat: " + e.message]; }
+    for (const p of ["0,15", "0.15", "0,15%", "0,15 %", " 0.15% "]) {
+      const m = fm("1250", "2", p), h = fb("1250", "1275", "2", p, p);
+      if (!m || m.biaya !== 375) salah.push(`kotak modal harus menerima "${p}" (0,15% × Rp250.000 = Rp375)`);
+      if (!h || h.biayaBeli !== 375 || h.biayaJual !== 383) salah.push(`kotak hasil bersih harus menerima "${p}"`);
+    }
+    for (const p of ["%", "0,1,5", "0.1.5", "abc", "6", "5,0001", "0,15%%", "-0,15"]) {
+      const m = fm("1250", "2", p), h = fb("1250", "1275", "2", p, "0,25");
+      if (!m || m.galat !== "biaya") salah.push(`kotak modal harus menolak "${p}"`);
+      if (!h || h.galat !== "biaya-beli") salah.push(`kotak hasil bersih harus menolak "${p}"`);
+    }
+    if (/\/\^\\d\+\(/.test(t.slice(a, b))) salah.push("kotak hasil bersih wajib memakai bacaPersen (bukan pola sendiri)");
+    return salah;
+  };
+  const sP = ujiP(appP);
+  ok(!sP.length, "Persen biaya kotak modal & hasil bersih: " + sP.join("; "));
+  for (const [rusak, pesan] of [
+    [appP.replace('.trim().replace(/\\s*%$/, "");', ".trim();"), "harus menerima \"0,15%\""],
+    [appP.replace("if (!/^\\d+([.,]\\d{1,4})?$/.test(s)) return NaN;", "if (!/^\\d+(,\\d{1,4})?$/.test(s)) return NaN;"), "harus menerima \"0.15\""],
+    [appP.replace("var pB = bacaPersen(sB), pJ = bacaPersen(sJ);", "var pB = Number(sB.replace(\",\", \".\")), pJ = Number(sJ.replace(\",\", \".\"));"), "hasil bersih harus menerima \"0,15%\""],
+  ]) ok(rusak !== appP && ujiP(rusak).some((x) => x.includes(pesan)), `uji balik persen biaya: "${pesan}" harus tertangkap`);
 }
 
 

@@ -525,14 +525,21 @@
     if (/^\d{1,3}(\.\d{3})+$/.test(s)) return Number(s.replace(/\./g, ""));
     return NaN;
   }
+  // Persen biaya dari aplikasi sekuritas (Kirana + Hana, 26 Nov 2026 18.xx; IDE.md #65): desimal boleh koma atau titik
+  // (aplikasi menulis "0,15%" atau "0.15%"; batas 5% membuat titik tidak mungkin berarti ribuan), tanda % di akhir boleh ikut.
+  function bacaPersen(teks) {
+    var s = String(teks == null ? "" : teks).trim().replace(/\s*%$/, "");
+    if (!/^\d+([.,]\d{1,4})?$/.test(s)) return NaN;
+    return Number(s.replace(",", "."));
+  }
   function hitungModalLot(harga, lot, biaya) {
     var h = bacaBulat(harga), jml = bacaBulat(lot);
     if (!Number.isInteger(h) || h < 1 || h > MODAL_HARGA_MAKS) return { galat: "harga" };
     if (!Number.isInteger(jml) || jml < 1 || jml > MODAL_LOT_MAKS) return { galat: "lot" };
     var modal = h * MODAL_LEMBAR_LOT * jml;
     if (biaya == null || biaya === "") return { lembar: jml * MODAL_LEMBAR_LOT, modal: modal, biaya: null, total: modal };
-    var b = Number(String(biaya).trim().replace(",", "."));
-    if (!/^\d+([.,]\d{1,4})?$/.test(String(biaya).trim()) || !(b >= 0) || b > MODAL_BIAYA_MAKS) return { galat: "biaya" };
+    var b = bacaPersen(biaya);
+    if (!(b >= 0) || b > MODAL_BIAYA_MAKS) return { galat: "biaya" };
     var rp = Math.round(modal * b / 100);
     return { lembar: jml * MODAL_LEMBAR_LOT, modal: modal, persen: b, biaya: rp, total: modal + rp };
   }
@@ -553,7 +560,7 @@
     var PESAN = {
       harga: "Isi harga per lembar dengan bilangan bulat Rp1 sampai " + rp(MODAL_HARGA_MAKS) + ", tanpa koma (contoh: 1250 atau 1.250).",
       lot: "Isi jumlah lot dengan bilangan bulat 1 sampai " + angkaModal.format(MODAL_LOT_MAKS) + ", tanpa koma (contoh: 2).",
-      biaya: "Isi persen biaya beli 0 sampai " + MODAL_BIAYA_MAKS + " (contoh penulisan: 0,25), atau kosongkan."
+      biaya: "Isi persen biaya beli 0 sampai " + MODAL_BIAYA_MAKS + " (contoh penulisan: 0,25 atau 0,25%), atau kosongkan."
     };
     var masukan = { harga: iHarga.inp, lot: iLot.inp, biaya: iBiaya.inp };
     function hitung() {
@@ -902,8 +909,7 @@
     var r = { nilaiBeli: nilaiBeli, nilaiJual: nilaiJual, kotor: nilaiJual - nilaiBeli, biayaBeli: null, biayaJual: null, totalBiaya: null, bersih: null };
     var sB = String(biayaBeli == null ? "" : biayaBeli).trim(), sJ = String(biayaJual == null ? "" : biayaJual).trim();
     if (sB === "" && sJ === "") return r;
-    var persen = function (s) { return /^\d+(,\d{1,4})?$/.test(s) ? Number(s.replace(",", ".")) : NaN; };
-    var pB = persen(sB), pJ = persen(sJ);
+    var pB = bacaPersen(sB), pJ = bacaPersen(sJ);
     if (sB !== "" && !(pB <= MODAL_BIAYA_MAKS)) return { galat: "biaya-beli" };
     if (sJ !== "" && !(pJ <= MODAL_BIAYA_MAKS)) return { galat: "biaya-jual" };
     if (sB === "" || sJ === "") return { galat: "pasangan" };
@@ -935,8 +941,8 @@
       beli: "Isi harga beli dengan bilangan bulat Rp1 sampai " + rp(MODAL_HARGA_MAKS) + ", tanpa koma (contoh: 1250 atau 1.250).",
       jual: "Isi harga jual dengan bilangan bulat Rp1 sampai " + rp(MODAL_HARGA_MAKS) + ", tanpa koma (contoh: 1275).",
       lot: "Isi jumlah lot dengan bilangan bulat 1 sampai " + angkaModal.format(MODAL_LOT_MAKS) + ", tanpa koma (contoh: 2).",
-      "biaya-beli": "Isi persen biaya beli 0 sampai " + MODAL_BIAYA_MAKS + " dengan koma untuk desimal (contoh penulisan: 0,15).",
-      "biaya-jual": "Isi persen biaya jual 0 sampai " + MODAL_BIAYA_MAKS + " dengan koma untuk desimal (contoh penulisan: 0,25).",
+      "biaya-beli": "Isi persen biaya beli 0 sampai " + MODAL_BIAYA_MAKS + " (contoh penulisan: 0,15 atau 0,15%).",
+      "biaya-jual": "Isi persen biaya jual 0 sampai " + MODAL_BIAYA_MAKS + " (contoh penulisan: 0,25 atau 0,25%).",
       pasangan: "Isi persen biaya beli dan biaya jual bersama-sama (keduanya dari aplikasi Anda), atau kosongkan keduanya."
     };
     var masukan = { beli: iBeli.inp, jual: iJual.inp, lot: iLot.inp, "biaya-beli": iBB.inp, "biaya-jual": iBJ.inp };

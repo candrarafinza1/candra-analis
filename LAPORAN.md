@@ -2536,3 +2536,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Laras + Arif: modul PDF kini punya lampiran "Lembar rumus" (hal. 22–23, tercantum di daftar isi): 7 kelompok rumus dari belajar.html #lembar-rumus (satu sumber untuk web dan PDF), tiap rumus menyebut pelajaran tempat kotak latihannya; catatan DES untuk dua rasio syariah ikut tercetak. Teks unduh di Belajar menyebut lembar rumus. PDF dibuat ulang.
 - Nina: sidik data PDF kini juga memuat bagian Lembar rumus (ubah rumus tanpa membuat ulang PDF → cek gagal); uji ujung-ke-ujung memastikan setiap baris rumus tampil di halaman lampiran (bukan sekadar di isi pelajaran) + 3 uji balik. `node tests/cek.mjs` lolos; belajar.html 390px & 1280px tanpa scroll horizontal & galat JS. Tegar: tanpa skrip/rahasia baru. Yoga: push ke main. README diperbarui.
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 26 Nov 2026, sesi 18.xx WIB (Bima)
+- Agenda: tidak dicek di sesi ini (rutin 07.xx/13.xx; ANDA & BUAT dicari lagi 07.xx Jumat). Proyek prioritas lain masih menunggu DES/sumber, jadi tim mengerjakan tugas pendukung.
+- Kirana + Hana: tinjau kotak rasio syariah #62 (tanpa temuan, kalimat sama dengan pelajaran & kamus) dan kotak hasil bersih #63 (bahasa netral). Temuan IDE.md #65: kotak modal menerima "0.15" tapi kotak hasil bersih menolaknya, dan keduanya menolak "0,15%" yang biasa tertulis di aplikasi sekuritas.
+- Arif: satu fungsi `bacaPersen` untuk kedua kotak (koma atau titik desimal, tanda % boleh ikut; huruf, dua pemisah, minus, >5% tetap ditolak); contoh di pesan salah menyebut "0,15%".
+- Nina: `node tests/cek.mjs` lolos, cek baru 2f-33 + 3 uji balik (uji balik dicoba merusak kode: tertangkap); cek 2f-31 disesuaikan. 390px gelap & 1280px terang tanpa scroll horizontal & galat JS. Tegar: tanpa skrip/rahasia baru. Yoga: push ke main.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
