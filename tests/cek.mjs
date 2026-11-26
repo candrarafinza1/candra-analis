@@ -8399,5 +8399,48 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
   ]) ok(rusak !== appR && ujiR(rusak).some((x) => x.includes(pesan)), `uji balik latihan rasio: "${pesan}" harus tertangkap`);
 }
 
+// 2f-26. Latihan "Hitung porsi tiap saham di portofolio" (Nina, 26 Nov 2026; Arif + Laras + Hana, IDE.md #60).
+// Porsi = nilai ÷ jumlah × 100%; minimal 2 isian; isian kosong dilewati; tanpa batas "ideal"; hanya di
+// pelajaran mengelola-risiko; tanpa kata ajakan; tanpa penyimpanan.
+{
+  const appP = readFileSync("assets/app.js", "utf8");
+  const ujiP = (t) => {
+    const salah = [];
+    const a0 = t.indexOf("  function bacaBulat("), a1 = t.indexOf("  function hitungModalLot(");
+    const a = t.indexOf("  var PORSI_MIN"), b = t.indexOf("  function buatLatihanPorsi("), c = t.indexOf("  function pasangLatihanPorsi("), d = t.indexOf("  /* ---------- Halaman pelajaran");
+    if (a0 < 0 || a1 < 0 || a < 0 || b < 0 || c < 0 || d < 0 || !(a < b && b < c && c < d)) return ["fungsi latihan porsi tidak ada"];
+    let f;
+    try { f = vm.runInNewContext(`${t.slice(a0, a1)}; ${t.slice(a, b)}; hitungPorsi`); } catch (e) { return ["galat: " + e.message]; }
+    const r1 = f(["3000000", "1.000.000", "1000000", "", ""]);
+    if (!r1 || !r1.daftar || r1.daftar.length !== 3 || Math.abs(r1.daftar[0].porsi - 60) > 1e-9 || Math.abs(r1.daftar[1].porsi - 20) > 1e-9 || r1.total !== 5000000 || r1.terbesar.ke !== 1) salah.push("rumus porsi (3 jt dari 5 jt = 60%)");
+    const r2 = f(["", "500", "", "1500", ""]);
+    if (!r2 || !r2.daftar || r2.daftar.length !== 2 || r2.daftar[0].ke !== 2 || Math.abs(r2.daftar[1].porsi - 75) > 1e-9) salah.push("isian kosong dilewati, nomor saham tetap");
+    if (!r1 || !r1.daftar || Math.abs(r1.daftar.reduce((x, y) => x + y.porsi, 0) - 100) > 1e-9) salah.push("jumlah porsi harus 100%");
+    for (const [v, g] of [[["1000", "", "", "", ""], "kurang"], [["", "", "", "", ""], "kurang"], [["1000", "0", "", "", ""], 1], [["1000", "12,5", "", "", ""], 1], [["abc", "100", "", "", ""], 0], [["100", "100", "-5", "", ""], 2], [["100", "100", "100000000001", "", ""], 2]]) {
+      const r = f(v);
+      if (!r || r.galat !== g) salah.push(`isian tidak sah harus ditolak (${v.join("/")} → ${g})`);
+    }
+    if (!/m\.id !== "mengelola-risiko"/.test(t.slice(c, d))) salah.push("hanya di pelajaran mengelola-risiko");
+    if (!/pasangLatihanPorsi\(wadah, m\);/.test(t)) salah.push("renderPelajaran wajib memasang latihan porsi");
+    const badan = t.slice(a, d).replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/[^\n]*/g, "");
+    if (/buruan|pasti (naik|untung)|rekomendasi|layak dibeli|saatnya (beli|jual)|ideal|sebaiknya|maksimal \d+ ?%|jangan lebih dari/i.test(badan)) salah.push("kata ajakan atau batas porsi karangan dilarang");
+    if (/localStorage|sessionStorage|fetch\(|XMLHttpRequest|innerHTML/.test(badan)) salah.push("tanpa simpan/kirim data dan tanpa innerHTML");
+    if (!/"aria-hidden": "true"/.test(t.slice(b, c))) salah.push("batang teks wajib aria-hidden (angka sudah dibacakan)");
+    return salah;
+  };
+  const sP = ujiP(appP);
+  ok(!sP.length, "Latihan porsi: " + sP.join("; "));
+  for (const [rusak, pesan] of [
+    [appP.replace("x.porsi = x.nilai / total * 100;", "x.porsi = x.nilai / total;"), "rumus porsi"],
+    [appP.replace('if (s === "") continue;', ""), "isian kosong"],
+    [appP.replace("if (isi.length < PORSI_MIN) return", "if (isi.length < 1) return"), "isian tidak sah"],
+    [appP.replace("v < 1 || v > PORSI_RP_MAKS", "v < 0 || v > PORSI_RP_MAKS"), "isian tidak sah"],
+    [appP.replace('    if (m.id !== "mengelola-risiko") return;\n', ""), "mengelola-risiko"],
+    [appP.replace("    pasangLatihanPorsi(wadah, m);\n", ""), "renderPelajaran"],
+    [appP.replace("bukan saran membeli atau menjual saham apa pun.", "porsi ideal satu saham 20%."), "batas porsi karangan"],
+    [appP.replace('el("span", { class: "latihan-porsi-batang", "aria-hidden": "true",', 'el("span", { class: "latihan-porsi-batang",'), "aria-hidden"],
+  ]) ok(rusak !== appP && ujiP(rusak).some((x) => x.includes(pesan)), `uji balik latihan porsi: "${pesan}" harus tertangkap`);
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);

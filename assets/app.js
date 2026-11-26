@@ -666,6 +666,74 @@
     wadah.insertBefore(buatLatihanRasio(), wadah.querySelectorAll("form.kuis")[0] || null);
   }
 
+  /* ---------- Latihan "Hitung porsi tiap saham di portofolio" (Arif + Laras + Hana, 26 Nov 2026; IDE.md #60) ----------
+     Di pelajaran "Mengelola risiko", sebelum kuis. Porsi = nilai satu saham ÷ jumlah semua nilai × 100%.
+     Pengguna mengisi 2–5 nilai rupiah TANPA nama emiten. Tidak ada batas porsi "ideal" (tim tidak punya sumber
+     untuk angka seperti itu), tidak menilai saham apa pun, tidak disimpan, tidak dikirim. Batang teks tanpa animasi. */
+  var PORSI_MIN = 2, PORSI_MAKS_ISIAN = 5, PORSI_RP_MAKS = 100000000000, PORSI_BATANG = 20;
+  var angkaPorsi = new Intl.NumberFormat("id-ID", { maximumFractionDigits: 1 });
+  // nilai: larik teks isian. Kosong dilewati; isian berisi harus bilangan bulat Rp1..PORSI_RP_MAKS.
+  function hitungPorsi(nilai) {
+    var isi = [];
+    for (var i = 0; i < nilai.length; i++) {
+      var s = String(nilai[i] == null ? "" : nilai[i]).trim();
+      if (s === "") continue;
+      var v = bacaBulat(s);
+      if (!Number.isInteger(v) || v < 1 || v > PORSI_RP_MAKS) return { galat: i };
+      isi.push({ ke: i + 1, nilai: v });
+    }
+    if (isi.length < PORSI_MIN) return { galat: "kurang" };
+    var total = isi.reduce(function (a, x) { return a + x.nilai; }, 0);
+    isi.forEach(function (x) { x.porsi = x.nilai / total * 100; });
+    var terbesar = isi.reduce(function (a, x) { return x.nilai > a.nilai ? x : a; }, isi[0]);
+    return { daftar: isi, total: total, terbesar: terbesar };
+  }
+  function buatLatihanPorsi() {
+    var rp = function (x) { return "Rp" + angkaPorsi.format(x); };
+    var kotak = el("section", { class: "kuis latihan-modal latihan-porsi", "aria-labelledby": "judul-latihan-porsi" });
+    kotak.appendChild(el("h2", { id: "judul-latihan-porsi", text: "Hitung sendiri: porsi tiap saham di portofolio" }));
+    kotak.appendChild(el("p", { class: "kuis-pengantar", text: "Isi nilai (rupiah) 2 sampai 5 saham. Tidak perlu menulis nama sahamnya. Angka yang sudah terisi hanya contoh bulat. Ini alat berhitung, bukan saran membeli atau menjual saham apa pun. Angka tidak disimpan dan tidak dikirim." }));
+    var info = el("p", { class: "kuis-hasil", id: "latihan-porsi-info", role: "status", "aria-live": "polite" });
+    var hasil = el("ul", { class: "latihan-modal-hasil latihan-porsi-hasil" });
+    var contoh = ["3000000", "1000000", "1000000", "", ""];
+    var isian = [];
+    for (var i = 0; i < PORSI_MAKS_ISIAN; i++) {
+      var id = "latihan-porsi-" + (i + 1);
+      var inp = el("input", { id: id, "aria-describedby": "latihan-porsi-info", type: "text", inputmode: "numeric", autocomplete: "off", value: contoh[i] });
+      isian.push({ inp: inp, baris: el("div", { class: "cari-kamus" }, [el("label", { for: id, text: "Nilai saham " + (i + 1) + " (Rp" + (i >= PORSI_MIN ? ", boleh kosong)" : ")") }), inp]) });
+    }
+    function hitung() {
+      var r = hitungPorsi(isian.map(function (x) { return x.inp.value; }));
+      hasil.textContent = "";
+      isian.forEach(function (x, k) { x.inp.setAttribute("aria-invalid", r.galat === k ? "true" : "false"); });
+      if (r.galat === "kurang") { info.textContent = "Isi nilai paling sedikit " + PORSI_MIN + " saham untuk melihat porsinya."; return; }
+      if (r.galat != null) {
+        info.textContent = "Nilai saham " + (r.galat + 1) + ": isi bilangan bulat Rp1 sampai " + rp(PORSI_RP_MAKS) + " tanpa koma (contoh: 1000000 atau 1.000.000), atau kosongkan.";
+        return;
+      }
+      r.daftar.forEach(function (x) {
+        var penuh = Math.round(x.porsi / 100 * PORSI_BATANG);
+        hasil.appendChild(el("li", {}, [
+          el("span", { text: "Saham " + x.ke + ": " + rp(x.nilai) + " ÷ " + rp(r.total) + " × 100% = " + angkaPorsi.format(x.porsi) + "% " }),
+          el("span", { class: "latihan-porsi-batang", "aria-hidden": "true", text: "█".repeat(penuh) + "░".repeat(PORSI_BATANG - penuh) })
+        ]));
+      });
+      info.textContent = "Jumlah semua: " + rp(r.total) + ". Porsi terbesar: saham " + r.terbesar.ke + ", " + angkaPorsi.format(r.terbesar.porsi) + "% dari uang di saham (dibulatkan 1 angka di belakang koma).";
+    }
+    isian.forEach(function (x) { x.inp.addEventListener("input", hitung); });
+    kotak.appendChild(el("div", { class: "kotak-rumus", text: "Porsi = nilai satu saham ÷ jumlah nilai semua saham × 100%" }));
+    kotak.appendChild(el("div", { class: "latihan-modal-isian" }, isian.map(function (x) { return x.baris; })));
+    kotak.appendChild(info);
+    kotak.appendChild(hasil);
+    kotak.appendChild(el("p", { class: "latihan-modal-catatan", text: "Makin besar porsi satu saham, makin besar pengaruh masalah di perusahaan itu terhadap seluruh uang Anda di saham. Diversifikasi mengurangi risiko, tetapi tidak menghilangkannya. Perhatikan juga sektornya: beberapa saham dari sektor yang sama bisa terkena masalah yang sama. Karena pembulatan, jumlah persen bisa sedikit berbeda dari 100%." }));
+    hitung();
+    return kotak;
+  }
+  function pasangLatihanPorsi(wadah, m) {
+    if (m.id !== "mengelola-risiko") return;
+    wadah.insertBefore(buatLatihanPorsi(), wadah.querySelectorAll("form.kuis")[0] || null);
+  }
+
   /* ---------- Halaman pelajaran ---------- */
   function renderPelajaran() {
     var wadah = document.getElementById("isi-pelajaran");
@@ -688,6 +756,7 @@
     pasangLatihanLaba(wadah, m);
     pasangLatihanModal(wadah, m);
     pasangLatihanRasio(wadah, m);
+    pasangLatihanPorsi(wadah, m);
 
     var nav = el("nav", { class: "navigasi-pelajaran", "aria-label": "Pelajaran lain" });
     nav.appendChild(idx > 0

@@ -1136,7 +1136,7 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Masalah: pelajaran menjelaskan diversifikasi, tetapi pemula sulit membayangkan "terlalu banyak di satu saham" dalam angka.
 - Ide: isi nilai (Rp) 2–5 saham milik sendiri tanpa nama emiten → tampil porsi masing-masing dalam persen dan batang teks sederhana. Tanpa batas "ideal" karangan; hanya angka porsi dan kalimat netral dari pelajaran.
 - Dampak bagi pemula: melihat sendiri bila satu saham memegang sebagian besar uangnya. Batasan: tanpa simpan/kirim data, tanpa ajakan, prefers-reduced-motion (tanpa animasi), keyboard.
-- Usaha: kecil (Arif + Laras; Hana meninjau bahasa). Status: diusulkan Kirana 26 Nov 07.xx.
+- Usaha: kecil (Arif + Laras; Hana meninjau bahasa). Status: diusulkan Kirana 26 Nov 07.xx; dipilih Bima 26 Nov 07.xx; **selesai 26 Nov 08.xx** (Arif + Laras + Hana; cek 2f-26).
 
 ### 61. Profil emiten: tautan "Coba hitung sendiri" di samping PER/DPS (Kirana, 26 Nov 2026) — kecil
 - Masalah: profil menampilkan DPS dan angka laba, tetapi tidak menunjukkan cara pemula menghitung rasio sendiri.

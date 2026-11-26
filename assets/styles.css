@@ -443,6 +443,8 @@ tbody tr:hover { background: var(--hover-baris); }
 .latihan-modal-isian .cari-kamus { margin-bottom: 12px; }
 .latihan-modal-hasil { margin: 8px 0 12px; padding-left: 1.2em; overflow-wrap: anywhere; }
 .latihan-modal-catatan { font-size: .9rem; color: var(--tinta-2); }
+.latihan-porsi-hasil li { margin-bottom: 6px; }
+.latihan-porsi-batang { display: inline-block; font-family: ui-monospace, Menlo, Consolas, monospace; letter-spacing: -1px; white-space: nowrap; max-width: 100%; overflow: hidden; vertical-align: middle; }
 .latihan-urut-petunjuk { display: block; margin-top: 6px; font-weight: 400; }
 .latihan-urut-jelas[hidden] { display: none; }
 

@@ -2480,3 +2480,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Arif + Laras + Dewi: kotak "Hitung sendiri: PER dan dividend yield" di pelajaran Membaca laporan keuangan (angka bawaan hanya contoh bulat; EPS nol/negatif → PER tidak dibaca; desimal pakai koma). #60 dan #61 masuk BACKLOG sebagai tugas pendukung berikutnya.
 - Nina: `node tests/cek.mjs` lolos, cek baru 2f-25 + 6 uji balik; batas potongan cek 2f-23/2f-24 disesuaikan; 390px gelap & 1280px terang tanpa scroll horizontal & galat JS. Tegar: tanpa rahasia, teks lewat textContent, angka tidak disimpan. Yoga: push ke main.
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 26 Nov 2026, sesi 08.xx (Bima)
+- Agenda: tidak dicek di sesi ini (rutin 07.xx/13.xx; ANDA & BUAT dicek lagi 13.xx). DES periode II 2026 belum ada kabar baru.
+- Arif + Laras + Hana: kotak "Hitung sendiri: porsi tiap saham di portofolio" di pelajaran Mengelola risiko (IDE.md #60): 2–5 nilai rupiah tanpa nama emiten → porsi % + batang teks, tanpa batas "ideal" karangan, tanpa simpan/kirim data.
+- Nina: `node tests/cek.mjs` lolos, cek baru 2f-26 + 8 uji balik; 390px gelap & 1280px terang tanpa scroll horizontal & galat JS. Tegar: teks lewat textContent, tanpa penyimpanan. Yoga: push ke main.
+- Berikutnya: Dewi + Nina tautan #61 dari profil emiten; Kirana + Hana meninjau kotak porsi.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
