@@ -8452,7 +8452,7 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
     const p0 = t.indexOf("  function renderProfil("), g0 = t.indexOf("  function gulirJangkarPelajaran("), r0 = t.indexOf("  function renderPelajaran(");
     if (p0 < 0 || g0 < 0 || r0 < 0) return ["fungsi profil/jangkar tidak ada"];
     const prof = t.slice(p0, t.indexOf("\n  function ", p0 + 10));
-    const m = prof.match(/href: "pelajaran\.html\?m=([a-z-]+)#([a-z-]+)", text: "([^"]+)"/);
+    const m = prof.match(/href: "pelajaran\.html\?m=([a-z-]+)#(judul-latihan-rasio[a-z-]*)", text: "([^"]+)"/);
     if (!m) salah.push("tautan profil ke kotak rasio tidak ada");
     else {
       if (m[1] !== "laporan-keuangan") salah.push("tautan harus ke pelajaran laporan-keuangan");
@@ -8525,6 +8525,44 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
     [appD.replace("    pasangLatihanRoeDer(wadah, m);\n", ""), "renderPelajaran"],
     [appD.replace("bukan penilaian baik atau buruknya saham.", "ROE di atas 15% berarti saham layak dibeli."), "kata ajakan"],
   ]) ok(rusak !== appD && ujiD(rusak).some((x) => x.includes(pesan)), `uji balik latihan ROE/DER: "${pesan}" harus tertangkap`);
+}
+
+// 2f-29. Tautan "Coba hitung ROE & DER sendiri" dari profil emiten (Nina, 26 Nov 2026 13.xx; Dewi, tinjauan Kirana + Laras).
+// Tautan wajib ke pelajaran praktik-analisis-sendiri, jangkarnya ada di kotak ROE/DER, letaknya setelah ubin Angka utama,
+// tanpa mengisi angka lewat alamat, dan tanpa kata ajakan. Guliran memakai gulirJangkarPelajaran (diuji di 2f-27).
+{
+  const appK = readFileSync("assets/app.js", "utf8");
+  const ujiK = (t) => {
+    const salah = [];
+    const p0 = t.indexOf("  function renderProfil(");
+    if (p0 < 0) return ["fungsi profil tidak ada"];
+    const prof = t.slice(p0, t.indexOf("\n  function ", p0 + 10));
+    const m = prof.match(/href: "pelajaran\.html\?m=([a-z-]+)#(judul-latihan-roe[a-z-]*)", text: "([^"]+)"/);
+    if (!m) salah.push("tautan profil ke kotak ROE/DER tidak ada");
+    else {
+      if (m[1] !== "praktik-analisis-sendiri") salah.push("tautan harus ke pelajaran praktik-analisis-sendiri");
+      if (!t.includes(`id: "${m[2]}"`)) salah.push("jangkar tautan tidak ada di kotak latihan");
+      if (!/ROE/.test(m[3]) || !/DER/.test(m[3]) || !/sendiri/.test(m[3])) salah.push("teks tautan harus jelas");
+      const iU = prof.indexOf('ubin("DER akhir 2025"'), iT = prof.indexOf(m[0]);
+      if (iU < 0 || iT < iU) salah.push("tautan harus setelah ubin Angka utama");
+    }
+    if (/m=praktik-analisis-sendiri&/.test(prof)) salah.push("tanpa mengisi angka otomatis lewat alamat");
+    if (!t.includes('if (m.id !== "praktik-analisis-sendiri") return;\n    wadah.insertBefore(buatLatihanRoeDer()')) salah.push("kotak ROE/DER harus di pelajaran praktik-analisis-sendiri");
+    const teks = (prof.match(/tautan-hitung-roeder[\s\S]*?\]\)\);/) || [""])[0];
+    if (!teks) salah.push("paragraf tautan ROE/DER tidak ada");
+    if (/buruan|pasti (naik|untung)|rekomendasi|layak dibeli|saatnya (beli|jual)|murah|mahal|sehat|bagus|jelek/i.test(teks)) salah.push("kata ajakan/penilaian dilarang");
+    return salah;
+  };
+  const sK = ujiK(appK);
+  ok(!sK.length, "Tautan hitung ROE/DER: " + sK.join("; "));
+  for (const [rusak, pesan] of [
+    [appK.replace('#judul-latihan-roeder", text: "Coba hitung ROE & DER sendiri"', '#judul-latihan-roederr", text: "Coba hitung ROE & DER sendiri"'), "jangkar tautan"],
+    [appK.replace('pelajaran.html?m=praktik-analisis-sendiri#judul-latihan-roeder', 'pelajaran.html?m=laporan-keuangan#judul-latihan-roeder'), "praktik-analisis-sendiri"],
+    [appK.replace('text: "Coba hitung ROE & DER sendiri"', 'text: "Coba di sini"'), "teks tautan"],
+    [appK.replace("Ingin tahu dari mana ROE dan DER dihitung? ", "ROE ini bagus? "), "kata ajakan"],
+    [appK.replace('if (m.id !== "praktik-analisis-sendiri") return;\n    wadah.insertBefore(buatLatihanRoeDer()', 'if (m.id !== "laporan-keuangan") return;\n    wadah.insertBefore(buatLatihanRoeDer()'), "kotak ROE/DER harus"],
+    [appK.replace('pelajaran.html?m=praktik-analisis-sendiri#judul-latihan-roeder"', 'pelajaran.html?m=praktik-analisis-sendiri&laba=120#judul-latihan-roeder"'), "tautan profil ke kotak ROE/DER tidak ada"],
+  ]) ok(rusak !== appK && ujiK(rusak).some((x) => x.includes(pesan)), `uji balik tautan hitung ROE/DER: "${pesan}" harus tertangkap`);
 }
 
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }

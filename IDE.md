@@ -1143,3 +1143,8 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Ide: satu tautan teks kecil ke kotak #59 di pelajaran Laporan keuangan (jangkar `#judul-latihan-rasio`), tanpa mengisi angka otomatis agar pengguna menyalin sendiri dari sumber.
 - Dampak bagi pemula: jalur belajar dari data ke rumus. Batasan: teks biasa, tanpa ajakan. Usaha: kecil (Dewi; Nina menambah cek tautan).
 - Status: diusulkan Kirana 26 Nov 07.xx; dipilih Bima 07.xx; **dikerjakan Dewi + Nina 26 Nov 09.xx** (tautan di bawah tabel dividen profil; pelajaran menggulir ke jangkar setelah kotak dibuat JS; cek 2f-27). Menunggu tinjauan Kirana + Laras.
+
+### Tinjauan kotak "Hitung sendiri: ROE dan DER" (Kirana + Laras, 26 Nov 2026, 13.xx WIB)
+- Bahasa: pengantar dan arti hasil ("setiap Rp100 modal pemilik menghasilkan laba bersih sekitar Rp…") mudah dipahami pemula; tidak ada penilaian baik/buruk; catatan bank & dana syirkah temporer netral.
+- Keyboard: tiga isian berurutan dengan label, hasil dibacakan lewat `role=status`; pesan salah menyebut contoh angka.
+- Usul: profil emiten sudah menampilkan ubin ROE & DER, jadi perlu tautan seperti #61 agar pemula bisa menghitung ulang sendiri. **Disetujui Bima, langsung dikerjakan Dewi + Nina (26 Nov 13.xx):** kalimat "Ingin tahu dari mana ROE dan DER dihitung? Coba hitung ROE & DER sendiri …" di bawah ubin Angka utama, menuju `#judul-latihan-roeder`; angka tidak diisi otomatis. Dicek 390px gelap & 1280px terang: judul kotak terfokus di atas layar, tanpa scroll horizontal.

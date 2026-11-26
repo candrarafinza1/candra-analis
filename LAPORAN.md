@@ -2502,3 +2502,11 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Nina: `node tests/cek.mjs` lolos, cek baru 2f-28 + 7 uji balik; dicek 390px gelap & 1280px terang, tanpa scroll horizontal & galat JS. Tegar: teks lewat el()/textContent, tanpa rahasia. Yoga: push ke main.
 - Berikutnya: Kirana + Laras meninjau kotak ROE/DER; rutin Agenda 13.xx.
 - Masalah berat baru: tidak ada.
+
+### 26 Nov 2026, sesi 13.xx WIB (Bima)
+- Laporan masuk kerja siang dikirim ke Rafinza (13.1x).
+- Agenda: +0 IPO, +0 dividen, −0 kedaluwarsa. Raka + Hana: ANDA & BUAT dicari lagi, tetap tidak ada sumber yang menyebut status syariah → tidak dicatat (dicoba lagi 07.xx Jumat). Daftar dividen akhir November (Katadata 16 Nov) hanya berisi calon yang sudah tercatat menunggu DES (TOTL, PORT, YUPI, ULTJ, dll.). Fajar: DES periode II 2026 belum terbit (terbaru KEP-21/D.04/2026). Fajar + Galih: BSSR laba 9 bulan tetap belum ada sumber.
+- Kirana + Laras: kotak ROE/DER ditinjau, bahasa & keyboard baik; usul tautan dari profil disetujui Bima.
+- Dewi: tautan "Coba hitung ROE & DER sendiri" di bawah ubin Angka utama profil emiten → kotak ROE/DER pelajaran Praktik analisis (angka tidak diisi otomatis).
+- Nina: `node tests/cek.mjs` lolos, cek baru 2f-29 + 6 uji balik; cek 2f-27 dipersempit ke tautan PER agar tidak bentrok; profil ICBP → klik → judul kotak terfokus di atas layar, 390px gelap & 1280px terang, tanpa scroll horizontal & galat JS. Tegar: teks lewat el(), tanpa rahasia. Yoga: push ke main.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

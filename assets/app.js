@@ -1507,6 +1507,13 @@
       ubin("ROE 2025", strip(roe(e), persen), "Laba bersih ÷ ekuitas"),
       ubin("DER akhir 2025", strip(der(e), function (v) { return angka.format(v) + "x"; }), "Liabilitas ÷ ekuitas")
     ]));
+    // Dewi + Nina (26 Nov 2026 13.xx; tinjauan Kirana + Laras): jalur dari ubin ROE/DER ke kotak hitung di pelajaran Praktik.
+    // Sama seperti #61: angka tidak diisi otomatis, pengguna menyalin sendiri dari laporan.
+    akar.appendChild(el("p", { class: "catatan-metode tautan-hitung-roeder" }, [
+      "Ingin tahu dari mana ROE dan DER dihitung? ",
+      el("a", { href: "pelajaran.html?m=praktik-analisis-sendiri#judul-latihan-roeder", text: "Coba hitung ROE & DER sendiri" }),
+      " di pelajaran Praktik: menganalisis perusahaan sendiri, dengan angka yang Anda salin dari laporan keuangan."
+    ]));
 
     // Arif (IDE.md #7): posisi emiten di Peringkat, memakai peserta() dan rumus yang sama dengan halaman Peringkat
     function posisi(kunci, nama) {
