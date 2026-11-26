@@ -734,6 +734,75 @@
     wadah.insertBefore(buatLatihanPorsi(), wadah.querySelectorAll("form.kuis")[0] || null);
   }
 
+  /* ---------- Latihan "Hitung ROE dan DER" (Arif + Laras + Hana, 26 Nov 2026; tugas pendukung Bima) ----------
+     Di pelajaran "Praktik: menganalisis perusahaan sendiri" (langkah 6 & 7 lembar kerja), sebelum kuis.
+     ROE = laba bersih ÷ ekuitas × 100%; DER = total liabilitas ÷ ekuitas (kali), sama dengan isi pelajaran.
+     Angka bawaan hanya contoh bulat. Satuan bebas asal sama (mis. miliar rupiah). Tidak disimpan, tidak dikirim. */
+  var ROEDER_MAKS = 1000000000000;
+  function hitungRoeDer(laba, ekuitas, liabilitas) {
+    var l = bacaDesimal(laba), e = bacaDesimal(ekuitas);
+    if (!isFinite(l) || Math.abs(l) > ROEDER_MAKS) return { galat: "laba" };
+    if (!isFinite(e) || Math.abs(e) > ROEDER_MAKS) return { galat: "ekuitas" };
+    if (!(e > 0)) return { galat: "ekuitas-negatif" };
+    var r = { laba: l, ekuitas: e, roe: l / e * 100, liabilitas: null, der: null };
+    if (liabilitas != null && String(liabilitas).trim() !== "") {
+      var b = bacaDesimal(liabilitas);
+      if (!isFinite(b) || b < 0 || b > ROEDER_MAKS) return { galat: "liabilitas" };
+      r.liabilitas = b; r.der = b / e;
+    }
+    return r;
+  }
+  function buatLatihanRoeDer() {
+    var ang = function (x) { return (x < 0 ? "−" : "") + angkaRasio.format(Math.abs(x)); };
+    var kotak = el("section", { class: "kuis latihan-modal latihan-roeder", "aria-labelledby": "judul-latihan-roeder" });
+    kotak.appendChild(el("h2", { id: "judul-latihan-roeder", text: "Hitung sendiri: ROE dan DER" }));
+    kotak.appendChild(el("p", { class: "kuis-pengantar", text: "Untuk langkah 6 dan 7 lembar kerja. Angka yang sudah terisi hanya contoh bulat, bukan perusahaan mana pun. Ganti dengan angka dari laporan keuangan tahunan, dalam satuan yang sama (misalnya semuanya miliar rupiah, seperti tertulis di laporan). Ini alat berhitung, bukan penilaian baik atau buruknya saham. Angka tidak disimpan dan tidak dikirim." }));
+    var info = el("p", { class: "kuis-hasil", id: "latihan-roeder-info", role: "status", "aria-live": "polite" });
+    var hasil = el("ul", { class: "latihan-modal-hasil" });
+    function isian(id, label, nilai) {
+      var inp = el("input", { id: id, "aria-describedby": "latihan-roeder-info", type: "text", inputmode: "decimal", autocomplete: "off", value: nilai });
+      return { inp: inp, baris: el("div", { class: "cari-kamus" }, [el("label", { for: id, text: label }), inp]) };
+    }
+    var iLaba = isian("latihan-roeder-laba", "Laba bersih setahun", "120");
+    var iEkuitas = isian("latihan-roeder-ekuitas", "Total ekuitas", "1.000");
+    var iLiab = isian("latihan-roeder-liabilitas", "Total liabilitas (boleh kosong)", "800");
+    var PESAN = {
+      laba: "Isi laba bersih dengan angka, desimal memakai koma (contoh: 120 atau 1.250,5). Rugi ditulis dengan tanda minus.",
+      ekuitas: "Isi total ekuitas dengan angka, desimal memakai koma (contoh: 1.000 atau 950,25).",
+      "ekuitas-negatif": "Ekuitas nol atau negatif: ROE dan DER tidak bisa dibaca dengan cara biasa. Ekuitas negatif berarti total liabilitas lebih besar dari total aset.",
+      liabilitas: "Isi total liabilitas dengan angka nol atau lebih, desimal memakai koma (contoh: 800), atau kosongkan."
+    };
+    var masukan = { laba: iLaba.inp, ekuitas: iEkuitas.inp, liabilitas: iLiab.inp };
+    function hitung() {
+      var r = hitungRoeDer(iLaba.inp.value, iEkuitas.inp.value, iLiab.inp.value);
+      hasil.textContent = "";
+      Object.keys(masukan).forEach(function (k) {
+        var kena = r.galat === k || (k === "ekuitas" && r.galat === "ekuitas-negatif");
+        masukan[k].setAttribute("aria-invalid", kena ? "true" : "false");
+      });
+      if (r.galat) { info.textContent = PESAN[r.galat]; return; }
+      hasil.appendChild(el("li", { text: "ROE: " + ang(r.laba) + " ÷ " + ang(r.ekuitas) + " × 100% = " + ang(r.roe) + "%. Artinya setiap Rp100 modal pemilik menghasilkan laba bersih sekitar Rp" + ang(r.roe) + " dalam setahun." + (r.laba < 0 ? " Angka negatif karena perusahaan rugi." : "") }));
+      var teks = ["ROE " + ang(r.roe) + "%"];
+      if (r.der != null) {
+        hasil.appendChild(el("li", { text: "DER: " + ang(r.liabilitas) + " ÷ " + ang(r.ekuitas) + " = " + ang(r.der) + " kali. Artinya total liabilitas " + ang(r.der) + " kali ekuitas." }));
+        teks.push("DER " + ang(r.der) + " kali");
+      }
+      info.textContent = "Hasil: " + teks.join(", ") + " (dibulatkan 2 angka di belakang koma).";
+    }
+    [iLaba.inp, iEkuitas.inp, iLiab.inp].forEach(function (x) { x.addEventListener("input", hitung); });
+    kotak.appendChild(el("div", { class: "kotak-rumus" }, [el("div", { text: "ROE = laba bersih ÷ total ekuitas × 100%" }), el("div", { text: "DER = total liabilitas ÷ total ekuitas" })]));
+    kotak.appendChild(el("div", { class: "latihan-modal-isian" }, [iLaba.baris, iEkuitas.baris, iLiab.baris]));
+    kotak.appendChild(info);
+    kotak.appendChild(hasil);
+    kotak.appendChild(el("p", { class: "latihan-modal-catatan", text: "Pakai laba setahun penuh dan ekuitas akhir tahun yang sama. Bank biasanya punya DER jauh lebih tinggi daripada perusahaan lain karena usahanya mengelola dana nasabah (di bank syariah, sebagian dana nasabah dicatat sebagai dana syirkah temporer, terpisah dari liabilitas dan ekuitas). Jadi bandingkan dengan perusahaan sejenis dan dengan tahun-tahun sebelumnya." }));
+    hitung();
+    return kotak;
+  }
+  function pasangLatihanRoeDer(wadah, m) {
+    if (m.id !== "praktik-analisis-sendiri") return;
+    wadah.insertBefore(buatLatihanRoeDer(), wadah.querySelectorAll("form.kuis")[0] || null);
+  }
+
   /* ---------- Halaman pelajaran ---------- */
   // Jangkar pelajaran (Dewi + Nina, 26 Nov 2026; IDE.md #61): isi pelajaran dibuat JS setelah halaman dimuat,
   // jadi peramban tidak bisa menggulir sendiri ke "#judul-..." di alamat. Setelah isi siap, judul kotak itu
@@ -773,6 +842,7 @@
     pasangLatihanModal(wadah, m);
     pasangLatihanRasio(wadah, m);
     pasangLatihanPorsi(wadah, m);
+    pasangLatihanRoeDer(wadah, m);
     gulirJangkarPelajaran(wadah);
 
     var nav = el("nav", { class: "navigasi-pelajaran", "aria-label": "Pelajaran lain" });

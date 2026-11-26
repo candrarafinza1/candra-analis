@@ -8483,5 +8483,49 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
   ]) ok(rusak !== appJ && ujiJ(rusak).some((x) => x.includes(pesan)), `uji balik tautan hitung rasio: "${pesan}" harus tertangkap`);
 }
 
+// 2f-28. Latihan "Hitung ROE dan DER" (Nina, 26 Nov 2026; Arif + Laras + Hana, tugas pendukung).
+// ROE = laba ÷ ekuitas × 100%; DER = liabilitas ÷ ekuitas; ekuitas ≤ 0 ditolak; liabilitas boleh kosong;
+// hanya di pelajaran praktik-analisis-sendiri; tanpa kata ajakan; tanpa penyimpanan.
+{
+  const appD = readFileSync("assets/app.js", "utf8");
+  const ujiD = (t) => {
+    const salah = [];
+    const a0 = t.indexOf("  function bacaDesimal("), a1 = t.indexOf("  function hitungRasio(");
+    const a = t.indexOf("  var ROEDER_MAKS"), b = t.indexOf("  function buatLatihanRoeDer("), c = t.indexOf("  function pasangLatihanRoeDer("), d = t.indexOf("  /* ---------- Halaman pelajaran");
+    if (a0 < 0 || a1 < 0 || a < 0 || b < 0 || c < 0 || d < 0 || !(a < b && b < c && c < d)) return ["fungsi latihan ROE/DER tidak ada"];
+    let f;
+    try { f = vm.runInNewContext(`${t.slice(a0, a1)}; ${t.slice(a, b)}; hitungRoeDer`); } catch (e) { return ["galat: " + e.message]; }
+    const r1 = f("120", "1.000", "800");
+    if (!r1 || Math.abs(r1.roe - 12) > 1e-9 || Math.abs(r1.der - 0.8) > 1e-9) salah.push("rumus ROE/DER (120/1.000 = 12%, 800/1.000 = 0,8)");
+    const r2 = f("-50", "1.250,5", "");
+    if (!r2 || r2.der !== null || !(r2.roe < 0)) salah.push("liabilitas kosong & laba rugi");
+    for (const [v, g] of [[["abc", "100", ""], "laba"], [["10", "", ""], "ekuitas"], [["10", "0", ""], "ekuitas-negatif"], [["10", "-5", ""], "ekuitas-negatif"], [["10", "100", "-1"], "liabilitas"], [["10.5", "100", ""], "laba"]]) {
+      const r = f(...v);
+      if (!r || r.galat !== g) salah.push(`isian tidak sah harus ditolak (${v.join("/")} → ${g})`);
+    }
+    if (!/m\.id !== "praktik-analisis-sendiri"/.test(t.slice(c, d))) salah.push("hanya di pelajaran praktik-analisis-sendiri");
+    const r0 = t.indexOf("  function renderPelajaran(");
+    const ren = t.slice(r0, t.indexOf("\n  function ", r0 + 10));
+    const iR = ren.indexOf("pasangLatihanRoeDer(wadah, m);"), iG = ren.indexOf("gulirJangkarPelajaran(wadah);");
+    if (iR < 0) salah.push("renderPelajaran wajib memasang latihan ROE/DER");
+    else if (iG >= 0 && iG < iR) salah.push("guliran jangkar harus setelah latihan ROE/DER");
+    const badan = t.slice(a, d).replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/[^\n]*/g, "");
+    if (/buruan|pasti (naik|untung)|rekomendasi|layak dibeli|saatnya (beli|jual)|sehat|murah|mahal/i.test(badan)) salah.push("kata ajakan atau penilaian dilarang");
+    if (/localStorage|sessionStorage|fetch\(|XMLHttpRequest|innerHTML/.test(badan)) salah.push("tanpa simpan/kirim data dan tanpa innerHTML");
+    return salah;
+  };
+  const sD = ujiD(appD);
+  ok(!sD.length, "Latihan ROE/DER: " + sD.join("; "));
+  for (const [rusak, pesan] of [
+    [appD.replace("roe: l / e * 100,", "roe: l / e,"), "rumus ROE/DER"],
+    [appD.replace("r.liabilitas = b; r.der = b / e;", "r.liabilitas = b; r.der = e / b;"), "rumus ROE/DER"],
+    [appD.replace('    if (!(e > 0)) return { galat: "ekuitas-negatif" };\n', ""), "isian tidak sah"],
+    [appD.replace("if (!isFinite(b) || b < 0 ||", "if (!isFinite(b) ||"), "isian tidak sah"],
+    [appD.replace('    if (m.id !== "praktik-analisis-sendiri") return;\n', ""), "praktik-analisis-sendiri"],
+    [appD.replace("    pasangLatihanRoeDer(wadah, m);\n", ""), "renderPelajaran"],
+    [appD.replace("bukan penilaian baik atau buruknya saham.", "ROE di atas 15% berarti saham layak dibeli."), "kata ajakan"],
+  ]) ok(rusak !== appD && ujiD(rusak).some((x) => x.includes(pesan)), `uji balik latihan ROE/DER: "${pesan}" harus tertangkap`);
+}
+
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);
