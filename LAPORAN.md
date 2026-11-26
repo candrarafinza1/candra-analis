@@ -2530,3 +2530,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Nina: `node tests/cek.mjs` lolos, cek baru 2f-32 + 7 uji balik (tautan harus menuju pelajaran yang benar-benar memasang kotak itu; rumus sama persis dengan kotak latihan; catatan DES wajib). 390px gelap & 1280px terang tanpa scroll horizontal; klik tautan porsi → judul kotak terfokus di atas layar. Tegar: tanpa skrip/rahasia baru. Yoga: push ke main.
 - Berikutnya: Kirana + Laras meninjau Lembar rumus setelah tayang.
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 26 Nov 2026, sesi 17.xx WIB (Bima)
+- Agenda: tidak dicek di sesi ini (rutin 07.xx/13.xx; ANDA & BUAT dicari lagi 07.xx Jumat). Proyek prioritas lain masih menunggu DES/sumber, jadi tim mengerjakan tugas pendukung yang bermanfaat.
+- Laras + Arif: modul PDF kini punya lampiran "Lembar rumus" (hal. 22–23, tercantum di daftar isi): 7 kelompok rumus dari belajar.html #lembar-rumus (satu sumber untuk web dan PDF), tiap rumus menyebut pelajaran tempat kotak latihannya; catatan DES untuk dua rasio syariah ikut tercetak. Teks unduh di Belajar menyebut lembar rumus. PDF dibuat ulang.
+- Nina: sidik data PDF kini juga memuat bagian Lembar rumus (ubah rumus tanpa membuat ulang PDF → cek gagal); uji ujung-ke-ujung memastikan setiap baris rumus tampil di halaman lampiran (bukan sekadar di isi pelajaran) + 3 uji balik. `node tests/cek.mjs` lolos; belajar.html 390px & 1280px tanpa scroll horizontal & galat JS. Tegar: tanpa skrip/rahasia baru. Yoga: push ke main. README diperbarui.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

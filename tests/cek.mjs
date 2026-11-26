@@ -5055,12 +5055,15 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
   // Nina & Tegar (15 Nov 21.09): modul PDF selaras dengan kurikulum. tools/buat-modul-pdf.py menulis
   // "sidik-data <16 huruf SHA-256 dari data/modul.js + \n + data/rujukan.js>" di Keywords PDF;
   // di sini dihitung ulang. Beda = kurikulum/rujukan berubah tetapi PDF belum dibuat ulang.
-  const sidikData = (modulB, rujukanB) => createHash("sha256").update(Buffer.concat([modulB, Buffer.from("\n"), rujukanB])).digest("hex").slice(0, 16);
-  const cekModulPdf = (pdf, modulB, rujukanB, skripPy, readme) => {
+  // Laras + Arif (26 Nov 2026 17.xx): sidik juga memuat bagian #lembar-rumus belajar.html (lampiran Lembar rumus di PDF).
+  const potongLembar = (bel) => { const a = bel.indexOf('id="lembar-rumus"'), z = bel.indexOf("</section>", a); return a < 0 || z < 0 ? Buffer.from("") : bel.subarray(a, z); };
+  const belajarB = readFileSync("belajar.html");
+  const sidikData = (modulB, rujukanB, belB = belajarB) => createHash("sha256").update(Buffer.concat([modulB, Buffer.from("\n"), rujukanB, Buffer.from("\n"), potongLembar(belB)])).digest("hex").slice(0, 16);
+  const cekModulPdf = (pdf, modulB, rujukanB, skripPy, readme, belB = belajarB) => {
     const salah = [];
     const kw = pdf.toString("latin1").match(/\/Keywords \(sidik-data ([0-9a-f]{16})\)/g) || [];
     if (kw.length !== 1) salah.push(`modul PDF harus memuat tepat satu sidik data di Keywords (ada ${kw.length})`);
-    else if (kw[0].slice(-17, -1) !== sidikData(modulB, rujukanB)) salah.push("modul PDF belum dibuat ulang setelah data/modul.js atau data/rujukan.js berubah: jalankan python3 tools/buat-modul-pdf.py");
+    else if (kw[0].slice(-17, -1) !== sidikData(modulB, rujukanB, belB)) salah.push("modul PDF belum dibuat ulang setelah data/modul.js, data/rujukan.js, atau Lembar rumus belajar.html berubah: jalankan python3 tools/buat-modul-pdf.py");
     if (!/keywords=f"sidik-data \{sidik_data\(\)\}"/.test(skripPy)) salah.push("tools/buat-modul-pdf.py tidak menulis sidik data ke Keywords PDF");
     const iB = readme.indexOf("## Cara menguji\n");
     const bagian = iB < 0 ? "" : readme.slice(iB).split(/\n## /)[0];
@@ -5084,6 +5087,9 @@ for (const f of [...halaman, "data/modul.js", "data/istilah.js", "assets/app.js"
   ];
   for (const [p, m, r, py, rd, pesan] of rusakPdf)
     ok(cekModulPdf(p, m, r, py, rd).some((x) => x.includes(pesan)), `uji balik modul PDF: "${pesan}" harus tertangkap`);
+  // Lembar rumus berubah (mis. satu rumus diganti) tetapi PDF belum dibuat ulang → tertangkap.
+  const belUbah = Buffer.from(belajarB.toString("utf8").replace("Modal = harga per lembar × 100 × jumlah lot", "Modal = harga × lot"), "utf8");
+  ok(!belUbah.equals(belajarB) && cekModulPdf(pdfB, modulB, rujukanB, skripPyT, readmeT, belUbah).some((x) => x.includes("Lembar rumus")), 'uji balik modul PDF: "Lembar rumus berubah tanpa membuat ulang PDF" harus tertangkap');
   // Nina & Tegar (16 Nov 07.10): jumlah halaman modul PDF masuk akal terhadap kurikulum.
   // Minimal = sampul + pengantar/daftar isi + 1 halaman per pelajaran + kunci jawaban (bila ada kuis) + rujukan.
   // Maksimal = minimal + 4 halaman lanjutan per pelajaran (lebih dari itu tanda isi berulang/rusak).
@@ -5673,6 +5679,14 @@ for i, (j, kuis) in enumerate(zip(masuk["judul"], masuk["kuis"]), 1):
     if semua.count(rapat(j)) < (3 if kuis else 2): hasil.append(f"modul PDF: judul pelajaran {i} \"{j[:40]}\" harus tampil di daftar isi dan halaman pelajaran" + (" serta kunci jawaban" if kuis else ""))
 for r in masuk["rujukan"]:
     if rapat(r["judul"]) not in semua: hasil.append(f"modul PDF: rujukan \"{r['judul'][:40]}\" tidak tampil di PDF hasil")
+import re as _re
+_buang = lambda t: _re.sub(r"^CandraAnalis·ModulBelajarSahamSyariahHalaman\d+", "", t)
+_lr = [k for k, t in enumerate(hal) if k > 1 and _buang(t).startswith("Lembarrumus")]
+_akhir = next((k for k, t in enumerate(hal) if _lr and k > _lr[0] and _buang(t).startswith("Kuncijawaban")), len(hal))
+lampiran = "".join(hal[_lr[0]:_akhir]) if _lr else ""
+if masuk.get("rumus") and not _lr: hasil.append("modul PDF: halaman lampiran \"Lembar rumus\" tidak ada di PDF hasil")
+for x in masuk.get("rumus", []):
+    if _lr and rapat(x) not in lampiran: hasil.append(f"modul PDF: rumus \"{x[:40]}\" dari Lembar rumus belajar.html tidak tampil di PDF hasil")
 harap = [r["url"] for r in masuk["rujukan"]]
 if uri != harap: hasil.append(f"modul PDF: tautan (URI) di PDF hasil tidak sama dengan url data/rujukan.js ({len(uri)} tautan vs {len(harap)} url; beda pertama: {next((u for u, h in zip(uri + [''] * len(harap), harap) if u != h), '-')[:60]})")
 print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
@@ -5681,7 +5695,16 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
     judul: MODUL.map((m) => m.judul),
     kuis: MODUL.map((m) => Array.isArray(m.kuis) && m.kuis.length > 0),
     rujukan: RUJUKAN.flatMap((k) => k.item.map((r) => ({ judul: r.judul, url: r.url }))),
+    // Laras + Arif (26 Nov 2026 17.xx): setiap baris rumus Lembar rumus belajar.html wajib tampil di lampiran PDF.
+    rumus: (() => {
+      const bel = readFileSync("belajar.html", "utf8"), a = bel.indexOf('id="lembar-rumus"'), z = bel.indexOf("</section>", a);
+      return [...bel.slice(a, z).matchAll(/<div class="kotak-rumus">([\s\S]*?)<\/div>\s*(?=<a|<p)/g)].flatMap(([, x]) => {
+        const b = [...x.matchAll(/<div>([^<]+)<\/div>/g)].map((m) => m[1]);
+        return (b.length ? b : [x]).map((t) => t.replace(/&amp;/g, "&"));
+      });
+    })(),
   };
+  ok(harapE2E.rumus.length >= 10, `uji ujung-ke-ujung modul PDF: baris Lembar rumus terbaca ${harapE2E.rumus.length}, harus ≥ 10`);
   const sidikAset = () => (existsSync("assets/modul/modul-candra-analis.pdf") ? createHash("sha256").update(readFileSync("assets/modul/modul-candra-analis.pdf")).digest("hex") : "");
   const jalankanE2E = (skrip, harap) => {
     const r = spawnSync("python3", ["-I", "-c", KODE_E2E], { input: JSON.stringify({ skrip, ...harap }), encoding: "utf8", timeout: 60000 });
@@ -5702,6 +5725,8 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
       [skripE2E.replace(`isi.append(Paragraph(m["judul"], GAYA["h1"]))`, `isi.append(Paragraph(m["judul"][:8], GAYA["h1"]))`), harapE2E, "tidak tampil di halaman pelajarannya"],
       [skripE2E.replace(`<link href='{r['url']}' color='#262b63'>`, `<link href='{r['url']}/' color='#262b63'>`), harapE2E, "tautan (URI)"],
       [skripE2E.replace("doc.build(isi)", "raise RuntimeError('rusak')"), harapE2E, "skrip galat"],
+      [skripE2E.replace('    for r in baca_lembar_rumus():', '    for r in baca_lembar_rumus()[1:]:'), harapE2E, "dari Lembar rumus belajar.html tidak tampil"],
+      [skripE2E.replace('isi.append(Paragraph("Lembar rumus", GAYA["h1"]))', 'isi.append(Paragraph("Rumus", GAYA["h1"]))'), harapE2E, "halaman lampiran \"Lembar rumus\" tidak ada"],
     ];
     for (const [s, h, pesan] of rusakE2E) {
       const x = jalankanE2E(s, h);

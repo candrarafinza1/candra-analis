@@ -198,16 +198,53 @@ def kaki_halaman(c, doc):
     c.restoreState()
 
 
+def potong_lembar_rumus():
+    """Bagian #lembar-rumus di belajar.html (byte), dari 'id="lembar-rumus"' sampai '</section>' pertama sesudahnya.
+    Laras + Arif (26 Nov 2026, usul Kirana di IDE.md #64): satu sumber untuk web dan PDF."""
+    with open(os.path.join(AKAR, "belajar.html"), "rb") as f:
+        b = f.read()
+    a = b.find(b'id="lembar-rumus"')
+    z = b.find(b"</section>", a)
+    if a < 0 or z < 0:
+        raise SystemExit("belajar.html: bagian #lembar-rumus tidak ditemukan")
+    return b[a:z]
+
+
+def baca_lembar_rumus():
+    """Daftar rumus dari belajar.html: [{nama, rumus: [baris], catatan, modul}] (urutan sama dengan halaman Belajar)."""
+    import html as h, re
+    isi = potong_lembar_rumus().decode("utf8")
+    hasil = []
+    for li in re.findall(r"<li>([\s\S]*?)</li>", isi):
+        nama = re.search(r'<p class="lembar-rumus-nama">([^<]+)</p>', li)
+        kotak_r = re.search(r'<div class="kotak-rumus">([\s\S]*?)</div>\s*(?=<a|<p)', li)
+        modul_id = re.search(r'href="pelajaran\.html\?m=([a-z-]+)#', li)
+        catatan = re.search(r'<p class="lembar-rumus-catatan">([^<]+)</p>', li)
+        if not (nama and kotak_r and modul_id):
+            raise SystemExit("belajar.html: butir lembar rumus tidak lengkap (nama, kotak-rumus, tautan pelajaran)")
+        baris = re.findall(r"<div>([^<]+)</div>", kotak_r.group(1)) or [kotak_r.group(1)]
+        hasil.append({
+            "nama": h.unescape(nama.group(1).strip()),
+            "rumus": [h.unescape(x.strip()) for x in baris],
+            "catatan": h.unescape(catatan.group(1).strip()) if catatan else "",
+            "modul": modul_id.group(1),
+        })
+    return hasil
+
+
 def sidik_data():
-    """Sidik data kurikulum: 16 huruf awal SHA-256 dari isi data/modul.js + baris baru + data/rujukan.js.
+    """Sidik data kurikulum: 16 huruf awal SHA-256 dari isi data/modul.js + baris baru + data/rujukan.js
+    + baris baru + bagian #lembar-rumus belajar.html.
     Ditulis di Keywords PDF ("sidik-data …"); tests/cek.mjs menghitung ulang dengan cara yang sama,
-    sehingga lupa membuat ulang PDF setelah kurikulum berubah tertangkap (Nina & Tegar)."""
+    sehingga lupa membuat ulang PDF setelah kurikulum atau lembar rumus berubah tertangkap (Nina & Tegar)."""
     h = hashlib.sha256()
     with open(os.path.join(AKAR, "data", "modul.js"), "rb") as f:
         h.update(f.read())
     h.update(b"\n")
     with open(os.path.join(AKAR, "data", "rujukan.js"), "rb") as f:
         h.update(f.read())
+    h.update(b"\n")
+    h.update(potong_lembar_rumus())
     return h.hexdigest()[:16]
 
 
@@ -250,6 +287,7 @@ def main():
     isi.append(Paragraph("Daftar isi", GAYA["h2"]))
     for i, m in enumerate(modul, 1):
         isi.append(Paragraph(f"<b>{i}.</b>  {m['judul']}  <font color='#4a5266' size='9'>(waktu baca ± {menit_baca(m)} menit)</font>", GAYA["daftar"]))
+    isi.append(Paragraph("<b>Lampiran.</b>  Lembar rumus", GAYA["daftar"]))
     isi.append(Spacer(1, 14))
     isi += kotak(
         "Candra Analis adalah platform belajar dan penyaji data. Kami bukan penasihat investasi dan "
@@ -274,6 +312,27 @@ def main():
                     baris.append(Paragraph(f"{h}. {pil}", GAYA["kecil"]))
                 baris.append(Spacer(1, 6))
                 isi.append(KeepTogether(baris))
+
+    # Lembar rumus (Laras + Arif, 26 Nov 2026, IDE.md #64): semua rumus dari belajar.html #lembar-rumus.
+    # Tanpa tautan (PDF untuk dibaca/dicetak); tiap rumus menyebut pelajaran tempat kotak latihannya.
+    nomor = {m["id"]: (i, m["judul"]) for i, m in enumerate(modul, 1)}
+    isi.append(PageBreak())
+    isi.append(Paragraph("Lembar rumus", GAYA["h1"]))
+    isi.append(Paragraph(
+        "Semua rumus dari pelajaran dalam satu tempat, untuk mengulang sebelum membaca laporan keuangan. "
+        "Setiap rumus punya kotak latihan di halaman pelajarannya di website untuk mencoba menghitung sendiri "
+        "dengan angka Anda.", GAYA["meta"]))
+    for r in baca_lembar_rumus():
+        if r["modul"] not in nomor:
+            raise SystemExit(f"lembar rumus: pelajaran {r['modul']} tidak ada di data/modul.js")
+        no, judul = nomor[r["modul"]]
+        e = lambda t: t.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+        blok = [Paragraph(e(r["nama"]), GAYA["h2"])]
+        blok += kotak("<br/>".join(e(x) for x in r["rumus"]), NAIK_MUDA, "rumus")
+        if r["catatan"]:
+            blok.append(Paragraph(e(r["catatan"]), GAYA["kecil"]))
+        blok.append(Paragraph(f"Latihan: Pelajaran {no}, {e(judul)} (kotak Hitung sendiri di website).", GAYA["kecil"]))
+        isi.append(KeepTogether(blok))
 
     # Kunci jawaban kuis
     if any(m.get("kuis") for m in modul):
