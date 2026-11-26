@@ -391,6 +391,12 @@ tbody tr:hover { background: var(--hover-baris); }
   background: var(--putih); border: 1px solid var(--garis); border-radius: var(--radius-kecil);
   padding: 14px 16px; margin: 0 0 1em; font-variant-numeric: tabular-nums;
 }
+/* Dewi + Laras (26 Nov 2026, IDE.md #64): Lembar rumus di belajar.html, satu kolom di HP, dua kolom di layar lebar */
+.lembar-rumus { list-style: none; padding: 0; margin: 1em 0 0; display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); }
+.lembar-rumus li { min-width: 0; }
+.lembar-rumus-nama { font-weight: 700; margin: 0 0 .4em; }
+.lembar-rumus .kotak-rumus { margin-bottom: .5em; overflow-wrap: anywhere; }
+.lembar-rumus-catatan { font-size: .95rem; color: var(--tinta-2); margin: 0 0 .5em; }
 .kotak-penting {
   background: var(--naik-muda); border-radius: var(--radius-kecil);
   padding: 14px 16px; margin: 0 0 1em;

@@ -2523,3 +2523,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Arif + Laras + Hana: kotak "Hitung sendiri: hasil bersih setelah biaya beli dan jual" (IDE.md #63) di pelajaran Lot, harga, dan biaya transaksi, tepat setelah kotak modal. Nilai beli/jual = harga × 100 × lot; persen biaya beli & jual diisi pengguna dari aplikasinya (tanpa angka bawaan, wajib berpasangan); hasil bersih = selisih − biaya beli − biaya jual. Bahasa netral ("uang yang kembali lebih banyak/sedikit daripada uang yang keluar"), tertulis bukan saran membeli atau menjual, tanpa simpan/kirim data.
 - Nina: `node tests/cek.mjs` lolos, cek baru 2f-31 + 8 uji balik; 390px gelap & 1280px terang tanpa scroll horizontal & galat JS; jangkar `#judul-latihan-bersih` terfokus. Masalah ringan diperbaiki: nama variabel `n` di fungsi baru membuat uji balik Agenda hitung lot salah sasaran → diganti `jml`. Tegar: teks lewat el(), tanpa rahasia. Yoga: push ke main.
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 26 Nov 2026, sesi 16.xx WIB (Bima)
+- Agenda: tidak dicek di sesi ini (rutin 07.xx/13.xx; ANDA & BUAT dicari lagi 07.xx Jumat).
+- Dewi + Laras: bagian "Lembar rumus" (IDE.md #64) di halaman Belajar, di bawah daftar pelajaran: modal per lot, hasil bersih, perubahan laba, PER & dividend yield, porsi, ROE & DER, dua rasio syariah (dengan catatan: hasil hitungan bukan status syariah, status resmi dari DES OJK). Tiap kelompok punya tautan "Coba hitung … sendiri" ke kotak latihan di pelajarannya. Teks biasa, tanpa JS & animasi; satu kolom di HP, tiga kolom di layar lebar.
+- Nina: `node tests/cek.mjs` lolos, cek baru 2f-32 + 7 uji balik (tautan harus menuju pelajaran yang benar-benar memasang kotak itu; rumus sama persis dengan kotak latihan; catatan DES wajib). 390px gelap & 1280px terang tanpa scroll horizontal; klik tautan porsi → judul kotak terfokus di atas layar. Tegar: tanpa skrip/rahasia baru. Yoga: push ke main.
+- Berikutnya: Kirana + Laras meninjau Lembar rumus setelah tayang.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

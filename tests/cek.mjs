@@ -8671,5 +8671,58 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
   ]) ok(rusak !== appB && ujiB(rusak).some((x) => x.includes(pesan)), `uji balik latihan hasil bersih: "${pesan}" harus tertangkap`);
 }
 
+
+// 2f-32. Lembar rumus di belajar.html (Nina, 26 Nov 2026 16.xx; Dewi + Laras, IDE.md #64 Kirana).
+// Setiap tautan "Coba hitung" harus menuju pelajaran yang benar-benar memasang kotak latihan itu (dibaca dari
+// pasangLatihan*() di app.js), dan setiap baris rumus harus sama persis dengan teks kotak rumus di app.js.
+{
+  const appR = readFileSync("assets/app.js", "utf8"), belR = readFileSync("belajar.html", "utf8");
+  const idModul = new Set((MODUL || []).map((m) => m.id));
+  const ujiLembar = (bel, app) => {
+    const salah = [];
+    const a = bel.indexOf('id="lembar-rumus"'), b = bel.indexOf("</section>", a);
+    if (a < 0 || b < 0) return ["bagian #lembar-rumus tidak ada di belajar.html"];
+    const isi = bel.slice(a, b);
+    if (!/id="judul-lembar-rumus"/.test(isi)) salah.push("judul #judul-lembar-rumus tidak ada");
+    // jangkar → modul yang memasangnya
+    const pasang = new Map();
+    for (const [, nama, id] of app.matchAll(/function buatLatihan(\w+)\(\) \{[\s\S]*?id: "(judul-latihan-[a-z-]+)"/g)) {
+      const m = app.match(new RegExp("function pasangLatihan" + nama + "\\(wadah, m\\) \\{\\n    if \\(m\\.id !== \"([a-z-]+)\"\\) return;"));
+      if (m) pasang.set(id, m[1]);
+    }
+    const tautan = [...isi.matchAll(/<a href="pelajaran\.html\?m=([a-z-]+)#(judul-latihan-[a-z-]+)">([^<]+)<\/a>/g)];
+    if (tautan.length < 7) salah.push(`tautan latihan kurang (${tautan.length} dari 7)`);
+    const dipakai = new Set();
+    for (const [, modul, jangkar, teks] of tautan) {
+      if (!idModul.has(modul)) salah.push(`modul ${modul} tidak ada`);
+      if (!pasang.has(jangkar)) salah.push(`jangkar ${jangkar} tidak dibuat app.js`);
+      else if (pasang.get(jangkar) !== modul) salah.push(`jangkar ${jangkar} ada di pelajaran ${pasang.get(jangkar)}, bukan ${modul}`);
+      if (!/^Coba hitung /.test(teks)) salah.push(`teks tautan harus diawali "Coba hitung": ${teks}`);
+      dipakai.add(jangkar);
+    }
+    for (const j of pasang.keys()) if (j !== "judul-latihan-urut" && !dipakai.has(j)) salah.push(`kotak ${j} belum masuk lembar rumus`);
+    // rumus sama persis dengan app.js
+    const rumus = [...isi.matchAll(/<div class="kotak-rumus">([\s\S]*?)<\/div>\s*(?=<a|<p)/g)].flatMap(([, x]) => {
+      const baris = [...x.matchAll(/<div>([^<]+)<\/div>/g)].map((m) => m[1]);
+      return baris.length ? baris : [x];
+    });
+    if (rumus.length < 10) salah.push(`baris rumus kurang (${rumus.length} dari 10)`);
+    for (const r of rumus) if (!app.includes('text: "' + r.replace(/&amp;/g, "&") + '"')) salah.push(`rumus berbeda dengan kotak latihan: ${r}`);
+    if (!/bukan status syariah[\s\S]*Daftar Efek Syariah \(DES\) OJK/.test(isi)) salah.push("catatan rasio syariah: hasil hitungan bukan status syariah, status resmi dari DES OJK");
+    if (/<script|on[a-z]+=/i.test(isi)) salah.push("lembar rumus harus teks biasa tanpa skrip");
+    return salah;
+  };
+  const sL = ujiLembar(belR, appR);
+  ok(!sL.length, "Lembar rumus: " + sL.join("; "));
+  for (const [bel, app, pesan] of [
+    [belR.replace("m=mengelola-risiko#judul-latihan-porsi", "m=laporan-keuangan#judul-latihan-porsi"), appR, "bukan laporan-keuangan"],
+    [belR.replace("#judul-latihan-roeder", "#judul-latihan-roe"), appR, "tidak dibuat app.js"],
+    [belR.replace("Porsi = nilai satu saham ÷ jumlah nilai semua saham × 100%", "Porsi = nilai satu saham ÷ jumlah nilai semua saham"), appR, "rumus berbeda"],
+    [belR.replace(/\s*<li>\s*<p class="lembar-rumus-nama">Hasil bersih[\s\S]*?<\/li>/, ""), appR, "judul-latihan-bersih belum masuk"],
+    [belR.replace("Hasil hitungan sendiri bukan status syariah.", "Hasil hitungan ini menentukan status syariah."), appR, "bukan status syariah"],
+    [belR, appR.replace('    if (m.id !== "saham-syariah") return;', '    if (m.id !== "laporan-keuangan") return;'), "bukan saham-syariah"],
+    [belR.replace('id="lembar-rumus"', 'id="rumus"'), appR, "tidak ada di belajar.html"],
+  ]) ok((bel !== belR || app !== appR) && ujiLembar(bel, app).some((x) => x.includes(pesan)), `uji balik lembar rumus: "${pesan}" harus tertangkap`);
+}
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);
