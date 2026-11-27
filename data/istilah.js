@@ -390,5 +390,9 @@ window.ISTILAH = [
   // Arti umum tanpa angka; juga cocok untuk "Laba dari Divestasi … (sebelum pajak)" di data emiten.
   { istilah: "Sebelum pajak (bruto)", pola: ["sebelum pajak"],
     arti: "Angka yang belum dikurangi pajak, disebut juga bruto. Di situs ini paling sering dipakai untuk dividen: dividen per saham yang diumumkan emiten adalah angka sebelum pajak, jadi uang yang akhirnya diterima bisa sama atau lebih kecil, tergantung aturan pajak yang berlaku untuk penerimanya (lihat istilah Pajak dividen).",
+    pelajaran: "praktik-beli-pertama" },
+  // Sari + Laras (27 Nov 13.xx): dari sisir kabar terbaru (kabar dividen AADI); Hana meninjau. Arti umum tanpa angka.
+  { istilah: "Kurs tengah BI", pola: ["kurs tengah"],
+    arti: "Nilai tukar rata-rata antara kurs jual dan kurs beli yang diumumkan Bank Indonesia setiap hari kerja. Emiten yang menetapkan dividen dalam dolar AS sering memakainya untuk menghitung jumlah rupiah yang dibayarkan, jadi angka rupiahnya baru pasti pada tanggal kurs yang disebut pengumuman.",
     pelajaran: "praktik-beli-pertama" }
 ];

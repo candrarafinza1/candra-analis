@@ -11,6 +11,11 @@
 window.KABAR_JENIS = ["Laporan keuangan", "Pembelian kembali saham", "Dividen", "Rapat umum pemegang saham", "Aksi korporasi lain"];
 
 window.KABAR = [
+  // Dividen interim AADI tahun buku 2026 — Investortrust 25 Nov 2026; total, jadwal & kurs sama di StockWatch 25 Nov dan Kontan (di TradingView);
+  // Kontan: dividen per saham belum diumumkan (Raka + Fajar, ditinjau Hana, 27 Nov 13.xx)
+  { kode: "AADI", tanggal: "2026-11-25", jenis: "Dividen",
+    ringkas: "Adaro Andalan Indonesia membagikan dividen interim tahun buku 2026 sebesar US$500 juta; dividen per saham belum diumumkan. Dibayar dalam rupiah dengan kurs tengah BI 7 Desember 2026. Cum date 3 Desember, pembayaran 11 Desember 2026.",
+    sumber: { judul: "Investortrust, 25 Nov 2026: Adaro Andalan (AADI) tebar dividen interim US$ 500 juta, cek jadwal berikut", url: "https://investortrust.id/market/123672/adaro-andalan-aadi-tebar-dividen-interim-us-500-juta-cek-jadwal-berikut" } },
   // Laporan 9 bulan BRIS — Investortrust, 24 Nov 2026; angka sama di Katadata, Infobanknews, Warta Ekonomi 24 Nov 2026 (Raka, ditinjau Hana)
   { kode: "BRIS", tanggal: "2026-11-24", jenis: "Laporan keuangan",
     ringkas: "Laporan Januari–September 2026 terbit. Bank Syariah Indonesia mencatat laba bersih Rp6,13 triliun, tumbuh 10,02% dari Rp5,57 triliun pada periode yang sama 2025 (Bisnis.com, 29 Okt 2025).",

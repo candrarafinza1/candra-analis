@@ -2592,3 +2592,12 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Nina: "sekuritas" masuk cek kata kunci + uji balik tertangkap; `node tests/cek.mjs` lolos; Agenda, pelajaran, Belajar, Kabar di 390px gelap & 1280px terang tanpa scroll horizontal & galat JS. Kurikulum tidak berubah, PDF modul tidak dibuat ulang. Yoga: push ke main.
 - Tugas pendukung berikutnya dicatat: sisir kotak Hitung contoh dividen, pita Agenda beranda, dan kabar terbaru untuk kamus.
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 27 Nov 2026, sesi 13.xx WIB (Bima)
+- Laporan masuk kerja siang dikirim ke Rafinza (13.09).
+- Agenda: +0 IPO, +1 dividen, −0 kedaluwarsa. Raka + Fajar + Hana: **AADI dividen interim tahun buku 2026 US$500 juta** masuk (cum 3 Des, ex 4 Des, recording 7 Des, bayar 11 Des 2026; sama di Investortrust, StockWatch, Kontan; DES baris 8 sama dengan data emiten). Dividen per saham belum diumumkan, jadi tidak ditulis angka per saham: Arif menambah `totalDividenTeks` (kartu: "Dividen per saham belum diumumkan; total dividen US$500 juta"), contoh hitungan & hitung lot tidak tampil untuk kartu itu. Nina: cek data + kalimat kartu + 10 uji balik. ANDA & BUAT tetap tanpa bukti syariah. DES periode II 2026 belum terbit (terbaru KEP-21/D.04/2026).
+- Raka + Hana: kabar "Dividen" AADI 25 Nov di halaman Kabar & profil AADI. Sari + Laras + Hana: sisir kotak Hitung, pita beranda, kabar terbaru → satu istilah baru "Kurs tengah BI"; Nina: cek kata kunci kabar + uji balik.
+- Dewi + Kirana: Agenda, beranda, profil AADI, Radar, Kabar di 390px gelap & 1280px terang tanpa scroll horizontal & galat JS (galat hanya font Google yang diblokir jaringan alat tim). Tautan "Profil AADI" dan label "Baru ditambahkan" kini tampil dengan data sungguhan → tinjauan Kirana selesai. Kotak Info profil AADI muncul (cum date 6 hari lagi).
+- Nina: `node tests/cek.mjs` lolos. Tegar: teks lewat textContent, tanpa skrip/rahasia baru; 5 alamat sumber baru https, bukan pemendek tautan. Yoga: push ke main. Kurikulum tidak berubah, PDF modul tidak dibuat ulang.
+- Tugas baru: Fajar + Raka mengisi DPS AADI begitu diumumkan (sekitar 7–8 Des); Arif + Sari + Hana: kalimat "dibayar dalam rupiah dengan kurs tengah BI" di kartu dividen US$.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
