@@ -978,6 +978,49 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
     return { salah, jumlahPola: pola.length };
   };
 
+  // Nina (27 Nov 16.xx, temuan Dewi): "(" dan ")" yang menempel pada istilah harus satu bungkus dengan tombolnya
+  // (span.ikat-istilah) agar tidak tertinggal sendirian di ujung baris; teks kalimat tidak boleh berubah.
+  const ujiIkat = (blokUji) => {
+    const { doc, semua } = buatDom();
+    const ctxI = {
+      document: doc, MODUL, NodeFilter: { SHOW_TEXT: 4, FILTER_ACCEPT: 1, FILTER_REJECT: 2, FILTER_SKIP: 3 },
+      window: { ISTILAH: [{ istilah: "Sebelum pajak", pola: ["sebelum pajak"], arti: "Belum dikurangi pajak." },
+        { istilah: "Panjang", pola: ["istilah yang sangat panjang sekali"], arti: "Contoh." }],
+      innerWidth: 390, innerHeight: 800, addEventListener() {}, matchMedia: () => ({ matches: false, addEventListener() {} }) },
+    };
+    vm.runInNewContext(ambilEl + "\n" + blokUji + "\n;globalThis.pasangIstilah = pasangIstilah;", ctxI);
+    const salah = [];
+    const kalimat = "Total dividen US$500 juta (sebelum pajak), lalu (istilah yang sangat panjang sekali).";
+    const p = doc.createElement("p");
+    p.appendChild(doc.createTextNode(kalimat));
+    doc.body.appendChild(p);
+    ctxI.pasangIstilah(p);
+    if (p.textContent !== kalimat) salah.push("teks kalimat berubah");
+    const tombol = semua(p).filter((n) => n.nodeType === 1 && n.cocok("button.istilah"));
+    const pendek = tombol.find((b) => b.textContent === "sebelum pajak");
+    const ikat = pendek && pendek.parentNode;
+    if (!ikat || !ikat.cocok("span.ikat-istilah")) salah.push('"(sebelum pajak)," tidak dibungkus span.ikat-istilah');
+    else if (ikat.textContent !== "(sebelum pajak),") salah.push(`isi bungkus "${ikat.textContent}", seharusnya "(sebelum pajak),"`);
+    const panjang = tombol.find((b) => b.textContent.startsWith("istilah yang"));
+    if (panjang && panjang.parentNode.cocok("span.ikat-istilah")) salah.push("istilah panjang tidak boleh dibungkus (harus bisa turun baris)");
+    if (pendek) {
+      doc.kirim("click", { target: pendek });
+      const kotak = doc.getElementById("kotak-istilah");
+      if (!kotak || kotak.hidden || pendek.nextSibling !== kotak) salah.push("kotak istilah di dalam bungkus tidak terbuka tepat setelah tombol");
+    }
+    return salah;
+  };
+  const salahIkat = ujiIkat(blok);
+  ok(salahIkat.length === 0, `kurung menempel istilah: ${salahIkat.join("; ")}`);
+  const tanpaIkat = blok.replace("        ikatTandaIstilah(b, n, lanjut);\n", "");
+  ok(tanpaIkat !== blok && ujiIkat(tanpaIkat).some((s) => s.includes("tidak dibungkus")),
+    "uji balik: cek kurung harus gagal bila tanda kurung tidak lagi dibungkus bersama tombol istilah");
+  const ikatSemua = blok.replace("|| b.textContent.length > 24) return;", ") return;");
+  ok(ikatSemua !== blok && ujiIkat(ikatSemua).some((s) => s.includes("istilah panjang")),
+    "uji balik: cek kurung harus gagal bila istilah panjang ikut dibungkus");
+  ok(/\.ikat-istilah\s*\{\s*white-space:\s*nowrap/.test(readFileSync("assets/styles.css", "utf8")),
+    "styles.css: .ikat-istilah harus white-space: nowrap");
+
   const hasil = jalankan(ctx.window.ISTILAH || [], blok);
   ok(hasil.jumlahPola > 0 && hasil.salah.length === 0,
     `kotak istilah (DOM tiruan, ${hasil.jumlahPola} pola): ${hasil.salah.slice(0, 5).join("; ")}`);

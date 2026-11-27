@@ -620,6 +620,8 @@ button.istilah {
 /* Di tabel (kepala kolom & judul tabel) bidang ketuk minimal 24px tanpa menggeser tata letak (Dewi, 7 Nov 19.09) */
 table button.istilah { padding: 2px 0; margin: -2px 0; }
 button.istilah:hover, button.istilah[aria-expanded="true"] { color: var(--aksen); background: var(--sorot-istilah); border-radius: 3px; }
+/* Dewi (27 Nov 16.xx): "(" atau ")" ikut satu baris dengan tombol istilah di sebelahnya */
+.ikat-istilah { white-space: nowrap; }
 .kotak-istilah {
   position: fixed; z-index: 20; display: block; white-space: normal; text-align: left;
   background: var(--putih); color: var(--tinta); border: 1px solid var(--garis); border-top: 3px solid var(--bulan);

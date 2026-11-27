@@ -2269,10 +2269,32 @@
           title: "Apa itu " + ISTILAH[terbaik.i].istilah + "?", text: terbaik.teks });
         b.dataset.istilah = String(terbaik.i);
         sisa.parentNode.replaceChild(b, sisa);
+        ikatTandaIstilah(b, n, lanjut);
         n = lanjut;
       }
     });
     aturIstilahKepalaKartu(wadah);
+  }
+
+  // Dewi + Sari (27 Nov 16.xx): tombol istilah adalah kotak sebaris, jadi peramban boleh memotong baris tepat
+  // setelah "(" atau sebelum ")". Tanda kurung/kutip/baca yang menempel pada istilah dibungkus bersama tombol
+  // (span.ikat-istilah, white-space: nowrap) agar tidak tertinggal sendirian. Kalimat tidak berubah sama sekali.
+  // Istilah panjang (> 24 huruf) tidak dibungkus agar tetap bisa turun baris di HP.
+  var TANDA_BUKA = /[(\[“"‘]+$/, TANDA_TUTUP = /^[)\]”"’.,;:!?]+/;
+  function ikatTandaIstilah(b, sebelum, sesudah) {
+    var buka = sebelum && TANDA_BUKA.exec(sebelum.nodeValue), tutup = sesudah && TANDA_TUTUP.exec(sesudah.nodeValue);
+    if ((!buka && !tutup) || b.textContent.length > 24) return;
+    var ikat = el("span", { class: "ikat-istilah" });
+    b.parentNode.insertBefore(ikat, b);
+    if (buka) {
+      sebelum.nodeValue = sebelum.nodeValue.slice(0, sebelum.nodeValue.length - buka[0].length);
+      ikat.appendChild(document.createTextNode(buka[0]));
+    }
+    ikat.appendChild(b);
+    if (tutup) {
+      sesudah.nodeValue = sesudah.nodeValue.slice(tutup[0].length);
+      ikat.appendChild(document.createTextNode(tutup[0]));
+    }
   }
 
   // Arif + Nina (7 Nov 19.09): di HP, Peringkat tampil sebagai kartu dan kepala tabel disembunyikan.
