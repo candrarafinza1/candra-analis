@@ -7684,6 +7684,8 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
     if (f({ mataUang: "USD" }) !== "") salah.push("tanpa bayarRupiah harus kosong");
     if (f({ mataUang: "IDR", bayarRupiah: { tanggalKurs: "2026-12-07" } }) !== "") salah.push("dividen rupiah harus kosong");
     if (!/var rp = teksBayarRupiah\(a\);\s*if \(rp\) info\.push\(rp\);/.test(js)) salah.push("kartu Agenda wajib memakai teksBayarRupiah");
+    // Nina (27 Nov 15.xx): kotak Info profil & Radar memakai kalimat yang sama, diletakkan setelah "tahun buku …." dan sebelum "Ini jadwal".
+    if (!/var rpInfo = teksBayarRupiah\(a\);/.test(js) || !/a\.tahunBuku \+ "\." \+ \(rpInfo \? " " \+ rpInfo : ""\) \+ " Ini jadwal/.test(js)) salah.push("kotak Info profil/Radar wajib memakai teksBayarRupiah");
     if (/Rp ?\d/.test(js.slice(i, j))) salah.push("kalimat tidak boleh memuat angka rupiah perkiraan");
     return salah;
   };
@@ -7692,6 +7694,8 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
   for (const [rusak, pesan] of [
     [app.replace('if (!b || a.mataUang !== "USD"', 'if (!b'), "dividen rupiah"],
     [app.replace("      if (rp) info.push(rp);", ""), "kartu Agenda"],
+    [app.replace('"." + (rpInfo ? " " + rpInfo : "") + " Ini jadwal', '". Ini jadwal'), "kotak Info"],
+    [app.replace("var rpInfo = teksBayarRupiah(a);", "var rpInfo = \"\";"), "kotak Info"],
     [app.replace('"Ditetapkan dalam dolar AS, dibayar dalam rupiah', '"Dibayar Rp1.176 dalam rupiah'), "kalimat"],
   ]) ok(rusak !== app && uji(rusak).some((x) => x.includes(pesan)), `uji balik Agenda kalimat bayar rupiah: "${pesan}" harus tertangkap`);
 }

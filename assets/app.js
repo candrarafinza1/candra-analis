@@ -2852,10 +2852,12 @@
     var c = dividenDekat(kode, kini);
     if (!c) return null;
     var a = c.x.data, namaB = PENJELASAN_AGENDA[c.x.berikut.kunci][0];
+    // Arif (27 Nov 2026, 15.xx): kalimat "dibayar dalam rupiah" sama dengan kartu Agenda, hanya bila field bayarRupiah ada.
+    var rpInfo = teksBayarRupiah(a);
     return el("div", { class: "info-agenda", role: "note" }, [
       el("p", { class: "info-agenda-kepala" }, [el("span", { class: "kabar-jenis", text: "Info" }), " ",
         el("strong", { text: namaB + " dividen " + a.jenis + " " + tanggalId(c.x.berikut.tanggal) + ", " + teksMundur(c.n) })]),
-      el("p", { text: teksDividenAgenda(a) + ", tahun buku " + a.tahunBuku + ". Ini jadwal, bukan tanda risiko dan bukan saran membeli atau menjual." }),
+      el("p", { text: teksDividenAgenda(a) + ", tahun buku " + a.tahunBuku + "." + (rpInfo ? " " + rpInfo : "") + " Ini jadwal, bukan tanda risiko dan bukan saran membeli atau menjual." }),
       el("p", null, [el("a", { href: "agenda.html", text: "Lihat semua tanggal dan sumbernya di Agenda" })])
     ]);
   }
