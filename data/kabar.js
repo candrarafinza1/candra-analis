@@ -104,6 +104,11 @@ window.KABAR = [
   { kode: "ICBP", tanggal: "2026-11-02", jenis: "Laporan keuangan",
     ringkas: "Indofood CBP merilis laporan Januari–September 2026: laba yang diatribusikan kepada pemilik entitas induk Rp6,16 triliun, dibandingkan Rp7,10 triliun pada periode yang sama 2025. Penjualan naik 15%.",
     sumber: { judul: "Fortune IDN, 2 Nov 2026: Penjualan ICBP naik 15%, laba Rp6,16 triliun hingga September 2026", url: "https://www.fortuneidn.com/business/penjualan-icbp-naik-15-biaya-produksi-tekan-margin-00-4pj81-1dd5zr" } },
+  // Realisasi buyback UNTR 1 Jul–30 Sep 2026 + program 1 Okt–31 Des 2026 — EmitenNews 9 Okt 2026 (keterbukaan BEI 8 Okt);
+  // jumlah saham & nilai sama di IDX Channel lewat RCTI+ 1 Okt 2026 (Raka + Fajar, ditinjau Hana, 27 Nov 20.xx)
+  { kode: "UNTR", tanggal: "2026-10-09", jenis: "Pembelian kembali saham",
+    ringkas: "United Tractors membeli kembali 57.974.100 saham senilai Rp1,42 triliun pada 1 Juli–30 September 2026 (71,2% dari anggaran Rp2,0 triliun). Program berikutnya berjalan 1 Oktober–31 Desember 2026 dengan dana Rp2,0 triliun dari kas internal.",
+    sumber: { judul: "EmitenNews, 9 Okt 2026: United Tractors (UNTR) gunakan kas internal Rp5,6T buyback saham", url: "https://emitennews.com/news/united-tractors-untr-gunakan-kas-internal-rp56t-buyback-saham" } },
   // Pembelian kembali saham (buyback) — Kontan, 3 Okt 2026
   { kode: "UNTR", tanggal: "2026-10-03", jenis: "Pembelian kembali saham",
     ringkas: "United Tractors menyiapkan dana hingga Rp2 triliun untuk membeli kembali sahamnya sendiri (buyback).",

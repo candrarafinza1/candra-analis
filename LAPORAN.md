@@ -2633,3 +2633,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Raka + Hana: kabar baru HRUM: Harum Energy menghentikan buyback mulai 17 Nov 2026, lebih awal dari jadwal 28 Sep–24 Des 2026 (dana maks. Rp120 miliar), alasan rencana restrukturisasi internal pemegang saham pengendali (EmitenNews 16 Nov; sama di BCA Sekuritas 17 Nov). Realisasi pembelian tidak disebut sumber → tidak ditulis. Ringkasan pertama terlalu panjang (cek 20–260 karakter) → dipendekkan.
 - Nina: `node tests/cek.mjs` lolos. Dewi: Kabar di 390px & 1280px tanpa scroll horizontal & galat JS, kartu HRUM tampil. Tegar: sumber https, bukan pemendek tautan. Yoga: push ke main. Kurikulum tidak berubah.
 - Catatan: salinan lokal repo ternyata klon dangkal yang tertinggal; kerja dilakukan di cabang dari origin/main lalu di-push ke main. Bisnis.com gagal dibuka alat tim. Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 27 Nov 2026, 20.xx WIB — Bima
+- Raka + Fajar + Hana: kabar baru UNTR (Pembelian kembali saham, 9 Okt 2026): realisasi buyback 1 Juli–30 September 2026 sebanyak 57.974.100 saham senilai Rp1,42 triliun (71,2% dari anggaran Rp2,0 triliun), program berikutnya 1 Oktober–31 Desember 2026 dengan dana Rp2,0 triliun dari kas internal (EmitenNews 9 Okt; jumlah & nilai sama di IDX Channel lewat RCTI+ 1 Okt). Hana: kalimat netral, harga rata-rata tidak ditulis.
+- KLBF (program 17 Sep–17 Des 2026, Rp500 M) dan MBMA (rencana Rp1,38 T): belum ada sumber realisasi → tidak ditulis, dicoba lagi setelah program berakhir.
+- Nina: `node tests/cek.mjs` lolos. Dewi: Kabar (saringan buyback = 8 kabar) di 390px gelap & 1280px terang tanpa scroll horizontal & galat JS. Tegar: sumber https. Yoga: push ke main. Kurikulum tidak berubah.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
