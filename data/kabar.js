@@ -68,6 +68,15 @@ window.KABAR = [
   { kode: "ITMG", tanggal: "2026-11-13", jenis: "Dividen",
     ringkas: "Indo Tambangraya Megah menetapkan dividen interim tahun buku 2026 sebesar Rp1.286,83 per saham. Tanggal pencatatan 12 November 2026, pembayaran 18 November 2026.",
     sumber: { judul: "Fortune IDN, 13 Nov 2026: ITMG tetapkan dividen interim Rp1.286,83 per saham", url: "https://www.fortuneidn.com/market/itmg-tetapkan-dividen-interim-rp1-286-83-per-saham-00-3dhnm-6jq0tx" } },
+  // Buyback ITMG 2026 — EmitenNews 4 Nov 2026; nilai Rp2,31 T & batas 20% sama di BCA Sekuritas 5 Nov 2026 (BCA menulis akhir "4 Februari 2026", diduga salah ketik);
+  // Bisnis 4 Nov gagal dibuka alat tim; program 2025 Rp2,49 T (Kontan 4 Nov 2025) tidak dicampur (Raka, ditinjau Hana, 27 Nov 18.xx)
+  { kode: "ITMG", tanggal: "2026-11-04", jenis: "Pembelian kembali saham",
+    ringkas: "Indo Tambangraya Megah menyiapkan dana hingga Rp2,31 triliun dari kas internal untuk membeli kembali sahamnya sendiri (buyback), maksimal 20% dari modal disetor, dalam kondisi pasar yang berfluktuasi signifikan. Jadwal 4 November 2026–4 Februari 2027.",
+    sumber: { judul: "EmitenNews, 4 Nov 2026: Selain dividen, emiten tambang batu bara termal ini buyback jumbo", url: "https://emitennews.com/news/selain-dividen-emiten-tambang-batu-bara-termal-ini-buyback-jumbo" } },
+  // Realisasi buyback TPIA s/d 2 Nov 2026 — EmitenNews 2 Nov 2026; angka sama di BCA Sekuritas 3 Nov 2026 (Raka + Fajar, ditinjau Hana, 27 Nov 18.xx)
+  { kode: "TPIA", tanggal: "2026-11-02", jenis: "Pembelian kembali saham",
+    ringkas: "Chandra Asri Pacific telah membeli kembali 378.428.200 lembar sahamnya senilai Rp518,2 miliar hingga 2 November 2026, dari dana yang disiapkan hingga Rp2 triliun. Program dilanjutkan hingga 28 Januari 2027.",
+    sumber: { judul: "EmitenNews, 2 Nov 2026: Realisasi buyback saham 4 emiten Pak PP Rp830M hingga awal November", url: "https://emitennews.com/news/realisasi-buyback-saham-4-emiten-pak-pp-rp830m-hingga-awal-november" } },
   // RUPS Luar Biasa UNTR 9 Nov 2026 — Investortrust 9 Nov 2026 (Bisnis 9 Nov tidak bisa dibuka alat tim) (Raka, ditinjau Hana, 27 Nov 17.xx)
   { kode: "UNTR", tanggal: "2026-11-09", jenis: "Rapat umum pemegang saham",
     ringkas: "RUPSLB United Tractors 9 November 2026 menyetujui penghapusan 238,79 juta saham treasuri hasil buyback (6,4% dari modal ditempatkan dan disetor) serta mengangkat Irwandy Arif sebagai komisaris independen dan Christopher Suprayogie Ganis sebagai komisaris.",
