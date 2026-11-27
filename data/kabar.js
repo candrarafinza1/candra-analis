@@ -116,6 +116,11 @@ window.KABAR = [
   { kode: "KLBF", tanggal: "2026-10-03", jenis: "Pembelian kembali saham",
     ringkas: "Kalbe Farma menyiapkan dana Rp500 miliar untuk membeli kembali sahamnya sendiri (buyback).",
     sumber: { judul: "Kontan, 3 Okt 2026: Buyback saham ramai jelang akhir 2026", url: "https://investasi.kontan.co.id/news/buyback-saham-ramai-jelang-akhir-2026-ini-emiten-yang-jadi-sorotan-analis" } },
+  // Jadwal buyback KLBF — Kontan 16 Sep 2026; jadwal awal 16 Sep–16 Des & dana hingga Rp500 M sama di IDX Channel lewat RCTI+ 15 Sep 2026
+  // (rencana awal ditarik beberapa jam kemudian). Realisasi belum ada sumber (Raka + Fajar, ditinjau Hana, 27 Nov 21.xx)
+  { kode: "KLBF", tanggal: "2026-09-16", jenis: "Pembelian kembali saham",
+    ringkas: "Kalbe Farma menjadwalkan pembelian kembali saham pada 17 September–17 Desember 2026 dengan dana hingga Rp500 miliar dari kas internal, tanpa RUPS. Rencana awal 16 September–16 Desember 2026 sempat ditarik beberapa jam setelah diumumkan.",
+    sumber: { judul: "Kontan, 16 Sep 2026: Ubah jadwal, Kalbe Farma (KLBF) bakal buyback Rp500 miliar", url: "https://investasi.kontan.co.id/news/ubah-jadwal-kalbe-farma-klbf-bakal-buyback-rp-500-miliar" } },
   { kode: "MBMA", tanggal: "2026-10-03", jenis: "Pembelian kembali saham",
     ringkas: "Merdeka Battery Materials menyiapkan dana Rp1,38 triliun untuk membeli kembali sahamnya sendiri (buyback).",
     sumber: { judul: "Kontan, 3 Okt 2026: Buyback saham ramai jelang akhir 2026", url: "https://investasi.kontan.co.id/news/buyback-saham-ramai-jelang-akhir-2026-ini-emiten-yang-jadi-sorotan-analis" } },

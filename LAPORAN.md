@@ -2639,3 +2639,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - KLBF (program 17 Sep–17 Des 2026, Rp500 M) dan MBMA (rencana Rp1,38 T): belum ada sumber realisasi → tidak ditulis, dicoba lagi setelah program berakhir.
 - Nina: `node tests/cek.mjs` lolos. Dewi: Kabar (saringan buyback = 8 kabar) di 390px gelap & 1280px terang tanpa scroll horizontal & galat JS. Tegar: sumber https. Yoga: push ke main. Kurikulum tidak berubah.
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 27 Nov 2026, 21.xx WIB — Bima
+- Raka + Fajar + Hana: kabar baru KLBF (Pembelian kembali saham, 16 Sep 2026): Kalbe Farma menjadwalkan buyback 17 September–17 Desember 2026 dengan dana hingga Rp500 miliar dari kas internal, tanpa RUPS; rencana awal 16 September–16 Desember 2026 sempat ditarik beberapa jam setelah diumumkan (Kontan 16 Sep; jadwal awal & dana sama di IDX Channel lewat RCTI+ 15 Sep). Hana: kalimat netral, alasan penarikan dan EPS proforma tidak ditulis. Realisasi belum ada sumber → tidak ditulis.
+- MIKA laba 9 bulan 2026 dicari lagi: hasil masih kuartal III/2025 & semester I/2026 → tetap 30 dari 32.
+- Nina: `node tests/cek.mjs` lolos. Dewi: Kabar (saringan buyback = 9 kabar) di 390px gelap & 1280px terang dan profil KLBF di 390px, tanpa scroll horizontal & galat JS. Tegar: sumber https. Yoga: push ke main. Kurikulum tidak berubah.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
