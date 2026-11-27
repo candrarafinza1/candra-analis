@@ -2579,3 +2579,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Nina: "sebelum pajak" masuk cek kata kunci + uji balik tertangkap; `node tests/cek.mjs` lolos; belajar, profil ANTM, Agenda di 390px & 1280px tanpa scroll horizontal & galat JS. Tegar: hanya teks kamus, tanpa skrip/rahasia baru. Yoga: push ke main.
 - Tugas pendukung berikutnya dicatat: sisir kartu IPO & kotak "Cara memeriksa status syariah sebuah IPO" untuk kamus.
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 27 Nov 2026, sesi 09.xx WIB (Bima)
+- Agenda: tidak dicek di sesi ini (rutin 07.xx/13.xx); proyek prioritas lain masih menunggu DES periode II/sumber, jadi tim mengerjakan tugas pendukung teratas.
+- Sari + Laras + Hana: kartu IPO Agenda dan kotak "Cara memeriksa status syariah sebuah IPO" disisir. Tiga istilah baru di kamus: "Kisaran harga (IPO)", "Harga final (IPO)", "Efek syariah" (arti umum tanpa angka). "Efek syariah" hanya cocok huruf kecil agar nama "Daftar Efek Syariah" tidak terpotong (dicek di Agenda & pelajaran).
+- Nina: ketiga kata masuk cek kata kunci + uji balik tertangkap; `node tests/cek.mjs` lolos; Agenda, pelajaran Saham syariah & Praktik beli pertama, Belajar di 390px gelap & 1280px terang tanpa scroll horizontal & galat JS. Kartu IPO dicoba dengan data uji di peramban saja (tidak disimpan). Tegar: hanya teks kamus. Yoga: push ke main.
+- Tugas pendukung berikutnya dicatat: sisir kotak "Mengapa sebuah dividen tidak ada di Agenda?" & "Arti tanggal" untuk kamus.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

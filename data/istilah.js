@@ -291,6 +291,18 @@ window.ISTILAH = [
   { istilah: "Penawaran umum", pola: ["penawaran umum"],
     arti: "Masa pemesanan saham IPO di harga final yang sudah ditetapkan. Dana untuk pesanan harus tersedia di RDN dan ditahan selama masa ini.",
     pelajaran: "praktik-beli-pertama" },
+  /* Sari + Laras + Hana (27 Nov 09.xx): dari sisir kartu IPO di Agenda ("Kisaran harga …", "Harga final …") dan kotak
+     "Cara memeriksa status syariah sebuah IPO" ("efek syariah"). Arti umum tanpa angka. "Efek syariah" hanya huruf kecil
+     (besarKecil) agar tidak menandai potongan "Efek Syariah" di dalam nama "Daftar Efek Syariah". */
+  { istilah: "Kisaran harga (IPO)", pola: ["kisaran harga"],
+    arti: "Batas harga terendah dan tertinggi per saham yang diumumkan untuk masa penawaran awal IPO. Calon investor menyampaikan minat di dalam rentang ini, lalu harga final diumumkan sesudahnya.",
+    pelajaran: "praktik-beli-pertama" },
+  { istilah: "Harga final (IPO)", pola: ["harga final"],
+    arti: "Harga per saham yang ditetapkan setelah masa penawaran awal selesai. Semua pesanan pada masa penawaran umum memakai harga ini. Setelah saham tercatat di bursa, harganya bisa lebih tinggi atau lebih rendah daripada harga final.",
+    pelajaran: "praktik-beli-pertama" },
+  { istilah: "Efek syariah", pola: ["efek syariah"], besarKecil: true,
+    arti: "Efek adalah surat berharga yang diperdagangkan di pasar modal, misalnya saham, sukuk, dan reksa dana. Efek syariah adalah efek yang memenuhi prinsip syariah di pasar modal; untuk saham, daftarnya ditetapkan OJK dalam Daftar Efek Syariah (DES).",
+    pelajaran: "saham-syariah" },
   { istilah: "Penjatahan", pola: ["penjatahan"],
     arti: "Pembagian saham IPO kepada pemesan setelah masa penawaran umum selesai. Bila pesanan lebih banyak daripada saham yang ditawarkan, pemesan bisa mendapat lebih sedikit dari yang dipesan, dan dana yang tidak terpakai dikembalikan.",
     pelajaran: "praktik-beli-pertama" },

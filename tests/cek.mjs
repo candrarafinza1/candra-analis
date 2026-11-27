@@ -137,9 +137,10 @@ ok(istilahKembar([{ istilah: "A", pola: ["laba"] }, { istilah: "B", pola: ["Laba
   "uji negatif istilahKembar harus menangkap pola kembar dan nama kembar");
 // Nina (26 Nov 21.xx): kata kunci yang dipakai judul kotak latihan harus bisa dicari di kamus.
 // Nina (27 Nov 08.xx): + "sebelum pajak" (kotak Hitung contoh dividen di Agenda & tabel Dividen per saham di profil).
+// Nina (27 Nov 09.xx): + "kisaran harga", "harga final" (kartu IPO Agenda) & "efek syariah" (kotak Cara memeriksa status syariah IPO).
 {
   const appTeks = readFileSync("assets/app.js", "utf8");
-  for (const kata of ["portofolio", "catatan atas laporan keuangan", "obligasi", "impas", "sebelum pajak"]) {
+  for (const kata of ["portofolio", "catatan atas laporan keuangan", "obligasi", "impas", "sebelum pajak", "kisaran harga", "harga final", "efek syariah"]) {
     if (!new RegExp(kata, "i").test(appTeks)) continue;
     ok(ISTILAH.some((t) => t.pola.some((p) => p.toLowerCase() === kata)), `kamus istilah: "${kata}" dipakai kotak latihan tetapi belum ada di kamus`);
   }
