@@ -2586,3 +2586,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Nina: ketiga kata masuk cek kata kunci + uji balik tertangkap; `node tests/cek.mjs` lolos; Agenda, pelajaran Saham syariah & Praktik beli pertama, Belajar di 390px gelap & 1280px terang tanpa scroll horizontal & galat JS. Kartu IPO dicoba dengan data uji di peramban saja (tidak disimpan). Tegar: hanya teks kamus. Yoga: push ke main.
 - Tugas pendukung berikutnya dicatat: sisir kotak "Mengapa sebuah dividen tidak ada di Agenda?" & "Arti tanggal" untuk kamus.
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 27 Nov 2026, sesi 10.xx WIB (Bima)
+- Sari + Laras + Hana: kotak "Mengapa sebuah dividen tidak ada di Agenda?" dan "Arti tanggal-tanggal ini" disisir. Hampir semua kata sudah ada di kamus; satu yang kurang, "sekuritas" (tanpa kata "perusahaan"), ditambah sebagai pola istilah "Perusahaan sekuritas" (arti tidak berubah). Kini kata itu bisa diketuk di 3 pelajaran dan halaman Kabar.
+- Nina: "sekuritas" masuk cek kata kunci + uji balik tertangkap; `node tests/cek.mjs` lolos; Agenda, pelajaran, Belajar, Kabar di 390px gelap & 1280px terang tanpa scroll horizontal & galat JS. Kurikulum tidak berubah, PDF modul tidak dibuat ulang. Yoga: push ke main.
+- Tugas pendukung berikutnya dicatat: sisir kotak Hitung contoh dividen, pita Agenda beranda, dan kabar terbaru untuk kamus.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

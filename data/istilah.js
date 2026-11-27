@@ -120,7 +120,7 @@ window.ISTILAH = [
   { istilah: "Capital gain (kenaikan harga)", pola: ["capital gain"],
     arti: "Selisih harga jual dan harga beli saham bila harga jual lebih tinggi. Contoh: dibeli Rp1.000, dijual Rp1.300, selisihnya Rp300 per lembar. Harga juga bisa turun di bawah harga beli, sehingga hasilnya rugi (capital loss).",
     pelajaran: "apa-itu-saham" },
-  { istilah: "Perusahaan sekuritas", pola: ["perusahaan sekuritas"],
+  { istilah: "Perusahaan sekuritas", pola: ["perusahaan sekuritas", "sekuritas"],
     arti: "Perantara pedagang efek yang berizin OJK dan menjadi anggota BEI. Lewat perusahaan sekuritas investor membuka rekening efek dan melakukan transaksi saham.",
     pelajaran: "buka-rekening" },
   { istilah: "BEI (Bursa Efek Indonesia)", pola: ["BEI", "Bursa Efek Indonesia"], besarKecil: true,
