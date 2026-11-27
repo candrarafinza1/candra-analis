@@ -363,5 +363,15 @@ window.ISTILAH = [
     pelajaran: "saham-syariah" },
   { istilah: "Jasa keuangan ribawi", pola: ["jasa keuangan ribawi", "ribawi"],
     arti: "Jasa keuangan yang mengandung riba, misalnya meminjamkan uang dengan bunga. Perusahaan yang kegiatan usahanya jasa keuangan ribawi tidak memenuhi kriteria Daftar Efek Syariah.",
-    pelajaran: "saham-syariah" }
+    pelajaran: "saham-syariah" },
+  // Sari + Laras + Hana (27 Nov 2026): kata yang dipakai kotak latihan rasio syariah & PER tetapi belum bisa dicari.
+  { istilah: "Catatan atas laporan keuangan", pola: ["catatan atas laporan keuangan"],
+    arti: "Bagian laporan keuangan yang menjelaskan rincian angka di neraca dan laba rugi, misalnya jenis pinjaman, obligasi, dan sumber pendapatan. Rincian seperti utang berbasis bunga dan pendapatan bunga biasanya baru terlihat di bagian ini.",
+    pelajaran: "laporan-keuangan" },
+  { istilah: "Obligasi", pola: ["obligasi"],
+    arti: "Surat utang yang diterbitkan perusahaan atau pemerintah: pembeli meminjamkan uang dan menerima imbalan sampai jatuh tempo. Obligasi konvensional memberi bunga, jadi dihitung sebagai utang berbasis bunga dalam kriteria Daftar Efek Syariah. Padanan syariahnya disebut sukuk.",
+    pelajaran: "saham-syariah" },
+  { istilah: "Impas", pola: ["impas"],
+    arti: "Keadaan ketika pendapatan sama dengan seluruh biaya, sehingga perusahaan tidak untung dan tidak rugi (laba nol). Bila laba per saham nol atau negatif, PER tidak bisa dibaca.",
+    pelajaran: "laporan-keuangan" }
 ];

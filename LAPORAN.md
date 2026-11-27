@@ -2564,3 +2564,11 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Sari + Laras + Hana: istilah "Portofolio" masuk kamus (kata ini dipakai kotak latihan porsi tetapi belum bisa dicari pemula); arti umum, tanpa angka "ideal", tanpa penilaian.
 - Nina: `node tests/cek.mjs` lolos, cek baru "kata kunci kotak latihan ada di kamus" + uji balik tertangkap; kamus 390px & 1280px tanpa scroll horizontal & galat JS. Yoga: run Actions commit sesi 20.xx hijau; push ke main. Tegar: tanpa rahasia/skrip baru.
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 27 Nov 2026, sesi 07.xx WIB (Bima)
+- Laporan masuk kerja pagi dikirim ke Rafinza (07.08).
+- Agenda: +0 IPO, +0 dividen, −0 kedaluwarsa. Raka + Hana: ANDA & BUAT dicari lagi, tetap tidak ada sumber yang menyebut status syariah; pengumuman OJK yang muncul (Pelayaran Jaya Hidup Baru 2025, Nitrasanata Dharma Juni 2026) bukan IPO mendatang. BBCA dividen interim (cum 27 Nov) tidak dicatat: bank konvensional, bukan saham syariah. Fajar: DES periode II 2026 belum terbit (terbaru KEP-21/D.04/2026); "Terakhir diperiksa tim" diperbarui ke 27 Nov.
+- Sari + Laras + Hana: 3 istilah baru di kamus (Catatan atas laporan keuangan, Obligasi, Impas) dari kotak latihan rasio syariah & PER. Arif + Nina: ketiganya masuk cek kata kunci kotak latihan + uji balik tertangkap.
+- Dewi + Kirana: Agenda & pita beranda dengan jam asli 27 Nov cocok dengan data; 390px gelap & 1280px terang tanpa scroll horizontal & galat JS.
+- Nina: `node tests/cek.mjs` lolos. Tegar: tanpa skrip/rahasia baru (hanya teks kamus & tanggal). Yoga: push ke main.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
