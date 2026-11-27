@@ -68,6 +68,10 @@ window.KABAR = [
   { kode: "ITMG", tanggal: "2026-11-13", jenis: "Dividen",
     ringkas: "Indo Tambangraya Megah menetapkan dividen interim tahun buku 2026 sebesar Rp1.286,83 per saham. Tanggal pencatatan 12 November 2026, pembayaran 18 November 2026.",
     sumber: { judul: "Fortune IDN, 13 Nov 2026: ITMG tetapkan dividen interim Rp1.286,83 per saham", url: "https://www.fortuneidn.com/market/itmg-tetapkan-dividen-interim-rp1-286-83-per-saham-00-3dhnm-6jq0tx" } },
+  // RUPS Luar Biasa UNTR 9 Nov 2026 — Investortrust 9 Nov 2026 (Bisnis 9 Nov tidak bisa dibuka alat tim) (Raka, ditinjau Hana, 27 Nov 17.xx)
+  { kode: "UNTR", tanggal: "2026-11-09", jenis: "Rapat umum pemegang saham",
+    ringkas: "RUPSLB United Tractors 9 November 2026 menyetujui penghapusan 238,79 juta saham treasuri hasil buyback (6,4% dari modal ditempatkan dan disetor) serta mengangkat Irwandy Arif sebagai komisaris independen dan Christopher Suprayogie Ganis sebagai komisaris.",
+    sumber: { judul: "Investortrust, 9 Nov 2026: UNTR setujui penghapusan 238,79 juta saham treasuri hasil buyback, ini dampaknya", url: "https://investortrust.id/market/121985/untr-setujui-penghapusan-238-79-juta-saham-treasuri-hasil-buyback-ini-dampaknya" } },
   // Dividen interim UNTR tahun buku 2026 — BCA Sekuritas 28 Okt 2026; jadwal sama di Pasardana 28 Okt 2026 (jadwal lama: bayar 26 Okt, diundur; EmitenNews) (Raka + Fajar, ditinjau Hana, 24 Nov 09.xx)
   { kode: "UNTR", tanggal: "2026-10-28", jenis: "Dividen",
     ringkas: "United Tractors membagikan dividen interim tahun buku 2026 sebesar Rp430 per saham (sekitar Rp1,478 triliun). Jadwal pembayaran diundur dari 26 Oktober menjadi 23 November 2026, tanggal pencatatan 9 November 2026.",

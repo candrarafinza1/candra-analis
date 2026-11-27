@@ -146,14 +146,19 @@ ok(istilahKembar([{ istilah: "A", pola: ["laba"] }, { istilah: "B", pola: ["Laba
     ok(ISTILAH.some((t) => t.pola.some((p) => p.toLowerCase() === kata)), `kamus istilah: "${kata}" dipakai kotak latihan tetapi belum ada di kamus`);
   }
 }
+// Nina (27 Nov 17.xx): + "saham treasuri" & "rupslb" (kabar RUPSLB UNTR 9 Nov 2026).
 // Nina (27 Nov 13.xx): kata umum di kabar emiten (data/kabar.js) juga harus bisa dicari di kamus: "kurs tengah" (kabar dividen AADI).
 {
   const cariKata = (teks, daftar, kamus) => daftar.filter((kata) => new RegExp(kata, "i").test(teks) && !kamus.some((t) => t.pola.some((p) => p.toLowerCase() === kata)));
   const kabarTeks = readFileSync("data/kabar.js", "utf8");
-  const kurang = cariKata(kabarTeks, ["kurs tengah"], ISTILAH);
+  const kurang = cariKata(kabarTeks, ["kurs tengah", "saham treasuri", "rupslb"], ISTILAH);
   ok(!kurang.length, `kamus istilah: ${kurang.join(", ")} dipakai kabar emiten tetapi belum ada di kamus`);
   ok(cariKata("dibayar dengan kurs tengah BI", ["kurs tengah"], ISTILAH.filter((t) => t.istilah !== "Kurs tengah BI")).length === 1,
     'uji balik kamus kabar: "kurs tengah" tanpa istilah harus tertangkap');
+  ok(cariKata("menghapus saham treasuri", ["saham treasuri"], ISTILAH.filter((t) => t.istilah !== "Saham treasuri")).length === 1,
+    'uji balik kamus kabar: "saham treasuri" tanpa istilah harus tertangkap');
+  ok(cariKata("RUPSLB menyetujui", ["rupslb"], ISTILAH.map((t) => ({ ...t, pola: t.pola.filter((x) => x !== "RUPSLB") }))).length === 1,
+    'uji balik kamus kabar: "RUPSLB" tanpa pola harus tertangkap');
 }
 // Nina + Arif (6 Nov 07.08): penanda istilah memilih istilah yang muncul paling awal; bila mulai di tempat
 // yang sama, istilah yang lebih panjang menang ("Pendapatan tidak halal" > "Pendapatan").
