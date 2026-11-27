@@ -636,6 +636,15 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
       if (x.totalDividenTeks != null) s.push("totalDividenTeks hanya untuk dps null");
     }
     if (!["IDR", "USD"].includes(x.mataUang)) s.push("mataUang harus IDR/USD");
+    // Nina (27 Nov 14.xx): bayarRupiah opsional, hanya untuk dividen dolar AS; tanggal kurs sah dan tidak setelah pembayaran;
+    // sumber wajib salah satu alamat di daftar sumber entri (bukti bahwa sumber memang menyebut pembayaran rupiah).
+    if (x.bayarRupiah !== undefined) {
+      const b = x.bayarRupiah || {};
+      if (x.mataUang !== "USD") s.push("bayarRupiah hanya untuk mataUang USD");
+      if (!b.tanggalKurs || !tgl(b.tanggalKurs)) s.push("bayarRupiah.tanggalKurs tidak valid");
+      else if (x.tanggal && x.tanggal.pembayaran && b.tanggalKurs > x.tanggal.pembayaran) s.push("bayarRupiah.tanggalKurs setelah tanggal pembayaran");
+      if (!(x.sumber || []).some((y) => y && y.url && y.url === b.sumber)) s.push("bayarRupiah.sumber wajib salah satu alamat di sumber");
+    }
     const t = x.tanggal || {};
     for (const k of ["cum", "ex", "recording", "pembayaran"]) if (t[k] === undefined || !tgl(t[k])) s.push(`tanggal.${k} tidak valid`);
     if (!t.cum) s.push("tanggal.cum wajib");
@@ -679,9 +688,15 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
     [{ ...baikDiv, dps: null, totalDividenTeks: "Rp500 juta", sumber: [{ judul: "Berita: dividen Rp1.500 juta", url: "https://contoh.id/a" }, baikDiv.sumber[1]] }, "judul sumber"],
     [{ ...baikDiv, dps: null, totalDividenTeks: "sekitar Rp500 juta" }, "totalDividenTeks"],
     [{ ...baikDiv, totalDividenTeks: "Rp500 juta" }, "hanya untuk dps null"],
+    [{ ...baikDiv, bayarRupiah: { tanggalKurs: hariIniA, sumber: "https://contoh.id/a" } }, "hanya untuk mataUang USD"],
+    [{ ...baikDiv, mataUang: "USD", bayarRupiah: { tanggalKurs: "2026-02-30", sumber: "https://contoh.id/a" } }, "tanggalKurs tidak valid"],
+    [{ ...baikDiv, mataUang: "USD", bayarRupiah: { tanggalKurs: hariIniA, sumber: "https://contoh.id/lain" } }, "bayarRupiah.sumber"],
+    [{ ...baikDiv, mataUang: "USD", tanggal: { ...baikDiv.tanggal, pembayaran: baikDiv.tanggal.ex }, bayarRupiah: { tanggalKurs: "2099-01-01", sumber: "https://contoh.id/a" } }, "setelah tanggal pembayaran"],
     [{ ...baikDiv, kode: "TLKM", desBaris: 5, sumber: [baikDiv.sumber[0], { judul: "DES periode I 2026 baris 5: TLKM", url: baikDiv.sumber[1].url }] }, "emiten-asli"],
   ];
   const baikDivNull = { ...baikDiv, dps: null, totalDividenTeks: "Rp500 juta", sumber: [{ judul: "Berita: dividen interim Rp 500 Juta", url: "https://contoh.id/a" }, baikDiv.sumber[1]] };
+  const baikDivRp = { ...baikDiv, mataUang: "USD", dps: 0.05, bayarRupiah: { tanggalKurs: hariIniA, sumber: "https://contoh.id/a" } };
+  ok(salahDiv(baikDivRp).length === 0, `uji balik agenda: dividen US$ dibayar rupiah bersumber ditolak (${salahDiv(baikDivRp).join("; ")})`);
   ok(salahDiv(baikDivNull).length === 0, `uji balik agenda: dividen dps null + total bersumber ditolak (${salahDiv(baikDivNull).join("; ")})`);
   for (const [x, pesan] of rusakDiv) ok(salahDiv(x).some((s) => s.includes(pesan)), `uji balik agenda dividen: "${pesan}" harus tertangkap`);
   const baikIpo = { nama: "PT Contoh Tbk", kode: null, sektor: "Contoh", buktiSyariah: { judul: "Prospektus", url: "https://contoh.id/p.pdf" },
@@ -7652,6 +7667,33 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
     [app.replace('info.push(teksDividenAgenda(a) + ". Tercatat', 'info.push("Dividen" + ". Tercatat'), "kartu Agenda"],
     [app.replace('text: teksDividenAgenda(a) + ", tahun buku "', 'text: "Dividen " + a.dps + ", tahun buku "'), "kotak Info"],
   ]) ok(rusak !== app && uji(rusak).some((x) => x.includes(pesan)), `uji balik Agenda kalimat dividen: "${pesan}" harus tertangkap`);
+}
+
+// 2f-10c. Agenda: kalimat "dibayar dalam rupiah" untuk dividen dolar AS (Nina, 27 Nov 2026, kartu AADI).
+{
+  const app = readFileSync("assets/app.js", "utf8");
+  const uji = (js) => {
+    const i = js.indexOf("  function teksBayarRupiah("), j = js.indexOf("\n  }\n", i);
+    if (i < 0) return ["fungsi teksBayarRupiah wajib ada"];
+    let f; try { const bl = (/  var BULAN = \[[^\]]*\];/.exec(js) || [""])[0];
+    const ti = js.indexOf("  function tanggalId("), tj = js.indexOf("\n  }\n", ti);
+    f = new Function(bl + js.slice(ti, tj + 4) + js.slice(i, j + 4) + "; return teksBayarRupiah;")(); } catch (e) { return ["teksBayarRupiah galat: " + e.message]; }
+    const salah = [];
+    const a = f({ mataUang: "USD", bayarRupiah: { tanggalKurs: "2026-12-07", sumber: "https://contoh.id" } });
+    if (a !== "Ditetapkan dalam dolar AS, dibayar dalam rupiah dengan kurs tengah Bank Indonesia (BI) tanggal 7 Des 2026.") salah.push(`kalimat: "${a}"`);
+    if (f({ mataUang: "USD" }) !== "") salah.push("tanpa bayarRupiah harus kosong");
+    if (f({ mataUang: "IDR", bayarRupiah: { tanggalKurs: "2026-12-07" } }) !== "") salah.push("dividen rupiah harus kosong");
+    if (!/var rp = teksBayarRupiah\(a\);\s*if \(rp\) info\.push\(rp\);/.test(js)) salah.push("kartu Agenda wajib memakai teksBayarRupiah");
+    if (/Rp ?\d/.test(js.slice(i, j))) salah.push("kalimat tidak boleh memuat angka rupiah perkiraan");
+    return salah;
+  };
+  const s = uji(app);
+  ok(!s.length, "Agenda kalimat bayar rupiah: " + s.join("; "));
+  for (const [rusak, pesan] of [
+    [app.replace('if (!b || a.mataUang !== "USD"', 'if (!b'), "dividen rupiah"],
+    [app.replace("      if (rp) info.push(rp);", ""), "kartu Agenda"],
+    [app.replace('"Ditetapkan dalam dolar AS, dibayar dalam rupiah', '"Dibayar Rp1.176 dalam rupiah'), "kalimat"],
+  ]) ok(rusak !== app && uji(rusak).some((x) => x.includes(pesan)), `uji balik Agenda kalimat bayar rupiah: "${pesan}" harus tertangkap`);
 }
 
 // 2f-10. Agenda: contoh hitungan dividen per lot di kartu (Nina, 20 Nov 2026, IDE.md #38).

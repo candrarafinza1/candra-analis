@@ -102,11 +102,17 @@ window.AGENDA_DIVIDEN = [
   // sama dengan data/emiten-asli.js). Begitu DPS diumumkan (sekitar 7 Des), Fajar mengisi dps + sumbernya.
   { kode: "AADI", desBaris: 8, jenis: "interim", tahunBuku: 2026, dps: null, totalDividenTeks: "US$500 juta", mataUang: "USD",
     ditambahkan: "2026-11-27",
+    // Hana + Fajar (27 Nov 14.xx): Investor Daily 25 Nov & Katadata 26 Nov mengutip keterangan resmi manajemen: dibayar
+    // dalam rupiah, kurs konversi = kurs tengah BI 7 Des 2026 (diumumkan di situs BEI & perseroan). Angka "Rp1.176,1 per
+    // saham" di kedua berita hanya perkiraan (Stockbit Sekuritas / asumsi kurs Rp18.317), bukan pengumuman → dps tetap null.
+    bayarRupiah: { tanggalKurs: "2026-12-07", sumber: "https://investor.id/market/463356/dividen-jumbo-aadi-us-500-juta-per-sahamnya-kirakira-segini" },
     tanggal: { cum: "2026-12-03", ex: "2026-12-04", recording: "2026-12-07", pembayaran: "2026-12-11" },
     sumber: [
       { judul: "Investortrust, 25 Nov 2026: Adaro Andalan (AADI) tebar dividen interim US$ 500 juta, cek jadwal berikut", url: "https://investortrust.id/market/123672/adaro-andalan-aadi-tebar-dividen-interim-us-500-juta-cek-jadwal-berikut" },
       { judul: "StockWatch, 25 Nov 2026: Adaro Andalan (AADI) tebar dividen interim USD500 juta, catat jadwal cum date", url: "https://stockwatch.id/adaro-andalan-aadi-tebar-dividen-interim-usd500-juta-catat-jadwal-cum-date/" },
       { judul: "Kontan (di TradingView): Adaro Andalan Indonesia (AADI) tebar dividen interim US$ 500 juta, cek jadwalnya", url: "https://id.tradingview.com/news/kontan:294cee2a787ea:0/" },
+      { judul: "Investor Daily, 25 Nov 2026: Dividen jumbo AADI US$ 500 juta, per sahamnya kira-kira segini", url: "https://investor.id/market/463356/dividen-jumbo-aadi-us-500-juta-per-sahamnya-kirakira-segini" },
+      { judul: "Katadata, 26 Nov 2026: AADI tebar dividen interim; pembayaran dalam rupiah dengan kurs tengah BI 7 Des 2026", url: "https://katadata.co.id/finansial/bursa/6b07a08a7987f/emiten-boy-thohir-aadi-tebar-dividen-interim-rp-9-15-t-per-saham-dapat-rp-1176" },
       { judul: "DES periode I 2026 (KEP-21/D.04/2026) baris 8: AADI PT Adaro Andalan Indonesia Tbk", url: DES_2026_I }
     ] }
 ];

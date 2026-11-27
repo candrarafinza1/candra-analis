@@ -2524,6 +2524,14 @@
       return "Dividen " + (a.mataUang === "USD" ? "US$" + angka2.format(a.dps) : "Rp" + angka2.format(a.dps)) + " per saham (sebelum pajak)";
     return "Dividen per saham belum diumumkan" + (a.totalDividenTeks ? "; total dividen " + a.totalDividenTeks + " (sebelum pajak)" : "");
   }
+  /* Arif + Sari + Hana (27 Nov 2026): dividen yang ditetapkan dalam dolar AS tetapi dibayar dalam rupiah (AADI). Field opsional
+     `bayarRupiah: { tanggalKurs, sumber }` hanya diisi bila sumber menyebutnya (cek.mjs: hanya mataUang USD, sumber = salah
+     satu alamat di daftar sumber). Satu kalimat netral, tanpa angka rupiah perkiraan. Kosong bila field tidak ada. */
+  function teksBayarRupiah(a) {
+    var b = a && a.bayarRupiah;
+    if (!b || a.mataUang !== "USD" || !/^\d{4}-\d{2}-\d{2}$/.test(b.tanggalKurs || "")) return "";
+    return "Ditetapkan dalam dolar AS, dibayar dalam rupiah dengan kurs tengah Bank Indonesia (BI) tanggal " + tanggalId(b.tanggalKurs) + ".";
+  }
   var angkaContoh = new Intl.NumberFormat("id-ID", { maximumFractionDigits: 4 });
   function contohDividenLot(a) {
     if (typeof a.dps !== "number" || !(a.dps > 0)) return null;
@@ -2617,6 +2625,8 @@
       if (a.sektor) info.push("Sektor: " + a.sektor + ".");
     } else {
       info.push(teksDividenAgenda(a) + ". Tercatat di Daftar Efek Syariah periode berjalan, baris " + a.desBaris + ".");
+      var rp = teksBayarRupiah(a);
+      if (rp) info.push(rp);
     }
     /* Dewi + Nina (21 Nov 2026, IDE.md #46): kartu dividen memakai garis waktu mini (.agenda-garis): titik di garis,
        tanggal tetap tertulis, "sudah lewat" tetap teks. Di layar lebar 4 titik sebaris; di HP garis tegak. CSS saja, tanpa animasi.
