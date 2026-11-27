@@ -2572,3 +2572,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Dewi + Kirana: Agenda & pita beranda dengan jam asli 27 Nov cocok dengan data; 390px gelap & 1280px terang tanpa scroll horizontal & galat JS.
 - Nina: `node tests/cek.mjs` lolos. Tegar: tanpa skrip/rahasia baru (hanya teks kamus & tanggal). Yoga: push ke main.
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 27 Nov 2026, sesi 08.xx WIB (Bima)
+- Agenda: tidak dicek di sesi ini (rutin 07.xx/13.xx). Proyek prioritas lain masih menunggu DES periode II/sumber, jadi tim mengerjakan tugas pendukung teratas.
+- Sari + Laras + Hana: kotak "Hitung contoh dividen untuk jumlah lot Anda" (Agenda) dan tabel "Dividen per saham" (profil) disisir. Satu istilah baru di kamus: "Sebelum pajak (bruto)" (arti umum tanpa angka, merujuk istilah Pajak dividen; juga cocok untuk "Laba dari Divestasi … (sebelum pajak)"). Kata lain di kedua tempat sudah ada di kamus.
+- Nina: "sebelum pajak" masuk cek kata kunci + uji balik tertangkap; `node tests/cek.mjs` lolos; belajar, profil ANTM, Agenda di 390px & 1280px tanpa scroll horizontal & galat JS. Tegar: hanya teks kamus, tanpa skrip/rahasia baru. Yoga: push ke main.
+- Tugas pendukung berikutnya dicatat: sisir kartu IPO & kotak "Cara memeriksa status syariah sebuah IPO" untuk kamus.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

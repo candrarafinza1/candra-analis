@@ -373,5 +373,10 @@ window.ISTILAH = [
     pelajaran: "saham-syariah" },
   { istilah: "Impas", pola: ["impas"],
     arti: "Keadaan ketika pendapatan sama dengan seluruh biaya, sehingga perusahaan tidak untung dan tidak rugi (laba nol). Bila laba per saham nol atau negatif, PER tidak bisa dibaca.",
-    pelajaran: "laporan-keuangan" }
+    pelajaran: "laporan-keuangan" },
+  // Sari + Laras + Hana (27 Nov 08.xx): dari sisir kotak "Hitung contoh dividen" (Agenda) & tabel "Dividen per saham" (profil).
+  // Arti umum tanpa angka; juga cocok untuk "Laba dari Divestasi … (sebelum pajak)" di data emiten.
+  { istilah: "Sebelum pajak (bruto)", pola: ["sebelum pajak"],
+    arti: "Angka yang belum dikurangi pajak, disebut juga bruto. Di situs ini paling sering dipakai untuk dividen: dividen per saham yang diumumkan emiten adalah angka sebelum pajak, jadi uang yang akhirnya diterima bisa sama atau lebih kecil, tergantung aturan pajak yang berlaku untuk penerimanya (lihat istilah Pajak dividen).",
+    pelajaran: "praktik-beli-pertama" }
 ];
