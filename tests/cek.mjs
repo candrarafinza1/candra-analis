@@ -612,7 +612,20 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
     if (!des || !new RegExp(`baris ${x.desBaris}: ${x.kode}\\b`).test(des.judul || "")) s.push("sumber DES yang mengutip baris & kode wajib ada");
     if (!["interim", "final"].includes(x.jenis)) s.push("jenis harus interim/final");
     if (!Number.isInteger(x.tahunBuku) || x.tahunBuku < 2020) s.push("tahunBuku tidak valid");
-    if (!(typeof x.dps === "number" && x.dps > 0)) s.push("dps harus angka > 0");
+    // Nina (27 Nov 2026): dps boleh null hanya bila dividen per saham belum diumumkan; lalu totalDividenTeks wajib
+    // ("US$500 juta" / "Rp103,2 miliar"), awalan sama dengan mataUang, dan angka + satuannya muncul di judul salah satu sumber.
+    if (x.dps === null) {
+      const m = /^(Rp|US\$)(\d[\d.,]*) (juta|miliar|triliun)$/.exec(x.totalDividenTeks || "");
+      if (!m) s.push("dps null wajib totalDividenTeks (mis. \"US$500 juta\")");
+      else {
+        if ((m[1] === "US$") !== (x.mataUang === "USD")) s.push("totalDividenTeks: awalan Rp/US$ harus sama dengan mataUang");
+        const pola = new RegExp(`(^|[^\\d,.])${m[2].replace(/[.,]/g, "\\$&")} ?${m[3]}`, "i");
+        if (!(x.sumber || []).some((y) => pola.test(((y && y.judul) || "").replace(/(US\$|USD|Rp) ?/g, "")))) s.push("totalDividenTeks: angka total wajib ada di judul sumber");
+      }
+    } else {
+      if (!(typeof x.dps === "number" && x.dps > 0)) s.push("dps harus angka > 0");
+      if (x.totalDividenTeks != null) s.push("totalDividenTeks hanya untuk dps null");
+    }
     if (!["IDR", "USD"].includes(x.mataUang)) s.push("mataUang harus IDR/USD");
     const t = x.tanggal || {};
     for (const k of ["cum", "ex", "recording", "pembayaran"]) if (t[k] === undefined || !tgl(t[k])) s.push(`tanggal.${k} tidak valid`);
@@ -650,8 +663,17 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
     [{ ...baikDiv, sumber: [{ judul: "Berita contoh", url: "https://s.id/dividen" }, baikDiv.sumber[1]] }, "https"],
     [{ ...baikDiv, catatan: "Buruan beli sebelum cum date" }, "ajakan"],
     [{ ...baikDiv, tanggal: { cum: "2020-01-02", ex: "2020-01-03", recording: null, pembayaran: null } }, "60 hari"],
+    [{ ...baikDiv, dps: null }, "totalDividenTeks"],
+    [{ ...baikDiv, dps: undefined }, "dps harus"],
+    [{ ...baikDiv, dps: null, totalDividenTeks: "US$500 juta", sumber: [{ judul: "Berita: dividen US$ 500 juta", url: "https://contoh.id/a" }, baikDiv.sumber[1]] }, "awalan"],
+    [{ ...baikDiv, dps: null, totalDividenTeks: "Rp500 juta" }, "judul sumber"],
+    [{ ...baikDiv, dps: null, totalDividenTeks: "Rp500 juta", sumber: [{ judul: "Berita: dividen Rp1.500 juta", url: "https://contoh.id/a" }, baikDiv.sumber[1]] }, "judul sumber"],
+    [{ ...baikDiv, dps: null, totalDividenTeks: "sekitar Rp500 juta" }, "totalDividenTeks"],
+    [{ ...baikDiv, totalDividenTeks: "Rp500 juta" }, "hanya untuk dps null"],
     [{ ...baikDiv, kode: "TLKM", desBaris: 5, sumber: [baikDiv.sumber[0], { judul: "DES periode I 2026 baris 5: TLKM", url: baikDiv.sumber[1].url }] }, "emiten-asli"],
   ];
+  const baikDivNull = { ...baikDiv, dps: null, totalDividenTeks: "Rp500 juta", sumber: [{ judul: "Berita: dividen interim Rp 500 Juta", url: "https://contoh.id/a" }, baikDiv.sumber[1]] };
+  ok(salahDiv(baikDivNull).length === 0, `uji balik agenda: dividen dps null + total bersumber ditolak (${salahDiv(baikDivNull).join("; ")})`);
   for (const [x, pesan] of rusakDiv) ok(salahDiv(x).some((s) => s.includes(pesan)), `uji balik agenda dividen: "${pesan}" harus tertangkap`);
   const baikIpo = { nama: "PT Contoh Tbk", kode: null, sektor: "Contoh", buktiSyariah: { judul: "Prospektus", url: "https://contoh.id/p.pdf" },
     tanggal: { penawaranAwal: { mulai: hariIniA, selesai: hariIniA }, penawaranUmum: { mulai: null, selesai: null }, penjatahan: null, pencatatan: null },
@@ -7594,6 +7616,33 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
     [app, css.replace(".agenda-aksi { display: flex; flex-wrap: wrap;", ".agenda-aksi { display: flex;"), "flex-wrap"],
     [app, css.replace(".agenda-aksi > .agenda-sumber-lipat[open] { flex-basis: 100%; }", ""), "flex-basis 100%"],
   ]) ok(rusakJ + rusakC !== app + css && uji(rusakJ, rusakC).some((x) => x.includes(pesan)), `uji balik Agenda baris aksi: "${pesan}" harus tertangkap`);
+}
+
+// 2f-10b. Agenda: kalimat dividen bila dividen per saham belum diumumkan (Nina, 27 Nov 2026, kartu AADI).
+// dps angka → "Dividen Rp10 per saham (sebelum pajak)"; dps null → "belum diumumkan" + total dari sumber, tanpa angka per saham karangan.
+{
+  const app = readFileSync("assets/app.js", "utf8");
+  const uji = (js) => {
+    const i = js.indexOf("  function teksDividenAgenda("), j = js.indexOf("\n  }\n", i);
+    if (i < 0) return ["fungsi teksDividenAgenda wajib ada"];
+    let f; try { f = new Function("var angka2 = new Intl.NumberFormat('id-ID', { maximumFractionDigits: 2 });" + js.slice(i, j + 4) + "; return teksDividenAgenda;")(); } catch (e) { return ["teksDividenAgenda galat: " + e.message]; }
+    const salah = [];
+    const a = f({ dps: 19.5, mataUang: "IDR" }), b = f({ dps: 0.0123, mataUang: "USD" }), c = f({ dps: null, mataUang: "USD", totalDividenTeks: "US$500 juta" });
+    if (a !== "Dividen Rp19,5 per saham (sebelum pajak)") salah.push(`dps rupiah: "${a}"`);
+    if (b !== "Dividen US$0,01 per saham (sebelum pajak)") salah.push(`dps US$: "${b}"`);
+    if (!/^Dividen per saham belum diumumkan; total dividen US\$500 juta \(sebelum pajak\)$/.test(c)) salah.push(`dps null: "${c}"`);
+    if (/NaN|null|undefined/.test(a + b + c)) salah.push("kalimat tidak boleh memuat NaN/null/undefined");
+    if (!/teksDividenAgenda\(a\) \+ "\. Tercatat di Daftar Efek Syariah/.test(js)) salah.push("kartu Agenda wajib memakai teksDividenAgenda");
+    if (!/text: teksDividenAgenda\(a\) \+ ", tahun buku "/.test(js)) salah.push("kotak Info profil/Radar wajib memakai teksDividenAgenda");
+    return salah;
+  };
+  const s = uji(app);
+  ok(!s.length, "Agenda kalimat dividen: " + s.join("; "));
+  for (const [rusak, pesan] of [
+    [app.replace('return "Dividen per saham belum diumumkan"', 'return "Dividen " + a.dps + " per saham"'), "dps null"],
+    [app.replace('info.push(teksDividenAgenda(a) + ". Tercatat', 'info.push("Dividen" + ". Tercatat'), "kartu Agenda"],
+    [app.replace('text: teksDividenAgenda(a) + ", tahun buku "', 'text: "Dividen " + a.dps + ", tahun buku "'), "kotak Info"],
+  ]) ok(rusak !== app && uji(rusak).some((x) => x.includes(pesan)), `uji balik Agenda kalimat dividen: "${pesan}" harus tertangkap`);
 }
 
 // 2f-10. Agenda: contoh hitungan dividen per lot di kartu (Nina, 20 Nov 2026, IDE.md #38).

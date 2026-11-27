@@ -2516,6 +2516,14 @@
      yang sama dengan baris di atasnya. Dolar AS tetap US$ (tanpa konversi kurs). Hanya contoh hitungan, bukan perkiraan
      keuntungan dan bukan ajakan (ditinjau Hana). Kata "lot" dijadikan tombol istilah di setiap kartu. */
   var LEMBAR_PER_LOT = 100;
+  /* Arif (27 Nov 2026): kalimat dividen di kartu Agenda & kotak Info profil/Radar. Bila sumber menyebut dividen per saham
+     belum diumumkan (dps = null), yang ditulis hanya total dari sumber (totalDividenTeks); contoh hitungan & hitung lot
+     otomatis tidak tampil untuk kartu itu. Tanpa titik di akhir: pemanggil yang menambah kelanjutan kalimat. */
+  function teksDividenAgenda(a) {
+    if (typeof a.dps === "number" && a.dps > 0)
+      return "Dividen " + (a.mataUang === "USD" ? "US$" + angka2.format(a.dps) : "Rp" + angka2.format(a.dps)) + " per saham (sebelum pajak)";
+    return "Dividen per saham belum diumumkan" + (a.totalDividenTeks ? "; total dividen " + a.totalDividenTeks + " (sebelum pajak)" : "");
+  }
   var angkaContoh = new Intl.NumberFormat("id-ID", { maximumFractionDigits: 4 });
   function contohDividenLot(a) {
     if (typeof a.dps !== "number" || !(a.dps > 0)) return null;
@@ -2608,8 +2616,7 @@
       else if (hg.kisaranBawah != null) info.push("Kisaran harga Rp" + angka.format(hg.kisaranBawah) + "–Rp" + angka.format(hg.kisaranAtas) + " per saham.");
       if (a.sektor) info.push("Sektor: " + a.sektor + ".");
     } else {
-      info.push("Dividen " + (a.mataUang === "USD" ? "US$" + angka2.format(a.dps) : "Rp" + angka2.format(a.dps)) +
-        " per saham (sebelum pajak). Tercatat di Daftar Efek Syariah periode berjalan, baris " + a.desBaris + ".");
+      info.push(teksDividenAgenda(a) + ". Tercatat di Daftar Efek Syariah periode berjalan, baris " + a.desBaris + ".");
     }
     /* Dewi + Nina (21 Nov 2026, IDE.md #46): kartu dividen memakai garis waktu mini (.agenda-garis): titik di garis,
        tanggal tetap tertulis, "sudah lewat" tetap teks. Di layar lebar 4 titik sebaris; di HP garis tegak. CSS saja, tanpa animasi.
@@ -2838,8 +2845,7 @@
     return el("div", { class: "info-agenda", role: "note" }, [
       el("p", { class: "info-agenda-kepala" }, [el("span", { class: "kabar-jenis", text: "Info" }), " ",
         el("strong", { text: namaB + " dividen " + a.jenis + " " + tanggalId(c.x.berikut.tanggal) + ", " + teksMundur(c.n) })]),
-      el("p", { text: "Dividen " + (a.mataUang === "USD" ? "US$" + angka2.format(a.dps) : "Rp" + angka2.format(a.dps)) +
-        " per saham (sebelum pajak), tahun buku " + a.tahunBuku + ". Ini jadwal, bukan tanda risiko dan bukan saran membeli atau menjual." }),
+      el("p", { text: teksDividenAgenda(a) + ", tahun buku " + a.tahunBuku + ". Ini jadwal, bukan tanda risiko dan bukan saran membeli atau menjual." }),
       el("p", null, [el("a", { href: "agenda.html", text: "Lihat semua tanggal dan sumbernya di Agenda" })])
     ]);
   }

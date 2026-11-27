@@ -25,7 +25,10 @@
                            // salah satu sumber wajib menaut ke berkas DES dan judulnya mengutip baris itu
      jenis,                // "interim" | "final"
      tahunBuku,            // mis. 2026
-     dps,                  // dividen per saham, dalam mataUang
+     dps,                  // dividen per saham, dalam mataUang. Boleh null HANYA bila sumber menyebut dividen per saham
+                           // belum diumumkan; lalu totalDividenTeks wajib (Arif, 27 Nov 2026)
+     totalDividenTeks,     // opsional, mis. "US$500 juta" / "Rp103,2 miliar": total dividen persis seperti sumber,
+                           // dipakai hanya bila dps = null. Angkanya wajib muncul di judul salah satu sumber.
      mataUang,             // "IDR" atau "USD"
      tanggal: { cum, ex, recording, pembayaran },   // cum & ex = pasar reguler dan negosiasi
      sumber: [{ judul, url }]
@@ -92,5 +95,18 @@ window.AGENDA_DIVIDEN = [
       { judul: "Kontan, 19 Nov 2026: Palma Serasih (PSGO) tebar dividen interim Rp113,1 miliar, catat jadwalnya", url: "https://investasi.kontan.co.id/news/palma-serasih-psgo-tebar-dividen-interim-rp-1131-miliar-catat-jadwalnya" },
       { judul: "EmitenNews, 19 Nov 2026: PSGO jadwal dividen Rp113,1 miliar, cum date 27 November", url: "https://emitennews.com/news/psgo-jadwal-dividen-rp1131-miliar-cum-date-27-november" },
       { judul: "DES periode I 2026 (KEP-21/D.04/2026) baris 269: PSGO PT Palma Serasih Tbk", url: DES_2026_I }
+    ] },
+  // AADI — interim 2026 (Raka, 27 Nov 13.xx; Fajar: jadwal sama di Investortrust, StockWatch & Kontan, semua 25 Nov;
+  // dividen per saham BELUM diumumkan (Kontan: "belum mengumumkan besaran dividen per saham"), jadi dps = null dan
+  // yang ditulis hanya total US$500 juta. Dibayar dalam rupiah dengan kurs tengah BI 7 Des 2026. Hana: DES baris 8,
+  // sama dengan data/emiten-asli.js). Begitu DPS diumumkan (sekitar 7 Des), Fajar mengisi dps + sumbernya.
+  { kode: "AADI", desBaris: 8, jenis: "interim", tahunBuku: 2026, dps: null, totalDividenTeks: "US$500 juta", mataUang: "USD",
+    ditambahkan: "2026-11-27",
+    tanggal: { cum: "2026-12-03", ex: "2026-12-04", recording: "2026-12-07", pembayaran: "2026-12-11" },
+    sumber: [
+      { judul: "Investortrust, 25 Nov 2026: Adaro Andalan (AADI) tebar dividen interim US$ 500 juta, cek jadwal berikut", url: "https://investortrust.id/market/123672/adaro-andalan-aadi-tebar-dividen-interim-us-500-juta-cek-jadwal-berikut" },
+      { judul: "StockWatch, 25 Nov 2026: Adaro Andalan (AADI) tebar dividen interim USD500 juta, catat jadwal cum date", url: "https://stockwatch.id/adaro-andalan-aadi-tebar-dividen-interim-usd500-juta-catat-jadwal-cum-date/" },
+      { judul: "Kontan (di TradingView): Adaro Andalan Indonesia (AADI) tebar dividen interim US$ 500 juta, cek jadwalnya", url: "https://id.tradingview.com/news/kontan:294cee2a787ea:0/" },
+      { judul: "DES periode I 2026 (KEP-21/D.04/2026) baris 8: AADI PT Adaro Andalan Indonesia Tbk", url: DES_2026_I }
     ] }
 ];
