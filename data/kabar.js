@@ -65,6 +65,8 @@ window.KABAR = [
     ringkas: "Japfa Comfeed Indonesia menetapkan dividen interim tahun buku 2026 sebesar Rp90 per saham, total Rp1.052.780.364.090. Tanggal pencatatan 9 November 2026, pembayaran 12 November 2026.",
     sumber: { judul: "BCA Sekuritas, 28 Okt 2026: JPFA akan bagikan dividen interim Rp90 per saham (tahun buku 2026) pada 12 November 2026", url: "https://bcasekuritas.co.id/latest-news/news/jpfa-akan-bagikan-dividen-interim-12-november-2026" } },
   // Dividen interim ITMG tahun buku 2026 — Fortune IDN 13 Nov 2026; Rp1.286,83 sama di Katadata 13 Nov 2026, tanggal sama di Kontan 3 Nov 2026 (Raka + Fajar, ditinjau Hana, 24 Nov 09.xx)
+  // Cek tanggal bayar 27 Nov 19.xx (Fajar + Raka): pencatatan 12 Nov & bayar 18 Nov sama di Fortune 13 Nov, Kontan 3 Nov, dan Katadata 3 Nov ("14 Emiten Tebar Dividen November");
+  // EmitenNews 4 Nov (bayar 23 Nov) dianggap menyimpang, kabar tidak diubah. Angka Rp1.191,09 di Katadata 3 Nov (sebelum penetapan) tidak dipakai.
   { kode: "ITMG", tanggal: "2026-11-13", jenis: "Dividen",
     ringkas: "Indo Tambangraya Megah menetapkan dividen interim tahun buku 2026 sebesar Rp1.286,83 per saham. Tanggal pencatatan 12 November 2026, pembayaran 18 November 2026.",
     sumber: { judul: "Fortune IDN, 13 Nov 2026: ITMG tetapkan dividen interim Rp1.286,83 per saham", url: "https://www.fortuneidn.com/market/itmg-tetapkan-dividen-interim-rp1-286-83-per-saham-00-3dhnm-6jq0tx" } },
@@ -73,6 +75,11 @@ window.KABAR = [
   { kode: "ITMG", tanggal: "2026-11-04", jenis: "Pembelian kembali saham",
     ringkas: "Indo Tambangraya Megah menyiapkan dana hingga Rp2,31 triliun dari kas internal untuk membeli kembali sahamnya sendiri (buyback), maksimal 20% dari modal disetor, dalam kondisi pasar yang berfluktuasi signifikan. Jadwal 4 November 2026–4 Februari 2027.",
     sumber: { judul: "EmitenNews, 4 Nov 2026: Selain dividen, emiten tambang batu bara termal ini buyback jumbo", url: "https://emitennews.com/news/selain-dividen-emiten-tambang-batu-bara-termal-ini-buyback-jumbo" } },
+  // Penghentian buyback HRUM — EmitenNews 16 Nov 2026; tanggal efektif, dana & periode sama di BCA Sekuritas 17 Nov 2026 (IQPlus).
+  // Realisasi pembelian tidak disebut kedua sumber → tidak ditulis (Raka, ditinjau Hana, 27 Nov 19.xx)
+  { kode: "HRUM", tanggal: "2026-11-16", jenis: "Pembelian kembali saham",
+    ringkas: "Harum Energy menghentikan buyback mulai 17 November 2026, lebih awal dari jadwal semula 28 September–24 Desember 2026 (dana maksimal Rp120 miliar). Alasan perseroan: rencana restrukturisasi internal oleh pemegang saham pengendali.",
+    sumber: { judul: "EmitenNews, 16 Nov 2026: Harum Energy (HRUM) stop rencana buyback saham", url: "https://emitennews.com/news/harum-energy-hrum-stop-rencana-buyback-saham" } },
   // Realisasi buyback TPIA s/d 2 Nov 2026 — EmitenNews 2 Nov 2026; angka sama di BCA Sekuritas 3 Nov 2026 (Raka + Fajar, ditinjau Hana, 27 Nov 18.xx)
   { kode: "TPIA", tanggal: "2026-11-02", jenis: "Pembelian kembali saham",
     ringkas: "Chandra Asri Pacific telah membeli kembali 378.428.200 lembar sahamnya senilai Rp518,2 miliar hingga 2 November 2026, dari dana yang disiapkan hingga Rp2 triliun. Program dilanjutkan hingga 28 Januari 2027.",
