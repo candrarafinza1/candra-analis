@@ -2654,3 +2654,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Nina: `node tests/cek.mjs` lolos. Tegar: sumber https. Yoga: push ke main. Kurikulum tidak berubah.
 - Catatan teknis: salinan lokal `main` di mesin kerja menyimpang dari origin; sesi ini bekerja dari origin/main lewat cabang lokal, tidak ada riwayat yang ditimpa.
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 28 Nov 2026, 08.xx WIB — Bima
+- Raka + Fajar + Hana: kabar dividen SIDO yang terlewat ditambahkan. Sido Muncul membagikan dividen interim tahun buku 2026 Rp300 miliar atau Rp10 per saham, tanggal pencatatan 4 November, pembayaran 20 November 2026 (Kontan 23 Okt; angka & tanggal sama di EmitenNews dan Katadata 23 Okt). Hana: kalimat netral, yield Kontan tidak ditulis karena bergantung harga.
+- Fajar menyisir daftar dividen November Katadata (3 Nov & 16 Nov): emiten dalam data selain SIDO (ITMG, JPFA, UNTR) sudah punya kabar → kini 6 kabar dividen.
+- Nina: `node tests/cek.mjs` lolos. Dewi: Kabar (saringan Dividen) dan profil SIDO di 390px gelap & 1280px terang tanpa scroll horizontal & galat JS. Tegar: sumber https. Yoga: push ke main. Kurikulum tidak berubah.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

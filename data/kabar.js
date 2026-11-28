@@ -64,6 +64,11 @@ window.KABAR = [
   { kode: "JPFA", tanggal: "2026-10-28", jenis: "Dividen",
     ringkas: "Japfa Comfeed Indonesia menetapkan dividen interim tahun buku 2026 sebesar Rp90 per saham, total Rp1.052.780.364.090. Tanggal pencatatan 9 November 2026, pembayaran 12 November 2026.",
     sumber: { judul: "BCA Sekuritas, 28 Okt 2026: JPFA akan bagikan dividen interim Rp90 per saham (tahun buku 2026) pada 12 November 2026", url: "https://bcasekuritas.co.id/latest-news/news/jpfa-akan-bagikan-dividen-interim-12-november-2026" } },
+  // Dividen interim SIDO tahun buku 2026 — Kontan 23 Okt 2026; Rp300 miliar, Rp10 per saham, pencatatan 4 Nov & bayar 20 Nov sama di EmitenNews & Katadata 23 Okt 2026
+  // (Katadata menulis "10 per saham" tanpa "Rp"; yield Kontan tidak ditulis karena bergantung harga) (Raka + Fajar, ditinjau Hana, 28 Nov 08.xx)
+  { kode: "SIDO", tanggal: "2026-10-23", jenis: "Dividen",
+    ringkas: "Sido Muncul membagikan dividen interim tahun buku 2026 sebesar Rp300 miliar atau Rp10 per saham. Tanggal pencatatan 4 November 2026, pembayaran 20 November 2026.",
+    sumber: { judul: "Kontan, 23 Okt 2026: Sido Muncul (SIDO) bagikan dividen interim Rp 300 miliar, cek jadwalnya", url: "https://investasi.kontan.co.id/news/sido-muncul-sido-bagikan-dividen-interim-rp-300-miliar-cek-jadwalnya" } },
   // Dividen interim ITMG tahun buku 2026 — Fortune IDN 13 Nov 2026; Rp1.286,83 sama di Katadata 13 Nov 2026, tanggal sama di Kontan 3 Nov 2026 (Raka + Fajar, ditinjau Hana, 24 Nov 09.xx)
   // Cek tanggal bayar 27 Nov 19.xx (Fajar + Raka): pencatatan 12 Nov & bayar 18 Nov sama di Fortune 13 Nov, Kontan 3 Nov, dan Katadata 3 Nov ("14 Emiten Tebar Dividen November");
   // EmitenNews 4 Nov (bayar 23 Nov) dianggap menyimpang, kabar tidak diubah. Angka Rp1.191,09 di Katadata 3 Nov (sebelum penetapan) tidak dipakai.
