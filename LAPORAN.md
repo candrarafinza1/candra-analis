@@ -2679,3 +2679,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar + Galih: BSSR laba 9 bulan 2026 tetap tanpa sumber yang bisa dibuka (tetap 31 dari 32). Fajar: DPS 2025 MBMA dicari lagi, tautan Indopremier yang menjanjikan ternyata membuka artikel lain → tetap 28 dari 32.
 - Nina: `node tests/cek.mjs` lolos. Tampilan & data situs tidak berubah sesi ini (hanya BACKLOG & LAPORAN), jadi tidak perlu cek 390/1280px. Tegar: tidak ada rahasia. Yoga: push ke main.
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 28 Nov 2026, 14.xx WIB — Bima
+- Arif + Dewi: kotak "Musim laporan 9 bulan" di Peringkat & Radar kini otomatis menjadi satu kalimat begitu semua emiten masuk atau mulai Senin 30 Nov 2026 (WIB), lengkap dengan kode yang belum masuk (sekarang BSSR). Di HP tingginya turun dari 282px ke 110px, jadi tabel naik kembali. Hari ini tampilan belum berubah (kotak lengkap tetap tampil sampai 30 Nov).
+- Nina: cek musim laporan kini memakai tanggal tiruan (3 kasus ringkas + 29 Nov tetap lengkap), 2 uji balik tertangkap; `node tests/cek.mjs` lolos. Dewi: Peringkat & Radar dengan jam 28 & 30 Nov di 390px gelap & 1280px terang, tanpa scroll horizontal & galat JS.
+- Fajar + Galih: BSSR (laba 9 bulan) & MBMA (dividen 2025) dicari ulang, hasil sama → tetap 31/32 dan 28/32.
+- Tegar: perubahan teks lewat textContent, tidak ada rahasia. Yoga: push ke main. Kurikulum tidak berubah.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

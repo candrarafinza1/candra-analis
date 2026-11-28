@@ -807,9 +807,9 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
     return { wadahBeranda, document: { createElement: simpul, createTextNode: (t) => ({ textContent: String(t) }), getElementById: (id) => (id === "musim-beranda" ? wadahBeranda : null) } };
   };
   const cari = (n, f, out = []) => { if (f(n)) out.push(n); (n.anak || []).forEach((c) => cari(c, f, out)); return out; };
-  const uji = (EMITEN, nama, harapN, harapSudah, harapBelum) => {
+  const uji = (EMITEN, nama, harapN, harapSudah, harapBelum, hari = "2026-11-20") => {
     const { document, wadahBeranda } = buatDoc();
-    const ctxM = { document, EMITEN };
+    const ctxM = { document, EMITEN, MUSIM_HARI_UJI: hari };
     vm.runInNewContext(kode.join("\n") + "\n;globalThis.musimLaporan = musimLaporan; globalThis.musimBeranda = musimBeranda;", ctxM);
     const wadah = document.createElement("div");
     ctxM.musimLaporan(wadah); ctxM.musimBeranda();
@@ -831,8 +831,30 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
     "campuran, rugi tetap dihitung", 3, "ANTM, SIDO, UNVR", "BRIS, KLBF");
   uji([E("AAA", { 2026: null }), E("BBB", { 2026: "Rp1 T" }), E("CCC", { 2026: NaN }), E("DDD", { 2026: Infinity })],
     "nilai bukan angka tidak dihitung", 0, "belum ada", "AAA, BBB, CCC, DDD");
-  uji([E("ZZZ", { 2026: 1 }), E("AAA", { 2026: 0 })], "semua masuk, nol tetap angka", 2, "AAA, ZZZ", "tidak ada");
   uji([], "data kosong", 0, "belum ada", "tidak ada");
+  // Nina (28 Nov 2026): kotak diringkas jadi satu baris bila semua sudah masuk atau mulai 30 Nov 2026 WIB.
+  const ujiRingkas = (EMITEN, nama, hari, harapN, harapAkhir) => {
+    const { document, wadahBeranda } = buatDoc();
+    const ctxM = { document, EMITEN, MUSIM_HARI_UJI: hari };
+    vm.runInNewContext(kode.join("\n") + "\n;globalThis.musimLaporan = musimLaporan; globalThis.musimBeranda = musimBeranda;", ctxM);
+    const wadah = document.createElement("div");
+    ctxM.musimLaporan(wadah); ctxM.musimBeranda();
+    const kotak = wadah.anak[0] || {};
+    const teks = kotak.textContent || "";
+    ok(wadah.anak.length === 1 && /musim-ringkas/.test(kotak.atribut && kotak.atribut.class || kotak.className || ""),
+      `musimLaporan ringkas (${nama}): harus satu kotak .musim-ringkas`);
+    ok(!cari(kotak, (x) => x.tag === "details" || x.className === "musim-isi").length,
+      `musimLaporan ringkas (${nama}): tanpa batang & tanpa <details>`);
+    ok(teks.startsWith(`Laporan Januari–September 2026 sudah masuk untuk ${harapN} dari ${EMITEN.length} emiten`) && teks.endsWith(harapAkhir),
+      `musimLaporan ringkas (${nama}): teks salah (dapat: ${teks})`);
+    ok(wadahBeranda.textContent.includes(`${harapN} dari ${EMITEN.length} emiten`), `musimBeranda (${nama}) harus tetap sama`);
+  };
+  ujiRingkas([E("ZZZ", { 2026: 1 }), E("AAA", { 2026: 0 })], "semua masuk, nol tetap angka", "2026-11-20", 2, "emiten.");
+  ujiRingkas([E("BSSR"), E("ANTM", { 2026: 1 }), E("ACES", { 2026: 2 })], "30 Nov, satu belum", "2026-11-30", 2,
+    ". Belum masuk: BSSR (laporannya belum terbit atau sumbernya belum bisa dipastikan).");
+  ujiRingkas([E("BSSR"), E("ANTM", { 2026: 1 })], "Januari 2027", "2027-01-05", 1, "sumbernya belum bisa dipastikan).");
+  // Uji balik: 29 Nov dengan satu belum masuk harus tetap kotak lengkap.
+  uji([E("BSSR"), E("ANTM", { 2026: 1 })], "29 Nov masih lengkap", 1, "ANTM", "BSSR", "2026-11-29");
   // Data asli: hitungan kotak sama dengan hitungan langsung dari data.
   const n9 = ASLI.filter((e) => e.laba9b && typeof e.laba9b[2026] === "number" && isFinite(e.laba9b[2026]));
   uji(ASLI, "data asli", n9.length, n9.map((e) => e.kode).sort((a, b) => a.localeCompare(b)).join(", "),

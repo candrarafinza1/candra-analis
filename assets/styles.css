@@ -554,6 +554,7 @@ input::placeholder, textarea::placeholder { color: var(--tinta-2); opacity: 1; }
 /* Musim laporan 9 bulan (Dewi, IDE.md #17): teks selalu tertulis, batang hanya pelengkap */
 .musim-laporan { border: 1px solid var(--garis); border-radius: var(--radius-kecil); padding: 12px 16px; margin: 0 0 20px; font-size: .95rem; }
 .musim-laporan p { margin: 0; }
+.musim-ringkas { padding: 8px 12px; margin-bottom: 12px; font-size: .9rem; overflow-wrap: break-word; }
 .musim-jalur { background: var(--garis); border-radius: var(--radius-kecil); height: .7rem; overflow: hidden; margin: 8px 0; max-width: var(--lebar-teks); }
 .musim-isi { display: block; height: 100%; background: var(--naik); border-radius: var(--radius-kecil); }
 .musim-catatan { color: var(--tinta-2); font-size: .9rem; }

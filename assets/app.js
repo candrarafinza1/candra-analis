@@ -85,6 +85,21 @@
     var belum = urut.filter(function (e) { return !(e.laba9b && ada(e.laba9b[2026])); }).map(function (e) { return e.kode; });
     var n = sudah.length, total = urut.length;
     var pct = total ? Math.round(n / total * 100) : 0;
+    /* Arif + Dewi (28 Nov 2026, temuan Kirana 2 Nov): setelah musim laporan usai — semua emiten sudah masuk,
+       atau mulai 30 Nov 2026 (WIB) — kotak diringkas jadi satu baris agar tabel naik kembali di HP.
+       MUSIM_HARI_UJI hanya dipakai tests/cek.mjs untuk meniru tanggal. */
+    var mulaiRingkas = "2026-11-30";
+    var hari = typeof MUSIM_HARI_UJI === "string" ? MUSIM_HARI_UJI : new Date(Date.now() + 7 * 36e5).toISOString().slice(0, 10);
+    if (total && (n === total || hari >= mulaiRingkas)) {
+      wadah.appendChild(el("div", { class: "musim-laporan musim-ringkas", role: "note", "aria-label": "Musim laporan 9 bulan" }, [
+        el("p", { class: "musim-teks" }, [
+          "Laporan Januari–September 2026 sudah masuk untuk ",
+          el("strong", { text: n + " dari " + total + " emiten" }),
+          belum.length ? ". Belum masuk: " + belum.join(", ") + " (laporannya belum terbit atau sumbernya belum bisa dipastikan)." : "."
+        ])
+      ]));
+      return;
+    }
     var isi = el("span", { class: "musim-isi" });
     isi.style.width = pct + "%";
     var jalur = el("div", { class: "musim-jalur", "aria-hidden": "true" }, [isi]);
