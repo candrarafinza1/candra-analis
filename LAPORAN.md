@@ -2645,3 +2645,12 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - MIKA laba 9 bulan 2026 dicari lagi: hasil masih kuartal III/2025 & semester I/2026 → tetap 30 dari 32.
 - Nina: `node tests/cek.mjs` lolos. Dewi: Kabar (saringan buyback = 9 kabar) di 390px gelap & 1280px terang dan profil KLBF di 390px, tanpa scroll horizontal & galat JS. Tegar: sumber https. Yoga: push ke main. Kurikulum tidak berubah.
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 28 Nov 2026, 07.xx WIB — Bima
+- Laporan masuk kerja pagi dikirim ke Rafinza (07.10).
+- Rutin Agenda pagi (Raka + Fajar + Hana): Agenda: +0 IPO, +0 dividen, −0 kedaluwarsa. Dividen baru yang muncul di berita (BBCA, BFIN, MLBI) bukan/belum terbukti saham syariah → tidak dicatat. `AGENDA_DIPERIKSA` jadi 28 Nov.
+- ANDA: Fortune 27 Nov mengutip BEI bahwa penawaran umum ANDA mundur dari jadwal 24–27 Nov, BEI menunggu konfirmasi perseroan; status syariah ANDA & BUAT tetap tanpa bukti → tidak dicatat, dicoba lagi Senin 07.xx.
+- Kirana + Dewi: agenda.html dicek 390px gelap & 1280px terang, tanpa scroll horizontal & galat JS.
+- Nina: `node tests/cek.mjs` lolos. Tegar: sumber https. Yoga: push ke main. Kurikulum tidak berubah.
+- Catatan teknis: salinan lokal `main` di mesin kerja menyimpang dari origin; sesi ini bekerja dari origin/main lewat cabang lokal, tidak ada riwayat yang ditimpa.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
