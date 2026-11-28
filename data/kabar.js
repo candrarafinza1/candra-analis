@@ -89,6 +89,15 @@ window.KABAR = [
   { kode: "TPIA", tanggal: "2026-11-02", jenis: "Pembelian kembali saham",
     ringkas: "Chandra Asri Pacific telah membeli kembali 378.428.200 lembar sahamnya senilai Rp518,2 miliar hingga 2 November 2026, dari dana yang disiapkan hingga Rp2 triliun. Program dilanjutkan hingga 28 Januari 2027.",
     sumber: { judul: "EmitenNews, 2 Nov 2026: Realisasi buyback saham 4 emiten Pak PP Rp830M hingga awal November", url: "https://emitennews.com/news/realisasi-buyback-saham-4-emiten-pak-pp-rp830m-hingga-awal-november" } },
+  // RUPS Luar Biasa TLKM 30 Sep 2026 — Katadata 1 Okt 2026; tanggal rapat, persetujuan pemisahan ke InfraNexia & Direktur Utama sama di BCA Sekuritas (IQPlus) 1 Okt 2026
+  // (Bisnis 9 & 30 Sep tidak bisa dibuka alat tim) (Raka, ditinjau Hana, 28 Nov 09.xx)
+  { kode: "TLKM", tanggal: "2026-10-01", jenis: "Rapat umum pemegang saham",
+    ringkas: "RUPSLB Telkom 30 September 2026 menyetujui pemisahan bisnis dan aset fiber grosir ke PT Telkom Infrastruktur Indonesia (InfraNexia), nilai transaksi sekitar Rp85,7 triliun, serta perubahan pengurus dengan Nanang Hendarno sebagai Direktur Utama.",
+    sumber: { judul: "Katadata, 1 Okt 2026: RUPSLB Telkom 2026 setujui spin-off InfraCo dan perubahan direksi", url: "https://katadata.co.id/finansial/korporasi/6abe21bd934e5/rupslb-telkom-2026-setujui-spin-off-infraco-dan-perubahan-direksi" } },
+  // Kebijakan dividen TLKM tahun buku 2026 — Kontan 7 Sep 2026; rentang 60–90% & dividen setelah tahun buku sama di BCA Sekuritas (IQPlus) 7 Sep 2026 (Raka + Fajar, ditinjau Hana, 28 Nov 09.xx)
+  { kode: "TLKM", tanggal: "2026-09-07", jenis: "Dividen",
+    ringkas: "Telkom tidak membagikan dividen interim dari kinerja semester I 2026. Dividen tunai akan diputuskan RUPS setelah tahun buku berakhir, dengan rasio pembagian 60–90% dari laba bersih tahun buku 2026.",
+    sumber: { judul: "Kontan, 7 Sep 2026: Telkom (TLKM) absen bagi dividen interim, ini alasannya", url: "https://investasi.kontan.co.id/news/telkom-tlkm-absen-bagi-dividen-interim-ini-alasannya" } },
   // RUPS Luar Biasa UNTR 9 Nov 2026 — Investortrust 9 Nov 2026 (Bisnis 9 Nov tidak bisa dibuka alat tim) (Raka, ditinjau Hana, 27 Nov 17.xx)
   { kode: "UNTR", tanggal: "2026-11-09", jenis: "Rapat umum pemegang saham",
     ringkas: "RUPSLB United Tractors 9 November 2026 menyetujui penghapusan 238,79 juta saham treasuri hasil buyback (6,4% dari modal ditempatkan dan disetor) serta mengangkat Irwandy Arif sebagai komisaris independen dan Christopher Suprayogie Ganis sebagai komisaris.",

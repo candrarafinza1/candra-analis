@@ -2660,3 +2660,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar menyisir daftar dividen November Katadata (3 Nov & 16 Nov): emiten dalam data selain SIDO (ITMG, JPFA, UNTR) sudah punya kabar → kini 6 kabar dividen.
 - Nina: `node tests/cek.mjs` lolos. Dewi: Kabar (saringan Dividen) dan profil SIDO di 390px gelap & 1280px terang tanpa scroll horizontal & galat JS. Tegar: sumber https. Yoga: push ke main. Kurikulum tidak berubah.
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 28 Nov 2026, 09.xx WIB — Bima
+- Raka + Fajar + Hana: dua kabar TLKM yang terlewat ditambahkan. (1) RUPSLB 30 September 2026 menyetujui pemisahan bisnis dan aset fiber grosir ke PT Telkom Infrastruktur Indonesia (InfraNexia), nilai transaksi sekitar Rp85,7 triliun, serta perubahan pengurus dengan Nanang Hendarno sebagai Direktur Utama (Katadata 1 Okt; tanggal rapat, persetujuan & direksi sama di BCA Sekuritas/IQPlus 1 Okt). (2) Telkom tidak membagikan dividen interim semester I 2026; dividen tunai diputuskan RUPS setelah tahun buku, rasio 60–90% laba bersih tahun buku 2026 (Kontan 7 Sep; sama di BCA Sekuritas/IQPlus 7 Sep). Hana: kalimat netral, istilah Inggris "spin-off" tidak dipakai di ringkasan.
+- Ringkasan RUPSLB pertama 270+ karakter (cek 20–260) → dipendekkan menjadi 244.
+- Nina: `node tests/cek.mjs` lolos. Dewi: Kabar (saringan RUPS = 2, Dividen = 7) di 390px gelap & 1280px terang dan profil TLKM, tanpa scroll horizontal & galat JS. Tegar: sumber https. Yoga: push ke main. Kurikulum tidak berubah.
+- Catatan: Bisnis.com (9 & 30 Sep) tetap gagal dibuka alat tim. Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
