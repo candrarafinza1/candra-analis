@@ -2706,3 +2706,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Nina: cek 2f-37 (frasa sumber wajib ada di pelajaran, hanya di buka-rekening, dilewati Lembar rumus, petunjuk tidak membocorkan jawaban) + 8 uji balik; uji 2f-21 dibuat berparameter; `node tests/cek.mjs` lolos. Dewi: 390px gelap & 1280px terang, susun dengan keyboard sampai benar, tanpa scroll horizontal & galat JS. Tegar: teks lewat textContent, tanpa simpan/kirim, tidak ada rahasia. Yoga: push ke main.
 - Fajar: DES periode II 2026 dicek lagi di OJK: terbaru tetap KEP-21/D.04/2026 (periode I).
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 28 Nov 2026, 18.xx WIB — Bima
+- Tugas prioritas Agenda masih menunggu sumber (ANDA & BUAT, BSSR, MBMA, DPS AADI, DES periode II), jadi tim mengerjakan tugas pendukung. Usulan #68–#70 sudah selesai; Kirana + Laras menulis usulan #71 dan Bima langsung memilihnya.
+- Arif + Laras: bagian baru "Kuis ulangan: semua pelajaran" di halaman Belajar (IDE.md #71). 8 soal, satu dipilih acak dari kuis tiap pelajaran (soal & penjelasan sama persis, tanpa soal baru). Jawaban yang belum tepat diberi tautan "Baca lagi: <judul pelajaran>". Tombol "Ganti soal" memilih soal lain. Tidak dinilai, tidak disimpan. Kuis di tiap pelajaran tidak berubah.
+- Nina: cek 2f-38 + 12 uji balik; `node tests/cek.mjs` lolos. Dewi: 390px gelap & 1280px terang, tanpa scroll horizontal & galat JS. Tegar: teks lewat textContent, tanpa simpan/kirim, tidak ada rahasia. Yoga: push ke main. Kurikulum (data/modul.js) tidak berubah, jadi PDF tidak dibuat ulang.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

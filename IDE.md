@@ -1219,3 +1219,12 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Usaha: kecil–sedang (Arif + Laras; Nina cek).
 - Status: dipilih Bima 28 Nov 16.xx; **selesai 28 Nov 17.xx** (Arif + Laras; Nina cek 2f-37 + 8 uji balik; Dewi 390/1280px). Kini kedelapan pelajaran punya latihan interaktif. Kirana meninjau di HP sungguhan begitu bisa.
 
+
+### 71. Halaman Belajar: "Kuis ulangan: semua pelajaran" (Kirana + Laras, 28 Nov 2026, 18.xx WIB) ★ paling berdampak — kecil
+- Masalah: kuis hanya ada di akhir tiap pelajaran. Pemula yang sudah selesai belajar tidak punya cara cepat mengulang semua materi sekaligus.
+- Ide: satu bagian di halaman Belajar, sesudah daftar pelajaran: satu soal acak dari kuis tiap pelajaran (8 soal), memakai ulang komponen kuis (Periksa, Ulangi, Ulangi soal yang salah). Jawaban salah diberi tautan "Baca lagi: <judul pelajaran>". Tombol "Ganti soal" memilih soal lain.
+- Tren yang diacu: "spaced repetition"/latihan campuran di aplikasi belajar (mis. kartu ulangan di aplikasi bahasa).
+- Dampak bagi pemula: mengingat inti semua pelajaran dan langsung tahu pelajaran mana yang perlu dibaca lagi.
+- Batasan: soal sama persis dengan kuis pelajaran (tanpa soal baru), tanpa skor tersimpan, tanpa animasi, bisa keyboard, bahasa netral.
+- Usaha: kecil (Arif + Laras; Nina cek).
+- Status: dipilih Bima 28 Nov 18.xx; **selesai 28 Nov 18.xx** (Arif + Laras; Nina cek 2f-38 + 12 uji balik; Dewi 390px gelap & 1280px terang). Kirana meninjau di HP sungguhan begitu bisa.

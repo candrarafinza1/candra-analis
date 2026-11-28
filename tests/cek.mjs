@@ -2365,6 +2365,109 @@ ok(!cekLaba9b({ laba9b: { 2025: 90, 2026: 100 }, sumber: [] }), "cek laba9b tida
     const b = blokAsisten.replace(lama, baru);
     ok(b !== blokAsisten && (await ujiAsisten(b)).some((s) => s.includes(pesan)), `uji balik Alur kirim Asisten: "${pesan}" harus tertangkap`);
   }
+  // 2f-38. Kuis ulangan semua pelajaran di halaman Belajar (Nina, 28 Nov 2026 18.xx; Arif + Laras, IDE.md #71):
+  // satu soal dari kuis tiap pelajaran (soal, pilihan, jawaban, penjelasan sama persis, tanpa soal baru), acak aman di
+  // ujung (acak()=1 tidak keluar daftar), judul h2 hanya dari HTML (tidak ganda), cadangan tanpa JS disembunyikan,
+  // jawaban salah → tautan "Baca lagi: <judul>" ke pelajaran asal, jawaban benar tanpa tautan, "Ganti soal" mengganti
+  // formulir, memfokus pilihan pertama, dan diumumkan. Kuis pelajaran biasa tetap "Cek pemahaman" (cek kuis di atas).
+  const ujiUlangan = (blok, js, html) => {
+    const salah = [];
+    const { doc, semua } = buatDom();
+    const buatAsli = doc.createElement;
+    doc.createElement = (tag) => {
+      const e = buatAsli(tag);
+      e.querySelector = (sel) => {
+        const isi = semua(e).filter((n) => n.nodeType === 1 && n !== e);
+        const c = sel.match(/^input\[name="([^"]+)"\]:checked$/);
+        if (c) return isi.find((n) => n.nodeName === "INPUT" && n.getAttribute("name") === c[1] && n.checked) || null;
+        return sel === "input" ? isi.find((n) => n.nodeName === "INPUT") || null : null;
+      };
+      e.reset = () => semua(e).forEach((n) => { if (n.nodeName === "INPUT") n.checked = false; });
+      return e;
+    };
+    const ctxU = {
+      document: doc, MODUL, URLSearchParams, location: { search: "" }, Math: Object.assign(Object.create(Math), { random: () => 0 }),
+      localStorage: { getItem: () => null, setItem() {} }, sessionStorage: { getItem: () => null, setItem() {} },
+      NodeFilter: { SHOW_TEXT: 4, FILTER_ACCEPT: 1, FILTER_REJECT: 2, FILTER_SKIP: 3 },
+      window: { ISTILAH: [], innerWidth: 390, innerHeight: 800, addEventListener() {}, matchMedia: () => ({ matches: false, addEventListener() {} }) },
+    };
+    try { vm.runInNewContext(ambilEl + "\n" + blok + "\n;globalThis.pilih = pilihSoalUlangan; globalThis.render = renderKuisUlangan;", ctxU); }
+    catch (e) { return ["kuis ulangan galat: " + e.message]; }
+    if (typeof ctxU.pilih !== "function" || typeof ctxU.render !== "function") return ["pilihSoalUlangan & renderKuisUlangan wajib ada"];
+    const n = MODUL.filter((m) => m.kuis && m.kuis.length).length;
+    for (const [acak, nama] of [[() => 0, "awal"], [() => 0.9999, "akhir"], [() => 1, "acak()=1"]]) {
+      let d;
+      try { d = ctxU.pilih(MODUL, acak); } catch (e) { salah.push(`pilihSoalUlangan galat (${nama}): ${e.message}`); continue; }
+      if (d.length !== n) { salah.push(`satu soal per pelajaran (${nama}): ${d.length} dari ${n}`); continue; }
+      d.forEach((q, k) => {
+        const m = MODUL[k], asli = m.kuis[nama === "awal" ? 0 : m.kuis.length - 1];
+        if (!asli || q.soal !== asli.soal || q.jelas !== asli.jelas || q.benar !== asli.benar || JSON.stringify(q.pilihan) !== JSON.stringify(asli.pilihan))
+          salah.push(`soal ulangan wajib sama persis dengan kuis pelajaran ${m.id} (${nama})`);
+        if (!q.asal || q.asal.href !== "pelajaran.html?m=" + m.id || q.asal.judul !== m.judul) salah.push(`asal soal wajib menaut ke pelajaran ${m.id}`);
+      });
+    }
+    const wadah = doc.createElement("div"); wadah.setAttribute("id", "kuis-ulangan");
+    const cadangan = doc.createElement("p"); cadangan.setAttribute("id", "kuis-ulangan-tanpa-js"); cadangan.textContent = "Aktifkan JavaScript";
+    wadah.appendChild(cadangan); doc.body.appendChild(wadah);
+    try { ctxU.render(); } catch (e) { return [...salah, "renderKuisUlangan galat: " + e.message]; }
+    const form = () => wadah.anak.find((c) => c.nodeName === "FORM");
+    const f1 = form();
+    if (!f1) return [...salah, "kuis ulangan wajib dipasang di #kuis-ulangan"];
+    if (!cadangan.hidden) salah.push("teks cadangan tanpa JS wajib disembunyikan");
+    const isi = (f) => semua(f).filter((x) => x.nodeType === 1);
+    if (isi(f1).some((x) => x.nodeName === "H2")) salah.push("judul h2 kuis ulangan hanya dari HTML (tanpa h2 ganda)");
+    const fs = isi(f1).filter((x) => x.nodeName === "FIELDSET");
+    if (fs.length !== n) salah.push(`kuis ulangan wajib ${n} soal, ada ${fs.length}`);
+    const peng = isi(f1).find((x) => x.className === "kuis-pengantar");
+    if (!peng || !peng.textContent.startsWith(n + " soal, satu dari kuis setiap pelajaran") || !/Tidak dinilai dan tidak disimpan\.$/.test(peng.textContent)) salah.push("pengantar kuis ulangan wajib menyebut jumlah soal & tidak disimpan");
+    const radio = isi(f1).filter((x) => x.nodeName === "INPUT");
+    const kirim = (f) => (f.pendengar.submit || []).forEach((h) => h({ preventDefault() {} }));
+    const soal = ctxU.pilih(MODUL, () => 0);
+    radio.forEach((r) => { const i = +r.getAttribute("name").slice(5), j = +r.getAttribute("value"); r.value = String(j); r.checked = i === 0 ? j !== soal[0].benar && j === (soal[0].benar + 1) % soal[0].pilihan.length : j === soal[i].benar; });
+    kirim(f1);
+    const umpan = isi(f1).filter((x) => x.nodeName === "P" && /kuis-umpan/.test(x.className));
+    const a0 = umpan[0] ? isi(umpan[0]).find((x) => x.nodeName === "A") : null;
+    if (!a0 || a0.getAttribute("href") !== soal[0].asal.href || a0.textContent !== "Baca lagi: " + soal[0].asal.judul) salah.push('jawaban salah wajib diberi tautan "Baca lagi: <judul pelajaran>"');
+    if (umpan[0] && !umpan[0].textContent.startsWith("✗ Belum tepat. Jawaban: ")) salah.push("umpan jawaban salah tetap ✗ + jawaban benar");
+    if (umpan.slice(1).some((u) => isi(u).some((x) => x.nodeName === "A"))) salah.push("jawaban benar tanpa tautan Baca lagi");
+    radio.forEach((r) => { const i = +r.getAttribute("name").slice(5); r.checked = +r.value === soal[i].benar; });
+    kirim(f1);
+    const hasil = isi(f1).find((x) => x.nodeName === "P" && /kuis-hasil/.test(x.className));
+    if (!hasil || !hasil.textContent.startsWith(n + " dari " + n + " benar. Bagus, inti setiap pelajaran sudah Anda ingat.")) salah.push("pesan semua benar kuis ulangan: " + (hasil && hasil.textContent));
+    const ganti = semua(wadah).find((x) => x.nodeName === "BUTTON" && x.textContent === "Ganti soal");
+    const pesan = semua(wadah).find((x) => x.nodeName === "P" && x.getAttribute("role") === "status" && x.className === "kuis-pengantar");
+    if (!ganti) return [...salah, 'tombol "Ganti soal" wajib ada'];
+    doc.activeElement = null;
+    (ganti.pendengar.click || []).forEach((h) => h({ target: ganti }));
+    const f2 = form();
+    if (!f2 || f2 === f1 || f1.parentNode || wadah.anak.filter((c) => c.nodeName === "FORM").length !== 1) salah.push("Ganti soal wajib mengganti formulir (tetap satu)");
+    else if (doc.activeElement !== isi(f2).find((x) => x.nodeName === "INPUT")) salah.push("Ganti soal wajib memfokus pilihan pertama");
+    if (!pesan || pesan.textContent !== "Soal baru dipilih. Mulai lagi dari soal 1.") salah.push("Ganti soal wajib diumumkan di role=status");
+    if (!/\n  renderJalur\("jalur-lengkap", true\);\n  jagaGulirKembali\("jalur-lengkap"\);\n  renderKuisUlangan\(\);\n/.test(js)) salah.push("renderKuisUlangan wajib dipanggil");
+    if ((html.match(/id="judul-kuis"/g) || []).length !== 1 || !/<section class="bagian" aria-labelledby="judul-kuis">/.test(html) || !/<div id="kuis-ulangan">/.test(html) || !/<p id="kuis-ulangan-tanpa-js">/.test(html)) salah.push("belajar.html wajib punya bagian kuis ulangan (judul-kuis satu kali, #kuis-ulangan, cadangan)");
+    const iU = js.indexOf("  function pilihSoalUlangan("), bU = iU < 0 ? "" : js.slice(iU, js.indexOf("  /* ---------- Latihan \"Urutkan 4 tanggal dividen\"", iU));
+    if (/buruan|pasti untung|pasti naik|rekomendasi beli|segera beli|\bskor terbaik\b/i.test(bU)) salah.push("kuis ulangan tanpa kata ajakan");
+    if (/localStorage|sessionStorage|fetch\(/.test(bU)) salah.push("kuis ulangan tidak menyimpan/mengirim apa pun");
+    return salah;
+  };
+  const htmlBelajar = readFileSync("belajar.html", "utf8");
+  const s38 = ujiUlangan(blokRender, app, htmlBelajar);
+  ok(!s38.length, "kuis ulangan semua pelajaran (2f-38): " + s38.join("; "));
+  const gantiR = (a, b) => blokRender.replace(a, b);
+  for (const [blok, js, html, pesan] of [
+    [gantiR("Math.min(m.kuis.length - 1, Math.floor(acak() * m.kuis.length))", "Math.floor(acak() * m.kuis.length)"), app, htmlBelajar, "acak()=1"],
+    [gantiR("return { soal: q.soal, pilihan: q.pilihan, benar: q.benar, jelas: q.jelas,", "return { soal: q.soal + \"?\", pilihan: q.pilihan, benar: q.benar, jelas: q.jelas,"), app, htmlBelajar, "sama persis"],
+    [gantiR('        if (!tepat && q.asal) { u.appendChild(document.createTextNode(" ")); u.appendChild(el("a", { href: q.asal.href, text: "Baca lagi: " + q.asal.judul })); }\n', ""), app, htmlBelajar, "Baca lagi"],
+    [gantiR("if (!tepat && q.asal)", "if (q.asal)"), app, htmlBelajar, "jawaban benar tanpa tautan"],
+    [gantiR("    if (!o.tanpaJudul) form.appendChild(", "    form.appendChild("), app, htmlBelajar, "h2 ganda"],
+    [gantiR("    if (cadangan) cadangan.hidden = true;\n", ""), app, htmlBelajar, "cadangan"],
+    [gantiR("(o.bagus || \". Bagus, Anda siap ke pelajaran berikutnya.\")", "\". Bagus, Anda siap ke pelajaran berikutnya.\""), app, htmlBelajar, "pesan semua benar"],
+    [gantiR("      if (form) form.parentNode.replaceChild(baru, form); else wadah.insertBefore(baru, baris);", "      wadah.insertBefore(baru, baris);"), app, htmlBelajar, "tetap satu"],
+    [gantiR("      if (pertama) pertama.focus();\n    });\n  }", "    });\n  }"), app, htmlBelajar, "memfokus pilihan pertama"],
+    [gantiR('      pesan.textContent = "Soal baru dipilih. Mulai lagi dari soal 1.";\n', ""), app, htmlBelajar, "diumumkan"],
+    [blokRender, app.replace("  renderKuisUlangan();\n", ""), htmlBelajar, "wajib dipanggil"],
+    [blokRender, app, htmlBelajar.replace('<div id="kuis-ulangan">', "<div>"), "belajar.html wajib"],
+  ]) ok((blok !== blokRender || js !== app || html !== htmlBelajar) && ujiUlangan(blok, js, html).some((x) => x.includes(pesan)), `uji balik kuis ulangan: "${pesan}" harus tertangkap`);
 }
 
 // Tegar & Arif (10 Nov 16.10): setiap fetch() di assets/*.js hanya ke alamat relatif situs sendiri
@@ -2670,6 +2773,7 @@ ok(/\.form-tanya textarea::placeholder\s*\{[^}]*color:\s*var\(--tinta-2\)/.test(
     "istilah-hari": ["index.html"], "kabar-beranda": ["index.html"], "lanjutkan-belajar": ["index.html"],
     "mini-peringkat": ["index.html"], "musim-beranda": ["index.html"],
     kabar: ["kabar.html"], agenda: ["agenda.html"], "agenda-beranda": ["index.html"], "kamus-istilah": ["belajar.html"], rujukan: ["belajar.html"],
+    "kuis-ulangan": ["belajar.html"], "kuis-ulangan-tanpa-js": ["belajar.html"],
     peringkat: ["peringkat.html"], radar: ["radar.html"],
     pita: ["emiten.html", "peringkat.html", "radar.html"],
   };

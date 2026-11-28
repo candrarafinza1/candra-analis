@@ -240,10 +240,13 @@
 
   /* ---------- Kuis akhir pelajaran (tim Laras, Sari, Hana; tampilan Dewi) ----------
      Tanpa server dan tanpa menyimpan apa pun: jawaban hanya diperiksa di perangkat. */
-  function buatKuis(m) {
+  // opsi (Arif, 28 Nov 2026, IDE.md #71, dipakai Kuis ulangan di halaman Belajar): tanpaJudul (judul h2
+  // id="judul-kuis" sudah ada di HTML halaman), pengantar, bagus (pesan semua benar). Soal boleh punya asal {judul, href}: jawaban salah diberi tautan "Baca lagi".
+  function buatKuis(m, opsi) {
+    var o = opsi || {};
     var form = el("form", { class: "kuis", "aria-labelledby": "judul-kuis", novalidate: "" });
-    form.appendChild(el("h2", { id: "judul-kuis", text: "Cek pemahaman" }));
-    form.appendChild(el("p", { class: "kuis-pengantar", text: "Tiga soal singkat dari pelajaran ini. Pilih satu jawaban di tiap soal, lalu periksa. Tidak dinilai dan tidak disimpan." }));
+    if (!o.tanpaJudul) form.appendChild(el("h2", { id: "judul-kuis", text: "Cek pemahaman" }));
+    form.appendChild(el("p", { class: "kuis-pengantar", text: o.pengantar || "Tiga soal singkat dari pelajaran ini. Pilih satu jawaban di tiap soal, lalu periksa. Tidak dinilai dan tidak disimpan." }));
     var umpan = [], soalFs = [], wadahPilihan = [], masukan = [], dilipat = [], salahTerakhir = [], tepatTerakhir = [];
     m.kuis.forEach(function (q, i) {
       // Dewi & Nina (18 Nov 08.xx, WCAG 3.3.1): umpan per soal (mis. "Belum dijawab.") terhubung ke kelompok soalnya.
@@ -290,9 +293,10 @@
         if (tepat) { benar++; tepatTerakhir.push(i); } else salahTerakhir.push(i);
         u.className = "kuis-umpan " + (tepat ? "kuis-tepat" : "kuis-salah");
         u.textContent = (tepat ? "✓ Benar. " : "✗ Belum tepat. Jawaban: " + q.pilihan[q.benar] + ". ") + q.jelas;
+        if (!tepat && q.asal) { u.appendChild(document.createTextNode(" ")); u.appendChild(el("a", { href: q.asal.href, text: "Baca lagi: " + q.asal.judul })); }
       });
       hasil.textContent = benar + " dari " + m.kuis.length + " benar" +
-        (kosong ? " (" + kosong + " soal belum dijawab)." : benar === m.kuis.length ? ". Bagus, Anda siap ke pelajaran berikutnya." : ". Baca lagi bagian yang belum tepat, lalu coba ulangi.");
+        (kosong ? " (" + kosong + " soal belum dijawab)." : benar === m.kuis.length ? (o.bagus || ". Bagus, Anda siap ke pelajaran berikutnya.") : ". Baca lagi bagian yang belum tepat, lalu coba ulangi.");
       ulang.hidden = false;
       ulangSalah.hidden = salahTerakhir.length === 0;
     });
@@ -324,6 +328,48 @@
       masukan[buka[0]][0].focus();
     });
     return form;
+  }
+
+  /* ---------- Kuis ulangan semua pelajaran (Arif + Laras, 28 Nov 2026, IDE.md #71 Kirana) ----------
+     Di halaman Belajar, sesudah daftar pelajaran. Satu soal acak dari kuis setiap pelajaran; soal, pilihan, dan
+     penjelasan sama persis dengan kuis pelajaran (tanpa soal baru). Jawaban salah diberi tautan "Baca lagi" ke
+     pelajaran asalnya. Tombol "Ganti soal" memilih soal lain. Tidak dinilai, tidak disimpan, tanpa animasi. */
+  function pilihSoalUlangan(daftar, acak) {
+    return daftar.filter(function (m) { return m.kuis && m.kuis.length; }).map(function (m) {
+      var q = m.kuis[Math.min(m.kuis.length - 1, Math.floor(acak() * m.kuis.length))];
+      return { soal: q.soal, pilihan: q.pilihan, benar: q.benar, jelas: q.jelas,
+        asal: { judul: m.judul, href: "pelajaran.html?m=" + m.id } };
+    });
+  }
+  function renderKuisUlangan() {
+    var wadah = document.getElementById("kuis-ulangan");
+    if (!wadah || !MODUL.length) return;
+    var form = null;
+    var pesan = el("p", { class: "kuis-pengantar", role: "status", "aria-live": "polite" });
+    var ganti = el("button", { type: "button", class: "tombol kuis-ulang", text: "Ganti soal" });
+    var baris = el("div", { class: "kuis-aksi kuis-ulangan-ganti" }, [ganti]);
+    function pasang() {
+      var soal = pilihSoalUlangan(MODUL, Math.random);
+      var baru = buatKuis({ kuis: soal }, {
+        tanpaJudul: true,
+        pengantar: soal.length + " soal, satu dari kuis setiap pelajaran, dipilih acak. Cocok untuk mengulang setelah selesai belajar. Bila jawaban belum tepat, ada tautan untuk membaca lagi pelajarannya. Tidak dinilai dan tidak disimpan.",
+        bagus: ". Bagus, inti setiap pelajaran sudah Anda ingat. Coba Ganti soal untuk mengulang dengan soal lain."
+      });
+      if (form) form.parentNode.replaceChild(baru, form); else wadah.insertBefore(baru, baris);
+      form = baru;
+      return baru;
+    }
+    var cadangan = document.getElementById("kuis-ulangan-tanpa-js");
+    if (cadangan) cadangan.hidden = true;
+    wadah.appendChild(baris);
+    wadah.appendChild(pesan);
+    pasang();
+    ganti.addEventListener("click", function () {
+      var baru = pasang();
+      pesan.textContent = "Soal baru dipilih. Mulai lagi dari soal 1.";
+      var pertama = baru.querySelector("input");
+      if (pertama) pertama.focus();
+    });
   }
 
   /* ---------- Latihan "Urutkan 4 tanggal dividen" (Arif + Laras, 23 Nov 2026, IDE.md #52) ----------
@@ -3371,6 +3417,7 @@
   renderIstilahHari();
   renderJalur("jalur-lengkap", true);
   jagaGulirKembali("jalur-lengkap");
+  renderKuisUlangan();
   renderKamus();
   renderPelajaran();
   renderMini();
