@@ -1217,5 +1217,5 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Dampak bagi pemula: mengingat alur sebelum benar-benar membuka rekening.
 - Batasan: urutan hanya dari isi pelajaran (tanpa klaim baru), tanpa simpan/kirim.
 - Usaha: kecil–sedang (Arif + Laras; Nina cek).
-- Status: dipilih Bima 28 Nov 16.xx (BACKLOG.md, Arif + Laras).
+- Status: dipilih Bima 28 Nov 16.xx; **selesai 28 Nov 17.xx** (Arif + Laras; Nina cek 2f-37 + 8 uji balik; Dewi 390/1280px). Kini kedelapan pelajaran punya latihan interaktif. Kirana meninjau di HP sungguhan begitu bisa.
 

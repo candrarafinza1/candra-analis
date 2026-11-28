@@ -8244,7 +8244,8 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
 {
   const app = readFileSync("assets/app.js", "utf8");
   const modulJs = readFileSync("data/modul.js", "utf8");
-  const ujiLatihan = (js) => {
+  const U_DIV = { panggil: "buatLatihanUrut()", konfig: "LATIHAN_URUT_DIVIDEN", nama: "Cum date|Ex date|Recording date|Tanggal pembayaran", satuan: "tanggal", awalBenar: /^Urutan sudah benar: Cum date, lalu Ex date/, petunjuk: /Petunjuk: urutkan dari tanggal paling awal; cum date adalah hari terakhir membeli/, bocor: /Ex date|Recording date|pembayaran/i };
+  const ujiLatihan = (js, u = U_DIV) => {
     const salah = [];
     const iE = js.indexOf("  function el("), jE = js.indexOf("\n  }\n", iE);
     const i = js.indexOf("  var LATIHAN_URUT = ["), j = js.indexOf("  function pasangLatihanUrut(");
@@ -8253,7 +8254,7 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
     if (/localStorage|sessionStorage|indexedDB/.test(kode)) salah.push("latihan tanpa simpanan");
     if (/animation|transition|draggable|dragstart/.test(kode)) salah.push("latihan tanpa animasi/seret");
     const p = js.slice(j, js.indexOf("\n  }\n", j));
-    if (!/m\.id !== "praktik-beli-pertama"/.test(p)) salah.push("latihan hanya di pelajaran praktik-beli-pertama");
+    if (u === U_DIV && !/m\.id !== "praktik-beli-pertama"/.test(p)) salah.push("latihan hanya di pelajaran praktik-beli-pertama");
     if (!/\n    wadah\.appendChild\(buatTandaiSelesai\(m\)\);\n    pasangLatihanUrut\(wadah, m\);\n/.test(js)) salah.push("renderPelajaran wajib memanggil pasangLatihanUrut sesudah istilah dipasang");
     let fokus = null;
     const El = class {
@@ -8270,10 +8271,10 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
     };
     const document = { createElement: (t) => new El(t), createTextNode: (t) => ({ textContent: String(t) }) };
     const ctx = { document };
-    try { vm.runInNewContext(kode + "\n;globalThis.buat = buatLatihanUrut; globalThis.L = LATIHAN_URUT;", ctx); } catch (e) { return ["galat: " + e.message]; }
+    try { vm.runInNewContext(kode + "\n;globalThis.buat = () => " + u.panggil + "; globalThis.L = " + u.konfig + ".langkah;", ctx); } catch (e) { return ["galat: " + e.message]; }
     const kotak = ctx.buat(), semua = kotak.semua();
     const namaL = ctx.L.map((x) => x.nama);
-    if (namaL.join("|") !== "Cum date|Ex date|Recording date|Tanggal pembayaran") salah.push("urutan benar wajib Cum date, Ex date, Recording date, Tanggal pembayaran");
+    if (namaL.join("|") !== u.nama) salah.push("urutan benar wajib " + u.nama.split("|").join(", "));
     const daftar = semua.find((n) => n.tag === "ol" && n.className === "latihan-urut-daftar");
     const hasil = semua.find((n) => n.atribut["aria-live"] === "polite" && n.atribut.role === "status");
     if (!daftar || !hasil) return [...salah, "daftar & pesan aria-live wajib ada"];
@@ -8297,20 +8298,20 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
     if (!periksa || !ulang || !jelas) return [...salah, "tombol Periksa urutan / Ulangi latihan & penjelasan wajib ada"];
     if (!jelas.hidden) salah.push("penjelasan tertutup sebelum Periksa");
     periksa.d.click();
-    if (!/^Urutan sudah benar: Cum date, lalu Ex date/.test(hasil.textContent) || jelas.hidden) salah.push("Periksa (benar) wajib memberi pesan & penjelasan");
+    if (!u.awalBenar.test(hasil.textContent) || jelas.hidden) salah.push("Periksa (benar) wajib memberi pesan & penjelasan");
     ulang.d.click();
     if (urutan().join() !== awal.join() || !jelas.hidden) salah.push("Ulangi wajib kembali ke urutan awal");
     periksa.d.click();
-    if (!/^\d dari 4 tanggal sudah di tempat yang benar\./.test(hasil.textContent)) salah.push("Periksa (salah) wajib menyebut jumlah yang benar");
+    if (!new RegExp("^\\d dari 4 " + u.satuan + " sudah di tempat yang benar\\.").test(hasil.textContent)) salah.push("Periksa (salah) wajib menyebut jumlah yang benar");
     // IDE.md #53: salah pertama → petunjuk saja + tombol "Lihat urutan yang benar"; salah kedua → penjelasan dibuka.
     const lihat = semua.find((n) => n.tag === "button" && n.textContent === "Lihat urutan yang benar");
     if (!lihat) return [...salah, "tombol Lihat urutan yang benar wajib ada"];
     if (!jelas.hidden || lihat.hidden || !/Coba lagi/.test(hasil.textContent)) salah.push("salah pertama: penjelasan tetap tertutup, tombol Lihat muncul");
     // IDE.md #54: petunjuk umum + nama tombol berkutip; petunjuk tidak boleh menyebut urutan lengkap (Ex date/Recording date).
-    if (!/Petunjuk: urutkan dari tanggal paling awal; cum date adalah hari terakhir membeli/.test(hasil.textContent) || !/\u201cLihat urutan yang benar\u201d\.$/.test(hasil.textContent) || /Ex date|Recording date|pembayaran/i.test(hasil.textContent)) salah.push("salah pertama: petunjuk umum tanpa membuka jawaban");
+    if (!u.petunjuk.test(hasil.textContent) || !/\u201cLihat urutan yang benar\u201d\.$/.test(hasil.textContent) || u.bocor.test(hasil.textContent)) salah.push("salah pertama: petunjuk umum tanpa membuka jawaban");
     // IDE.md #55: petunjuk di baris sendiri (huruf biasa), jumlah tetap di bagian pertama.
     const petunjuk = hasil.anak.find((n) => n.className === "latihan-urut-petunjuk");
-    if (!petunjuk || !/^Petunjuk: /.test(petunjuk.textContent) || !/^\d dari 4 tanggal sudah di tempat yang benar\.$/.test(hasil.anak[0]?.textContent || "")) salah.push("salah pertama: petunjuk di baris sendiri");
+    if (!petunjuk || !/^Petunjuk: /.test(petunjuk.textContent) || !new RegExp("^\\d dari 4 " + u.satuan + " sudah di tempat yang benar\\.$").test(hasil.anak[0]?.textContent || "")) salah.push("salah pertama: petunjuk di baris sendiri");
     periksa.d.click();
     if (jelas.hidden || !lihat.hidden) salah.push("salah kedua: penjelasan dibuka otomatis");
     ulang.d.click();
@@ -8331,7 +8332,7 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
     [app.replace("        if (i === 0) naik.disabled = true;\n", ""), "tombol ujung"],
     [app.replace("          t.focus();\n", ""), "fokus wajib tetap"],
     [app.replace('      hasil.textContent = nama + " kini di urutan "', '      hasil.textContent = "" + " kini di urutan "'), "diumumkan"],
-    [app.replace("      urut = LATIHAN_URUT_AWAL.slice();\n", ""), "Ulangi wajib"],
+    [app.replace("      urut = awal.slice();\n", ""), "Ulangi wajib"],
     [app.replace("    function bukaJelas() { jelas.hidden = false; lihat.hidden = true; }", "    function bukaJelas() { lihat.hidden = true; }"), "Periksa (benar)"],
     [app.replace("      if (salahKe === 1) {", "      if (false) {"), "salah pertama"],
     [app.replace("        bukaJelas();\n      }\n    });", "      }\n    });"), "salah kedua"],
@@ -8339,10 +8340,47 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
     [app.replace("Petunjuk: urutkan dari tanggal paling awal; ", ""), "petunjuk umum"],
     [app.replace("cum date adalah hari terakhir membeli saham di pasar reguler agar berhak atas dividen.", "urutannya cum date, ex date, recording date, lalu pembayaran."), "petunjuk umum"],
     [app.replace("      periksa.focus();\n", ""), "tombol Lihat"],
-    [app.replace('{ class: "latihan-urut-petunjuk", text: "Petunjuk', '{ text: "Petunjuk'), "baris sendiri"],
+    [app.replace('{ class: "latihan-urut-petunjuk", text: c.petunjuk }', '{ text: c.petunjuk }'), "baris sendiri"],
     [app.replace("    pasangLatihanUrut(wadah, m);\n", ""), "wajib memanggil"],
     [app.replace("  var LATIHAN_URUT_AWAL = [2, 3, 1, 0];", "  var LATIHAN_URUT_AWAL = [0, 1, 2, 3];"), "tidak boleh sudah benar"],
   ]) ok(rusak !== app && ujiLatihan(rusak).some((x) => x.includes(pesan)), `uji balik latihan urut: "${pesan}" harus tertangkap`);
+  // 2f-37. Latihan urut "langkah membuka rekening" (Nina, 28 Nov 2026 17.xx; Arif + Laras, IDE.md #70): komponen sama,
+  // dijalankan dengan konfigurasi rekening. Hanya di pelajaran buka-rekening, setiap langkah & penjelasan berasal dari isi
+  // pelajaran itu (tanpa klaim baru), id judul unik, petunjuk tidak membocorkan dua langkah terakhir, dilewati Lembar rumus.
+  const U_REK = { panggil: "buatLatihanUrut(LATIHAN_URUT_REKENING)", konfig: "LATIHAN_URUT_REKENING", nama: "Pastikan sekuritas resmi|Kirim data diri|Rekening efek, RDN, dan SID aktif|Pantau lewat AKSes KSEI", satuan: "langkah", awalBenar: /^Urutan sudah benar: Pastikan sekuritas resmi, lalu Kirim data diri/, petunjuk: /Petunjuk: urutkan dari langkah paling awal; sebelum mengirim data diri, pastikan dulu sekuritasnya resmi/, bocor: /RDN|SID|AKSes/ };
+  const ujiRek = (js, mj) => {
+    const salah = ujiLatihan(js, U_REK);
+    const a = js.indexOf("  function pasangLatihanUrutRekening("), p = a < 0 ? "" : js.slice(a, js.indexOf("\n  }\n", a));
+    if (!p) salah.push("pasangLatihanUrutRekening wajib ada");
+    else {
+      if (!/if \(m\.id !== "buka-rekening"\) return;/.test(p)) salah.push("latihan rekening hanya di pelajaran buka-rekening");
+      if (!/buatLatihanUrut\(LATIHAN_URUT_REKENING\)/.test(p)) salah.push("latihan rekening wajib memakai komponen latihan urut yang sama");
+    }
+    if (!/\n    pasangLatihanUrut\(wadah, m\);\n    pasangLatihanUrutRekening\(wadah, m\);\n/.test(js)) salah.push("renderPelajaran wajib memanggil pasangLatihanUrutRekening");
+    if (!/judul\[i\]\.id === "judul-latihan-urut-rekening" \|\|/.test(js)) salah.push("latihan rekening tidak punya rumus, harus dilewati Lembar rumus");
+    // isi pelajaran buka-rekening (teks tanpa tag) wajib memuat inti setiap penjelasan
+    const iM = mj.indexOf('id: "buka-rekening"'), isi = iM < 0 ? "" : mj.slice(iM, mj.indexOf("\n  },\n", iM)).replace(/<[^>]+>/g, " ").replace(/\s+/g, " ");
+    for (const frasa of ["situs resmi OJK atau daftar anggota bursa di situs BEI", "transaksi syariah (SOTS)", "KTP dan NPWP", "NPWP bisa menyusul di beberapa sekuritas", "Rekening bank atas nama sendiri", "Swafoto dan tanda tangan digital", "Rekening efek : tempat saham Anda dicatat", "rekening bank atas nama Anda untuk menampung uang transaksi", "nomor identitas tunggal Anda sebagai investor", "Setelah rekening aktif, Anda bisa memantau kepemilikan saham Anda sendiri lewat layanan AKSes KSEI", "benar-benar tercatat atas nama Anda"])
+      if (!isi.includes(frasa)) salah.push("frasa sumber tidak ada di pelajaran buka-rekening: " + frasa);
+    const iR = js.indexOf("  var LATIHAN_URUT_REKENING = {"), blok = iR < 0 ? "" : js.slice(iR, js.indexOf("\n  };\n", iR));
+    for (const kata of ["OJK", "BEI", "SOTS", "KTP", "NPWP", "swafoto", "rekening efek", "RDN", "SID", "AKSes KSEI"])
+      if (!blok.includes(kata)) salah.push("penjelasan latihan rekening wajib memuat " + kata);
+    if (/\bpasti\b|dijamin|terbaik|termurah|rekomendasi/i.test(blok)) salah.push("latihan rekening tanpa klaim/ajakan");
+    if ((js.match(/id: "judul-latihan-urut-rekening"/g) || []).length !== 1) salah.push("id judul latihan rekening wajib unik");
+    return salah;
+  };
+  const s37 = ujiRek(app, modulJs);
+  ok(!s37.length, "latihan urut langkah membuka rekening (2f-37): " + s37.join("; "));
+  for (const [rusak, mj, pesan] of [
+    [app.replace('    if (m.id !== "buka-rekening") return;', '    if (m.id !== "lot-dan-transaksi") return;'), modulJs, "hanya di pelajaran buka-rekening"],
+    [app.replace("    pasangLatihanUrutRekening(wadah, m);\n", ""), modulJs, "wajib memanggil pasangLatihanUrutRekening"],
+    [app.replace('judul[i].id === "judul-latihan-urut-rekening" || ', ""), modulJs, "dilewati Lembar rumus"],
+    [app.replace("    awal: [2, 0, 3, 1]", "    awal: [0, 1, 2, 3]"), modulJs, "tidak boleh sudah benar"],
+    [app.replace("sebelum mengirim data diri, pastikan dulu sekuritasnya resmi.", "urutannya resmi, data, RDN, lalu AKSes."), modulJs, "petunjuk umum"],
+    [app.replace('{ nama: "Kirim data diri"', '{ nama: "Kirim data"'), modulJs, "urutan benar wajib"],
+    [app, modulJs.replace("<li>Swafoto dan tanda tangan digital.</li>", "<li>Swafoto.</li>"), "frasa sumber"],
+    [app.replace("Pilih yang menyediakan fitur transaksi syariah (SOTS)", "Pilih yang dijamin menyediakan fitur transaksi syariah (SOTS)"), modulJs, "tanpa klaim"],
+  ]) ok((rusak !== app || mj !== modulJs) && ujiRek(rusak, mj).some((x) => x.includes(pesan)), `uji balik latihan rekening: "${pesan}" harus tertangkap`);
 }
 
 // 2g. Nina + Arif (22 Nov 07.xx): alat pencocok DES (tools/cek-des.mjs) untuk DES periode II 2026.

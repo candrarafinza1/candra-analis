@@ -2700,3 +2700,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Nina: cek 2f-36 + 9 uji balik; sempat bentrok dengan uji balik lama Agenda hitung lot (teks pengecekan sama), kode baru disesuaikan; `node tests/cek.mjs` lolos. Dewi: 390px gelap & 1280px terang, tanpa scroll horizontal & galat JS. Tegar: teks lewat textContent, tanpa simpan/kirim, tidak ada rahasia. Yoga: push ke main.
 - Bima memilih IDE.md #70 (latihan urut membuka rekening) untuk sesi berikutnya.
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 28 Nov 2026, 17.xx WIB — Bima
+- Arif + Laras: latihan baru "Latihan: urutkan 4 langkah membuka rekening" di pelajaran "Membuka rekening saham" (IDE.md #70), tepat setelah kotak AKSes KSEI. Memakai ulang komponen latihan urut (tombol Naik/Turun, bisa keyboard, petunjuk pada salah pertama, penjelasan per langkah). Semua langkah & penjelasan diambil dari isi pelajaran itu, tanpa klaim baru; tidak dinilai, tidak disimpan. Latihan tanggal dividen tetap sama. Kini kedelapan pelajaran punya latihan interaktif. Kurikulum (data/modul.js) tidak berubah, jadi PDF tidak dibuat ulang.
+- Nina: cek 2f-37 (frasa sumber wajib ada di pelajaran, hanya di buka-rekening, dilewati Lembar rumus, petunjuk tidak membocorkan jawaban) + 8 uji balik; uji 2f-21 dibuat berparameter; `node tests/cek.mjs` lolos. Dewi: 390px gelap & 1280px terang, susun dengan keyboard sampai benar, tanpa scroll horizontal & galat JS. Tegar: teks lewat textContent, tanpa simpan/kirim, tidak ada rahasia. Yoga: push ke main.
+- Fajar: DES periode II 2026 dicek lagi di OJK: terbaru tetap KEP-21/D.04/2026 (periode I).
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

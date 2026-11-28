@@ -336,17 +336,39 @@
     { nama: "Tanggal pembayaran", jelas: "dividen masuk ke RDN pemegang saham yang tercatat." }
   ];
   var LATIHAN_URUT_AWAL = [2, 3, 1, 0];
-  function buatLatihanUrut() {
-    var urut = LATIHAN_URUT_AWAL.slice();
-    var kotak = el("section", { class: "kuis latihan-urut", "aria-labelledby": "judul-latihan-urut" });
-    kotak.appendChild(el("h2", { id: "judul-latihan-urut", text: "Latihan: urutkan 4 tanggal dividen" }));
-    kotak.appendChild(el("p", { class: "kuis-pengantar", text: "Susun tanggal dari yang paling awal sampai yang paling akhir. Pakai tombol Naik dan Turun, lalu periksa. Tidak dinilai dan tidak disimpan." }));
+  var LATIHAN_URUT_DIVIDEN = {
+    id: "judul-latihan-urut", judul: "Latihan: urutkan 4 tanggal dividen", satuan: "tanggal",
+    pengantar: "Susun tanggal dari yang paling awal sampai yang paling akhir. Pakai tombol Naik dan Turun, lalu periksa. Tidak dinilai dan tidak disimpan.",
+    petunjuk: "Petunjuk: urutkan dari tanggal paling awal; cum date adalah hari terakhir membeli saham di pasar reguler agar berhak atas dividen. Coba lagi, atau pilih \u201cLihat urutan yang benar\u201d.",
+    langkah: LATIHAN_URUT, awal: LATIHAN_URUT_AWAL
+  };
+  /* Latihan "Urutkan 4 langkah membuka rekening" (Arif + Laras, 28 Nov 2026, IDE.md #70): komponen yang sama,
+     di pelajaran "Membuka rekening saham". Semua langkah & penjelasan diambil dari isi pelajaran itu, tanpa klaim baru. */
+  var LATIHAN_URUT_REKENING = {
+    id: "judul-latihan-urut-rekening", judul: "Latihan: urutkan 4 langkah membuka rekening", satuan: "langkah",
+    pengantar: "Susun langkah dari yang paling awal sampai yang paling akhir. Pakai tombol Naik dan Turun, lalu periksa. Tidak dinilai dan tidak disimpan.",
+    petunjuk: "Petunjuk: urutkan dari langkah paling awal; sebelum mengirim data diri, pastikan dulu sekuritasnya resmi. Coba lagi, atau pilih \u201cLihat urutan yang benar\u201d.",
+    langkah: [
+      { nama: "Pastikan sekuritas resmi", jelas: "cek nama sekuritas di situs resmi OJK atau daftar anggota bursa di situs BEI. Pilih yang menyediakan fitur transaksi syariah (SOTS) bila Anda ingin bertransaksi sesuai syariah." },
+      { nama: "Kirim data diri", jelas: "yang biasanya diminta: KTP dan NPWP (NPWP bisa menyusul di beberapa sekuritas), rekening bank atas nama sendiri, swafoto, dan tanda tangan digital." },
+      { nama: "Rekening efek, RDN, dan SID aktif", jelas: "rekening efek mencatat saham Anda, RDN atas nama Anda menampung uang transaksi, dan SID menjadi nomor identitas tunggal Anda sebagai investor." },
+      { nama: "Pantau lewat AKSes KSEI", jelas: "setelah rekening aktif, Anda bisa memantau sendiri kepemilikan saham Anda untuk memastikan saham benar-benar tercatat atas nama Anda." }
+    ],
+    awal: [2, 0, 3, 1]
+  };
+  function buatLatihanUrut(c) {
+    c = c || LATIHAN_URUT_DIVIDEN;
+    var L = c.langkah, awal = c.awal;
+    var urut = awal.slice();
+    var kotak = el("section", { class: "kuis latihan-urut", "aria-labelledby": c.id });
+    kotak.appendChild(el("h2", { id: c.id, text: c.judul }));
+    kotak.appendChild(el("p", { class: "kuis-pengantar", text: c.pengantar }));
     var daftar = el("ol", { class: "latihan-urut-daftar" });
     var hasil = el("p", { class: "kuis-hasil", role: "status", "aria-live": "polite" });
     function gambar(fokusNama, arah) {
       daftar.innerHTML = "";
       urut.forEach(function (k, i) {
-        var nama = LATIHAN_URUT[k].nama;
+        var nama = L[k].nama;
         var naik = el("button", { type: "button", class: "tombol latihan-urut-tombol", "aria-label": "Naik: " + nama, text: "↑ Naik" });
         var turun = el("button", { type: "button", class: "tombol latihan-urut-tombol", "aria-label": "Turun: " + nama, text: "↓ Turun" });
         if (i === 0) naik.disabled = true;
@@ -367,7 +389,7 @@
       var j = i + arah;
       if (j < 0 || j >= urut.length) return;
       var k = urut[i]; urut[i] = urut[j]; urut[j] = k;
-      var nama = LATIHAN_URUT[k].nama;
+      var nama = L[k].nama;
       gambar(nama, arah);
       hasil.textContent = nama + " kini di urutan " + (j + 1) + " dari " + urut.length + ".";
     }
@@ -383,7 +405,7 @@
     periksa.addEventListener("click", function () {
       var tepat = urut.filter(function (k, i) { return k === i; }).length;
       if (tepat === urut.length) {
-        hasil.textContent = "Urutan sudah benar: " + LATIHAN_URUT.map(function (x) { return x.nama; }).join(", lalu ") + ".";
+        hasil.textContent = "Urutan sudah benar: " + L.map(function (x) { return x.nama; }).join(", lalu ") + ".";
         bukaJelas();
         return;
       }
@@ -392,12 +414,12 @@
         // IDE.md #55 (Kirana \u2192 Dewi + Arif, 23 Nov 17.xx): di 390px pesan ini 7 baris tebal; jumlah tetap tebal,
         // petunjuk dipisah ke baris sendiri dengan huruf biasa agar mudah dibaca. Teks yang diumumkan tidak berubah.
         hasil.textContent = "";
-        hasil.appendChild(el("span", { text: tepat + " dari " + urut.length + " tanggal sudah di tempat yang benar." }));
+        hasil.appendChild(el("span", { text: tepat + " dari " + urut.length + " " + c.satuan + " sudah di tempat yang benar." }));
         hasil.appendChild(document.createTextNode(" "));
-        hasil.appendChild(el("span", { class: "latihan-urut-petunjuk", text: "Petunjuk: urutkan dari tanggal paling awal; cum date adalah hari terakhir membeli saham di pasar reguler agar berhak atas dividen. Coba lagi, atau pilih \u201cLihat urutan yang benar\u201d." }));
+        hasil.appendChild(el("span", { class: "latihan-urut-petunjuk", text: c.petunjuk }));
         lihat.hidden = false;
       } else {
-        hasil.textContent = tepat + " dari " + urut.length + " tanggal sudah di tempat yang benar. Urutan yang benar kini dibuka di bawah.";
+        hasil.textContent = tepat + " dari " + urut.length + " " + c.satuan + " sudah di tempat yang benar. Urutan yang benar kini dibuka di bawah.";
         bukaJelas();
       }
     });
@@ -407,7 +429,7 @@
       periksa.focus();
     });
     ulang.addEventListener("click", function () {
-      urut = LATIHAN_URUT_AWAL.slice();
+      urut = awal.slice();
       salahKe = 0;
       lihat.hidden = true;
       jelas.hidden = true;
@@ -415,7 +437,7 @@
       hasil.textContent = "Latihan diulang dari awal.";
       daftar.querySelector("button:not([disabled])").focus();
     });
-    LATIHAN_URUT.forEach(function (x) {
+    L.forEach(function (x) {
       jelas.appendChild(el("li", {}, [el("strong", { text: x.nama }), ": " + x.jelas]));
     });
     gambar();
@@ -431,6 +453,13 @@
     var daftar = judul && judul.parentNode.nextElementSibling;
     var latihan = buatLatihanUrut();
     if (daftar && daftar.nodeName === "OL") daftar.parentNode.insertBefore(latihan, daftar.nextSibling);
+    else wadah.insertBefore(latihan, wadah.querySelectorAll("form.kuis")[0] || null);
+  }
+  function pasangLatihanUrutRekening(wadah, m) {
+    if (m.id !== "buka-rekening") return;
+    var penting = wadah.querySelector(".kotak-penting");
+    var latihan = buatLatihanUrut(LATIHAN_URUT_REKENING);
+    if (penting) penting.parentNode.insertBefore(latihan, penting.nextSibling);
     else wadah.insertBefore(latihan, wadah.querySelectorAll("form.kuis")[0] || null);
   }
 
@@ -1133,7 +1162,7 @@
   function pasangTautanLembar(wadah) {
     var judul = wadah.querySelectorAll('h2[id^="judul-latihan-"]');
     for (var i = 0; i < judul.length; i++) {
-      if (judul[i].id === "judul-latihan-urut") continue;
+      if (judul[i].id === "judul-latihan-urut-rekening" || judul[i].id === "judul-latihan-urut") continue;
       var kotak = judul[i].parentNode;
       if (!kotak || kotak.querySelector(".latihan-lembar")) continue;
       kotak.appendChild(el("p", { class: "latihan-lembar" }, [
@@ -1176,6 +1205,7 @@
     if (m.kuis && m.kuis.length) wadah.appendChild(buatKuis(m));
     wadah.appendChild(buatTandaiSelesai(m));
     pasangLatihanUrut(wadah, m);
+    pasangLatihanUrutRekening(wadah, m);
     pasangLatihanLaba(wadah, m);
     pasangLatihanModal(wadah, m);
     pasangLatihanRasio(wadah, m);
