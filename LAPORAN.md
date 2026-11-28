@@ -2672,3 +2672,10 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Raka + Hana: kabar "Laporan keuangan" MIKA 27 Nov ditambah, bahasa netral.
 - Nina: `node tests/cek.mjs` lolos (sempat gagal karena kabar belum ada dan urutan angka di ringkasan, lalu diperbaiki). Dewi: profil MIKA, Radar, Peringkat, beranda dicek 390px & 1280px tanpa scroll horizontal & galat JS. Tegar: sumber https. Yoga: push ke main. Kurikulum tidak berubah.
 - Catatan: BSSR kuartal III/2026 tetap belum ada sumber yang bisa dibuka. Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 28 Nov 2026, 13.xx WIB — Bima
+- Laporan masuk kerja siang dikirim ke Rafinza (13.10; 12 karyawan, tugas per orang; cek lolos).
+- Rutin Agenda siang (Raka + Fajar + Hana): Agenda: +0 IPO, +0 dividen, −0 kedaluwarsa. Berita dividen terbaru hanya memuat jadwal yang sudah dicatat atau emiten yang bukan/belum terbukti syariah (BBCA). ANDA & BUAT tetap tanpa bukti status syariah, jadwal baru ANDA belum ada → tidak dicatat, dicoba lagi Senin 07.xx.
+- Fajar + Galih: BSSR laba 9 bulan 2026 tetap tanpa sumber yang bisa dibuka (tetap 31 dari 32). Fajar: DPS 2025 MBMA dicari lagi, tautan Indopremier yang menjanjikan ternyata membuka artikel lain → tetap 28 dari 32.
+- Nina: `node tests/cek.mjs` lolos. Tampilan & data situs tidak berubah sesi ini (hanya BACKLOG & LAPORAN), jadi tidak perlu cek 390/1280px. Tegar: tidak ada rahasia. Yoga: push ke main.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
