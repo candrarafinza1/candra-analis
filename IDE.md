@@ -1193,3 +1193,29 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Ide: tiap kotak latihan yang rumusnya ada di Lembar rumus (7 kotak; latihan urut tanggal dilewati karena tanpa rumus) diberi tautan teks "Lihat semua rumus di Lembar rumus" di bagian bawah. Pemula yang sedang berlatih bisa mengulang semua rumus tanpa mencari.
 - Batasan: teks saja, tanpa animasi baru, tanpa ajakan, keyboard biasa (tautan).
 - **Status:** dikerjakan Arif + Laras sesi yang sama; Nina: cek 2f-34 + 7 uji balik. Uji alur di 390px & 1280px, skrip cepat & lambat: Lembar rumus di atas layar, Kembali ke posisi semula (pelajaran → Lembar → Kembali dan Belajar → pelajaran → Kembali), tanpa scroll horizontal. Catatan: uji otomatis Kembali cepat memunculkan pesan "Transition was aborted" dari transisi halaman `@view-transition` yang sudah lama ada; peramban hanya membatalkan animasi, halaman tetap benar.
+
+### 68. Pelajaran Praktik membeli saham pertama: kotak "Hitung sendiri: dividen yang diterima" (Kirana, 28 Nov 2026, 15.xx WIB) ★ paling berdampak — kecil
+- Masalah: pelajaran 7 hanya memberi satu contoh tetap (Rp40 × 200 lembar). Pemula yang melihat dividen per saham di Agenda belum bisa mencoba angkanya sendiri, dan baris pajak terpisah jauh di bawah.
+- Ide: kotak hitung tepat setelah contoh: isian dividen per saham + lot pada recording date → lembar, dividen sebelum pajak, dan baris PPh final 10% (mengulang bagian "Pajak dividen" pelajaran yang sama, berlaku bila tidak diinvestasikan). Masuk Lembar rumus.
+- Tren: kalkulator kecil di dalam materi (seperti kotak hitung lain di situs).
+- Dampak bagi pemula: paham bahwa dividen dihitung per lembar pada recording date, dan bahwa harga sering turun di ex date.
+- Batasan: angka bawaan = contoh pelajaran, tanpa simpan/kirim, inputmode desimal, tanpa ajakan, ringan (teks saja).
+- Usaha: kecil (Arif + Laras + Hana; Nina cek 2f-35; Dewi 390/1280px).
+- Status: dipilih Bima 28 Nov 15.xx; **selesai sesi yang sama**. Kirana meninjau di HP sungguhan begitu bisa.
+
+### 69. Pelajaran Apa itu saham?: kotak "Hitung sendiri: persen kepemilikan Anda" (Kirana, 28 Nov 2026, 15.xx WIB) — kecil
+- Masalah: pelajaran 1 menyebut saham = bukti kepemilikan, tetapi pemula sulit membayangkan seberapa kecil bagian yang dimiliki.
+- Ide: isian jumlah lot + jumlah saham beredar (pengguna isi sendiri dari laporan tahunan/profil emiten) → lembar dan persen kepemilikan dengan banyak angka di belakang koma; angka bawaan bulat dan bukan saham mana pun.
+- Dampak bagi pemula: memahami arti "pemilik sebagian kecil perusahaan" dan mengapa suara di RUPS sebanding jumlah saham.
+- Batasan: tanpa angka emiten karangan, tanpa simpan/kirim, tanpa ajakan.
+- Usaha: kecil (Arif + Laras; Nina menambah cek).
+- Status: dipilih Bima 28 Nov 15.xx untuk sesi berikutnya (BACKLOG.md).
+
+### 70. Pelajaran Membuka rekening saham: latihan urut langkah membuka rekening (Kirana, 28 Nov 2026, 15.xx WIB) — kecil
+- Masalah: pelajaran 3 satu-satunya (bersama pelajaran 1) yang belum punya latihan interaktif.
+- Ide: pakai ulang komponen latihan urut (tombol Naik/Turun, bisa keyboard) untuk mengurutkan langkah sesuai isi pelajaran; penjelasan per langkah setelah diperiksa.
+- Dampak bagi pemula: mengingat alur sebelum benar-benar membuka rekening.
+- Batasan: urutan hanya dari isi pelajaran (tanpa klaim baru), tanpa simpan/kirim.
+- Usaha: kecil–sedang (Arif + Laras; Nina cek).
+- Status: antre, menunggu #69.
+

@@ -2686,3 +2686,11 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Fajar + Galih: BSSR (laba 9 bulan) & MBMA (dividen 2025) dicari ulang, hasil sama → tetap 31/32 dan 28/32.
 - Tegar: perubahan teks lewat textContent, tidak ada rahasia. Yoga: push ke main. Kurikulum tidak berubah.
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 28 Nov 2026, 15.xx WIB — Bima
+- Tugas prioritas Agenda semuanya sedang menunggu sumber (ANDA & BUAT, BSSR, MBMA, DPS AADI sekitar 7–8 Des, DES periode II), jadi tim mengerjakan tugas pendukung yang bermanfaat.
+- Kirana: 3 usulan baru di IDE.md (#68–#70). Bima memilih #68 (paling berdampak) dan #69 untuk sesi berikutnya.
+- Arif + Laras + Hana: kotak baru "Hitung sendiri: dividen yang diterima" di pelajaran "Praktik: membeli saham pertama Anda" (dividen per saham × 100 × lot, plus baris PPh final 10% sesuai bagian Pajak dividen pelajaran itu). Ditambahkan juga ke Lembar rumus. PDF modul dibuat ulang.
+- Nina: cek 2f-35 + 8 uji balik; `node tests/cek.mjs` lolos. Dewi: 390px gelap & 1280px terang, tanpa scroll horizontal & galat JS. Tegar: teks lewat textContent, tanpa simpan/kirim data, tidak ada rahasia. Yoga: push ke main.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+

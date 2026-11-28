@@ -9014,5 +9014,60 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
     [appR.replace('  jagaGulirKembali("jalur-lengkap");\n', ""), belR, "tepat setelah daftar pelajaran"],
   ]) ok((app !== appR || bel !== belR) && uji(app, bel).some((x) => x.includes(pesan)), `uji balik tautan Lembar rumus: "${pesan}" harus tertangkap`);
 }
+// 2f-35. Latihan "Hitung sendiri: dividen yang diterima" (Nina, 28 Nov 2026 15.xx; Arif + Laras + Hana, IDE.md #68 Kirana).
+// Dividen sebelum pajak = DPS × 100 × lot; PPh final 10% hanya mengulang bagian "Pajak dividen" pelajaran yang sama;
+// hanya di pelajaran praktik-beli-pertama, setelah contoh hitungan; angka bawaan = contoh pelajaran; tanpa kata ajakan.
+{
+  const appD = readFileSync("assets/app.js", "utf8");
+  const isiP = ((MODUL || []).find((m) => m.id === "praktik-beli-pertama") || {}).isi || "";
+  const ujiD = (t, isi) => {
+    const salah = [];
+    const k0 = t.indexOf("  var MODAL_LEMBAR_LOT"), k1 = t.indexOf("  function bacaBulat(");
+    const a0 = t.indexOf("  function bacaBulat("), a1 = t.indexOf("  function bacaPersen(");
+    const e0 = t.indexOf("  function bacaDesimal("), e1 = t.indexOf("  function hitungRasio(");
+    const v0 = t.indexOf("  var DIVIDEN_DPS_MAKS"), a = t.indexOf("  function hitungDividen("), b = t.indexOf("  function buatLatihanDividen("), c = t.indexOf("  function pasangLatihanDividen("), d = t.indexOf("  // Tautan ke Lembar rumus");
+    if ([k0, k1, a0, a1, e0, e1, v0, a, b, c, d].some((x) => x < 0) || !(v0 < a && a < b && b < c && c < d)) return ["fungsi latihan dividen tidak ada"];
+    let f;
+    try { f = vm.runInNewContext(`${t.slice(k0, k1)}; ${t.slice(a0, a1)}; ${t.slice(e0, e1)}; ${t.slice(v0, a)}; ${t.slice(a, b)}; hitungDividen`); } catch (e) { return ["galat: " + e.message]; }
+    const r1 = f("40", "2");
+    if (!r1 || r1.lembar !== 200 || r1.kotor !== 8000 || r1.pajak !== 800 || r1.sisa !== 7200) salah.push("rumus contoh pelajaran (Rp40 × 200 lembar = Rp8.000; PPh 10% Rp800; sisa Rp7.200)");
+    const r2 = f("12,5", "3");
+    if (!r2 || r2.kotor !== 3750 || r2.pajak !== 375) salah.push("dividen desimal (Rp12,5 × 300 = Rp3.750)");
+    const r3 = f("1.250", "1");
+    if (!r3 || r3.kotor !== 125000) salah.push("titik ribuan (Rp1.250 × 100 = Rp125.000)");
+    for (const [v, g] of [[["0", "1"], "dps"], [["-5", "1"], "dps"], [["abc", "1"], "dps"], [["12.5", "1"], "dps"], [["40", "0"], "lot"], [["40", "1,5"], "lot"], [["40", ""], "lot"]]) {
+      const r = f(...v);
+      if (!r || r.galat !== g) salah.push(`isian tidak sah harus ditolak (${v.join("/")} → ${g})`);
+    }
+    const ui = t.slice(b, c);
+    if (!/isian\("latihan-dividen-dps"[^\n]*value: "40" \}/.test(ui) || !/isian\("latihan-dividen-lot"[^\n]*value: "2" \}/.test(ui)) salah.push("angka bawaan wajib sama dengan contoh pelajaran (Rp40, 2 lot)");
+    if (!/Contoh hitungan: dividen Rp40 per saham dan Anda memegang 2 lot \(200 lembar\)/.test(isi)) salah.push("contoh hitungan Rp40 × 2 lot di pelajaran berubah: samakan angka bawaan kotak");
+    if (!/dikenai PPh final 10% dari nilai dividen/.test(isi)) salah.push("baris PPh 10% hanya boleh bila bagian Pajak dividen pelajaran masih menyebut PPh final 10%");
+    if (/type: "number"/.test(ui)) salah.push("isian bukan type=number");
+    if (!/m\.id !== "praktik-beli-pertama"/.test(t.slice(c, d)) || !/Contoh hitungan: dividen /.test(t.slice(c, d))) salah.push("hanya di pelajaran praktik-beli-pertama, setelah contoh hitungan");
+    const r0 = t.indexOf("  function renderPelajaran(");
+    const ren = t.slice(r0, t.indexOf("\n  function ", r0 + 10));
+    const iD = ren.indexOf("pasangLatihanDividen(wadah, m);"), iT = ren.indexOf("pasangTautanLembar(wadah);");
+    if (iD < 0) salah.push("renderPelajaran wajib memasang latihan dividen");
+    else if (iT >= 0 && iT < iD) salah.push("urutan: sebelum tautan Lembar rumus");
+    const badan = t.slice(v0, d).replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/[^\n]*/g, "");
+    if (/buruan|pasti (naik|untung)|rekomendasi|layak dibeli|saatnya (beli|jual)|untung|\bcuan\b|dijamin|murah|mahal|jangan sampai ketinggalan/i.test(badan)) salah.push("kata ajakan dilarang");
+    if (!/bukan saran membeli atau menjual/.test(badan)) salah.push("wajib menyebut bukan saran membeli atau menjual");
+    if (/localStorage|sessionStorage|fetch\(|XMLHttpRequest|innerHTML/.test(badan)) salah.push("tanpa simpan/kirim data dan tanpa innerHTML");
+    return salah;
+  };
+  const sD = ujiD(appD, isiP);
+  ok(!sD.length, "Latihan dividen: " + sD.join("; "));
+  for (const [rusak, isi, pesan] of [
+    [appD.replace("var lembar = jml * MODAL_LEMBAR_LOT;", "var lembar = jml;"), isiP, "rumus contoh"],
+    [appD.replace("var pajak = Math.round(kotor * DIVIDEN_PPH_PERSEN / 100);", "var pajak = Math.round(kotor * 15 / 100);"), isiP, "rumus contoh"],
+    [appD.replace('if (!isFinite(d) || d <= 0 || d > DIVIDEN_DPS_MAKS) return { galat: "dps" };', 'if (!isFinite(d) || d > DIVIDEN_DPS_MAKS) return { galat: "dps" };'), isiP, "isian tidak sah"],
+    [appD.replace('"Dividen per saham (Rp)", { type: "text", inputmode: "decimal", autocomplete: "off", value: "40" }', '"Dividen per saham (Rp)", { type: "text", inputmode: "decimal", autocomplete: "off", value: "50" }'), isiP, "angka bawaan"],
+    [appD, isiP.replace("dikenai PPh final 10% dari nilai dividen", "dikenai PPh final"), "Pajak dividen"],
+    [appD.replace('  function pasangLatihanDividen(wadah, m) {\n    if (m.id !== "praktik-beli-pertama") return;\n', "  function pasangLatihanDividen(wadah, m) {\n"), isiP, "praktik-beli-pertama"],
+    [appD.replace("    pasangLatihanDividen(wadah, m);\n", ""), isiP, "renderPelajaran"],
+    [appD.replace("Angka tidak disimpan dan tidak dikirim.\" }));\n    var info = el(\"p\", { class: \"kuis-hasil\", id: \"latihan-dividen-info\"", "Buruan beli sebelum cum date.\" }));\n    var info = el(\"p\", { class: \"kuis-hasil\", id: \"latihan-dividen-info\""), isiP, "kata ajakan"],
+  ]) ok((rusak !== appD || isi !== isiP) && ujiD(rusak, isi).some((x) => x.includes(pesan)), `uji balik latihan dividen: "${pesan}" harus tertangkap`);
+}
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);

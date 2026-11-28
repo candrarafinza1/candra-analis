@@ -1001,6 +1001,65 @@
     wadah.insertBefore(buatLatihanBersih(), acuan);
   }
 
+  /* ---------- Latihan "Hitung sendiri: dividen yang diterima" (Arif + Laras + Hana, 28 Nov 2026; IDE.md #68 Kirana) ----------
+     Di pelajaran "Praktik: membeli saham pertama Anda", tepat setelah contoh hitungan Rp40 × 200 lembar.
+     Dividen sebelum pajak = dividen per saham × 100 × jumlah lot. Baris PPh final 10% hanya mengulang bagian
+     "Pajak dividen" pelajaran yang sama (penjelasan DJP; berlaku bila dividen tidak diinvestasikan sesuai aturan).
+     Angka bawaan sama dengan contoh pelajaran (Rp40, 2 lot), bukan saham mana pun. Tidak disimpan, tidak dikirim. */
+  var DIVIDEN_DPS_MAKS = 100000, DIVIDEN_PPH_PERSEN = 10;
+  function hitungDividen(dps, lot) {
+    var d = bacaDesimal(dps), jml = bacaBulat(lot);
+    if (!isFinite(d) || d <= 0 || d > DIVIDEN_DPS_MAKS) return { galat: "dps" };
+    if (!Number.isInteger(jml) || jml < 1 || jml > MODAL_LOT_MAKS) return { galat: "lot" };
+    var lembar = jml * MODAL_LEMBAR_LOT;
+    var kotor = Math.round(d * lembar * 100) / 100;
+    var pajak = Math.round(kotor * DIVIDEN_PPH_PERSEN / 100);
+    return { dps: d, lembar: lembar, kotor: kotor, pajak: pajak, sisa: Math.round(kotor) - pajak };
+  }
+  function buatLatihanDividen() {
+    var rp = function (x) { return "Rp" + angkaRasio.format(x); };
+    var kotak = el("section", { class: "kuis latihan-modal latihan-dividen", "aria-labelledby": "judul-latihan-dividen" });
+    kotak.appendChild(el("h2", { id: "judul-latihan-dividen", text: "Hitung sendiri: dividen yang diterima" }));
+    kotak.appendChild(el("p", { class: "kuis-pengantar", text: "Angka yang sudah terisi sama dengan contoh di atas, bukan saham mana pun. Ganti dengan dividen per saham dari pengumuman emiten (bisa dilihat di halaman Agenda) dan jumlah lot yang Anda pegang pada recording date. Ini alat berhitung, bukan saran membeli atau menjual saham apa pun. Angka tidak disimpan dan tidak dikirim." }));
+    var info = el("p", { class: "kuis-hasil", id: "latihan-dividen-info", role: "status", "aria-live": "polite" });
+    var hasil = el("ul", { class: "latihan-modal-hasil" });
+    function isian(id, label, attrs) {
+      var inp = el("input", Object.assign({ id: id, "aria-describedby": "latihan-dividen-info" }, attrs));
+      return { inp: inp, baris: el("div", { class: "cari-kamus" }, [el("label", { for: id, text: label }), inp]) };
+    }
+    var iDps = isian("latihan-dividen-dps", "Dividen per saham (Rp)", { type: "text", inputmode: "decimal", autocomplete: "off", value: "40" });
+    var iLot = isian("latihan-dividen-lot", "Jumlah lot pada recording date", { type: "text", inputmode: "numeric", autocomplete: "off", value: "2" });
+    var PESAN = {
+      dps: "Isi dividen per saham lebih dari Rp0 sampai " + rp(DIVIDEN_DPS_MAKS) + ", paling banyak 2 angka di belakang koma (contoh: 40 atau 12,5).",
+      lot: "Isi jumlah lot dengan bilangan bulat 1 sampai " + angkaModal.format(MODAL_LOT_MAKS) + ", tanpa koma (contoh: 2)."
+    };
+    var masukan = { dps: iDps.inp, lot: iLot.inp };
+    function hitung() {
+      var r = hitungDividen(iDps.inp.value, iLot.inp.value);
+      hasil.textContent = "";
+      Object.keys(masukan).forEach(function (k) { masukan[k].setAttribute("aria-invalid", r.galat === k ? "true" : "false"); });
+      if (r.galat) { info.textContent = PESAN[r.galat]; return; }
+      hasil.appendChild(el("li", { text: angkaModal.format(r.lembar / MODAL_LEMBAR_LOT) + " lot = " + angkaModal.format(r.lembar) + " lembar saham." }));
+      hasil.appendChild(el("li", { text: "Dividen sebelum pajak: " + rp(r.dps) + " × " + angkaModal.format(r.lembar) + " lembar = " + rp(r.kotor) + "." }));
+      hasil.appendChild(el("li", { text: "Bila dividen tidak diinvestasikan sesuai aturan: PPh final " + DIVIDEN_PPH_PERSEN + "% ≈ " + rp(r.pajak) + ", disetor sendiri, sehingga sisanya ≈ " + rp(r.sisa) + " (dibulatkan ke rupiah terdekat)." }));
+      info.textContent = "Dividen sebelum pajak: " + rp(r.kotor) + ".";
+    }
+    [iDps.inp, iLot.inp].forEach(function (x) { x.addEventListener("input", hitung); });
+    kotak.appendChild(el("div", { class: "kotak-rumus", text: "Dividen sebelum pajak = dividen per saham × 100 × jumlah lot" }));
+    kotak.appendChild(el("div", { class: "latihan-modal-isian" }, [iDps.baris, iLot.baris]));
+    kotak.appendChild(info);
+    kotak.appendChild(hasil);
+    kotak.appendChild(el("p", { class: "latihan-modal-catatan", text: "Yang dihitung hanya saham yang tercatat atas nama Anda pada recording date. Bila dividen diumumkan dalam dolar AS, isi dividen per saham setelah diubah ke rupiah dengan kurs yang diumumkan emiten. Soal pengecualian pajak bila dividen diinvestasikan, baca bagian \"Pajak dividen\" di bawah. Ingat juga, harga saham sering turun pada ex date, jadi dividen belum tentu berarti hasil lebih." }));
+    hitung();
+    return kotak;
+  }
+  function pasangLatihanDividen(wadah, m) {
+    if (m.id !== "praktik-beli-pertama") return;
+    var contoh = [].slice.call(wadah.querySelectorAll("p")).filter(function (p) { return /^Contoh hitungan: dividen /.test(p.textContent); })[0];
+    if (contoh) contoh.parentNode.insertBefore(buatLatihanDividen(), contoh.nextSibling);
+    else wadah.insertBefore(buatLatihanDividen(), wadah.querySelectorAll("form.kuis")[0] || null);
+  }
+
   // Tautan ke Lembar rumus (Arif + Laras, 26 Nov 2026; IDE.md #67): setiap kotak latihan yang rumusnya ada di
   // belajar.html#lembar-rumus diberi satu tautan teks di bagian bawah. Latihan urut tanggal tidak punya rumus.
   // Posisi saat Kembali dijaga jagaGulirKembali() di kedua halaman (cek 2f-34).
@@ -1057,6 +1116,7 @@
     pasangLatihanRoeDer(wadah, m);
     pasangLatihanSyariah(wadah, m);
     pasangLatihanBersih(wadah, m);
+    pasangLatihanDividen(wadah, m);
     pasangTautanLembar(wadah);
     gulirJangkarPelajaran(wadah);
 
