@@ -2694,3 +2694,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Nina: cek 2f-35 + 8 uji balik; `node tests/cek.mjs` lolos. Dewi: 390px gelap & 1280px terang, tanpa scroll horizontal & galat JS. Tegar: teks lewat textContent, tanpa simpan/kirim data, tidak ada rahasia. Yoga: push ke main.
 - Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
 
+
+### 28 Nov 2026, 16.xx WIB — Bima
+- Arif + Laras: kotak baru "Hitung sendiri: persen kepemilikan Anda" di pelajaran "Apa itu saham?" (IDE.md #69), tepat setelah contoh satu miliar lembar. Isian lot + jumlah saham beredar (diisi pengguna dari laporan emiten) → lembar, persen kepemilikan (persen kecil tetap terbaca, mis. 0,0001%), dan "1 dari setiap N lembar". Angka bawaan = contoh pelajaran, bukan saham mana pun. Masuk Lembar rumus paling atas. PDF modul dibuat ulang.
+- Nina: cek 2f-36 + 9 uji balik; sempat bentrok dengan uji balik lama Agenda hitung lot (teks pengecekan sama), kode baru disesuaikan; `node tests/cek.mjs` lolos. Dewi: 390px gelap & 1280px terang, tanpa scroll horizontal & galat JS. Tegar: teks lewat textContent, tanpa simpan/kirim, tidak ada rahasia. Yoga: push ke main.
+- Bima memilih IDE.md #70 (latihan urut membuka rekening) untuk sesi berikutnya.
+- Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

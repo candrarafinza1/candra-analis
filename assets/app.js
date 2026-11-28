@@ -1060,6 +1060,73 @@
     else wadah.insertBefore(buatLatihanDividen(), wadah.querySelectorAll("form.kuis")[0] || null);
   }
 
+  /* ---------- Latihan "Hitung sendiri: persen kepemilikan Anda" (Arif + Laras, 28 Nov 2026; IDE.md #69 Kirana) ----------
+     Di pelajaran "Apa itu saham?", tepat setelah paragraf pertama (contoh 1 miliar lembar & 1.000 lembar = satu per sejuta).
+     Persen kepemilikan = jumlah lot × 100 ÷ jumlah saham beredar × 100%. Jumlah saham beredar DIISI PENGGUNA dari
+     laporan tahunan/laporan keuangan emiten; angka bawaan sama dengan contoh pelajaran (10 lot, 1 miliar lembar),
+     bukan saham mana pun. Tidak disimpan, tidak dikirim. */
+  var MILIK_BEREDAR_MAKS = 1000000000000;
+  function hitungKepemilikan(lot, beredar) {
+    var jml = bacaBulat(lot), n = bacaBulat(beredar);
+    if (!Number.isInteger(jml) || jml < 1 || jml > MODAL_LOT_MAKS) return { galat: "lot" };
+    if (!(n >= 1 && n <= MILIK_BEREDAR_MAKS && Number.isInteger(n))) return { galat: "beredar" };
+    var lembar = jml * MODAL_LEMBAR_LOT;
+    if (lembar > n) return { galat: "lebih" };
+    return { lembar: lembar, beredar: n, persen: lembar / n * 100, per: n / lembar };
+  }
+  // Persen kecil ditulis dengan cukup angka di belakang koma agar tidak terbaca 0 (0,0001% bukan 0%).
+  function formatPersenMilik(p) {
+    var dig = p >= 1 ? 2 : Math.min(12, Math.max(2, Math.floor(-Math.log10(p)) + 3));
+    return new Intl.NumberFormat("id-ID", { maximumFractionDigits: dig }).format(p) + "%";
+  }
+  function buatLatihanMilik() {
+    var bulat = new Intl.NumberFormat("id-ID", { maximumFractionDigits: 0 });
+    var kotak = el("section", { class: "kuis latihan-modal latihan-milik", "aria-labelledby": "judul-latihan-milik" });
+    kotak.appendChild(el("h2", { id: "judul-latihan-milik", text: "Hitung sendiri: persen kepemilikan Anda" }));
+    kotak.appendChild(el("p", { class: "kuis-pengantar", text: "Angka yang sudah terisi sama dengan contoh di atas, bukan saham mana pun. Ganti dengan jumlah lot yang ingin Anda bayangkan dan jumlah saham beredar dari laporan tahunan atau laporan keuangan emiten. Ini alat berhitung, bukan saran membeli atau menjual saham apa pun. Angka tidak disimpan dan tidak dikirim." }));
+    var info = el("p", { class: "kuis-hasil", id: "latihan-milik-info", role: "status", "aria-live": "polite" });
+    var hasil = el("ul", { class: "latihan-modal-hasil" });
+    function isian(id, label, attrs) {
+      var inp = el("input", Object.assign({ id: id, "aria-describedby": "latihan-milik-info" }, attrs));
+      return { inp: inp, baris: el("div", { class: "cari-kamus" }, [el("label", { for: id, text: label }), inp]) };
+    }
+    var iLot = isian("latihan-milik-lot", "Jumlah lot", { type: "text", inputmode: "numeric", autocomplete: "off", value: "10" });
+    var iBeredar = isian("latihan-milik-beredar", "Jumlah saham beredar (lembar)", { type: "text", inputmode: "numeric", autocomplete: "off", value: "1.000.000.000" });
+    var PESAN = {
+      lot: "Isi jumlah lot dengan bilangan bulat 1 sampai " + angkaModal.format(MODAL_LOT_MAKS) + ", tanpa koma (contoh: 10).",
+      beredar: "Isi jumlah saham beredar dengan bilangan bulat sampai " + bulat.format(MILIK_BEREDAR_MAKS) + " lembar, boleh dengan titik ribuan (contoh: 1.000.000.000).",
+      lebih: "Jumlah lembar Anda tidak bisa lebih banyak dari jumlah saham beredar. Periksa lagi kedua angka."
+    };
+    var masukan = { lot: iLot.inp, beredar: iBeredar.inp };
+    function hitung() {
+      var r = hitungKepemilikan(iLot.inp.value, iBeredar.inp.value);
+      hasil.textContent = "";
+      Object.keys(masukan).forEach(function (k) {
+        masukan[k].setAttribute("aria-invalid", (r.galat === k || (r.galat === "lebih")) ? "true" : "false");
+      });
+      if (r.galat) { info.textContent = PESAN[r.galat]; return; }
+      var bulatPer = Math.round(r.per);
+      hasil.appendChild(el("li", { text: angkaModal.format(r.lembar / MODAL_LEMBAR_LOT) + " lot = " + bulat.format(r.lembar) + " lembar saham." }));
+      hasil.appendChild(el("li", { text: "Persen kepemilikan: " + bulat.format(r.lembar) + " ÷ " + bulat.format(r.beredar) + " × 100% = " + formatPersenMilik(r.persen) + "." }));
+      hasil.appendChild(el("li", { text: (bulatPer === r.per ? "Artinya Anda memiliki 1 dari setiap " : "Artinya Anda memiliki sekitar 1 dari setiap ") + bulat.format(bulatPer) + " lembar saham perusahaan itu." }));
+      info.textContent = "Persen kepemilikan: " + formatPersenMilik(r.persen) + ".";
+    }
+    [iLot.inp, iBeredar.inp].forEach(function (x) { x.addEventListener("input", hitung); });
+    kotak.appendChild(el("div", { class: "kotak-rumus", text: "Persen kepemilikan = jumlah lot × 100 ÷ jumlah saham beredar × 100%" }));
+    kotak.appendChild(el("div", { class: "latihan-modal-isian" }, [iLot.baris, iBeredar.baris]));
+    kotak.appendChild(info);
+    kotak.appendChild(hasil);
+    kotak.appendChild(el("p", { class: "latihan-modal-catatan", text: "Bagian sekecil apa pun tetap bagian kepemilikan. Bila dividen dibagikan, yang Anda terima juga sebanding dengan jumlah lembar yang Anda pegang, seperti dihitung di pelajaran \"Praktik: membeli saham pertama Anda\". Jumlah saham beredar bisa berubah, misalnya karena saham baru diterbitkan atau perusahaan membeli kembali sahamnya, jadi pakai angka dari laporan terbaru." }));
+    hitung();
+    return kotak;
+  }
+  function pasangLatihanMilik(wadah, m) {
+    if (m.id !== "apa-itu-saham") return;
+    var contoh = [].slice.call(wadah.querySelectorAll("p")).filter(function (p) { return /^Saham adalah bukti bahwa Anda ikut memiliki/.test(p.textContent); })[0];
+    if (contoh) contoh.parentNode.insertBefore(buatLatihanMilik(), contoh.nextSibling);
+    else wadah.insertBefore(buatLatihanMilik(), wadah.querySelectorAll("form.kuis")[0] || null);
+  }
+
   // Tautan ke Lembar rumus (Arif + Laras, 26 Nov 2026; IDE.md #67): setiap kotak latihan yang rumusnya ada di
   // belajar.html#lembar-rumus diberi satu tautan teks di bagian bawah. Latihan urut tanggal tidak punya rumus.
   // Posisi saat Kembali dijaga jagaGulirKembali() di kedua halaman (cek 2f-34).
@@ -1117,6 +1184,7 @@
     pasangLatihanSyariah(wadah, m);
     pasangLatihanBersih(wadah, m);
     pasangLatihanDividen(wadah, m);
+    pasangLatihanMilik(wadah, m);
     pasangTautanLembar(wadah);
     gulirJangkarPelajaran(wadah);
 

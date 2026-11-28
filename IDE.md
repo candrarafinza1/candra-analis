@@ -1209,7 +1209,7 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Dampak bagi pemula: memahami arti "pemilik sebagian kecil perusahaan" dan mengapa suara di RUPS sebanding jumlah saham.
 - Batasan: tanpa angka emiten karangan, tanpa simpan/kirim, tanpa ajakan.
 - Usaha: kecil (Arif + Laras; Nina menambah cek).
-- Status: dipilih Bima 28 Nov 15.xx untuk sesi berikutnya (BACKLOG.md).
+- Status: dipilih Bima 28 Nov 15.xx; **selesai 28 Nov 16.xx** (Arif + Laras; Nina cek 2f-36; Dewi 390/1280px). Kirana meninjau di HP sungguhan begitu bisa.
 
 ### 70. Pelajaran Membuka rekening saham: latihan urut langkah membuka rekening (Kirana, 28 Nov 2026, 15.xx WIB) — kecil
 - Masalah: pelajaran 3 satu-satunya (bersama pelajaran 1) yang belum punya latihan interaktif.
@@ -1217,5 +1217,5 @@ pelajaran di kertas, dan pergantian Daftar Efek Syariah yang akan datang.
 - Dampak bagi pemula: mengingat alur sebelum benar-benar membuka rekening.
 - Batasan: urutan hanya dari isi pelajaran (tanpa klaim baru), tanpa simpan/kirim.
 - Usaha: kecil–sedang (Arif + Laras; Nina cek).
-- Status: antre, menunggu #69.
+- Status: dipilih Bima 28 Nov 16.xx (BACKLOG.md, Arif + Laras).
 

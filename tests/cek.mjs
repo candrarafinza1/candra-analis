@@ -9069,5 +9069,60 @@ print(json.dumps({"salah": hasil, "halaman": len(hal), "tautan": len(uri)}))
     [appD.replace("Angka tidak disimpan dan tidak dikirim.\" }));\n    var info = el(\"p\", { class: \"kuis-hasil\", id: \"latihan-dividen-info\"", "Buruan beli sebelum cum date.\" }));\n    var info = el(\"p\", { class: \"kuis-hasil\", id: \"latihan-dividen-info\""), isiP, "kata ajakan"],
   ]) ok((rusak !== appD || isi !== isiP) && ujiD(rusak, isi).some((x) => x.includes(pesan)), `uji balik latihan dividen: "${pesan}" harus tertangkap`);
 }
+// 2f-36. Latihan "Hitung sendiri: persen kepemilikan Anda" (Nina, 28 Nov 2026 16.xx; Arif + Laras, IDE.md #69 Kirana).
+// Persen = lot × 100 ÷ saham beredar × 100%; persen kecil tidak boleh terbaca 0; hanya di pelajaran apa-itu-saham,
+// setelah paragraf pertama; angka bawaan = contoh pelajaran (1.000 lembar dari 1 miliar = satu per sejuta); tanpa kata ajakan.
+{
+  const appM = readFileSync("assets/app.js", "utf8");
+  const isiA = ((MODUL || []).find((m) => m.id === "apa-itu-saham") || {}).isi || "";
+  const ujiM = (t, isi) => {
+    const salah = [];
+    const k0 = t.indexOf("  var MODAL_LEMBAR_LOT"), k1 = t.indexOf("  function bacaBulat(");
+    const a0 = t.indexOf("  function bacaBulat("), a1 = t.indexOf("  function bacaPersen(");
+    const v0 = t.indexOf("  var MILIK_BEREDAR_MAKS"), a = t.indexOf("  function hitungKepemilikan("), f0 = t.indexOf("  function formatPersenMilik("), b = t.indexOf("  function buatLatihanMilik("), c = t.indexOf("  function pasangLatihanMilik("), d = t.indexOf("  // Tautan ke Lembar rumus");
+    if ([k0, k1, a0, a1, v0, a, f0, b, c, d].some((x) => x < 0) || !(v0 < a && a < f0 && f0 < b && b < c && c < d)) return ["fungsi latihan kepemilikan tidak ada"];
+    let f, fp;
+    try { [f, fp] = vm.runInNewContext(`${t.slice(k0, k1)}; ${t.slice(a0, a1)}; ${t.slice(v0, b)}; [hitungKepemilikan, formatPersenMilik]`); } catch (e) { return ["galat: " + e.message]; }
+    const r1 = f("10", "1.000.000.000");
+    if (!r1 || r1.lembar !== 1000 || Math.abs(r1.persen - 0.0001) > 1e-12 || r1.per !== 1000000) salah.push("rumus contoh pelajaran (1.000 lembar ÷ 1 miliar = 0,0001% = 1 per 1.000.000)");
+    else if (fp(r1.persen) !== "0,0001%") salah.push(`format persen contoh harus "0,0001%" (dapat ${fp(r1.persen)})`);
+    const r2 = f("1", "3.000.000");
+    if (!r2 || fp(r2.persen) !== "0,00333%") salah.push(`persen kecil tidak boleh terbaca 0 (100 ÷ 3 juta harus "0,00333%", dapat ${r2 && fp(r2.persen)})`);
+    const r3 = f("5", "1000");
+    if (!r3 || fp(r3.persen) !== "50%") salah.push("persen besar (500 ÷ 1.000 = 50%)");
+    for (const [v, g] of [[["0", "1000"], "lot"], [["1,5", "1000"], "lot"], [["", "1000"], "lot"], [["1", "0"], "beredar"], [["1", "1.000,5"], "beredar"], [["1", "abc"], "beredar"], [["1", "1.000.000.000.001"], "beredar"], [["2", "150"], "lebih"]]) {
+      const r = f(...v);
+      if (!r || r.galat !== g) salah.push(`isian tidak sah harus ditolak (${v.join("/")} → ${g})`);
+    }
+    const ui = t.slice(b, c);
+    if (!/isian\("latihan-milik-lot"[^\n]*value: "10" \}/.test(ui) || !/isian\("latihan-milik-beredar"[^\n]*value: "1\.000\.000\.000" \}/.test(ui)) salah.push("angka bawaan wajib sama dengan contoh pelajaran (10 lot, 1.000.000.000 lembar)");
+    if (!/Kalau sebuah perusahaan punya satu miliar lembar saham dan Anda memegang seribu lembar, Anda pemilik satu per sejuta perusahaan itu\./.test(isi)) salah.push("contoh satu miliar lembar di pelajaran berubah: samakan angka bawaan kotak");
+    if (/type: "number"/.test(ui)) salah.push("isian bukan type=number");
+    if (!/m\.id !== "apa-itu-saham"/.test(t.slice(c, d)) || !/Saham adalah bukti bahwa Anda ikut memiliki/.test(t.slice(c, d))) salah.push("hanya di pelajaran apa-itu-saham, setelah paragraf pertama");
+    const r0 = t.indexOf("  function renderPelajaran(");
+    const ren = t.slice(r0, t.indexOf("\n  function ", r0 + 10));
+    const iM = ren.indexOf("pasangLatihanMilik(wadah, m);"), iT = ren.indexOf("pasangTautanLembar(wadah);");
+    if (iM < 0) salah.push("renderPelajaran wajib memasang latihan kepemilikan");
+    else if (iT >= 0 && iT < iM) salah.push("urutan: sebelum tautan Lembar rumus");
+    const badan = t.slice(v0, d).replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/[^\n]*/g, "");
+    if (/buruan|pasti (naik|untung)|rekomendasi|layak dibeli|saatnya (beli|jual)|untung|\bcuan\b|dijamin|murah|mahal|jangan sampai ketinggalan/i.test(badan)) salah.push("kata ajakan dilarang");
+    if (!/bukan saran membeli atau menjual/.test(badan)) salah.push("wajib menyebut bukan saran membeli atau menjual");
+    if (/localStorage|sessionStorage|fetch\(|XMLHttpRequest|innerHTML/.test(badan)) salah.push("tanpa simpan/kirim data dan tanpa innerHTML");
+    return salah;
+  };
+  const sM = ujiM(appM, isiA);
+  ok(!sM.length, "Latihan kepemilikan: " + sM.join("; "));
+  for (const [rusak, isi, pesan] of [
+    [appM.replace("var lembar = jml * MODAL_LEMBAR_LOT;\n    if (lembar > n)", "var lembar = jml;\n    if (lembar > n)"), isiA, "rumus contoh"],
+    [appM.replace("persen: lembar / n * 100,", "persen: lembar / n,"), isiA, "rumus contoh"],
+    [appM.replace("var dig = p >= 1 ? 2 : Math.min(12, Math.max(2, Math.floor(-Math.log10(p)) + 3));", "var dig = 2;"), isiA, "format persen"],
+    [appM.replace('    if (lembar > n) return { galat: "lebih" };\n', ""), isiA, "isian tidak sah"],
+    [appM.replace('{ type: "text", inputmode: "numeric", autocomplete: "off", value: "1.000.000.000" }', '{ type: "text", inputmode: "numeric", autocomplete: "off", value: "2.000.000.000" }'), isiA, "angka bawaan"],
+    [appM, isiA.replace("satu miliar lembar saham", "dua miliar lembar saham"), "contoh satu miliar"],
+    [appM.replace('  function pasangLatihanMilik(wadah, m) {\n    if (m.id !== "apa-itu-saham") return;\n', "  function pasangLatihanMilik(wadah, m) {\n"), isiA, "apa-itu-saham"],
+    [appM.replace("    pasangLatihanMilik(wadah, m);\n", ""), isiA, "renderPelajaran"],
+    [appM.replace("Angka tidak disimpan dan tidak dikirim.\" }));\n    var info = el(\"p\", { class: \"kuis-hasil\", id: \"latihan-milik-info\"", "Saham ini pasti naik.\" }));\n    var info = el(\"p\", { class: \"kuis-hasil\", id: \"latihan-milik-info\""), isiA, "kata ajakan"],
+  ]) ok((rusak !== appM || isi !== isiA) && ujiM(rusak, isi).some((x) => x.includes(pesan)), `uji balik latihan kepemilikan: "${pesan}" harus tertangkap`);
+}
 if (gagal) { console.error(`\n${gagal} pemeriksaan gagal.`); process.exit(1); }
 console.log(`Semua pemeriksaan lolos: ${halaman.length} halaman, ${MODUL.length} pelajaran, ${ASLI.length} emiten asli.`);
