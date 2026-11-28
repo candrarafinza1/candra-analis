@@ -434,13 +434,21 @@ window.EMITEN_ASLI = [
     labaTahun: { 2024: 1146.35, 2025: 1364.81 },
     pendapatan: { 2024: 4874.37, 2025: 5368.32 },
     liabilitas2025: 1092.28, ekuitas2025: 8174.06,
-    laba9b: { 2025: null, 2026: null },
+    // laba9b (Fajar & Galih, 28 Nov 2026 10.xx): Kontan 27 Nov 2026 menulis laba bersih hingga September 2026 Rp1,08 T (+6,7%);
+    // judul Bisnis 3 Nov 2026 sama (Rp1,08 T, +6,67%). Basis tersirat ±Rp1,01 T cocok dengan laba atribusi Jan–Sep 2025
+    // Rp1,01 T (Kontan 17 Nov 2025; BCA Sekuritas/IQPlus 28 Okt 2025 menulis Rp1,02 T, pembanding 2024 Rp872,88 M sama).
+    laba9b: { 2025: 1010, 2026: 1080 },
+    catatan9b: "Laba 9 bulan = laba bersih Rp1,08 T (Jan–Sep 2026) vs laba diatribusikan kepada pemilik entitas induk Rp1,01 T (Jan–Sep 2025). Angka 2026 dari Kontan 27 Nov 2026 (naik 6,7%), sama dengan judul Bisnis 3 Nov 2026 (naik 6,67%); sumber 2026 tidak menyebut jenis labanya, tetapi kenaikan 6,7% cocok dengan basis laba atribusi 2025. Angka 2025 dari Kontan 17 Nov 2025; BCA Sekuritas (IQPlus) 28 Okt 2025 menulis Rp1,02 T (beda pembulatan), sehingga kenaikan hitungan situs bisa sedikit berbeda dari 6,7%. Sumber tidak menyebut pos sekali-waktu.",
     // dps: Rp43 (tahun buku 2025, total sekitar Rp598 M, dibayar 10 Juli 2026; tanpa interim disebut) dari Fortune IDN 11 Jun 2026 & PintarSaham 11 Jun 2026; RCTI+ 10 Jun 2026 menulis Rp43 dan total Rp598 M (Fajar, 4 Nov 08.09).
     dps: 43, harga: null,
     dpsSumber: { judul: "Fortune IDN, 11 Jun 2026: MIKA bagi dividen Rp43 per saham (tahun buku 2025), dibayar 10 Juli 2026", url: "https://www.fortuneidn.com/market/mika-bagi-dividen-10-juli-2026-besarannya-rp43-saham-00-3dhnm-l90klz" },
     catatan: "Dari laporan keuangan konsolidasian 31 Des 2025 (laba diatribusikan kepada pemilik entitas induk). Cek: liabilitas + ekuitas = aset Rp9.266,34 M. Dividen tahun buku 2025 Rp43 per saham (total sekitar Rp598 M) dari Fortune IDN & PintarSaham, 11 Jun 2026.",
     sumber: [{ judul: "Laporan keuangan konsolidasian MIKA 31 Des 2025 (salinan di Indo Premier)",
-      url: "https://www.indopremier.com/xdir/news/LAPORAN%20KEUANGAN/2025/q4//MIKA_Q4_2025.pdf" }]
+      url: "https://www.indopremier.com/xdir/news/LAPORAN%20KEUANGAN/2025/q4//MIKA_Q4_2025.pdf" },
+      { judul: "Kontan, 27 Nov 2026: Saham Mitra Keluarga (MIKA) mulai rebound (laba bersih 9 bulan 2026 Rp1,08 triliun, naik 6,7%)", url: "https://investasi.kontan.co.id/news/saham-mitra-keluarga-mika-mulai-rebound-volume-pasien-jadi-penentu-prospek" },
+      { judul: "Bisnis, 3 Nov 2026: Mitra Keluarga (MIKA) cetak laba Rp1,08 triliun kuartal III/2026, tumbuh 6,67%", url: "https://market.bisnis.com/read/20261103/192/2017943/mitra-keluarga-mika-cetak-laba-rp108-triliun-kuartal-iii2026-tumbuh-667" },
+      { judul: "Kontan, 17 Nov 2025: Mitra Keluarga Karyasehat (MIKA) raih kinerja positif hingga kuartal III-2025 (laba atribusi 9 bulan 2025 Rp1,01 triliun)", url: "https://industri.kontan.co.id/news/mitra-keluarga-karyasehat-mika-raih-kinerja-positif-hingga-kuartal-iii-2025" },
+      { judul: "BCA Sekuritas (IQPlus), 28 Okt 2025: Mitra Keluarga raih pendapatan bersih Rp3,98 triliun hingga September 2025", url: "https://bcasekuritas.co.id/latest-news/news/mitra-keluarga-raih-pendapatan-bersih-rp398-triliun-hingga-september-2025" } ]
   },
   {
     kode: "CTRA", nama: "PT Ciputra Development Tbk", sektor: "Properti & real estat",

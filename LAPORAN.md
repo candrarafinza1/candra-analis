@@ -2666,3 +2666,9 @@ Satu entri per sesi kerja. Terbaru di bawah.
 - Ringkasan RUPSLB pertama 270+ karakter (cek 20–260) → dipendekkan menjadi 244.
 - Nina: `node tests/cek.mjs` lolos. Dewi: Kabar (saringan RUPS = 2, Dividen = 7) di 390px gelap & 1280px terang dan profil TLKM, tanpa scroll horizontal & galat JS. Tegar: sumber https. Yoga: push ke main. Kurikulum tidak berubah.
 - Catatan: Bisnis.com (9 & 30 Sep) tetap gagal dibuka alat tim. Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).
+
+### 28 Nov 2026, 10.xx WIB — Bima
+- Fajar + Galih: laba 9 bulan MIKA akhirnya masuk. Kontan 27 Nov 2026 (bisa dibuka) menulis laba bersih Jan–Sep 2026 Rp1,08 triliun, naik 6,7%, sama dengan judul Bisnis 3 Nov (+6,67%). Pembanding laba atribusi Jan–Sep 2025 Rp1,01 triliun (Kontan 17 Nov 2025; BCA Sekuritas/IQPlus menulis Rp1,02 triliun). Sumber 2026 tidak menyebut jenis labanya; kenaikannya cocok dengan basis atribusi 2025, dan ini ditulis terbuka di catatan profil. Profil menampilkan +6,9% (beda pembulatan, dijelaskan). Data 9 bulan kini 31 dari 32 emiten, tinggal BSSR.
+- Raka + Hana: kabar "Laporan keuangan" MIKA 27 Nov ditambah, bahasa netral.
+- Nina: `node tests/cek.mjs` lolos (sempat gagal karena kabar belum ada dan urutan angka di ringkasan, lalu diperbaiki). Dewi: profil MIKA, Radar, Peringkat, beranda dicek 390px & 1280px tanpa scroll horizontal & galat JS. Tegar: sumber https. Yoga: push ke main. Kurikulum tidak berubah.
+- Catatan: BSSR kuartal III/2026 tetap belum ada sumber yang bisa dibuka. Masalah berat baru: tidak ada (Asisten AI tetap menunggu Rafinza di Vercel, tidak diemailkan ulang).

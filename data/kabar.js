@@ -11,6 +11,10 @@
 window.KABAR_JENIS = ["Laporan keuangan", "Pembelian kembali saham", "Dividen", "Rapat umum pemegang saham", "Aksi korporasi lain"];
 
 window.KABAR = [
+  // Laporan 9 bulan MIKA — Kontan 27 Nov 2026; angka & kenaikan sama di judul Bisnis 3 Nov 2026 (Raka + Fajar, ditinjau Hana, 28 Nov 10.xx)
+  { kode: "MIKA", tanggal: "2026-11-27", jenis: "Laporan keuangan",
+    ringkas: "Laporan Januari–September 2026 terbit. Mitra Keluarga mencatat laba bersih Rp1,08 triliun, naik 6,7% dari Rp1,01 triliun pada periode yang sama 2025 (Kontan, 17 Nov 2025). Pendapatan Rp4,27 triliun, tumbuh 7,2%.",
+    sumber: { judul: "Kontan, 27 Nov 2026: Saham Mitra Keluarga (MIKA) mulai rebound (laba bersih 9 bulan 2026 Rp1,08 triliun, naik 6,7%)", url: "https://investasi.kontan.co.id/news/saham-mitra-keluarga-mika-mulai-rebound-volume-pasien-jadi-penentu-prospek" } },
   // Dividen interim AADI tahun buku 2026 — Investortrust 25 Nov 2026; total, jadwal & kurs sama di StockWatch 25 Nov dan Kontan (di TradingView);
   // Kontan: dividen per saham belum diumumkan (Raka + Fajar, ditinjau Hana, 27 Nov 13.xx)
   { kode: "AADI", tanggal: "2026-11-25", jenis: "Dividen",
